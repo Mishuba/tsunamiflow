@@ -299,7 +299,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             "LastName" => $laNa,
                             "NickName" => $niNa,
                             "Gender" => $gede,
-                            "Birthday" => $bihda
+                            "Birthday" => $bihda,
                             "Email" => $eml,
                             "Username" => $usNa,
                             "Password" => $Checkpassword,
