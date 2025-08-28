@@ -1,0 +1,82 @@
+<?php
+ini_set("session.cookie_secure", true);
+ini_set("session.cookie_httponly", "1");
+ini_set("session.gc_maxlifetime", 3600);
+ini_set("session.cookie_lifetime", 0);
+ini_set("session.use_strict_mode", true);
+
+header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://tsunamiflow.club");
+header("Content-Security-Policy: frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club" );
+
+session_start();
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>
+Tycadome
+</title>
+    <meta charset="utf-8" />
+    <meta name="viewpoint" width="device-width" height="device-height" initial-scale="1" minimum-scale="0.1" user-scalable="1" interactive-widget="resizes-content" />
+    <meta name="author" content="Hubert Christopher Maxwell" />
+    <meta name="keyword" content="mishuba, challenges, business, music, property, rap, pop, rock, news, thoughts, clothes, shoes, games, shows, movies, books, love, inspiration, information, research" />
+    <meta name="description" content="Tsunami Flow is the homebase for turning your dreams to goals and mastering your life." />
+</head>
+<body id="homepageBody">
+
+    <script type="module">
+        import { FirstGame, letsDoIt, gameComponent } from "./JS/sprite.js";
+        let TFpostMessageLinks = "https://www.tsunamiflow.club"; //"https://tsunamiflow.club"; 
+
+        let TFpostActualObject = {
+            type: "Website Updates",
+            message: "make this the first character maybe.",
+            username: "Mishuba",
+            error: "currently no error fam."
+        };
+
+        window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
+
+        window.addEventListener("message", async (ev) => {
+            console.log("iframe message received");
+            console.log(ev.origin);
+            let data = ev.data;
+            let origin = ev.origin;
+            let source = ev.source;
+
+            if (origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+                console.log(data);
+                console.log(source);
+
+                if (data.type === "start_updates") {
+                    const game = letsDoIt.from(ev.data.info);
+                    let GameStartButton = document.createElement("button");
+                    document.body.appendChild(GameStartButton);
+                    GameStartButton.addEventListener("click", async () => {
+                    game.start();
+                    });
+
+                    TFpostActualObject = {
+                        type: "updates",
+                        info: game.toJSON(),
+
+                    }
+                } else if (data.type === "game") {
+
+                } else {
+                    
+                }
+            } else if (ev.origin === "https://js.stripe.com") {
+                console.log(ev.data);
+                console.log(ev.source);
+            } else {
+                return console.log(`Some outside source is trying to send my homepage a message.`);
+            }
+        });
+    </script>
+</body>
+
+</html>

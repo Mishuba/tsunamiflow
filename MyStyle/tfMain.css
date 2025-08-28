@@ -1,0 +1,454 @@
+body {
+    border: 0%;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    border-collapse: collapse;
+    background-color: black;
+    color: rgb(56, 217, 238);
+    text-align: center;
+    text-shadow: 2px 2px 5px white;
+    /* 2px 2px yellow; */
+    font-family: "Brush Script MT", "Courier New", "Verdana", "Copperplate", "Papyrus", fantasy, "Times New Roman";
+    text-decoration-style: wavy;
+    text-decoration-thickness: auto;
+    font-style: normal;
+    font-weight: normal;
+    /*
+    font-size: ;
+    min-height: initial;
+    height: auto;
+    max-height: 100%;
+    min-width: initial;
+    width: auto;
+    max-width: 100%;
+    */
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+/*
+#id
+.class 
+* {
+    font-style: oblique;
+}
+
+p.class {
+    text-transform: uppercase;
+}
+
+p#id {
+    text-transform: lowercase;
+}
+
+video {
+    text-transform: captialize;
+    
+}
+
+img {
+    opacity: 0.5; 0 invisible 1 completely visible;
+    z-index: -1; will put the image back something. 1 will put it in front of something. 
+
+    // when putting an image or video into the green screen from the webcam give it a z-index of one maybe 0
+}
+ul li {
+    list-style-image: url(""); 
+}
+
+h1,h2, p {
+
+} grouping elements together 
+ 
+*/
+button {
+    background-color: rgb(71, 16, 16);
+    font-style: oblique;
+    font-weight: bold;
+}
+
+a:link {
+    text-decoration: none;
+    text-decoration-line: overline;
+    text-decoration-color: white;
+    text-decoration-style: solid;
+    text-decoration-thickness: auto;
+    font-style: italic;
+    font-weight: bold;
+}
+
+a:visited {
+    text-decoration-line: underline;
+    text-decoration-color: white;
+    text-decoration-style: dotted;
+    text-decoration-thickness: auto;
+    font-style: italic;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration-line: overline underline;
+    text-decoration-color: white;
+    text-decoration-style: dashed;
+    text-decoration-thickness: auto;
+    font-style: italic;
+    font-weight: bold;
+}
+
+a:active {
+    text-decoration-line: line-through;
+    text-decoration-color: white;
+    text-decoration-style: double;
+    text-decoration-thickness: auto;
+    font-style: italic;
+    font-weight: bold;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+ol {
+    list-style-type: upper-roman, lower-alpha;
+}
+
+canvas {
+    background: white;
+}
+
+header {
+    min-height: 10%;
+    height: 20%;
+    max-height: 100%;
+    min-width: 10%;
+    width: 100%;
+    max-width: 100%;
+    float: inline-start;
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+}
+
+header div {
+    float: left;
+    min-height: 10%;
+    /*
+    height: 100%;
+    */
+    max-height: 100%;
+    min-width: 10%;
+    width: 33.3%;
+    max-width: 100%;
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    overflow: auto;
+}
+
+nav {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-height: 10%;
+    max-height: 100%;
+    min-width: 10%;
+    max-width: 100%;
+    border: 0 none black;
+    float: inline-start;
+}
+
+nav table {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    float: inline-start;
+    border: 0 none black;
+    border-collapse: collapse;
+    min-width: 45%;
+    width: 50%;
+    max-width: 100%;
+}
+
+nav table tr {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    border-collapse: collapse;
+}
+
+nav table tr td {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-height: 5%;
+    height: 5%;
+    max-height: 5%;
+    min-width: 10%;
+    width: 25%;
+    max-width: 50%;
+    border-collapse: collapse;
+}
+
+nav table tr td button {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    border-collapse: collapse;
+}
+
+nav form {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    float: inline-start;
+    border: 1px;
+    min-width: 10%;
+    width: 50%;
+    max-width: 100%;
+    min-height: 5%;
+    height: 10%;
+    max-height: 10%;
+}
+
+nav form input {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    height: 10%;
+    width: 20%;
+}
+
+.menu-item {
+    position: relative;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.submenu {
+    display: none;
+    /* Hide submenus by default */
+    position: absolute;
+    top: 40px;
+    /* Position below the menu item */
+    left: 0;
+    z-index: 1000;
+}
+
+.menu-item:focus-within .submenu {
+    display: block;
+    /* Show submenu when the item is focused */
+}
+
+.submenu li {}
+
+#MainSection {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    border: 0 none black;
+    border-collapse: collapse;
+    min-height: 10%;
+    max-height: 100%;
+    min-width: 10%;
+    max-width: 100%;
+    text-align: center;
+}
+
+aside {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-width: 10%;
+    width: 15%;
+    max-width: 100%;
+    min-height: 10%;
+    height: 451px;
+    max-height: 100%;
+    float: inline-start;
+    border: 0 none black;
+    overflow: scroll;
+}
+
+
+#donation {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-width: 10%;
+    width: 15%;
+    max-width: 100%;
+    min-height: 10%;
+    height: 451px;
+    max-height: 100%;
+    float: inline-start;
+    border: 0 none black;
+}
+
+
+section {
+    margin: 0%;
+    padding: 0%;
+    min-width: 10%;
+    width: 70%;
+    max-width: 100%;
+    min-height: 10%;
+    max-height: 100%;
+    float: left;
+    border: 0px none black;
+}
+
+#TFcanvas {
+    border: 1px solid black;
+    min-width: 10%;
+    width: 600px;
+    max-width: 100%;
+    min-height: 10%;
+    height: 600px;
+    max-height: 100%;
+}
+
+#TsunamiContent {
+    min-height: 10px;
+    height: 430px;
+    max-height: 100%;
+    min-width: 10%;
+    width: 925px;
+    max-width: 100%;
+}
+
+#ThoughtsCSS {
+    float: left;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-width: 10%;
+    width: 50%;
+    max-width: 100%;
+    min-height: 10%;
+    height: 50;
+    max-height: 100%;
+    float: inline-start;
+    border: 0 none black;
+}
+
+fieldset {
+    border: 0px;
+}
+
+#ThoughtsArea {
+    border: 0px;
+}
+
+#TFCompleteForm {
+    border: 0%;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    float: inline-start;
+    min-width: 10%;
+    max-width: 100%;
+}
+
+#TFCompleteForm input {
+    border: 0%;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    height: 100%;
+    width: 80%;
+}
+
+article {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-height: 10%;
+    height: 20%;
+    max-height: 100%;
+    min-width: 10%;
+    width: 100%;
+    max-width: 100%;
+    clear: both;
+    float: inline-start;
+    border: 0%;
+}
+
+#TFradioCanvas {
+    border: 1px solid black;
+    min-width: 10%;
+    width: 100%;
+    max-width: 100%;
+    min-height: 10%;
+    height: 100px;
+    max-height: 100%;
+}
+
+article audio {
+    border: 0 none black;
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    width: 100%;
+}
+
+footer {
+    margin: 0%;
+    content: 0%;
+    padding: 0%;
+    min-height: 10%;
+    max-height: 100%;
+    min-width: 10%;
+    max-width: 100%;
+    border: 0 none black;
+    float: inline-start;
+    overflow: scroll;
+}
+
+#storeTitle,
+#productTitle {
+    color: #333;
+}
+
+#StoreItemsList li {
+    background: white;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+img {
+    max-width: 100px;
+    height: auto;
+}
+
+#storeButton {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#storeButton:hover {
+    background-color: #218838;
+}
+
+.receipt {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+}

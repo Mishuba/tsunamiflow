@@ -1,0 +1,16 @@
+{
+    "name": "Tsunami Flow",
+    "shortname": "TF",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#000000",
+    "theme_color": "0A0A0A",
+    "description": "Website Application",
+    "icons": [
+        {
+            "src": "/Pictures/Logo/'Tsunami Flow Logo.png'",
+            "sizes": "192X192",
+            "type": "image/png"
+        }
+    ]
+}

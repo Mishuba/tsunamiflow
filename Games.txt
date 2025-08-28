@@ -1,0 +1,45 @@
+1 Word Games
+2 Text Adventure
+3 Point-and-click
+4 Tile-matching
+5 Logic Puzzles
+6 Clicker/Incremental: Games where you repeatedly perform simple actions to gain rewards.
+7 Hidden Object Games
+8 Visual Novel
+9 Turn-based Strategy (TBS)
+10 Turn-based RPG
+11 Tower Defense
+12 Stealth (fairy)
+13 Fighting (Complete character list 
+14 Escape Room
+15 Beat 'em up (Ackma Hawk
+16 Hack and Slash (Vampire)
+17 Dungeon Crawl
+18 Platformer (Rukal Jubax)
+19 Shoot 'em up ( Mishuba (Feilong Ding) / Civilans)
+20 Psychological Horror
+21 Bullet Hell (Duwen Lyric)
+22 Hunting Sim
+23 Farming Sim
+24 Vehicle Simulation 
+25 Racing
+26 Construction and Management Sim
+27 Flight Simulation
+28 Business Simulation
+29 Sports
+30 Music-based Games / Rhythm Games
+31 Survival Horror
+32 Life Simulation 
+33 Free-for-all elimination-based gameplay
+34 Open-World
+35 4X (Explore, Expand, Exploit, Exterminate)
+36 Metroidvania (witch) 
+37 Freeform Creation (e.g., Minecraft)
+38 Exergame
+39 Sandbox
+40 MMORPG (Massively Multiplayer Online Role-playing Game)
+41 Augmented Reality (AR)
+42 MMOFPS (Massively Multiplayer Online First-Person Shooter)
+43 MOBA (Multiplayer Online Battle Arena)
+44 Grand Strategy
+45 Virtual Reality (VR)
