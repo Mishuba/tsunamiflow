@@ -337,8 +337,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     header("Location: " . $TsunamiFlowStripeCheckoutSession->url);
                     exit;
                 //Subscriptions Ends
+                }
             }
-        }
         } else if($data["type"] === "Navigation Login") {
             if ($data["log in"] === true) {
                 // Allow specific headers
@@ -348,7 +348,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // use session_regenerate_id() for every login attempt.
                 $_SESSION["LoginStatus"] = "is the user logged in or nah";
             } else {
-                tfLogOut() // logout function already created.
+                //tfLogOut(); // logout function already created.
             }
         } else if($data["type"] === "Tsunami Flow Store") {
             if ($data["shopping cart"] === true) {
