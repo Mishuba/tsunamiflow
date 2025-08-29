@@ -5,7 +5,7 @@ import { RadioTimes, WordTimes, DefaultPlaylist } from "./Arrays.js";
 //import { } from "./Classes.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
-import { HomepageUpdates, FirstGame, TfStickMan, letsDoIt } from "./JS/sprite.js";
+import { HomepageUpdates, FirstGame, TfStickMan, letsDoIt } from "./sprite.js";
 
 if (navigator.cookieEnabled) {
     //use cookies
