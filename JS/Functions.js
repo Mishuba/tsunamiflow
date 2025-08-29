@@ -1,8 +1,11 @@
-import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, CANVAS_HEIGHT, CANVAS_WIDTH, hpCC, homepageCanvas, tfVidStuff, frameSkipCount, frameCounter, useChromaKeyWebcam, chromaKeyColorWebcam, AskForWebcam, Tframe4u, TframeSpRec, TframeStRec, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
+import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, hpCC, homepageCanvas, tfVidStuff, useChromaKeyWebcam, chromaKeyColorWebcam, Tframe4u, TframeSpRec, TframeStRec, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
 
 import { DSLO } from "./Objects.js";
 
 import { Particle } from "./Classes.js";
+
+let CANVAS_WIDTH = 600;
+let CANVAS_HEIGHT = 600;
 
 //Visualizator
 let particles = [];
@@ -603,8 +606,9 @@ export async function stopRecording() {
 //Recording Ends
 
 //Webcam
+/*
 export async function startWebcam() {
-    AskForWebcam;
+    
     //let emptyStream = new MediaStream();
     //let VideoStreamOk = new MediaStream(AskForWebcam);
     //let AudioStreamOk = new MediaStream(RadioPlaylistElement);
@@ -612,7 +616,7 @@ export async function startWebcam() {
     tfVidStuff.play();
     animate();
 }
-
+*/
 export async function applyChromaKeyWebcam() {
     const frame = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     const data = frame.data;
@@ -649,6 +653,8 @@ export async function hexToRgb(hex) {
 //ChromaKey Canvas Ends
 
 export async function animate() {
+    let frameSkipCount = 2;
+    let frameCounter = 0;
     if (tfVidStuff.paused || tfVidStuff.ended) {
         hpCC.drawImage(tfVidStuff, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
         const imageData = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
