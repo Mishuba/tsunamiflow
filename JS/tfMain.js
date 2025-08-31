@@ -564,197 +564,201 @@ async function DoTheThingMan() {
 
         console.log("just making sure this works like i want so i can really start having fun and programing.");
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Community.php" || "https://tsunamiflow.club/Community.php" || "Community.php") {
+        window.addEventListener("message", async (ev) => {
+            console.log("iframe message received");
+            console.log(ev.origin);
 
-        if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club" || "https://world.tsunamiflow.club") {
-            if (ev.data.type === "community") {
-                let CommunityJson = {
-                    type: "community",
-                    info: "idk community",
-                    message: "this is the community message",
-                    username: "Mishuba",
-                    error: "ok no errors for community right now"
-                };
-
-                TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
-
-                console.log(CommunityJson);
-            } else {
-                if (ev.data.error) {
-                    let tfError = ev.data.error;
+            if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club" || "https://world.tsunamiflow.club") {
+                if (ev.data.type === "community") {
                     let CommunityJson = {
                         type: "community",
                         info: "idk community",
                         message: "this is the community message",
                         username: "Mishuba",
-                        error: tfError
+                        error: "ok no errors for community right now"
                     };
+
                     TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+
+                    console.log(CommunityJson);
                 } else {
-                    let tfError = "nothing";
-                    let CommunityJson = {
-                        type: "community",
-                        info: "idk community",
-                        message: "this is the community message",
-                        username: "Mishuba",
-                        error: tfError
-                    };
-                    TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                    if (ev.data.error) {
+                        let tfError = ev.data.error;
+                        let CommunityJson = {
+                            type: "community",
+                            info: "idk community",
+                            message: "this is the community message",
+                            username: "Mishuba",
+                            error: tfError
+                        };
+                        TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                    } else {
+                        let tfError = "nothing";
+                        let CommunityJson = {
+                            type: "community",
+                            info: "idk community",
+                            message: "this is the community message",
+                            username: "Mishuba",
+                            error: tfError
+                        };
+                        TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                    }
                 }
+            } else if (ev.origin === "https.js.stripe.com") {
+                //console.log(ev.data);
+            } else {
+                return console.log(`some outside source is trying to send my homepage a message. The origin is ${ev.origin}`);
             }
-        } else if (ev.origin === "https.js.stripe.com") {
-            //console.log(ev.data);
-        } else {
-            return console.log(`some outside source is trying to send my homepage a message. The origin is ${ev.origin}`);
-        }
 
-        /*
-                TFcolorPicker.addEventListener('input', (e) => {
-                    const hex = e.target.value;
-                    const rgb = parseInt(hex.slice(1), 16);
-                    chromaKeyColorWebcam.r = (rgb >> 16) & 255;
-                    chromaKeyColorWebcam.g = (rgb >> 8) & 255;
-                    chromaKeyColorWebcam.b = rgb & 255;
-                });
-        
-                // Use chroma key color for webcam
-                TfCpBtn.addEventListener('click', () => {
-                    useChromaKeyWebcam = true; // Set flag to true
-                    TframeStBtn.style.display = 'inline'; // Show start button after choosing color
-                });
-        
-                // Remove chroma key color button
-                TfCpRm.addEventListener('click', () => {
-                    hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
-                    frameCounter = 0; // Reset frame counter
-                    useChromaKeyWebcam = false; // Reset flags
-                });
-        
-                //Green Screen Ends
-        
-                TframeSpBtn.addEventListener('click', () => {
-                    isPlaying = false;
-                    cancelAnimationFrame(animationId);
-                    hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                    if (webcamStream) {
-                        const tracks = webcamStream.getTracks();
-                        tracks.forEach(track => track.stop());
-                        tfVidStuff.srcObject = null;
-                        webcamStream = null;
-                    }
-                    TframeSpBtn.style.display = 'none'; // Hide stop button
-                });
-        
-                TframeStRec.addEventListener('click', () => {
-                    recordedChunks = [];
-                    const stream = canvas.captureStream(30); // Capture at 30 FPS
-                    mediaRecorder = new MediaRecorder(stream);
-        
-                    mediaRecorder.ondataavailable = (event) => {
-                        if (event.data.size > 0) {
-                            recordedChunks.push(event.data);
-                        }
-                    };
-        
-                    mediaRecorder.onstop = () => {
-                        const blob = new Blob(recordedChunks, { type: 'video/webm' });
-                        const url = URL.createObjectURL(blob);
-                        const a = document.createElement('a');
-                        a.style.display = 'none';
-                        a.href = url;
-                        a.download = 'recording.webm';
-                        document.body.appendChild(a);
-                        a.click();
-                        URL.revokeObjectURL(url);
-                    };
-        
-                    mediaRecorder.start();
-                    TframeStRec.style.display = 'none';
-                    TframeSpRec.style.display = 'inline';
-                });
-        
-                TframeSpRec.addEventListener('click', () => {
-                    mediaRecorder.stop();
-                    TframeStRec.style.display = 'inline';
-                    TframeSpRec.style.display = 'none';
-                });
-        
-                Tframe4u.addEventListener('click', () => {
-                    const link = document.createElement('a');
-                    link.download = 'canvas-video.webm'; // make this a variable like prompot or something 
-                    link.href = hpCC.toDataURL('video/webm');
-                    link.click();
-                });
-        
-                TframeULimg.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        TbackgroundFImage = new Image();
-                        TbackgroundFImage.src = URL.createObjectURL(file);
-                        TframeStBtn.style.display = 'inline'; // Show start button
-                        TframeByeImg.style.display = 'inline'; // Show remove image button
-                    }
-                });
-        
-                TframeULvid.addEventListener('change', (e) => {
-                    const file = e.target.files[0];
-                    if (file) {
-                        TbackgroundFVideo = document.createElement('video');
-                        TbackgroundFVideo.src = URL.createObjectURL(file);
-                        TbackgroundFVideo.muted = true; // Mute the video
-                        TbackgroundFVideo.loop = true; // Loop the video
-                        TbackgroundFVideo.load(); // Load the video
-                        TframeStBtn.style.display = 'inline'; // Show start button
-                        TframeByeVid.style.display = 'inline'; // Show remove video button
-                    }
-                });
-        
-                TframeByeImg.addEventListener('click', () => {
-                    TbackgroundFImage = null;
-                    hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
-                    TframeStBtn.style.display = 'none'; // Hide start button
-                    TframeByeImg.style.display = 'none'; // Hide remove button
-                });
-        
-                TframeByeVid.addEventListener('click', () => {
-                    if (TbackgroundFVideo) {
-                        TbackgroundFVideo.pause();
-                        TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
-                        TbackgroundFVideo = null; // Clear the video reference
+            /*
+                    TFcolorPicker.addEventListener('input', (e) => {
+                        const hex = e.target.value;
+                        const rgb = parseInt(hex.slice(1), 16);
+                        chromaKeyColorWebcam.r = (rgb >> 16) & 255;
+                        chromaKeyColorWebcam.g = (rgb >> 8) & 255;
+                        chromaKeyColorWebcam.b = rgb & 255;
+                    });
+            
+                    // Use chroma key color for webcam
+                    TfCpBtn.addEventListener('click', () => {
+                        useChromaKeyWebcam = true; // Set flag to true
+                        TframeStBtn.style.display = 'inline'; // Show start button after choosing color
+                    });
+            
+                    // Remove chroma key color button
+                    TfCpRm.addEventListener('click', () => {
                         hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
-                    }
-                    TframeStBtn.style.display = 'none'; // Hide start button
-                    TframeByeVid.style.display = 'none'; // Hide remove button
-                });
-        
-                document.getElementById("TcameraFlipButton").onclick = () => {
-                    whichCamera = !whichCamera;
-                }
-        
-                TframeCtrBtn.addEventListener('click', () => {
-                    if (isPlaying) {
+                        frameCounter = 0; // Reset frame counter
+                        useChromaKeyWebcam = false; // Reset flags
+                    });
+            
+                    //Green Screen Ends
+            
+                    TframeSpBtn.addEventListener('click', () => {
                         isPlaying = false;
                         cancelAnimationFrame(animationId);
-                        tfVidStuff.pause();
+                        hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+                        if (webcamStream) {
+                            const tracks = webcamStream.getTracks();
+                            tracks.forEach(track => track.stop());
+                            tfVidStuff.srcObject = null;
+                            webcamStream = null;
+                        }
+                        TframeSpBtn.style.display = 'none'; // Hide stop button
+                    });
+            
+                    TframeStRec.addEventListener('click', () => {
+                        recordedChunks = [];
+                        const stream = canvas.captureStream(30); // Capture at 30 FPS
+                        mediaRecorder = new MediaRecorder(stream);
+            
+                        mediaRecorder.ondataavailable = (event) => {
+                            if (event.data.size > 0) {
+                                recordedChunks.push(event.data);
+                            }
+                        };
+            
+                        mediaRecorder.onstop = () => {
+                            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.style.display = 'none';
+                            a.href = url;
+                            a.download = 'recording.webm';
+                            document.body.appendChild(a);
+                            a.click();
+                            URL.revokeObjectURL(url);
+                        };
+            
+                        mediaRecorder.start();
+                        TframeStRec.style.display = 'none';
+                        TframeSpRec.style.display = 'inline';
+                    });
+            
+                    TframeSpRec.addEventListener('click', () => {
+                        mediaRecorder.stop();
+                        TframeStRec.style.display = 'inline';
+                        TframeSpRec.style.display = 'none';
+                    });
+            
+                    Tframe4u.addEventListener('click', () => {
+                        const link = document.createElement('a');
+                        link.download = 'canvas-video.webm'; // make this a variable like prompot or something 
+                        link.href = hpCC.toDataURL('video/webm');
+                        link.click();
+                    });
+            
+                    TframeULimg.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            TbackgroundFImage = new Image();
+                            TbackgroundFImage.src = URL.createObjectURL(file);
+                            TframeStBtn.style.display = 'inline'; // Show start button
+                            TframeByeImg.style.display = 'inline'; // Show remove image button
+                        }
+                    });
+            
+                    TframeULvid.addEventListener('change', (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            TbackgroundFVideo = document.createElement('video');
+                            TbackgroundFVideo.src = URL.createObjectURL(file);
+                            TbackgroundFVideo.muted = true; // Mute the video
+                            TbackgroundFVideo.loop = true; // Loop the video
+                            TbackgroundFVideo.load(); // Load the video
+                            TframeStBtn.style.display = 'inline'; // Show start button
+                            TframeByeVid.style.display = 'inline'; // Show remove video button
+                        }
+                    });
+            
+                    TframeByeImg.addEventListener('click', () => {
+                        TbackgroundFImage = null;
+                        hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
+                        TframeStBtn.style.display = 'none'; // Hide start button
+                        TframeByeImg.style.display = 'none'; // Hide remove button
+                    });
+            
+                    TframeByeVid.addEventListener('click', () => {
                         if (TbackgroundFVideo) {
                             TbackgroundFVideo.pause();
+                            TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
+                            TbackgroundFVideo = null; // Clear the video reference
+                            hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
                         }
-                    } else {
-                        isPlaying = true;
-        
-                        // Play the webcam feed if it's active
-                        if (webcamStream) {
-                            tfVidStuff.play();
-                        }
-        
-                        // Always play the background video if it exists
-                        if (TbackgroundFVideo) {
-                            TbackgroundFVideo.play();
-                        }
-        
-                        animate();
+                        TframeStBtn.style.display = 'none'; // Hide start button
+                        TframeByeVid.style.display = 'none'; // Hide remove button
+                    });
+            
+                    document.getElementById("TcameraFlipButton").onclick = () => {
+                        whichCamera = !whichCamera;
                     }
-                });
-        */
+            
+                    TframeCtrBtn.addEventListener('click', () => {
+                        if (isPlaying) {
+                            isPlaying = false;
+                            cancelAnimationFrame(animationId);
+                            tfVidStuff.pause();
+                            if (TbackgroundFVideo) {
+                                TbackgroundFVideo.pause();
+                            }
+                        } else {
+                            isPlaying = true;
+            
+                            // Play the webcam feed if it's active
+                            if (webcamStream) {
+                                tfVidStuff.play();
+                            }
+            
+                            // Always play the background video if it exists
+                            if (TbackgroundFVideo) {
+                                TbackgroundFVideo.play();
+                            }
+            
+                            animate();
+                        }
+                    });
+            */
+        });
     } else if (TFiframe.src === "https://www.tsunamiflow.club/news.php" || "https://tsunamiflow.club/news.php" || "news.php") {
         let NewsJson = {
 
@@ -801,7 +805,7 @@ async function DoTheThingMan() {
             } else {
 
             }
-        })
+        });
         //The character essence is created here. 
         // The character become a physical being in the digital realm.
         //const Mishuba = new tfVGC("Mishuba", "Feilong", "2-Fly", 10, 10, 10, 10, 10, 10, 10, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 3, 4, 5, 2, 1, 1, 1, 1, 1, 1, 1, 1);
@@ -840,7 +844,7 @@ async function DoTheThingMan() {
         console.log("something is wrong with the javascript iframe navigation system.");
         HomepageUpdates.start();
     }
-}
+};
 //Pages Ended
 
 //Nav Begins
