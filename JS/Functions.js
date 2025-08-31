@@ -1,4 +1,4 @@
-import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, hpCC, homepageCanvas, tfVidStuff, useChromaKeyWebcam, chromaKeyColorWebcam, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
+import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, tfVidStuff, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
 
 import { DSLO } from "./Objects.js";
 
