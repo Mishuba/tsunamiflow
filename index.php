@@ -627,7 +627,7 @@ donationForm.addEventListener("submit", async (e) => {
             <button id="StoreReadyPayment" disabled>Ready to Pay?</button>
         </div>
     </footer>
-<script type="module">
+<script type="module" crossorigin="anonymous">
     import {
         FreeSubmitButton,
         TStoreF,

@@ -550,7 +550,7 @@ async function DoTheThingMan() {
                         error: "Nothing as of now"
                     };
 
-                    TFiframe.contentWindow.postMessage(HomePageJson, "https://tsunamiflow.club/homepage.php");
+                    TFiframe.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
                 }
 
             } else if (ev.origin === "https://world.tsunamiflow.club") {
@@ -578,7 +578,7 @@ async function DoTheThingMan() {
                         error: "ok no errors for community right now"
                     };
 
-                    TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                    TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
 
                     console.log(CommunityJson);
                 } else {
@@ -591,7 +591,7 @@ async function DoTheThingMan() {
                             username: "Mishuba",
                             error: tfError
                         };
-                        TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                        TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
                     } else {
                         let tfError = "nothing";
                         let CommunityJson = {
@@ -601,7 +601,7 @@ async function DoTheThingMan() {
                             username: "Mishuba",
                             error: tfError
                         };
-                        TFiframe.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.php");
+                        TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
                     }
                 }
             } else if (ev.origin === "https.js.stripe.com") {
@@ -788,7 +788,7 @@ async function DoTheThingMan() {
                         error: "Nothing for competitions right now"
                     };
 
-                    TFiframe.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.php");
+                    TFiframe.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
                 } else if (ev.data.type === "game") {
                     CompetitionJson = {
                         type: "game",

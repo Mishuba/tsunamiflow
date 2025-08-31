@@ -1,7 +1,30 @@
 <?php
-header("Access-Control-Allow-Origin: https://www.tsunamiflow.club");
-header("Content-Security-Policy: frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+ini_set("session.cookie_secure", true);
+ini_set("session.cookie_httponly", "1");
+ini_set("session.gc_maxlifetime", 3600);
+ini_set("session.cookie_lifetime", 0);
+ini_set("session.use_strict_mode", true);
 
+session_start();
+
+header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
+header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
+header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://world.tsunamiflow.club wss://www.tsunamiflow.club; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
+
+header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
+
+header("X-Content-Type-Options: nosniff");
+header("X-Frame-Options: SAMEORIGIN");
+header("X-XSS-Protection: 1; mode=block");
+header("Referrer-Policy: no-referrer-when-downgrade");
+header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
+header("Cross-Origin-Opener-Policy: same-origin");
+header("Cross-Origin-Embedder-Policy: require-corp");
+header("Cross-Origin-Resource-Policy: same-origin");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,7 +50,7 @@ header("Content-Security-Policy: frame-ancestors 'self' https://www.tsunamiflow.
         <input id="msg" type="text" placeholder="Type a message...">
         <button id="LiveStreamChat"></button></button>>Send</button>
 
-    <script>
+    <script crossorigin="anonymous">
         let videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
         let videoRemote = document.getElementById("stream");
         let chatBox = document.getElementById('chatBox');
