@@ -61,7 +61,7 @@ export class Particle {
     }
 }
 
-export class tfVGbaby extends tfVGhuman {
+export class tfVGbaby {
 
     cry() {
         console.log("crying");
