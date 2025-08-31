@@ -13,7 +13,7 @@ header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
-header("Content-Security-Policy: script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
+//header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
 
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 
