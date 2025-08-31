@@ -1,4 +1,4 @@
-import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, hpCC, homepageCanvas, tfVidStuff, useChromaKeyWebcam, chromaKeyColorWebcam, Tframe4u, TframeSpRec, TframeStRec, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
+import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, hpCC, homepageCanvas, tfVidStuff, useChromaKeyWebcam, chromaKeyColorWebcam, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
 
 import { DSLO } from "./Objects.js";
 
@@ -569,6 +569,7 @@ export async function TpauseFVideo() {
 
 //Recording
 export async function startRecording() {
+    /*
     recordedChunks = [];
     let canvasStream = homepageCanvas.captureStream();
     let mediaStream = new MediaStream([
@@ -593,15 +594,18 @@ export async function startRecording() {
     TframeIsRecording = true;
     TframeStRec.disabled = true;
     TframeSpRec.disabled = false;
+    */
 }
 
 export async function stopRecording() {
+    /*
     if (mediaRecorder && isRecording) {
         mediaRecorder.stop();
         TframeIsRecording = false;
         TframeStRec.disabled = false;
         TframeSpRec.disabled = true;
     }
+        */
 }
 //Recording Ends
 
@@ -615,9 +619,11 @@ export async function startWebcam() {
     tfVidStuff.srcObject = AskForWebcam;
     tfVidStuff.play();
     animate();
+
 }
 */
 export async function applyChromaKeyWebcam() {
+    /*
     const frame = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     const data = frame.data;
 
@@ -632,12 +638,14 @@ export async function applyChromaKeyWebcam() {
         }
     }
     hpCC.putImageData(frame, 0, 0);
+    */
 }
 //Webcam Ends
 //Video Ends
 //Canvas
 //ChromaKey Canvas
 export async function hexToRgb(hex) {
+    /*
     let trf = 0, tgf = 0, tbf = 0;
     if (hex.length === 4) {
         trf = parseInt(hex[1] + hex[1], 16);
@@ -649,10 +657,12 @@ export async function hexToRgb(hex) {
         tbf = parseInt(hex[5] + hex[6], 16);
     }
     return { trf, tgf, tbf };
+    */
 }
 //ChromaKey Canvas Ends
 
 export async function animate() {
+    /*
     let frameSkipCount = 2;
     let frameCounter = 0;
     if (tfVidStuff.paused || tfVidStuff.ended) {
@@ -694,6 +704,7 @@ export async function animate() {
         // Continue the animation loop
         animationId = requestAnimationFrame(animate);
     }
+    */
 }
 //Canvas Ends
 
