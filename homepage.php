@@ -10,11 +10,12 @@ ini_set("session.use_strict_mode", true);
 session_start();
 
 header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
-header("Access-Control-Allow-Credentials: true");
+//header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
 //header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://world.tsunamiflow.club wss://www.tsunamiflow.club; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
 
+    /*
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 
 header("X-Content-Type-Options: nosniff");
@@ -25,6 +26,7 @@ header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Resource-Policy: same-origin");
+*/
 ?>
 
 <!DOCTYPE html>
