@@ -110,6 +110,7 @@ export let float32FromIterable = new Float32Array(TFgameIterable);
 export let GameWorldAudio = new AudioContext();
 
 //Canvas 3d
+/*
 export const hp3cc = homepageCanvas.getContext("webgl");
 
 if (hp3cc === null) {
@@ -148,8 +149,8 @@ if (hp3cc === null) {
             console.log(gl.getShaderInfoLog(shader));
             gl.deleteShader(shader);
         }
-    */
 }
+*/
 //Stripe Payments
 //Donation
 export const TFDA = document.getElementById("DonationAmount");
