@@ -1,4 +1,4 @@
-import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, tfVidStuff, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
+import { weatherSpot, WABul, WABurl, WapiKey, CWapi, TsunamiRadio, TsunamiRadioTitle, TsunamiLastButton, TsunamiRadioButtons, TsunamiRestartButton, TsunamiStartButton, TsunamiSkipButton, RadioCanvas } from "./Variables.js";
 
 import { DSLO } from "./Objects.js";
 
@@ -560,11 +560,11 @@ let mediaRecorder;
 let recordedChunks = [];
 
 export async function TplayFVideo() {
-    tfVidStuff.play();
+    /*tfVidStuff.play();*/
 }
 
 export async function TpauseFVideo() {
-    tfVidStuff.pause();
+    /*    tfVidStuff.pause(); */
 }
 
 //Recording
