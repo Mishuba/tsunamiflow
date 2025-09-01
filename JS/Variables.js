@@ -6,20 +6,8 @@ export let TFkeyboardUser = navigator.keyboard;
 //Time
 export let MyNewTFTime = document.getElementById("TFtime");
 
-//Words
-export let TheOtherWords = 1;
-export let QuoteStuff = 0;
-export let TfWotd = document.getElementById("tfWordOfTheDay");
-
 //Main Images
 export const TsunamiFlowLogo = "./Pictures/Logo/'Tsunami Flow Logo.png'";
-
-//Weather
-export let weatherSpot = document.getElementById("TFweather");
-export const WABul = "https://api.weatherapi.com/v1";
-export const WABurl = "https://api.weatherapi.com/v1";
-export const WapiKey = "cf5a64c9095e425ab0f52816230110";
-export const CWapi = "/current.json";
 
 //Subscribers
 // Define references to the form elements
@@ -72,43 +60,6 @@ export let tfConflictManagementStyle = document.getElementById("ConflictManageme
 export let tfTeamRolePreference = document.getElementById("TeamRolePreference");
 //export let MembershipCostFr = document.getElementById("hiddenMC");
 
-//Audio
-//Radio
-export let RadioCanvas = document.getElementById("TFradioCanvas");
-export let TsunamiRadio = document.getElementById("TFradioPlayer");
-export let phpRadio = new XMLHttpRequest();
-export let TsunamiRadioTitle = document.getElementById("TfRadioStuff");
-export const TsunamiLastButton = document.createElement("button");
-export const TsunamiRadioButtons = document.getElementById("CheckRadio");
-export const TsunamiRestartButton = document.createElement("button");
-export const TsunamiStartButton = document.createElement("button");
-export const TsunamiSkipButton = document.createElement("button");
-
-export let TsunamiRadioAudio = new AudioContext();
-//Radio Ends
-
-export let TFpwoReal = new Float32Array(2);
-
-export let TFpwoImag = new Float32Array(2);
-
-//Array Buffer
-export let TFaudioBuffer = new ArrayBuffer(32);
-export let TFtestingF32A = new Float32Array(TFaudioBuffer, 4, 4);
-//console.log(TFtestingF32A.byteOffset);
-//console.log(TFtestingF32A.length);
-//console.log(TFtestingF32A.BYTES_PER_ELEMENT);
-
-//From an Iterable
-export let TFgameIterable = (function* () {
-    yield* [1, 2, 3];
-})();
-export let float32FromIterable = new Float32Array(TFgameIterable);
-//Regular Audio Ends//
-
-
-//Game Audio 
-export let GameWorldAudio = new AudioContext();
-
 //Canvas 3d
 /*
 export const hp3cc = homepageCanvas.getContext("webgl");
@@ -151,23 +102,3 @@ if (hp3cc === null) {
         }
 }
 */
-//Stripe Payments
-//Donation
-export const TFDA = document.getElementById("DonationAmount");
-export const TFdoEM = document.getElementById("TFemailDO");
-export const TFdoNa = document.getElementById("TFnameDO");
-export const TFdoCo = document.getElementById("TFcoDO");
-//Donation Ends
-
-
-//Store
-//Printful
-export let TStoreF = document.getElementById('tspf');
-export let SPC = document.getElementById("tfSubPaymentCity");
-export let SPCC = document.getElementById("tfSubPaymentCountry");
-export let SPA1 = document.getElementById("tfSubPaymentAddress1");
-export let SPA2 = document.getElementById("tfSubPaymentAddress2");
-export let SPCtf = document.getElementById("tfSubPostalCode");
-export let SS = document.getElementById("tfSubState");
-export let SPN = document.getElementById("tfSubPhoneNumber");
-export let MembershipCostFr = document.getElementById("hiddenMC");

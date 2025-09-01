@@ -68,13 +68,13 @@ Helps maintain brand consistency across user platforms-->
     <!--link rel="mainfest" href="/JSon/mainfest.json" /-->
 </head>
 <body id="theBody">
-    <header>
+    <header id="tfHeaderFr">
         <div>
             <h3 id="TFtime">Time</h3>
             <p5 id="tfWordOfTheDay"></p5>
             <br />
             <p5 id="TimeInfo"></p5>
-            <p6 id="TfAd"></p>
+
         </div>
         <div>
             <h3>TF News & History</h3>
@@ -83,6 +83,7 @@ Helps maintain brand consistency across user platforms-->
         <div>
             <h3>Weather</h3>
             <p3 id="TFweather"></p3>
+            <p6 id="TfAd"></p>
         </div>
     </header>
     <nav>
@@ -130,106 +131,19 @@ Helps maintain brand consistency across user platforms-->
                 <p6 id="CheckRadio"></p6>
             </span>
             <span>
-                <h1>Ai</h1>
-                <p>Ai Content</p>
-            </span>
-            <span>
                 <address id="authorStuffTF" itemscope itemref="a b c" itemtype="">
                     <p itemprop="b">Homebase: Tyacdome <br />Location: The Land of Dreams <br /></p>
                     <p itemprop="c">Planet: Earth<br />Galaxy: Milky Way<br /></p>
                 </address>
             </span>
-            <span id="donation">
-                <form id="TFdonation" name="TFdonation" method="POST" action="server.php">
-
-                    <label for="Donation Amount"> Enter The Amount You Want To Donate. </label>
-                    <input type="number" id="DonationAmount" name="DonationAmount" placeholder="Enter Amount" required />
-
-                    <label for="Donation Email"> Enter your email</label>
-                    <input type="email" id="StripePaymentStuffEmail" name="email" placeholder="email" />
-
-                    <label for="First Name"> Enter Your First Name"> </label>
-                    <input type="text" id="StripePaymentStuffFirstName" name="FirstName" placeholder="name" />
-
-                    <label for="Last Name"> Enter Your Last Name <label>
-                    <input type="text" id="StripePaymentStuffLastName" name="LastName" placeholder="Last Name" />
-
-
-                    <select name="country" id="StripePaymentStuffCountryCode">
-                        <option value="DE">Germany</option>
-                        <option value="FR">France</option>
-                        <option value="US">United States</option>
-                        <option value="GB">United Kingdom</option>
-                        <option value="AU">Australia</option>
-                    </select>
-                    <label for="Donation Note"> Leave us a message" </label>
-                    <input type="text" id="StripePaymentStuffDescription" name="Description" placeholder="Do you have anything to share" />
-
-                    <button id="DonationCheckoutButton" type="submit"> Submit Payment </button>
-                </form>
-<script>
-let donationForm = document.getElementById("TFdonation");
-
-donationForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    // get the form information you want to use.
-    let donationAmount = document.getElementById("DonationAmount").value;
-    let donationEmail = document.getElementById("StripePaymentStuffEmail").value;
-    let donationFirstName = document.getElementById("StripePaymentStuffFirstName").value;
-    let donationLastName = document.getElementById("StripePaymentStuffLastName").value;
-    let donationCountry = document.getElementById("StripePaymentStuffCountryCode").value;
-    let donationNote = document.getElementById("StripePaymentStuffDescription").value;
-
-    let donationXHR = new XMLHttpRequest();
-    donationXHR.open("POST", "server.php", true);
-    donationXHR.setRequestHeader("Content-Type", "application/json");
-    donationXHR.onreadystatechange = async function () {
-        if (donationXHR.readyState === 4) {
-            if (donationXHR.status === 200) {
-                let donationResponse = JSON.parse(donationXHR.responseText);
-
-                if (donationResponse.url) {
-                    window.location.href = donationResponse.url;
-                } else {
-                    alert("Error: " + (donationResponse.error || "Unknown"));
-                }
-            } else {
-                alert("Failed to create checkout session.");
-                console.log("Failed to create a checkout session.");
-            }
-        }
-    };
-
-    let donationData = JSON.stringify({
-        "type": "Tsunami Flow Donation",
-        "amount": donationAmount,
-        "email": donationEmail,
-        "first_name": donationFirstName,
-        "last_name": donationLastName,
-        "country": donationCountry,
-        "note": donationNote
-    });
-    donationXHR.send(donationData);
-})
-</script>
-        <div id="DonationCardElement" style="padding: 10px; margin-top: 15px; margin-bottom: 15px; margin-right: 15px; margin-left: 15px; border: 1px solid #ccc; border-radius: 4px;" min-width="10%" min-height="10%" max-width="100%" min-height="100%">
-
-        </div>
-        
-        <div id="DonationCardErrors" role="alert">
-
-        </div>
-                <button type="button" id="DonationReadyPayment" disabled>Click To Input Card Information</button>
-            </span>
-            <!--p1 id="TFdonation"></p1>
+            <p1 id="TFdonation"></p1>
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick" />
                     <input type="hidden" name="hosted_button_id" value="3LQGL334FUKLW" />
                     <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
                     <ilt="Please donate." border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
                 </form>
-            </p1-->
+            </p1>
         </aside>
         <section>
             <div id="mainTsectionFdiv" height="800" width="800" src=""></div>
@@ -300,73 +214,7 @@ donationForm.addEventListener("submit", async (e) => {
 
                         <!-- Regular Member Section -->
                         <div id="regularLevelInputs" style="display:none;">
-                            <label for="ChineseZodiacSign">Chinese Zodiac Sign
-                                <select id="ChineseZodiacSign" class="TFFormInput" name="ChineseZodiacSign">
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                </select>
-                            </label>
-                            <br>
-                            <label for="WesternZodiacSign">Western Zodiac Sign<input type="text" placeholder="Western Zodiac Sign" />
-                                <select id="WesternZodiacSign" class="TFFormInput" name="WesternZodiacSign">
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                    <option value=""></option>
-                                </select>
-                            </label>
+                            
                             <br>
                             <label for="SpiritAnimal">Spirit Animal
                                 <select id="SpiritAnimal" class="TFFormInput" name="SpiritAnimal">
@@ -460,10 +308,6 @@ donationForm.addEventListener("submit", async (e) => {
                         <div id="vipLevelInputs" style="display:none;">
                             <label for="LoveLanguage">Love Language<input id="LoveLanguage" class="TFFormInput" name="LoveLanguage" type="text" placeholder="Love Language" /></label>
                             <br>
-                            <label for="Birthstone">Birthstone<input id="Birthstone" class="TFFormInput" name="Birthstone" type="text" placeholder="Birthstone" /></label>
-                            <br>
-                            <label for="BirthFlower">Birth Flower<input id="BirthFlower" class="TFFormInput" name="BirthFlower" type="text" placeholder="Birth Flower" /></label>
-                            <br>
                             <label for="BloodType">Blood Type<input id="BloodType" class="TFFormInput" name="BloodType" type="text" placeholder="Blood Type" /></label>
                             <br>
                             <label for="AttachmentStyle">Attachment Style<input id="AttachmentStyle" class="TFFormInput" name="AttachmentStyle" type="text" placeholder="Attachment Style" /></label>
@@ -491,37 +335,9 @@ donationForm.addEventListener("submit", async (e) => {
                             <br>
                             <label for="TeamRolePreference">Team Role Preference<input id="TeamRolePreference" class="TFFormInput" name="TeamRolePreference" type="text" placeholder="Team Role Prefernce" /></label>
                         </div>
-
-                        <div id="AddressDetailsSubscibers">
-                            <input id="tfSubPaymentCity" class="TFFormInput" name="tfSubPaymentCity" type="text" placeholder="City" />
-                            <input id="tfSubPaymentCountry" class="TFFormInput" name="tfSubPaymentCountry" type="text" placeholder="Country" />
-                            <input id="tfSubPaymentAddress1" class="TFFormInput" name="tfSubPaymentAddress1" type="text" placeholder="Address Line 1" />
-                            <input id="tfSubPaymentAddress2" class="TFFormInput" name="tfSubPaymentAddress2" type="text" placeholder="Address Line 2" />
-                            <input id="tfSubPostalCode" class="TFFormInput" name="tfSubPostalCode" type="text" placeholder="Postal Code" />
-                            <input id="tfSubState" class="TFFormInput" name="tfSubState" type="text" placeholder="State" />
-                            <input id="tfSubPhoneNumber" class="TFFormInput" name="tfSubPhoneNumber" type="text" placeholder="Phone Number" />
-                        </div>
-
-                        <!-- Membership Cost Information -->
-                        <div id="membershipCostInfo">
-                            <input type="hidden" name="membershipCost" id="hiddenMC" placeholder="0" />
-                            Cost: <span id="membershipCost"></span>
-                            <input type="hidden" name="paymentType" id="hiddenPT" />
-                            <p><span id="paymentType"></span></p>
-                        </div>
-
-                        <div id="card-element"><!-- Stripe.js injects the Card Element here --></div>
-                        
-
-                        <div id="payment-message" class="hidden"></div>
-
-                        <!-- Submit Button -->
                         <label for="SubmitButton"><button id="FreeLevelSubmit" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit"> Subscribe </button></label>
                     </fieldset>
-                    <div id="payment-message" class="hidden"></div>
                 </form>
-                <button id="SubReadyPayment" disabled>Ready to Pay?</button>
-
             </span>
         </aside>
     </div>
@@ -606,323 +422,10 @@ donationForm.addEventListener("submit", async (e) => {
             <p>
                 Cost:
             </p>
-
-            <form id="tspf">
-
-                <div id="cardStoreelement"><!-- Stripe.js injects the Card Element here --></div>
-
-                <div id="OrdersAddressesFr">
-                    <input id="tfOrdPaymentCity" class="TFFormInput" name="tfOrdPaymentCity" type="text" placeholder="City" />
-                    <input id="tfOrdPaymentCountry" class="TFFormInput" name="tfOrdPaymentCountry" type="text" placeholder="Country" />
-                    <input id="tfOrdPaymentAddress1" class="TFFormInput" name="tfOrdPaymentAddress1" type="text" placeholder="Address Line 1" />
-                    <input id="tfOrdPaymentAddress2" class="TFFormInput" name="tfOrdPaymentAddress2" type="text" placeholder="Address Line 2" />
-                    <input id="tfOrdPostalCode" class="TFFormInput" name="tfOrdPostalCode" type="text" placeholder="Postal Code" />
-                    <input id="tfOrdState" class="TFFormInput" name="tfOrdState" type="text" placeholder="State" />
-                    <input id="tfOrdPhoneNumber" class="TFFormInput" name="tfOrdPhoneNumber" type="text" placeholder="Phone Number" />
-                </div>
-                <button id="StoreSubmitButton" name="StoreSubmitButton">Pay</button disabled>
-
-                <div id="payment-message" class="hidden"></div>
-            </form>
-            <button id="StoreReadyPayment" disabled>Ready to Pay?</button>
         </div>
     </footer>
 <script type="module" crossorigin="anonymous">
-    import {
-        FreeSubmitButton,
-        TStoreF,
-        tfFN,
-        tfLN,
-        tfNN,
-        tfGen,
-        tfEM,
-        tfBirth,
-        tfUN,
-        tfPsw,
-        tfMembershipLevel,
-        tfChineseZodiacSign,
-        tfWesternZodiacSign,
-        tfSpiritAnimal,
-        tfCelticTreeZodiacSign,
-        tfNativeAmericanZodiacSign,
-        tfVedicAstrologySign,
-        tfGuardianAngel,
-        tfChineseElement,
-        tfEyeColorMeaning,
-        tfGreekMythologyArchetype,
-        tfNorseMythologyPatronDeity,
-        tfEgyptianZodiacSign,
-        tfMayanZodiacSign,
-        tfLoveLanguage,
-        tfBirthstone,
-        tfBirthFlower,
-        tfBloodType,
-        tfAttachmentStyle,
-        tfCharismaType,
-        tfBusinessPersonality,
-        tfDisc,
-        tfSocionicsType,
-        tfLearningStyle,
-        tfFinancialPersonalityType,
-        tfPrimaryMotivationStyle,
-        tfCreativeStyle,
-        tfConflictManagementStyle,
-        tfTeamRolePreference,
-        SPC,
-        SPCC,
-        SPA1,
-        SPA2,
-        SPCtf,
-        SS,
-        SPN,
-        MembershipCostFr, TFDA
-    } from "./JS/Variables.js";
-
-    import {
-        DoXML, toggleTaxField
-    } from "./JS/Functions.js";
-
     import "./JS/tfMain.js";
-
-    /*
-    const paymentElementOptions = {layout: "accordion"};
-    var SoStShOk = Stripe("<?php echo htmlspecialchars(TfStripePublishableKey, ENT_QUOTES, 'UTF-8'); ?>");
-    var StrEleOk = SoStShOk.elements();
-    let StrCaOk = StrEleOk.create("card");
-
-    document.getElementById("TFdonation").addEventListener("submit", function(event) {
-        event.preventDefault();
-        handleSubmit(SoStShOk, StrCaOk, "TycadomeDonations");
-    });
-
-    let supportedPaymentMethods = {
-        supportedMethods: {
-            type: "card",
-            methodDetails: "",
-            methodName: "",
-        },
-        Stripe: {
-            type: "card",
-            card: StrCaOk,
-        }
-    };
-
-    //TsunamiStoreCheckout.js
-async function initializeTsunamiStore() {
-    const fetchTsunamiClientSecret = async () => {
-        const TsunamiStoreResponse = await fetch("TsunamiStoreCheckout.php", { method: "POST", });
-        const { clientSecret } = await TsunamiStoreResponse.json();
-        return clientSecret;
-    }
-
-    let StripeDonationXML = new XMLHttpRequest();
-
-    StripeDonationXML.onreadystatechange = async function () {
-        if (this.readyState == 4 && this.status == 200) {
-            let StripeSecretKeyOk = JSON.parse(this.responseText);
-            if (StripeSecretKeyOk.error) {
-
-            } else {
-                let thestripekey = StripeSecretKeyOk.secret_key;
-                const TsunamiStoreCheckout = await thestripekey.initEmbeddedCheckout({
-                    fetchTsunamiClientSecret,
-                });
-
-                TsunamiStoreCheckout.mount("#DonationCheckoutElement");
-            }
-        }
-    }
-    StripeDonationXML.open("POST", 'server.php', true);
-    StripeDonation = JSON.parse({
-        "Payment_Message": "donation"
-    });
-    StripeDonationXML.send(StripeDonation);
-};
-
-
-    async function TFdonationXML(needThis, successMessageElement, amount, email, name, description, countryCode) {
-        let DonationXHR = new XMLHttpRequest();
-        //DonationXHR.timeout(300000); // one second
-        
-        DonationXHR.ontimeout = (e) => {
-
-        }
-        
-        //DonationXHR.overrideMimeType();
-        DonationXHR.open("POST", "server.php", true);
-        DonationXHR.setRequestHeader("Content-Type", "application/json");
-        //DonationXHR.setAttributionReporting({eventSourceEligible: true, triggerEligible: true});
-        DonationXHR.withCredentials = true;
-        DonationXHR.onreadystatechange = async () => {
-            if (this.readyState === this.HEADERS_RECEIVED) {
-                const TsunamiHeaders = this.getAllResponseHeaders();
-                const TfHeaderArray = TsunamiHeaders.trim().split(/[\r\n]+/);
-                const TfHeaderMap = {};
-                TfHeaderArray.forEach((line) => {
-                    const TfHeaderParts = line.split(":");
-                    const TfHeaderHeader = TfHeaderParts.shift();
-                    const TfHeaderValue = TfHeaderParts.join(":");
-                    TfHeaderMap[TfHeaderHeader] = value;
-                });
-
-                const StripeHeaderMap = TfHeaderMap["content-type"];
-            } else {
-
-            }
-            if (this.readyState === 4) {
-                if (this.status === 200) {
-                    console.log(`the XML http request status for the current Stripe Payment is ${this.statusText}`)
-                    //console.log(this.response);
-                    //console.log(this.responseURL);
-                    //console.log(this.responseXML)
-                    try {
-                        let DonationResponse = this.responseText.startsWith("<") ? this.responseText : JSON.parse(this.responseText);
-                        if (DonationResponse.success) {
-                            console.log(DonationResponse.message);
-                            successMessageElement.innerHTML = DonationResponse.message;
-                        } else if (DonationResponse.requires_action) {
-                            console.log(DonationResponse.message);
-                            let HandleCardActionPromise = await paymentInstance.handleCardAction(DonationResponse.payment_intent_client_secret);
-                            const paymentIntent = HandleCardActionPromise.error ? HandleCardActionPromise.error : HandleCardActionPromise.paymentIntent;
-                            //successMessageElement.innerHTML = "Error: " + paymentIntent;
-                        } else if (DonationResponse.requires_confirmation) {
-                            let ReqConfiPromise = await paymentInstance.confirmCardPayment(DonationResponse.payment_intent_client_secret, {
-                                payment_method: {
-                                    card: paymentElement
-                                }
-                            });
-                            let RCPouttaHere = await ReqConfiPromise.error ? ReqConfiPromise.error : ReqConfiPromise.paymentIntent;
-                            //successMessageElement.innerHTML = "Payment successful: " + RCPouttaHere;
-                        } else if (DonationResponse.requires_capture) {
-                            let DRRCugg = await paymentInstance.captureCardPayment(DonationResponse.payment_intent_client_secret);
-                            let DRRCokjo = await DRRCugg.error ? DRRCugg.error : DRRCugg.paymentIntent;
-                            //successMessageElement.innerHTML = "Payment successful: " + DRRCokjo;
-                        }
-                    } catch (Error) {
-                        console.error("Error processing donation:", Error);
-                        //successMessageElement.innerHTML = "An error occurred. Please try again.";
-                    }
-                } else {
-                    console.error("Failed to contact server: ", this.status);
-                }
-            }
-        };
-        DonationAmount = JSON.parse({
-            "Payment_Method": needThis,
-            "Payment_Message": successMessageElement,
-            "Payment_Amount": amount, 
-            "email": email,
-            "name": name,
-            "description": description,
-            "countryCode": countryCode,
-            "TaxId": ""
-        }); 
-        DonationXHR.send(DonationAmount);
-        //let NdXhr = DonationXHR.upload;
-        // NdXhr.onloadstart();
-        // NdXhr.onprogress();
-        // NdXhr.onabort();
-        // NdXhr.onerror();
-        // NdXhr.onload();
-        // NdXhr.ontimeout();
-        // NdXhr.onloadend();
-
-        //Donation.abort();
-    }
-
-    async function handleSubmit(paymentInstance, paymentElement, theThing) {
-        if (theThing === "SubscriberTfFormHandleIght") {
-            if (tfMembershipLevel.value === "free" || tfMembershipLevel.value === "Free") {
-                return await DoXML(tfFN, tfLN, tfNN, tfGen, tfEM, tfBirth, tfUN, tfPsw, tfMembershipLevel, tfChineseZodiacSign, tfWesternZodiacSign, tfSpiritAnimal, tfCelticTreeZodiacSign, tfNativeAmericanZodiacSign, tfVedicAstrologySign, tfGuardianAngel, tfChineseElement, tfEyeColorMeaning, tfGreekMythologyArchetype, tfNorseMythologyPatronDeity, tfEgyptianZodiacSign, tfMayanZodiacSign, tfLoveLanguage, tfBirthstone, tfBirthFlower, tfBloodType, tfAttachmentStyle, tfCharismaType, tfBusinessPersonality, tfDisc, tfSocionicsType, tfLearningStyle, tfFinancialPersonalityType, tfPrimaryMotivationStyle, tfCreativeStyle, tfConflictManagementStyle, tfTeamRolePreference, SPC, SPCC, SPA1, SPA2, SPCtf, SS, SPN, MembershipCostFr, "No Payment Method Required");
-            } else {
-                let SubmitPromise = await paymentInstance.createPaymentMethod(supportedPaymentMethods.Stripe);
-                let paymentMethodFr = await SubmitPromise.error ? SubmitPromise.error : SubmitPromise.paymentMethod;
-                TFdonationXML(paymentMethodFr, DonationUserMessages, MembershipCostFr); //needThis, successMessageElement, amount, email, name, description, countryCode
-                return await DoXML(tfFN, tfLN, tfNN, tfGen, tfEM, tfBirth, tfUN, tfPsw, tfMembershipLevel, tfChineseZodiacSign, tfWesternZodiacSign, tfSpiritAnimal, tfCelticTreeZodiacSign, tfNativeAmericanZodiacSign, tfVedicAstrologySign, tfGuardianAngel, tfChineseElement, tfEyeColorMeaning, tfGreekMythologyArchetype, tfNorseMythologyPatronDeity, tfEgyptianZodiacSign, tfMayanZodiacSign, tfLoveLanguage, tfBirthstone, tfBirthFlower, tfBloodType, tfAttachmentStyle, tfCharismaType, tfBusinessPersonality, tfDisc, tfSocionicsType, tfLearningStyle, tfFinancialPersonalityType, tfPrimaryMotivationStyle, tfCreativeStyle, tfConflictManagementStyle, tfTeamRolePreference, SPC, SPCC, SPA1, SPA2, SPCtf, SS, SPN, MembershipCostFr, paymentMethodFr);
-            }
-        } else if (theThing === "TycadomePrintfulStore") {
-            let SubmitPromise = await paymentInstance.createPaymentMethod(supportedPaymentMethods.Stripe);
-            let paymentMethod = await SubmitPromise.error ? SubmitPromise.error : SubmitPromise.paymentMethod;
-            TFdonationXML(paymentMethod, DonationUserMessages, amount); //needThis, successMessageElement, amount, email, name, description, countryCode
-            return;
-        } else if (theThing === "TycadomeDonations") {
-            const DonationAmount = TFDA.value * 100;
-            if (DonationAmount < 50) {
-                return await alert("minimum donation is $0.50");
-            } else {
-                let DonationEmail = document.getElementById("StripePaymentStuffEmail").value;
-                let DonationFirstName = document.getElementById("StripePaymentStuffFirstName").value;
-                let DonationLastName = document.getElementById("StripePaymentStuffLastName").value;
-                let DonationFullName = DonationFirstName + " " + DonationLastName;
-                let DonationDescription = document.getElementById("StripePaymentStuffDescription").value;
-                let DonationCountryCode = document.getElementById("StripePaymentStuffCountryCode").value;
-                let SubmitPromise = await paymentInstance.createPaymentMethod(supportedPaymentMethods.Stripe);
-                let paymentMethod = await SubmitPromise.error ? SubmitPromise.error : SubmitPromise.paymentMethod;
-                return TFdonationXML(paymentMethod, "Donation", DonationAmount, DonationEmail, DonationFullName, DonationDescription, DonationCountryCode); 
-            }
-        } else {
-            console.error("Something went wrong.");
-            alert("An unknown error occurred. Time to debug.");
-        }
-    }
-
-    function mountStripeCardElement(targetElementId) {
-        const apperance = {
-            theme: "stripe",
-            variables: {
-                colorPrimary: "#5469d4",
-                colorBackground: "#ffffff",
-                colorText: "#32325d",
-                colorDanger: "#df1b41",
-                fontFamily: "Arial, sans-serif",
-                borderRadius: "4px"
-            },
-        };
-        if (StrCaOk) {
-            StrCaOk.unmount();
-        }
-        StrEleOk = SoStShOk.elements({apperance});
-        StrCaOk = StrEleOk.create("card");
-        try {
-            StrCaOk.mount(targetElementId);
-            FreeSubmitButton.disabled = true;
-            TStoreF.disabled = true;
-            document.getElementById("DonationSubmitButton").disabled = false;
-        } catch (error) {
-            console.error("Error mounting Stripe Card Element:", error);
-        }
-    }
-
-    function setupPaymentElements() {
-        document.getElementById("DonationReadyPayment").addEventListener("click", function() {
-            mountStripeCardElement('#DonationCardElement');
-        });
-
-        document.getElementById("SubReadyPayment").addEventListener("click", function() {
-            mountStripeCardElement('#card-element');
-        });
-
-        document.getElementById("StoreReadyPayment").addEventListener("click", function() {
-            mountStripeCardElement("#cardStoreelement");
-        });
-    }
-
-    if (FreeSubmitButton) {
-        FreeSubmitButton.addEventListener('click', function(event) {
-            event.preventDefault();
-            handleSubmit(SoStShOk, StrCaOk, "SubscriberTfFormHandleIght");
-        });
-    }
-
-    if (TStoreF) {
-        TStoreF.addEventListener('submit', function(event) {
-            event.preventDefault();
-            handleSubmit(SoStShOk, StrCaOk, "TycadomePrintfulStore");
-        });
-    }
-
-    setupPaymentElements();
-    */
 </script>
 </body>
 </html>

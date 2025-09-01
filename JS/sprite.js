@@ -225,6 +225,16 @@ export class letsDoIt {
         this.frame = 0; // 10 //Moving Obstacles
         this.frameDirection = 1;
         this.StaggerFrame = 15;
+        //Armor
+        this.armourSet1 = { name: "Helmet", defense: 5 };
+        this.armourSet2 = { name: "Chestplate", defense: 10 };
+        this.armourSet3 = { name: "Gloves", defense: 3 };
+        this.armourSet4 = { name: "Boots", defense: 2 };
+        this.armourSet5 = { name: "Shield", defense: 8 };
+        this.armourSet6 = { name: "Pants", defense: 6 };
+        this.armourSet7 = { name: "Bracers", defense: 4 };
+        this.armourSet8 = { name: "Cloak", defense: 7 };
+        //Weapons
         //Ranking/PowerScaling
         this.GodRank = Infinity;
         this.RulerLevel = Math.pow(10, 10000);
@@ -321,6 +331,28 @@ export class letsDoIt {
         //Planets
         this.EarthMass = 5.972e24;
         this.EarthRadius = 6.371e6;
+        this.gamepads = {};
+        this.controllerMappings = {
+            playstation: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "touchpad", start: "Options Button", share: "Share Button",
+                action1: "Cross", action2: "Circle", action3: "Square", action4: "Triangle",
+                action5: "L1", action6: "R1", action7: "L2", action8: "R2", action9: "Left Analog Stick Button", action10: "Right Analog Stick Button", action11: "", action12: "",
+                leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            },
+            xbox: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "Menu Button", start: "View Button", action1: "A", action2: "B",
+                action3: "X", action4: "Y", leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            },
+            switch: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "- Button", start: "+ Button", action1: "B", action2: "A", action3: "Y", action4: "X",
+                leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            }
+        };
+        this.SoundTrack;
+        this.GameWorldAudio = new AudioContext();
     }
     HomePageAnimation(player) {
         this.clear();
@@ -1238,6 +1270,88 @@ export class letsDoIt {
         }
         return crash;
     }
+    damage(character, attackType) {
+        switch (attackType) {
+            case "weakAttack":
+                return character.weakAttack;
+            case "strongAttack":
+                return character.strongAttack;
+            case "knockBackAttack":
+                return character.knockBackAttack;
+            case "specialAttack":
+                return character.specialAttack;
+            case "aoeSkill":
+                return character.aoeSkill;
+            case "rangeSkill":
+                return character.rangeSkill;
+            case "knockBackSkill":
+                return character.knockBackSkill;
+            case "evadeSkill":
+                return character.evadeSkill;
+            case "defenseSkill":
+                return character.defenseSkill;
+            case "buffSkill":
+                return character.buffSkill;
+            case "debuffSkill":
+                return character.debuffSkill;
+            case "ultimateSkill":
+                return character.ultimateSkill;
+            default:
+                return 0;
+        }
+    }
+
+    damageTotal(tfCC1, tfCC2, pressed) {
+        let damageDealt = damage(tfCC1, pressed) - tfCC2.ArmorMax;
+        if (damageDealt < 0) {
+            damagedealt = 0;
+        }
+        return damageDealt;
+        /*
+        // Calculate damage, considering ArmorMax
+        let damageDealt = damage(tfCC1, pressed) - tfCC2.ArmorMax;
+        return damageDealt < 0 ? 0 : damageDealt; // Ensure no negative damage
+        */
+    }
+
+    newHealth(character, damage) {
+        character.health = character.health - damage;
+        return character.health;
+        // Subtract damage from character's health
+        //    character.health = Math.max(0, character.health - damage); // Health shouldn't go below 0
+    }
+
+    death(character) {
+        if (character.health > 0) {
+            return console.log("still alive");
+        } else {
+            return console.log("dead");
+        }
+        //return character.health > 0 ? "still alive" : "dead";
+    }
+
+    fullHealth(character) {
+        character.health = character.maxHealth;
+        return character.health;
+    }
+
+    function instantKill(character) {
+        character.health = 0;
+        return character.health;
+    }
+
+    GainExperience(character) {
+        //const base_xp = 100; // Example base XP
+        //const factor = 7; // XP growth factor
+        //return base_xp * Math.pow((character.CharacterLevel + 1), factor);
+    }
+
+    LevelUp(character) {
+        //character.CharacterLevel++;
+        //character.health += 10; // Increase max health per level
+        //character.strength += 2; // Increase strength per level
+        console.log(`Level Up! New Level: ${character.CharacterLevel}`);
+    }
     everyInterval(n, frameNumber) {
         if ((frameNumber / n) % 1 == 0) {
             return true;
@@ -1768,90 +1882,3 @@ FirstGame.context.reset();
         FirstGame.start() 
         //startGame(FirstGame); // Original but startGame code is deleted.
 */
-// Game Mechanics
-function damage(character, attackType) {
-    switch (attackType) {
-        case "weakAttack":
-            return character.weakAttack;
-        case "strongAttack":
-            return character.strongAttack;
-        case "knockBackAttack":
-            return character.knockBackAttack;
-        case "specialAttack":
-            return character.specialAttack;
-        case "aoeSkill":
-            return character.aoeSkill;
-        case "rangeSkill":
-            return character.rangeSkill;
-        case "knockBackSkill":
-            return character.knockBackSkill;
-        case "evadeSkill":
-            return character.evadeSkill;
-        case "defenseSkill":
-            return character.defenseSkill;
-        case "buffSkill":
-            return character.buffSkill;
-        case "debuffSkill":
-            return character.debuffSkill;
-        case "ultimateSkill":
-            return character.ultimateSkill;
-        default:
-            return 0;
-    }
-}
-
-function damageTotal(tfCC1, tfCC2, pressed) {
-    let damageDealt = damage(tfCC1, pressed) - tfCC2.ArmorMax;
-    if (damageDealt < 0) {
-        damagedealt = 0;
-    }
-    return damageDealt;
-    /*
-    // Calculate damage, considering ArmorMax
-    let damageDealt = damage(tfCC1, pressed) - tfCC2.ArmorMax;
-    return damageDealt < 0 ? 0 : damageDealt; // Ensure no negative damage
-    */
-}
-
-function newHealth(character, damage) {
-    character.health = character.health - damage;
-    return character.health;
-    // Subtract damage from character's health
-    //    character.health = Math.max(0, character.health - damage); // Health shouldn't go below 0
-}
-
-function death(character) {
-    if (character.health > 0) {
-        return console.log("still alive");
-    } else {
-        return console.log("dead");
-    }
-    //return character.health > 0 ? "still alive" : "dead";
-}
-
-function fullHealth(character) {
-    character.health = character.maxHealth;
-    return character.health;
-}
-
-function instantKill(character) {
-    character.health = 0;
-    return character.health;
-}
-
-function GainExperience(character) {
-    //const base_xp = 100; // Example base XP
-    //const factor = 7; // XP growth factor
-    //return base_xp * Math.pow((character.CharacterLevel + 1), factor);
-}
-
-function LevelUp(character) {
-    //character.CharacterLevel++;
-    //character.health += 10; // Increase max health per level
-    //character.strength += 2; // Increase strength per level
-    console.log(`Level Up! New Level: ${character.CharacterLevel}`);
-}
-// var hitPoint = damageTotal(Halu, MIshuba, "weakAttack");
-// var healthResult = newHealth(Mishuba, damageDealt);
-
-// create an addeventlistener with a function that changes that PlayerState based on user input. and then the animation is complete

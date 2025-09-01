@@ -27,37 +27,32 @@ header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Resource-Policy: same-origin");
 */
-require_once "functions.php";
+//require_once "functions.php";
+
 
 use Stripe\Stripe;
 use Stripe\StripeClient;
 use \Stripe\Exception\ApiErrorException;
-$StripeKeyTf = Stripe::setApiKey(TfStripeSecretKey);
+//$StripeKeyTf = Stripe::setApiKey(TfStripeSecretKey);
+$StfPk = new StripeClient(TfStripeSecretKey);
 
-$GetJson = @file_get_contents("php://ipnut");
-$DecodedJson = json_decode($GetJson);
-
-//User Computer Info
 //ip address
 getIpAddress();
-// Computer/User Language
+
+$GetJson = @file_get_contents("php://ipnut");
+$data = json_decode($GetJson);
 
 //User Time
 $TfUserTime = time();
 
-//User Location Information
-
 //Community
-$_SESSION["UserPreferences"] = "What do you really prefer fam";
-$_SESSION["Setting"] = "How should I optimize your settings";
+$_SESSION["UserPreferences"] = [
+    "Chosen_Companion" => "Ackma Hawk"
+];
 
-$StfPk = new StripeClient(TfStripeSecretKey);
-/*
-//$StripeWebhook = $StfPk->webhookEndpoints->retrieve($TheWebhook->id, []);
-//$StripeWebhook->getLastResponse();
-//$StfPk->events->retrieve($StripeWebhook, []);
-*/
-
+$_SESSION["Setting"] = [
+    "font_style" => "auto"
+];
 /*
 curl_init(); //initializes the session
 curl_setopt(); //configure options like the URL, HTTP, method, headers, or data payload,
@@ -65,7 +60,6 @@ curl_exec(); //executes the session and returns the response.
 curl_close(); //close the cURL session to free resources.
 
 Turn Server Stuff Uncomment later when you ready
-
 */
 
 /*
@@ -153,7 +147,6 @@ if(!isset($_SESSION["visit_count"])) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //Get javascript information.
     $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
-    $data = json_decode(file_get_contents("php://input"), true);
 
     if($_POST["token"] === "TsunamiFlowClubStripeToken") {
         //get the checkout session
