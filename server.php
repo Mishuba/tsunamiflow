@@ -27,7 +27,7 @@ header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Resource-Policy: same-origin");
 */
-//require_once "functions.php";
+require_once "functions.php";
 
 //use Stripe\Stripe;
 //use Stripe\StripeClient;
