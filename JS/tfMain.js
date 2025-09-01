@@ -535,13 +535,19 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 
 
 async function DoTheThingMan() {
+    console.log("checking the iframe source");
     if (TFiframe.src === "https://www.tsunamiflow.club/homepage.php" || TFiframe.src === "https://tsunamiflow.club/homepage.php" || TFiframe.src === "homepage.php") {
+        console.log("creating and using the add event listener");
+
         window.addEventListener("message", async (ev) => {
-            console.log("iframe message received");
-            console.log(ev.origin);
+            console.log("iframe message received from the homepage");
+
+            console.log("the iframe origin is " + ev.origin);
 
             if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+                console.log("The event type is " + ev.data.type);
                 if (ev.data.type === "Website Updates") {
+                    console.l("creating the jsong to send to the iframe");
                     let HomePageJson = {
                         type: "start_updates",
                         info: HomepageUpdates.toJSON(),
@@ -549,20 +555,18 @@ async function DoTheThingMan() {
                         username: "Mishuba",
                         error: "Nothing as of now"
                     };
-
+                    console.log("sending the iframe message");
                     TFiframe.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
                 }
-
+                console.log("the end of that");
             } else if (ev.origin === "https://world.tsunamiflow.club") {
-
+                console.log("I shouldn't be getting stuff from here");
             } else if (ev.origin === "https.js.stripe.com") {
                 // console.log(ev.data)
             } else {
                 return console.log(`Some outside source is trying to send my homepage a message. the origin is ${ev.origin}`);
             }
         });
-
-        console.log("just making sure this works like i want so i can really start having fun and programing.");
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Community.php" || "https://tsunamiflow.club/Community.php" || "Community.php") {
         window.addEventListener("message", async (ev) => {
             console.log("iframe message received");
@@ -764,14 +768,17 @@ async function DoTheThingMan() {
 
         };
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Competitions.php" || "https://tsunamiflow.club/Competitions.php" || "Competitions.php") {
-
+        console.log("creating the event listener for the competitions iframe");
         window.addEventListener("message", async (ev) => {
             console.log("iframe competition message received");
             console.log(ev.origin);
             let CompetitionJson;
 
+            console.log("checking the origin from the competitions iframe");
             if (ev.origin === "https://www.tsunamiflow.club" || ev.origin === "https://tsunamiflow.club" || ev.origin === "https://world.tsunamiflow.club") {
+                console.log("checking the data type of the competitions iframe which is " + ev.data.type);
                 if (ev.data.type === "start_game") {
+                    console.log("sending the game data over now");
                     CompetitionJson = {
                         type: "game_begin",
                         info: FirstGame.toJSON(),
@@ -781,6 +788,8 @@ async function DoTheThingMan() {
                     };
 
                     TFiframe.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+
+                    console.log("the competitions iframe should have received the message");
                 } else if (ev.data.type === "game") {
                     CompetitionJson = {
                         type: "game",

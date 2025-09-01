@@ -1,46 +1,13 @@
-//Mixins Learn more about his later
 /*
-    let Talker = Base => class extends Base {
-        talk() {
-        console.log("Talking...");
-        }
-    };
+//let TfWebSocket = new WebSocket("wss://3.143.179/123/websocket");
 
-    class Robot {}
-    class Chatbot extends Talker(Robot) {}
+//TfWebSocket.onopen = async (event) => {let data = event.data;//alert(data.message);let testingData = {type: "start_game",message: "testing message",username: "Mishuba",error: "nothing right now"}//TfWebSocket.send(JSON.stringify());}
 
-    const bot = new Chatbot();
-    bot.talk(); // Talking...
-*/
-/*
-let TfWebSocket = new WebSocket("wss://3.143.179/123/websocket");
+//TfWebSocket.onmessage = async (event) => {let data = event.data;console.log(data);}
 
-TfWebSocket.onopen = async (event) => {
-    let data = event.data;
-    //alert(data.message);
-    let testingData = {
-        type: "start_game",
-        message: "testing message",
-        username: "Mishuba",
-        error: "nothing right now"
-    }
-    //TfWebSocket.send(JSON.stringify());
-}
+//TfWebSocket.onerror = async (event) => {let data = event.data;console.log(data);}
 
-TfWebSocket.onmessage = async (event) => {
-    let data = event.data;
-    console.log(data);
-}
-
-TfWebSocket.onerror = async (event) => {
-    let data = event.data;
-    console.log(data);
-}
-
-TfWebSocket.onclose = async (event) => {
-    let data = event;
-    console.log(data);
-}
+//TfWebSocket.onclose = async (event) => {let data = event; console.log(data);}
 */
 
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
@@ -371,10 +338,10 @@ export class letsDoIt {
         }
 
         if (player.textHeight + player.speedY > this.canvas.height || player.textHeight + player.speedY < 0) {
-            if (this.frames === player.spriteArray.length) {
-                this.frames = 0;
+            if (this.frame === player.spriteArray.length) {
+                this.frame = 0;
             } else {
-                this.frames = this.frames + 1;
+                this.frame = this.frame + 1;
             }
             player.speedY = -player.speedY;
         }

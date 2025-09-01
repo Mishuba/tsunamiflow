@@ -72,14 +72,14 @@ Tycadome
                     const game = letsDoIt.from(ev.data.info);
                     game.start();
 
-                    TFpostActualObject = {
+                    /*TFpostActualObject = {
                         type: "updates",
                         info: game.toJSON(),
                         message: "the message should be showing.",
                         username: "Mishuba",
                         error: "Nothing as of now."
                     }
-                    window.parent.postMessage(TFpostActualObject,TFpostMessageLinks);
+                    window.parent.postMessage(TFpostActualObject,TFpostMessageLinks);*/
                 } else if (data.type === "game") {
 
                 } else {
