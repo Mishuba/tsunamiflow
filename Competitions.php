@@ -286,8 +286,8 @@ header("Cross-Origin-Resource-Policy: same-origin");
 
         window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
 
-        window.addEventListener("message", async(ev) => {
-            console.log("iframe message received");
+        window.addEventListener("message", async (ev) => {
+            console.log("competitions iframe message received");
             console.log(ev.origin);
             let data = ev.data;
             let origin = ev.origin;
@@ -297,13 +297,13 @@ header("Cross-Origin-Resource-Policy: same-origin");
                 console.log(data);
                 console.log(source);
 
-                if (data.type === "start_game") {
-                    const game = letsDoIt.from(ev.data.info);
+                if (data.type === "game_begin") {
+                    const game = letsDoIt.from(data.info);
                         game.start();
 
                     TFpostActualObject = {
                         type: "game",
-                        info: "just testing for now",
+                        info: game.start(),
                         message: "The Game has Started. if any new updates need to be send use the type: 'game'",
                         username: "Mishuba",
                         error: "currently no error fam."

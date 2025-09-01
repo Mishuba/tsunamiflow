@@ -49,6 +49,7 @@ Tycadome
 
         let TFpostActualObject = {
             type: "Website Updates",
+            info: "this is the array stuff"
             message: "make this the first character maybe.",
             username: "Mishuba",
             error: "currently no error fam."
@@ -57,13 +58,13 @@ Tycadome
         window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
 
         window.addEventListener("message", async (ev) => {
-            console.log("iframe message received");
+            console.log("homepage iframe message received");
             console.log(ev.origin);
             let data = ev.data;
             let origin = ev.origin;
             let source = ev.source;
 
-            if (origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+            if (origin === "https://www.tsunamiflow.club" || origin === "https://tsunamiflow.club") {
                 console.log(data.info);
                 console.log(data);
 
