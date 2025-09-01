@@ -764,21 +764,13 @@ async function DoTheThingMan() {
 
         };
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Competitions.php" || "https://tsunamiflow.club/Competitions.php" || "Competitions.php") {
-        CompetitionJson = {
-            type: "start_game",
-            info: FirstGame.toJSON(),
-            message: "start the first game once the page opens.",
-            username: "Mishuba",
-            error: "Nothing for competitions right now"
-        };
 
-        TFiframe.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.php");
         window.addEventListener("message", async (ev) => {
             console.log("iframe message received");
             console.log(ev.origin);
             let CompetitionJson;
 
-            if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club" || "https://world.tsunamiflow.club") {
+            if (ev.origin === "https://www.tsunamiflow.club" || ev.origin === "https://tsunamiflow.club" || ev.origin === "https://world.tsunamiflow.club") {
                 if (ev.data.type === "start_game") {
                     CompetitionJson = {
                         type: "start_game",

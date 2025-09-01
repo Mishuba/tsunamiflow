@@ -276,7 +276,15 @@ header("Cross-Origin-Resource-Policy: same-origin");
     import { letsDoIt, FirstGame, HomepageUpdates, Stickman, gameComponent} from "./JS/sprite.js";
         let TFpostMessageLinks = "https://www.tsunamiflow.club";
 
-        let TFpostActualObject;
+        let TFpostActualObject= {
+            type: "start_game",
+            info: "just testing for now",
+            message: "The Game has not Started. if any new updates need to be send use the type: 'game'",
+            username: "Mishuba",
+            error: "currently no error fam."
+        };
+
+        window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
 
         window.addEventListener("message", async(ev) => {
             console.log("iframe message received");

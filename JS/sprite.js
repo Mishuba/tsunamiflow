@@ -1338,7 +1338,7 @@ export class letsDoIt {
 
         if (this.TgameFname === "Tsunami Flow Updates") {
             this.interval = setInterval(async () => {
-                this.HomePageAnimation(this.context, this.player, this.frames, this.canvas, this.gameState);
+                this.HomePageAnimation(this.player1);
             }, 20);
         } else if (this.TgameFname === "Homepage Game") {
 
