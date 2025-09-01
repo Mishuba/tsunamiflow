@@ -44,7 +44,7 @@ Tycadome
 <body id="homepageBody">
 
     <script type="module" crossorigin="anonymous">
-        import { FirstGame, letsDoIt, gameComponent } from "./JS/sprite.js";
+        import { letsDoIt, FirstGame, HomepageUpdates, Stickman, gameComponent } from "./JS/sprite.js";
         let TFpostMessageLinks = "https://www.tsunamiflow.club"; //"https://tsunamiflow.club"; 
 
         let TFpostActualObject = {

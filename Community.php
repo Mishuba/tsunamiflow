@@ -82,7 +82,8 @@ header("Cross-Origin-Resource-Policy: same-origin");
     
     <input type="file" id="TFuploadVideo" accept="video/*">
     <button id="rmvTFvid" style="display:none;">Remove Video</button>
-    <script type="module" src="./JS/Community.js" crossorigin="anonymous">
+    <script type="module" crossorigin="anonymous">
+        //import "./JS/Community.js";
 
     </script>
 </body>

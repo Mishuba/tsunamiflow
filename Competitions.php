@@ -272,7 +272,8 @@ header("Cross-Origin-Resource-Policy: same-origin");
             <g></g>
             <g></g>
         </svg-->
-<script type="module" src="./JS/sprite.js" crossorigin="anonymous">
+<script type="module" crossorigin="anonymous">
+    import { letsDoIt, FirstGame, HomepageUpdates, Stickman, gameComponent} from "./JS/sprite.js";
         let TFpostMessageLinks = "https://www.tsunamiflow.club";
 
         let TFpostActualObject;
