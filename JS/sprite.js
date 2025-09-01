@@ -357,7 +357,7 @@ export class letsDoIt {
     }
     HomePageAnimation(player) {
         this.clear();
-        this.context.fillText(player.SpriteDialog[this.frames], player.textWidth, player.textHeight);
+        this.context.fillText(player.SpriteDialog[this.frame], player.textWidth, player.textHeight);
         if (player.speedX === 0) {
             player.speedX = 1;
         }
