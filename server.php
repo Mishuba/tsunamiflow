@@ -29,12 +29,11 @@ header("Cross-Origin-Resource-Policy: same-origin");
 */
 //require_once "functions.php";
 
-
-use Stripe\Stripe;
-use Stripe\StripeClient;
-use \Stripe\Exception\ApiErrorException;
+//use Stripe\Stripe;
+//use Stripe\StripeClient;
+//use \Stripe\Exception\ApiErrorException;
 //$StripeKeyTf = Stripe::setApiKey(TfStripeSecretKey);
-$StfPk = new StripeClient(TfStripeSecretKey);
+//$StfPk = new StripeClient(TfStripeSecretKey);
 
 //ip address
 getIpAddress();
