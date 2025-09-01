@@ -64,22 +64,21 @@ Tycadome
             let source = ev.source;
 
             if (origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+                console.log(data.info);
                 console.log(data);
-                console.log(source);
 
                 if (data.type === "start_updates") {
                     const game = letsDoIt.from(ev.data.info);
-                    let GameStartButton = document.createElement("button");
-                    document.body.appendChild(GameStartButton);
-                    GameStartButton.addEventListener("click", async () => {
                     game.start();
-                    });
 
                     TFpostActualObject = {
                         type: "updates",
                         info: game.toJSON(),
-
+                        message: "the message should be showing.",
+                        username: "Mishuba",
+                        error: "Nothing as of now."
                     }
+                    window.parent.postMessage(TFpostActualObject,TFpostMessageLinks);
                 } else if (data.type === "game") {
 
                 } else {

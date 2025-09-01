@@ -1338,7 +1338,7 @@ export class letsDoIt {
 
         if (this.TgameFname === "Tsunami Flow Updates") {
             this.interval = setInterval(async () => {
-                await HomePageAnimation(this.context, this.player, this.frames, this.canvas, this.gameState);
+                this.HomePageAnimation(this.context, this.player, this.frames, this.canvas, this.gameState);
             }, 20);
         } else if (this.TgameFname === "Homepage Game") {
 
@@ -1539,7 +1539,7 @@ export class letsDoIt {
     toJSON() {
         return {
             TgameFname: this.TgameFname,
-            player1: this.player1.toJSON(),
+            player1: this.player1,
         };
     }
 }

@@ -766,7 +766,7 @@ async function DoTheThingMan() {
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Competitions.php" || "https://tsunamiflow.club/Competitions.php" || "Competitions.php") {
         CompetitionJson = {
             type: "start_game",
-            info: FirstGame.toJson(),
+            info: FirstGame.toJSON(),
             message: "start the first game once the page opens.",
             username: "Mishuba",
             error: "Nothing for competitions right now"
@@ -782,7 +782,7 @@ async function DoTheThingMan() {
                 if (ev.data.type === "start_game") {
                     CompetitionJson = {
                         type: "start_game",
-                        info: FirstGame.toJson(),
+                        info: FirstGame.toJSON(),
                         message: "start the first game once the page opens.",
                         username: "Mishuba",
                         error: "Nothing for competitions right now"
@@ -792,7 +792,7 @@ async function DoTheThingMan() {
                 } else if (ev.data.type === "game") {
                     CompetitionJson = {
                         type: "game",
-                        info: FirstGame.toJson(),
+                        info: FirstGame.toJSON(),
                         message: "this will be the first game message i send from outside of the game for some reason and to the game maybe",
                         username: "Mishuba",
                         error: "No errors as of now."

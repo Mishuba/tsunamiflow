@@ -290,21 +290,15 @@ header("Cross-Origin-Resource-Policy: same-origin");
 
                 if (data.type === "start_game") {
                     const game = letsDoIt.from(ev.data.info);
-
-                    let GameStartButton = document.createElement("button");
-
-                    document.body.appendChild(GameStartButton);
-
-                    GameStartButton.addEventListener("click", async () => {
                         game.start();
-                    });
 
                     TFpostActualObject = {
                         type: "game",
+                        info: "just testing for now".
                         message: "The Game has Started. if any new updates need to be send use the type: 'game'",
                         username: "Mishuba",
                         error: "currently no error fam."
-                    }
+                    };
 
                     window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
                     } else if (data.type === "game") {
