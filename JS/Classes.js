@@ -48,7 +48,7 @@ export class Weather {
     let TFlong = working.coords.longitude;
     let TFcoords = working.coords;
     //use the latitude and longitude location points.
-    let something = `${WABurl}${CWapi}?key=${WapiKey}&q=${TFlat},${TFlong}&aqi=no`;
+    let something = `${this.WABurl}${this.CWapi}?key=${this.WapiKey}&q=${TFlat},${TFlong}&aqi=no`;
     const xhr = new XMLHttpRequest();
     xhr.open('POST', something);
 
@@ -71,7 +71,7 @@ export class Weather {
 
 
             // Display on web page
-            weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+            this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
 
             //Make the response do cool stuf.
         }
@@ -79,7 +79,7 @@ export class Weather {
     xhr.send();
     }
     City(CityName) {
-    let something = `${WABul}${CWapi}?key=${WapiKey}&q=${CityName}&aqi=no`;
+    let something = `${this.WABul}${this.CWapi}?key=${this.WapiKey}&q=${CityName}&aqi=no`;
 
     const userCity = new XMLHttpRequest();
     userCity.open("POST", something);
@@ -140,11 +140,11 @@ export class Weather {
             } else if (result.state === "prompt") {
                 console.log("geolocation needs to be requested");
                 if (confirm("TF is asking if you will allow it to access your location.")) {
-                    navigator.geolocation.getCurrentPosition(DSWL, DEWL, DSLO);
+                    navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
                 } else {
                     let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
                     if (!letmegetloc === "" || " ") {
-                        CityXml(letmegetloc);
+                        this.City(letmegetloc);
                     } else {
                         console.log("the weather will not work.");
                     }
@@ -153,7 +153,7 @@ export class Weather {
                 console.log("geo denied");
                 let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
                 if (!letmegetloc === "" || " ") {
-                    CityXml(letmegetloc);
+                    this.City(letmegetloc);
                 } else {
                     console.log("the weather will not work.");
                 }
@@ -215,14 +215,14 @@ export class TfMusic {
     this.TFgameIterable = (function* () {
     yield* [1, 2, 3];
 })();
-    this.float32FromIterable = new Float32Array(TFgameIterable);
+    this.float32FromIterable = new Float32Array(this.TFgameIterable);
 
-    this.TFperiodicWave = GameWorldAudio.createPeriodicWave(TFpwoReal, TFpwoImag, TFperiodicWaveOptions)
+    this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
     this.TFoscillatorNodeOptions = {
         type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
         detune: 0,
         frequency: 440,
-        periodicWave: TFperiodicWave,
+        periodicWave: this.TFperiodicWave,
         channelCount: 2,
         channelCountMode: "max", // max, something , huh
         channelInterpretation: "speakers"
@@ -251,13 +251,13 @@ export class TfMusic {
     };
     particle() {
         for (let i = 0; i < 100; i++) {
-            let x = Math.random() * RadioCanvas.width;
-            let y = Math.random() * RadioCanvas.height;
+            let x = Math.random() * this.canvas.width;
+            let y = Math.random() * this.canvas.height;
             let dx = (Math.random() - 0.5) * 0.5;
             let dy = (Math.random() - 0.5) * 0.5;
             let radius = Math.random() * 0.5 + 0.2;
             let color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-            particles.push(new Particle(x, y, dx, dy, radius, color));
+            this.particles.push(new Particle(x, y, dx, dy, radius, color));
         }
     }
     update(volume) {
@@ -266,10 +266,10 @@ export class TfMusic {
         this.y += this.dy;
 
         // bounce off edges
-        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+        if (this.x + this.radius > this.canvas.width || this.x - this.radius < 0) {
             this.dx = -this.dx;
         }
-        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+        if (this.y + this.radius > this.canvas.height || this.y - this.radius < 0) {
             this.dy = -this.dy;
         }
     }
@@ -281,18 +281,18 @@ export class TfMusic {
         ctx.shadowBlur = 20;
         ctx.fill();
     }
-    Visualizer(canvas, dataArray, bufferLength, AudioAnalyser){
+    Visualizer(dataArray, bufferLength, AudioAnalyser){
         let ctx = canvas.getContext("2d");
         this.particle();
         let hereDude = async function doitBro() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
             //AudioAnalyser.getFloatTimeDomainData(dataArray);
             //AudioAnalyser.getByteTimeDomainData(dataArray);
             AudioAnalyser.getByteFrequencyData(dataArray);
 
             ctx.fillStyle = "rgb(10, 10, 30)";
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
             //Get Average volume for particle reaction
             let CtxTotal = 0;
@@ -332,8 +332,8 @@ export class TfMusic {
         cancelAnimationFrame(this.visualizationController)
     }
     startMusic() {
-        if (TsunamiRadio.paused) {
-            TsunamiRadio.play().catch(async (error) => {
+        if (this.TsunamiRadio.paused) {
+            this.TsunamiRadio.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
                     console.log("Autoplay is blocked. Please interact with the page to start the radio.");
                 } else {
@@ -341,7 +341,7 @@ export class TfMusic {
                 }
             });
         } else {
-            await TsunamiRadio.play().catch(async (error) => {
+            await this.TsunamiRadio.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
                     console.log("Autoplay is blocked. Please interact with the page to start the radio.");
                 } else {
@@ -351,55 +351,55 @@ export class TfMusic {
         }
     }
     stopMusic() {
-        if (!TsunamiRadio.paused) {
-            await TsunamiRadio.pause();
+        if (!this.TsunamiRadio.paused) {
+            await this.TsunamiRadio.pause();
         }
     }
     previousSong(music) {
-        TsunamiRadio.src = music;
-        await TsunamiRadio.play();
+        this.TsunamiRadio.src = music;
+        await this.TsunamiRadio.play();
     }
     restartSong(music) {
-        TsunamiRadio.src = await music;
-        await TsunamiRadio.play();
+        this.TsunamiRadio.src = await music;
+        await this.TsunamiRadio.play();
     }
     TsunamiRadioReady() {
-        TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
+        this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
 
-        TsunamiLastButton.id = "TFradioPreviousButton";
-        TsunamiLastButton.innerHTML = "Previous";
-        TsunamiLastButton.addEventListener("click", async () => {
-
-        });
-        TsunamiRadioButtons.appendChild(TsunamiLastButton);
-
-        TsunamiRestartButton.id = "TFRadioRestartButton";
-        TsunamiRestartButton.innerHTML = "Restart";
-        TsunamiRestartButton.addEventListener("click", async () => {
+        this.TsunamiLastButton.id = "TFradioPreviousButton";
+        this.TsunamiLastButton.innerHTML = "Previous";
+        this.TsunamiLastButton.addEventListener("click", async () => {
 
         });
-        TsunamiRadioButtons.appendChild(TsunamiRestartButton);
+        this.TsunamiRadioButtons.appendChild(TsunamiLastButton);
 
-        TsunamiStartButton.id = "TFradioButton";
-        TsunamiStartButton.innerHTML = "Start Radio";
-        TsunamiStartButton.addEventListener("click", async () => {
-            if (TsunamiRadio.paused) {
+        this.TsunamiRestartButton.id = "TFRadioRestartButton";
+        this.TsunamiRestartButton.innerHTML = "Restart";
+        this.TsunamiRestartButton.addEventListener("click", async () => {
+
+        });
+        this.TsunamiRadioButtons.appendChild(TsunamiRestartButton);
+
+        this.TsunamiStartButton.id = "TFradioButton";
+        this.TsunamiStartButton.innerHTML = "Start Radio";
+        this.TsunamiStartButton.addEventListener("click", async () => {
+            if (this.TsunamiRadio.paused) {
                 startMusic();
-                TsunamiStartButton.innerHTML = "Pause Tsuanmi Radio";
+                this.TsunamiStartButton.innerHTML = "Pause Tsuanmi Radio";
             } else {
                 stopMusic();
-                TsunamiStartButton.innerHTML = "Play Tsunami Radio";
+                this.TsunamiStartButton.innerHTML = "Play Tsunami Radio";
             }
         });
-        TsunamiRadioButtons.appendChild(TsunamiStartButton);
+        this.TsunamiRadioButtons.appendChild(this.TsunamiStartButton);
 
 
-        TsunamiSkipButton.id = "TFradioSkipButton";
-        TsunamiSkipButton.innerHTML = "Next";
-        TsunamiSkipButton.addEventListener("click", async () => {
+        this.TsunamiSkipButton.id = "TFradioSkipButton";
+        this.TsunamiSkipButton.innerHTML = "Next";
+        this.TsunamiSkipButton.addEventListener("click", async () => {
 
         });
-        TsunamiRadioButtons.appendChild(TsunamiSkipButton);
+        this.TsunamiRadioButtons.appendChild(TsunamiSkipButton);
     }
 }
 
@@ -569,9 +569,9 @@ export class TfNetwork {
         return { trf, tgf, tbf };
     */
     }
-    chromaKey(){
+    chromaKey(thing){
 
-        if(webcam === ""){
+        if(thing === "webcam"){
             /*
             const frame = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             const data = frame.data;
@@ -588,7 +588,7 @@ export class TfNetwork {
             }
             hpCC.putImageData(frame, 0, 0);
             */
-        } else if (canvas === ""){
+        } else if (thing === "canvas"){
             //Apply chromakey after webcam is put on the canvas instead of before. 
                 /*
             let frameSkipCount = 2;
@@ -634,7 +634,7 @@ export class TfNetwork {
             }
             */
 
-        } else if (video === ) {
+        } else if (thing === "video") {
 
         } else {
             //nothing
