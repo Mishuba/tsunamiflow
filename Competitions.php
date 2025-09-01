@@ -285,7 +285,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
             let origin = ev.origin;
             let source = ev.source;
 
-            if (origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+            if (origin === "https://www.tsunamiflow.club" || origin === "https://tsunamiflow.club") {
                 console.log(data);
                 console.log(source);
 
@@ -295,7 +295,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
 
                     TFpostActualObject = {
                         type: "game",
-                        info: "just testing for now".
+                        info: "just testing for now",
                         message: "The Game has Started. if any new updates need to be send use the type: 'game'",
                         username: "Mishuba",
                         error: "currently no error fam."
