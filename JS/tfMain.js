@@ -9,8 +9,10 @@ import { HomepageUpdates, FirstGame, letsDoIt } from "./sprite.js";
 
 if (navigator.cookieEnabled) {
     //use cookies
+    console.log("Cookies are enabled");
 } else {
     //don't use cookies 
+    console.log("Cookies are not enabled");
 }
 
 console.log(TfUserAgentInfo);
@@ -254,7 +256,7 @@ if (typeof (Worker) !== "undefined") {
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
-                        gettingRadioRight();
+                        //gettingRadioRight();
 
                     } else {
                         console.log("No matching Radio Times as the moment");
@@ -263,16 +265,16 @@ if (typeof (Worker) !== "undefined") {
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
                 requestLocation();
-                gettingRadioRight();
+                //gettingRadioRight();
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();
                 requestLocation();
-                gettingRadioRight();
+                //gettingRadioRight();
             }
 
             RadioWorker.onmessage = async function (event) {
-                TsunamiRadioReady();
+                //TsunamiRadioReady();
                 let SongList1st;
                 let RadioLoadStartTime;
                 let RadioAnalyser;
