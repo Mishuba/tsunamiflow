@@ -1,6 +1,37 @@
-import { TFwordOftheDay } from "./Classes.js";
-import { TheOtherWords, QuoteStuff } from "./Variables.js";
 import { WordTimes } from "./Arrays.js";
+
+let TheOtherWords = 1;
+let QuoteStuff = 0;
+export class TFwordOftheDay {
+    constructor(word) {
+        this.word = word || {};
+        this.TheOtherWords = 1;
+        this.QuoteStuff = 0;
+        this.Tfwotd = document.getElementById("tfWordOfTheDay");
+    }
+    set EnHword(value) {
+        this.word = {
+            word: value.word,
+            definition: value.definition,
+            quotes: value.quotes.map((quote, index) => ({
+                quote: quote.text,
+                history: this.buildHistory(quote.history)
+            }))
+        };
+    }
+
+    buildHistory(historyData) {
+        return {
+            fact: historyData.fact || {},
+            myth: historyData.myth || {},
+            legend: historyData.legend || {}
+        };
+    }
+
+    getWord() {
+        return this.word;
+    }
+}
 
 export const WordOfTheDayArray = new Array();
 
