@@ -67,7 +67,7 @@ export class TfMusic {
         this.TFpowReal = new Float32Array(2);
         this.TFpwoImag = new Float32Array(2);
         this.TFaudioBuffer = new ArrayBuffer(32);
-        this.TFtestingF32A = new Float32Array(TFaudioBuffer, 4, 4);
+        this.TFtestingF32A = new Float32Array(this.TFaudioBuffer, 4, 4);
         this.TFgameIterable = (function* () {
         yield* [1, 2, 3];
     })();
