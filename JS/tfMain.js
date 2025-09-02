@@ -1,11 +1,17 @@
-import { MyNewTFTime, TfWotd, TsunamiRadioAudio, TsunamiRadio, TfUserLanguage, TfUserAgentInfo, TfOnlineStatus, RadioCanvas } from "./Variables.js";
-import { TfAudioVisualizer, StopTheVisualizator, requestLocation, TfPostThot, TsunamiRadioReady, startMusic } from "./Functions.js";
+import { MyNewTFTime, TfUserLanguage, TfUserAgentInfo, TfOnlineStatus } from "./Variables.js";
 import { navButtons } from "./Objects.js";
 import { RadioTimes, WordTimes, DefaultPlaylist } from "./Arrays.js";
 //import { } from "./Classes.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
 import { HomepageUpdates, FirstGame, letsDoIt } from "./sprite.js";
+import { TfMusic } from "./Audio.js";
+import { Weather } from "./Classes.js";
+
+let TfWeather = new Weather();
+let TfWotd = document.getElementById("tfWordOfTheDay");
+let Radio = new TfMusic();
+let GameAudio = new TfMusic();
 
 if (navigator.cookieEnabled) {
     //use cookies
@@ -135,112 +141,6 @@ if (typeof (Worker) !== "undefined") {
                 console.log("Radio Worker is now defined");
             }
 
-            async function gettingRadioRight() {
-                if (TsunamiRadio.readyState === 0) {
-                    console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-                    if (TsunamiRadio.networkState == 0) {
-                        console.log("Radio networkState has NETWORK_EMPTY");
-                        if (TsunamiRadio.src == "") {
-                            console.log("The radio source is ''");
-                            RadioWorker.postMessage({ type: "radio", system: "start" });
-                        } else if (!TsunamiRadio.src) {
-                            ("The radio source does not exist");
-                            RadioWorker.postMessage({ type: "radio", system: "start" });
-                        } else if (TsunamiRadio.src == " ") {
-                            console.log("The radio source is ' '");
-                            RadioWorker.postMessage({ type: "radio", system: "start" });
-                        } else if (TsunamiRadio.src == "about:blank") {
-                            console.log("The radio source is about:blank");
-                            RadioWorker.postMessage({ type: "radio", system: "start" });
-                        }
-                        else {
-                            console.log("Something else is going on and I dont know what it is.");
-                        }
-                    } else if (TsunamiRadio.networkState == 2) {
-                        console.log("Radio networkState is NETWORK_LOADING");
-                        //Actively fetching the audio from the network.
-                        //Show loading or buffering user interface.
-                    } else if (TsunamiRadio.networkState == 3) {
-                        console.log("Radio networkState has NETWORK_NO_SOURCE");
-                        //No valid source
-                        RadioWorker.postMessage({ type: "radio", system: "start" });
-                    }
-                } else if (TsunamiRadio.readyState === 1) {
-                    console.log("Radio readyState is HAVE_METADATA");
-                    if (TsunamiRadio.networkState == 1) {
-                        console.log("Radio networkState is NETWORK_IDLE");
-                    } else if (TsunamiRadio.networkState == 2) {
-                        console.log("Radio networkState is NETWORK_LOADING");
-                        //Actively fetching the audio from the network.
-                        //Show loading or buffering user interface.
-                    } else if (TsunamiRadio.networkState == 3) {
-                        console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
-                        //No valid source
-                    }
-                } else if (TsunamiRadio.readyState === 2) {
-                    console.log("Radio readyState is HAVE_CURRENT_DATA");
-                    if (TsunamiRadio.networkState == 1) {
-                        console.log("Radio networkState is NETWORK_IDLE");
-                    } else if (TsunamiRadio.networkState == 2) {
-                        console.log("Radio networkState is NETWORK_LOADING");
-                        //Actively fetching the audio from the network.
-                        //Show loading or buffering user interface.
-                    } else if (TsunamiRadio.networkState == 3) {
-                        console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
-                        //No valid source
-                    }
-                } else if (TsunamiRadio.readyState === 3) {
-                    console.log("Radio readyState is HAVE_FUTURE_DATA");
-                    if (TsunamiRadio.networkState == 1) {
-                        console.log("Radio networkState is NETWORK_IDLE");
-                    } else if (TsunamiRadio.networkState == 3) {
-                        console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
-                        //No valid source
-                    }
-                } else if (TsunamiRadio.readyState === 4) {
-                    console.log("Radio readyState is HAVE_ENOUGH_DATA");
-                    if (TsunamiRadio.networkState == 1) {
-                        console.log("Radio networkState is NETWORK_IDLE");
-                    } else if (TsunamiRadio.networkState == 2) {
-                        console.log("Radio networkState is NETWORK_LOADING");
-                        //Actively fetching the audio from the network.
-                        //Show loading or buffering user interface.
-                    } else if (TsunamiRadio.networkState == 3) {
-                        console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
-                        //No valid source
-                    }
-
-                    if (TsunamiRadio.ended) {
-                        if (TsunamiRadio.src = "") {
-
-                        } else if (TsunamiRadio.src = undefined) {
-
-                        } else if (!TsunamiRadio.src) {
-
-                        } else {
-                            RadioWorker.postMessage({ type: "radio", system: "skip" });
-                        }
-                    } else {
-                        if (TsunamiRadio.paused) {
-                            if (TsunamiRadio.currentTime === 0) {
-                                console.log("Tsunami Radio has not started yet.");
-                            } else {
-                                console.log("Paused at " + TsunamiRadio.currentTime);
-                            }
-                        } else {
-                            console.log("A song is still playing. Make the next song play using the functions");
-                        }
-                    }
-                } else {
-                    if (TsunamiRadio.networkState === 3) {
-                        console.log("The network could not find the source.");
-                        RadioWorker.postMessage({ type: "radio", system: "start" });
-                    } else {
-                        console.log("Some unknown error is going on with the Radio");
-                    }
-                }
-            }
-
             if (event.data.type === "Tf Schedule") {
                 WordTimes.forEach(async (word) => {
                     if (TimerTime === word) {
@@ -252,11 +152,11 @@ if (typeof (Worker) !== "undefined") {
                 });
 
                 NewsTimer();
-                requestLocation();
+                TfWeather.requestLocation();
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
-                        //gettingRadioRight();
+                        Radio.MusicNetworkState(RadioWorker);
 
                     } else {
                         console.log("No matching Radio Times as the moment");
@@ -264,246 +164,18 @@ if (typeof (Worker) !== "undefined") {
                 });
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
-                requestLocation();
-                //gettingRadioRight();
+                TfWeather.requestLocation();
+                Radio.MusicNetworkState(RadioWOrker);
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();
-                requestLocation();
-                //gettingRadioRight();
+                TfWeather.requestLocation();
+                Radio.MusicNetworkState(RadioWorker);
             }
 
             RadioWorker.onmessage = async function (event) {
-                //TsunamiRadioReady();
-                let SongList1st;
-                let RadioLoadStartTime;
-                let RadioAnalyser;
-                let RadioSrc;
-                let TsunamiRadioBufferLength;
-                let TsunamiRadioDataArray;
-
-                function checkRealQuick() {
-                    let randomMusicDefault;
-                    let SongList;
-                    if (event.data.file == "undefined") {
-                        randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-                        SongList = DefaultPlaylist[randomMusicDefault];
-                        console.log(`This should be a song from the default playlist in javascript <br />: ${SongList}`);
-                    } else if (event.data.file == undefined) {
-                        randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-                        SongList = DefaultPlaylist[randomMusicDefault];
-                        console.log(`This should be a song from the default playlist in javascript <br /> ${SongList}`);
-                    } else if (event.data.file == "") {
-                        randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-                        SongList = DefaultPlaylist[randomMusicDefault];
-                        console.log(`This should be a song from the default playlist in javascript <br /> ${SongList}`);
-                    } else if (event.data.file == "null") {
-                        randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-                        SongList = DefaultPlaylist[randomMusicDefault];
-                        console.log(`This should be a song from the default playlist in javascript <br /> ${SongList}`);
-                    } else if (event.data.file == null) {
-                        randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-                        SongList = DefaultPlaylist[randomMusicDefault];
-                        console.log(`This should be a song from the default playlist in javascript <br /> ${SongList}`);
-                    } else {
-                        SongList = event.data.file;
-                        console.log(`This should be a song from php ${SongList} <br /> typeof: ${typeof SongList}`);
-                    }
-                    return SongList;
-                }
-
-                if (typeof event.data.file == undefined) {
-                    SongList1st = checkRealQuick();
-                } else if (typeof event.data.file == null) {
-                    SongList1st = checkRealQuick();
-                } else if (typeof event.data.file == "string") {
-                    SongList1st = checkRealQuick();
-                } else {
-                    SongList1st = checkRealQuick();
-                }
-
-                console.log(SongList1st + " is the source of the current song.");
-                TsunamiRadio.src = SongList1st; //SongList.trim();
-                TsunamiRadio.load();
-
-                TsunamiRadio.addEventListener("emptied", () => {
-                    console.log("The radio has become emptied");
-                }); //The media has become empty; for example, this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
-
-                TsunamiRadio.addEventListener("loadstart", async () => {
-                    console.log("The radio has started to load.")
-                    //Put a loading icon or something here.
-                    RadioLoadStartTime = Date.now();
-                    console.log("Starting loading at " + RadioLoadStartTime);
-                }); // Fired when the browser has started to load the resource.
-
-                TsunamiRadio.addEventListener("loadedmetadata", async () => {
-                    console.log("The radio metadata has started to load.")
-                    //Do Visualization Processing Here.
-                    //SongSample = TsunamiRadio.sampleRate;// This for the visualizator
-
-                    //Attach the audio to the Audio Context.
-
-                    RadioSrc = TsunamiRadioAudio.createMediaElementSource(TsunamiRadio);
-                    // Initialize frequency analyzer nodes or waveform processors.
-                    RadioAnalyser = TsunamiRadioAudio.createAnalyser();
-                    RadioAnalyser.fftSize = 2048;
-                    TsunamiRadioBufferLength = RadioAnalyser.frequencyBinCount;
-                    TsunamiRadioDataArray = new Uint8Array(TsunamiRadioBufferLength);
-
-                    //Connect Stuff
-                    RadioSrc.connect(RadioAnalyser);
-                    RadioAnalyser.connect(TsunamiRadioAudio.destination);
-
-                    //Check audioContext
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-                }); //The metadata has been loaded.
-
-                TsunamiRadio.addEventListener("loadeddata", () => {
-                    console.log("The data has loaded.");
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-                    //Set up your canvas
-                }); //The first frame of the media has finished loading.
-
-                TsunamiRadio.addEventListener("canplay", () => {
-                    console.log("Tsunami Radio is at the can play part.");
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        console.log("The audio Context state is suspened");
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-                    //Start Audio Timer Here
-
-                    //Start Visualizater here 
-                    if (RadioCanvas !== null) {
-                        let newctxok = RadioCanvas.getContext("2d");
-                        TfAudioVisualizer(RadioCanvas, TsunamiRadioDataArray, TsunamiRadioBufferLength, RadioAnalyser);
-                    } else {
-                        console.log("The canvas so null so i am getting it again.");
-                        RadioCanvas = document.getElementById("TFradioCanvas");
-                        TfAudioVisualizer(RadioCanvas, TsunamiRadioDataArray, TsunamiRadioBufferLength, RadioAnalyser);
-                    }
-                }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
-
-                TsunamiRadio.addEventListener("canplaythrough", async () => {
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-                    startMusic();
-                }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
-
-                TsunamiRadio.addEventListener("play", () => {
-                    console.log("The radio should be playing");
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-                    //Measure audio latency after user presses play.
-                }); //Playback has begun.
-
-                TsunamiRadio.addEventListener("pause", () => {
-                    console.log("The radio should be paused");
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        StopTheVisualizator()
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                        StopTheVisualizator()
-                    }
-                    // Pause visualizator or have a idle frame.
-
-                }); // Playback has been paused.
-
-                TsunamiRadio.addEventListener("ended", async () => {
-                    console.log("The radio should have ended.");
-                    //TsunamiRadioAudio.suspend();
-                    //StopTheVisualizator()
-                    //RadioWorker.postMessage({ type: "radio", system: "ended" });
-                }); //Playback has stopped because of the end of the media was reached.
-
-                TsunamiRadio.addEventListener("waiting", (waiting) => {
-                    console.log("The radio should be waiting");
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        console.log(`Tsunami Radio is waiting for some reason. ${waiting}`);
-                        console.log("The audio Context state is suspended");
-                        TsunamiRadioAudio.resume();
-                    } else if (TsunamiRadioAudio.state === "running") {
-                        console.log("The audio Context state is running");
-                        console.log(`Tsunami Radio is waiting for some reason. ${waiting}`);
-                        TsunamiRadioAudio.suspend();
-                    } else {
-                        console.log("The Audio Context state must be closed");
-                    }
-
-                }); //Playback has stopped because of a temporary lack of data.
-
-                TsunamiRadio.addEventListener("playing", () => {
-                    console.log("the radio should be playing");
-                    //Ensure Sound is actively rendering before enabling interactions
-                    if (TsunamiRadioAudio.state === "suspended") {
-                        TsunamiRadioAudio.resume();
-                    }
-
-                }); // Playback is ready to start after having been paused or delayed due to lack of data.
-
-                TsunamiRadio.addEventListener("stalled", (stalled) => {
-                    console.log(`The Tsunami Radio has stalled for something reason. ${stalled} <br /> here is the supposed song path ${event.data.file}`);
-
-                });//The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
-
-                TsunamiRadio.addEventListener("suspended", (suspend) => {
-                    if (TsunamiRadio.networkState === TsunamiRadio.NETWORK_IDLE) {
-                        console.log(`Tsunami Radio has been suspended ${suspend}`);
-                    } else if (TsunamiRadio.readyState < TsunamiRadio.HAVE_ENOUGH_DATA) {
-                        //TsunamiRadio.load();
-                    }
-                }); //Media data loading has been suspended.
-
-                TsunamiRadio.addEventListener("timeupdate", () => {
-
-                    function FormatRadioTime(seconds) {
-                        let m = Math.floor(seconds / 60);
-                        let s = seconds % 60;
-                        return `${m}:${s.toString().padStart(2, "0")}`;
-                    }
-
-                    let TfTimingOk = Math.floor(TsunamiRadio.currentTime);
-                    let UsingTfTk = `Time: ${FormatRadioTime(TfTimingOk)}`;
-                    let TfRadioProcessBar = (TsunamiRadio.currentTime / TsunamiRadio.duration) * 100;
-                    //document.getElementById("TFradioCurrentTime").innerHTML = `elapsed time: ${FormatRadioTime(TsunamiRadio.currentTime)}`;
-                    //document.getElementById("TFradioTimeLeft").innerHTML = `Remaing time: ${FormatRadioTime(TsunamiRadio.duration)}`;
-                    //document.getElementById("RadioTimeFr").innerHTML = UsingTfTk;
-                    //document.getElementById("TFradioProcessBar").innerHTML = TfRadioProcessBar;
-                }); //The time indicated by the currentTime attribute has been updated.
-
-                TsunamiRadio.addEventListener("volumechange", () => {
-                    // Do something cool with the screen and colors and come when this happens.
-                }); //The Volume has changed.
-            }
+                Radio.RadioWorkerReceivedMessage(event);
+            } 
 
             RadioWorker.onerror = async function (error) {
                 console.error(`error message: ${error.message} <br /> error filename: ${error.filename} <br /> error line: ${error.lineno}`);
@@ -531,7 +203,7 @@ if (typeof (Worker) !== "undefined") {
 document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
     TsunamiThoughts.preventDefault();
     let tfUserThot = document.getElementById("TFthought");
-    TfPostThot(tfUserThot);
+    //TfPostThot(tfUserThot);
 });
 //Tsunami Thoughts Ends
 

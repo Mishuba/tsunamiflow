@@ -1,13 +1,10 @@
 import { WordTimes } from "./Arrays.js";
 
-let TheOtherWords = 1;
-let QuoteStuff = 0;
-export class TFwordOftheDay {
+class TFwordOftheDay {
     constructor(word) {
         this.word = word || {};
         this.TheOtherWords = 1;
         this.QuoteStuff = 0;
-        this.Tfwotd = document.getElementById("tfWordOfTheDay");
     }
     set EnHword(value) {
         this.word = {

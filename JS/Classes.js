@@ -12,68 +12,68 @@ export class Weather {
         this.CWapi = "/current.json";
     }
     LatAndLong(working) {
-    // use the latitude and longitude location points. 
-    let TFlat = working.coords.latitude;
-    let TFlong = working.coords.longitude;
-    let TFcoords = working.coords;
-    //use the latitude and longitude location points.
-    let something = `${this.WABurl}${this.CWapi}?key=${this.WapiKey}&q=${TFlat},${TFlong}&aqi=no`;
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', something);
+        // use the latitude and longitude location points. 
+        let TFlat = working.coords.latitude;
+        let TFlong = working.coords.longitude;
+        let TFcoords = working.coords;
+        //use the latitude and longitude location points.
+        let something = `${this.WABurl}${this.CWapi}?key=${this.WapiKey}&q=${TFlat},${TFlong}&aqi=no`;
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', something);
 
-    xhr.onload = async function (e) {
-        if (this.status == 200) {
-            // get the JSON reponse
-            //parse when receiving 
-            //stringify when sending
-            let infoWeather = ('response', JSON.parse(this.response));
+        xhr.onload = async function (e) {
+            if (this.status == 200) {
+                // get the JSON reponse
+                //parse when receiving 
+                //stringify when sending
+                let infoWeather = ('response', JSON.parse(this.response));
 
-            let IWname = infoWeather.location.name;
-            let IWregion = infoWeather.location["region"];
-            let IWcountry = infoWeather.location["country"];
+                let IWname = infoWeather.location.name;
+                let IWregion = infoWeather.location["region"];
+                let IWcountry = infoWeather.location["country"];
 
-            //current
-            let IWcTC = infoWeather.current["temp_c"];
-            let IWcTF = infoWeather.current["temp_f"];
-            let IWcText = infoWeather.current["condition"]["text"];
-            let IWcIcon = infoWeather.current["condition"]["icon"];
+                //current
+                let IWcTC = infoWeather.current["temp_c"];
+                let IWcTF = infoWeather.current["temp_f"];
+                let IWcText = infoWeather.current["condition"]["text"];
+                let IWcIcon = infoWeather.current["condition"]["icon"];
 
 
-            // Display on web page
-            this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                // Display on web page
+                this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
 
-            //Make the response do cool stuf.
+                //Make the response do cool stuf.
+            }
+        };
+        xhr.send();
         }
-    };
-    xhr.send();
-    }
-    City(CityName) {
-    let something = `${this.WABul}${this.CWapi}?key=${this.WapiKey}&q=${CityName}&aqi=no`;
+        City(CityName) {
+        let something = `${this.WABul}${this.CWapi}?key=${this.WapiKey}&q=${CityName}&aqi=no`;
 
-    const userCity = new XMLHttpRequest();
-    userCity.open("POST", something);
-    userCity.onload = function (e) {
-        if (this.status == 200) {
-            //get  the JSON response
-            let infoWeather = ('response', JSON.stringify(this.response));
-            let IWname = infoWeather.location.name;
-            let IWregion = infoWeather.location["region"];
-            let IWcountry = infoWeather.location["country"];
+        const userCity = new XMLHttpRequest();
+        userCity.open("POST", something);
+        userCity.onload = function (e) {
+            if (this.status == 200) {
+                //get  the JSON response
+                let infoWeather = ('response', JSON.stringify(this.response));
+                let IWname = infoWeather.location.name;
+                let IWregion = infoWeather.location["region"];
+                let IWcountry = infoWeather.location["country"];
 
-            //current
-            let IWcTC = infoWeather.current["temp_c"];
-            let IWcTF = infoWeather.current["temp_f"];
-            let IWcText = infoWeather.current["condition"]["text"];
-            let IWcIcon = infoWeather.current["condition"]["icon"];
+                //current
+                let IWcTC = infoWeather.current["temp_c"];
+                let IWcTF = infoWeather.current["temp_f"];
+                let IWcText = infoWeather.current["condition"]["text"];
+                let IWcIcon = infoWeather.current["condition"]["icon"];
 
 
-            // Display on web page
-            weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                // Display on web page
+                weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
 
-            //Make the response do cool stuff. 
-        }
-    };
-    userCity.send();
+                //Make the response do cool stuff. 
+            }
+        };
+        userCity.send();
     }
     Error(e) {
         switch(e.code){
@@ -95,435 +95,466 @@ export class Weather {
         }
     }
     requestLocation() {
-    if (!navigator.geolocation) {
-        console.log("geo not working");
-    } else {
-        console.log("geo working");
-        navigator.permissions.query({
-            name: "geolocation"
-        }).then(result => {
-            if (result.state === "granted") {
-                console.log("geolocation is accessible and you are able to use it for different things. granted");
-                console.log("getting the information on the current position.");
-                navigator.geolocation.getCurrentPosition(DSWL, DEWL, DSLO);
-            } else if (result.state === "prompt") {
-                console.log("geolocation needs to be requested");
-                if (confirm("TF is asking if you will allow it to access your location.")) {
-                    navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
+        if (!navigator.geolocation) {
+            console.log("geo not working");
+        } else {
+            console.log("geo working");
+            navigator.permissions.query({
+                name: "geolocation"
+            }).then(result => {
+                if (result.state === "granted") {
+                    console.log("geolocation is accessible and you are able to use it for different things. granted");
+                    console.log("getting the information on the current position.");
+                    navigator.geolocation.getCurrentPosition(DSWL, DEWL, DSLO);
+                } else if (result.state === "prompt") {
+                    console.log("geolocation needs to be requested");
+                    if (confirm("TF is asking if you will allow it to access your location.")) {
+                        navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
+                    } else {
+                        let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
+                        if (!letmegetloc === "" || " ") {
+                            this.City(letmegetloc);
+                        } else {
+                            console.log("the weather will not work.");
+                        }
+                    };
                 } else {
+                    console.log("geo denied");
                     let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
                     if (!letmegetloc === "" || " ") {
                         this.City(letmegetloc);
                     } else {
                         console.log("the weather will not work.");
                     }
-                };
-            } else {
-                console.log("geo denied");
-                let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
-                if (!letmegetloc === "" || " ") {
-                    this.City(letmegetloc);
-                } else {
-                    console.log("the weather will not work.");
-                }
-            }
-        });
-    };
-    }
-}
-
-
-export class TfMusic {
-    constructor(x, y, dx, dy, radius, color, canvas) {
-        this.TsunamiRadio = document.getElementById("TFradioPlayer");
-        this.TsunamiRadioTitle = document.getElementById("TfRadioStuff");
-        this.TsunamiLastButton = document.createElement("button");
-        this.TsunamiRadioButtons = document.getElementById("CheckRadio");
-        this.TsunamiRestartButton = document.createElement("button");
-        this.TsunamiStartButton = document.createElement("button");
-        this.TsunamiSkipButton = document.createElement("button");
-        this.phpRadio = new XMLHttpRequest();
-        this.TsunamiRadioAudio = new AudioContext();
-        this.canvas = document.getElementById("TFradioCanvas");
-        this.x = x;
-        this.y = y;
-        this.dx = dx; // x velocity
-        this.dy = dy; // y velocity
-        this.radius = radius;
-        this.baseRadius = radius;
-        this.color = color;
-        this.particles = [];
-        this.visualizatorController;
-        this.textTrackOptions = {
-            kind: "subtitles", // caption, descriptions, chapters, metadata
-            label: "name",
-            language: "en", //
-        };
-        this.audioAnalyzerOptions = {
-            fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
-            maxDecibels: 0, // 0 is the loudest
-            minDecibels: -100, // 0 is the loudest 
-            smoothingTimeConstant: 0.5, // between 0 and 1
-            //channelCount: ,
-            channelCountMode: "max",
-            //channelInterpretation: ,
-            //
-        };
-        this.periodicWaveOptions = {
-            //channelCount: 2,
-            //channelCountMode: "max",
-            //channelInterpretation: "speakers",
-            disableNormalization: true,
-        };
-        this.TFpowReal = new Float32Array(2);
-        this.TFpwoImag = new Float32Array(2);
-        this.TFaudioBuffer = new ArrayBuffer(32);
-        this.TFtestingF32A = new Float32Array(TFaudioBuffer, 4, 4);
-        this.TFgameIterable = (function* () {
-        yield* [1, 2, 3];
-    })();
-        this.float32FromIterable = new Float32Array(this.TFgameIterable);
-
-        this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
-        this.TFoscillatorNodeOptions = {
-            type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
-            detune: 0,
-            frequency: 440,
-            periodicWave: this.TFperiodicWave,
-            channelCount: 2,
-            channelCountMode: "max", // max, something , huh
-            channelInterpretation: "speakers"
-        };
-        this.TFWaveShaperNodeOptions = {
-            //curve: 0.5, // -1, 1
-            oversample: "none", // "none", "2x", "4x",
-            channelCount: "2", //
-            channelCountMode: "max",
-            //channelInterpretation: "speaker"
-        };
-        this.Game2dPannerOptions = { pan: 0 }; // -1 = far left, 1 = far right;
-        this.TFdelayNodeOptions = {
-            delayTime: 0,
-            maxDelayTime: 1,
-            channelCount: 2,
-            channelCountMode: "max",
-            channelInterpretation: "speakers"
-        };
-        this.TFdynamicsCompressorNodeOptions = {
-            attack: 0.003, // 0-1
-            knee: 30, //0 - 40
-            ratio: 12, // 1  - 20
-            release: 0.250, // 0-1
-            threshold: -24 // -100 - 0
-        };
-    }
-    particle() {
-        for (let i = 0; i < 100; i++) {
-            let x = Math.random() * this.canvas.width;
-            let y = Math.random() * this.canvas.height;
-            let dx = (Math.random() - 0.5) * 0.5;
-            let dy = (Math.random() - 0.5) * 0.5;
-            let radius = Math.random() * 0.5 + 0.2;
-            let color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-            this.particles.push(new Particle(x, y, dx, dy, radius, color));
-        }
-    }
-    update(volume) {
-        this.radius = this.baseRadius + volume / 80; // pulse based on volume
-        this.x += this.dx;
-        this.y += this.dy;
-
-        // bounce off edges
-        if (this.x + this.radius > this.canvas.width || this.x - this.radius < 0) {
-            this.dx = -this.dx;
-        }
-        if (this.y + this.radius > this.canvas.height || this.y - this.radius < 0) {
-            this.dy = -this.dy;
-        }
-    }
-    draw(ctx) {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        ctx.shadowColor = this.color;
-        ctx.shadowBlur = 20;
-        ctx.fill();
-    }
-    Visualizer(dataArray, bufferLength, AudioAnalyser){
-        let ctx = canvas.getContext("2d");
-        this.particle();
-        let hereDude = async function doitBro() {
-            ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-            //AudioAnalyser.getFloatTimeDomainData(dataArray);
-            //AudioAnalyser.getByteTimeDomainData(dataArray);
-            AudioAnalyser.getByteFrequencyData(dataArray);
-
-            ctx.fillStyle = "rgb(10, 10, 30)";
-            ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-            //Get Average volume for particle reaction
-            let CtxTotal = 0;
-            for (let i = 0; i < dataArray.length; i++) {
-                CtxTotal += dataArray[i];
-            }
-            let averageVolume = CtxTotal / dataArray.length;
-
-            for (let i = 0; i < this.particles.length; i++) {
-                this.particles[i].update(averageVolume);
-                this.particles[i].draw(ctx);
-            }
-
-            let barWidth = (100 / bufferLength) * 2.5;
-            let barHeight;
-            let CtxX = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                barHeight = dataArray[i];
-
-                let CtxR = barHeight + 25 * (i / bufferLength);
-                let CtxG = 250 * (i / bufferLength);
-                let CtxB = 50;
-
-                ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-                ctx.fillRect(CtxX, 100 - barHeight, barWidth, barHeight);
-
-                CtxX += barWidth + 1;
-            }
-
-            this.visualizatorController = requestAnimationFrame(hereDude);
-        }
-
-        hereDude();
-    }
-    StopVisualizator(){
-        cancelAnimationFrame(this.visualizationController)
-    }
-    startMusic() {
-        if (this.TsunamiRadio.paused) {
-            this.TsunamiRadio.play().catch(async (error) => {
-                if (error.name === "NotAllowedError") {
-                    console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-                } else {
-                    console.error("Error playing audio:", error);
                 }
             });
-        } else {
-            this.TsunamiRadio.play().catch(async (error) => {
-                if (error.name === "NotAllowedError") {
-                    console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-                } else {
-                    console.error("Error playing audio:", error);
-                }
-            });
-        }
-    }
-    stopMusic() {
-        if (!this.TsunamiRadio.paused) {
-            this.TsunamiRadio.pause();
-        }
-    }
-    previousSong(music) {
-        this.TsunamiRadio.src = music;
-        this.TsunamiRadio.play();
-    }
-    restartSong(music) {
-        this.TsunamiRadio.src = music;
-        this.TsunamiRadio.play();
-    }
-    TsunamiRadioReady() {
-        this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
-
-        this.TsunamiLastButton.id = "TFradioPreviousButton";
-        this.TsunamiLastButton.innerHTML = "Previous";
-        this.TsunamiLastButton.addEventListener("click", async () => {
-
-        });
-        this.TsunamiRadioButtons.appendChild(TsunamiLastButton);
-
-        this.TsunamiRestartButton.id = "TFRadioRestartButton";
-        this.TsunamiRestartButton.innerHTML = "Restart";
-        this.TsunamiRestartButton.addEventListener("click", async () => {
-
-        });
-        this.TsunamiRadioButtons.appendChild(TsunamiRestartButton);
-
-        this.TsunamiStartButton.id = "TFradioButton";
-        this.TsunamiStartButton.innerHTML = "Start Radio";
-        this.TsunamiStartButton.addEventListener("click", async () => {
-            if (this.TsunamiRadio.paused) {
-                startMusic();
-                this.TsunamiStartButton.innerHTML = "Pause Tsuanmi Radio";
-            } else {
-                stopMusic();
-                this.TsunamiStartButton.innerHTML = "Play Tsunami Radio";
-            }
-        });
-        this.TsunamiRadioButtons.appendChild(this.TsunamiStartButton);
-
-
-        this.TsunamiSkipButton.id = "TFradioSkipButton";
-        this.TsunamiSkipButton.innerHTML = "Next";
-        this.TsunamiSkipButton.addEventListener("click", async () => {
-
-        });
-        this.TsunamiRadioButtons.appendChild(TsunamiSkipButton);
+        };
     }
 }
-
-export class User {
-    constructor(username, password) {
-        this.username = username;
-        this.password = password;
-        //Subscribers
-// Define references to the form elements
-this.FreeSubmitButton = document.getElementById("TFCompleteForm");
-this.tfFN = document.getElementById("TfFirstName");
-this.tfLN = document.getElementById("TfLastName");
-this.tfNN = document.getElementById("TfNickName");
-this.tfGen = document.getElementById("TfGender");
-this.tfEM = document.getElementById("TfEmail");
-this.tfBirth = document.getElementById("TfBirthday");
-this.tfUN = document.getElementById("TFuserName"); //username
-this.tfPsw = document.getElementById("TFpassword"); //password
-
-// Membership level selection
-this.tfMembershipLevel = document.getElementById("TFMembershipLevel");
-
-// Additional fields based on membership level
-// Free/Regular level fields
-this.tfChineseZodiacSign = document.getElementById("ChineseZodiacSign");
-this.tfWesternZodiacSign = document.getElementById("WesternZodiacSign");
-this.tfSpiritAnimal = document.getElementById("SpiritAnimal");
-this.tfCelticTreeZodiacSign = document.getElementById("CelticTreeZodiacSign");
-this.tfNativeAmericanZodiacSign = document.getElementById("NativeAmericanZodiacSign");
-this.tfVedicAstrologySign = document.getElementById("VedicAstrologySign");
-this.tfGuardianAngel = document.getElementById("GuardianAngel");
-this.tfChineseElement = document.getElementById("ChineseElement");
-this.tfEyeColorMeaning = document.getElementById("EyeColorMeaning");
-this.tfGreekMythologyArchetype = document.getElementById("GreekMythologyArchetype");
-this.tfNorseMythologyPatronDeity = document.getElementById("NorseMythologyPatronDeity");
-this.tfEgyptianZodiacSign = document.getElementById("EgyptianZodiacSign");
-this.tfMayanZodiacSign = document.getElementById("MayanZodiacSign");
-
-// Regular/VIP level fields
-this.tfLoveLanguage = document.getElementById("LoveLanguage");
-this.tfBirthstone = document.getElementById("Birthstone");
-this.tfBirthFlower = document.getElementById("BirthFlower");
-this.tfBloodType = document.getElementById("BloodType");
-this.tfAttachmentStyle = document.getElementById("AttachmentStyle");
-this.tfCharismaType = document.getElementById("CharismaType");
-
-// VIP/Team level fields
-this.tfBusinessPersonality = document.getElementById("BusinessPersonality");
-this.tfDisc = document.getElementById("DISC");
-this.tfSocionicsType = document.getElementById("SocionicsType");
-this.tfLearningStyle = document.getElementById("LearningStyle");
-this.tfFinancialPersonalityType = document.getElementById("FinancialPersonalityType");
-this.tfPrimaryMotivationStyle = document.getElementById("PrimaryMotivationStyle");
-this.tfCreativeStyle = document.getElementById("CreativeStyle");
-this.tfConflictManagementStyle = document.getElementById("ConflictManagementStyle");
-this.tfTeamRolePreference = document.getElementById("TeamRolePreference");
-    }
-    signup(fn, ls, nn, gen, em, birth, un, psw, membershipLevel, chineseZodiacSign, westernZodiacSign, spiritAnimal, celticTreeZodiacSign, nativeAmericanZodiacSign, vedicAstrologySign, guardianAngel, chineseElement, eyeColorMeaning, greekMythologyArchetype, norseMythologyPatronDeity, egyptianZodiacSign, mayanZodiacSign, loveLanguage, birthstone, birthFlower, bloodType, attachmentStyle, charismaType, businessPersonality, disc, socionicsType, learningStyle, financialPersonalityType, primaryMotivationStyle, creativeStyle, conflictManagementStyle, teamRolePreference, SPC, SPCC, SPA1, SPA2, SPCtf, SS, SPN, MembershipCostFr, SCidFR) {
-        let SubFormData = new FormData();
-        SubFormData.append("TFRegisterFirstName", fn.value);
-        SubFormData.append("TFRegisterLastName", ls.value);
-        SubFormData.append("TFRegisterNickName", nn.value);
-        SubFormData.append("TFRegisterGender", gen.value);
-        SubFormData.append("TFRegisterEmail", em.value);
-        SubFormData.append("TFRegisterBirthday", birth.value);
-        SubFormData.append("TFRegisterUsername", un.value);
-        SubFormData.append("TFRegisterPassword", psw.value);
-        SubFormData.append("membershipLevel", membershipLevel.value);
-        SubFormData.append("ChineseZodiacSign", chineseZodiacSign.value);
-        SubFormData.append("WesternZodiacSign", westernZodiacSign.value);
-        SubFormData.append("SpiritAnimal", spiritAnimal.value);
-        SubFormData.append("CelticTreeZodiacSign", celticTreeZodiacSign.value);
-        SubFormData.append("NativeAmericanZodiacSign", nativeAmericanZodiacSign.value);
-        SubFormData.append("VedicAstrologySign", vedicAstrologySign.value);
-        SubFormData.append("GuardianAngel", guardianAngel.value);
-        SubFormData.append("ChineseElement", chineseElement.value);
-        SubFormData.append("EyeColorMeaning", eyeColorMeaning.value);
-        SubFormData.append("GreekMythologyArchetype", greekMythologyArchetype.value);
-        SubFormData.append("NorseMythologyPatronDeity", norseMythologyPatronDeity.value);
-        SubFormData.append("EgyptianZodiacSign", egyptianZodiacSign.value);
-        SubFormData.append("MayanZodiacSign", mayanZodiacSign.value);
-        SubFormData.append("LoveLanguage", loveLanguage.value);
-        SubFormData.append("Birthstone", birthstone.value);
-        SubFormData.append("BirthFlower", birthFlower.value);
-        SubFormData.append("BloodType", bloodType.value);
-        SubFormData.append("AttachmentStyle", attachmentStyle.value);
-        SubFormData.append("CharismaType", charismaType.value);
-        SubFormData.append("BusinessPersonality", businessPersonality.value);
-
-        SubFormData.append("DISC", disc.value);
-        SubFormData.append("SocionicsType", socionicsType.value);
-        SubFormData.append("LearningStyle", learningStyle.value);
-        SubFormData.append("FinancialPersonalityType", financialPersonalityType.value);
-        SubFormData.append("PrimaryMotivationStyle", primaryMotivationStyle.value);
-        SubFormData.append("CreativeStyle", creativeStyle.value);
-        SubFormData.append("ConflictManagementStyle", conflictManagementStyle.value);
-        SubFormData.append("TeamRolePreference", teamRolePreference.value);
-        SubFormData.append("tfSubPaymentCity", SPC.value);
-        SubFormData.append("tfSubPaymentCountry", SPCC.value);
-        SubFormData.append("tfSubPaymentAddress1", SPA1.value);
-        SubFormData.append("tfSubPaymentAddress2", SPA2.value);
-        SubFormData.append("tfSubPostalCode", SPCtf.value);
-        SubFormData.append("tfSubState", SS.value);
-        SubFormData.append("tfSubPhoneNumber", SPN.value);
-        SubFormData.append("hiddenMC", MembershipCostFr.value);
-        SubFormData.append("SCidFR", SCidFR);
-        //SubFormData.append("TFRegisterFreeLevelButton", tfButton);
-        //Ends
-        let MyXML = new XMLHttpRequest();
-        MyXML.onreadystatechange = async function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let tSubFdataOk = JSON.parse(this.responseText);
-
-                //DO Something it the response.
-
-
-            }
-        }
-        MyXML.open("POST", `./../server.php`, true);
-        MyXML.send(SubFormData);
-    }
-    login () {
-        if (this.username == "" || this.password == "") {
-            // You may want to handle the case where username or password is empty
-        } else {
-            let xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function () {
-                if (this.readyState == 4 && this.status == 200) {
-                    document.getElementById("TFloginIcon").innerHTML = this.responseText;
-                    // create a cookie to keep the user logged in when I regenerate the session.
-                    // set sessionstorage, sessionids,and localstorageid, userPreferences, get computer info
-                }
-            };
-            xhr.open("POST", `server.php?phpnun=${this.username}&phpnpsw=${this.password}`, true);
-            xhr.send();
-        }
-    }
-}
-
-export class TfNetwork {
+export class Art {
     constructor() {
+
+    }
+}
+export class TfVideo {
+    constructor() {
+        //create
+        this.VideoSystemControllerButton = document.createElement("button");
+        this.VideoSystemControllerButton.id = "TfControlShit";
+        this.tfVidImgUploadButton = document.createElement("button");
+        this.tfVidImgUploadButton.id = "TfUploadImages";
+        this.tfVidImgRemoveImgButton = createElement("button");
+        this.tfVidImgRemoveImgButton.id = "rmvTFimg";
+        
+        this.tfVideoStuff = document.createElement("video");
+        this.tfVideoStuff.id = "TsunamiFlowVideoStuff";
+        this.tfVideoStuff.controls = true;
+        this.tfVideoStuff.autoplay = false;
+        this.tfVideoStuff.loop = false;
+        this.tfVideoStuff.muted = false;
+        this.
+        //tfVideoStuff.poster = "";
+        
+        //Webcam
+        this.WebcamStartButton = document.createElement("button");
+        this.WebcamStartButton.id = "TfStartShit";
+        this.WebcamStopButton = document.createElement("button");
+        this.WebcamStopButton.id = "TfStopShit";
+        this.whichCamera = true;
+        this.WebcamStreamVideoAndAudio;
+        this.WebcamAudioStream;
+        this.WebcamVideoStream;
+        this.useChromaKeyWebcam = false;
+
+        this.TmediaFstreamConstraints = {
+            audio: {
+                deviceId: "f",
+                //groupId: "",
+                autoGainControl: {
+                    //exact: ,
+                    ideal: true,
+                },
+                channelCount: {
+                    //exact: 7.5,
+                    min: 1,
+                    ideal: 6,
+                    max: 12,
+                },
+                echoCancellation: true,
+                //latency: ,
+                //noiseSuppression: variable,
+                //sampleRate: {},
+                sampleSize: {
+                    min: 8,
+                    ideal: 16,
+                    max: 32
+                },
+            },
+            image: {
+                deviceId: "n",
+                //groupId: "",
+                whiteBalanceMode: {
+                    ideal: "none",
+                    //exact: ,
+                }, // "manual", "single-shot", "continuous"
+                exposureMode: "none", // "manual", "single-shot", "continuous"
+                focusMode: "none", // "manual", "single-shot", "continuous"
+                //pointsOInterest: { x: , y: , },
+                //exposureCompensation: , //
+                //colorTemperature: , //Integer
+                //iso: ,//
+                //brightness: ,//
+                //contrast: ,//
+                //saturation: ,//
+                //sharpness: ,//
+                //focusDistance: ,//
+                //zoom: ,//
+                //torch: ,//
+            },
+            video: {
+                deviceId: "t",
+                //groupId: "",
+                //aspectRadio: { },
+                width: {
+                    min: 400,
+                    ideal: 600,
+                    max: 1280,
+                },
+                height: {
+                    min: 400,
+                    ideal: 600,
+                    max: 720,
+                },
+                framerate: {
+                    exact: 7.5,
+                    min: 15,
+                    ideal: 30,
+                    max: 60,
+                },
+                //facingMode: whichCamera ? "" || "";
+            }
+        };
+        //ChromaKey
+        this.chromaKeyColorWebcam = {
+            r:0,
+            g: 255,
+            b: 0
+        }
+        this.chromaColorPicker = document.createElement("button");
+        this.chromaColorPicker.id = "TFchormaKey";
+        this.useChromaColor = document.createElement("button");
+        this.useChromaColor.id = "TuseFthisKeyColor";
+        this.removeChromaColor = document.create.Element("button");
+        this.removeChromaColor.id = "rmvTFchromaKey";
+
+        //background
+        this.backgroundVideo = null;
+        this.backgroundVideoButton = document.createElement("button");
+        this.backgroundVideoButton.id = "TfUploadShit";
+        this.removeBackgroundVideoButton = document.createElement("button");
+        this.removeBackgroundVideoButton.id = "rmTFvid";
+
+        //Stream
+        this.emptyStream;
+        this.stream;
+        this.stream1;
+        this.stream2;
+
+        //WebRTC
+        this.VideoProcessor;
+        this.VideoReader;
+        this.VideoDevice;
+
+        //recording
+        this.startRecordingButton = document.createElement("button");
+        startRecordingButton.id = "TfStartRecPlz";
+        this.stopRecordingButton = document.createElement("button");
+        this.stopRecordingButton.id = "TfStopRecPlz";
+        this.frameIsRecording = false;
         this.isPlaying = false;
         this.mediaRecorder; 
         this.recordedChunks = [];
+        this.DownloadVideoRecordingButton = document.createElement("button");
+        this.DownloadVideoRecordingButton.id = "IframeDownload";
+    }
+    VideoNetworkState() {
+        /*
+        if (this.tfVideoStuff.networkState === this.tfVideoStuff.NETWORK_NO_SOURCE) {
+            console.log("The Tsunami Community Video Network State is NETWORK_NO_SOURCE");
+        } else if (this.tfVideoStuff.networkState === this.tfVideoStuff.NETWORK_IDLE) {
+            console.log("The Tsunami Community Video Network State is NETWORK_IDLE");
+        } else if (this.tfVideoStuff.networkState === this.tfVideoStuff.NETWORK_LOADING) {
+            console.log("The Tsunami Community Video Network State is NETWORK_LOADING");
+        }
+        */
+        if (this.tfVideoStuff.readyState === 0) {
+            console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
+            if (this.tfVideoStuff.networkState == 0) {
+                console.log("Radio networkState has NETWORK_EMPTY");
+                if (this.tfVideoStuff.src == "") {
+                    console.log("The radio source is ''");
+                } else if (!this.tfVideoStuff.src) {
+                    ("The radio source does not exist");
+                } else if (this.tfVideoStuff.src == " ") {
+                    console.log("The radio source is ' '");
+                } else if (this.tfVideoStuff.src == "about:blank") {
+                    console.log("The radio source is about:blank");
+                }
+                else {
+                    console.log("Something else is going on and I dont know what it is.");
+                }
+            } else if (this.tfVideoStuff.networkState == 2) {
+                console.log("Radio networkState is NETWORK_LOADING");
+                //Actively fetching the audio from the network.
+                //Show loading or buffering user interface.
+            } else if (this.tfVideoStuff.networkState == 3) {
+                console.log("Radio networkState has NETWORK_NO_SOURCE");
+                //No valid source
+            }
+        } else if (this.tfVideoStuff.readyState === 1) {
+            console.log("Radio readyState is HAVE_METADATA");
+            if (this.tfVideoStuff.networkState == 1) {
+                console.log("Radio networkState is NETWORK_IDLE");
+            } else if (this.tfVideoStuff.networkState == 2) {
+                console.log("Radio networkState is NETWORK_LOADING");
+                //Actively fetching the audio from the network.
+                //Show loading or buffering user interface.
+            } else if (this.tfVideoStuff.networkState == 3) {
+                console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
+                //No valid source
+            }
+        } else if (this.tfVideoStuff.readyState === 2) {
+            console.log("Radio readyState is HAVE_CURRENT_DATA");
+            if (this.tfVideoStuff.networkState == 1) {
+                console.log("Radio networkState is NETWORK_IDLE");
+            } else if (this.tfVideoStuff.networkState == 2) {
+                console.log("Radio networkState is NETWORK_LOADING");
+                //Actively fetching the audio from the network.
+                //Show loading or buffering user interface.
+            } else if (this.tfVideoStuff.networkState == 3) {
+                console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
+                //No valid source
+            }
+        } else if (this.tfVideoStuff.readyState === 3) {
+            console.log("Radio readyState is HAVE_FUTURE_DATA");
+            if (this.tfVideoStuff.networkState == 1) {
+                console.log("Radio networkState is NETWORK_IDLE");
+            } else if (this.tfVideoStuff.networkState == 3) {
+                console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
+                //No valid source
+            }
+        } else if (this.tfVideoStuff.readyState === 4) {
+            console.log("Radio readyState is HAVE_ENOUGH_DATA");
+            if (this.tfVideoStuff.networkState == 1) {
+                console.log("Radio networkState is NETWORK_IDLE");
+            } else if (this.tfVideoStuff.networkState == 2) {
+                console.log("Radio networkState is NETWORK_LOADING");
+                //Actively fetching the audio from the network.
+                //Show loading or buffering user interface.
+            } else if (this.tfVideoStuff.networkState == 3) {
+                console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
+                //No valid source
+            }
+
+            if (this.tfVideoStuff.ended) {
+                if (this.tfVideoStuff.src = "") {
+
+                } else if (this.tfVideoStuff.src = undefined) {
+
+                } else if (!this.tfVideoStuff.src) {
+
+                } else {
+
+                }
+            } else {
+                if (this.tfVideoStuff.paused) {
+                    if (this.tfVideoStuff.currentTime === 0) {
+                        console.log("Tsunami Radio has not started yet.");
+                    } else {
+                        console.log("Paused at " + this.tfVideoStuff.currentTime);
+                    }
+                } else {
+                    console.log("A song is still playing. Make the next song play using the functions");
+                }
+            }
+        } else {
+            if (this.tfVideoStuff.networkState === 3) {
+                console.log("The network could not find the source.");
+            } else {
+                console.log("Some unknown error is going on with the Radio");
+            }
+        }
+    }
+    VideoState() {
+
+    }
+    emptiedVideo() {
+        this.VideoNetworkState();
+    }
+    loadVideo() {
+        this.VideoNetworkState();
+    }
+    VideoLoadStarted() {
+        /*
+        if (this.tfVideoStuff.state === "suspended") {
+            //this.tfVideoStuff.resume();
+        } else if (this.tfVideoStuff.state === "running") {
+            console.log("The Tsunami Commjnity Video Context state is running");
+        } else {
+            console.log("The Tsunami COmmunity Video COntext state must be closed");
+        }
+        */
+    }
+    loadedVideoMetadata(metadata){
+        this.VideoNetworkState();
+        this.tfVideoStuff.videoWidth;
+        this.tfVideoStuff.videoHeight;
+        /*
+        //Start stuff here.
+        //Combining stream
+        const CombinedVidAndAudioStreams = new MediaStream([
+            this.stream1.getVideoTracks()[0],
+            this.stream2.getAudioTracks()[0]
+        ]);
+
+        this.stream1.getSettings();
+        this.stream1.applyConstraints(TmediaFstreamConstraints);
+
+        metadata.getAudioTracks().forEach(async (track) => {
+            track.enabled = true;
+
+        }); //mute
+        metadata.getVideoTracks().forEach(track => track.enabled = true);
+        */
+
+        //Attach the Audio to the Audio Context or the geeAudioTracks thing.
+
+        /*
+        //Attach the video to the video Context
+        const StreamingStuff = new MediaStream();
+        StreamingStuff.addTrack(stream);
+        StreamingStuff.addEventListener("addtrack", async (track) => {
+            console.log("Track Added " + track.track);
+        });
+        StreamingStuff.addEventListener("removetrack", async (track) => {
+            console.log("Track removed " + track.track);
+        })
+        const videoTracks = StreamingStuff.getVideoTracks();
+        */
+        /*
+            videoTracks[0].enabled;
+            videoTracks[0].readyState;
+            videoTracks[0].label;
+            videoTracks[0].kind;
+    
+            videoTracks[0].applyConstraints();
+    
+            videoTracks[0].stop();
+        
+        videoTracks.addEventListener("ended", async (ended) => {
+            console.log("Video Eneded");
+        });
+
+        videoTracks.addEventListener("muted", async (muted) => {
+            console.log("The video is muted");
+        });
+
+        videoTracks.addEventListener("unmuted", async (unmuted) => {
+            console.log("The video is unmuted");
+        })
+        */
+
+        //ctx.drawImage(tfVideoStuff, 0, 0, canvas.width, canvas.height);
+    }
+    loadedVideoData() {
+        this.VideoState();
+    }
+    canPlayVideo() {
+        if(this.canvas !== null) {
+            
+
+        } else {
+            this.canvas = document.createElement("canvas");
+        }
+    }
+    canPlayVideoThrough(){
+        this.VideoState();
+        this.tfVideoStuff.play();
     }
     playVideo(){
+        this.VideoState();
+        if (this.isRecording) {
 
+        } else {
+            //Media Recorder
+            const tfVidRecorder = new MediaRecorder(stream);
+            let tfVidChunks = [];
+
+            tfVidRecorder.ondataavailable = async (e) => {
+                tfVidChunks.push(e.data);
+                tfVidRecorder.onstop = async (e) => {
+                    const tfVidBlob = new Blob(tfVidChunks, {
+                        type: "video/webm"
+                    });
+                    const tfVidUrl = URL.createObjectURL(tfVidBlob);
+                    const tfAhref = document.createElement("a");
+                    tfAhref.href = TfVidUrl;
+                    tfAhref.download = "recorded.webm";
+                    tfAhref.click();
+                };
+                tfVidRecorder.start();
+            };
+        }
     }
     pauseVideo(){
+        this.VideoState();
+    }
+    VideoEnded(){
 
     }
-    stopVideo(){
+    VideoWaiting(){
+        this.VideoState();
+    }
+    VideoPlaying(){
+        this.VideoState();
+    }
+    VideoStalled(){
 
+    }
+    VideoSuspended(){
+        this.VideoNetworkState();
+
+    }
+    FormatVideoTime(seconds) { 
+        let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2,"0")}`;
+    }
+    UpdateVideoTime(){
+        /*
+        let TimingVideo = Math.floor(this.tfVideoStuff.currentTime);
+        let UsingTfVidTk = `Time: ${this.FormatVideoTime(TimingVideo)}`;
+        let VideoProcessBar = (this.tfVideoStuff.currentTime / this.tfVideoStuff.duration) * 100;
+        */
+    }
+    VideoVolumeChange(){
+
+    }
+    processVideoFrames(){
+        /*
+        while (true) {
+            //const { value: frame, done } = await tfVidReader.read();
+
+            /*
+            if (done) {
+                break;
+            } else {
+
+            }
+            frame.close();
+            
+        }
+        */
     }
     chromaKey(hex) {
-    /*
         let trf = 0, tgf = 0, tbf = 0;
         if (hex.length === 4) {
             trf = parseInt(hex[1] + hex[1], 16);
@@ -535,9 +566,15 @@ export class TfNetwork {
             tbf = parseInt(hex[5] + hex[6], 16);
         }
         return { trf, tgf, tbf };
-    */
     }
-    chromaKey(thing){
+    ColorPickerChromaKey(chroma){
+        const Tfhex = chroma.target.value;
+        const rgb = parseInt(hex.slice(1), 16);
+        this.chromaKeyColorWebcam.r = (rgb >> 16) & 255;
+        this.chromaKeyColorWebcam.g = (rgb >> 8) & 255;
+        this.chromaKeyColorWebcam.b = rgb & 255;
+    }
+    ApplyTfChromaKey(thing){
 
         if(thing === "webcam"){
             /*
@@ -561,8 +598,8 @@ export class TfNetwork {
                 /*
             let frameSkipCount = 2;
             let frameCounter = 0;
-            if (tfVidStuff.paused || tfVidStuff.ended) {
-                hpCC.drawImage(tfVidStuff, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            if (this.tfVideoStuff.paused || this.tfVideoStuff.ended) {
+                hpCC.drawImage(this.tfVideoStuff, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 const imageData = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 const data = imageData.data;
                 const chromaColor = hexToRgb(colorPicker.value);
@@ -603,21 +640,123 @@ export class TfNetwork {
             */
 
         } else if (thing === "video") {
+            //current code below is drawing the video to the canvas, and then getting the pixel data, and then turning it into GreenScreen or aka manipulating it.
+            //Draw the video directly to canvas.
+            //ctx.drawImage(this.tfVideoStuff, 0, 0, canvas.width, canvas.height); 
+            
+            //Get pixel data.
+            //const TfVidDrawFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
+            //mainpulate pixel
+            //ctx.putImageData(TfVidDrawFrame, 0 ,0);
+            requestAnimationFrame(DrawVideo);
         } else {
-            //nothing
+            //nothing 
         }
     }
     startWebcam(){
-        //let emptyStream = new MediaStream();
-        //let VideoStreamOk = new MediaStream(AskForWebcam);
-        //let AudioStreamOk = new MediaStream(RadioPlaylistElement);
-        tfVidStuff.srcObject = AskForWebcam;
-        tfVidStuff.play();
-        animate();
+        this.WebcamStreamVideoAndAudio = navigator.mediaDevices.getUserMedia(this.TmediaFstreamConstraints).then(async (stream) => {
+        //AudioStream
+        //this.WebcamAudioStream = new MediaStream(stream);
+        
+        //mediaStream
+        //this.emptyStream = new MediaStream();
+        this.WebcamVideoStream = new MediaStream(stream);
+
+        this.tfVideoStuff.srcObject = stream;
+        //this.tfVideoStuff.play();
+        //animate();
+
+        this.tfVideoStuff.addEventListener("emptied", async () => {
+            console.log("The Tsunami Community Video has been emptied.");
+
+        }); //The media has become empty; for example, this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
+
+        this.tfVideoStuff.addEventListener("load", async () => {
+
+        }); //The resource has been loaded.
+        this.tfVideoStuff.addEventListener("loadstart", async () => {
+            console.log("The Tsunami Community Video has started loading.");
+
+        });//Fired when the browser has started to load teh resource.
+
+        this.tfVideoStuff.addEventListener("loadedmetadata", async (metadata) => {
+            console.log("The Tsunami COmmunity Video metadata has started to load.");
+
+
+        });
+
+        this.tfVideoStuff.addEventListener("loadeddata", async () => {
+            console.log("The data has loaded");
+
+        }); // The first frame of the mdeia has finished loading.
+
+        this.tfVideoStuff.addEventListener("canplay", async () => {
+            console.log("The Tsunami Video Community can play this part.");
+
+            //create canvas
+        });
+
+        this.tfVideoStuff.addEventListener("canplaythrough", async () => {
+
+        }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
+
+        this.tfVideoStuff.addEventListener("play", () => {
+            console.log("The Video should be playing");
+        }); //Playback has begun.
+
+        this.tfVideoStuff.addEventListener("pause", async () => {
+
+        }); //playback has been paused.
+
+        this.tfVideoStuff.addEventListener("ended", async () => {
+            console.log("The video should have ended");
+        });
+
+        this.tfVideoStuff.addEventListener("waiting", async (waiting) => {
+            console.log("The Video should be waiting");
+        }); //Playback has stopped because of a temporary lack of data.
+
+        this.tfVideoStuff.addEventListener("playing", async () => {
+            console.log("The video should be playing");
+        }); //Playback is ready to start after having been paused or delayed due to lack of data.
+
+        this.tfVideoStuff.addEventListener("stalled", async (stalled) => {
+            console.log(`The Tsunami Community Video has stalled for some reason. ${stalled} <br /> here is the supposed song path: input the real path here later.`);
+        });
+
+        this.tfVideoStuff.addEventListener("suspended", async (suspend) => {
+
+        });
+
+        this.tfVideoStuff.addEventListener("timeupdate", () => {
+            //function 
+
+
+        });
+
+        this.tfVideoStuff.addEventListener("volumechange", async () => {
+
+        });
+        }).catch(async (error) => {
+            console.error(error);
+        });
     }
     stopWebcam(){
 
+    }
+    VideoWebCodecs(stream){
+        this.VideoProcessor = new MediaStreamTrackProcess({
+            track: stream.getVideoTracks()[0]
+        });
+        this.VideoReader = this.VideoProcessor.readable.getReader();
+    }
+    VideoWebRTC(stream) {
+        this.VideoDevice = new RTCPeerConnection();
+        stream.getTracks().forEach(track => this.VideoDevice.addTrack(track, stream));
+    }
+    VideoScreenSharing(){
+        //navigator.mediaDevices.getDisplayMedia(TmediaFstreamConstraints).then(async (stream) => { // use stream})
     }
     startRecording(){
         /*
@@ -625,7 +764,7 @@ export class TfNetwork {
         let canvasStream = homepageCanvas.captureStream();
         let mediaStream = new MediaStream([
             ...canvasStream.getVideoTracks(),
-            ...tfVidStuff.srcObject.getAudioTracks() // Include audio from video stream
+            ...this.tfVideoStuff.srcObject.getAudioTracks() // Include audio from video stream
         ]);
         mediaRecorder = new MediaRecorder(mediaStream);
         mediaRecorder.ondataavailable = (event) => {
