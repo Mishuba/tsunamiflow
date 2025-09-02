@@ -73,7 +73,8 @@ export class TfMusic {
     })();
         this.float32FromIterable = new Float32Array(this.TFgameIterable);
 
-        this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
+        //this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
+/*
         this.TFoscillatorNodeOptions = {
             type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
             detune: 0,
@@ -83,6 +84,7 @@ export class TfMusic {
             channelCountMode: "max", // max, something , huh
             channelInterpretation: "speakers"
         };
+        */
         this.TFWaveShaperNodeOptions = {
             //curve: 0.5, // -1, 1
             oversample: "none", // "none", "2x", "4x",
