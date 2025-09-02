@@ -1300,7 +1300,6 @@ export class letsDoIt {
                 return 0;
         }
     }
-
     damageTotal(tfCC1, tfCC2, pressed) {
         let damageDealt = damage(tfCC1, pressed) - tfCC2.ArmorMax;
         if (damageDealt < 0) {
@@ -1313,14 +1312,12 @@ export class letsDoIt {
         return damageDealt < 0 ? 0 : damageDealt; // Ensure no negative damage
         */
     }
-
     newHealth(character, damage) {
         character.health = character.health - damage;
         return character.health;
         // Subtract damage from character's health
         //    character.health = Math.max(0, character.health - damage); // Health shouldn't go below 0
     }
-
     death(character) {
         if (character.health > 0) {
             return console.log("still alive");
@@ -1329,23 +1326,19 @@ export class letsDoIt {
         }
         //return character.health > 0 ? "still alive" : "dead";
     }
-
     fullHealth(character) {
         character.health = character.maxHealth;
         return character.health;
     }
-
-    function instantKill(character) {
+    instantKill(character) {
         character.health = 0;
         return character.health;
     }
-
     GainExperience(character) {
         //const base_xp = 100; // Example base XP
         //const factor = 7; // XP growth factor
         //return base_xp * Math.pow((character.CharacterLevel + 1), factor);
     }
-
     LevelUp(character) {
         //character.CharacterLevel++;
         //character.health += 10; // Increase max health per level
