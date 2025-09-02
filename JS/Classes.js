@@ -340,7 +340,7 @@ export class TfMusic {
                 }
             });
         } else {
-            await this.TsunamiRadio.play().catch(async (error) => {
+            this.TsunamiRadio.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
                     console.log("Autoplay is blocked. Please interact with the page to start the radio.");
                 } else {
