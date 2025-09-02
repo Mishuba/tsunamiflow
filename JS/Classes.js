@@ -105,7 +105,7 @@ export class Weather {
                 if (result.state === "granted") {
                     console.log("geolocation is accessible and you are able to use it for different things. granted");
                     console.log("getting the information on the current position.");
-                    navigator.geolocation.getCurrentPosition(DSWL, DEWL, DSLO);
+                    navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
                 } else if (result.state === "prompt") {
                     console.log("geolocation needs to be requested");
                     if (confirm("TF is asking if you will allow it to access your location.")) {

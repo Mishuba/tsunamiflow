@@ -8,10 +8,19 @@ import { HomepageUpdates, FirstGame, letsDoIt } from "./sprite.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 
+let TsunamiRadio = document.getElementById("TFradioPlayer");
+let RadioTitle = document.getElementById("TfRadioStuff");
+let RadioButtons = document.getElementById("CheckRadio");
+let RadioLastButton = document.createElement("button");
+let RadioRestartButton = document.createElement("button"); 
+let RadioStartButton = document.createElement("button");
+let RadioSkipButton = document.createElement("button");
+let RadioCanvas = document.getElementById("TFradioCanvas");
+
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
-let Radio = new TfMusic();
-let GameAudio = new TfMusic();
+let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
+let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
 
 if (navigator.cookieEnabled) {
     //use cookies
@@ -164,7 +173,7 @@ if (typeof (Worker) !== "undefined") {
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
                 TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWOrker);
+                Radio.MusicNetworkState(RadioWorker);
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();

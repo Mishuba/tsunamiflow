@@ -1,17 +1,17 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor() {
-        this.TsunamiAudio = document.getElementById("TFradioPlayer");
-        this.TsunamiRadioTitle = document.getElementById("TfRadioStuff");
-        this.TsunamiRadioButtons = document.getElementById("CheckRadio");
-        this.TsunamiLastButton = document.createElement("button");
-        this.TsunamiRestartButton = document.createElement("button");
-        this.TsunamiStartButton = document.createElement("button");
-        this.TsunamiSkipButton = document.createElement("button");
+    constructor(audioElement, Title, Buttons, Last, Restart, Start, Skip, TfCanvas) {
+        this.TsunamiAudio = audioElement;
+        this.TsunamiRadioTitle = Title;
+        this.TsunamiRadioButtons = Buttons;
+        this.TsunamiLastButton = Last;
+        this.TsunamiRestartButton = Restart;
+        this.TsunamiStartButton = Start;
+        this.TsunamiSkipButton = Skip;
         this.phpRadio = new XMLHttpRequest();
         this.TsunamiRadioAudio = new AudioContext();
-        this.RadioCanvas = document.getElementById("TFradioCanvas");
+        this.RadioCanvas = TfCanvas;
         this.canvas;
         this.x;
         this.y;
