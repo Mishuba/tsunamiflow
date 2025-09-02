@@ -17,7 +17,7 @@ export class Weather {
         let TFlong = working.coords.longitude;
         let TFcoords = working.coords;
         //use the latitude and longitude location points.
-        let something = `${this.WABurl}${this.CWapi}?key=${this.WapiKey}&q=${TFlat},${TFlong}&aqi=no`;
+        let something = this.WABurl + this.CWapi + "?key=" + this.WapiKey + "&q=" + TFlat +"," + TFlong + "&aqi=no";
         const xhr = new XMLHttpRequest();
         xhr.open('POST', something);
 
@@ -48,7 +48,7 @@ export class Weather {
         xhr.send();
         }
         City(CityName) {
-        let something = `${this.WABul}${this.CWapi}?key=${this.WapiKey}&q=${CityName}&aqi=no`;
+        let something = this.WABul + this.CWapi + "?key=" + this.WapiKey + "&q=" + CityName + "&aqi=no";
 
         const userCity = new XMLHttpRequest();
         userCity.open("POST", something);
