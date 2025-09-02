@@ -142,7 +142,9 @@ export class TfVideo {
     constructor() {
         //create
         this.VideoSystemControllerButton = document.createElement("button");
+        this.VideoSystemControllerStopButton = document.createElement("button");
         this.VideoSystemControllerButton.id = "TfControlShit";
+        this.VideoSystemControllerStopButton.id = "TfControlStopStart";
         this.tfVidImgUploadButton = document.createElement("button");
         this.tfVidImgUploadButton.id = "TfUploadImages";
         this.tfVidImgRemoveImgButton = createElement("button");
@@ -278,6 +280,32 @@ export class TfVideo {
         this.recordedChunks = [];
         this.DownloadVideoRecordingButton = document.createElement("button");
         this.DownloadVideoRecordingButton.id = "IframeDownload";
+    }
+    UploadImage(){
+        /*
+        
+        const file = e.target.files[0];
+        if (file) {
+            TbackgroundFImage = new Image();
+            TbackgroundFImage.src = URL.createObjectURL(file);
+            TframeStBtn.style.display = 'inline'; // Show start button
+            TframeByeImg.style.display = 'inline'; // Show remove image button
+        }
+        */
+    }
+    UploadVideo(){
+    /*
+    const file = e.target.files[0];
+    if (file) {
+        TbackgroundFVideo = document.createElement('video');
+        TbackgroundFVideo.src = URL.createObjectURL(file);
+        TbackgroundFVideo.muted = true; // Mute the video
+        TbackgroundFVideo.loop = true; // Loop the video
+        TbackgroundFVideo.load(); // Load the video
+        TframeStBtn.style.display = 'inline'; // Show start button
+        TframeByeVid.style.display = 'inline'; // Show remove video button
+    }
+    */
     }
     VideoNetworkState() {
         /*
@@ -557,6 +585,10 @@ export class TfVideo {
         }
         */
     }
+    usePickedColor() {
+        this.useChromaKeyWebcam = true;
+        this.VideoSystemControllerButton.style.display = "inline";
+    }
     chromaKey(hex) {
         let trf = 0, tgf = 0, tbf = 0;
         if (hex.length === 4) {
@@ -656,6 +688,11 @@ export class TfVideo {
         } else {
             //nothing 
         }
+    }
+    RemoveChromaKeyColor() {
+        ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        //frameCounter = 0
+        this.useChromaKeyWebcam = false;
     }
     startWebcam(){
         this.WebcamStreamVideoAndAudio = navigator.mediaDevices.getUserMedia(this.TmediaFstreamConstraints).then(async (stream) => {
@@ -773,23 +810,36 @@ export class TfVideo {
             ...this.tfVideoStuff.srcObject.getAudioTracks() // Include audio from video stream
         ]);
         mediaRecorder = new MediaRecorder(mediaStream);
+
         mediaRecorder.ondataavailable = (event) => {
             if (event.data.size > 0) {
                 recordedChunks.push(event.data);
             }
         };
+
         mediaRecorder.onstop = () => {
             const recordedBlob = new Blob(recordedChunks, { type: "video/webm" });
             const randomSrc = URL.createObjectURL(recordedBlob);
+            const a = document.createElement("a");
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'recording.webm';
+            document.body.appendChild(a);
+            a.click();
+            URL.revoke.ObjectURL(url);
             Tframe4u.href = randomSrc;
             Tframe4u.download = "RecordedVideo.webm";
             Tframe4u.style.display = 'block';
             Tframe4u.textContent = 'Download Video';
         };
+
         mediaRecorder.start();
         TframeIsRecording = true;
         TframeStRec.disabled = true;
+        TframeStRec.style.display = "none";
         TframeSpRec.disabled = false;
+        TframeSpRec.style.display = "inline";
+
         */
     }
     stopRecording(){
@@ -799,8 +849,142 @@ export class TfVideo {
             mediaRecorder.stop();
             TframeIsRecording = false;
             TframeStRec.disabled = false;
+            TframeStRec.style.display = "inline";
             TframeSpRec.disabled = true;
+            TframeSpRec.style.display = "none";
         }
+    */
+    }
+    DownloadRecording(){
+        console.log("Placeholder for download Video");
+        /*
+        const link = document.createElement('a');
+        link.download = 'canvas-video.webm'; // make this a variable like prompot or something 
+        link.href = hpCC.toDataURL('video/webm');
+        link.click();
+        */
+    }
+    RemoveImage(){
+        console.log("placeholder for RemoveImage");
+        /*
+        TbackgroundFImage = null;
+        hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
+        TframeStBtn.style.display = 'none'; // Hide start button
+        TframeByeImg.style.display = 'none'; // Hide remove button
+        */
+    }
+    RemoveVideo(){
+        console.log("Placeholder for remove video");
+    /*
+        if (TbackgroundFVideo) {
+            TbackgroundFVideo.pause();
+            TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
+            TbackgroundFVideo = null; // Clear the video reference
+            hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
+        }
+        TframeStBtn.style.display = 'none'; // Hide start button
+        TframeByeVid.style.display = 'none'; // Hide remove button
+    */
+    }
+    VideoSystemStart() {
+        console.log("Placeholder for system start");
+    /*
+        if (isPlaying) {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            tfVidStuff.pause();
+            if (TbackgroundFVideo) {
+                TbackgroundFVideo.pause();
+            }
+        } else {
+            isPlaying = true;
+
+            // Play the webcam feed if it's active
+            if (webcamStream) {
+                tfVidStuff.play();
+            }
+
+            // Always play the background video if it exists
+            if (TbackgroundFVideo) {
+                TbackgroundFVideo.play();
+            }
+
+            animate();
+        }
+    */
+    }
+    VideoSystemStop() {
+        this.isPlaying = false;
+        //cancelAnimationFrame(animationId);
+        ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        /*
+        if (webcamStream) {
+            const tracks = webcamStream.getTracks();
+            tracks.forEach(track => track.stop());
+            tfVidStuff.srcObject = null;
+            webcamStream = null;
+        }
+        */
+       this.VideoSystemControllerStopButton.style.display = "none";
+    }
+    IDontKnowYetButMainAddEventListenersIThink(){
+        console.log("placeholder for main")
+    /*
+        TFcolorPicker.addEventListener('input', (e) => {
+
+        });
+
+        // Use chroma key color for webcam
+        TfCpBtn.addEventListener('click', () => {
+
+        });
+
+        // Remove chroma key color button
+        TfCpRm.addEventListener('click', () => {
+
+        });
+
+        //Green Screen Ends
+
+        TframeSpBtn.addEventListener('click', () => {
+
+        });
+
+        TframeStRec.addEventListener('click', () => {
+
+        });
+
+        TframeSpRec.addEventListener('click', () => {
+
+        });
+
+        Tframe4u.addEventListener('click', () => {
+
+        });
+
+        TframeULimg.addEventListener('change', (e) => {
+
+        });
+
+        TframeULvid.addEventListener('change', (e) => {
+
+        });
+
+        TframeByeImg.addEventListener('click', () => {
+
+        });
+
+        TframeByeVid.addEventListener('click', () => {
+
+        });
+
+        document.getElementById("TcameraFlipButton").onclick = () => {
+            whichCamera = !whichCamera;
+        }
+
+        TframeCtrBtn.addEventListener('click', () => {
+
+        });
     */
     }
 }
