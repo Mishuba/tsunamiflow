@@ -351,16 +351,16 @@ export class TfMusic {
     }
     stopMusic() {
         if (!this.TsunamiRadio.paused) {
-            await this.TsunamiRadio.pause();
+            this.TsunamiRadio.pause();
         }
     }
     previousSong(music) {
         this.TsunamiRadio.src = music;
-        await this.TsunamiRadio.play();
+        this.TsunamiRadio.play();
     }
     restartSong(music) {
-        this.TsunamiRadio.src = await music;
-        await this.TsunamiRadio.play();
+        this.TsunamiRadio.src = music;
+        this.TsunamiRadio.play();
     }
     TsunamiRadioReady() {
         this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
