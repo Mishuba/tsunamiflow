@@ -200,55 +200,54 @@ export class TfMusic {
             //channelInterpretation: ,
             //
         };
-        periodicWaveOptions = {
+        this.periodicWaveOptions = {
             //channelCount: 2,
             //channelCountMode: "max",
             //channelInterpretation: "speakers",
             disableNormalization: true,
         };
-        
-    }
-    this.TFpowReal = new Float32Array(2);
-    this.TFpwoImag = new Float32Array(2);
-    this.TFaudioBuffer = new ArrayBuffer(32);
-    this.TFtestingF32A = new Float32Array(TFaudioBuffer, 4, 4);
-    this.TFgameIterable = (function* () {
-    yield* [1, 2, 3];
-})();
-    this.float32FromIterable = new Float32Array(this.TFgameIterable);
+        this.TFpowReal = new Float32Array(2);
+        this.TFpwoImag = new Float32Array(2);
+        this.TFaudioBuffer = new ArrayBuffer(32);
+        this.TFtestingF32A = new Float32Array(TFaudioBuffer, 4, 4);
+        this.TFgameIterable = (function* () {
+        yield* [1, 2, 3];
+    })();
+        this.float32FromIterable = new Float32Array(this.TFgameIterable);
 
-    this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
-    this.TFoscillatorNodeOptions = {
-        type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
-        detune: 0,
-        frequency: 440,
-        periodicWave: this.TFperiodicWave,
-        channelCount: 2,
-        channelCountMode: "max", // max, something , huh
-        channelInterpretation: "speakers"
-    };
-    this.TFWaveShaperNodeOptions = {
-        //curve: 0.5, // -1, 1
-        oversample: "none", // "none", "2x", "4x",
-        channelCount: "2", //
-        channelCountMode: "max",
-        //channelInterpretation: "speaker"
-    };
-    this.Game2dPannerOptions = { pan: 0 }; // -1 = far left, 1 = far right;
-    this.TFdelayNodeOptions = {
-        delayTime: 0,
-        maxDelayTime: 1,
-        channelCount: 2,
-        channelCountMode: "max",
-        channelInterpretation: "speakers"
-    };
-    this.TFdynamicsCompressorNodeOptions = {
-        attack: 0.003, // 0-1
-        knee: 30, //0 - 40
-        ratio: 12, // 1  - 20
-        release: 0.250, // 0-1
-        threshold: -24 // -100 - 0
-    };
+        this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
+        this.TFoscillatorNodeOptions = {
+            type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
+            detune: 0,
+            frequency: 440,
+            periodicWave: this.TFperiodicWave,
+            channelCount: 2,
+            channelCountMode: "max", // max, something , huh
+            channelInterpretation: "speakers"
+        };
+        this.TFWaveShaperNodeOptions = {
+            //curve: 0.5, // -1, 1
+            oversample: "none", // "none", "2x", "4x",
+            channelCount: "2", //
+            channelCountMode: "max",
+            //channelInterpretation: "speaker"
+        };
+        this.Game2dPannerOptions = { pan: 0 }; // -1 = far left, 1 = far right;
+        this.TFdelayNodeOptions = {
+            delayTime: 0,
+            maxDelayTime: 1,
+            channelCount: 2,
+            channelCountMode: "max",
+            channelInterpretation: "speakers"
+        };
+        this.TFdynamicsCompressorNodeOptions = {
+            attack: 0.003, // 0-1
+            knee: 30, //0 - 40
+            ratio: 12, // 1  - 20
+            release: 0.250, // 0-1
+            threshold: -24 // -100 - 0
+        };
+    }
     particle() {
         for (let i = 0; i < 100; i++) {
             let x = Math.random() * this.canvas.width;
