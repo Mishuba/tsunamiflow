@@ -534,7 +534,7 @@ export class TfMusic {
             this.rangeIndex = 3;
         }
 
-        await console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
             if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
@@ -590,84 +590,84 @@ export class TfMusic {
 
         switch (this.hour) {
             case 0:
-                await this.FourFolderSub(PSL, 0, this.minute);
+                this.FourFolderSub(PSL, 0, this.minute);
                 break;
             case 1:
                 if (this.minute <= 4) {
-                    await this.NoSubFolder(PSL, 1);
+                    this.NoSubFolder(PSL, 1);
                 } else if (this.minute <= 14) {
-                    await this.ThreeFolderSub(PSL, 1, this.minute);
+                    this.ThreeFolderSub(PSL, 1, this.minute);
                 } else if (this.minute <= 29) {
-                    await this.ThreeFolderSub(PSL, 1, this.minute);
+                    this.ThreeFolderSub(PSL, 1, this.minute);
                 } else {
-                    await this.ThreeFolderSub(PSL, 1, this.minute);
+                    this.ThreeFolderSub(PSL, 1, this.minute);
                 }
                 break;
             case 2:
-                await this.NoSubFolder(PSL, 2);
+                this.NoSubFolder(PSL, 2);
                 break;
             case 3:
-                await this.ThreeFolderSub(PSL, 3, this.minute);
+                this.ThreeFolderSub(PSL, 3, this.minute);
                 break;
             case 4:
-                await this.ThreeFolderSub(PSL, 4, this.minute);
+                this.ThreeFolderSub(PSL, 4, this.minute);
                 break;
             case 5:
-                await this.ThreeFolderSub(PSL, 5, this.minute);
+                this.ThreeFolderSub(PSL, 5, this.minute);
                 break;
             case 6:
-                await this.ThreeFolderSub(PSL, 6, this.minute);
+                this.ThreeFolderSub(PSL, 6, this.minute);
                 break;
             case 7:
-                await this.ThreeFolderSub(PSL, 7, this.minute);
+                this.ThreeFolderSub(PSL, 7, this.minute);
                 break;
             case 8:
-                await this.SixFolderSub(PSL, 8, this.minute);
+                this.SixFolderSub(PSL, 8, this.minute);
                 break;
             case 9:
-                await this.ThreeFolderSub(PSL, 9, this.minute);
+                this.ThreeFolderSub(PSL, 9, this.minute);
                 break;
             case 10:
-                await this.NoSubFolder(PSL, 10);
+                this.NoSubFolder(PSL, 10);
                 break;
             case 11:
                 postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
                 break;
             case 12:
-                await this.FourFolderSub(PSL, 12, this.minute);
+                this.FourFolderSub(PSL, 12, this.minute);
                 break;
             case 13:
-                await this.FourFolderSub(PSL, 13, this.minute);
+                this.FourFolderSub(PSL, 13, this.minute);
                 break;
             case 14:
-                await this.FourFolderSub(PSL, 14, this.minute);
+                this.FourFolderSub(PSL, 14, this.minute);
                 break;
             case 15:
-                await this.FourFolderSub(PSL, 15, this.minute);
+                this.FourFolderSub(PSL, 15, this.minute);
                 break;
             case 16:
-                await this.FourFolderSub(PSL, 16, this.minute);
+                this.FourFolderSub(PSL, 16, this.minute);
                 break;
             case 17:
-                await this.NoSubFolder(PSL, 17);
+                this.NoSubFolder(PSL, 17);
                 break;
             case 18:
-                await this.SixFolderSub(PSL, 18, this.minute);
+                this.SixFolderSub(PSL, 18, this.minute);
                 break;
             case 19:
-                await this.FourFolderSub(PSL, 19, this.minute);
+                this.FourFolderSub(PSL, 19, this.minute);
                 break;
             case 20:
-                await this.FourFolderSub(PSL, 20, this.minute);
+                this.FourFolderSub(PSL, 20, this.minute);
                 break;
             case 21:
-                await this.NoSubFolder(PSL, 21);
+                this.NoSubFolder(PSL, 21);
                 break;
             case 22:
-                await this.NoSubFolder(PSL, 22);
+                this.NoSubFolder(PSL, 22);
                 break;
             case 23:
-                await this.NoSubFolder(PSL, 23);
+                this.NoSubFolder(PSL, 23);
                 break;
             default:
                 postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
@@ -681,10 +681,10 @@ export class TfMusic {
             this.phpRadio.onreadystatechange = async function () {
                 if (this.phpRadio.readyState === 4) {
                     if (this.phpRadio.status === 200) {
-                        this.phpSongList = await JSON.parse(this.phpRadio.responseText);
+                        this.phpSongList = JSON.parse(this.phpRadio.responseText);
                         console.log("Parsed Songs:", this.phpSongList);
 
-                        await this.RadioTime(this.phpSongList);
+                        this.RadioTime(this.phpSongList);
                         this.nextRadioItem = this.phpSongList;
                     } else {
                         console.log(this.phpRadio.response + this.phpRadio.responseText); //const xmlDoc = this.phpRadio.responseXML;
