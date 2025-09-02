@@ -1,5 +1,7 @@
 import { WordTimes } from "./Arrays.js";
 
+let QuoteStuff = 0;
+let TheOtherWords = 1;
 class TFwordOftheDay {
     constructor(word) {
         this.word = word || {};
