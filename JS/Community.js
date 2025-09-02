@@ -155,6 +155,6 @@ export class User {
         }
     }
     PostThoughts() {
-        
+        console.log("Post Thoughts")
     }
 }

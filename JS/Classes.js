@@ -131,11 +131,13 @@ export class Weather {
         };
     }
 }
+/*
 export class Art {
     constructor() {
 
     }
 }
+*/
 export class TfVideo {
     constructor() {
         //create
@@ -386,7 +388,7 @@ export class TfVideo {
         }
     }
     VideoState() {
-
+        console.log("pointless change VideoState() to VideoLoadStarted()");
     }
     emptiedVideo() {
         this.VideoNetworkState();
@@ -510,7 +512,7 @@ export class TfVideo {
         this.VideoState();
     }
     VideoEnded(){
-
+        console.log("The video has ended");
     }
     VideoWaiting(){
         this.VideoState();
@@ -519,7 +521,7 @@ export class TfVideo {
         this.VideoState();
     }
     VideoStalled(){
-
+        console.log("The video has stalled");
     }
     VideoSuspended(){
         this.VideoNetworkState();
@@ -536,9 +538,10 @@ export class TfVideo {
         */
     }
     VideoVolumeChange(){
-
+        console.log("The video volume has changed");
     }
     processVideoFrames(){
+        console.log("not done working on this");
         /*
         while (true) {
             //const { value: frame, done } = await tfVidReader.read();
@@ -743,7 +746,7 @@ export class TfVideo {
         });
     }
     stopWebcam(){
-
+        console.log("Stop the webcam");
     }
     VideoWebCodecs(stream){
         this.VideoProcessor = new MediaStreamTrackProcess({
@@ -756,9 +759,12 @@ export class TfVideo {
         stream.getTracks().forEach(track => this.VideoDevice.addTrack(track, stream));
     }
     VideoScreenSharing(){
+        console.log("Start Video Sharing");
         //navigator.mediaDevices.getDisplayMedia(TmediaFstreamConstraints).then(async (stream) => { // use stream})
     }
     startRecording(){
+        console.log("start recording");
+
         /*
         recordedChunks = [];
         let canvasStream = homepageCanvas.captureStream();
@@ -787,6 +793,7 @@ export class TfVideo {
         */
     }
     stopRecording(){
+        console.log("Stop Recording");
     /*
         if (mediaRecorder && isRecording) {
             mediaRecorder.stop();

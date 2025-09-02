@@ -402,9 +402,8 @@ export class TfMusic {
             }
         }
     }
-    }
     emptiedAudio() {
-
+        console.log("The audio is empty");
     }
     loadstartAudio() {
         this.RadioLoadStartTime = Date.now();
@@ -422,7 +421,8 @@ export class TfMusic {
         this.MusicState();
     }
     loadeddataAudio() {
-
+        console.log("The audio data is loaded");
+    }
     canplayAudio(){
         this.MusicState();
         if (this.RadioCanvas !== null) {
@@ -455,7 +455,7 @@ export class TfMusic {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
     }
     suspendedAudio(suspend) {
-
+        console.log("The audio is suspended");
     }
     FormatAudioTime(second){
         this.minutes = Math.floor(second / 60);
@@ -468,7 +468,7 @@ export class TfMusic {
         this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
     }
     volumechangeAudio(){
-
+        console.log("The volume has changed");
     }
     NoSubFolder(PSL, tsu) {
         if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
@@ -819,6 +819,5 @@ export class TfMusic {
         this.TsunamiAudio.addEventListener("volumechange", () => {
 
         });
-        
     }
 }
