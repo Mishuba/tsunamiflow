@@ -29,13 +29,6 @@ function getIpAddress () {
     }
     return $TfIpAdd;
 }
-function tfLogOut() {
-    $_SESSION = array();
-    session_unset();
-    session_destroy();
-    header("location: index.php");
-    exit;
-}
 
 function LogOut(){
     $_SESSION = array();
@@ -45,6 +38,7 @@ function LogOut(){
     header("location: index.php");
     exit;
 }
+
 //Input Functions
 function TsunamiInput($data){
     return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
@@ -565,7 +559,7 @@ function TsunamiDatabaseFlow(){
 //Community Ends
 
     //Nav Login
-function NavLoginFr(){
+function Login(){
     if (!empty($_POST["NavUserName"])) {
         $tfUsername = validate_input("NavUserName", $_POST);
         $tfPassword = validate_input("NavPassword", $_POST);
@@ -1482,7 +1476,4 @@ curl -X POST \
                 }
     }
 */
-//WebSockets Functions 
-
-//RTMP Functions
 ?>

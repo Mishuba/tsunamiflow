@@ -8,6 +8,8 @@ import { HomepageUpdates, FirstGame, letsDoIt } from "./sprite.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 
+let TsunamiWeather = document.getElementById("TFweather");
+
 let TsunamiRadio = document.getElementById("TFradioPlayer");
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
@@ -226,7 +228,7 @@ async function DoTheThingMan() {
 
             console.log("the iframe origin is " + ev.origin);
 
-            if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club") {
+            if (ev.origin === "https://www.tsunamiflow.club" || ev.origin === "https://tsunamiflow.club") {
                 console.log("The event type is " + ev.data.type);
                 if (ev.data.type === "Website Updates") {
                     console.l("creating the jsong to send to the iframe");
@@ -254,7 +256,7 @@ async function DoTheThingMan() {
             console.log("iframe message received");
             console.log(ev.origin);
 
-            if (ev.origin === "https://www.tsunamiflow.club" || "https://tsunamiflow.club" || "https://world.tsunamiflow.club") {
+            if (ev.origin === "https://www.tsunamiflow.club" || ev.origin === "https://tsunamiflow.club" || ev.origin === "https://world.tsunamiflow.club") {
                 if (ev.data.type === "community") {
                     let CommunityJson = {
                         type: "community",

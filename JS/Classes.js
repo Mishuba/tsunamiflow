@@ -5,7 +5,7 @@ export class Weather {
             enabledHighAccuracy: true,
             timeout: 5000,
             maximumAge: 0,
-        }
+        };
         this.WABul = "https://api.weatherapi.com/v1";
         this.WABurl = "https://api.weatherapi.com/v1";
         this.WapiKey = "cf5a64c9095e425ab0f52816230110";
@@ -69,6 +69,8 @@ export class Weather {
 
                 // Display on web page
                 weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                //postMessage(`${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`);
+
 
                 //Make the response do cool stuff. 
             }

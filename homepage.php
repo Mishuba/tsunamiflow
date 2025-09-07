@@ -49,7 +49,7 @@ Tycadome
 
         let TFpostActualObject = {
             type: "Website Updates",
-            info: "this is the array stuff"
+            info: "this is the array stuff",
             message: "make this the first character maybe.",
             username: "Mishuba",
             error: "currently no error fam."
