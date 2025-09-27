@@ -1,6 +1,6 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
-class TfMusic {
+export class TfMusic {
     constructor(audioElement, Title, Buttons, Last, Restart, Start, Skip, TfCanvas) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
@@ -68,23 +68,20 @@ class TfMusic {
         this.TFpwoImag = new Float32Array(2);
         this.TFaudioBuffer = new ArrayBuffer(32);
         this.TFtestingF32A = new Float32Array(this.TFaudioBuffer, 4, 4);
-        this.TFgameIterable = (function* () {
-        yield* [1, 2, 3];
-    })();
-        this.float32FromIterable = new Float32Array(this.TFgameIterable);
+        this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
         //this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
-/*
-        this.TFoscillatorNodeOptions = {
-            type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
-            detune: 0,
-            frequency: 440,
-            periodicWave: this.TFperiodicWave,
-            channelCount: 2,
-            channelCountMode: "max", // max, something , huh
-            channelInterpretation: "speakers"
-        };
-        */
+        /*
+                this.TFoscillatorNodeOptions = {
+                    type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
+                    detune: 0,
+                    frequency: 440,
+                    periodicWave: this.TFperiodicWave,
+                    channelCount: 2,
+                    channelCountMode: "max", // max, something , huh
+                    channelInterpretation: "speakers"
+                };
+                */
         this.TFWaveShaperNodeOptions = {
             //curve: 0.5, // -1, 1
             oversample: "none", // "none", "2x", "4x",
@@ -108,7 +105,7 @@ class TfMusic {
             threshold: -24 // -100 - 0
         };
     }
-    tfParticles(x, y, dx, dy, radius, color){
+    tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
     }
     particle() {
@@ -184,12 +181,12 @@ class TfMusic {
 
         this.visualizatorController = requestAnimationFrame(this.hereDude);
     }
-    Visualizer(){
+    Visualizer() {
         let ctx = this.RadioCanvas.getContext("2d");
         this.particle();
         this.hereDude(ctx);
     }
-    StopVisualizator(){
+    StopVisualizator() {
         cancelAnimationFrame(this.visualizationController)
     }
     startMusic() {
@@ -223,6 +220,9 @@ class TfMusic {
     restartSong(music) {
         this.TsunamiAudio.src = music;
         this.TsunamiAudio.play();
+    }
+    TFgameIterable() {
+        yield * [1, 2, 3];
     }
     TsunamiRadioReady() {
         this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
@@ -389,17 +389,17 @@ class TfMusic {
         }
         return this.SongList;
     }
-    MusicState(context){
-        if(this.context.state === "suspended") {
+    MusicState(context) {
+        if (this.context.state === "suspended") {
             this.context.resume();
         } else if (this.context.state === "running") {
             console.log("The audio context state is running");
-            if(this.TsunamiAudio.waiting){
+            if (this.TsunamiAudio.waiting) {
                 this.context.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
-            if(this.TsunamiAudio.pause){
+            if (this.TsunamiAudio.pause) {
                 this.StopVisualizator();
             }
         }
@@ -425,7 +425,7 @@ class TfMusic {
     loadeddataAudio() {
         console.log("The audio data is loaded");
     }
-    canplayAudio(){
+    canplayAudio() {
         this.MusicState();
         if (this.RadioCanvas !== null) {
             this.Visualizator();
@@ -437,39 +437,39 @@ class TfMusic {
         this.MusicState();
         this.startMusic();
     }
-    playAudio(){
+    playAudio() {
         this.MusicState();
 
     }
-    pauseAudio(){
+    pauseAudio() {
         this.MusicState();
     }
-    endedAudio(){
+    endedAudio() {
         console.log("The audio should have ended");
     }
-    waitingAudio(){
+    waitingAudio() {
         this.MusicState();
     }
-    playingAudio(){
+    playingAudio() {
         this.MusicState();
     }
-    stalledAudio(stalled){
+    stalledAudio(stalled) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
     }
     suspendedAudio(suspend) {
         console.log("The audio is suspended");
     }
-    FormatAudioTime(second){
+    FormatAudioTime(second) {
         this.minutes = Math.floor(second / 60);
         this.seconds = second % 60;
-        return `${this.minutes}:${seconds.toString().padStart(2,"0")}`;
+        return `${this.minutes}:${seconds.toString().padStart(2, "0")}`;
     }
     timeupdateAudio() {
         this.Timing = Math.floor(this.TsunamiAudio.currentTime);
-        this.RadioProcessBar = (this.TsunamiAudio.currentTime / this.TsunamiAudio.duration) * 100; 
+        this.RadioProcessBar = (this.TsunamiAudio.currentTime / this.TsunamiAudio.duration) * 100;
         this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
     }
-    volumechangeAudio(){
+    volumechangeAudio() {
         console.log("The volume has changed");
     }
     NoSubFolder(PSL, tsu) {
@@ -477,20 +477,20 @@ class TfMusic {
             if (PSL[tsu].length >= 20) {
                 this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
                 this.CurrentSong = PSL[tsu][this.radioRandom];
-                console.log(this.CurrentSong); 
-                postMessage({type: "file", file: this.CurrentSong});
+                console.log(this.CurrentSong);
+                postMessage({ type: "file", file: this.CurrentSong });
 
             } else {
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             }
         } else {
             this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
             this.CurrentSong = PSL[11][this.radioRandom];
             console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+            postMessage({ type: "file", file: this.CurrentSong });
         }
     }
     ThreeFolderSub(PSL, tsu, nami) {
@@ -509,20 +509,20 @@ class TfMusic {
                 this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             }
         } else {
             console.log(`PSL[${tsu}] is not valid, falling back to PSL[11]`);
             this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
             this.CurrentSong = PSL[11][this.radioRandom];
             console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+            postMessage({ type: "file", file: this.CurrentSong });
         }
     }
     FourFolderSub(PSL, tsu, nami) {
@@ -543,20 +543,20 @@ class TfMusic {
                 this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             }
         } else {
             console.log(`PSL[${tsu}] is not valid, falling back to PSL[11]`);
             this.radioRandom = PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))];
             this.CurrentSong = PSL[11][this.radioRandom];
             console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+            postMessage({ type: "file", file: this.CurrentSong });
         }
     }
     SixFolderSub(PSL, tsu, nami) {
@@ -569,20 +569,20 @@ class TfMusic {
                 this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+                postMessage({ type: "file", file: this.CurrentSong });
             }
         } else {
             console.log(`PSL[${tsu}] is not valid, falling back to PSL[11]`);
             this.radioRandom = PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))];
             this.CurrentSong = PSL[11][this.radioRandom];
             console.log(this.CurrentSong);
-                postMessage({type: "file", file: this.CurrentSong});
+            postMessage({ type: "file", file: this.CurrentSong });
         }
     }
     RadioTime(PSL) {
@@ -706,11 +706,11 @@ class TfMusic {
         } finally {
         }
     }
-    audioCapabilities(){
+    audioCapabilities() {
         if ("mediaCapabilities" in navigator) {
             //for (const type of radioTypes) {
-                //console.log(`Is ${type} supported? ${MediaRecorder.isTypeSupported(type) ? "Yes" : "Nope :("}`);
-                //console.log(`Can you use this audio type for playback: ${this.TsunamiAudio.canPlayType}`);
+            //console.log(`Is ${type} supported? ${MediaRecorder.isTypeSupported(type) ? "Yes" : "Nope :("}`);
+            //console.log(`Can you use this audio type for playback: ${this.TsunamiAudio.canPlayType}`);
             //}
             this.fetchRadioSongs();
         } else {
@@ -746,7 +746,7 @@ class TfMusic {
 
         }
     }
-    RadioWorkerReceivedMessage(event){
+    RadioWorkerReceivedMessage(event) {
         this.TsunamiRadioReady();
         if (typeof event.data.file == undefined) {
             this.SongList1st = this.MusicFile(event);
