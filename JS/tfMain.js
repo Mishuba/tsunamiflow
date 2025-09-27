@@ -14,7 +14,7 @@ let TsunamiRadio = document.getElementById("TFradioPlayer");
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
 let RadioLastButton = document.createElement("button");
-let RadioRestartButton = document.createElement("button"); 
+let RadioRestartButton = document.createElement("button");
 let RadioStartButton = document.createElement("button");
 let RadioSkipButton = document.createElement("button");
 let RadioCanvas = document.getElementById("TFradioCanvas");
@@ -185,7 +185,7 @@ if (typeof (Worker) !== "undefined") {
 
             RadioWorker.onmessage = async function (event) {
                 Radio.RadioWorkerReceivedMessage(event);
-            } 
+            }
 
             RadioWorker.onerror = async function (error) {
                 console.error(`error message: ${error.message} <br /> error filename: ${error.filename} <br /> error line: ${error.lineno}`);
@@ -253,7 +253,7 @@ async function DoTheThingMan() {
         });
     } else if (TFiframe.src === "https://www.tsunamiflow.club/Community.php" || "https://tsunamiflow.club/Community.php" || "Community.php") {
         window.addEventListener("message", async (ev) => {
-            console.log("iframe message received");
+            console.log("iframe commmunity message received");
             console.log(ev.origin);
 
             if (ev.origin === "https://www.tsunamiflow.club" || ev.origin === "https://tsunamiflow.club" || ev.origin === "https://world.tsunamiflow.club") {
@@ -282,14 +282,18 @@ async function DoTheThingMan() {
                         TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
                     } else {
                         let tfError = "nothing";
-                        let CommunityJson = {
-                            type: "community",
-                            info: "idk community",
-                            message: "this is the community message",
+                        console.log("sending the game data over now");
+                        CompetitionJson = {
+                            type: "game_begin",
+                            info: FirstGame.toJSON(),
+                            message: "start the first game once the page opens.",
                             username: "Mishuba",
-                            error: tfError
+                            error: "Nothing for competitions right now"
                         };
-                        TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
+
+                        TFiframe.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+
+                        console.log("the competitions iframe should have received the message");
                     }
                 }
             } else if (ev.origin === "https.js.stripe.com") {
