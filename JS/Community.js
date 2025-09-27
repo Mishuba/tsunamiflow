@@ -19,6 +19,14 @@ TfWebSocket.onerror = (error) => {
 }
 */
 
+/*
+This is for the ffpmeg link to file to improve the live stream function of the website. 
+// /var/www/scripts/ffpmeg-restream.sh 
+
+I keep forgetting about this file. 
+"/etc/streamkeys.json"
+*/
+
 
 export class User {
     constructor(username, password) {
@@ -131,8 +139,18 @@ export class User {
                 let tSubFdataOk = JSON.parse(this.responseText);
 
                 //DO Something it the response.
+                    /*
+                        if(success) {
+                        //successful 
 
+                        } else if (not successful) {
+                        //nonsuccessful 
 
+                        } else {
+                        //error 
+
+                        }
+                    */
             }
         }
         MyXML.open("POST", `./../server.php`, true);
