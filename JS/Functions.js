@@ -54,8 +54,11 @@ export function loadBrowserSpecificScript() {
 }
 
 function checkIframeOrigin(event, source) {
-    console.log("the iframe origin is " + event.origin);
+    console.log("the iframe origin is " + event.origin)
     switch (event.origin) {
+        case "https://www.tsunamiflow.club":
+        case "https://tsunamiflow.club":
+            switch(source) {
         case "homepage.php":
         case "https://tsunamiflowclub/homepage.php":
         case "https://www.tsunamiflowclub/homepage.php":
@@ -163,10 +166,19 @@ function checkIframeOrigin(event, source) {
             break;
         default:
             console.log("The iframe is from the default page");
-
             break;
-    };
+            };
+    break;
+
+    case "https://world.tsunamiflow.club":
+
+    break;
+    default: 
+    console.log(event.origin);
+    break;
+};
 }
+
 export async function DoTheThingMan(source) {
     console.log("starting the main page navigation system.");
     console.log("checking the iframe source");
