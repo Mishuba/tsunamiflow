@@ -8,6 +8,8 @@ import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 import { DoTheThingMan } from "./Functions.js";
 
+let TsunamiWeather = document.getElementById("TFweather");
+
 let TsunamiRadio = document.getElementById("TFradioPlayer");
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
@@ -219,7 +221,7 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 for (const [key, button] of Object.entries(navButtons)) {
     button.addEventListener("click", () => {
         TFiframe.src = `${key}.php`;
-        DoTheThingMan(TFiframe.src);
+        DoTheThingMan(TFiframe);
     });
 };
 //Nav Ended

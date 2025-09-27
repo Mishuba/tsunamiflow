@@ -1,6 +1,5 @@
 import { HomepageUpdates, FirstGame, letsDoIt } from "./sprite.js";
 
-let TsunamiWeather = document.getElementById("TFweather");
 //Get browser info
 async function getBrowserType() {
     const userAgent = navigator.userAgent;
@@ -59,7 +58,7 @@ function checkIframeOrigin(event, source) {
     switch (event.origin) {
         case "https://www.tsunamiflow.club":
         case "https://tsunamiflow.club":
-            switch (TFiframe.src) {
+            switch (source.src) {
                 case "homepage.php":
                 case "https://tsunamiflowclub/homepage.php":
                 case "https://www.tsunamiflowclub/homepage.php":
@@ -75,7 +74,7 @@ function checkIframeOrigin(event, source) {
                             error: "Nothing as of now"
                         };
                         console.log("sending the iframe message");
-                        TFiframe.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
+                        source.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
                     } else {
 
                     }
@@ -92,7 +91,7 @@ function checkIframeOrigin(event, source) {
                         username: "Mishuba",
                         error: "ok no errors for the roster right now"
                     };
-                    TFiframe.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.php");
+                    source.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.php");
                     break;
                 case "news.php":
                 case "https://tsunamiflowclub/news.php":
@@ -105,7 +104,7 @@ function checkIframeOrigin(event, source) {
                         username: "Mishuba",
                         error: "ok no errors for community right now"
                     }
-                    TFiframe.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.php");
+                    source.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.php");
                     break;
                 case "Competitions.php":
                 case "https://tsunamiflowclub/Competitions.php":
@@ -123,7 +122,7 @@ function checkIframeOrigin(event, source) {
                             error: "Nothing for competitions right now"
                         };
 
-                        TFiframe.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+                        source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
                     } else if (ev.data.type === "game") {
                         CompetitionJson = {
                             type: "game",
@@ -133,7 +132,7 @@ function checkIframeOrigin(event, source) {
                             error: "No errors as of now."
                         };
 
-                        TFiframe.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+                        source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
                     } else {
 
                     }
@@ -149,7 +148,7 @@ function checkIframeOrigin(event, source) {
                         username: "Mishuba",
                         error: "ok no errors for network right now"
                     };
-                    TFiframe.contentWindow.postMessage(TfNetworkJson, "https://www.tsunamiflow.club/TFnetwork.php");
+                    source.contentWindow.postMessage(TfNetworkJson, "https://www.tsunamiflow.club/TFnetwork.php");
                     break;
                 case "Community.php":
                 case "https://tsunamiflow.club/Community.php":
@@ -163,7 +162,7 @@ function checkIframeOrigin(event, source) {
                         error: "ok no errors for community right now"
                     };
 
-                    TFiframe.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
+                    source.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
                     break;
                 default:
                     console.log("The iframe is from the default page");
@@ -187,7 +186,7 @@ export async function DoTheThingMan(source) {
     console.log("checking the iframe source");
 
     console.log("creating and using the add event listener");
-    switch (source) {
+    switch (source.src) {
         case "homepage.php":
         case "https://tsunamiflowclub/homepage.php":
         case "https://www.tsunamiflowclub/homepage.php":
