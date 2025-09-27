@@ -55,8 +55,8 @@ export function loadBrowserSpecificScript() {
 function doIframeThing(event, source) {
     switch (source.src) {
         case "homepage.php":
-        case "https://tsunamiflowclub/homepage.php":
-        case "https://www.tsunamiflowclub/homepage.php":
+        case "https://tsunamiflow.club/homepage.php":
+        case "https://www.tsunamiflow.club/homepage.php":
             console.log("iframe message received from the homepage");
             console.log("The event type is " + event.data.type);
             if (event.data.type === "Website Updates") {
@@ -76,8 +76,8 @@ function doIframeThing(event, source) {
             console.log("the end of that");
             break;
         case "roster.php":
-        case "https://tsunamiflowclub/roster.php":
-        case "https://www.tsunamiflowclub/roster.php":
+        case "https://tsunamiflow.club/roster.php":
+        case "https://www.tsunamiflow.club/roster.php":
             console.log("The iframe is from the roster page");
             let RosterJson = {
                 type: "roster",
@@ -89,8 +89,8 @@ function doIframeThing(event, source) {
             source.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.php");
             break;
         case "news.php":
-        case "https://tsunamiflowclub/news.php":
-        case "https://www.tsunamiflowclub/news.php":
+        case "https://tsunamiflow.club/news.php":
+        case "https://www.tsunamiflow.club/news.php":
             console.log("The iframe is from the news page");
             let NewsJson = {
                 type: "live",
@@ -102,8 +102,8 @@ function doIframeThing(event, source) {
             source.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.php");
             break;
         case "Competitions.php":
-        case "https://tsunamiflowclub/Competitions.php":
-        case "https://www.tsunamiflowclub/Competitions.php":
+        case "https://tsunamiflow.club/Competitions.php":
+        case "https://www.tsunamiflow.club/Competitions.php":
             console.log("iframe competition message received");
             let CompetitionJson;
             console.log("checking the data type of the competitions iframe which is " + event.data.type);
@@ -160,7 +160,8 @@ function doIframeThing(event, source) {
             source.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
             break;
         default:
-            console.log("The iframe is from the default page" + event.origin);
+            console.log("The iframe is from the default page " + source.src);
+            console.log("The event information is " + event);
             break;
     };
 }
