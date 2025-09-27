@@ -174,32 +174,32 @@ export async function DoTheThingMan(source) {
     console.log("creating and using the add event listener");
     switch (source.src) {
         case "homepage.php":
-        case "https://tsunamiflowclub/homepage.php":
-        case "https://www.tsunamiflowclub/homepage.php":
+        case "https://tsunamiflow.club/homepage.php":
+        case "https://www.tsunamiflow.club/homepage.php":
             console.log("The iframe is from the homepage");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
         case "roster.php":
-        case "https://tsunamiflowclub/roster.php":
-        case "https://www.tsunamiflowclub/roster.php":
+        case "https://tsunamiflow.club/roster.php":
+        case "https://www.tsunamiflow.club/roster.php":
             console.log("The iframe is from the roster page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
         case "news.php":
-        case "https://tsunamiflowclub/news.php":
-        case "https://www.tsunamiflowclub/news.php":
+        case "https://tsunamiflow.club/news.php":
+        case "https://www.tsunamiflow.club/news.php":
             console.log("The iframe is from the news page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
         case "Competitions.php":
-        case "https://tsunamiflowclub/Competitions.php":
-        case "https://www.tsunamiflowclub/Competitions.php":
+        case "https://tsunamiflow.club/Competitions.php":
+        case "https://www.tsunamiflow.club/Competitions.php":
             console.log("The iframe is from the competitions page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
