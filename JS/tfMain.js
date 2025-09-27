@@ -7,6 +7,7 @@ import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 import { DoTheThingMan } from "./Functions.js";
+import { HomepageUpdates } from "./sprite.js";
 
 let TsunamiWeather = document.getElementById("TFweather");
 
@@ -225,3 +226,6 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
+
+//Start non web worker stuff
+HomepageUpdates.start();
