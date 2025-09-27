@@ -10,7 +10,7 @@ export class TfMusic {
         this.TsunamiStartButton = Start;
         this.TsunamiSkipButton = Skip;
         this.phpRadio = new XMLHttpRequest();
-        this.TsunamiRadioAudio = new AudioContext();
+        //this.TsunamiRadioAudio = new AudioContext();
         this.RadioCanvas = TfCanvas;
         this.canvas;
         this.x;
