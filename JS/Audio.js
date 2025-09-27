@@ -68,7 +68,7 @@ export class TfMusic {
         this.TFpwoImag = new Float32Array(2);
         this.TFaudioBuffer = new ArrayBuffer(32);
         this.TFtestingF32A = new Float32Array(this.TFaudioBuffer, 4, 4);
-        this.float32FromIterable = new Float32Array(this.TFgameIterable());
+        //this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
         //this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
         /*
@@ -222,7 +222,7 @@ export class TfMusic {
         this.TsunamiAudio.play();
     }
     TFgameIterable() {
-        yield * [1, 2, 3];
+        //yield * [1, 2, 3];
     }
     TsunamiRadioReady() {
         this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
