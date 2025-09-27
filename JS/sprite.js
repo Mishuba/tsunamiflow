@@ -1396,9 +1396,9 @@ export class letsDoIt {
         //this.canvas.min-height = 70%;
         this.canvas.height = 400;
         //this.canvas.max-height = 100%;
-        //this.canvas.style.margin = "0 auto";
-        //this.canvas.style.background = 000000;
-        //this.canvas.style.display = "block";
+        this.canvas.style.margin = "0 auto";
+        this.canvas.style.background = "000000";
+        this.canvas.style.display = "block";
         this.canvas.style.border = "1px solid black";
         this.canvas.style.cursor = "none";
         this.context.imageSmoothingEnabled = true;
