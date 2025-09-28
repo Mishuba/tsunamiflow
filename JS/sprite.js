@@ -1,13 +1,32 @@
 /*
-//let TfWebSocket = new WebSocket("wss://3.143.179/123/websocket");
+const TfWebSocket = new WebSocket("wss://3.143.179/123/websocket");
 
-//TfWebSocket.onopen = async (event) => {let data = event.data;//alert(data.message);let testingData = {type: "start_game",message: "testing message",username: "Mishuba",error: "nothing right now"}//TfWebSocket.send(JSON.stringify());}
+TfWebSocket.onopen = async (event) => {
+    let data = event.data;
+    //alert(data.message);
+    let testingData = {
+        type: "start_game",
+        message: "testing message",
+        username: "Mishuba",
+        error: "nothing right now"
+    };
+    TfWebSocket.send(JSON.stringify(testingData));
+}
 
-//TfWebSocket.onmessage = async (event) => {let data = event.data;console.log(data);}
+TfWebSocket.onmessage = async (event) => {
+    let data = event.data;
+    console.log(data);
+}
 
-//TfWebSocket.onerror = async (event) => {let data = event.data;console.log(data);}
+TfWebSocket.onerror = async (event) => {
+    let data = event.data;
+    console.log(data);
+}
 
-//TfWebSocket.onclose = async (event) => {let data = event; console.log(data);}
+TfWebSocket.onclose = async (event) => {
+    let data = event;
+    console.log(data);
+}
 */
 
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
@@ -371,7 +390,7 @@ export class letsDoIt {
         }
 
         if (player.textHeight + player.speedY > this.canvas.height || player.textHeight + player.speedY < 0) {
-            if (this.frame === player.spriteArray.length) {
+            if (this.frame === player.spriteDialog.length) {
                 this.frame = 0;
             } else {
                 this.frame = this.frame + 1;
