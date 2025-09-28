@@ -1,7 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement, Title, Buttons, Last, Restart, Start, Skip, TfCanvas) {
+    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
         this.TsunamiRadioButtons = Buttons;
@@ -390,12 +390,12 @@ export class TfMusic {
         return this.SongList;
     }
     MusicState(context) {
-        if (this.context.state === "suspended") {
-            this.context.resume();
-        } else if (this.context.state === "running") {
+        if (context.state === "suspended") {
+            context.resume();
+        } else if (context.state === "running") {
             console.log("The audio context state is running");
             if (this.TsunamiAudio.waiting) {
-                this.context.suspend();
+                context.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
@@ -411,8 +411,8 @@ export class TfMusic {
         this.RadioLoadStartTime = Date.now();
     }
     loadedmetadataAudio(context) {
-        this.RadioSrc = this.context.createMediaElementSource(this.TsunamiAudio);
-        this.RadioAnalyser = this.context.createAnalyser();
+        this.RadioSrc = context.createMediaElementSource(this.TsunamiAudio);
+        this.RadioAnalyser = context.createAnalyser();
         this.RadioAnalyser.fftSize = 2048;
         this.TsunamiRadioBufferLength = this.RadioAnalyser.frequencyBinCount;
         this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);

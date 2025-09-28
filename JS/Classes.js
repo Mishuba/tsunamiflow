@@ -17,7 +17,7 @@ export class Weather {
         let TFlong = working.coords.longitude;
         let TFcoords = working.coords;
         //use the latitude and longitude location points.
-        let something = this.WABurl + this.CWapi + "?key=" + this.WapiKey + "&q=" + TFlat +"," + TFlong + "&aqi=no";
+        let something = this.WABurl + this.CWapi + "?key=" + this.WapiKey + "&q=" + TFlat + "," + TFlong + "&aqi=no";
         const xhr = new XMLHttpRequest();
         xhr.open('POST', something);
 
@@ -46,8 +46,8 @@ export class Weather {
             }
         };
         xhr.send();
-        }
-        City(CityName) {
+    }
+    City(CityName) {
         let something = this.WABul + this.CWapi + "?key=" + this.WapiKey + "&q=" + CityName + "&aqi=no";
 
         const userCity = new XMLHttpRequest();
@@ -78,22 +78,22 @@ export class Weather {
         userCity.send();
     }
     Error(e) {
-        switch(e.code){
+        switch (e.code) {
             case e.PERMISSION_DENIED:
 
-            break;
+                break;
             case e.POSITION_UNAVAILABLE:
 
-            break;
+                break;
             case e.TIMEOUT:
 
-            break;
+                break;
             case e.UNKNOWN_ERROR:
 
-            break;
+                break;
             default:
                 console.error(e);
-            break;
+                break;
         }
     }
     requestLocation() {
@@ -134,7 +134,7 @@ export class Weather {
     }
 }
 /*
-export class Art {
+export class TfImages {
     constructor() {
 
     }
@@ -151,7 +151,7 @@ export class TfVideo {
         this.tfVidImgUploadButton.id = "TfUploadImages";
         this.tfVidImgRemoveImgButton = createElement("button");
         this.tfVidImgRemoveImgButton.id = "rmvTFimg";
-        
+
         this.tfVideoStuff = document.createElement("video");
         this.tfVideoStuff.id = "TsunamiFlowVideoStuff";
         this.tfVideoStuff.controls = true;
@@ -159,10 +159,10 @@ export class TfVideo {
         this.tfVideoStuff.loop = false;
         this.tfVideoStuff.muted = false;
         this.
-        //tfVideoStuff.poster = "";
-        
-        //Webcam
-        this.WebcamStartButton = document.createElement("button");
+            //tfVideoStuff.poster = "";
+
+            //Webcam
+            this.WebcamStartButton = document.createElement("button");
         this.WebcamStartButton.id = "TfStartShit";
         this.WebcamStopButton = document.createElement("button");
         this.WebcamStopButton.id = "TfStopShit";
@@ -242,7 +242,7 @@ export class TfVideo {
         };
         //ChromaKey
         this.chromaKeyColorWebcam = {
-            r:0,
+            r: 0,
             g: 255,
             b: 0
         }
@@ -278,12 +278,12 @@ export class TfVideo {
         this.stopRecordingButton.id = "TfStopRecPlz";
         this.frameIsRecording = false;
         this.isPlaying = false;
-        this.mediaRecorder; 
+        this.mediaRecorder;
         this.recordedChunks = [];
         this.DownloadVideoRecordingButton = document.createElement("button");
         this.DownloadVideoRecordingButton.id = "IframeDownload";
     }
-    UploadImage(){
+    UploadImage() {
         /*
         
         const file = e.target.files[0];
@@ -295,19 +295,19 @@ export class TfVideo {
         }
         */
     }
-    UploadVideo(){
-    /*
-    const file = e.target.files[0];
-    if (file) {
-        TbackgroundFVideo = document.createElement('video');
-        TbackgroundFVideo.src = URL.createObjectURL(file);
-        TbackgroundFVideo.muted = true; // Mute the video
-        TbackgroundFVideo.loop = true; // Loop the video
-        TbackgroundFVideo.load(); // Load the video
-        TframeStBtn.style.display = 'inline'; // Show start button
-        TframeByeVid.style.display = 'inline'; // Show remove video button
-    }
-    */
+    UploadVideo() {
+        /*
+        const file = e.target.files[0];
+        if (file) {
+            TbackgroundFVideo = document.createElement('video');
+            TbackgroundFVideo.src = URL.createObjectURL(file);
+            TbackgroundFVideo.muted = true; // Mute the video
+            TbackgroundFVideo.loop = true; // Loop the video
+            TbackgroundFVideo.load(); // Load the video
+            TframeStBtn.style.display = 'inline'; // Show start button
+            TframeByeVid.style.display = 'inline'; // Show remove video button
+        }
+        */
     }
     VideoNetworkState() {
         /*
@@ -437,7 +437,7 @@ export class TfVideo {
         }
         */
     }
-    loadedVideoMetadata(metadata){
+    loadedVideoMetadata(metadata) {
         this.VideoNetworkState();
         this.tfVideoStuff.videoWidth;
         this.tfVideoStuff.videoHeight;
@@ -502,18 +502,18 @@ export class TfVideo {
         this.VideoState();
     }
     canPlayVideo() {
-        if(this.canvas !== null) {
-            
+        if (this.canvas !== null) {
+
 
         } else {
             this.canvas = document.createElement("canvas");
         }
     }
-    canPlayVideoThrough(){
+    canPlayVideoThrough() {
         this.VideoState();
         this.tfVideoStuff.play();
     }
-    playVideo(){
+    playVideo() {
         this.VideoState();
         if (this.isRecording) {
 
@@ -538,39 +538,39 @@ export class TfVideo {
             };
         }
     }
-    pauseVideo(){
+    pauseVideo() {
         this.VideoState();
     }
-    VideoEnded(){
+    VideoEnded() {
         console.log("The video has ended");
     }
-    VideoWaiting(){
+    VideoWaiting() {
         this.VideoState();
     }
-    VideoPlaying(){
+    VideoPlaying() {
         this.VideoState();
     }
-    VideoStalled(){
+    VideoStalled() {
         console.log("The video has stalled");
     }
-    VideoSuspended(){
+    VideoSuspended() {
         this.VideoNetworkState();
 
     }
-    FormatVideoTime(seconds) { 
-        let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2,"0")}`;
+    FormatVideoTime(seconds) {
+        let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2, "0")}`;
     }
-    UpdateVideoTime(){
+    UpdateVideoTime() {
         /*
         let TimingVideo = Math.floor(this.tfVideoStuff.currentTime);
         let UsingTfVidTk = `Time: ${this.FormatVideoTime(TimingVideo)}`;
         let VideoProcessBar = (this.tfVideoStuff.currentTime / this.tfVideoStuff.duration) * 100;
         */
     }
-    VideoVolumeChange(){
+    VideoVolumeChange() {
         console.log("The video volume has changed");
     }
-    processVideoFrames(){
+    processVideoFrames() {
         console.log("not done working on this");
         /*
         while (true) {
@@ -604,16 +604,16 @@ export class TfVideo {
         }
         return { trf, tgf, tbf };
     }
-    ColorPickerChromaKey(chroma){
+    ColorPickerChromaKey(chroma) {
         const Tfhex = chroma.target.value;
         const rgb = parseInt(hex.slice(1), 16);
         this.chromaKeyColorWebcam.r = (rgb >> 16) & 255;
         this.chromaKeyColorWebcam.g = (rgb >> 8) & 255;
         this.chromaKeyColorWebcam.b = rgb & 255;
     }
-    ApplyTfChromaKey(thing){
+    ApplyTfChromaKey(thing) {
 
-        if(thing === "webcam"){
+        if (thing === "webcam") {
             /*
             const frame = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             const data = frame.data;
@@ -630,57 +630,57 @@ export class TfVideo {
             }
             hpCC.putImageData(frame, 0, 0);
             */
-        } else if (thing === "canvas"){
+        } else if (thing === "canvas") {
             //Apply chromakey after webcam is put on the canvas instead of before. 
-                /*
-            let frameSkipCount = 2;
-            let frameCounter = 0;
-            if (this.tfVideoStuff.paused || this.tfVideoStuff.ended) {
-                hpCC.drawImage(this.tfVideoStuff, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                const imageData = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                const data = imageData.data;
-                const chromaColor = hexToRgb(colorPicker.value);
+            /*
+        let frameSkipCount = 2;
+        let frameCounter = 0;
+        if (this.tfVideoStuff.paused || this.tfVideoStuff.ended) {
+            hpCC.drawImage(this.tfVideoStuff, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            const imageData = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            const data = imageData.data;
+            const chromaColor = hexToRgb(colorPicker.value);
 
-                for (let i = 0; i < data.length; i += 4) {
-                    if (data[i] === chromaColor.r && data[i + 1] === chromaColor.g && data[i + 2] === chromaColor.b) {
-                        data[i + 3] = 0; // Set alpha to 0 for transparency
-                    }
+            for (let i = 0; i < data.length; i += 4) {
+                if (data[i] === chromaColor.r && data[i + 1] === chromaColor.g && data[i + 2] === chromaColor.b) {
+                    data[i + 3] = 0; // Set alpha to 0 for transparency
                 }
-
-                hpCC.putImageData(imageData, 0, 0);
-                requestAnimationFrame(animate);
-            } else {
-                hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
-                // Draw the uploaded background video or image
-                if (backgroundVideo) {
-                    hpCC.drawImage(backgroundVideo, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                } else if (backgroundImage) {
-                    hpCC.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                }
-
-                // Draw the webcam feed if it's active
-                if (isPlaying) {
-                    hpCC.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-                }
-
-                // Apply chroma key for webcam, video, and image based on flags
-                if (frameCounter % frameSkipCount === 0) {
-                    if (useChromaKeyWebcam) applyChromaKeyWebcam();
-                }
-
-                frameCounter++;
-
-                // Continue the animation loop
-                animationId = requestAnimationFrame(animate);
             }
-            */
+
+            hpCC.putImageData(imageData, 0, 0);
+            requestAnimationFrame(animate);
+        } else {
+            hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            // Draw the uploaded background video or image
+            if (backgroundVideo) {
+                hpCC.drawImage(backgroundVideo, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            } else if (backgroundImage) {
+                hpCC.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            }
+
+            // Draw the webcam feed if it's active
+            if (isPlaying) {
+                hpCC.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            }
+
+            // Apply chroma key for webcam, video, and image based on flags
+            if (frameCounter % frameSkipCount === 0) {
+                if (useChromaKeyWebcam) applyChromaKeyWebcam();
+            }
+
+            frameCounter++;
+
+            // Continue the animation loop
+            animationId = requestAnimationFrame(animate);
+        }
+        */
 
         } else if (thing === "video") {
             //current code below is drawing the video to the canvas, and then getting the pixel data, and then turning it into GreenScreen or aka manipulating it.
             //Draw the video directly to canvas.
             //ctx.drawImage(this.tfVideoStuff, 0, 0, canvas.width, canvas.height); 
-            
+
             //Get pixel data.
             //const TfVidDrawFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
@@ -692,102 +692,102 @@ export class TfVideo {
         }
     }
     RemoveChromaKeyColor() {
-        ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         //frameCounter = 0
         this.useChromaKeyWebcam = false;
     }
-    startWebcam(){
+    startWebcam() {
         this.WebcamStreamVideoAndAudio = navigator.mediaDevices.getUserMedia(this.TmediaFstreamConstraints).then(async (stream) => {
-        //AudioStream
-        //this.WebcamAudioStream = new MediaStream(stream);
-        
-        //mediaStream
-        //this.emptyStream = new MediaStream();
-        this.WebcamVideoStream = new MediaStream(stream);
+            //AudioStream
+            //this.WebcamAudioStream = new MediaStream(stream);
 
-        this.tfVideoStuff.srcObject = stream;
-        //this.tfVideoStuff.play();
-        //animate();
+            //mediaStream
+            //this.emptyStream = new MediaStream();
+            this.WebcamVideoStream = new MediaStream(stream);
 
-        this.tfVideoStuff.addEventListener("emptied", async () => {
-            console.log("The Tsunami Community Video has been emptied.");
+            this.tfVideoStuff.srcObject = stream;
+            //this.tfVideoStuff.play();
+            //animate();
 
-        }); //The media has become empty; for example, this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
+            this.tfVideoStuff.addEventListener("emptied", async () => {
+                console.log("The Tsunami Community Video has been emptied.");
 
-        this.tfVideoStuff.addEventListener("load", async () => {
+            }); //The media has become empty; for example, this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
-        }); //The resource has been loaded.
-        this.tfVideoStuff.addEventListener("loadstart", async () => {
-            console.log("The Tsunami Community Video has started loading.");
+            this.tfVideoStuff.addEventListener("load", async () => {
 
-        });//Fired when the browser has started to load teh resource.
+            }); //The resource has been loaded.
+            this.tfVideoStuff.addEventListener("loadstart", async () => {
+                console.log("The Tsunami Community Video has started loading.");
 
-        this.tfVideoStuff.addEventListener("loadedmetadata", async (metadata) => {
-            console.log("The Tsunami COmmunity Video metadata has started to load.");
+            });//Fired when the browser has started to load teh resource.
 
-
-        });
-
-        this.tfVideoStuff.addEventListener("loadeddata", async () => {
-            console.log("The data has loaded");
-
-        }); // The first frame of the mdeia has finished loading.
-
-        this.tfVideoStuff.addEventListener("canplay", async () => {
-            console.log("The Tsunami Video Community can play this part.");
-
-            //create canvas
-        });
-
-        this.tfVideoStuff.addEventListener("canplaythrough", async () => {
-
-        }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
-
-        this.tfVideoStuff.addEventListener("play", () => {
-            console.log("The Video should be playing");
-        }); //Playback has begun.
-
-        this.tfVideoStuff.addEventListener("pause", async () => {
-
-        }); //playback has been paused.
-
-        this.tfVideoStuff.addEventListener("ended", async () => {
-            console.log("The video should have ended");
-        });
-
-        this.tfVideoStuff.addEventListener("waiting", async (waiting) => {
-            console.log("The Video should be waiting");
-        }); //Playback has stopped because of a temporary lack of data.
-
-        this.tfVideoStuff.addEventListener("playing", async () => {
-            console.log("The video should be playing");
-        }); //Playback is ready to start after having been paused or delayed due to lack of data.
-
-        this.tfVideoStuff.addEventListener("stalled", async (stalled) => {
-            console.log(`The Tsunami Community Video has stalled for some reason. ${stalled} <br /> here is the supposed song path: input the real path here later.`);
-        });
-
-        this.tfVideoStuff.addEventListener("suspended", async (suspend) => {
-
-        });
-
-        this.tfVideoStuff.addEventListener("timeupdate", () => {
-            //function 
+            this.tfVideoStuff.addEventListener("loadedmetadata", async (metadata) => {
+                console.log("The Tsunami COmmunity Video metadata has started to load.");
 
 
-        });
+            });
 
-        this.tfVideoStuff.addEventListener("volumechange", async () => {
+            this.tfVideoStuff.addEventListener("loadeddata", async () => {
+                console.log("The data has loaded");
 
-        });
+            }); // The first frame of the mdeia has finished loading.
+
+            this.tfVideoStuff.addEventListener("canplay", async () => {
+                console.log("The Tsunami Video Community can play this part.");
+
+                //create canvas
+            });
+
+            this.tfVideoStuff.addEventListener("canplaythrough", async () => {
+
+            }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
+
+            this.tfVideoStuff.addEventListener("play", () => {
+                console.log("The Video should be playing");
+            }); //Playback has begun.
+
+            this.tfVideoStuff.addEventListener("pause", async () => {
+
+            }); //playback has been paused.
+
+            this.tfVideoStuff.addEventListener("ended", async () => {
+                console.log("The video should have ended");
+            });
+
+            this.tfVideoStuff.addEventListener("waiting", async (waiting) => {
+                console.log("The Video should be waiting");
+            }); //Playback has stopped because of a temporary lack of data.
+
+            this.tfVideoStuff.addEventListener("playing", async () => {
+                console.log("The video should be playing");
+            }); //Playback is ready to start after having been paused or delayed due to lack of data.
+
+            this.tfVideoStuff.addEventListener("stalled", async (stalled) => {
+                console.log(`The Tsunami Community Video has stalled for some reason. ${stalled} <br /> here is the supposed song path: input the real path here later.`);
+            });
+
+            this.tfVideoStuff.addEventListener("suspended", async (suspend) => {
+
+            });
+
+            this.tfVideoStuff.addEventListener("timeupdate", () => {
+                //function 
+
+
+            });
+
+            this.tfVideoStuff.addEventListener("volumechange", async () => {
+
+            });
         }).catch(async (error) => {
             console.error(error);
         });
     }
-    stopWebcam(){
+    stopWebcam() {
         console.log("Stop the webcam");
     }
-    VideoWebCodecs(stream){
+    VideoWebCodecs(stream) {
         this.VideoProcessor = new MediaStreamTrackProcess({
             track: stream.getVideoTracks()[0]
         });
@@ -797,11 +797,11 @@ export class TfVideo {
         this.VideoDevice = new RTCPeerConnection();
         stream.getTracks().forEach(track => this.VideoDevice.addTrack(track, stream));
     }
-    VideoScreenSharing(){
+    VideoScreenSharing() {
         console.log("Start Video Sharing");
         //navigator.mediaDevices.getDisplayMedia(TmediaFstreamConstraints).then(async (stream) => { // use stream})
     }
-    startRecording(){
+    startRecording() {
         console.log("start recording");
 
         /*
@@ -844,20 +844,20 @@ export class TfVideo {
 
         */
     }
-    stopRecording(){
+    stopRecording() {
         console.log("Stop Recording");
-    /*
-        if (mediaRecorder && isRecording) {
-            mediaRecorder.stop();
-            TframeIsRecording = false;
-            TframeStRec.disabled = false;
-            TframeStRec.style.display = "inline";
-            TframeSpRec.disabled = true;
-            TframeSpRec.style.display = "none";
-        }
-    */
+        /*
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                TframeIsRecording = false;
+                TframeStRec.disabled = false;
+                TframeStRec.style.display = "inline";
+                TframeSpRec.disabled = true;
+                TframeSpRec.style.display = "none";
+            }
+        */
     }
-    DownloadRecording(){
+    DownloadRecording() {
         console.log("Placeholder for download Video");
         /*
         const link = document.createElement('a');
@@ -866,7 +866,7 @@ export class TfVideo {
         link.click();
         */
     }
-    RemoveImage(){
+    RemoveImage() {
         console.log("placeholder for RemoveImage");
         /*
         TbackgroundFImage = null;
@@ -875,50 +875,50 @@ export class TfVideo {
         TframeByeImg.style.display = 'none'; // Hide remove button
         */
     }
-    RemoveVideo(){
+    RemoveVideo() {
         console.log("Placeholder for remove video");
-    /*
-        if (TbackgroundFVideo) {
-            TbackgroundFVideo.pause();
-            TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
-            TbackgroundFVideo = null; // Clear the video reference
-            hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
-        }
-        TframeStBtn.style.display = 'none'; // Hide start button
-        TframeByeVid.style.display = 'none'; // Hide remove button
-    */
+        /*
+            if (TbackgroundFVideo) {
+                TbackgroundFVideo.pause();
+                TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
+                TbackgroundFVideo = null; // Clear the video reference
+                hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
+            }
+            TframeStBtn.style.display = 'none'; // Hide start button
+            TframeByeVid.style.display = 'none'; // Hide remove button
+        */
     }
     VideoSystemStart() {
         console.log("Placeholder for system start");
-    /*
-        if (isPlaying) {
-            isPlaying = false;
-            cancelAnimationFrame(animationId);
-            tfVidStuff.pause();
-            if (TbackgroundFVideo) {
-                TbackgroundFVideo.pause();
+        /*
+            if (isPlaying) {
+                isPlaying = false;
+                cancelAnimationFrame(animationId);
+                tfVidStuff.pause();
+                if (TbackgroundFVideo) {
+                    TbackgroundFVideo.pause();
+                }
+            } else {
+                isPlaying = true;
+    
+                // Play the webcam feed if it's active
+                if (webcamStream) {
+                    tfVidStuff.play();
+                }
+    
+                // Always play the background video if it exists
+                if (TbackgroundFVideo) {
+                    TbackgroundFVideo.play();
+                }
+    
+                animate();
             }
-        } else {
-            isPlaying = true;
-
-            // Play the webcam feed if it's active
-            if (webcamStream) {
-                tfVidStuff.play();
-            }
-
-            // Always play the background video if it exists
-            if (TbackgroundFVideo) {
-                TbackgroundFVideo.play();
-            }
-
-            animate();
-        }
-    */
+        */
     }
     VideoSystemStop() {
         this.isPlaying = false;
         //cancelAnimationFrame(animationId);
-        ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         /*
         if (webcamStream) {
             const tracks = webcamStream.getTracks();
@@ -927,67 +927,67 @@ export class TfVideo {
             webcamStream = null;
         }
         */
-       this.VideoSystemControllerStopButton.style.display = "none";
+        this.VideoSystemControllerStopButton.style.display = "none";
     }
-    IDontKnowYetButMainAddEventListenersIThink(){
+    IDontKnowYetButMainAddEventListenersIThink() {
         console.log("placeholder for main")
-    /*
-        TFcolorPicker.addEventListener('input', (e) => {
-
-        });
-
-        // Use chroma key color for webcam
-        TfCpBtn.addEventListener('click', () => {
-
-        });
-
-        // Remove chroma key color button
-        TfCpRm.addEventListener('click', () => {
-
-        });
-
-        //Green Screen Ends
-
-        TframeSpBtn.addEventListener('click', () => {
-
-        });
-
-        TframeStRec.addEventListener('click', () => {
-
-        });
-
-        TframeSpRec.addEventListener('click', () => {
-
-        });
-
-        Tframe4u.addEventListener('click', () => {
-
-        });
-
-        TframeULimg.addEventListener('change', (e) => {
-
-        });
-
-        TframeULvid.addEventListener('change', (e) => {
-
-        });
-
-        TframeByeImg.addEventListener('click', () => {
-
-        });
-
-        TframeByeVid.addEventListener('click', () => {
-
-        });
-
-        document.getElementById("TcameraFlipButton").onclick = () => {
-            whichCamera = !whichCamera;
-        }
-
-        TframeCtrBtn.addEventListener('click', () => {
-
-        });
-    */
+        /*
+            TFcolorPicker.addEventListener('input', (e) => {
+    
+            });
+    
+            // Use chroma key color for webcam
+            TfCpBtn.addEventListener('click', () => {
+    
+            });
+    
+            // Remove chroma key color button
+            TfCpRm.addEventListener('click', () => {
+    
+            });
+    
+            //Green Screen Ends
+    
+            TframeSpBtn.addEventListener('click', () => {
+    
+            });
+    
+            TframeStRec.addEventListener('click', () => {
+    
+            });
+    
+            TframeSpRec.addEventListener('click', () => {
+    
+            });
+    
+            Tframe4u.addEventListener('click', () => {
+    
+            });
+    
+            TframeULimg.addEventListener('change', (e) => {
+    
+            });
+    
+            TframeULvid.addEventListener('change', (e) => {
+    
+            });
+    
+            TframeByeImg.addEventListener('click', () => {
+    
+            });
+    
+            TframeByeVid.addEventListener('click', () => {
+    
+            });
+    
+            document.getElementById("TcameraFlipButton").onclick = () => {
+                whichCamera = !whichCamera;
+            }
+    
+            TframeCtrBtn.addEventListener('click', () => {
+    
+            });
+        */
     }
 }
 

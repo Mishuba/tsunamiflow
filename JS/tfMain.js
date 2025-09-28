@@ -4,13 +4,16 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
-import { TfMusic } from "./Audio.js";
+import { Radio } from "./Audio.js";
 import { Weather } from "./Classes.js";
 import { DoTheThingMan } from "./Functions.js";
 import { HomepageUpdates } from "./sprite.js";
 
-let TsunamiWeather = document.getElementById("TFweather");
+let TfWeather = new Weather();
+let TfWotd = document.getElementById("tfWordOfTheDay");
 
+//Tsunami Radio Audio
+// Buttons
 let TsunamiRadio = document.getElementById("TFradioPlayer");
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
@@ -18,11 +21,12 @@ let RadioLastButton = document.createElement("button");
 let RadioRestartButton = document.createElement("button");
 let RadioStartButton = document.createElement("button");
 let RadioSkipButton = document.createElement("button");
+//visualizer
 let RadioCanvas = document.getElementById("TFradioCanvas");
-
-let TfWeather = new Weather();
-let TfWotd = document.getElementById("tfWordOfTheDay");
+//Radio
 let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
+
+//VideoGame Audio
 let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
 
 if (navigator.cookieEnabled) {
@@ -163,7 +167,6 @@ if (typeof (Worker) !== "undefined") {
                 });
 
                 NewsTimer();
-                TfWeather.requestLocation();
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
@@ -228,4 +231,12 @@ for (const [key, button] of Object.entries(navButtons)) {
 //Nav Ended
 
 //Start non web worker stuff
-HomepageUpdates.start();
+
+TfWeather.requestLocation();
+if (TFiframe.src === null || TFiframe.src === "") {
+    HomepageUpdates.start();
+} else {
+    console.log("this should stop the homepageupdates from contionously running");
+    HomepageUpdates.stop();
+
+}
