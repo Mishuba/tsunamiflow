@@ -1910,12 +1910,25 @@ FirstGame.context.canvas;
 FirstGame.context.save();
 FirstGame.context.restore();
 FirstGame.context.reset();
-*/
+FirstGame.context.scale(x,y);
+FirstGame.context.rotate(angle);
+FirstGame.context.translate(x,y);
+FirstGame.context.transform(a,b,c,d,e,f);
+FirstGame.context.setTransform(a,b,c,d,e,f);
+FirstGame.context.resetTransform();
+FirstGame.context.globalAlpha;
+FirstGame.context.globalCompositeOperation;
+FirstGame.context.imageSmoothingEnabled;
 
-/*
     //do this inside the iframe.
         window.addEventListener("message", (event) => {
             const { type, info } = event.data;
  
             if (type === "game") {
-                const game = letsDoIt.from(e
+                const game = letsDoIt.from(event.data.info);
+            }
+        });
+
+        FirstGame.start() 
+        //startGame(FirstGame); // Original but startGame code is deleted.
+*/
