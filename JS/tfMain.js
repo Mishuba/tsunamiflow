@@ -231,4 +231,4 @@ for (const [key, button] of Object.entries(navButtons)) {
 
 //Start non web worker stuff
 
-TfWeather.requestLocation();
+document.getElementById("TFweather").innerHTML = await TfWeather.requestLocation();
