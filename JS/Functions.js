@@ -118,7 +118,7 @@ function doIframeThing(event, source) {
                 };
 
                 source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
-            } else if (ev.data.type === "game") {
+            } else if (event.data.type === "game") {
                 CompetitionJson = {
                     type: "game",
                     info: FirstGame.toJSON(),
