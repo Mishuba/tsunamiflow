@@ -15,9 +15,9 @@ export class Weather {
         // use the latitude and longitude location points. 
         let TFlat = working.coords.latitude;
         let TFlong = working.coords.longitude;
-        let TFcoords = working.coords;
+        //let TFcoords = working.coords;
         //use the latitude and longitude location points.
-        let something = this.WABurl + this.CWapi + "?key=" + this.WapiKey + "&q=" + TFlat + "," + TFlong + "&aqi=no";
+        let something = "https://api.weatherapi.com/v1" + "/current.json" + "?key=" + "cf5a64c9095e425ab0f52816230110" + "&q=" + TFlat + "," + TFlong + "&aqi=no";
         const xhr = new XMLHttpRequest();
         xhr.open('POST', something);
 
