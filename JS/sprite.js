@@ -32,7 +32,7 @@ TfWebSocket.onclose = async (event) => {
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
 const StickMan = new Image();
-StickMan.src = linkToSpriteSheet
+StickMan.src = linkToSpriteSheet;
 
 let AckmaHawkSpriteSheet = "";
 
@@ -379,23 +379,31 @@ export class letsDoIt {
         this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
         if (player.speedX === 0) {
             player.speedX = 1;
+        } else {
+            player.speedX = 1;
         }
 
         if (player.speedY === 0) {
             player.speedY = 1;
+        } else {
+            player.speedY = 1;
         }
 
-        if (player.textWidth + player.speedX > this.canvas.width || player.textWidth + player.speedX < 0) {
+        if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
             player.speedX = -player.speedX;
+        } else {
+
         }
 
-        if (player.textHeight + player.speedY > this.canvas.height || player.textHeight + player.speedY < 0) {
+        if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
             if (this.frame === player.spriteDialog.length) {
                 this.frame = 0;
             } else {
                 this.frame = this.frame + 1;
             }
             player.speedY = -player.speedY;
+        } else {
+            
         }
         player.textWidth += player.width;
         player.textHeight += player.height;
@@ -1910,10 +1918,4 @@ FirstGame.context.reset();
             const { type, info } = event.data;
  
             if (type === "game") {
-                const game = letsDoIt.from(event.data.info);
-            }
-        });
-
-        FirstGame.start() 
-        //startGame(FirstGame); // Original but startGame code is deleted.
-*/
+                const game = letsDoIt.from(e
