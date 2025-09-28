@@ -7,7 +7,6 @@ import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 import { DoTheThingMan } from "./Functions.js";
-import { HomepageUpdates } from "./sprite.js";
 
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -233,10 +232,3 @@ for (const [key, button] of Object.entries(navButtons)) {
 //Start non web worker stuff
 
 TfWeather.requestLocation();
-if (TFiframe.src === null || TFiframe.src === "") {
-    HomepageUpdates.start();
-} else {
-    console.log("this should stop the homepageupdates from contionously running");
-    HomepageUpdates.stop();
-
-}

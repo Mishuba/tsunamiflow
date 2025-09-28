@@ -799,7 +799,7 @@ export class TfMusic {
         }); //Playback has stopped because of the end of the media was reached.
 
         this.TsunamiAudio.addEventListener("waiting", (waiting) => {
-
+            console.log("The audio has been waiting because: " + waiting);
         }); //Playback has stopped because of a temporary lack of data.
 
         this.TsunamiAudio.addEventListener("playing", () => {
@@ -807,11 +807,11 @@ export class TfMusic {
         }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
         this.TsunamiAudio.addEventListener("stalled", (stalled) => {
-
+            console.log("the audio has stalled because: " + stalled);
         });//The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
 
         this.TsunamiAudio.addEventListener("suspended", (suspend) => {
-
+            console.log("The audio has suspened because:" + suspend);
         }); //Media data loading has been suspended.
 
         this.TsunamiAudio.addEventListener("timeupdate", () => {
