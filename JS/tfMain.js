@@ -4,7 +4,7 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
-import { Radio } from "./Audio.js";
+import { TfMusic } from "./Audio.js";
 import { Weather } from "./Classes.js";
 import { DoTheThingMan } from "./Functions.js";
 import { HomepageUpdates } from "./sprite.js";
