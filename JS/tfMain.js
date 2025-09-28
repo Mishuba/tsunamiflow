@@ -177,7 +177,7 @@ if (typeof (Worker) !== "undefined") {
                 });
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
-                TfWeather.requestLocation();
+                document.getElementById("TFweather").innerHTML = await TfWeather.requestLocation();
                 Radio.MusicNetworkState(RadioWorker);
             } else {
                 console.log("No matching Times as the moment");

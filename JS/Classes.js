@@ -1,6 +1,5 @@
 export class Weather {
     constructor() {
-        this.weatherElement = document.getElementById("TFweather");
         this.DSLO = {
             enabledHighAccuracy: true,
             timeout: 5000,
@@ -40,7 +39,9 @@ export class Weather {
 
 
                 // Display on web page
-                this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                //this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+
+                return `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
 
                 //Make the response do cool stuf.
             }
