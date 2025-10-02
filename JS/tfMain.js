@@ -177,7 +177,7 @@ if (typeof (Worker) !== "undefined") {
                 });
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
-                document.getElementById("TFweather").innerHTML = await TfWeather.requestLocation();
+                document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
                 Radio.MusicNetworkState(RadioWorker);
             } else {
                 console.log("No matching Times as the moment");
@@ -231,4 +231,4 @@ for (const [key, button] of Object.entries(navButtons)) {
 
 //Start non web worker stuff
 
-document.getElementById("TFweather").innerHTML = await TfWeather.requestLocation();
+document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
