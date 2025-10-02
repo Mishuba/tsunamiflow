@@ -169,7 +169,7 @@ if (typeof (Worker) !== "undefined") {
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
-                        Radio.MusicNetworkState(RadioWorker);
+                        //Radio.MusicNetworkState(RadioWorker);
 
                     } else {
                         console.log("No matching Radio Times as the moment");
@@ -178,16 +178,16 @@ if (typeof (Worker) !== "undefined") {
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
                 document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWorker);
+                //Radio.MusicNetworkState(RadioWorker);
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();
                 TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWorker);
+                //Radio.MusicNetworkState(RadioWorker);
             }
 
             RadioWorker.onmessage = async function (event) {
-                Radio.RadioWorkerReceivedMessage(event);
+                //Radio.RadioWorkerReceivedMessage(event);
             }
 
             RadioWorker.onerror = async function (error) {
@@ -231,4 +231,4 @@ for (const [key, button] of Object.entries(navButtons)) {
 
 //Start non web worker stuff
 
-document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
+TfWeather.requestLocation();
