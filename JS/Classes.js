@@ -5,10 +5,6 @@ export class Weather {
             timeout: 5000,
             maximumAge: 0,
         };
-        this.WABul = "https://api.weatherapi.com/v1";
-        this.WABurl = "https://api.weatherapi.com/v1";
-        this.WapiKey = "cf5a64c9095e425ab0f52816230110";
-        this.CWapi = "/current.json";
     }
     LatAndLong(working) {
         // use the latitude and longitude location points. 
@@ -39,17 +35,16 @@ export class Weather {
 
 
                 // Display on web page
-                //this.weatherElement.innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                let theWeatherFr = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
 
-                return `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
-
+                return theWeatherFr;
                 //Make the response do cool stuf.
             }
         };
         xhr.send();
     }
     City(CityName) {
-        let something = this.WABul + this.CWapi + "?key=" + this.WapiKey + "&q=" + CityName + "&aqi=no";
+        let something = "https://api.weatherapi.com/v1" + "/current.json" + "?key=" + "cf5a64c9095e425ab0f52816230110" + "&q=" + CityName + "&aqi=no";
 
         const userCity = new XMLHttpRequest();
         userCity.open("POST", something);
@@ -69,9 +64,10 @@ export class Weather {
 
 
                 // Display on web page
-                //document.getElementById("TFweather").innerHTML = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                //document.getElementById("TFweather").innerHTML 
+                let theWeatherFr = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
                 //postMessage(`${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`);
-                return `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
+                return theWeatherFr;
 
                 //Make the response do cool stuff. 
             }
@@ -110,12 +106,12 @@ export class Weather {
                     console.log("getting the information on the current position.");
                     navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
                 } else if (result.state === "prompt") {
-                    console.log("geolocation needs to be requested");
+                    //console.log("geolocation needs to be requested");
                     if (confirm("TF is asking if you will allow it to access your location.")) {
                         navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
                     } else {
                         let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
-                        if (!letmegetloc === "" || " ") {
+                        if (letmegetloc.trim() !== "") {
                             this.City(letmegetloc);
                         } else {
                             console.log("the weather will not work.");

@@ -1,5 +1,10 @@
 /*
-const TfWebSocket = new WebSocket("wss://3.143.179/123/websocket");
+const TfWebSocket = new WebSocket("wss://3.143.179.123/websocket");
+
+new WebSocket("wss://world.tsunamiflow.club:8080");
+
+*/
+const TfWebSocket = new WebSocket("wss://3.143.179.123:8080");
 
 TfWebSocket.onopen = async (event) => {
     let data = event.data;
@@ -27,7 +32,6 @@ TfWebSocket.onclose = async (event) => {
     let data = event;
     console.log(data);
 }
-*/
 
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";

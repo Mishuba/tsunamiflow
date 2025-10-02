@@ -1,4 +1,3 @@
-/*
 let TfWebSocket = new WebSocket("wss://world.tsunamiflow.club/websocket");
 
 TfWebSocket.onopen = () => {
@@ -12,12 +11,12 @@ TfWebSocket.onmessage = (TF) => {
 
 TfWebSocket.onclose = () => {
     console.log("WebSocket closed.");
-}
+};
 
 TfWebSocket.onerror = (error) => {
     console.log(`WebSocket connection is not working.  error: ${error}`);
 }
-*/
+
 
 /*
 This is for the ffpmeg link to file to improve the live stream function of the website. 
@@ -139,24 +138,24 @@ export class User {
                 let tSubFdataOk = JSON.parse(this.responseText);
 
                 //DO Something it the response.
-                    /*
-                        if(success) {
-                        //successful 
+                /*
+                    if(success) {
+                    //successful 
 
-                        } else if (not successful) {
-                        //nonsuccessful 
+                    } else if (not successful) {
+                    //nonsuccessful 
 
-                        } else {
-                        //error 
+                    } else {
+                    //error 
 
-                        }
-                    */
+                    }
+                */
             }
         }
         MyXML.open("POST", `./../server.php`, true);
         MyXML.send(SubFormData);
     }
-    login () {
+    login() {
         if (this.username == "" || this.password == "") {
             // You may want to handle the case where username or password is empty
         } else {
