@@ -1,3 +1,16 @@
+/*
+sudo certbot--nginx - d websocket.tsunamiflow.club - d ruby.tsunamiflow.club - d network.tsunamiflow.club        
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Error while running nginx -c /etc/nginx/nginx.conf -t.
+
+2025/10/02 09:18:46 [warn] 116365#116365: protocol options redefined for 0.0.0.0:443 in /etc/nginx/sites-enabled/www.tsunamiflow.club:24
+2025/10/02 09:18:46 [emerg] 116365#116365: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/sites-enabled/network.tsunamiflow.club:7
+nginx: configuration file /etc/nginx/nginx.conf test failed
+
+The nginx plugin is not working; there may be problems with your existing configuration.
+The error was: MisconfigurationError('Error while running nginx -c /etc/nginx/nginx.conf -t.\n\n2025/10/02 09:18:46 [warn] 116365#116365: protocol options redefined for 0.0.0.0:443 in /etc/nginx/sites-enabled/www.tsunamiflow.club:24\n2025/10/02 09:18:46 [emerg] 116365#116365: no "ssl_certificate" is defined for the "listen ... ssl" directive in /etc/nginx/sites-enabled/network.tsunamiflow.club:7\nnginx: configuration file /etc/nginx/nginx.conf test failed\n')
+*/
+
 export class Weather {
     constructor() {
         this.DSLO = {
