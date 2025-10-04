@@ -49,8 +49,8 @@ export class Weather {
 
                 // Display on web page
                 let theWeatherFr = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
-
-                return theWeatherFr;
+                document.getElementById("TFweather").innerHTML = theWeatherFr;
+                //return theWeatherFr;
                 //Make the response do cool stuf.
             }
         };
@@ -80,7 +80,8 @@ export class Weather {
                 //document.getElementById("TFweather").innerHTML 
                 let theWeatherFr = `${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`;
                 //postMessage(`${IWname}, ${IWregion}, ${IWcountry} <br>${IWcText} C: ${IWcTC} F: ${IWcTF} <img src=${IWcIcon}>`);
-                return theWeatherFr;
+                document.getElementById("TFweather").innerHTML = theWeatherFr;
+                //return theWeatherFr;
 
                 //Make the response do cool stuff. 
             }
