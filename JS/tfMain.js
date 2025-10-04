@@ -169,7 +169,7 @@ if (typeof (Worker) !== "undefined") {
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
-                        //Radio.MusicNetworkState(RadioWorker);
+                        Radio.MusicNetworkState(RadioWorker);
 
                     } else {
                         console.log("No matching Radio Times as the moment");
@@ -187,8 +187,22 @@ if (typeof (Worker) !== "undefined") {
             }
 
             RadioWorker.onmessage = async function (event) {
-                //Radio.RadioWorkerReceivedMessage(event);
-            }
+                if (event.data.type === "radio") {
+                    if (event.data.system === "file") {
+                        let update = Radio.RadioWorkerReceivedMessage(event);
+
+                        RadioWorker.postMessage({
+                            type: "radio",
+                            system: "start",
+                            file: update,
+                            message: "the file",
+                            buffer: "starting now"
+                        });
+                    } else if (event.data.system === "arraybuffer") {
+                        let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer);
+                    }
+                }
+            };
 
             RadioWorker.onerror = async function (error) {
                 console.error(`error message: ${error.message} <br /> error filename: ${error.filename} <br /> error line: ${error.lineno}`);

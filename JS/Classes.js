@@ -1,4 +1,4 @@
-/*
+/*cd
 sudo certbot--nginx - d websocket.tsunamiflow.club - d ruby.tsunamiflow.club - d network.tsunamiflow.club        
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Error while running nginx -c /etc/nginx/nginx.conf -t.
