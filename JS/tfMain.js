@@ -233,15 +233,9 @@ if (typeof (Worker) !== "undefined") {
 } else {
     console.log("No Web Worker Support");
 }
-//Web Workers Ends
 
-//Tsunami Thoughts 
-document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
-    TsunamiThoughts.preventDefault();
-    //let tfUserThot = document.getElementById("TFthought");
-    //TfPostThot(tfUserThot);
-});
-//Tsunami Thoughts Ends
+TfWeather.requestLocation();
+//Web Workers Ends
 
 //Nav Begins
 for (const [key, button] of Object.entries(navButtons)) {
@@ -252,6 +246,17 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
 
+//Websocket Stuff maybe create a database. do database calculations.
+//Tsunami Thoughts 
+document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
+    TsunamiThoughts.preventDefault();
+    //let tfUserThot = document.getElementById("TFthought");
+    //TfPostThot(tfUserThot);
+});
+//Tsunami Thoughts Ends
+
+
+
 //Start non web worker stuff
 
-TfWeather.requestLocation();
+

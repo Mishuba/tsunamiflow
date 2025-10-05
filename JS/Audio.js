@@ -380,19 +380,19 @@ export class TfMusic {
     }
     MusicFile(event) {
         if (event.data.file == "undefined") {
-            this.SongList = DefaultPlaylist[randomMusicDefault];
+            this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
         } else if (event.data.file == undefined) {
-            this.SongList = DefaultPlaylist[randomMusicDefault];
+            this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
         } else if (event.data.file == "") {
-            this.SongList = DefaultPlaylist[randomMusicDefault];
+            this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
         } else if (event.data.file == "null") {
-            this.SongList = DefaultPlaylist[randomMusicDefault];
+            this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
         } else if (event.data.file == null) {
-            this.SongList = DefaultPlaylist[randomMusicDefault];
+            this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
         } else {
             this.SongList = event.data.file;
