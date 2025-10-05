@@ -239,7 +239,7 @@ export class TfMusic {
                 file: this.TsunamiAudio.src
             });
         });
-        this.TsunamiRadioButtons.appendChild(TsunamiLastButton);
+        this.TsunamiRadioButtons.appendChild(this.TsunamiLastButton);
 
         this.TsunamiRestartButton.id = "TFRadioRestartButton";
         this.TsunamiRestartButton.innerHTML = "Restart";
@@ -471,7 +471,7 @@ export class TfMusic {
     FormatAudioTime(second) {
         this.minutes = Math.floor(second / 60);
         this.seconds = second % 60;
-        return `${this.minutes}:${seconds.toString().padStart(2, "0")}`;
+        return `${this.minutes}:${this.seconds.toString().padStart(2, "0")}`;
     }
     timeupdateAudio(tu) {
         this.Timing = Math.floor(this.TsunamiAudio.currentTime);

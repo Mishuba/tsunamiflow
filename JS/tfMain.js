@@ -255,8 +255,4 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 });
 //Tsunami Thoughts Ends
 
-
-
 //Start non web worker stuff
-
-
