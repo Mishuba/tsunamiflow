@@ -289,6 +289,10 @@ async function fetchRadioArrayBuffer(file) {
             });
         };
         phpRadio.send();
+    } catch (e) {
+        console.error(e);
+    } finally {
+
     }
 }
 let Radio = new TfMusic();
@@ -316,6 +320,8 @@ onmessage = async (event) => {
         } else if (event.data.system === "ended") {
             TheLastSongUsed = CurrentSong;
             fetchRadioSongs();
+        } else if (event.data.system === "pcm") {
+
         }
     } else if (event.data.type === "stream") {
         //Streaming Chuncks

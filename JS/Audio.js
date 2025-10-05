@@ -9,7 +9,41 @@ export class TfMusic {
         this.TsunamiRestartButton = Restart;
         this.TsunamiStartButton = Start;
         this.TsunamiSkipButton = Skip;
+        this.textTrackOptions = {
+            kind: "subtitles", // caption, descriptions, chapters, metadata
+            label: "name",
+            language: "en", //
+        };
         this.TsunamiRadioAudio = new (window.AudioContext() || window.webkitAudioContext)();
+        this.TsunamiGain = this.TsunamiRadioAudio.createGain();
+        this.audioAnalyzerOptions = {
+            fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
+            maxDecibels: 0, // 0 is the loudest
+            minDecibels: -100, // 0 is the loudest 
+            smoothingTimeConstant: 0.5, // between 0 and 1
+            //channelCount: ,
+            channelCountMode: "max",
+            //channelInterpretation: ,
+            //
+        };
+        this.TsunamiAnalyser = this.TsunamiRadioAudio.createAnalyser(this.audioAnalyzerOptions);
+        this.periodicWaveOptions = {
+            //channelCount: 2,
+            //channelCountMode: "max",
+            //channelInterpretation: "speakers",
+            disableNormalization: true,
+        };
+        this.TsunamiPanner = this.TsunamiRadioAudio.createStereoPanner();
+        this.TsunamiDelay = this.TsunamiRadioAudio.createDelay();
+        this.TsunamiCompressor = this.TsunamiRadioAudio.createDynamicsCompressor();
+        this.TsunamiRadioMedia;
+        this.TFpwoImag;
+        this.TFaudioBuffer;
+        this.RadioChannel1;
+        this.TfRcCopy1;
+        this.RadioChannel2;
+        this.TsunamiCtxSrc;
+        this.TfNextPlayTime = 0;
         this.RadioCanvas = TfCanvas;
         this.canvas;
         this.x;
@@ -29,37 +63,11 @@ export class TfMusic {
         this.minutes;
         this.seconds;
         this.RadioLoadStartTime;
-        this.RadioAnalyser;
         this.RadioSrc;
         this.TsunamiRadioBufferLength;
-        this.TsunamiRadioBufferLength;
         this.hour;
-        this.minute;
         this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-        this.textTrackOptions = {
-            kind: "subtitles", // caption, descriptions, chapters, metadata
-            label: "name",
-            language: "en", //
-        };
-        this.audioAnalyzerOptions = {
-            fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
-            maxDecibels: 0, // 0 is the loudest
-            minDecibels: -100, // 0 is the loudest 
-            smoothingTimeConstant: 0.5, // between 0 and 1
-            //channelCount: ,
-            channelCountMode: "max",
-            //channelInterpretation: ,
-            //
-        };
-        this.periodicWaveOptions = {
-            //channelCount: 2,
-            //channelCountMode: "max",
-            //channelInterpretation: "speakers",
-            disableNormalization: true,
-        };
         this.TFpowReal = new Float32Array(2);
-        this.TFpwoImag = new Float32Array(2);
-        this.TFaudioBuffer = new ArrayBuffer(32);
         this.TFtestingF32A = new Float32Array(this.TFaudioBuffer, 4, 4);
         //this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
@@ -97,7 +105,7 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
-        this.worker = new Worker("../'Web Worker'/TsunamiRadio.js");
+        //this.worker = new Worker("../'Web Worker'/TsunamiRadio.js");
     }
     tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
@@ -139,7 +147,7 @@ export class TfMusic {
 
         //this.RadioAnalyser.getFloatTimeDomainData(this.TsunamiRadioDataArray);
         //this.RadioAnalyser.getByteTimeDomainData(this.TsunamiRadioDataArray);
-        this.RadioAnalyser.getByteFrequencyData(this.TsunamiRadioDataArray);
+        this.TsunamiAnalyser.getByteFrequencyData(this.TsunamiRadioDataArray);
 
         ctx.fillStyle = "rgb(10, 10, 30)";
         ctx.fillRect(0, 0, this.RadioCanvas.width, this.RadioCanvas.height);
@@ -383,10 +391,10 @@ export class TfMusic {
         }
         return this.SongList;
     }
-    MusicState(context) {
-        if (context.state === "suspended") {
+    MusicState() {
+        if (this.TsunamiRadioAudio.state === "suspended") {
             context.resume();
-        } else if (context.state === "running") {
+        } else if (this.TsunamiRadioAudio.state === "running") {
             console.log("The audio context state is running");
             if (this.TsunamiAudio.waiting) {
                 context.suspend();
@@ -398,28 +406,26 @@ export class TfMusic {
             }
         }
     }
-    emptiedAudio() {
+    emptiedAudio(empty) {
         console.log("The audio is empty");
     }
-    loadstartAudio() {
+    loadstartAudio(ls) {
         this.RadioLoadStartTime = Date.now();
+        console.log("Load start time recorded:", this.RadioLoadStartTime);
     }
-    loadedmetadataAudio(context) {
-        this.RadioSrc = context.createMediaElementSource(this.TsunamiAudio);
-        this.RadioAnalyser = context.createAnalyser();
-        this.RadioAnalyser.fftSize = 2048;
-        this.TsunamiRadioBufferLength = this.RadioAnalyser.frequencyBinCount;
+    loadedmetadataAudio(lmd) {
+        //this.RadioAnalyser.fftSize = 2048;
+        this.TsunamiRadioBufferLength = this.TsunamiAnalyser.frequencyBinCount;
         this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);
 
-        this.RadioSrc.connect(this.RadioAnalyser);
-        this.RadioAnalyser.connect(this.context.destination);
-
+        //this.TsunamiCtxSrc = this.TsunamiRadioAudio.createMediaElementSource(this.TsunamiAudio);
+        this.TfRadioConnectNow();
         this.MusicState();
     }
-    loadeddataAudio() {
+    loadeddataAudio(od) {
         console.log("The audio data is loaded");
     }
-    canplayAudio() {
+    canplayAudio(cp) {
         this.MusicState();
         if (this.RadioCanvas !== null) {
             this.Visualizator();
@@ -427,24 +433,24 @@ export class TfMusic {
             this.Visualizator();
         }
     }
-    canplaythroughAudio() {
+    canplaythroughAudio(cpt) {
         this.MusicState();
         this.startMusic();
     }
-    playAudio() {
+    playAudio(play) {
         this.MusicState();
 
     }
-    pauseAudio() {
+    pauseAudio(paused) {
         this.MusicState();
     }
-    endedAudio() {
+    endedAudio(ended) {
         console.log("The audio should have ended");
     }
-    waitingAudio() {
+    waitingAudio(waiting) {
         this.MusicState();
     }
-    playingAudio() {
+    playingAudio(playing) {
         this.MusicState();
     }
     stalledAudio(stalled) {
@@ -458,7 +464,7 @@ export class TfMusic {
         this.seconds = second % 60;
         return `${this.minutes}:${seconds.toString().padStart(2, "0")}`;
     }
-    timeupdateAudio() {
+    timeupdateAudio(tu) {
         this.Timing = Math.floor(this.TsunamiAudio.currentTime);
         this.RadioProcessBar = (this.TsunamiAudio.currentTime / this.TsunamiAudio.duration) * 100;
         this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
@@ -481,69 +487,117 @@ export class TfMusic {
         console.log(this.SongList1st + " is the source of the current song.");
         return this.SongList1st;
     }
+    HandleArrayBuffer(buffer) {
+        if (this.TsunamiRadioAudio.state === "suspended") {
+            this.TsunamiRadioAudio.resume();
+
+            try {
+                this.TFaudioBuffer = this.TsunamiRadioAudio.decodeAudioData(buffer);
+
+                //this.RadioChannel1 = this.TFaudioBuffer.getChannelData(0);
+                //this.TfRcCopy1 = new Float32Array(this.RadioChannel1);
+
+                //this.RadioChannel2 = this.TFaudioBuffer.getChannelData(1);
+            } catch (error) {
+
+                console.error("Error decoding audio data: ", error);
+            } finally {
+                return this.TfRcCopy1;
+            }
+        }
+    }
     RadioWorkerArrayBuffer(buffer) {
-        this.TsunamiRadioAudio;
+        //decode audio data (get AudioBuffer);
+        let decode = this.HandleArrayBuffer(buffer);
+        //Visualizator
+        this.TFpwoImag = new Float32Array(buffer);
+        return decode;
+    }
+    TfScheduleBuffer(buffer) {
+        this.TsunamiCtxSrc = this.TsunamiRadioAudio.createBufferSource();
+        this.TsunamiCtxSrc.buffer = buffer;
+    }
+    TfRadioConnectNow(element) {
+        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(element);
+        this.TsunamiRadioMedia.connect(this.TsunamiAnalyser);
+        //this.TsunamiAnalyser.connect(this.TsunamiPanner);
+        //this.TsunamiPanner.connect(this.TsunamiDelay);
+        //this.TsunamiDelay.connect(this.TsunamiCompressor);
+        //this.TsunamiCompressor.connect(this.TsunamiGain);
+        this.TsunamiAnalyser.connect(this.TsunamiRadioAudio.destination);
+    }
+    TfRadioCreateContexts() {
+        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(element);
+        
     }
     TfRadioEventListeners() {
 
-        this.TsunamiAudio.addEventListener("emptied", () => {
+        this.TsunamiCtxSrc.addEventListener("emptied", async (emptied) => {
+            this.emptiedAudio(emptied);
+        }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
-        }); //The media has become empty; for example, this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
-
-        this.TsunamiAudio.addEventListener("loadstart", async () => {
-
+        this.TsunamiCtxSrc.addEventListener("loadstart", async (loadstart) => {
+            this.loadstartAudio(loadstart);
         }); // Fired when the browser has started to load the resource.
 
-        this.TsunamiAudio.addEventListener("loadedmetadata", async () => {
-
+        this.TsunamiCtxSrc.addEventListener("loadedmetadata", async (metadata) => {
+            this.loadedmetadataAudio(metadata);
         }); //The metadata has been loaded.
 
-        this.TsunamiAudio.addEventListener("loadeddata", () => {
-
+        this.TsunamiCtxSrc.addEventListener("loadeddata", (data) => {
+            this.loadeddataAudio(data);
         }); //The first frame of the media has finished loading.
 
-        this.TsunamiAudio.addEventListener("canplay", () => {
-
+        this.TsunamiCtxSrc.addEventListener("canplay", (canplay) => {
+            this.canplayAudio(canplay);
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
-        this.TsunamiAudio.addEventListener("canplaythrough", async () => {
-
+        this.TsunamiCtxSrc.addEventListener("canplaythrough", async (canplaythrough) => {
+            this.canplaythroughAudio(canplaythrough);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
-        this.TsunamiAudio.addEventListener("play", () => {
-
+        this.TsunamiCtxSrc.addEventListener("play", (play) => {
+            this.playAudio(play);
         }); //Playback has begun.
 
-        this.TsunamiAudio.addEventListener("pause", () => {
-
+        this.TsunamiCtxSrc.addEventListener("pause", (pause) => {
+            this.pauseAudio(pause);
         }); // Playback has been paused.
 
-        this.TsunamiAudio.addEventListener("ended", async () => {
-
+        this.TsunamiCtxSrc.addEventListener("ended", async (ended) => {
+            this.endedAudio(ended);
         }); //Playback has stopped because of the end of the media was reached.
 
-        this.TsunamiAudio.addEventListener("waiting", (waiting) => {
+        this.TsunamiCtxSrc.addEventListener("waiting", (waiting) => {
             console.log("The audio has been waiting because: " + waiting);
+            this.waitingAudio(waiting);
         }); //Playback has stopped because of a temporary lack of data.
 
-        this.TsunamiAudio.addEventListener("playing", () => {
-
+        this.TsunamiCtxSrc.addEventListener("playing", (playing) => {
+            this.playingAudio(playing);
         }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
-        this.TsunamiAudio.addEventListener("stalled", (stalled) => {
+        this.TsunamiCtxSrc.addEventListener("stalled", (stalled) => {
             console.log("the audio has stalled because: " + stalled);
+            this.stalledAudio(stalled);
         });//The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
 
-        this.TsunamiAudio.addEventListener("suspended", (suspend) => {
+        this.TsunamiCtxSrc.addEventListener("suspended", (suspend) => {
             console.log("The audio has suspened because:" + suspend);
+            this.suspendAudio(suspend);
         }); //Media data loading has been suspended.
 
-        this.TsunamiAudio.addEventListener("timeupdate", () => {
-
+        this.TsunamiCtxSrc.addEventListener("timeupdate", (timeupdate) => {
+            this.timeupdateAudio(timeupdate);
         }); //The time indicated by the currentTime attribute has been updated.
 
-        this.TsunamiAudio.addEventListener("volumechange", () => {
-
+        this.TsunamiCtxSrc.addEventListener("volumechange", (volumechange) => {
+            this.volumechangeAudio(volumechange);
         });
+    }
+    BeginRadio(song) {
+        this.TsunamiAudio.src = song;
+        this.TfRadioConnectNow(this.TsunamiAudio);
+        this.TfRadioEventListeners();
     }
 }

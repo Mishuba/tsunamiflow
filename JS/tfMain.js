@@ -190,16 +190,24 @@ if (typeof (Worker) !== "undefined") {
                 if (event.data.type === "radio") {
                     if (event.data.system === "file") {
                         let update = Radio.RadioWorkerReceivedMessage(event);
+                        Radio.BeginRadio(update);
+                    } else if (event.data.system === "arraybuffer") {
+                        Radio.TfScheduleBuffer(event.data.buffer);
+                        let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer);
+                        Radio.TfRadioConnectNow();
+
+                        Radio.TfRadioEventListeners();
 
                         RadioWorker.postMessage({
                             type: "radio",
-                            system: "start",
-                            file: update,
-                            message: "the file",
-                            buffer: "starting now"
-                        });
-                    } else if (event.data.system === "arraybuffer") {
-                        let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer);
+                            system: "pcm",
+                            file: "playing now",
+                            message: "the buffer",
+                            buffer: usebuffer,
+                            sampleRate: event.data.buffer.sampleRate
+                        }, [usebuffer]);
+                    } else if (event.data.system === "pcm") {
+
                     }
                 }
             };
