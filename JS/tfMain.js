@@ -178,7 +178,7 @@ if (typeof (Worker) !== "undefined") {
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
                 document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWorker);
+                Radio.MusicNetworkState(RadioWorker.Radio.TsunamiAudio);
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();
@@ -189,15 +189,14 @@ if (typeof (Worker) !== "undefined") {
             RadioWorker.onmessage = async function (event) {
                 if (event.data.type === "radio") {
                     if (event.data.system === "file") {
-
                         let update = Radio.RadioWorkerReceivedMessage(event);
                         Radio.BeginRadio(update, RadioWorker);
                     } else if (event.data.system === "arraybuffer") {
                         Radio.TfScheduleBuffer(event.data.buffer);
                         let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer);
-                        Radio.TfRadioConnectNow();
+                        //Radio.TfRadioConnectNow();
 
-                        Radio.TfRadioEventListeners();
+                        //Radio.TfRadioEventListeners();
 
                         RadioWorker.postMessage({
                             type: "radio",

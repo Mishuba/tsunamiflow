@@ -44,9 +44,9 @@ export class TfMusic {
         this.TfRcCopy1;
         this.RadioChannel2;
         this.TsunamiCtxSrc;
+        this.TsunamiRadioDataArray;
         this.TfNextPlayTime = 0;
         this.RadioCanvas = TfCanvas;
-        this.canvas;
         this.x;
         this.y;
         this.dx; // x velocity
@@ -61,15 +61,8 @@ export class TfMusic {
         this.Timing;
         this.RadioProcessBar;
         this.TaudioFtime;
-        this.minutes;
-        this.seconds;
-        this.RadioLoadStartTime;
-        this.RadioSrc;
         this.TsunamiRadioBufferLength;
-        this.hour;
         this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-        this.TFpowReal = new Float32Array(2);
-        this.TFtestingF32A = new Float32Array(this.TFaudioBuffer, 4, 4);
         //this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
         //this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
@@ -111,69 +104,69 @@ export class TfMusic {
     tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
     }
-    particle() {
+    particle(canvas, x, y, dx, dy, radius, color, particles) {
         for (let i = 0; i < 100; i++) {
-            this.x = Math.random() * this.RadioCanvas.width;
-            this.y = Math.random() * this.RadioCanvas.height;
-            this.dx = (Math.random() - 0.5) * 0.5;
-            this.dy = (Math.random() - 0.5) * 0.5;
-            this.radius = Math.random() * 0.5 + 0.2;
-            this.color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-            this.particles.push(this.tfParticles(this.x, this.y, this.dx, this.dy, this.radius, this.color));
+            x = Math.random() * canvas.width;
+            y = Math.random() * canvas.height;
+            dx = (Math.random() - 0.5) * 0.5;
+            dy = (Math.random() - 0.5) * 0.5;
+            radius = Math.random() * 0.5 + 0.2;
+            color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
+            particles.push(this.tfParticles(x, y, dx, dy, radius, color));
         }
     }
-    update(volume) {
-        this.radius = this.baseRadius + volume / 80; // pulse based on volume
-        this.x += this.dx;
-        this.y += this.dy;
+    update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
+        radius = baseRadius + volume / 80; // pulse based on volume
+        x += dx;
+        y += dy;
 
         // bounce off edges
-        if (this.x + this.radius > this.RadioCanvas.width || this.x - this.radius < 0) {
-            this.dx = -this.dx;
+        if (x + radius > canvas.width || x - radius < 0) {
+            dx = -dx;
         }
-        if (this.y + this.radius > this.RadioCanvas.height || this.y - this.radius < 0) {
-            this.dy = -this.dy;
+        if (y + radius > canvas.height || y - radius < 0) {
+            dy = -dy;
         }
     }
-    draw(ctx) {
+    draw(ctx, x, y, radius, color) {
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        ctx.shadowColor = this.color;
+        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+        ctx.fillStyle = color;
+        ctx.shadowColor = color;
         ctx.shadowBlur = 20;
         ctx.fill();
     }
-    hereDude(ctx) {
-        ctx.clearRect(0, 0, this.RadioCanvas.width, this.RadioCanvas.height);
+    hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        //this.RadioAnalyser.getFloatTimeDomainData(this.TsunamiRadioDataArray);
-        //this.RadioAnalyser.getByteTimeDomainData(this.TsunamiRadioDataArray);
-        this.TsunamiAnalyser.getByteFrequencyData(this.TsunamiRadioDataArray);
+        //analyser.getFloatTimeDomainData(this.TsunamiRadioDataArray);
+        //analyser.getByteTimeDomainData(this.TsunamiRadioDataArray);
+        analyser.getByteFrequencyData(dataArray);
 
         ctx.fillStyle = "rgb(10, 10, 30)";
-        ctx.fillRect(0, 0, this.RadioCanvas.width, this.RadioCanvas.height);
+        ctx.fillRect(0, 0, canvas, canvas.height);
 
         //Get Average volume for particle reaction
         let CtxTotal = 0;
-        for (let i = 0; i < this.TsunamiRadioDataArray.length; i++) {
-            CtxTotal += this.TsunamiRadioDataArray[i];
+        for (let i = 0; i < dataArray.length; i++) {
+            CtxTotal += dataArray[i];
         }
-        let averageVolume = CtxTotal / this.TsunamiRadioDataArray.length;
+        let averageVolume = CtxTotal / dataArray.length;
 
-        for (let i = 0; i < this.particles.length; i++) {
-            this.particles[i].update(averageVolume);
-            this.particles[i].draw(ctx);
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
+            particles[i].draw(ctx, x, y, radius, color);
         }
 
-        let barWidth = (100 / this.TsunamiRadioBufferLength) * 2.5;
+        let barWidth = (100 / bufferLength) * 2.5;
         let barHeight;
         let CtxX = 0;
 
-        for (let i = 0; i < this.TsunamiRadioBufferLength; i++) {
-            barHeight = this.TsunamiRadioDataArray[i];
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
 
-            let CtxR = barHeight + 25 * (i / this.TsunamiRadioBufferLength);
-            let CtxG = 250 * (i / this.TsunamiRadioBufferLength);
+            let CtxR = barHeight + 25 * (i / bufferLength);
+            let CtxG = 250 * (i / bufferLength);
             let CtxB = 50;
 
             ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
@@ -182,19 +175,19 @@ export class TfMusic {
             CtxX += barWidth + 1;
         }
 
-        this.visualizatorController = requestAnimationFrame(this.hereDude);
+        this.visualizatorController = requestAnimationFrame(async () => this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles));
     }
-    Visualizer() {
-        let ctx = this.RadioCanvas.getContext("2d");
-        this.particle();
-        this.hereDude(ctx);
+    Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
+        this.particle(canvas, x, y, dx, dy, radius, color, particles);
+        let ctx = canvas.getContext("2d");
+        this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles);
     }
     StopVisualizator() {
         cancelAnimationFrame(this.visualizationController)
     }
-    startMusic() {
-        if (this.TsunamiAudio.paused) {
-            this.TsunamiAudio.play().catch(async (error) => {
+    startMusic(element) {
+        if (element.paused) {
+            element.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
                     console.log("Autoplay is blocked. Please interact with the page to start the radio.");
                 } else {
@@ -202,7 +195,7 @@ export class TfMusic {
                 }
             });
         } else {
-            this.TsunamiAudio.play().catch(async (error) => {
+            element.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
                     console.log("Autoplay is blocked. Please interact with the page to start the radio.");
                 } else {
@@ -211,166 +204,169 @@ export class TfMusic {
             });
         }
     }
-    stopMusic() {
-        if (!this.TsunamiAudio.paused) {
-            this.TsunamiAudio.pause();
+    stopMusic(element) {
+        if (!element.paused) {
+            element.pause();
         }
     }
-    previousSong(music) {
-        this.TsunamiAudio.src = music;
-        this.TsunamiAudio.play();
+    previousSong(element, music) {
+        element.src = music;
+        element.play();
     }
-    restartSong(music) {
-        this.TsunamiAudio.src = music;
-        this.TsunamiAudio.play();
+    restartSong(element, music) {
+        element.src = music;
+        element.play();
     }
     TFgameIterable() {
         //yield * [1, 2, 3];
     }
-    TsunamiRadioReady(RadioWorker) {
-        this.TsunamiRadioTitle.innerHTML = "Welcome to TFN Radio";
+    TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
+        title.innerHTML = "Welcome to TFN Radio";
 
-        this.TsunamiLastButton.id = "TFradioPreviousButton";
-        this.TsunamiLastButton.innerHTML = "Previous";
-        this.TsunamiLastButton.addEventListener("click", async () => {
+        last.id = "TFradioPreviousButton";
+        last.innerHTML = "Previous";
+        last.addEventListener("click", async () => {
+            /*
             RadioWorker.postMessage({
                 type: "radio",
                 system: "previous",
-                file: this.TsunamiAudio.src
+                file: "not done yet"
             });
+            */
+            //this.previousSong(element, oldSong);
         });
-        this.TsunamiRadioButtons.appendChild(this.TsunamiLastButton);
+        buttonSpot.appendChild(last);
 
-        this.TsunamiRestartButton.id = "TFRadioRestartButton";
-        this.TsunamiRestartButton.innerHTML = "Restart";
-        this.TsunamiRestartButton.addEventListener("click", async () => {
-            //something like timeupdate = 0 or something.
+        restart.id = "TFRadioRestartButton";
+        restart.innerHTML = "Restart";
+        restart.addEventListener("click", async () => {
+            this.restartSong(element, element.src)
+            //element.src = element.src;
         });
-        this.TsunamiRadioButtons.appendChild(this.TsunamiRestartButton);
+        buttonSpot.appendChild(restart);
 
-        this.TsunamiStartButton.id = "TFradioButton";
-        this.TsunamiStartButton.innerHTML = "Start Radio";
-        this.TsunamiStartButton.addEventListener("click", async () => {
-            if (this.TsunamiAudio.paused) {
-                this.startMusic();
-                this.TsunamiStartButton.innerHTML = "Pause Tsuanmi Radio";
+        start.id = "TFradioButton";
+        start.innerHTML = "Start Radio";
+        start.addEventListener("click", async () => {
+            if (element.paused) {
+                this.startMusic(element);
+                start.innerHTML = "Pause Tsuanmi Radio";
             } else {
-                this.stopMusic();
-                this.TsunamiStartButton.innerHTML = "Play Tsunami Radio";
+                this.stopMusic(element);
+                start.innerHTML = "Play Tsunami Radio";
             }
         });
-        this.TsunamiRadioButtons.appendChild(this.TsunamiStartButton);
+        buttonSpot.appendChild(start);
 
-
-        this.TsunamiSkipButton.id = "TFradioSkipButton";
-        this.TsunamiSkipButton.innerHTML = "Next";
-        this.TsunamiSkipButton.addEventListener("click", async () => {
+        skip.id = "TFradioSkipButton";
+        skip.innerHTML = "Next";
+        skip.addEventListener("click", async () => {
             RadioWorker.postMessage({
                 type: "radio",
                 system: "skip",
-                file: this.TsunamiAudio.src
+                file: "not done yet."
             })
         });
-        this.TsunamiRadioButtons.appendChild(this.TsunamiSkipButton);
+        buttonSpot.appendChild(skip);
     }
-    MusicNetworkState(RadioWorker) {
-        if (this.TsunamiAudio.readyState === 0) {
+    MusicNetworkState(RadioWorker, element) {
+        if (element.readyState === 0) {
             console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-            if (this.TsunamiAudio.networkState == 0) {
+            if (element.networkState == 0) {
                 console.log("Radio networkState has NETWORK_EMPTY");
-                if (this.TsunamiAudio.src == "") {
+                if (element.src == "") {
                     console.log("The radio source is ''");
                     RadioWorker.postMessage({ type: "radio", system: "file", file: "none", message: "the radio source is ''", buffer: "nothing should be buffering." });
-                } else if (!this.TsunamiAudio.src) {
+                } else if (!element.src) {
                     ("The radio source does not exist");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
-                } else if (this.TsunamiAudio.src == " ") {
+                } else if (element.src == " ") {
                     console.log("The radio source is ' '");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
-                } else if (this.TsunamiAudio.src == "about:blank") {
+                } else if (element.src == "about:blank") {
                     console.log("The radio source is about:blank");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
                 }
                 else {
                     console.log("Something else is going on and I dont know what it is.");
                 }
-            } else if (this.TsunamiAudio.networkState == 2) {
+            } else if (element.networkState == 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TsunamiAudio.networkState == 3) {
+            } else if (element.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
                 RadioWorker.postMessage({ type: "radio", system: "file" });
             }
-        } else if (this.TsunamiAudio.readyState === 1) {
+        } else if (element.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
-            if (this.TsunamiAudio.networkState == 1) {
+            if (element.networkState == 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TsunamiAudio.networkState == 2) {
+            } else if (element.networkState == 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TsunamiAudio.networkState == 3) {
+            } else if (element.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
                 //No valid source
             }
-        } else if (this.TsunamiAudio.readyState === 2) {
+        } else if (element.readyState === 2) {
             console.log("Radio readyState is HAVE_CURRENT_DATA");
-            if (this.TsunamiAudio.networkState == 1) {
+            if (element.networkState == 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TsunamiAudio.networkState == 2) {
+            } else if (element.networkState == 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TsunamiAudio.networkState == 3) {
+            } else if (element.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
                 //No valid source
             }
-        } else if (this.TsunamiAudio.readyState === 3) {
+        } else if (element.readyState === 3) {
             console.log("Radio readyState is HAVE_FUTURE_DATA");
-            if (this.TsunamiAudio.networkState == 1) {
+            if (element.networkState == 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TsunamiAudio.networkState == 3) {
+            } else if (element.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
                 //No valid source
             }
-        } else if (this.TsunamiAudio.readyState === 4) {
+        } else if (element.readyState === 4) {
             console.log("Radio readyState is HAVE_ENOUGH_DATA");
-            if (this.TsunamiAudio.networkState == 1) {
+            if (element.networkState == 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TsunamiAudio.networkState == 2) {
+            } else if (element.networkState == 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TsunamiAudio.networkState == 3) {
+            } else if (element.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
                 //No valid source
             }
 
-            if (this.TsunamiAudio.ended) {
-                if (this.TsunamiAudio.src = "") {
+            if (element.ended) {
+                if (element.src = "") {
 
-                } else if (this.TsunamiAudio.src = undefined) {
+                } else if (element.src = undefined) {
 
-                } else if (!this.TsunamiAudio.src) {
+                } else if (!element.src) {
 
                 } else {
                     RadioWorker.postMessage({ type: "radio", system: "skip" });
                 }
             } else {
-                if (this.TsunamiAudio.paused) {
-                    if (this.TsunamiAudio.currentTime === 0) {
+                if (element.paused) {
+                    if (element.currentTime === 0) {
                         console.log("Tsunami Radio has not started yet.");
                     } else {
-                        console.log("Paused at " + this.TsunamiAudio.currentTime);
+                        console.log("Paused at " + element.currentTime);
                     }
                 } else {
                     console.log("A song is still playing. Make the next song play using the functions");
                 }
             }
         } else {
-            if (this.TsunamiAudio.networkState === 3) {
+            if (element.networkState === 3) {
                 console.log("The network could not find the source.");
                 RadioWorker.postMessage({ type: "radio", system: "file" });
             } else {
@@ -400,83 +396,83 @@ export class TfMusic {
         }
         return this.SongList;
     }
-    MusicState() {
-        if (this.TsunamiRadioAudio.state === "suspended") {
-            this.TsunamiRadioAudio.resume();
-        } else if (this.TsunamiRadioAudio.state === "running") {
+    MusicState(element, context) {
+        if (context.state === "suspended") {
+            context.resume();
+        } else if (context.state === "running") {
             console.log("The audio context state is running");
-            if (this.TsunamiAudio.waiting) {
-                this.TsunamiRadioAudio.suspend();
+            if (element.waiting) {
+                context.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
-            if (this.TsunamiAudio.pause) {
+            if (element.pause) {
                 this.StopVisualizator();
             }
         }
     }
     emptiedAudio(empty) {
-        console.log("The audio is empty");
+        console.log("The audio is empty" + empty);
     }
-    loadstartAudio(ls) {
-        this.RadioLoadStartTime = Date.now();
-        console.log("Load start time recorded:", this.RadioLoadStartTime);
+    loadstartAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
+        let RadioLoadStartTime = Date.now();
+        console.log("Load start time recorded:", RadioLoadStartTime);
+        this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain);
     }
-    loadedmetadataAudio(lmd) {
+    loadedmetadataAudio(element, RadioBufferLength, Analyser, DataArray, context, mediasource, panner, delay, compressor, gain) {
         //this.RadioAnalyser.fftSize = 2048;
-        this.TsunamiRadioBufferLength = this.TsunamiAnalyser.frequencyBinCount;
-        this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);
+        RadioBufferLength = Analyser.frequencyBinCount;
+        DataArray = new Uint8Array(RadioBufferLength);
 
-        this.TfRadioCreateContexts(this.TsunamiAudio);
-        this.TfRadioConnectNow();
-        this.MusicState();
+
+        this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain);
+        this.MusicState(element, context);
     }
-    loadeddataAudio(od) {
+    loadeddataAudio() {
         console.log("The audio data is loaded");
     }
-    canplayAudio(cp) {
-        this.MusicState();
-        if (this.RadioCanvas !== null) {
-            this.Visualizator();
+    canplayAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
+        this.MusicState(element, context);
+        if (canvas !== null) {
+            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
         } else {
-            this.Visualizator();
+            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
         }
     }
-    canplaythroughAudio(cpt) {
-        this.MusicState();
-        this.startMusic();
+    canplaythroughAudio(element, context) {
+        this.MusicState(element, context);
+        this.startMusic(element);
     }
-    playAudio(play) {
-        this.MusicState();
-
+    playAudio(element, context) {
+        this.MusicState(element, context);
     }
-    pauseAudio(paused) {
-        this.MusicState();
+    pauseAudio(element, context) {
+        this.MusicState(element, context);
     }
     endedAudio(ended) {
         console.log("The audio should have ended");
     }
-    waitingAudio(waiting) {
-        this.MusicState();
+    waitingAudio(element, context) {
+        this.MusicState(element, context);
     }
-    playingAudio(playing) {
-        this.MusicState();
+    playingAudio(element, context) {
+        this.MusicState(element, context);
     }
     stalledAudio(stalled) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
     }
     suspendedAudio(suspend) {
-        console.log("The audio is suspended");
+        console.log("The audio is suspended" + suspend);
     }
     FormatAudioTime(second) {
-        this.minutes = Math.floor(second / 60);
-        this.seconds = second % 60;
-        return `${this.minutes}:${this.seconds.toString().padStart(2, "0")}`;
+        let minutes = Math.floor(second / 60);
+        let seconds = second % 60;
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }
-    timeupdateAudio(tu) {
-        this.Timing = Math.floor(this.TsunamiAudio.currentTime);
-        this.RadioProcessBar = (this.TsunamiAudio.currentTime / this.TsunamiAudio.duration) * 100;
-        this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
+    timeupdateAudio(element, timing, radioProcessBar, time) {
+        timing = Math.floor(element.currentTime);
+        radioProcessBar = (element.currentTime / element.duration) * 100;
+        time = `Time: ${this.FormatAudioTime(timing)}`
     }
     volumechangeAudio() {
         console.log("The volume has changed");
@@ -525,55 +521,56 @@ export class TfMusic {
         this.TsunamiCtxSrc = this.TsunamiRadioAudio.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
     }
-    TfRadioConnectNow(element) {
-        this.TsunamiRadioAudio = new AudioContext();
-        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(element);
-        this.TsunamiRadioMedia.connect(this.TsunamiAnalyser);
-        //this.TsunamiAnalyser.connect(this.TsunamiPanner);
-        //this.TsunamiPanner.connect(this.TsunamiDelay);
-        //this.TsunamiDelay.connect(this.TsunamiCompressor);
-        //this.TsunamiCompressor.connect(this.TsunamiGain);
-        this.TsunamiAnalyser.connect(this.TsunamiRadioAudio.destination);
+    TfRadioConnectNow(context, ctxSource, analyzer, panner, delay, compressor, gain) {
+        ctxSource.connect(analyzer);
+        //analyzer.connect(panner);
+        //panner.connect(delay);
+        //delay.connect(compressor);
+        //compressor.connect(gain);
+        analyzer.connect(context.destination);
     }
-    TfRadioCreateContexts() {
-        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(element);
-        this.TsunamiAnalyser = this.TsunamiRadioAudio.createAnalyser(this.audioAnalyserOptions);
-        this.TsunamiPanner = this.TsunamiRadioAudio.createStereoPanner();
-        this.TsunamiDelay = this.TsunamiRadioAudio.createDelay();
-        this.TsunamiCompressor = this.TsunamiRadioAudio.createDynamicsCompressor();
+    TfRadioCreateContexts(element, context, ctxSource, analyzer, panner, delay, compressor, gain) {
+        context = new AudioContext();
+        ctxSource = context.createMediaElementSource(element);
+        analyzer = context.createAnalyser(this.audioAnalyserOptions);
+        panner = context.createStereoPanner();
+        delay = context.createDelay();
+        compressor = context.createDynamicsCompressor();
+        gain = context.createGain();
     }
-    TfRadioEventListeners(element) {
-
+    TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, panner, delay, compressor, gain, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
+        this.TsunamiRadioReady(worker, element.src, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
         element.addEventListener("emptied", async (emptied) => {
             this.emptiedAudio(emptied);
         }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
-        element.addEventListener("loadstart", async (loadstart) => {
-            this.loadstartAudio(loadstart);
+        element.addEventListener("loadstart", async () => {
+            this.loadstartAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
+            this.MusicNetworkState(worker);
         }); // Fired when the browser has started to load the resource.
 
-        element.addEventListener("loadedmetadata", async (metadata) => {
-            this.loadedmetadataAudio(metadata);
+        element.addEventListener("loadedmetadata", async () => {
+            this.loadedmetadataAudio(element, bufferLength, analyser, dataArray, audiocontext, audioctx, panner, delay, compressor, gain);
         }); //The metadata has been loaded.
 
         element.addEventListener("loadeddata", (data) => {
             this.loadeddataAudio(data);
         }); //The first frame of the media has finished loading.
 
-        element.addEventListener("canplay", (canplay) => {
-            this.canplayAudio(canplay);
+        element.addEventListener("canplay", () => {
+            this.canplayAudio(element, audiocontext, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
-        element.addEventListener("canplaythrough", async (canplaythrough) => {
-            this.canplaythroughAudio(canplaythrough);
+        element.addEventListener("canplaythrough", async () => {
+            this.canplaythroughAudio(element, audiocontext);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
-        element.addEventListener("play", (play) => {
-            this.playAudio(play);
+        element.addEventListener("play", () => {
+            this.playAudio(element, audiocontext);
         }); //Playback has begun.
 
-        element.addEventListener("pause", (pause) => {
-            this.pauseAudio(pause);
+        element.addEventListener("pause", () => {
+            this.pauseAudio(element, audiocontext);
         }); // Playback has been paused.
 
         element.addEventListener("ended", async (ended) => {
@@ -582,11 +579,11 @@ export class TfMusic {
 
         element.addEventListener("waiting", (waiting) => {
             console.log("The audio has been waiting because: " + waiting);
-            this.waitingAudio(waiting);
+            this.waitingAudio(audiocontext);
         }); //Playback has stopped because of a temporary lack of data.
 
-        element.addEventListener("playing", (playing) => {
-            this.playingAudio(playing);
+        element.addEventListener("playing", () => {
+            this.playingAudio(element, audiocontext);
         }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
         element.addEventListener("stalled", (stalled) => {
@@ -599,8 +596,8 @@ export class TfMusic {
             this.suspendAudio(suspend);
         }); //Media data loading has been suspended.
 
-        element.addEventListener("timeupdate", (timeupdate) => {
-            this.timeupdateAudio(timeupdate);
+        element.addEventListener("timeupdate", () => {
+            this.timeupdateAudio(element, timing, processBar, someTime);
         }); //The time indicated by the currentTime attribute has been updated.
 
         element.addEventListener("volumechange", (volumechange) => {
@@ -609,7 +606,6 @@ export class TfMusic {
     }
     BeginRadio(song, worker) {
         this.TsunamiAudio.src = song;
-        this.TfRadioEventListeners(this.TsunamiAudio);
-        this.TsunamiRadioReady(worker);
+        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
     }
 }
