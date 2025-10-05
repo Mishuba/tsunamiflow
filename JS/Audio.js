@@ -29,9 +29,9 @@ export class TfMusic {
         };
         this.TsunamiAnalyser;
         this.periodicWaveOptions = {
-            //channelCount: 2,
-            //channelCountMode: "max",
-            //channelInterpretation: "speakers",
+            channelCount: 2,
+            channelCountMode: "max",
+            channelInterpretation: "speakers",
             disableNormalization: true,
         };
         this.TsunamiPanner;
