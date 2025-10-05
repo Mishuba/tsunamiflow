@@ -246,7 +246,7 @@ export class TfMusic {
         this.TsunamiRestartButton.addEventListener("click", async () => {
             //something like timeupdate = 0 or something.
         });
-        this.TsunamiRadioButtons.appendChild(TsunamiRestartButton);
+        this.TsunamiRadioButtons.appendChild(this.TsunamiRestartButton);
 
         this.TsunamiStartButton.id = "TFradioButton";
         this.TsunamiStartButton.innerHTML = "Start Radio";
@@ -271,7 +271,7 @@ export class TfMusic {
                 file: this.TsunamiAudio.src
             })
         });
-        this.TsunamiRadioButtons.appendChild(TsunamiSkipButton);
+        this.TsunamiRadioButtons.appendChild(this.TsunamiSkipButton);
     }
     MusicNetworkState(RadioWorker) {
         if (this.TsunamiAudio.readyState === 0) {
