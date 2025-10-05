@@ -14,7 +14,7 @@ let rangeIndex;
 let TheLastSongUsed;
 let CurrentSong;
 
-async function NoSubFolder(PSL, tsu, response) {
+async function NoSubFolder(PSL, tsu, response = null) {
     if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
         if (PSL[tsu].length >= 20) {
             radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
@@ -35,7 +35,7 @@ async function NoSubFolder(PSL, tsu, response) {
         postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
-async function ThreeFolderSub(PSL, tsu, nami, response) {
+async function ThreeFolderSub(PSL, tsu, nami, response = null) {
     if (nami <= 19) {
         rangeIndex = 0;
     } else if (nami >= 20 && nami <= 39) {
@@ -67,7 +67,7 @@ async function ThreeFolderSub(PSL, tsu, nami, response) {
         postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
-async function FourFolderSub(PSL, tsu, nami, response) {
+async function FourFolderSub(PSL, tsu, nami, response = null) {
     if (nami <= 14) {
         rangeIndex = 0;
     } else if (nami >= 15 && nami <= 29) {
@@ -101,7 +101,7 @@ async function FourFolderSub(PSL, tsu, nami, response) {
         postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
-async function SixFolderSub(PSL, tsu, nami, response) {
+async function SixFolderSub(PSL, tsu, nami, response = null) {
     rangeIndex = Math.floor(nami / 10);
 
     console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
@@ -129,7 +129,7 @@ async function SixFolderSub(PSL, tsu, nami, response) {
 }
 
 
-async function RadioTime(PSL, response) {
+async function RadioTime(PSL, response = null) {
     now = new Date();
     hour = now.getHours();
     minute = now.getMinutes();
@@ -231,8 +231,8 @@ async function fetchRadioSongs() {
                     phpSongList = JSON.parse(phpRadio.responseText);
                     console.log("Parsed Songs:", phpSongList);
 
-                    RadioResponseOk = phpRadio.response;
-                    RadioTime(phpSongList, RadioResponseOk);
+                    //RadioResponseOk = phpRadio.response;
+                    RadioTime(phpSongList);
                     nextRadioItem = phpSongList;
                 } else {
                     console.log(phpRadio.response + phpRadio.responseText); //const xmlDoc = phpRadio.responseXML;
