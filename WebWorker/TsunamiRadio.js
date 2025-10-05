@@ -295,7 +295,7 @@ async function fetchRadioArrayBuffer(file) {
 
     }
 }
-let Radio = new TfMusic();
+
 onmessage = async (event) => {
     //Fetch Streaming URL
     if (event.data.type === "radio") {
