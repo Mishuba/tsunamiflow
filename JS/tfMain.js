@@ -178,12 +178,12 @@ if (typeof (Worker) !== "undefined") {
             } else if (event.data.type === "Tf Time") {
                 NewsTimer();
                 document.getElementById("TFweather").innerHTML = TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWorker.Radio.TsunamiAudio);
+                Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
             } else {
                 console.log("No matching Times as the moment");
                 NewsTimer();
                 TfWeather.requestLocation();
-                Radio.MusicNetworkState(RadioWorker);
+                Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
             }
 
             RadioWorker.onmessage = async function (event) {

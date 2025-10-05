@@ -546,7 +546,7 @@ export class TfMusic {
 
         element.addEventListener("loadstart", async () => {
             this.loadstartAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
-            this.MusicNetworkState(worker);
+            this.MusicNetworkState(worker, element);
         }); // Fired when the browser has started to load the resource.
 
         element.addEventListener("loadedmetadata", async () => {
