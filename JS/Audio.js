@@ -301,7 +301,7 @@ export class TfMusic {
             } else if (this.TsunamiAudio.networkState == 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
-                RadioWorker.postMessage({ type: "radio", system: "start" });
+                RadioWorker.postMessage({ type: "radio", system: "file" });
             }
         } else if (this.TsunamiAudio.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
@@ -372,7 +372,7 @@ export class TfMusic {
         } else {
             if (this.TsunamiAudio.networkState === 3) {
                 console.log("The network could not find the source.");
-                RadioWorker.postMessage({ type: "radio", system: "start" });
+                RadioWorker.postMessage({ type: "radio", system: "file" });
             } else {
                 console.log("Some unknown error is going on with the Radio");
             }
@@ -402,11 +402,11 @@ export class TfMusic {
     }
     MusicState() {
         if (this.TsunamiRadioAudio.state === "suspended") {
-            context.resume();
+            this.TsunamiRadioAudio.resume();
         } else if (this.TsunamiRadioAudio.state === "running") {
             console.log("The audio context state is running");
             if (this.TsunamiAudio.waiting) {
-                context.suspend();
+                this.TsunamiRadioAudio.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
@@ -483,7 +483,6 @@ export class TfMusic {
     }
 
     RadioWorkerReceivedMessage(event) {
-        this.TsunamiRadioReady();
         if (typeof event.data.file == undefined) {
             this.SongList1st = this.MusicFile(event);
         } else if (typeof event.data.file == null) {
@@ -608,8 +607,9 @@ export class TfMusic {
             this.volumechangeAudio(volumechange);
         });
     }
-    BeginRadio(song) {
+    BeginRadio(song, worker) {
         this.TsunamiAudio.src = song;
         this.TfRadioEventListeners(this.TsunamiAudio);
+        this.TsunamiRadioReady(worker);
     }
 }
