@@ -26,6 +26,8 @@ let RadioCanvas = document.getElementById("TFradioCanvas");
 let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
+RadioMedia.connect(RadioAnalyser);
+RadioAnalyser.connect(TsunamiAudioCtx.destination);
 let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 
 //VideoGame Audio

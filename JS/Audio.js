@@ -98,9 +98,6 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
-        this.TsunamiRadioMedia.connect(this.TsunamiAnalyser);
-        this.TsunamiAnalyser.connect(this.TsunamiRadioAudio.destination);
-        //this.worker = new Worker("../'Web Worker'/TsunamiRadio.js");
     }
     tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
