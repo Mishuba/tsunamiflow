@@ -345,11 +345,11 @@ export class TfMusic {
 
             if (element.ended) {
                 if (element.src = "") {
-
+                    RadioWorker.postMessage({ type: "radio", system: "file" });
                 } else if (element.src = undefined) {
-
+                    RadioWorker.postMessage({ type: "radio", system: "file" });
                 } else if (!element.src) {
-
+                    RadioWorker.postMessage({ type: "radio", system: "file" });
                 } else {
                     RadioWorker.postMessage({ type: "radio", system: "skip" });
                 }

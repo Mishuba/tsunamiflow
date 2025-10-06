@@ -172,6 +172,13 @@ if (typeof (Worker) !== "undefined") {
                         Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
                     } else {
                         console.log("No matching Radio Times as the moment");
+                        if (Radio.TsunamiAudio.src === "" || Radio.TsunamiAudio.src === undefined || !Radio.TsunamiAudio.src) {
+                            Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
+                        } else if (Radio.TsunamiAudio.ended) {
+                            Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
+                        } else {
+                            console.log("Radio is already playing or paused");
+                        }
                     }
                 });
             } else if (event.data.type === "Tf Time") {
