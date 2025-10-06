@@ -15,7 +15,7 @@ export class TfMusic {
             language: "en", //
         };
         this.TsunamiRadioAudio = AudioContext;
-        this.TsunamiGain;
+        this.TsunamiGain = this.TsunamiRadioAudio.createGain();
         this.audioAnalyzerOptions = {
             fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
             maxDecibels: 0, // 0 is the loudest
@@ -26,17 +26,17 @@ export class TfMusic {
             //channelInterpretation: ,
             //
         };
-        this.TsunamiAnalyser;
+        this.TsunamiAnalyser = this.TsunamiRadioAudio.createAnalyser(this.audioAnalyzerOptions)
         this.periodicWaveOptions = {
             channelCount: 2,
             channelCountMode: "max",
             channelInterpretation: "speakers",
             disableNormalization: true,
         };
-        this.TsunamiPanner;
-        this.TsunamiDelay;
-        this.TsunamiCompressor;
-        this.TsunamiRadioMedia;
+        this.TsunamiPanner = this.TsunamiRadioAudio.createStereoPanner();
+        this.TsunamiDelay = this.TsunamiRadioAudio.createDelay();
+        this.TsunamiCompressor = this.TsunamiRadio.createDynamicCompressor();
+        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(audioElement);
         this.TFpwoImag;
         this.TFaudioBuffer;
         this.RadioChannel1;
@@ -98,6 +98,8 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
+        this.TsunamiRadioMedia.connect(this.TsunamiAnalyser);
+        this.TsunamiAnalyser.connect(this.TsunamiRadioAudio.destination);
         //this.worker = new Worker("../'Web Worker'/TsunamiRadio.js");
     }
     tfParticles(x, y, dx, dy, radius, color) {
@@ -427,12 +429,10 @@ export class TfMusic {
         console.log("The audio data is loaded");
         this.MusicState(element, context);
     }
-    canplayAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
-        this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain)
+    canplayAudio(element, context) {
         this.MusicState(element, context);
     }
-    canplaythroughAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
-        this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain)
+    canplaythroughAudio(element, context) {
         this.MusicState(element, context);
         this.startMusic(element);
     }
@@ -520,22 +520,6 @@ export class TfMusic {
     TfScheduleBuffer(buffer, context) {
         this.TsunamiCtxSrc = context.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
-    }
-    TfRadioConnectNow(context, ctxSource, analyzer, panner, delay, compressor, gain) {
-        ctxSource.connect(analyzer);
-        //analyzer.connect(panner);
-        //panner.connect(delay);
-        //delay.connect(compressor);
-        //compressor.connect(gain);
-        analyzer.connect(context.destination);
-    }
-    TfRadioCreateContexts(element, context, ctxSource, analyzer, panner, delay, compressor, gain) {
-        ctxSource = context.createMediaElementSource(element);
-        analyzer = context.createAnalyser(this.audioAnalyserOptions);
-        panner = context.createStereoPanner();
-        delay = context.createDelay();
-        compressor = context.createDynamicsCompressor();
-        gain = context.createGain();
     }
     TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, panner, delay, compressor, gain, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
         this.TsunamiRadioReady(worker, element.src, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
