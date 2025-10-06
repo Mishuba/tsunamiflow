@@ -530,7 +530,7 @@ export class TfMusic {
     }
     TfRadioCreateContexts(element, context, ctxSource, analyzer, panner, delay, compressor, gain) {
         context = new AudioContext();
-        ctxSource = context.createMediaElementSource(element.src);
+        ctxSource = context.createMediaElementSource(element);
         analyzer = context.createAnalyser(this.audioAnalyserOptions);
         panner = context.createStereoPanner();
         delay = context.createDelay();
