@@ -10,7 +10,7 @@ import { DoTheThingMan } from "./Functions.js";
 
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
-
+let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 //Tsunami Radio Audio
 // Buttons
 let TsunamiRadio = document.getElementById("TFradioPlayer");
@@ -169,8 +169,7 @@ if (typeof (Worker) !== "undefined") {
 
                 RadioTimes.forEach(async (tfRT) => {
                     if (TimerTime === tfRT) {
-                        Radio.MusicNetworkState(RadioWorker);
-
+                        Radio.MusicNetworkState(RadioWorker, Radio.TsunamiAudio);
                     } else {
                         console.log("No matching Radio Times as the moment");
                     }
@@ -190,10 +189,10 @@ if (typeof (Worker) !== "undefined") {
                 if (event.data.type === "radio") {
                     if (event.data.system === "file") {
                         let update = Radio.RadioWorkerReceivedMessage(event);
-                        Radio.BeginRadio(update, RadioWorker);
+                        Radio.BeginRadio(update, RadioWorker, TsunamiAudioCtx);
                     } else if (event.data.system === "arraybuffer") {
-                        Radio.TfScheduleBuffer(event.data.buffer);
-                        let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer);
+                        Radio.TfScheduleBuffer(event.data.buffer, TsunamiAudioCtx);
+                        let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer, TsunamiAudioCtx);
                         //Radio.TfRadioConnectNow();
 
                         //Radio.TfRadioEventListeners();

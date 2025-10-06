@@ -14,7 +14,6 @@ export class TfMusic {
             label: "name",
             language: "en", //
         };
-        this.TsunamiRadioAudio;
         //= new (window.AudioContext() || window.webkitAudioContext)();
         this.TsunamiGain;
         this.audioAnalyzerOptions = {
@@ -65,7 +64,7 @@ export class TfMusic {
         this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
         //this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
-        //this.TFperiodicWave = this.TsunamiRadioAudio.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
+        //this.TFperiodicWave = context.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
         /*
                 this.TFoscillatorNodeOptions = {
                     type: "sine", //"square", "sawtooth", "triangle", "custom" //default is "sine";
@@ -489,12 +488,12 @@ export class TfMusic {
         console.log(this.SongList1st + " is the source of the current song.");
         return this.SongList1st;
     }
-    HandleArrayBuffer(buffer) {
-        if (this.TsunamiRadioAudio.state === "suspended") {
-            this.TsunamiRadioAudio.resume();
+    HandleArrayBuffer(buffer, context) {
+        if (context.state === "suspended") {
+            context.resume();
 
             try {
-                this.TFaudioBuffer = this.TsunamiRadioAudio.decodeAudioData(buffer);
+                this.TFaudioBuffer = context.decodeAudioData(buffer);
 
                 //this.RadioChannel1 = this.TFaudioBuffer.getChannelData(0);
                 //this.TfRcCopy1 = new Float32Array(this.RadioChannel1);
@@ -508,15 +507,15 @@ export class TfMusic {
             }
         }
     }
-    RadioWorkerArrayBuffer(buffer) {
+    RadioWorkerArrayBuffer(buffer, context) {
         //decode audio data (get AudioBuffer);
-        let decode = this.HandleArrayBuffer(buffer);
+        let decode = this.HandleArrayBuffer(buffer, context);
         //Visualizator
         this.TFpwoImag = new Float32Array(buffer);
         return decode;
     }
-    TfScheduleBuffer(buffer) {
-        this.TsunamiCtxSrc = this.TsunamiRadioAudio.createBufferSource();
+    TfScheduleBuffer(buffer, context) {
+        this.TsunamiCtxSrc = context.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
     }
     TfRadioConnectNow(context, ctxSource, analyzer, panner, delay, compressor, gain) {
@@ -602,8 +601,8 @@ export class TfMusic {
             this.volumechangeAudio(volumechange);
         });
     }
-    BeginRadio(song, worker) {
+    BeginRadio(song, worker, context) {
         this.TsunamiAudio.src = song;
-        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
+        this.TfRadioEventListeners(this.TsunamiAudio, worker, context, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
     }
 }
