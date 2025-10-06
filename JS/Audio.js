@@ -419,11 +419,7 @@ export class TfMusic {
         console.log("Load start time recorded:", RadioLoadStartTime);
         this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain);
     }
-    loadedmetadataAudio(element, RadioBufferLength, Analyser, DataArray, context, mediasource, panner, delay, compressor, gain) {
-        //this.RadioAnalyser.fftSize = 2048;
-        RadioBufferLength = Analyser.frequencyBinCount;
-        DataArray = new Uint8Array(RadioBufferLength);
-
+    loadedmetadataAudio(element, analyser, context, mediasource, panner, delay, compressor, gain) {
 
         this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain);
         ////this.MusicState(element, context);
@@ -433,6 +429,8 @@ export class TfMusic {
     }
     canplayAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
         //this.MusicState(element, context);
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
         if (canvas !== null) {
             this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
         } else {
@@ -550,7 +548,7 @@ export class TfMusic {
         }); // Fired when the browser has started to load the resource.
 
         element.addEventListener("loadedmetadata", async () => {
-            this.loadedmetadataAudio(element, bufferLength, analyser, dataArray, audiocontext, audioctx, panner, delay, compressor, gain);
+            this.loadedmetadataAudio(element, analyser, audiocontext, audioctx, panner, delay, compressor, gain);
         }); //The metadata has been loaded.
 
         element.addEventListener("loadeddata", (data) => {
