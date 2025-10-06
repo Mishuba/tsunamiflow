@@ -413,30 +413,25 @@ export class TfMusic {
     emptiedAudio(empty) {
         console.log("The audio is empty" + empty);
     }
-    loadstartAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
+    loadstartAudio(element, context) {
+        this.MusicState(element, context);
         let RadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", RadioLoadStartTime);
+    }
+    loadedmetadataAudio(element, context) {
+        //create html data
+        this.MusicState(element, context);
+    }
+    loadeddataAudio(element, context) {
+        console.log("The audio data is loaded");
+        this.MusicState(element, context);
+    }
+    canplayAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
+        this.MusicState(element, context);
         this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain);
     }
-    loadedmetadataAudio(element, analyser, context, mediasource, panner, delay, compressor, gain) {
-
+    canplaythroughAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
         this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain);
-        this.MusicState(element, context);
-    }
-    loadeddataAudio() {
-        console.log("The audio data is loaded");
-    }
-    canplayAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
-        this.MusicState(element, context);
-        bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
-        if (canvas !== null) {
-            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
-        } else {
-            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
-        }
-    }
-    canplaythroughAudio(element, context) {
         this.MusicState(element, context);
         this.startMusic(element);
     }
@@ -452,8 +447,15 @@ export class TfMusic {
     waitingAudio(element, context) {
         this.MusicState(element, context);
     }
-    playingAudio(element, context) {
+    playingAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
         this.MusicState(element, context);
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        if (canvas !== null) {
+            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
+        } else {
+            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
+        }
     }
     stalledAudio(stalled) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
@@ -542,24 +544,24 @@ export class TfMusic {
         }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
         element.addEventListener("loadstart", async () => {
-            this.loadstartAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
-            this.MusicNetworkState(worker, element);
+            this.loadstartAudio(element, audiocontext);
+            //this.MusicNetworkState(worker, element);
         }); // Fired when the browser has started to load the resource.
 
         element.addEventListener("loadedmetadata", async () => {
-            this.loadedmetadataAudio(element, analyser, audiocontext, audioctx, panner, delay, compressor, gain);
+            this.loadedmetadataAudio(element, audiocontext);
         }); //The metadata has been loaded.
 
         element.addEventListener("loadeddata", (data) => {
-            this.loadeddataAudio(data);
+            this.loadeddataAudio(element, audiocontext);
         }); //The first frame of the media has finished loading.
 
         element.addEventListener("canplay", () => {
-            this.canplayAudio(element, audiocontext, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
+            this.canplayAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
         element.addEventListener("canplaythrough", async () => {
-            this.canplaythroughAudio(element, audiocontext);
+            this.canplaythroughAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
         element.addEventListener("play", () => {
@@ -580,7 +582,7 @@ export class TfMusic {
         }); //Playback has stopped because of a temporary lack of data.
 
         element.addEventListener("playing", () => {
-            this.playingAudio(element, audiocontext);
+            this.playingAudio(element, audiocontext, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
         }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
         element.addEventListener("stalled", (stalled) => {
