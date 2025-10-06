@@ -15,7 +15,7 @@ export class TfMusic {
             language: "en", //
         };
         this.TsunamiRadioAudio = AudioContext;
-        this.TsunamiGain = this.TsunamiRadioAudio.createGain();
+        this.TsunamiGain;
         this.audioAnalyzerOptions = {
             fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
             maxDecibels: 0, // 0 is the loudest
