@@ -1,7 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext) {
+    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext, AudioAnalyser, AudioMedia) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
         this.TsunamiRadioButtons = Buttons;
@@ -26,17 +26,17 @@ export class TfMusic {
             //channelInterpretation: ,
             //
         };
-        this.TsunamiAnalyser = this.TsunamiRadioAudio.createAnalyser(this.audioAnalyzerOptions)
+        this.TsunamiAnalyser = AudioAnalyser;
         this.periodicWaveOptions = {
             channelCount: 2,
             channelCountMode: "max",
             channelInterpretation: "speakers",
             disableNormalization: true,
         };
-        this.TsunamiPanner = this.TsunamiRadioAudio.createStereoPanner();
-        this.TsunamiDelay = this.TsunamiRadioAudio.createDelay();
+        this.TsunamiPanner;
+        this.TsunamiDelay;
         this.TsunamiCompressor;
-        this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(audioElement);
+        this.TsunamiRadioMedia = AudioMedia;
         this.TFpwoImag;
         this.TFaudioBuffer;
         this.RadioChannel1;

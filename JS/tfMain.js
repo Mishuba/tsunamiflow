@@ -23,7 +23,10 @@ let RadioSkipButton = document.createElement("button");
 //visualizer
 let RadioCanvas = document.getElementById("TFradioCanvas");
 //Radio
-let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx);
+let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
+RadioAnalyser.fftSize = 2048;
+let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
+let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 
 //VideoGame Audio
 let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
