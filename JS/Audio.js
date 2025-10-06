@@ -35,7 +35,7 @@ export class TfMusic {
         };
         this.TsunamiPanner = this.TsunamiRadioAudio.createStereoPanner();
         this.TsunamiDelay = this.TsunamiRadioAudio.createDelay();
-        this.TsunamiCompressor = this.TsunamiRadio.createDynamicCompressor();
+        this.TsunamiCompressor = this.TsunamiRadioAudio.createDynamicCompressor();
         this.TsunamiRadioMedia = this.TsunamiRadioAudio.createMediaElementSource(audioElement);
         this.TFpwoImag;
         this.TFaudioBuffer;
