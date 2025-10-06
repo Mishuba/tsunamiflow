@@ -1,7 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null) {
+    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
         this.TsunamiRadioButtons = Buttons;
@@ -14,7 +14,7 @@ export class TfMusic {
             label: "name",
             language: "en", //
         };
-        //= new (window.AudioContext() || window.webkitAudioContext)();
+        this.TsunamiRadioAudio = AudioContext;
         this.TsunamiGain;
         this.audioAnalyzerOptions = {
             fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
@@ -414,6 +414,7 @@ export class TfMusic {
         console.log("The audio is empty" + empty);
     }
     loadstartAudio(element, context) {
+
         this.MusicState(element, context);
         let RadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", RadioLoadStartTime);
@@ -427,11 +428,11 @@ export class TfMusic {
         this.MusicState(element, context);
     }
     canplayAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
+        this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain)
         this.MusicState(element, context);
-        this.TfRadioCreateContexts(element, context, mediasource, analyser, panner, delay, compressor, gain);
     }
     canplaythroughAudio(element, context, mediasource, analyser, panner, delay, compressor, gain) {
-        this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain);
+        this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain)
         this.MusicState(element, context);
         this.startMusic(element);
     }
@@ -529,7 +530,6 @@ export class TfMusic {
         analyzer.connect(context.destination);
     }
     TfRadioCreateContexts(element, context, ctxSource, analyzer, panner, delay, compressor, gain) {
-        context = new AudioContext();
         ctxSource = context.createMediaElementSource(element);
         analyzer = context.createAnalyser(this.audioAnalyserOptions);
         panner = context.createStereoPanner();
@@ -557,11 +557,11 @@ export class TfMusic {
         }); //The first frame of the media has finished loading.
 
         element.addEventListener("canplay", () => {
-            this.canplayAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
+            this.canplayAudio(element, audiocontext);
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
         element.addEventListener("canplaythrough", async () => {
-            this.canplaythroughAudio(element, audiocontext, audioctx, analyser, panner, delay, compressor, gain);
+            this.canplaythroughAudio(element, audiocontext);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
         element.addEventListener("play", () => {
@@ -603,8 +603,8 @@ export class TfMusic {
             this.volumechangeAudio(volumechange);
         });
     }
-    BeginRadio(song, worker, context) {
-        this.TsunamiAudio.src = song;
-        this.TfRadioEventListeners(this.TsunamiAudio, worker, context, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
+    BeginRadio(song, worker) {
+        this.TsunamiAudio.src = song
+        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
     }
 }

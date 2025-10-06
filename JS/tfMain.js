@@ -23,7 +23,7 @@ let RadioSkipButton = document.createElement("button");
 //visualizer
 let RadioCanvas = document.getElementById("TFradioCanvas");
 //Radio
-let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
+let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx);
 
 //VideoGame Audio
 let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
@@ -196,7 +196,7 @@ if (typeof (Worker) !== "undefined") {
                 if (event.data.type === "radio") {
                     if (event.data.system === "file") {
                         let update = Radio.RadioWorkerReceivedMessage(event);
-                        Radio.BeginRadio(update, RadioWorker, TsunamiAudioCtx);
+                        Radio.BeginRadio(update, RadioWorker);
                     } else if (event.data.system === "arraybuffer") {
                         Radio.TfScheduleBuffer(event.data.buffer, TsunamiAudioCtx);
                         let usebuffer = Radio.RadioWorkerArrayBuffer(event.data.buffer, TsunamiAudioCtx);
