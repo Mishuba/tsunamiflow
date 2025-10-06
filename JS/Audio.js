@@ -421,13 +421,13 @@ export class TfMusic {
     loadedmetadataAudio(element, analyser, context, mediasource, panner, delay, compressor, gain) {
 
         this.TfRadioConnectNow(context, mediasource, analyser, panner, delay, compressor, gain);
-        ////this.MusicState(element, context);
+        this.MusicState(element, context);
     }
     loadeddataAudio() {
         console.log("The audio data is loaded");
     }
     canplayAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
         bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
         if (canvas !== null) {
@@ -437,23 +437,23 @@ export class TfMusic {
         }
     }
     canplaythroughAudio(element, context) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
         this.startMusic(element);
     }
     playAudio(element, context) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
     }
     pauseAudio(element, context) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
     }
     endedAudio(ended) {
         console.log("The audio should have ended");
     }
     waitingAudio(element, context) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
     }
     playingAudio(element, context) {
-        //this.MusicState(element, context);
+        this.MusicState(element, context);
     }
     stalledAudio(stalled) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
@@ -528,7 +528,7 @@ export class TfMusic {
     }
     TfRadioCreateContexts(element, context, ctxSource, analyzer, panner, delay, compressor, gain) {
         context = new AudioContext();
-        ctxSource = context.createMediaElementSource(element);
+        ctxSource = context.createMediaElementSource(element.src);
         analyzer = context.createAnalyser(this.audioAnalyserOptions);
         panner = context.createStereoPanner();
         delay = context.createDelay();
