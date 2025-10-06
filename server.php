@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //Get javascript information.
     $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
 
-    if($_POST["token"] === "TsunamiFlowClubStripeToken") {
+    if($_POST["type"] === "TsunamiFlowClubStripeToken") {
         //get the checkout session
         $session_id = $_POST["session_id"];
         $TsunamiFlowStripeSuccessSession = \Stripe\Checkout\Session::retrieve($session_id);
