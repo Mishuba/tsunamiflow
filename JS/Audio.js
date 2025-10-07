@@ -152,8 +152,8 @@ export class TfMusic {
         let averageVolume = CtxTotal / dataArray.length;
 
         for (let i = 0; i < particles.length; i++) {
-            particles[i].update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
-            particles[i].draw(ctx, x, y, radius, color);
+            particles[i].this.update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
+            particles[i].this.draw(ctx, x, y, radius, color);
         }
 
         let barWidth = (100 / bufferLength) * 2.5;
