@@ -46,7 +46,7 @@ export class TfMusic {
         this.TsunamiRadioDataArray;
         this.TfNextPlayTime = 0;
         this.RadioCanvas = TfCanvas;
-        this.x;
+        this.x = 0;
         this.y;
         this.dx; // x velocity
         this.dy; // y velocity
@@ -152,10 +152,9 @@ export class TfMusic {
         }
         let averageVolume = CtxTotal / dataArray.length;
 
-
         for (let i = 0; i < particles.length; i++) {
-            particles[i].update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
-            particles[i].draw(ctx, x, y, radius, color);
+            particles[i] = update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
+            particles[i] = draw(ctx, x, y, radius, color);
         }
 
         let barWidth = (100 / bufferLength) * 2.5;
@@ -170,7 +169,7 @@ export class TfMusic {
             let CtxB = 50;
 
             ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-            ctx.fillRect(CtxX, 200 - barHeight, barWidth, barHeight);
+            ctx.fillRect(CtxX, 100 - barHeight, barWidth, barHeight);
 
             CtxX += barWidth + 1;
         }
