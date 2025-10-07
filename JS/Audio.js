@@ -99,9 +99,6 @@ export class TfMusic {
             threshold: -24 // -100 - 0
         };
     }
-    tfParticles(x, y, dx, dy, radius, color) {
-        return { x, y, dx, dy, radius, color };
-    }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
         async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
             radius = baseRadius + volume / 80; // pulse based on volume
@@ -124,6 +121,9 @@ export class TfMusic {
             ctx.shadowBlur = 20;
             ctx.fill();
         }
+        async function tfParticles(x, y, dx, dy, radius, color) {
+            return { x, y, dx, dy, radius, color };
+        }
         async function particle(canvas, x, y, dx, dy, radius, color, particles) {
             for (let i = 0; i < 100; i++) {
                 x = Math.random() * canvas.width;
@@ -132,7 +132,7 @@ export class TfMusic {
                 dy = (Math.random() - 0.5) * 0.5;
                 radius = Math.random() * 0.5 + 0.2;
                 color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-                particles.push(this.tfParticles(x, y, dx, dy, radius, color));
+                particles.push(tfParticles(x, y, dx, dy, radius, color));
             }
         }
         particle(canvas, x, y, dx, dy, radius, color, particles);
@@ -143,7 +143,7 @@ export class TfMusic {
         analyser.getByteFrequencyData(dataArray);
 
         ctx.fillStyle = "rgb(10, 10, 30)";
-        ctx.fillRect(0, 0, canvas, canvas.height);
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
         //Get Average volume for particle reaction
         let CtxTotal = 0;
@@ -170,7 +170,7 @@ export class TfMusic {
             let CtxB = 50;
 
             ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-            ctx.fillRect(CtxX, 100 - barHeight, barWidth, barHeight);
+            ctx.fillRect(CtxX, 200 - barHeight, barWidth, barHeight);
 
             CtxX += barWidth + 1;
         }
@@ -193,6 +193,24 @@ export class TfMusic {
                     console.error("Error playing audio:", error);
                 }
             });
+        } else if (element.ended) {
+            if (element.currentTime === 0) {
+                element.play().catch(async (error) => {
+                    if (error.name === "NotAllowedError") {
+                        console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+                    } else {
+                        console.error("Error playing audio:", error);
+                    }
+                });
+            } else {
+                element.play().catch(async (error) => {
+                    if (error.name === "NotAllowedError") {
+                        console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+                    } else {
+                        console.error("Error playing audio:", error);
+                    }
+                });
+            }
         } else {
             element.play().catch(async (error) => {
                 if (error.name === "NotAllowedError") {
