@@ -102,39 +102,40 @@ export class TfMusic {
     tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
     }
-    particle(canvas, x, y, dx, dy, radius, color, particles) {
-        for (let i = 0; i < 100; i++) {
-            x = Math.random() * canvas.width;
-            y = Math.random() * canvas.height;
-            dx = (Math.random() - 0.5) * 0.5;
-            dy = (Math.random() - 0.5) * 0.5;
-            radius = Math.random() * 0.5 + 0.2;
-            color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-            particles.push(this.tfParticles(x, y, dx, dy, radius, color));
-        }
-    }
-    update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
-        radius = baseRadius + volume / 80; // pulse based on volume
-        x += dx;
-        y += dy;
-
-        // bounce off edges
-        if (x + radius > canvas.width || x - radius < 0) {
-            dx = -dx;
-        }
-        if (y + radius > canvas.height || y - radius < 0) {
-            dy = -dy;
-        }
-    }
-    draw(ctx, x, y, radius, color) {
-        ctx.beginPath();
-        ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-        ctx.fillStyle = color;
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 20;
-        ctx.fill();
-    }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
+        async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
+            radius = baseRadius + volume / 80; // pulse based on volume
+            x += dx;
+            y += dy;
+
+            // bounce off edges
+            if (x + radius > canvas.width || x - radius < 0) {
+                dx = -dx;
+            }
+            if (y + radius > canvas.height || y - radius < 0) {
+                dy = -dy;
+            }
+        }
+        async function draw(ctx, x, y, radius, color) {
+            ctx.beginPath();
+            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+            ctx.fillStyle = color;
+            ctx.shadowColor = color;
+            ctx.shadowBlur = 20;
+            ctx.fill();
+        }
+        async function particle(canvas, x, y, dx, dy, radius, color, particles) {
+            for (let i = 0; i < 100; i++) {
+                x = Math.random() * canvas.width;
+                y = Math.random() * canvas.height;
+                dx = (Math.random() - 0.5) * 0.5;
+                dy = (Math.random() - 0.5) * 0.5;
+                radius = Math.random() * 0.5 + 0.2;
+                color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
+                particles.push(this.tfParticles(x, y, dx, dy, radius, color));
+            }
+        }
+        particle(canvas, x, y, dx, dy, radius, color, particles);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         //analyser.getFloatTimeDomainData(this.TsunamiRadioDataArray);
@@ -151,9 +152,10 @@ export class TfMusic {
         }
         let averageVolume = CtxTotal / dataArray.length;
 
+
         for (let i = 0; i < particles.length; i++) {
-            particles[i].this.update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
-            particles[i].this.draw(ctx, x, y, radius, color);
+            particles[i].update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
+            particles[i].draw(ctx, x, y, radius, color);
         }
 
         let barWidth = (100 / bufferLength) * 2.5;
@@ -176,7 +178,6 @@ export class TfMusic {
         this.visualizatorController = requestAnimationFrame(async () => this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles));
     }
     Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
-        this.particle(canvas, x, y, dx, dy, radius, color, particles);
         let ctx = canvas.getContext("2d");
         this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles);
     }
