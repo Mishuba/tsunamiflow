@@ -17,14 +17,14 @@ export class TfMusic {
         this.TsunamiRadioAudio = AudioContext;
         this.TsunamiGain;
         this.audioAnalyzerOptions = {
-            fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
+            fftSize: 2048,
             maxDecibels: 0, // 0 is the loudest
             minDecibels: -100, // 0 is the loudest 
             smoothingTimeConstant: 0.5, // between 0 and 1
             //channelCount: ,
             channelCountMode: "max",
             //channelInterpretation: ,
-            //
+            //disableNormalization: true
         };
         this.TsunamiAnalyser = AudioAnalyser;
         this.periodicWaveOptions = {
@@ -181,7 +181,7 @@ export class TfMusic {
         this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles);
     }
     StopVisualizator() {
-        cancelAnimationFrame(this.visualizationController)
+        cancelAnimationFrame(this.visualizationController);
     }
     startMusic(element) {
         if (element.paused) {
