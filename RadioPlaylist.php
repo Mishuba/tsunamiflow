@@ -1,7 +1,7 @@
 <?php
-ini_set("display_errors", 1);
-ini_set("display_startup_errors", 1);
-error_reporting(E_ALL);
+ini_set("display_errors", 0);
+//ini_set("display_startup_errors", 0);
+error_reporting(0);
 
 require "stripestuff/vendor/autoload.php";
 
@@ -45,18 +45,24 @@ function addSongsToArray($path, &$array, $index, $index2 = null){
     //$songs = glob($path . '*.mp3');
     $matches = file_get_contents("https://www.tsunamiflow.club/Music/");
 
-    if ($matches === false || empty($songs[1])) {
+    if ($matches === isFalse()) {
         error_log("Failed to fetch music listing from Cloudflare R2 HTML endpoint");
         return;
     } else {
         preg_match_all('/href="([^"]+\.mp3)"/', $matches, $songs);
-        foreach ($songs[1] as $song) {
-            if ($index2 === null) {
-                array_push($array[$index], $song);
-            } else if ($index2 !== null) {
-                array_push($array[$index][$index2], $song);
-            } else {
-                array_push($array[11], $song);
+
+        if (empty($songs[1])) {
+            error_log("No MPE files found in HTML listing");
+            return;
+        } else {
+            foreach ($songs[1] as $song) {
+                if ($index2 === null) {
+                    array_push($array[$index], $song);
+                } else if ($index2 !== null) {
+                    array_push($array[$index][$index2], $song);
+                } else {
+                    array_push($array[11], $song);
+                }
             }
         }
     }
@@ -212,14 +218,14 @@ try {
     }
 
     if (empty($sentToJsArray)) {
-        echo (json_encode(["error" => "No .mp3 files found in bucket"], JSON_INVALID_UTF8_IGNORE));
+        $arrayError = json_encode(["error" => "No .mp3 files found in bucket"], JSON_INVALID_UTF8_IGNORE);
     } else {
 
     }
 } catch (AwsException $e) {
-            echo json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()], JSON_INVALID_UTF8_IGNORE);
+            $awsError = json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()], JSON_INVALID_UTF8_IGNORE);
 } catch (Exception $e) {
-            echo json_encode(["error" => "PHP Exception: " . $e->getMessage()], JSON_INVALID_UTF8_IGNORE);
+            $regularAwsError = json_encode(["error" => "PHP Exception: " . $e->getMessage()], JSON_INVALID_UTF8_IGNORE);
 }
 
 
@@ -241,4 +247,3 @@ echo $json;
     throw new Exception("Invalid Request Type");
     }
 }
-?>
