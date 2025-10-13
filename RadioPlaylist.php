@@ -5,7 +5,6 @@ error_reporting(0);
 
 require "stripestuff/vendor/autoload.php";
 
-use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 
 header("Content-Type: application/json");
@@ -191,17 +190,18 @@ addSongsToArray("Music/Outside/", $sentToJsArray, 23);
 // Everything 
 //$EverythingRadio = glob("Music/Everything/*.mp3");
 try {
-    $StorageBucket = new S3Client([
+    $accountId = "ac47c31c7548ac580a0b4caaed91d41f";
+    $accessKey = "e049b04aab83b8cf7e2d73ea3c660c66";
+    $secretKey = "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212";
+    $credentials = new Aws\Credentials\Credentials($accessKey, $secretKey);
+    $StorageBucket = new Aws\S3\S3Client([
         "region" => "auto",
         "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
         "version" => "latest",
-        "credentials" => [
-            "key" => "e049b04aab83b8cf7e2d73ea3c660c66",
-            "secret" => "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212",
-        ]
+        "credentials" => $credentials
     ]);
 
-    $Objects = $StorageBucket->listObjects([
+    $Objects = $StorageBucket->listObjectsV2([
         "Bucket" => "tsunami-radio",
         "Prefix" => "Music/"
     ]);
