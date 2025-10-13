@@ -1,6 +1,7 @@
 <?php
-if (isset(($_SERVER["HTTP_X_REQUEST_TYPE"]))) {
+if (isset($_SERVER["HTTP_X_REQUEST_TYPE"])) {
     if ($_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
+        header("Content-Type: application/json");
 // Define the array with corrected syntax
 $sentToJsArray = array(
     array(array(), array(), array(), array()), // Rizz
@@ -29,7 +30,7 @@ $sentToJsArray = array(
     array()  // Outside
 );
 
-function addSongsToArray($path, $array, $index1, $index2 = null){
+function addSongsToArray($path, &$array, $index1, $index2 = null){
     $songs = glob($path . '*.mp3');
     if ($songs === false || empty($songs)) {
         return;
@@ -37,11 +38,23 @@ function addSongsToArray($path, $array, $index1, $index2 = null){
 
     foreach ($songs as $song) {
         if ($index2 === null) {
-            array_push($array[$index1], $song);
+            if(!isset($array[$index1]) || !is_array($array[$index1])) {
+                $array[$index1][] = [];
+                //array_push($array[$index1], $song);
+            }
+            $array[$index1][] = $song;
         } else {
-            array_push($array[$index1][$index2], $song);
+            if(!isset($array[$index1][$index2]) || !is_array($array[$index1][$index2])) {
+                $array[$index1][$index2][] = [];
+            }
+            $array[$index1][$index2][] = $song;
+            //array_push($array[$index1][$index2], $song);
         }
-        array_push($array[11], $song);
+        if (!isset($array[11])) {
+            $array[11] = [];
+        }
+        $array[11][] = $song;
+        //array_push($array[11], $song);
     }
 }
 
@@ -167,6 +180,7 @@ addSongsToArray("Music/Outside/", $sentToJsArray, 23);
 $EverythingRadio = glob("Music/Everything/*.mp3");
 if ($EverythingRadio !== false) {
     foreach ($EverythingRadio as $tfSongs) {
+        $sentToJsArray[11][] = $tfSongs;
         array_push($sentToJsArray[11], $tfSongs);
     }
 }
