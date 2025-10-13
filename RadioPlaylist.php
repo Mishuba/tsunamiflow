@@ -1,11 +1,18 @@
 <?php
+ini_set("disply_errors", 1);
+ini_set("display_startup_errors", 1);
+error_reporting(E_ALL);
+
 require "stripestuff/vendor/autoload.php";
 
 use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+
+header("Content-Type: application/json");
 
 if (isset($_SERVER["HTTP_X_REQUEST_TYPE"])) {
     if ($_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
-        header("Content-Type: application/json");
+
 // Define the array with corrected syntax
 $sentToJsArray = array(
     array(array(), array(), array(), array()), // Rizz
@@ -102,7 +109,7 @@ addSongsToArray("Music/Politics/Republican/", $sentToJsArray, 8, 2);
 addSongsToArray("Music/Politics/Socialism/", $sentToJsArray, 8, 3);
 addSongsToArray("Music/Politics/Bureaucracy/", $sentToJsArray, 8, 4);
 addSongsToArray("Music/Politics/Aristocratic/", $sentToJsArray, 8, 5);
-
+ 
 // 9 a.m. Gaming 
 addSongsToArray("Music/Gaming/Fighters/", $sentToJsArray, 9, 0);
 addSongsToArray("Music/Gaming/Shooters/", $sentToJsArray, 9, 1);
@@ -175,26 +182,46 @@ addSongsToArray("Music/Outside/", $sentToJsArray, 23);
 
 // Everything 
 //$EverythingRadio = glob("Music/Everything/*.mp3");
-$StorageBucket = new S3Client([
-    "region" => "auto",
-    "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
-    "version" => "latest",
-    "credentials" => [
-        "key" => "e049b04aab83b8cf7e2d73ea3c660c66",
-        "secret" => "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212",
-    ]
+try {
+    $StorageBucket = new S3Client([
+        "region" => "auto",
+        "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
+        "version" => "latest",
+        "credentials" => [
+            "key" => "e049b04aab83b8cf7e2d73ea3c660c66",
+            "secret" => "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212",
+        ]
     ]);
 
-$Objects = $StorageBucket->listObjects([
-    "Bucket" => "tsunami-radio",
-    "Prefix" => "Music/"
-]);
-foreach ($Objects["Contents"] as $objects) {
-    if (str_ends_with($objects["Key"], ".mp3")) {
-        //$EverythingRadio[] = 
-        array_push($sentToJsArray[11], "https://www.tsunamiflow.club/" . $objects["Key"]);
+    $Objects = $StorageBucket->listObjects([
+        "Bucket" => "tsunami-radio",
+        "Prefix" => "Music/"
+    ]);
+
+    if (!isset($objects["Contents"])) {
+        throw new Exception("No contents returned from R2 listObjects");
+    } else {
+        foreach ($Objects["Contents"] as $objects) {
+            if (str_ends_with($objects["Key"], ".mp3")) {
+                //$EverythingRadio[] = 
+                array_push($sentToJsArray[11], "https://www.tsunamiflow.club/" . $objects["Key"]);
+            }
+        }
     }
+
+    if (empty($sentToJsArray)) {
+        echo (json_encode(["error" => "No .mp3 files found in bucket"]));
+    } else {
+        
+    }
+} catch (AwsException $e) {
+            echo json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()]);
+} catch (Exception $e) {
+            echo json_encode(["error" => "PHP Exception: " . $e->getMessage()]);
 }
+
+
+
 /*
 if ($EverythingRadio !== false) {
     foreach ($EverythingRadio as $tfSongs) {
