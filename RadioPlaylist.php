@@ -1,4 +1,8 @@
 <?php
+require "stripestuff/vendor/autoload.php";
+
+use Aws\S3\S3Client;
+
 if (isset($_SERVER["HTTP_X_REQUEST_TYPE"])) {
     if ($_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
         header("Content-Type: application/json");
@@ -30,32 +34,25 @@ $sentToJsArray = array(
     array()  // Outside
 );
 
-function addSongsToArray($path, &$array, $index1, $index2 = null){
-    $songs = glob($path . '*.mp3');
+function addSongsToArray($path, &$array, $index, $index2 = null){
+    //$songs = glob($path . '*.mp3');
+    $matches = file_get_contents("https://www.tsunamiflow.club/Music/");
+    preg_match_all("/href='([^']+\.mp3)'/", $matches, $songs);
     if ($songs === false || empty($songs)) {
         return;
+    } else {
+        foreach ($songs as $song) {
+            if ($index2 === null) {
+                array_push($array[$index], $song);
+            } else if ($index2 !== null) {
+                array_push($array[$index][$index2], $song);
+            } else {
+                array_push($array[11], $song);
+            }
+        }
     }
 
-    foreach ($songs as $song) {
-        if ($index2 === null) {
-            if(!isset($array[$index1]) || !is_array($array[$index1])) {
-                $array[$index1][] = [];
-                //array_push($array[$index1], $song);
-            }
-            $array[$index1][] = $song;
-        } else {
-            if(!isset($array[$index1][$index2]) || !is_array($array[$index1][$index2])) {
-                $array[$index1][$index2][] = [];
-            }
-            $array[$index1][$index2][] = $song;
-            //array_push($array[$index1][$index2], $song);
-        }
-        if (!isset($array[11])) {
-            $array[11] = [];
-        }
-        $array[11][] = $song;
-        //array_push($array[11], $song);
-    }
+    error_log("Added songs to index $index" . ($index2 !== null ? " at sub-index $index2" : ""));
 }
 
 // 12 a.m Rizz IceBreakers Flirting GetHerDone Shot
@@ -177,14 +174,35 @@ addSongsToArray("Music/Pregame/", $sentToJsArray, 22);
 addSongsToArray("Music/Outside/", $sentToJsArray, 23);
 
 // Everything 
-$EverythingRadio = glob("Music/Everything/*.mp3");
+//$EverythingRadio = glob("Music/Everything/*.mp3");
+$StorageBucket = new S3Client([
+    "region" => "auto",
+    "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
+    "version" => "latest",
+    "credentials" => [
+        "key" => "e049b04aab83b8cf7e2d73ea3c660c66",
+        "secret" => "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212",
+    ]
+    ]);
+
+$Objects = $StorageBucket->listObjects([
+    "Bucket" => "tsunami-radio",
+    "Prefix" => "Music/"
+]);
+foreach ($Objects["Contents"] as $objects) {
+    if (str_ends_with($objects["Key"], ".mp3")) {
+        //$EverythingRadio[] = 
+        array_push($sentToJsArray[11], "https://www.tsunamiflow.club/" . $objects["Key"]);
+    }
+}
+/*
 if ($EverythingRadio !== false) {
     foreach ($EverythingRadio as $tfSongs) {
-        $sentToJsArray[11][] = $tfSongs;
+        //$sentToJsArray[11][] = $tfSongs;
         array_push($sentToJsArray[11], $tfSongs);
     }
 }
-
+*/
 // Encode the array to JSON
 $json = json_encode($sentToJsArray);
 

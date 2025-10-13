@@ -3,4 +3,4 @@ Logs/
 xampp/
 .override
 application.html
-stripestuff/
+stripestuff/vendor/stripe/

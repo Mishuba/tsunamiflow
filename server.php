@@ -350,7 +350,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 // Allow specific headers
                 header("Access-Control-Allow-Headers: X-Requested-With, Content-Type");
                 // Allow specific methods
-                NavLoginFr();
+                //NavLoginFr();
                 // use session_regenerate_id() for every login attempt.
                 $_SESSION["LoginStatus"] = "is the user logged in or nah";
             } else {
