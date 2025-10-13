@@ -1,5 +1,5 @@
 <?php
-ini_set("disply_errors", 1);
+ini_set("display_errors", 1);
 ini_set("display_startup_errors", 1);
 error_reporting(E_ALL);
 
@@ -44,10 +44,12 @@ $sentToJsArray = array(
 function addSongsToArray($path, &$array, $index, $index2 = null){
     //$songs = glob($path . '*.mp3');
     $matches = file_get_contents("https://www.tsunamiflow.club/Music/");
-    preg_match_all('/href="([^"]+\.mp3)"/', $matches, $songs);
-    if ($songs === false || empty($songs[1])) {
+
+    if ($matches === false || empty($songs[1])) {
+        error_log("Failed to fetch music listing from Cloudflare R2 HTML endpoint");
         return;
     } else {
+        preg_match_all('/href="([^"]+\.mp3)"/', $matches, $songs);
         foreach ($songs[1] as $song) {
             if ($index2 === null) {
                 array_push($array[$index], $song);
@@ -198,7 +200,7 @@ try {
         "Prefix" => "Music/"
     ]);
 
-    if (!isset($objects["Contents"])) {
+    if (!isset($Objects["Contents"])) {
         throw new Exception("No contents returned from R2 listObjects");
     } else {
         foreach ($Objects["Contents"] as $objects) {
@@ -210,14 +212,14 @@ try {
     }
 
     if (empty($sentToJsArray)) {
-        echo (json_encode(["error" => "No .mp3 files found in bucket"]));
+        echo (json_encode(["error" => "No .mp3 files found in bucket"], JSON_INVALID_UTF8_IGNORE));
     } else {
-        
+
     }
 } catch (AwsException $e) {
-            echo json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()]);
+            echo json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()], JSON_INVALID_UTF8_IGNORE);
 } catch (Exception $e) {
-            echo json_encode(["error" => "PHP Exception: " . $e->getMessage()]);
+            echo json_encode(["error" => "PHP Exception: " . $e->getMessage()], JSON_INVALID_UTF8_IGNORE);
 }
 
 
@@ -231,7 +233,7 @@ if ($EverythingRadio !== false) {
 }
 */
 // Encode the array to JSON
-$json = json_encode($sentToJsArray);
+$json = json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE);
 
 // Output the JSON
 echo $json;
