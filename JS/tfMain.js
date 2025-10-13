@@ -220,6 +220,8 @@ if (typeof (Worker) !== "undefined") {
                     } else if (event.data.system === "pcm") {
 
                     }
+                } else {
+                    let update = Radio.RadioWorkerReceivedMessage(event);
                 }
             };
 

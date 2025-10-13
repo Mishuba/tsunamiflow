@@ -240,6 +240,7 @@ async function fetchRadioSongs() {
                     // phpRadio.responseType = "blob";
                     // function () { const blob = phpRadio.response; const blobURL = URL.createObjectURL(blob); document.getElementById("the Element").src = bloblURL; }
                     console.error("It did not do JSON.parse");
+                    RadioTime(undefined);
                 }
             }
         };
