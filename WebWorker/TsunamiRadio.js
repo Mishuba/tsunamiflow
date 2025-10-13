@@ -29,10 +29,7 @@ async function NoSubFolder(PSL, tsu, response = null) {
             postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
         }
     } else {
-        radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-        CurrentSong = PSL[11][radioRandom];
-        console.log(CurrentSong);
-        postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
 async function ThreeFolderSub(PSL, tsu, nami, response = null) {
@@ -60,11 +57,7 @@ async function ThreeFolderSub(PSL, tsu, nami, response = null) {
             postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
         }
     } else {
-        console.log(`PSL[${tsu}] is not valid, falling back to PSL[11]`);
-        radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-        CurrentSong = PSL[11][radioRandom];
-        console.log(CurrentSong);
-        postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
 async function FourFolderSub(PSL, tsu, nami, response = null) {
@@ -94,11 +87,7 @@ async function FourFolderSub(PSL, tsu, nami, response = null) {
             postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
         }
     } else {
-        console.log(`PSL[${tsu}] is not valid, falling back to PSL[11]`);
-        radioRandom = PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))];
-        CurrentSong = PSL[11][radioRandom];
-        console.log(CurrentSong);
-        postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
 async function SixFolderSub(PSL, tsu, nami, response = null) {
@@ -124,7 +113,7 @@ async function SixFolderSub(PSL, tsu, nami, response = null) {
         radioRandom = PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))];
         CurrentSong = PSL[11][radioRandom];
         console.log(CurrentSong);
-        postMessage({ type: "radio", file: CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
     }
 }
 

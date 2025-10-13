@@ -391,22 +391,7 @@ export class TfMusic {
         }
     }
     MusicFile(event) {
-        if (event == "null") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event == undefined) {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event == "") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event == null) {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event == "undefined") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event.data.file == "undefined") {
+        if (event.data.file == "undefined") {
             this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
         } else if (event.data.file == undefined) {
