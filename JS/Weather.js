@@ -112,7 +112,7 @@ export class Weather {
                         navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
                     } else {
                         let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
-                        if (letmegetloc.trim() !== "") {
+                        if (letmegetloc !== "") {
                             this.City(letmegetloc);
                         } else {
                             console.log("the weather will not work.");
