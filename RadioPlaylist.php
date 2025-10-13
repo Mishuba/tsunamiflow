@@ -37,11 +37,11 @@ $sentToJsArray = array(
 function addSongsToArray($path, &$array, $index, $index2 = null){
     //$songs = glob($path . '*.mp3');
     $matches = file_get_contents("https://www.tsunamiflow.club/Music/");
-    preg_match_all("/href='([^']+\.mp3)'/", $matches, $songs);
-    if ($songs === false || empty($songs)) {
+    preg_match_all('/href="([^"]+\.mp3)"/', $matches, $songs);
+    if ($songs === false || empty($songs[1])) {
         return;
     } else {
-        foreach ($songs as $song) {
+        foreach ($songs[1] as $song) {
             if ($index2 === null) {
                 array_push($array[$index], $song);
             } else if ($index2 !== null) {
