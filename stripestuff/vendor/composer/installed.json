@@ -503,6 +503,57 @@
             "install-path": "../braintree/braintree_php"
         },
         {
+            "name": "cloudflare/sdk",
+            "version": "1.4.0",
+            "version_normalized": "1.4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cloudflare/cloudflare-php.git",
+                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cloudflare/cloudflare-php/zipball/2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
+                "reference": "2d3f198773e865b5de2357d7bdbc52bdf42e8f97",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.0.1",
+                "php": ">=7.2.5",
+                "psr/http-message": "~1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.6",
+                "phpmd/phpmd": "@stable",
+                "phpunit/phpunit": "^5.7"
+            },
+            "time": "2024-12-17T23:18:20+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "Cloudflare\\API\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Junade Ali",
+                    "email": "junade@cloudflare.com"
+                }
+            ],
+            "description": "PHP binding for v4 of the Cloudflare Client API.",
+            "support": {
+                "issues": "https://github.com/cloudflare/cloudflare-php/issues",
+                "source": "https://github.com/cloudflare/cloudflare-php/tree/1.4.0"
+            },
+            "install-path": "../cloudflare/sdk"
+        },
+        {
             "name": "coderjerk/bird-elephant",
             "version": "v0.7.1",
             "version_normalized": "0.7.1.0",
@@ -823,67 +874,53 @@
             "install-path": "../eher/oauth"
         },
         {
-            "name": "facebook/graph-sdk",
-            "version": "5.1.4",
-            "version_normalized": "5.1.4.0",
+            "name": "facebook/php-business-sdk",
+            "version": "23.0.3",
+            "version_normalized": "23.0.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/facebook/php-graph-sdk.git",
-                "reference": "38fd7187a6704d3ab14ded2f3a534ac4ee6f3481"
+                "url": "https://github.com/facebook/facebook-php-business-sdk.git",
+                "reference": "1eb51fddd9bbd4af239b5dd940e727216c0278a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/facebook/php-graph-sdk/zipball/38fd7187a6704d3ab14ded2f3a534ac4ee6f3481",
-                "reference": "38fd7187a6704d3ab14ded2f3a534ac4ee6f3481",
+                "url": "https://api.github.com/repos/facebook/facebook-php-business-sdk/zipball/1eb51fddd9bbd4af239b5dd940e727216c0278a7",
+                "reference": "1eb51fddd9bbd4af239b5dd940e727216c0278a7",
                 "shasum": ""
             },
             "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.4.0"
+                "guzzlehttp/guzzle": "^6.5 || ^7.0",
+                "php": ">=8.0"
             },
             "require-dev": {
-                "guzzlehttp/guzzle": "~5.0",
-                "mockery/mockery": "~0.8",
-                "phpunit/phpunit": "~4.0"
+                "mockery/mockery": "1.3.3",
+                "phpunit/phpunit": "~9",
+                "symfony/finder": "~2.6"
             },
-            "suggest": {
-                "guzzlehttp/guzzle": "Allows for implementation of the Guzzle HTTP client"
-            },
-            "time": "2016-05-13T17:28:30+00:00",
+            "time": "2025-10-13T22:33:29+00:00",
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.x-dev"
-                }
-            },
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Facebook\\": "src/Facebook/"
+                    "FacebookAds\\": "src/FacebookAds/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Facebook Platform"
-            ],
-            "authors": [
-                {
-                    "name": "Facebook",
-                    "homepage": "https://github.com/facebook/facebook-php-sdk-v4/contributors"
-                }
-            ],
-            "description": "Facebook SDK for PHP",
-            "homepage": "https://github.com/facebook/facebook-php-sdk-v4",
+            "description": "PHP SDK for Facebook Business",
+            "homepage": "https://developers.facebook.com/",
             "keywords": [
+                "ads",
+                "business",
                 "facebook",
+                "instagram",
+                "page",
                 "sdk"
             ],
             "support": {
-                "issues": "https://github.com/facebook/php-graph-sdk/issues",
-                "source": "https://github.com/facebook/php-graph-sdk/tree/5.1.4"
+                "issues": "https://github.com/facebook/facebook-php-business-sdk/issues",
+                "source": "https://github.com/facebook/facebook-php-business-sdk/tree/23.0.3"
             },
-            "abandoned": true,
-            "install-path": "../facebook/graph-sdk"
+            "install-path": "../facebook/php-business-sdk"
         },
         {
             "name": "firebase/php-jwt",
@@ -2076,62 +2113,6 @@
             "install-path": "../patreon/patreon"
         },
         {
-            "name": "paypal/paypal-checkout-sdk",
-            "version": "1.0.2",
-            "version_normalized": "1.0.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/Checkout-PHP-SDK.git",
-                "reference": "19992ce7051ff9e47e643f28abb8cc1b3e5f1812"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/Checkout-PHP-SDK/zipball/19992ce7051ff9e47e643f28abb8cc1b3e5f1812",
-                "reference": "19992ce7051ff9e47e643f28abb8cc1b3e5f1812",
-                "shasum": ""
-            },
-            "require": {
-                "paypal/paypalhttp": "1.0.1"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7"
-            },
-            "time": "2021-09-21T20:57:38+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Sample\\": "samples/",
-                    "PayPalCheckoutSdk\\": "lib/PayPalCheckoutSdk"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "https://github.com/paypal/Checkout-PHP-SDK/blob/master/LICENSE"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/Checkout-PHP-SDK/contributors"
-                }
-            ],
-            "description": "PayPal's PHP SDK for Checkout REST APIs",
-            "homepage": "http://github.com/paypal/Checkout-PHP-SDK/",
-            "keywords": [
-                "checkout",
-                "orders",
-                "payments",
-                "paypal",
-                "rest",
-                "sdk"
-            ],
-            "support": {
-                "source": "https://github.com/paypal/Checkout-PHP-SDK/tree/1.0.2"
-            },
-            "abandoned": "paypal/paypal-server-sdk",
-            "install-path": "../paypal/paypal-checkout-sdk"
-        },
-        {
             "name": "paypal/paypal-server-sdk",
             "version": "1.1.0",
             "version_normalized": "1.1.0.0",
@@ -2177,53 +2158,6 @@
                 "source": "https://github.com/paypal/PayPal-PHP-Server-SDK/tree/1.1.0"
             },
             "install-path": "../paypal/paypal-server-sdk"
-        },
-        {
-            "name": "paypal/paypalhttp",
-            "version": "1.0.1",
-            "version_normalized": "1.0.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/paypal/paypalhttp_php.git",
-                "reference": "7b09c89c80828e842c79230e7f156b61fbb68d25"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/paypal/paypalhttp_php/zipball/7b09c89c80828e842c79230e7f156b61fbb68d25",
-                "reference": "7b09c89c80828e842c79230e7f156b61fbb68d25",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^5.7",
-                "wiremock-php/wiremock-php": "1.43.2"
-            },
-            "time": "2021-09-14T21:35:26+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "PayPalHttp\\": "lib/PayPalHttp"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "PayPal",
-                    "homepage": "https://github.com/paypal/paypalhttp_php/contributors"
-                }
-            ],
-            "support": {
-                "issues": "https://github.com/paypal/paypalhttp_php/issues",
-                "source": "https://github.com/paypal/paypalhttp_php/tree/1.0.1"
-            },
-            "abandoned": true,
-            "install-path": "../paypal/paypalhttp"
         },
         {
             "name": "php-http/httplug",

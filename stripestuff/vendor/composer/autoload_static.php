@@ -47,7 +47,6 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
             'Symfony\\Polyfill\\Mbstring\\' => 26,
             'Stripe\\' => 7,
             'Square\\' => 7,
-            'Sample\\' => 7,
         ),
         'Q' => 
         array (
@@ -60,8 +59,6 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
             'PaypalServerSdkLib\\' => 19,
-            'PayPalHttp\\' => 11,
-            'PayPalCheckoutSdk\\' => 18,
             'Patreon\\' => 8,
             'ParagonIE\\ConstantTime\\' => 23,
         ),
@@ -104,7 +101,7 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
-            'Facebook\\' => 9,
+            'FacebookAds\\' => 12,
         ),
         'D' => 
         array (
@@ -116,6 +113,7 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
             'CoreInterfaces\\' => 15,
             'Composer\\CaBundle\\' => 18,
             'Coderjerk\\BirdElephant\\' => 23,
+            'Cloudflare\\API\\' => 15,
         ),
         'B' => 
         array (
@@ -158,10 +156,6 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         array (
             0 => __DIR__ . '/..' . '/square/square/src',
         ),
-        'Sample\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/samples',
-        ),
         'QuickBooksOnline\\API\\' => 
         array (
             0 => __DIR__ . '/..' . '/quickbooks/v3-php-sdk/src',
@@ -186,14 +180,6 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'PaypalServerSdkLib\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypal-server-sdk/src',
-        ),
-        'PayPalHttp\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp',
-        ),
-        'PayPalCheckoutSdk\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/paypal/paypal-checkout-sdk/lib/PayPalCheckoutSdk',
         ),
         'Patreon\\' => 
         array (
@@ -267,9 +253,9 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
-        'Facebook\\' => 
+        'FacebookAds\\' => 
         array (
-            0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
+            0 => __DIR__ . '/..' . '/facebook/php-business-sdk/src/FacebookAds',
         ),
         'DocuSign\\eSign\\' => 
         array (
@@ -290,6 +276,10 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'Coderjerk\\BirdElephant\\' => 
         array (
             0 => __DIR__ . '/..' . '/coderjerk/bird-elephant/src',
+        ),
+        'Cloudflare\\API\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cloudflare/sdk/src',
         ),
         'Braintree\\' => 
         array (
