@@ -8,7 +8,7 @@ export async function StartVideoOrWebcam(Shuba, videoElement) {
     //Shuba.VideoAudioElement = audioElement;//Create Audio Element;
     Shuba.VideoElement = videoElement;
     Shuba.VideoAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-
+    //env variable
     Shuba.VideoWebSocket = new WebSocket("wss://world.tsunamiflow.club/websocket");
 
     Shuba.VideoNetworkState(Shuba.VideoElement);

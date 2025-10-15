@@ -7,7 +7,7 @@ let targetUsername = null;
 
 const TFconfig = {
     iceServers: [
-        {
+        { //env variable
             urls: "stun:stun.cloudflare.com:3478"
         }
     ],
@@ -18,7 +18,7 @@ let TFpcWrtc = new RTCPeerConnection(TFconfig);
 const TFconstraintsWrtc = { audio: true, video: true };
 const TFselfVideoWrtc = document.getElementById("local_video");
 const TFremoteVideoWrtc = document.getElementById("received_video");
-const TFsignalerWrtc = new WebSocket("wss://webhook.tsunamiflow.club:8080");
+const TFsignalerWrtc = new WebSocket("wss://world.tsunamiflow.club/websocket");
 
 const supportsEncodedTransforms = window.RTCRtpSender && "transform" in RTCRtpSender.prototype;
 

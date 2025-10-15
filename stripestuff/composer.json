@@ -1,6 +1,23 @@
 {
     "require": {
-        "stripe/stripe-php": "^18.0",
-        "aws/aws-sdk-php": "*"
+        "stripe/stripe-php": "*",
+        "aws/aws-sdk-php": "^3.356",
+        "kreait/firebase-php": "*",
+        "google/apiclient": "*",
+        "docusign/esign-client": "^5.6",
+        "paypal/paypal-checkout-sdk": "*",
+        "braintree/braintree_php": "*",
+        "tumblr/tumblr": "*",
+        "facebook/graph-sdk": "*",
+        "patreon/patreon": "*",
+        "google/apiclient-services": "^0.416.0",
+        "quickbooks/v3-php-sdk": "^6.2",
+        "square/square": "^43.1",
+        "microsoft/microsoft-graph": "^1.110",
+        "coderjerk/bird-elephant": "^0.7.1",
+        "abraham/twitteroauth": "^7.0"
+    },
+    "config": {
+        "process-timeout": 2400
     }
 }

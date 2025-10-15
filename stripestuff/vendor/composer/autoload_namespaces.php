@@ -6,4 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Tumblr\\API' => array($vendorDir . '/tumblr/tumblr/lib'),
+    'Rs\\Json' => array($vendorDir . '/php-jsonpointer/php-jsonpointer/src'),
+    'Eher\\OAuth' => array($vendorDir . '/eher/oauth/src'),
 );
