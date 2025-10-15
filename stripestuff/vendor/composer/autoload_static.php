@@ -16,6 +16,13 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '8a9dc1de0ca7e01f3e08231539562f61' => __DIR__ . '/..' . '/aws/aws-sdk-php/src/functions.php',
         'a8d3953fd9959404dd22d3dfcd0a79f0' => __DIR__ . '/..' . '/google/apiclient/src/aliases.php',
+        '07d7f1a47144818725fd8d91a907ac57' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/create_uploaded_file.php',
+        'da94ac5d3ca7d2dbab84ce561ce72bfd' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_headers_from_sapi.php',
+        '3d97c8dcdfba8cb85d3b34f116bb248b' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_method_from_sapi.php',
+        'e6f3bc6883e449ab367280b34158c05b' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/marshal_protocol_version_from_sapi.php',
+        'de95e0ac670b27c84ef8c5ac41fc1b34' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_server.php',
+        'b6c2870932b0250c10334a86dcb33c7f' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/normalize_uploaded_files.php',
+        'd02cf21124526632320d6f20b1bbf905' => __DIR__ . '/..' . '/laminas/laminas-diactoros/src/functions/parse_cookie_header.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -52,6 +59,7 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
+            'PaypalServerSdkLib\\' => 19,
             'PayPalHttp\\' => 11,
             'PayPalCheckoutSdk\\' => 18,
             'Patreon\\' => 8,
@@ -61,6 +69,10 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         array (
             'Monolog\\' => 8,
             'Microsoft\\Graph\\' => 16,
+        ),
+        'L' => 
+        array (
+            'Laminas\\Diactoros\\' => 18,
         ),
         'K' => 
         array (
@@ -73,6 +85,11 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'I' => 
         array (
             'Ivory\\HttpAdapter\\' => 18,
+        ),
+        'H' => 
+        array (
+            'Http\\Promise\\' => 13,
+            'Http\\Client\\' => 12,
         ),
         'G' => 
         array (
@@ -166,6 +183,10 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'PaypalServerSdkLib\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paypal/paypal-server-sdk/src',
+        ),
         'PayPalHttp\\' => 
         array (
             0 => __DIR__ . '/..' . '/paypal/paypalhttp/lib/PayPalHttp',
@@ -190,6 +211,10 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         array (
             0 => __DIR__ . '/..' . '/microsoft/microsoft-graph/src',
         ),
+        'Laminas\\Diactoros\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laminas/laminas-diactoros/src',
+        ),
         'Kreait\\Firebase\\' => 
         array (
             0 => __DIR__ . '/..' . '/kreait/firebase-php/src',
@@ -201,6 +226,14 @@ class ComposerStaticInit90cc7dcc0d47582dc6c12f4e4a7ef1d4
         'Ivory\\HttpAdapter\\' => 
         array (
             0 => __DIR__ . '/..' . '/egeloen/http-adapter/src',
+        ),
+        'Http\\Promise\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/promise/src',
+        ),
+        'Http\\Client\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/php-http/httplug/src',
         ),
         'GuzzleHttp\\Subscriber\\Oauth\\' => 
         array (

@@ -15,7 +15,10 @@
         "square/square": "^43.1",
         "microsoft/microsoft-graph": "^1.110",
         "coderjerk/bird-elephant": "^0.7.1",
-        "abraham/twitteroauth": "^7.0"
+        "abraham/twitteroauth": "^7.0",
+        "php-http/httplug": "^2.4",
+        "paypal/paypal-server-sdk": "^1.1",
+        "laminas/laminas-diactoros": "^3.8"
     },
     "config": {
         "process-timeout": 2400
