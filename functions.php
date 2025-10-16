@@ -738,8 +738,9 @@ function createTpaymentFintent() {
 //Create Payment Intent Ends.
 
 //Confirm Payment Intent
-/*
+
 function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $oneTimePayment, $DorS) {
+/*
     global $StfPk;
     try{
         //Webhook Events
