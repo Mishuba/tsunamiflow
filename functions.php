@@ -1,6 +1,7 @@
 <?php
 require_once "Arrays.php";
 require_once "Objects.php";
+/*
 require_once "stripestuff/vendor/autoload.php";
 
 use Stripe\Subscription;
@@ -13,7 +14,7 @@ use \Stripe\Exception\RateLimitException;
 use \Stripe\Exception\InvalidRequestException;
 use \Stripe\Exception\AuthenticationException;
 use \Stripe\Exception\ApiConnectionException; 
-
+*/
 $TfRcI = @file_get_contents("php://input");
 $UseThis = json_decode($TfRcI);
 
@@ -670,8 +671,9 @@ function Login(){
 //Nav Login ends
 
 //Stripe && Handling Payments 
-$StfPk = new StripeClient(TfStripeSecretKey); //Public Key
+//$StfPk = new StripeClient(TfStripeSecretKey); //Public Key
 //Create Payment Intent
+/*
 function createTpaymentFintent()        {
     global $StfPk;
     $TpiF = @file_get_contents("php://input");
@@ -729,8 +731,9 @@ function createTpaymentFintent()        {
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
 }
+*/
 //Create Payment Intent Ends.
-
+/*
 //Confirm Payment Intent
 function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $oneTimePayment, $DorS) {
     global $StfPk;
@@ -904,11 +907,14 @@ function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
 }
+*/
 //Confirm Payment Intent Ends.
-
+/*
 function getTaxIdType($countryCode) {
     return $taxIdTypes[$countryCode] ?? null;
 }
+*/
+/*
 function TcreateFcustomer($email, $name, $taxId, $countryCode, $description, $PaymentMethodId): Fiber {
     return new Fiber(function () use ($email, $name, $taxId, $countryCode, $description, $PaymentMethodId) {
         Fiber::suspend("Creating customer asynchroncously ... \n");
@@ -966,7 +972,8 @@ function TcreateFcustomer($email, $name, $taxId, $countryCode, $description, $Pa
         }
     });
 }
-
+*/
+/*
 function updateTpaymentFintent($RetrievedPaymentIntent, $RetrievedPaymentMethod) {
     global $StfPk;
     try {
@@ -999,9 +1006,9 @@ function updateTpaymentFintent($RetrievedPaymentIntent, $RetrievedPaymentMethod)
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
 }
 }
-
+*/
 //Subscriber
-
+/*
 function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMethod) {
     global $StfPk;
     try {
@@ -1022,9 +1029,10 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
 }
-
+*/
 //Choose Payment Type
-        function WhichPaymentWeDoing($oneTimePayment, $PaymentMethod, $PaymentAmount/*, $TypeOfThing*/){
+/*
+        function WhichPaymentWeDoing($oneTimePayment, $PaymentMethod, $PaymentAmount){//, $TypeOfThing
             global $StfPk;
             $TfStoreShit = json_decode(file_get_contents("php://input"), true);
             try {
@@ -1391,7 +1399,7 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
                 }
     }
 }
-
+*/
 //Printful Functions
 function BasicPrintfulRequest()
 {
