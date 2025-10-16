@@ -367,7 +367,7 @@ Helps maintain brand consistency across user platforms-->
     <footer>
         <div id="TFstore">
             <?php if ($showSuccess === true): ?>
-                <p> success </p>
+                <h> Tsunami Flow Store </h>
 <ul>
                 <?php
                 if (isset($myProductsFr["result"]) && is_array($myProductsFr['result'])) {
