@@ -366,58 +366,58 @@ Helps maintain brand consistency across user platforms-->
     </article>
     <footer>
         <div id="TFstore">
-            <?php// if ($showSuccess): ?>
+            <?php if ($showSuccess): ?>
                 <p> success </p>
-            <?php // endif; ?>
+            <?php endif; ?>
 
             <ul>
                 <?php
-             /*   if (isset($myProductsFr["result"]) && is_array($myProductsFr['result'])) {
+                if (isset($myProductsFr["result"]) && is_array($myProductsFr['result'])) {
                     foreach ($myProductsFr["result"] as $ItemsFr) {
-              */  ?>
-                        <li id="<?php /* echo (htmlspecialchars($ItemsFr["name"] ?? "No Name")); */?>">
-                            <h4><?php /* echo (htmlspecialchars($ItemsFr["name"] ?? "No Name")); */ ?></h4>
-                            <img src="<?php /* echo (htmlspecialchars($ItemsFr["thumbnail_url"] ?? "No Url"));*/ ?>">
+                ?>
+                        <li id="<?php  echo (htmlspecialchars($ItemsFr["name"] ?? "No Name")); ?>">
+                            <h4><?php  echo (htmlspecialchars($ItemsFr["name"] ?? "No Name"));  ?></h4>
+                            <img src="<?php  echo (htmlspecialchars($ItemsFr["thumbnail_url"] ?? "No Url")); ?>">
                             <br>
                             <p>
                                 <?php
-  /*                              $TheDescriptionFr = PrintfulProductionDescription($ItemsFr["id"]);
-                                echo (htmlspecialchars($TheDescriptionFr["result"]["product"]["description"] ?? "Description Unavailable" /*var_dump($TheDescriptionFr)*/)); */ ?>
+                               $TheDescriptionFr = PrintfulProductionDescription($ItemsFr["id"]);
+                                echo (htmlspecialchars($TheDescriptionFr["result"]["product"]["description"] ?? "Description Unavailable" /*var_dump($TheDescriptionFr)*/));  ?>
                             </p>
                             <form method="POST" action="server.php" target="self">
                                 <?php
-/*                                $printfulVariants = getVariantandPrice($ItemsFr["id"]);
+                               $printfulVariants = getVariantandPrice($ItemsFr["id"]);
                                 //var_dump($printfulVariants["sync_variants"]);
                                 if (is_array($printfulVariants) && !empty($printfulVariants)) {
-                               */ ?>
+                                ?>
                                     <select name="product_id" required>
                                         <?php
- /*                                       foreach ($printfulVariants["sync_variants"] as $variant) {
-                                   */     ?>
-                                            <option value="<?php /* echo htmlspecialchars($variant["id"]); */ ?>"><?php /* echo (htmlspecialchars($variant["name"])); ?> (Price: <?php */ echo (htmlspecialchars($variant["retail_price"])); ?>) (Size: <?php /* echo (htmlspecialchars($variant["size"])); */ ?>) (Availability: <?php /* echo (htmlspecialchars($variant["availability_status"])); */ ?>)</option>
-                                        <?php /*
+                                        foreach ($printfulVariants["sync_variants"] as $variant) {
+                                        ?>
+                                            <option value="<?php  echo htmlspecialchars($variant["id"]);  ?>"><?php  echo (htmlspecialchars($variant["name"])); ?> (Price: <?php  echo (htmlspecialchars($variant["retail_price"])); ?>) (Size: <?php  echo (htmlspecialchars($variant["size"]));  ?>) (Availability: <?php  echo (htmlspecialchars($variant["availability_status"]));  ?>)</option>
+                                        <?php 
                                         }
-                                      */  ?>
+                                        ?>
                                     </select>
                                     <br>
                                 <?php
-             /*                   } else {
-                            */    ?>
+                               } else {
+                                ?>
                                     <select>
                                         <option value=""> No Variants Available </option>
                                     </select>
-                                <?php /*
+                                <?php
                                 }
-                           */     ?>
+                              ?>
                                 <input  type="number" name=”StoreQuantity" value="1" min="1" max="1000">
-                                <input type="hidden" name="product_id" value="<?php /* echo (htmlspecialchars($variant["id"])); */ ?>">
+                                <input type="hidden" name="product_id" value="<?php  echo (htmlspecialchars($variant["id"])); ?>">
                                 <button id="StoreButton" type="submit" name="addProductToCart"> Add to Cart </button>
                             </form>
                         </li>
-                <?php /*
+                <?php 
                     }
                 }
-           */     ?>
+                ?>
             </ul>
             <p>
                 Cost:
