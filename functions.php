@@ -1506,7 +1506,7 @@ function UserShoppingCartWishList(){
 }
 
 //Create an Order
-/*
+
 function NPOtfTS($orderData)
 {
 /*
