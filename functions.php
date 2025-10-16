@@ -98,7 +98,7 @@ function handleDatabaseError($e){
 function TsunamiDatabaseFlow($which){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
     if ($which === "postgresql") {
-        $TycadomeDatabase = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions);
+        //$TycadomeDatabase = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions);
     } else if ($which === "mysql") {
         //headers
         /*
@@ -674,8 +674,9 @@ function Login(){
 //Stripe && Handling Payments 
 //$StfPk = new StripeClient(TfStripeSecretKey); //Public Key
 //Create Payment Intent
+
+function createTpaymentFintent() {
 /*
-function createTpaymentFintent()        {
     global $StfPk;
     $TpiF = @file_get_contents("php://input");
     $JSpmInfo = json_decode($TpiF);
@@ -731,11 +732,13 @@ function createTpaymentFintent()        {
     } catch (ApiConnectionException $e) {
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
+        */
 }
-*/
+
 //Create Payment Intent Ends.
-/*
+
 //Confirm Payment Intent
+/*
 function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $oneTimePayment, $DorS) {
     global $StfPk;
     try{
@@ -907,16 +910,19 @@ function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $
     } catch (ApiConnectionException $e) {
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
+        */
 }
-*/
+
 //Confirm Payment Intent Ends.
-/*
+
 function getTaxIdType($countryCode) {
-    return $taxIdTypes[$countryCode] ?? null;
-}
-*/
 /*
+    return $taxIdTypes[$countryCode] ?? null;
+    */
+}
+
 function TcreateFcustomer($email, $name, $taxId, $countryCode, $description, $PaymentMethodId): Fiber {
+/*
     return new Fiber(function () use ($email, $name, $taxId, $countryCode, $description, $PaymentMethodId) {
         Fiber::suspend("Creating customer asynchroncously ... \n");
     global $StfPk;
@@ -972,10 +978,11 @@ function TcreateFcustomer($email, $name, $taxId, $countryCode, $description, $Pa
             return json_encode(["error" => "An unexpected error occurred: " . $e->getMessage()]);
         }
     });
+    */
 }
-*/
-/*
+
 function updateTpaymentFintent($RetrievedPaymentIntent, $RetrievedPaymentMethod) {
+/*
     global $StfPk;
     try {
         if (!$RetrievedPaymentIntent || !$RetrievedPaymentMethod) {
@@ -1006,11 +1013,13 @@ function updateTpaymentFintent($RetrievedPaymentIntent, $RetrievedPaymentMethod)
     } catch (ApiConnectionException $e) {
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
 }
+        */
 }
-*/
+
 //Subscriber
-/*
+
 function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMethod) {
+/*
     global $StfPk;
     try {
         $TpFmSub = $StfPk->paymentMethods->retrieve($RetrievedPaymentMethod);
@@ -1029,11 +1038,13 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
     } catch (ApiConnectionException $e) {
         return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
+        */
 }
-*/
+
 //Choose Payment Type
-/*
+
         function WhichPaymentWeDoing($oneTimePayment, $PaymentMethod, $PaymentAmount){//, $TypeOfThing
+        /*
             global $StfPk;
             $TfStoreShit = json_decode(file_get_contents("php://input"), true);
             try {
@@ -1399,8 +1410,7 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
                     }
                 }
     }
-}
-*/
+*/}
 
 //Printful Functions
 function BasicPrintfulRequest()
