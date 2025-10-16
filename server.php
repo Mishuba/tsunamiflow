@@ -472,7 +472,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 //If Statements End
 // Lets Begin the Process Now 
 
-$myProductsFr = BasicPrintfulRequest();
+// $myProductsFr = BasicPrintfulRequest();
+$myProductsFr = false;
 
 if (!$myProductsFr) {
     $showSuccess = "No data received from Printful API. ";
