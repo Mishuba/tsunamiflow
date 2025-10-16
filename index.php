@@ -368,9 +368,7 @@ Helps maintain brand consistency across user platforms-->
         <div id="TFstore">
             <?php if ($showSuccess): ?>
                 <p> success </p>
-            <?php endif; ?>
-
-            <ul>
+<ul>
                 <?php
                 if (isset($myProductsFr["result"]) && is_array($myProductsFr['result'])) {
                     foreach ($myProductsFr["result"] as $ItemsFr) {
@@ -422,6 +420,8 @@ Helps maintain brand consistency across user platforms-->
             <p>
                 Cost:
             </p>
+
+            <?php endif; ?>
         </div>
     </footer>
 <script type="module" crossorigin="anonymous">
