@@ -471,6 +471,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 //If Statements End
 // Lets Begin the Process Now 
+/*
 $myProductsFr = BasicPrintfulRequest();
 
 if (!$myProductsFr) {
@@ -479,4 +480,5 @@ if (!$myProductsFr) {
 } else {
     $showSuccess = isset($_GET["success"]) && $_GET["success"] === "true";
 }
+    */
 ?>

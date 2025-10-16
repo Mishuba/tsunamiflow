@@ -738,8 +738,9 @@ function createTpaymentFintent() {
 //Create Payment Intent Ends.
 
 //Confirm Payment Intent
-/*
+
 function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $oneTimePayment, $DorS) {
+/*
     global $StfPk;
     try{
         //Webhook Events
@@ -1415,6 +1416,7 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
 //Printful Functions
 function BasicPrintfulRequest()
 {
+    /*
     $someCurl = curl_init(PrintfulBaseUrl . "store/products");
     curl_setopt($someCurl, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
     curl_setopt($someCurl, CURLOPT_RETURNTRANSFER, true);
@@ -1431,11 +1433,13 @@ function BasicPrintfulRequest()
 
     curl_close($someCurl);
     return $myStoreItems;
+    */
 }
 
 //Printful Product Description
 function PrintfulProductionDescription($printfulProduct_id)
 {
+    /*
     $regularPrintfulShit = "https://api.printful.com/products/$printfulProduct_id";
     $SomeDescription = curl_init($regularPrintfulShit);
 
@@ -1460,11 +1464,13 @@ function PrintfulProductionDescription($printfulProduct_id)
 
     // Check if the product and description exist and return it, otherwise return an empty array
     return $DescriptionDecodeResponse;
+    */
 }
 
 //Choose Store Items
 function getVariantandPrice($variantId)
 {
+    /*
     $PrintfulVariantId = "https://api.printful.com/store/products/$variantId";
     $TFvariant = curl_init($PrintfulVariantId);
     curl_setopt($TFvariant, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
@@ -1480,11 +1486,13 @@ function getVariantandPrice($variantId)
 
     $VariantResponse = json_decode($VariantResponse, true);
     return isset($VariantResponse["result"]) ? $VariantResponse["result"] : [];
+    */
 }
 
 function UserShoppingCartWishList(){
     // Handle the shopping cart logic
     // Add product to session/cart
+    /*
     $_SESSION["TfShoppingCartWish"][] = [
         'product_id' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
         'variant_id' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
@@ -1494,12 +1502,14 @@ function UserShoppingCartWishList(){
     ];
     header("Location: " . $_SERVER["PHP_SELF"]);
     exit();
+    */
 }
 
 //Create an Order
 /*
 function NPOtfTS($orderData)
 {
+/*
     //Printful Order
     // Initialize cURL session to make the API request
     $ch = curl_init(PrintfulOrdersUrl);
@@ -1529,8 +1539,9 @@ function NPOtfTS($orderData)
         }
     }
     //Orders Ends
-}
     */
+}
+    
 //Printful Functions Ends
 
 //Webhook Functions
