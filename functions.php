@@ -10,6 +10,7 @@ use Stripe\StripeClient;
 use Stripe\PaymentIntent;
 use \Stripe\Exception\ApiErrorException;
 use \Stripe\Exception\CardException;
++
 use \Stripe\Exception\RateLimitException;
 use \Stripe\Exception\InvalidRequestException;
 use \Stripe\Exception\AuthenticationException;
@@ -1257,7 +1258,7 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
                                                 "error" => "no error"
                                             ];
                                         } else if ($TheIntentTFcs == "requires_confirmation") {
-                                                $TheIntentStatus = $StfPk->paymentIntents->confirm($TfStoreIntent->id, [/*https://www.tsunamiflow.club/server.php*/]); //maybe add a return url;
+                                                $TheIntentStatus = $StfPk->paymentIntents->confirm($TfStoreIntent->id, []); //maybe add a return url  https://www.tsunamiflow.club/server.php
                                         }
                                     } else {
                                         //This is for subscribers
@@ -1400,6 +1401,7 @@ function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMeth
     }
 }
 */
+
 //Printful Functions
 function BasicPrintfulRequest()
 {
