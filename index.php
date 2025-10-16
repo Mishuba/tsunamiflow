@@ -366,7 +366,7 @@ Helps maintain brand consistency across user platforms-->
     </article>
     <footer>
         <div id="TFstore">
-            <?php if ($showSuccess): ?>
+            <?php if ($showSuccess === true): ?>
                 <p> success </p>
 <ul>
                 <?php
