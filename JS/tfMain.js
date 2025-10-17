@@ -59,13 +59,37 @@ TFiframe.width = 925;
 TFiframe.height = 430;
 TFiframe.style.background = "white";
 
+const oneMore = TFiframe;
+
+oneMore.addEventListener("load", async () => {
+
+console.log("Creating JSON to send to the iframe");
+
+const HomePageJson = {
+    type: "start_updates",
+    info: HomepageUpdates.toJSON(),
+    message: "Starting the game",
+    username: "Mishuba",
+    error: null
+};
+
+console.log("Sending message to iframe...");
+
+// Make sure iframe is fully loaded before messaging
+if (oneMore && oneMore.contentWindow) {
+    oneMore.contentWindow.postMessage(HomePageJson, "*");
+    console.log("Message sent successfully");
+} else {
+    console.error("Iframe not ready or missing contentWindow");
+}
+
+};
+
 if (twoMore === null) {
 
 } else {
     twoMore.appendChild(TFiframe);
 }
-
-const oneMore = TFiframe;
 
 document.getElementById("freeLevelInputs").style.display = "none";
 document.getElementById("TFMembershipLevel").addEventListener("change", function () {
@@ -257,30 +281,6 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-
-oneMore.onload = async () => {
-
-console.log("Creating JSON to send to the iframe");
-
-const HomePageJson = {
-    type: "start_updates",
-    info: HomepageUpdates.toJSON(),
-    message: "Starting the game",
-    username: "Mishuba",
-    error: null
-};
-
-console.log("Sending message to iframe...");
-
-// Make sure iframe is fully loaded before messaging
-if (oneMore && oneMore.contentWindow) {
-    oneMore.contentWindow.postMessage(HomePageJson, "*");
-    console.log("Message sent successfully");
-} else {
-    console.error("Iframe not ready or missing contentWindow");
-}
-
-};
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
