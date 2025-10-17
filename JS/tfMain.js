@@ -85,7 +85,7 @@ oneMore.contentWindow.postMessage(HomePageJson, "*");
 } else {
     console.error("Iframe not ready or missing contentWindow");
 }
-};
+});
 
 if (twoMore === null) {
 
