@@ -242,13 +242,10 @@ export class TfMusic {
         last.id = "TFradioPreviousButton";
         last.innerHTML = "Previous";
         last.addEventListener("click", async () => {
-            /*
             RadioWorker.postMessage({
                 type: "radio",
                 system: "previous",
-                file: "not done yet"
             });
-            */
             //this.previousSong(element, oldSong);
         });
         buttonSpot.appendChild(last);
@@ -278,10 +275,10 @@ export class TfMusic {
         skip.id = "TFradioSkipButton";
         skip.innerHTML = "Next";
         skip.addEventListener("click", async () => {
+            element.src = "";
             RadioWorker.postMessage({
                 type: "radio",
-                system: "file",
-                file: element.src
+                system: "skip",
             })
         });
         buttonSpot.appendChild(skip);
@@ -458,10 +455,11 @@ export class TfMusic {
     pauseAudio(element, context) {
         this.MusicState(element, context);
     }
-    endedAudio(worker) {
+    endedAudio(element, worker) {
         console.log("The audio should have ended");
+        element.src = "";
         worker.postMessage({ type: "radio", system: "file" });
-    }
+   }
     waitingAudio(element, context) {
         this.MusicState(element, context);
     }
@@ -574,7 +572,7 @@ export class TfMusic {
         }); // Playback has been paused.
 
         element.addEventListener("ended", async (ended) => {
-            this.endedAudio(worker);
+            this.endedAudio(element, worker);
         }); //Playback has stopped because of the end of the media was reached.
 
         element.addEventListener("waiting", (waiting) => {
