@@ -62,6 +62,7 @@ TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
 
+oneMore.addEventListener("load", async () = {
 console.log("Creating JSON to send to the iframe");
 
 const HomePageJson = {
@@ -84,6 +85,7 @@ oneMore.contentWindow.postMessage(HomePageJson, "*");
 } else {
     console.error("Iframe not ready or missing contentWindow");
 }
+};
 
 if (twoMore === null) {
 
