@@ -65,9 +65,8 @@ if (twoMore === null) {
     twoMore.appendChild(TFiframe);
 }
 
-const oneMore = TFiframe.contentDocument || TFiframe.contentWindow.document;
+const oneMore = TFiframe;
 
-//oneMore.onload = async () => {HomepageUpdates.start()};
 document.getElementById("freeLevelInputs").style.display = "none";
 document.getElementById("TFMembershipLevel").addEventListener("change", function () {
     var level = this.value;
@@ -259,6 +258,8 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
 
+oneMore.onload = async () => {
+
 console.log("Creating JSON to send to the iframe");
 
 const HomePageJson = {
@@ -279,6 +280,8 @@ if (oneMore && oneMore.contentWindow) {
     console.error("Iframe not ready or missing contentWindow");
 }
 
+};
+
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
 document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
@@ -288,8 +291,4 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 });
 //Tsunami Thoughts Ends
 
-
-
 //Start non web worker stuff
-
-
