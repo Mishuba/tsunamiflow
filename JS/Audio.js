@@ -457,8 +457,9 @@ export class TfMusic {
     pauseAudio(element, context) {
         this.MusicState(element, context);
     }
-    endedAudio(ended) {
+    endedAudio(worker) {
         console.log("The audio should have ended");
+        worker.postMessage({ type: "radio", system: "file" });
     }
     waitingAudio(element, context) {
         this.MusicState(element, context);
@@ -572,7 +573,7 @@ export class TfMusic {
         }); // Playback has been paused.
 
         element.addEventListener("ended", async (ended) => {
-            this.endedAudio(ended);
+            this.endedAudio(worker);
         }); //Playback has stopped because of the end of the media was reached.
 
         element.addEventListener("waiting", (waiting) => {
