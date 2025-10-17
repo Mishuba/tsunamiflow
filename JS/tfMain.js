@@ -258,6 +258,20 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
 
+            
+                console.log("creating the json to send to the iframe");
+                let HomePageJson = {
+                    type: "start_updates",
+                    info: HomepageUpdates.toJSON(),
+                    message: "Starting the game",
+                    username: "Mishuba",
+                    error: "Nothing as of now"
+                };
+                console.log("sending the iframe message");
+                oneMore.contentWindow.postMessage(HomePageJson, "*");
+    console.log("the end of that");
+
+
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
 document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
