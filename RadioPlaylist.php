@@ -42,9 +42,9 @@ $sentToJsArray = array(
 
 function addSongsToArray($path, &$array, $index, $index2 = null){
     //$songs = glob($path . '*.mp3');
-    $matches = file_get_contents("https://www.tsunamiflow.club/Music/");
+    $matches = file_get_contents("https://www.tsunamiflow.club/Music/" . $path);
 
-    if ($matches === isFalse()) {
+    if ($matches === false) {
         error_log("Failed to fetch music listing from Cloudflare R2 HTML endpoint");
         return;
     } else {
