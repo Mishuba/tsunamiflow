@@ -209,6 +209,19 @@ try {
     if (!isset($Objects["Contents"])) {
         throw new Exception("No contents returned from R2 listObjects");
     } else {
+
+            foreach ($Objects["Contents"] as $song) {
+                if ($index2 === null) {
+                    array_push($array[$index], $song);
+                } else if ($index2 !== null) {
+                    array_push($array[$index][$index2], $song);
+                } else {
+                    array_push($array[11], $song);
+                }
+
+
+
+
         foreach ($Objects["Contents"] as $objects) {
             if (str_ends_with($objects["Key"], ".mp3")) {
                 //$EverythingRadio[] = 
