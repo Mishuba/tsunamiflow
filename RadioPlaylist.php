@@ -78,6 +78,9 @@ if (isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVER["HTTP_X_REQUEST_TYPE"] ==
                     } else {
                         $array[$index][$index2][] = $url;
                     }
+                    if (!isset($array[11])) {
+                        $array[11] = [];
+                   }
                     $array[11][] = $url;
                     $added++;
                 }
