@@ -62,7 +62,7 @@ TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
 
-oneMore.addEventListener("load", async () = {
+oneMore.addEventListener("load", async () => {
 console.log("Creating JSON to send to the iframe");
 
 const HomePageJson = {
