@@ -5,7 +5,7 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
-import { Weather } from "./Classes.js";
+import { Weather } from "./Weather.js";
 import { DoTheThingMan } from "./Functions.js";
 
 let TfWeather = new Weather();
