@@ -258,19 +258,25 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
 
-            
-                console.log("creating the json to send to the iframe");
-                let HomePageJson = {
-                    type: "start_updates",
-                    info: HomepageUpdates.toJSON(),
-                    message: "Starting the game",
-                    username: "Mishuba",
-                    error: "Nothing as of now"
-                };
-                console.log("sending the iframe message");
-                oneMore.contentWindow.postMessage(HomePageJson, "*");
-    console.log("the end of that");
+console.log("Creating JSON to send to the iframe");
 
+const HomePageJson = {
+    type: "start_updates",
+    info: HomepageUpdates.toJSON(),
+    message: "Starting the game",
+    username: "Mishuba",
+    error: null
+};
+
+console.log("Sending message to iframe...");
+
+// Make sure iframe is fully loaded before messaging
+if (oneMore && oneMore.contentWindow) {
+    oneMore.contentWindow.postMessage(HomePageJson, "*");
+    console.log("Message sent successfully");
+} else {
+    console.error("Iframe not ready or missing contentWindow");
+}
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
