@@ -9,7 +9,7 @@ ini_set("session.use_strict_mode", true);
 
 session_start();
 
-header("Content-Type: audio/mpeg"); // MP3
+// MP3
 header("Accept-Ranges: bytes");
 
 header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
