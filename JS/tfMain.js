@@ -78,6 +78,9 @@ console.log("Sending message to iframe...");
 if (oneMore && oneMore.contentWindow) {
     oneMore.contentWindow.postMessage(HomePageJson, "*");
     console.log("Message sent successfully");
+} else if (oneMore && oneMore.contentdocument) {
+oneMore.contentWindow.postMessage(HomePageJson, "*");
+    console.log("Message sent successfully");
 } else {
     console.error("Iframe not ready or missing contentWindow");
 }
