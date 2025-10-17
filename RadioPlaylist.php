@@ -41,29 +41,50 @@ $sentToJsArray = array(
 );
 
 function addSongsToArray($path, &$array, $index, $index2 = null){
-    //$songs = glob($path . '*.mp3');
-    $matches = file_get_contents("https://www.tsunamiflow.club/Music/" . $path);
+    try {
+    $accountId = "ac47c31c7548ac580a0b4caaed91d41f";
+    $accessKey = "e049b04aab83b8cf7e2d73ea3c660c66";
+    $secretKey = "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212";
+    $credentials = new Aws\Credentials\Credentials($accessKey, $secretKey);
+    $StorageBucket = new Aws\S3\S3Client([
+        "region" => "auto",
+        "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
+        "version" => "latest",
+        "credentials" => $credentials
+    ]);
 
-    if ($matches === false) {
-        error_log("Failed to fetch music listing from Cloudflare R2 HTML endpoint");
-        return;
+    $Objects = $StorageBucket->listObjectsV2([
+        "Bucket" => "tsunami-radio",
+        "Prefix" => "Music/"
+    ]);
+
+    if (!isset($Objects["Contents"])) {
+        throw new Exception("No contents returned from R2 listObjects");
     } else {
-        preg_match_all('/href="([^"]+\.mp3)"/', $matches, $songs);
+            
+            foreach ($Objects["Contents"] as $song) {
 
-        if (empty($songs[1])) {
-            error_log("No MPE files found in HTML listing");
-            return;
-        } else {
-            foreach ($songs[1] as $song) {
+if (str_ends_with($objects["Key"], ".mp3")) {
                 if ($index2 === null) {
-                    array_push($array[$index], $song);
+                    array_push($array[$index], "https://www.tsunamiflow.club/" . $objects["Key"]);
                 } else if ($index2 !== null) {
-                    array_push($array[$index][$index2], $song);
+                    array_push($array[$index][$index2], "https://www.tsunamiflow.club/" . $objects["Key"]);
                 } else {
-                    array_push($array[11], $song);
+                    array_push($array[11], "https://www.tsunamiflow.club/" . $objects["Key"]);
                 }
-            }
-        }
+          }
+    }
+
+    if (empty($sentToJsArray)) {
+        $arrayError = json_encode(["error" => "No .mp3 files found in bucket"], JSON_INVALID_UTF8_IGNORE);
+    } else {
+
+    }
+} catch (AwsException $e) {
+            $awsError = json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()], JSON_INVALID_UTF8_IGNORE);
+} catch (Exception $e) {
+            $regularAwsError = json_encode(["error" => "PHP Exception: " . $e->getMessage()], JSON_INVALID_UTF8_IGNORE);
+}
     }
 
     error_log("Added songs to index $index" . ($index2 !== null ? " at sub-index $index2" : ""));
@@ -189,58 +210,6 @@ addSongsToArray("Music/Outside/", $sentToJsArray, 23);
 
 // Everything 
 //$EverythingRadio = glob("Music/Everything/*.mp3");
-try {
-    $accountId = "ac47c31c7548ac580a0b4caaed91d41f";
-    $accessKey = "e049b04aab83b8cf7e2d73ea3c660c66";
-    $secretKey = "fbdd66bb5fb5d0021396dea586a5d358ff0a9be106ad5bc234791690dce66212";
-    $credentials = new Aws\Credentials\Credentials($accessKey, $secretKey);
-    $StorageBucket = new Aws\S3\S3Client([
-        "region" => "auto",
-        "endpoint" => "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com",
-        "version" => "latest",
-        "credentials" => $credentials
-    ]);
-
-    $Objects = $StorageBucket->listObjectsV2([
-        "Bucket" => "tsunami-radio",
-        "Prefix" => "Music/"
-    ]);
-
-    if (!isset($Objects["Contents"])) {
-        throw new Exception("No contents returned from R2 listObjects");
-    } else {
-
-            foreach ($Objects["Contents"] as $song) {
-                if ($index2 === null) {
-                    array_push($array[$index], $song);
-                } else if ($index2 !== null) {
-                    array_push($array[$index][$index2], $song);
-                } else {
-                    array_push($array[11], $song);
-                }
-
-
-
-
-        foreach ($Objects["Contents"] as $objects) {
-            if (str_ends_with($objects["Key"], ".mp3")) {
-                //$EverythingRadio[] = 
-                array_push($sentToJsArray[11], "https://www.tsunamiflow.club/" . $objects["Key"]);
-            }
-        }
-    }
-
-    if (empty($sentToJsArray)) {
-        $arrayError = json_encode(["error" => "No .mp3 files found in bucket"], JSON_INVALID_UTF8_IGNORE);
-    } else {
-
-    }
-} catch (AwsException $e) {
-            $awsError = json_encode(["error" => "AWS Exception: " . $e->getAwsErrorMessage()], JSON_INVALID_UTF8_IGNORE);
-} catch (Exception $e) {
-            $regularAwsError = json_encode(["error" => "PHP Exception: " . $e->getMessage()], JSON_INVALID_UTF8_IGNORE);
-}
-
 
 
 /*
