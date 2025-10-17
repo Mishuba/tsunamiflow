@@ -57,6 +57,13 @@ TFiframe.allow = "camera;microphone;geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
+TFiframe.srcdoc = `
+<!DOCTYPE html>
+<html lang="en">
+<head><title>Tsunami</title></head>
+<body></body>
+</html>
+`;
 TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
