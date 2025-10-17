@@ -256,8 +256,9 @@ export class TfMusic {
         restart.id = "TFRadioRestartButton";
         restart.innerHTML = "Restart";
         restart.addEventListener("click", async () => {
-            this.restartSong(element, element.src)
-            //element.src = element.src;
+            element.currentTime = 0;
+            this.startMusic(element);
+            start.innerHTML = "Pause Tsunami Radio";
         });
         buttonSpot.appendChild(restart);
 
@@ -279,8 +280,8 @@ export class TfMusic {
         skip.addEventListener("click", async () => {
             RadioWorker.postMessage({
                 type: "radio",
-                system: "skip",
-                file: "not done yet."
+                system: "file",
+                file: element.src
             })
         });
         buttonSpot.appendChild(skip);
