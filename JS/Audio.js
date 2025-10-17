@@ -561,7 +561,7 @@ export class TfMusic {
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
         element.addEventListener("canplaythrough", async () => {
-           RadioMedia.connect(analyser);
+           audioctx.connect(analyser);
 analyser.connect(audiocontext.destination); this.canplaythroughAudio(element, audiocontext);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
