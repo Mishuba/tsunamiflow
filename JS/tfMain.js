@@ -7,6 +7,7 @@ import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Weather.js";
 import { DoTheThingMan } from "./Functions.js";
+import { HomepageUpdates } from "./sprite.js";
 
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
