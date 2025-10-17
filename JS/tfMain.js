@@ -7,7 +7,6 @@ import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Weather.js";
 import { DoTheThingMan } from "./Functions.js";
-import { HomepageUpdates } from "./sprite.js";
 
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -67,7 +66,7 @@ if (twoMore === null) {
 
 const oneMore = TFiframe.contentDocument || TFiframe.contentWindow.document;
 
-
+//oneMore.onload = async () => {HomepageUpdates.start()};
 document.getElementById("freeLevelInputs").style.display = "none";
 document.getElementById("TFMembershipLevel").addEventListener("change", function () {
     var level = this.value;
@@ -258,12 +257,6 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-
-oneMore.postMessage("Start updates","*");
-
-oneMore.onmessage = async () => {
-      HomepageUpdates.start();
-}
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
