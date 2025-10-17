@@ -61,7 +61,7 @@ export class TfMusic {
         this.RadioProcessBar;
         this.TaudioFtime;
         this.TsunamiRadioBufferLength;
-        this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
+        this.randomMusicDefault;
         //this.float32FromIterable = new Float32Array(this.TFgameIterable());
 
         //this.TFperiodicWave = context.createPeriodicWave(this.TFpwoReal, this.TFpwoImag, this.TFperiodicWaveOptions)
@@ -389,6 +389,7 @@ export class TfMusic {
         }
     }
     MusicFile(event) {
+        this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
         if (event.data.file == "undefined") {
             this.SongList = DefaultPlaylist[this.randomMusicDefault];
             console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
