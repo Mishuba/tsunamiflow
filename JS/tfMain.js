@@ -7,6 +7,7 @@ import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Weather.js";
 import { DoTheThingMan } from "./Functions.js";
+import { homepage } from "./sprite.js";
 
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -258,6 +259,14 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
 
+oneMore.postMessage({
+
+});
+
+oneMore.onmessage = async () => {
+
+}
+
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
 document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
@@ -267,4 +276,8 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 });
 //Tsunami Thoughts Ends
 
+
+
 //Start non web worker stuff
+
+
