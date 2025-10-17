@@ -380,39 +380,29 @@ export class letsDoIt {
         this.GameWorldAudio = new AudioContext();
     }
     HomePageAnimation(player) {
-        this.clear();
-        this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
-        if (player.speedX === 0) {
-            player.speedX = 1;
-        } else {
-            player.speedX = 1;
-        }
+    this.clear();
 
-        if (player.speedY === 0) {
-            player.speedY = 1;
-        } else {
-            player.speedY = 1;
-        }
+    // Draw text
+    this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
 
-        if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
-            player.speedX = -player.speedX;
-        } else {
+    // Initialize speed if needed
+    if (player.speedX === 0) player.speedX = 1;
+    if (player.speedY === 0) player.speedY = 1;
 
-        }
-
-        if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
-            if (this.frame === player.spriteDialog.length) {
-                this.frame = 0;
-            } else {
-                this.frame = this.frame + 1;
-            }
-            player.speedY = -player.speedY;
-        } else {
-            
-        }
-        player.textWidth += player.width;
-        player.textHeight += player.height;
+    // Bounce logic
+    if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
+        player.speedX = -player.speedX;
     }
+
+    if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
+        this.frame = (this.frame + 1) % player.spriteDialog.length;
+        player.speedY = -player.speedY;
+    }
+
+    // Move text
+    player.textWidth += player.speedX;
+    player.textHeight += player.speedY;
+}
     createComponent(width, height, color, x, y, speedX, speedY, type) {
         return { width, height, speedX, speedY, color, x, y, type };
     }
