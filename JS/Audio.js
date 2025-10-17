@@ -562,7 +562,8 @@ export class TfMusic {
 
         element.addEventListener("canplaythrough", async () => {
            audioctx.connect(analyser);
-analyser.connect(audiocontext.destination); this.canplaythroughAudio(element, audiocontext);
+analyser.connect(audiocontext.destination); 
+this.canplaythroughAudio(element, audiocontext);
         }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
         element.addEventListener("play", () => {
