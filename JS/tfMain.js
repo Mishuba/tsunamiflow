@@ -57,12 +57,10 @@ TFiframe.allow = "camera;microphone;geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
-TFiframe.src = "about/blank";
+TFiframe.src = "about:blank";
 TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
-
-oneMore.addEventListener("load", async () => {
 
 console.log("Creating JSON to send to the iframe");
 
@@ -83,8 +81,6 @@ if (oneMore && oneMore.contentWindow) {
 } else {
     console.error("Iframe not ready or missing contentWindow");
 }
-
-};
 
 if (twoMore === null) {
 
