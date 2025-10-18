@@ -1,4 +1,5 @@
 <?php
+// --- Required files & namespaces ---
 require_once "Arrays.php";
 require_once "Objects.php";
 require_once "stripestuff/vendor/autoload.php";
@@ -14,11 +15,12 @@ use \Stripe\Exception\InvalidRequestException;
 use \Stripe\Exception\AuthenticationException;
 use \Stripe\Exception\ApiConnectionException;
 
-// Input
-$TfRcI = @file_get_contents("php://input");
-$UseThis = json_decode($TfRcI);
+// --- Start session ---
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-// NanoTech Database Credentials
+// --- NanoTech Database Credentials ---
 $nanoH = getenv("NanoHost");
 $nanoP = getenv("NanoPort");
 $nanoDb = getenv("NanoDB");
@@ -26,15 +28,15 @@ $nanoU = getenv("NanoUser");
 $nanoPsw = getenv("NanoPsw");
 $nanoDSN = "pgsql:host=$nanoH;port=$nanoP;dbname=$nanoDb;sslmode=require;channel_binding=require";
 
+// --- Input ---
+$TfRcI = @file_get_contents("php://input");
+$UseThis = json_decode($TfRcI);
+
 // --- Utility Functions ---
 function getIpAddress() {
-    if (!empty($_SERVER["HTTP_CLIENT_IP"])) {
-        return $_SERVER["HTTP_CLIENT_IP"];
-    } elseif (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) {
-        return $_SERVER["HTTP_X_FORWARDED_FOR"];
-    } else {
-        return $_SERVER["REMOTE_ADDR"];
-    }
+    if (!empty($_SERVER["HTTP_CLIENT_IP"])) return $_SERVER["HTTP_CLIENT_IP"];
+    if (!empty($_SERVER["HTTP_X_FORWARDED_FOR"])) return $_SERVER["HTTP_X_FORWARDED_FOR"];
+    return $_SERVER["REMOTE_ADDR"];
 }
 
 function LogOut() {
@@ -53,234 +55,152 @@ function TsunamiInput($data) {
 function validate_input($inputName, $inputArray) {
     if (isset($inputArray[$inputName]) && !empty($inputArray[$inputName])) {
         $inputValue = TsunamiInput($inputArray[$inputName]);
-        if (preg_match("/^[a-zA-Z0-9-']+$/", $inputValue)) {
-            return $inputValue;
-        } else {
-            return "Invalid characters in $inputName.";
-        }
+        if (preg_match("/^[a-zA-Z0-9-']+$/", $inputValue)) return $inputValue;
+        return "Invalid characters in $inputName.";
     } else {
         switch ($inputArray) {
-            case 'number':
-                return filter_var($inputName, FILTER_VALIDATE_INT);
-            case 'email':
-                return filter_var($inputName, FILTER_VALIDATE_EMAIL);
-            case 'string':
-            default:
-                return TsunamiInput($inputName);
+            case 'number': return filter_var($inputName, FILTER_VALIDATE_INT);
+            case 'email': return filter_var($inputName, FILTER_VALIDATE_EMAIL);
+            default: return TsunamiInput($inputName);
         }
     }
 }
 
-// --- Database ---
 function handleDatabaseError($e){
     if ($e->getCode() == 23000 && strpos($e->getMessage(), "1062 Duplicate entry") !== false) {
-        echo "The username you choose is already being used. Please choose a new one.";
-        die();
+        die("The username you choose is already being used. Please choose a new one.");
     } else {
         error_log($e->getMessage(), 0);
-        $log_error_file = fopen("tferror.log", "a");
-        fwrite($log_error_file, $e->getMessage() . "\n");
-        fclose($log_error_file);
+        file_put_contents("tferror.log", $e->getMessage() . "\n", FILE_APPEND);
         die("An error occurred. Please try again later.");
     }
 }
 
 function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
-    return new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions);
+    return new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions ?? []);
 }
 
-// --- Community Functions ---
-function InputIntoDatabase($membership, $userName, $firstName, $lastName, $nickName, $gender, $birthdate, $email, $password, 
+function createCookieAndSession($key, $value, $days = 365){
+    setcookie($key, $value, time() + (86400 * $days), "/");
+    $_SESSION[$key] = $value;
+}
+
+// --- Main function to insert user data ---
+function InputIntoDatabase(
+    $membership, $userName, $firstName, $lastName, $nickName, $gender, $birthdate, $email, $password,
     $chineseZodiacSign, $westernZodiacSign, $spiritAnimal, $celticTreeZodiacSign, $nativeAmericanZodiacSign, $vedicAstrologySign,
     $guardianAngel, $ChineseElement, $eyeColorMeaning, $GreekMythologyArchetype, $NorseMythologyPatronDeity, $EgyptianZodiacSign,
     $MayanZodiacSign, $loveLanguage, $birthStone, $birthFlower, $bloodType, $attachmentStyle, $charismaType, $businessPersonality,
-    $TFuserDISC, $socionicsType, $learningStyle, $financialPersonalityType, $primaryMotivationStyle, $creativeStyle, $conflictManagementStyle,
-    $teamRolePreference
+    $TFuserDISC, $socionicsType, $learningStyle, $financialPersonalityType, $primaryMotivationStyle, $creativeStyle,
+    $conflictManagementStyle, $teamRolePreference
 ){
-    if(session_status() !== PHP_SESSION_ACTIVE) session_start();
-
-    // Helper for creating cookies and session variables
-    function createCookieAndSession($key, $value, $days = 365){
-        setcookie($key, $value, time() + (86400 * $days), "/");
-        $_SESSION[$key] = $value;
-    }
-
     try {
         $db = TsunamiDatabaseFlow();
 
-        // Insert into FreeLevelMembers
+        // --- FreeLevelMembers insert ---
         $stmt = $db->prepare("INSERT INTO FreeLevelMembers (tfUN, tfFN, tfLN, tfNN, tfGen, tfBirth, tfEM, tfPSW, created)
             VALUES (:tfUN, :tfFN, :tfLN, :tfNN, :tfGen, :tfBirth, :tfEM, :tfPSW, NOW())");
         $stmt->execute([
-            ":tfUN" => $userName,
-            ":tfFN" => $firstName,
-            ":tfLN" => $lastName,
-            ":tfNN" => $nickName,
-            ":tfGen" => $gender,
-            ":tfBirth" => $birthdate,
-            ":tfEM" => $email,
-            ":tfPSW" => $password
+            ":tfUN" => $userName, ":tfFN" => $firstName, ":tfLN" => $lastName, ":tfNN" => $nickName,
+            ":tfGen" => $gender, ":tfBirth" => $birthdate, ":tfEM" => $email, ":tfPSW" => $password
         ]);
 
-        // Set common cookies/session
-        createCookieAndSession("TfAccess", ucfirst($membership), 30);
-        createCookieAndSession("Username", $userName, 30);
-        createCookieAndSession("Birthday", $birthdate, 365000);
-        createCookieAndSession("Gender", $gender, 365000);
-        createCookieAndSession("Nickname", $nickName, 365000);
-        createCookieAndSession("Email", $email, 365);
+        // --- Set common cookies/session ---
+        $commonFields = [
+            "TfAccess" => ucfirst($membership),
+            "Username" => $userName,
+            "Birthday" => $birthdate,
+            "Gender" => $gender,
+            "Nickname" => $nickName,
+            "Email" => $email
+        ];
+        foreach ($commonFields as $key => $value) createCookieAndSession($key, $value);
 
-        // Insert additional info based on membership type
-        if (in_array($membership, ["regular", "vip", "team"])) {
-            $stmt2 = $db->prepare("INSERT INTO RegularMembers (tfUN, ChineseZodiacSign, WesternZodiacSign, SpiritAnimal,
-                CelticTreeZodiacSign, NativeAmericanZodiacSign, VedicAstrologySign, GuardianAngel, ChineseElement,
-                EyeColorMeaning, GreekMythologyArchetype, NorseMythologyPatronDeity, EgyptianZodiacSign, MayanZodiacSign)
-                VALUES (:tfUN, :ChineseZodiacSign, :WesternZodiacSign, :SpiritAnimal, :CelticTreeZodiacSign, :NativeAmericanZodiacSign,
-                :VedicAstrologySign, :GuardianAngel, :ChineseElement, :EyeColorMeaning, :GreekMythologyArchetype, :NorseMythologyPatronDeity,
-                :EgyptianZodiacSign, :MayanZodiacSign)");
+        // --- RegularMembers insert ---
+        if (in_array($membership, ["regular","vip","team"])) {
+            $stmt2 = $db->prepare("INSERT INTO RegularMembers
+                (tfUN, ChineseZodiacSign, WesternZodiacSign, SpiritAnimal, CelticTreeZodiacSign,
+                NativeAmericanZodiacSign, VedicAstrologySign, GuardianAngel, ChineseElement, EyeColorMeaning,
+                GreekMythologyArchetype, NorseMythologyPatronDeity, EgyptianZodiacSign, MayanZodiacSign)
+                VALUES (:tfUN, :ChineseZodiacSign, :WesternZodiacSign, :SpiritAnimal, :CelticTreeZodiacSign,
+                :NativeAmericanZodiacSign, :VedicAstrologySign, :GuardianAngel, :ChineseElement, :EyeColorMeaning,
+                :GreekMythologyArchetype, :NorseMythologyPatronDeity, :EgyptianZodiacSign, :MayanZodiacSign)");
             $stmt2->execute([
-                ":tfUN" => $userName,
-                ":ChineseZodiacSign" => $chineseZodiacSign,
-                ":WesternZodiacSign" => $westernZodiacSign,
-                ":SpiritAnimal" => $spiritAnimal,
-                ":CelticTreeZodiacSign" => $celticTreeZodiacSign,
-                ":NativeAmericanZodiacSign" => $nativeAmericanZodiacSign,
-                ":VedicAstrologySign" => $vedicAstrologySign,
-                ":GuardianAngel" => $guardianAngel,
-                ":ChineseElement" => $ChineseElement,
-                ":EyeColorMeaning" => $eyeColorMeaning,
-                ":GreekMythologyArchetype" => $GreekMythologyArchetype,
-                ":NorseMythologyPatronDeity" => $NorseMythologyPatronDeity,
-                ":EgyptianZodiacSign" => $EgyptianZodiacSign,
-                ":MayanZodiacSign" => $MayanZodiacSign
+                ":tfUN"=>$userName, ":ChineseZodiacSign"=>$chineseZodiacSign, ":WesternZodiacSign"=>$westernZodiacSign,
+                ":SpiritAnimal"=>$spiritAnimal, ":CelticTreeZodiacSign"=>$celticTreeZodiacSign, ":NativeAmericanZodiacSign"=>$nativeAmericanZodiacSign,
+                ":VedicAstrologySign"=>$vedicAstrologySign, ":GuardianAngel"=>$guardianAngel, ":ChineseElement"=>$ChineseElement,
+                ":EyeColorMeaning"=>$eyeColorMeaning, ":GreekMythologyArchetype"=>$GreekMythologyArchetype,
+                ":NorseMythologyPatronDeity"=>$NorseMythologyPatronDeity, ":EgyptianZodiacSign"=>$EgyptianZodiacSign,
+                ":MayanZodiacSign"=>$MayanZodiacSign
             ]);
-
-            // Set cookies/session for astrology info
-            $astrologyFields = [
-                "ChineseZodiacSign" => $chineseZodiacSign,
-                "WesternZodiacSign" => $westernZodiacSign,
-                "SpiritAnimal" => $spiritAnimal,
-                "CelticTreeZodiacSign" => $celticTreeZodiacSign,
-                "NativeAmericanZodiacSign" => $nativeAmericanZodiacSign,
-                "VedicAstrologySign" => $vedicAstrologySign,
-                "GuardianAngel" => $guardianAngel,
-                "ChineseElement" => $ChineseElement,
-                "EyeColorMeaning" => $eyeColorMeaning,
-                "GreekMythologyArchetype" => $GreekMythologyArchetype,
-                "NorseMythologyPatronDeity" => $NorseMythologyPatronDeity,
-                "EgyptianZodiacSign" => $EgyptianZodiacSign,
-                "MayanZodiacSign" => $MayanZodiacSign
-            ];
-            foreach ($astrologyFields as $key => $value) {
-                createCookieAndSession($key, $value);
-            }
+            $astrologyFields = compact(
+                "chineseZodiacSign","westernZodiacSign","spiritAnimal","celticTreeZodiacSign",
+                "nativeAmericanZodiacSign","vedicAstrologySign","guardianAngel","ChineseElement",
+                "eyeColorMeaning","GreekMythologyArchetype","NorseMythologyPatronDeity",
+                "EgyptianZodiacSign","MayanZodiacSign"
+            );
+            foreach ($astrologyFields as $k => $v) createCookieAndSession($k, $v);
         }
 
-        // VIP additional info
-        if (in_array($membership, ["vip", "team"])) {
-            $stmt3 = $db->prepare("INSERT INTO VIPMembers (tfUN, LoveLanguage, Birthstone, BirthFlower, BloodType, AttachmentStyle, CharismaType)
+        // --- VIPMembers insert ---
+        if (in_array($membership, ["vip","team"])) {
+            $stmt3 = $db->prepare("INSERT INTO VIPMembers
+                (tfUN, LoveLanguage, Birthstone, BirthFlower, BloodType, AttachmentStyle, CharismaType)
                 VALUES (:tfUN, :LoveLanguage, :Birthstone, :BirthFlower, :BloodType, :AttachmentStyle, :CharismaType)");
             $stmt3->execute([
-                ":tfUN" => $userName,
-                ":LoveLanguage" => $loveLanguage,
-                ":Birthstone" => $birthStone,
-                ":BirthFlower" => $birthFlower,
-                ":BloodType" => $bloodType,
-                ":AttachmentStyle" => $attachmentStyle,
-                ":CharismaType" => $charismaType
+                ":tfUN"=>$userName, ":LoveLanguage"=>$loveLanguage, ":Birthstone"=>$birthStone,
+                ":BirthFlower"=>$birthFlower, ":BloodType"=>$bloodType, ":AttachmentStyle"=>$attachmentStyle,
+                ":CharismaType"=>$charismaType
             ]);
-
-            // Set cookies/session for VIP info
-            $vipFields = [
-                "LoveLanguage" => $loveLanguage,
-                "Birthstone" => $birthStone,
-                "BirthFlower" => $birthFlower,
-                "BloodType" => $bloodType,
-                "AttachmentStyle" => $attachmentStyle,
-                "CharismaType" => $charismaType
-            ];
-            foreach ($vipFields as $key => $value) {
-                createCookieAndSession($key, $value);
+            foreach (compact("loveLanguage","birthStone","birthFlower","bloodType","attachmentStyle","charismaType") as $k=>$v) {
+                createCookieAndSession($k, $v);
             }
         }
 
-        // Team-only additional info
+        // --- TeamMembers insert & CSV backup ---
         if ($membership === "team") {
-            $stmt4 = $db->prepare("INSERT INTO TeamMembers (tfUN, BusinessPersonality, DISC, SocionicsType, LearningStyle,
+            $stmt4 = $db->prepare("INSERT INTO TeamMembers
+                (tfUN, BusinessPersonality, DISC, SocionicsType, LearningStyle,
                 FinancialPersonalityType, PrimaryMotivationStyle, CreativeStyle, ConflictManagementStyle, TeamRolePreference)
                 VALUES (:tfUN, :BusinessPersonality, :DISC, :SocionicsType, :LearningStyle,
                 :FinancialPersonalityType, :PrimaryMotivationStyle, :CreativeStyle, :ConflictManagementStyle, :TeamRolePreference)");
             $stmt4->execute([
-                ":tfUN" => $userName,
-                ":BusinessPersonality" => $businessPersonality,
-                ":DISC" => $TFuserDISC,
-                ":SocionicsType" => $socionicsType,
-                ":LearningStyle" => $learningStyle,
-                ":FinancialPersonalityType" => $financialPersonalityType,
-                ":PrimaryMotivationStyle" => $primaryMotivationStyle,
-                ":CreativeStyle" => $creativeStyle,
-                ":ConflictManagementStyle" => $conflictManagementStyle,
-                ":TeamRolePreference" => $teamRolePreference
+                ":tfUN"=>$userName, ":BusinessPersonality"=>$businessPersonality, ":DISC"=>$TFuserDISC,
+                ":SocionicsType"=>$socionicsType, ":LearningStyle"=>$learningStyle, ":FinancialPersonalityType"=>$financialPersonalityType,
+                ":PrimaryMotivationStyle"=>$primaryMotivationStyle, ":CreativeStyle"=>$creativeStyle,
+                ":ConflictManagementStyle"=>$conflictManagementStyle, ":TeamRolePreference"=>$teamRolePreference
             ]);
-
-            // Set cookies/session for Team info
-            $teamFields = [
-                "BusinessPersonality" => $businessPersonality,
-                "DISC" => $TFuserDISC,
-                "SocionicsType" => $socionicsType,
-                "LearningStyle" => $learningStyle,
-                "FinancialPersonalityType" => $financialPersonalityType,
-                "PrimaryMotivationStyle" => $primaryMotivationStyle,
-                "CreativeStyle" => $creativeStyle,
-                "ConflictManagementStyle" => $conflictManagementStyle,
-                "TeamRolePreference" => $teamRolePreference
-            ];
-            foreach ($teamFields as $key => $value) {
-                createCookieAndSession($key, $value);
+            foreach (compact("businessPersonality","TFuserDISC","socionicsType","learningStyle",
+                              "financialPersonalityType","primaryMotivationStyle","creativeStyle",
+                              "conflictManagementStyle","teamRolePreference") as $k=>$v) {
+                createCookieAndSession($k, $v);
             }
+
+            // CSV backup
+            $TheEntireFormFr = [
+                $userName, $birthdate, $gender, $nickName, $email,
+                $chineseZodiacSign, $westernZodiacSign, $spiritAnimal,
+                $celticTreeZodiacSign, $nativeAmericanZodiacSign, $vedicAstrologySign,
+                $guardianAngel, $ChineseElement, $eyeColorMeaning, $GreekMythologyArchetype,
+                $NorseMythologyPatronDeity, $EgyptianZodiacSign, $MayanZodiacSign,
+                $loveLanguage, $birthStone, $birthFlower, $bloodType, $attachmentStyle, $charismaType,
+                $businessPersonality, $TFuserDISC, $socionicsType, $learningStyle,
+                $financialPersonalityType, $primaryMotivationStyle, $creativeStyle,
+                $conflictManagementStyle, $teamRolePreference
+            ];
+            $csvDir = "./TDFB/CSV/Members/team.csv";
+            if (!is_dir(dirname($csvDir))) mkdir(dirname($csvDir), 0777, true);
+            $fileMode = file_exists($csvDir) ? "a" : "w";
+            $csvFile = fopen($csvDir, $fileMode);
+            if ($fileMode === "w") {
+                fputcsv($csvFile, array_keys(array_flip($TheEntireFormFr))); // header
+            }
+            fputcsv($csvFile, $TheEntireFormFr);
+            fclose($csvFile);
         }
 
-        //csv database version. Simple like a cookie
-$TheEntireFormFr = [
-    $userName, $birthdate, $gender, $nickName, $email,
-    $chineseZodiacSign, $westernZodiacSign, $spiritAnimal,
-    $celticTreeZodiacSign, $nativeAmericanZodiacSign, $vedicAstrologySign,
-    $guardianAngel, $ChineseElement, $eyeColorMeaning, $GreekMythologyArchetype,
-    $NorseMythologyPatronDeity, $EgyptianZodiacSign, $MayanZodiacSign,
-    $loveLanguage, $birthStone, $birthFlower, $bloodType, $attachmentStyle, $charismaType,
-    $businessPersonality, $TFuserDISC, $socionicsType, $learningStyle,
-    $financialPersonalityType, $primaryMotivationStyle, $creativeStyle,
-    $conflictManagementStyle, $teamRolePreference
-];
-
-$csvDir = "./TDFB/CSV/Members/team.csv";
-
-if (!file_exists($csvDir)) {
-    $newCSVfile = fopen($csvDir, "w");
-    if ($newCSVfile) {
-        fputcsv($newCSVfile, [
-            "Username","Birthday","Gender","Nickname","Email",
-            "Chinese Zodiac Sign","Western Zodiac Sign","Spirit Animal",
-            "Celtic Tree Zodiac Sign","Native American Zodiac Sign","Vedic Astrology Sign",
-            "Guardian Angel","Chinese Element","Eye Color Meaning","Greek Mythology Archetype",
-            "Norse Mythology Patron Deity","Egyptian Zodiac Sign","Mayan Zodiac Sign",
-            "Love Language","Birth Stone","Birth Flower","Blood Type","Attachment Style","Charisma Type",
-            "Business Personality","DISC","Socionics Type","Learning Style",
-            "Financial Personality Type","Primary Motivation Style","Creative Style",
-            "Conflict Management Style","Team Role Preference"
-        ]);
-        fputcsv($newCSVfile, $TheEntireFormFr);
-        fclose($newCSVfile);
-    }
-} else {
-    $CSVfile = fopen($csvDir, "a");
-    if ($CSVfile) {
-        fputcsv($CSVfile, $TheEntireFormFr);
-        fclose($CSVfile);
-    }
-}
-        // Final confirmation
+        // --- Final response ---
         echo json_encode([
             "status" => "success",
             "message" => "User $userName successfully registered as $membership member."
@@ -290,18 +210,39 @@ if (!file_exists($csvDir)) {
         handleDatabaseError($e);
     } catch (Exception $e) {
         error_log($e->getMessage(), 0);
-        echo json_encode([
-            "status" => "error",
-            "message" => "Unexpected error: " . $e->getMessage()
-        ]);
+        echo json_encode(["status"=>"error","message"=>"Unexpected error: ".$e->getMessage()]);
     }
 }
 
-// Optionally, you can start a session at the top if not already
-if(session_status() === PHP_SESSION_NONE){
-    session_start();
+// --- Login function ---
+function Login(){
+    $tfUsername = $_POST["NavUserName"] ?? $_REQUEST["phpnun"] ?? null;
+    $tfPassword = $_POST["NavPassword"] ?? $_REQUEST["phpnpsw"] ?? null;
+
+    if (!$tfUsername || !$tfPassword) return;
+
+    $tfUsername = validate_input("NavUserName", $_POST ?? $_REQUEST);
+    $tfPassword = validate_input("NavPassword", $_POST ?? $_REQUEST);
+
+    try {
+        $pdo = TsunamiDatabaseFlow();
+        $stmt = $pdo->prepare("SELECT * FROM FreeLevelMembers WHERE tfUN = :username");
+        $stmt->bindParam(':username', $tfUsername, PDO::PARAM_STR);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user && password_verify($tfPassword, $user['tfPSW'])) {
+            session_regenerate_id(true);
+            $_SESSION["UserName"] = $user['tfUN'];
+            echo htmlspecialchars($tfUsername) . " is now logged in.";
+        } else {
+            echo "Incorrect Username or Password";
+        }
+
+    } catch (PDOException $e) {
+        handleDatabaseError($e);
+    }
 }
- 
 
     //Nav Login
 function Login(){
