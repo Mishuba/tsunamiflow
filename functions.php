@@ -285,8 +285,8 @@ function Login() {
 
 // --- Printful functions ---
 function BasicPrintfulRequest(): ?array {
-    $ch = curl_init(PrintfulBaseUrl . "store/products");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    $ch = curl_init('https://api.printful.com/' . "store/products");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv('PrintfulApiKey')]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
@@ -295,8 +295,8 @@ function BasicPrintfulRequest(): ?array {
 }
 
 function PrintfulProductionDescription($productId): ?array {
-    $ch = curl_init(PrintfulBaseUrl . "store/products/$productId");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    $ch = curl_init('https://api.printful.com/' . "store/products/$productId");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv('PrintfulApiKey')]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
@@ -310,10 +310,10 @@ function getVariantandPrice($productId): ?array {
 }
 
 function NPOtfTS(array $orderData): ?int {
-    $ch = curl_init(PrintfulOrdersUrl);
+    $ch = curl_init('https://api.printful.com/orders');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . printfulApiKey,
+        'Authorization: Bearer ' . getenv('PrintfulApiKey'),
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -354,7 +354,7 @@ function CreatePrintfulOrder(array $cartItems, array $customer): array {
 
     $ch = curl_init('https://api.printful.com/orders');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . $apiKey,
+        'Authorization: Bearer ' . getenv('PrintfulApiKey'),
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_POST, true);
