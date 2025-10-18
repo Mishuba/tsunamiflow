@@ -785,106 +785,93 @@ function updatePaymentMethod($secretKey, $type, $id, $paymentMethodId) {
     }
 */}
 
-//Printful Functions
-function BasicPrintfulRequest()
-{
-    /*
-    $someCurl = curl_init(PrintfulBaseUrl . "store/products");
-    curl_setopt($someCurl, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
-    curl_setopt($someCurl, CURLOPT_RETURNTRANSFER, true);
+<?php
+// Example constants (replace with your actual keys/URLs)
+define('PrintfulBaseUrl', 'https://api.printful.com/');
+define('printfulApiKey', 'YOUR_PRINTFUL_API_KEY');
+define('PrintfulOrdersUrl', PrintfulBaseUrl . 'orders');
 
-    $myStoreItems = curl_exec($someCurl);
+// Basic Printful request: fetch all store products
+function BasicPrintfulRequest(): ?array {
+    $ch = curl_init(PrintfulBaseUrl . "store/products");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
-    if (curl_errno($someCurl)) {
-        echo ("<script> console.error(`Product Curl error: " . curl_error($someCurl) . "`); </script>");
-        curl_close($someCurl);
-        return null;
-    } else {
-    }
-    $myStoreItems = json_decode($myStoreItems, true);
+    $response = curl_exec($ch);
 
-    curl_close($someCurl);
-    return $myStoreItems;
-    */
-}
-
-//Printful Product Description
-function PrintfulProductionDescription($printfulProduct_id)
-{
-    /*
-    $regularPrintfulShit = "https://api.printful.com/products/$printfulProduct_id";
-    $SomeDescription = curl_init($regularPrintfulShit);
-
-    // Set the cURL options for the request
-    curl_setopt($SomeDescription, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
-    curl_setopt($SomeDescription, CURLOPT_RETURNTRANSFER, true);
-
-    // Execute the request
-    $DescriptionResponse = curl_exec($SomeDescription);
-
-    // Handle errors in the cURL request
-    if (curl_errno($SomeDescription)) {
-        echo ("<script> console.error(`Description Curl error: " . curl_error($SomeDescription) . "`); </script>");
-        curl_close($SomeDescription);
+    if (curl_errno($ch)) {
+        echo "<script>console.error('Product Curl error: " . curl_error($ch) . "');</script>";
+        curl_close($ch);
         return null;
     }
 
-    curl_close($SomeDescription);
-
-    // Decode the JSON response
-    $DescriptionDecodeResponse = json_decode($DescriptionResponse, true);
-
-    // Check if the product and description exist and return it, otherwise return an empty array
-    return $DescriptionDecodeResponse;
-    */
+    curl_close($ch);
+    return json_decode($response, true);
 }
 
-//Choose Store Items
-function getVariantandPrice($variantId)
-{
-    /*
-    $PrintfulVariantId = "https://api.printful.com/store/products/$variantId";
-    $TFvariant = curl_init($PrintfulVariantId);
-    curl_setopt($TFvariant, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
-    curl_setopt($TFvariant, CURLOPT_RETURNTRANSFER, true);
-    $VariantResponse = curl_exec($TFvariant);
-    curl_close($TFvariant);
+// Fetch Printful product description by product ID
+function PrintfulProductionDescription($productId): ?array {
+    $url = PrintfulBaseUrl . "products/$productId";
+    $ch = curl_init($url);
 
-    if (curl_errno($TFvariant)) {
-        echo ("<script> console.error(`Variant Curl error: " . curl_error($TFvariant) . "`); </script>");
-        curl_close($TFvariant);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo "<script>console.error('Description Curl error: " . curl_error($ch) . "');</script>";
+        curl_close($ch);
         return null;
     }
 
-    $VariantResponse = json_decode($VariantResponse, true);
-    return isset($VariantResponse["result"]) ? $VariantResponse["result"] : [];
-    */
+    curl_close($ch);
+    return json_decode($response, true);
 }
 
-function UserShoppingCartWishList(){
-    // Handle the shopping cart logic
-    // Add product to session/cart
-    /*
-    $_SESSION["TfShoppingCartWish"][] = [
-        'product_id' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
-        'variant_id' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
-        'quantity' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
-        'name' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
-        'price' => validate_input("", $_REQUEST) ?? validate_input("", $_POST),
+// Fetch variant info and price by variant ID
+function getVariantandPrice($variantId): array {
+    $url = PrintfulBaseUrl . "store/products/$variantId";
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo "<script>console.error('Variant Curl error: " . curl_error($ch) . "');</script>";
+        curl_close($ch);
+        return [];
+    }
+
+    curl_close($ch);
+    $data = json_decode($response, true);
+    return $data['result'] ?? [];
+}
+
+// Add item to user's shopping cart (stored in session)
+function UserShoppingCartWishList(): void {
+    session_start();
+
+    $item = [
+        'product_id' => $_REQUEST['product_id'] ?? null,
+        'variant_id' => $_REQUEST['variant_id'] ?? null,
+        'quantity' => $_REQUEST['quantity'] ?? 1,
+        'name' => $_REQUEST['name'] ?? '',
+        'price' => $_REQUEST['price'] ?? 0,
     ];
-    header("Location: " . $_SERVER["PHP_SELF"]);
+
+    $_SESSION['TfShoppingCartWish'][] = $item;
+
+    header("Location: " . $_SERVER['PHP_SELF']);
     exit();
-    */
 }
 
-//Create an Order
-
-function NPOtfTS($orderData)
-{
-/*
-    //Printful Order
-    // Initialize cURL session to make the API request
+// Create a Printful order
+function NPOtfTS(array $orderData): ?int {
     $ch = curl_init(PrintfulOrdersUrl);
+
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
         'Authorization: Bearer ' . printfulApiKey,
@@ -893,30 +880,25 @@ function NPOtfTS($orderData)
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($orderData));
 
-    // Execute the cURL request
     $response = curl_exec($ch);
-    curl_close($ch);
 
-    // Check the response for errors
-    if ($response === false) {
+    if (curl_errno($ch)) {
         echo "Error in API request: " . curl_error($ch);
-    } else {
-        $decodedResponse = json_decode($response, true);
-        if (isset($decodedResponse['result'])) {
-            echo ("Order created successfully. Order ID: " . $decodedResponse['result']['id']);
-            return $decodedResponse['result']['id'];
-        } else {
-            echo "Error creating order: " . $decodedResponse['error']['message'];
-            //cancel payment here. Create cancel payment function. CancelStripePaymentDude();
-        }
+        curl_close($ch);
+        return null;
     }
-    //Orders Ends
-    */
-}
-    
-//Printful Functions Ends
 
-//Webhook Functions
+    curl_close($ch);
+    $decodedResponse = json_decode($response, true);
+
+    if (isset($decodedResponse['result'])) {
+        echo "Order created successfully. Order ID: " . $decodedResponse['result']['id'];
+        return $decodedResponse['result']['id'];
+    } else {
+        echo "Error creating order: " . ($decodedResponse['error']['message'] ?? 'Unknown error');
+        return null;
+    }
+}
 
 //Webrtc Functions 
 //curl response to make php 
