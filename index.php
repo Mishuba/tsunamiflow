@@ -365,67 +365,64 @@ Helps maintain brand consistency across user platforms-->
         </audio> <!---->
     </article>
     <footer>
-        <div id="TFstore">
-            <?php if ($showSuccess === true): ?>
-                <h> Tsunami Flow Store </h>
-<ul>
-                <?php
-                if (isset($myProductsFr["result"]) && is_array($myProductsFr['result'])) {
-                    foreach ($myProductsFr["result"] as $ItemsFr) {
-                ?>
-                        <li id="<?php  echo (htmlspecialchars($ItemsFr["name"] ?? "No Name")); ?>">
-                            <h4><?php  echo (htmlspecialchars($ItemsFr["name"] ?? "No Name"));  ?></h4>
-                            <img src="<?php  echo (htmlspecialchars($ItemsFr["thumbnail_url"] ?? "No Url")); ?>">
-                            <br>
-                            <p>
-                                <?php
-                               $TheDescriptionFr = PrintfulProductionDescription($ItemsFr["id"]);
-                                echo (htmlspecialchars($TheDescriptionFr["result"]["product"]["description"] ?? "Description Unavailable" /*var_dump($TheDescriptionFr)*/));  ?>
-                            </p>
-                            <form method="POST" action="server.php" target="self">
-                                <?php
-                               $printfulVariants = getVariantandPrice($ItemsFr["id"]);
-                                //var_dump($printfulVariants["sync_variants"]);
-                                if (is_array($printfulVariants) && !empty($printfulVariants)) {
-                                ?>
-                                    <select name="product_id" required>
-                                        <?php
-                                        foreach ($printfulVariants["sync_variants"] as $variant) {
-                                        ?>
-                                            <option value="<?php  echo htmlspecialchars($variant["id"]);  ?>"><?php  echo (htmlspecialchars($variant["name"])); ?> (Price: <?php  echo (htmlspecialchars($variant["retail_price"])); ?>) (Size: <?php  echo (htmlspecialchars($variant["size"]));  ?>) (Availability: <?php  echo (htmlspecialchars($variant["availability_status"]));  ?>)</option>
-                                        <?php 
-                                        }
-                                        ?>
-                                    </select>
-                                    <br>
-                                <?php
-                               } else {
-                                ?>
-                                    <select>
-                                        <option value=""> No Variants Available </option>
-                                    </select>
-                                <?php
-                                }
-                              ?>
-                                <input  type="number" name=”StoreQuantity" value="1" min="1" max="1000">
-                                <input type="hidden" name="product_id" value="<?php  echo (htmlspecialchars($variant["id"])); ?>">
-                                <button id="StoreButton" type="submit" name="addProductToCart"> Add to Cart </button>
-                            </form>
-                        </li>
-                <?php 
-                    }
-                }
-                ?>
-            </ul>
-            <p>
-                Cost:
-            </p>
+      <?php
+// Fetch Printful products
+$myProductsFr = BasicPrintfulRequest();
+$showSuccess = !empty($myProductsFr['result']);
+?>
 
-            <?php endif; ?>
-        </div>
-    </footer>
+<?php if ($showSuccess): ?>
+<footer>
+    <div id="TFstore">
+        <h2>Tsunami Flow Store</h2>
+        <ul>
+            <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
+                <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
+                    <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
+                    <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
+                    <p>
+                        <?php
+                        $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
+                        echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
+                        ?>
+                    </p>
+                    <?php
+                    $printfulVariants = getVariantandPrice($ItemsFr['id']);
+                    ?>
+                    <form method="POST" action="server.php">
+                        <?php if (is_array($printfulVariants['sync_variants'] ?? null) && !empty($printfulVariants['sync_variants'])): ?>
+                            <select name="product_id" required>
+                                <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
+                                    <option value="<?php echo htmlspecialchars($variant['id']); ?>">
+                                        <?php 
+                                        echo htmlspecialchars($variant['name']); 
+                                        echo " (Price: " . htmlspecialchars($variant['retail_price']) . ")";
+                                        echo " (Size: " . htmlspecialchars($variant['size']) . ")";
+                                        echo " (Availability: " . htmlspecialchars($variant['availability_status']) . ")";
+                                        ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                            <br>
+                        <?php else: ?>
+                            <select>
+                                <option value="">No Variants Available</option>
+                            </select>
+                        <?php endif; ?>
+
+                        <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                        <button id="StoreButton" type="submit" name="addProductToCart">Add to Cart</button>
+                    </form>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+        <p>Cost:</p>
+    </div>
+</footer>
+
 <script type="module" crossorigin="anonymous">
     import "./JS/tfMain.js";
 </script>
+<?php endif; ?>
 </body>
 </html>
