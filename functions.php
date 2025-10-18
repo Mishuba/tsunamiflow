@@ -785,12 +785,6 @@ function updatePaymentMethod($secretKey, $type, $id, $paymentMethodId) {
     }
 */}
 
-<?php
-// Example constants (replace with your actual keys/URLs)
-define('PrintfulBaseUrl', 'https://api.printful.com/');
-define('printfulApiKey', 'YOUR_PRINTFUL_API_KEY');
-define('PrintfulOrdersUrl', PrintfulBaseUrl . 'orders');
-
 // Basic Printful request: fetch all store products
 function BasicPrintfulRequest(): ?array {
     $ch = curl_init(PrintfulBaseUrl . "store/products");
