@@ -294,6 +294,21 @@ function BasicPrintfulRequest(): ?array {
     return json_decode($response, true);
 }
 
+function PrintfulProductionDescription($productId): ?array {
+    $ch = curl_init(PrintfulBaseUrl . "store/products/$productId");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    if (curl_errno($ch)) { curl_close($ch); return null; }
+    curl_close($ch);
+    return json_decode($response, true);
+}
+
+function getVariantandPrice($productId): ?array {
+    $prod = PrintfulProductionDescription($productId);
+    return $prod['result']['sync_variants'] ?? null;
+}
+
 function NPOtfTS(array $orderData): ?int {
     $ch = curl_init(PrintfulOrdersUrl);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
