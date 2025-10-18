@@ -3,7 +3,6 @@ export class User {
         this.username = username;
         this.password = password;
 
-        // Wait for DOM to load
         document.addEventListener("DOMContentLoaded", () => {
             this.FreeSubmitButton = document.getElementById("TFCompleteForm");
             this.tfFN = document.getElementById("TfFirstName");
@@ -46,82 +45,89 @@ export class User {
                 ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
                 TeamRolePreference: document.getElementById("TeamRolePreference")
             };
-
-            // Attach signup listener
-            if (this.FreeSubmitButton) {
-                this.FreeSubmitButton.addEventListener("click", (e) => {
-                    e.preventDefault();
-                    this.signup();
-                });
-            }
         });
     }
 
     signup() {
         try {
-            const formData = new FormData();
+            let SubFormData = new FormData();
+            const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
+            fields.forEach(f => { if (this[f]) SubFormData.append(f, this[f].value); });
 
-            // Basic fields
-            ["tfFN","tfLN","tfNN","tfGen","tfEM","tfBirth","tfUN","tfPsw","tfMembershipLevel"].forEach(f => {
-                if (this[f]) formData.append(f, this[f].value);
-            });
-
-            // Extra fields
             for (let [key, elem] of Object.entries(this.extraFields)) {
-                if (elem) formData.append(key, elem.value);
+                if (elem) SubFormData.append(key, elem.value);
             }
 
-            // Add type for PHP
-            formData.append("type", "Subscribers Signup");
-
-            const membership = (this.tfMembershipLevel?.value || "free").toLowerCase();
-
-            if (membership === "free") {
-                // Free membership: direct PHP insert
-                fetch("./../server.php", { method: "POST", body: formData })
-                    .then(res => res.json())
-                    .then(resp => console.log(resp.success ? "Free membership created" : "Signup failed:", resp))
-                    .catch(err => console.error("Signup error:", err));
-            } else {
-                // Paid membership: create Stripe Checkout
-                const costMap = { regular: 400, vip: 700, team: 1000 };
-                formData.append("membershipLevel", membership);
-
-                fetch("./../server.php", { method: "POST", body: formData })
-                    .then(res => res.json())
-                    .then(resp => {
-                        if (resp.url) window.location.href = resp.url;
-                        else console.error("Checkout creation failed:", resp);
-                    })
-                    .catch(err => console.error("Stripe session error:", err));
-            }
-
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const response = JSON.parse(xhr.responseText);
+                        console.log("Signup response:", response);
+                        if (response.success) {
+                            // Store username/email in sessionStorage for client use
+                            sessionStorage.setItem("TFUsername", this.tfUN.value);
+                            sessionStorage.setItem("TFEmail", this.tfEM.value);
+                        }
+                    } else {
+                        console.error("Signup request failed:", xhr.statusText);
+                    }
+                }
+            };
+            xhr.open("POST", "./../server.php", true);
+            xhr.send(SubFormData);
         } catch (err) {
             console.error("Signup error:", err);
         }
     }
 
     login() {
-        if (!this.username || !this.password) return console.warn("Username or password empty.");
-        const formData = new FormData();
-        formData.append("username", this.username);
-        formData.append("password", this.password);
+        if (!this.username || !this.password) {
+            console.warn("Username or password is empty.");
+            return;
+        }
 
-        fetch("server.php", { method: "POST", body: formData })
-            .then(res => res.text())
-            .then(txt => document.getElementById("TFloginIcon").innerHTML = txt)
-            .catch(err => console.error("Login error:", err));
+        try {
+            const formData = new FormData();
+            formData.append("username", this.username);
+            formData.append("password", this.password);
+
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        document.getElementById("TFloginIcon").innerHTML = xhr.responseText;
+                        console.log("Login successful");
+                        // Store username/email in sessionStorage
+                        sessionStorage.setItem("TFUsername", this.username);
+                        // Email is not available here unless returned from server
+                    } else {
+                        console.error("Login failed:", xhr.statusText);
+                    }
+                }
+            };
+            xhr.open("POST", "server.php", true);
+            xhr.send(formData);
+        } catch (err) {
+            console.error("Login error:", err);
+        }
     }
 
     PostThoughts() {
         const thoughtInput = document.getElementById("TFthought");
         if (!thoughtInput) return;
+
         const formData = new FormData();
         formData.append("thought", thoughtInput.value);
 
-        fetch("server.php", { method: "POST", body: formData })
-            .then(res => res.text())
-            .then(txt => console.log("Thought posted:", txt))
-            .catch(err => console.error("Failed to post thought:", err));
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) console.log("Thought posted:", xhr.responseText);
+                else console.error("Failed to post thought:", xhr.statusText);
+            }
+        };
+        xhr.open("POST", "server.php", true);
+        xhr.send(formData);
     }
 }
