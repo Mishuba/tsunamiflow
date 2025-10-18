@@ -250,15 +250,6 @@ function Login() {
 //Stripe && Handling Payments 
 //$StfPk = new StripeClient(TfStripeSecretKey); //Public Key
 
-<?php
-use Stripe\StripeClient;
-use Stripe\Exception\ApiErrorException;
-use Stripe\Exception\CardException;
-use Stripe\Exception\RateLimitException;
-use Stripe\Exception\InvalidRequestException;
-use Stripe\Exception\AuthenticationException;
-use Stripe\Exception\ApiConnectionException;
-
 /**
  * Stripe Helper Module for Tsunami Flow
  * Handles: Customer creation, PaymentIntent, subscriptions, and confirmations
