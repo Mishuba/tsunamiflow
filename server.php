@@ -170,11 +170,194 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE
 use Stripe\StripeClient;
 $StfPk = new StripeClient(getenv("StripeSecretKey"));
 
-// Add your Stripe POST / GET logic here, but remember:
-// - Multiply amounts by 100
-// - Use $data['type'] if JSON decoded with true
-// - Handle free vs paid memberships correctly
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+session_start();
 
+// --- Configuration ---
+$TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
+$StripeToken = "TsunamiFlowClubStripeToken";
+
+// --- Main ---
+$method = $_SERVER['REQUEST_METHOD'];
+
+try {
+
+    if ($method === 'POST') {
+        // Parse JSON payload if Content-Type is application/json
+        $data = [];
+        if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
+            $data = json_decode(file_get_contents('php://input'), true) ?? [];
+        }
+
+        // Stripe Checkout
+        if (isset($_POST['token']) && $_POST['token'] === $StripeToken) {
+
+            $session_id = validate_input('session_id', $_POST);
+            $session = \Stripe\Checkout\Session::retrieve($session_id);
+
+            $metadata = $session->metadata;
+
+            // Hash password before storing
+            $passwordHash = password_hash($metadata['TFRegisterPassword'], PASSWORD_DEFAULT);
+
+            InputIntoDatabase(
+                $metadata['membership'],
+                $metadata['Username'],
+                $metadata['FirstName'],
+                $metadata['LastName'],
+                $metadata['NickName'],
+                $metadata['Gender'],
+                $metadata['Birthday'],
+                $metadata['Email'],
+                $passwordHash,
+                $metadata['ChineseZodiacSign'],
+                $metadata['WesternZodiacSign'],
+                $metadata['SpiritAnimal'],
+                $metadata['CelticTreeZodiacSign'],
+                $metadata['NativeAmericanZodiacSign'],
+                $metadata['VedicAstrologySign'],
+                $metadata['GuardianAngel'],
+                $metadata['ChineseElement'],
+                $metadata['EyeColorMeaning'],
+                $metadata['GreekMythologyArchetype'],
+                $metadata['NorseMythologyPatronDeity'],
+                $metadata['EgyptianZodiacSign'],
+                $metadata['MayanZodiacSign'],
+                $metadata['LoveLanguage'],
+                $metadata['Birthstone'],
+                $metadata['BirthFlower'],
+                $metadata['BloodType'],
+                $metadata['AttachmentStyle'],
+                $metadata['CharismaType'],
+                $metadata['BusinessPersonality'],
+                $metadata['DISC'],
+                $metadata['SocionicsType'],
+                $metadata['LearningStyle'],
+                $metadata['FinancialPersonalityType'],
+                $metadata['PrimaryMotivationStyle'],
+                $metadata['CreativeStyle'],
+                $metadata['ConflictManagementStyle'],
+                $metadata['TeamRolePreference']
+            );
+
+            header("Location: $TsunamiFlowClubDomain");
+            exit;
+
+        // Community Signup (free or paid)
+        } elseif (($data['type'] ?? '') === 'Subscribers Signup') {
+
+            $membership = validate_input('membershipLevel', $_POST);
+            $membershipCost = floatval($_POST['membershipCost'] ?? 0);
+
+            // Collect user info
+            $userData = [
+                'FirstName' => validate_input('TFRegisterFirstName', $_POST),
+                'LastName' => validate_input('TFRegisterLastName', $_POST),
+                'NickName' => validate_input('TFRegisterNickName', $_POST),
+                'Gender' => validate_input('TFRegisterGender', $_POST),
+                'Birthday' => validate_input('TFRegisterBirthday', $_POST),
+                'Email' => validate_input('TFRegisterEmail', $_POST),
+                'Username' => validate_input('TFRegisterUsername', $_POST),
+                'Password' => password_hash(validate_input('TFRegisterPassword', $_POST), PASSWORD_DEFAULT),
+                'ChineseZodiacSign' => validate_input('ChineseZodiacSign', $_POST, false),
+                'WesternZodiacSign' => validate_input('WesternZodiacSign', $_POST, false),
+                'SpiritAnimal' => validate_input('SpiritAnimal', $_POST, false),
+                'CelticTreeZodiacSign' => validate_input('CelticTreeZodiacSign', $_POST, false),
+                'NativeAmericanZodiacSign' => validate_input('NativeAmericanZodiacSign', $_POST, false),
+                'VedicAstrologySign' => validate_input('VedicAstrologySign', $_POST, false),
+                'GuardianAngel' => validate_input('GuardianAngel', $_POST, false),
+                'ChineseElement' => validate_input('ChineseElement', $_POST, false),
+                'EyeColorMeaning' => validate_input('EyeColorMeaning', $_POST, false),
+                'GreekMythologyArchetype' => validate_input('GreekMythologyArchetype', $_POST, false),
+                'NorseMythologyPatronDeity' => validate_input('NorseMythologyPatronDeity', $_POST, false),
+                'EgyptianZodiacSign' => validate_input('EgyptianZodiacSign', $_POST, false),
+                'MayanZodiacSign' => validate_input('MayanZodiacSign', $_POST, false),
+                'LoveLanguage' => validate_input('LoveLanguage', $_POST, false),
+                'Birthstone' => validate_input('Birthstone', $_POST, false),
+                'BirthFlower' => validate_input('BirthFlower', $_POST, false),
+                'BloodType' => validate_input('BloodType', $_POST, false),
+                'AttachmentStyle' => validate_input('AttachmentStyle', $_POST, false),
+                'CharismaType' => validate_input('CharismaType', $_POST, false),
+                'BusinessPersonality' => validate_input('BusinessPersonality', $_POST, false),
+                'DISC' => validate_input('DISC', $_POST, false),
+                'SocionicsType' => validate_input('SocionicsType', $_POST, false),
+                'LearningStyle' => validate_input('LearningStyle', $_POST, false),
+                'FinancialPersonalityType' => validate_input('FinancialPersonalityType', $_POST, false),
+                'PrimaryMotivationStyle' => validate_input('PrimaryMotivationStyle', $_POST, false),
+                'CreativeStyle' => validate_input('CreativeStyle', $_POST, false),
+                'ConflictManagementStyle' => validate_input('ConflictManagementStyle', $_POST, false),
+                'TeamRolePreference' => validate_input('TeamRolePreference', $_POST, false),
+            ];
+
+            if ($membership === 'free') {
+                InputIntoDatabase($membership, ...array_values($userData));
+                echo json_encode(['success' => true, 'message' => 'Free membership created']);
+            } else {
+                // Fix cost ranges
+                if ($membership === 'regular') $membershipCost = 400; // cents
+                elseif ($membership === 'vip') $membershipCost = 700;
+                elseif ($membership === 'team') $membershipCost = 1000;
+                else $membershipCost = 2000;
+
+                $checkoutSession = \Stripe\Checkout\Session::create([
+                    'payment_method_types' => ['card'],
+                    'mode' => 'payment',
+                    'line_items' => [[
+                        'price_data' => [
+                            'currency' => 'usd',
+                            'unit_amount' => $membershipCost,
+                            'product_data' => ['name' => 'Community Member Signup Fee'],
+                        ],
+                        'quantity' => 1,
+                    ]],
+                    'success_url' => "$TsunamiFlowClubDomain/server.php?session_id={CHECKOUT_SESSION_ID}",
+                    'cancel_url' => "$TsunamiFlowClubDomain/failed.php",
+                    'metadata' => $userData,
+                ]);
+
+                header("Location: " . $checkoutSession->url);
+                exit;
+            }
+
+        // Navigation login
+        } elseif (($data['type'] ?? '') === 'Navigation Login') {
+            if ($data['log in'] ?? false) {
+                $_SESSION['LoginStatus'] = true;
+                echo json_encode(['success' => true]);
+            } else {
+                $_SESSION['LoginStatus'] = false;
+                echo json_encode(['success' => true, 'message' => 'Logged out']);
+            }
+
+        // Tsunami Flow Store (simplified)
+        } elseif (($data['type'] ?? '') === 'Tsunami Flow Store') {
+            // Implement shopping cart / order processing here
+            echo json_encode(['success' => true, 'message' => 'Store endpoint hit']);
+        } else {
+            http_response_code(400);
+            echo json_encode(['error' => 'Invalid POST type']);
+        }
+
+    } elseif ($method === 'GET') {
+        // Shopping cart
+        if (isset($_GET['shopping_cart'])) {
+            $_SESSION['ShoppingCartItems'] = $_GET['shopping_cart'];
+            echo json_encode(['success' => true, 'items' => $_SESSION['ShoppingCartItems']]);
+        } else {
+            echo json_encode(['success' => true, 'message' => 'GET request received']);
+        }
+
+    } else {
+        http_response_code(400);
+        echo json_encode(['error' => 'Invalid request method']);
+    }
+
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
+}
 
 /*
 curl_init(); //initializes the session
@@ -183,349 +366,9 @@ curl_exec(); //executes the session and returns the response.
 curl_close(); //close the cURL session to free resources.
 
 Turn Server Stuff Uncomment later when you ready
-*/
+*/ 
 
-/*
-//Session
-// use the code below to display all available session data
-// var_dump($_SESSION);
-*/
-
-//Session Starts
-//$_SESSION["TfGuest"]; 
-//$_SESSION["TfNifage"] = true; 
-//$_SESSION["freeMembership]; 
-// $_SESSION["regularMembership"]; 
-// $_SESSION["vipMembership"]; 
-// $_SESSION["teamMembership"];
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    //Get javascript information.
-    $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
-
-    if(isset($_POST["token"]) && $_POST["token"] === "TsunamiFlowClubStripeToken") {
-        //get the checkout session
-        $session_id = $_POST["session_id"];
-        $TsunamiFlowStripeSuccessSession = \Stripe\Checkout\Session::retrieve($session_id);
-
-        //Get information you want to use.
-        $metadata = $TsunamiFlowStripeSuccessSession->metadata;
-            //Validate User Information Next.
-            $TfMlCts = $metadata["membership"];
-            $fiNa = $metadata["FirstName"]; //$metadata["tfFirstName"];
-            $laNa = $metadata["LastName"];
-            $niNa = $metadata["NickName"];
-            $gede = $metadata["Gender"];
-            $bihda = $metadata["Birthday"];
-            $eml = $_POST["Email"];
-            //$eml = TsunamiInput($_POST["TFRegisterEmail"]);
-            $usNa = $metadata["Username"];
-            $Checkpassword = $metadata["TFRegisterPassword"];
-            $pawo = password_hash($Checkpassword, PASSWORD_DEFAULT);
-            $chZoSi = $metadata["ChineseZodiacSign"];
-            $weZoSi = $metadata["WesternZodiacSign"];
-            $spiAna = $metadata["SpiritAnimal"];
-            $ceTrZoSi = $metadata["CelticTreeZodiacSign"];
-            $naAmZoSi = $metadata["NativeAmericanZodiacSign"];
-            $veAsSi = $metadata["VedicAstrologySign"];
-            $guAg = $metadata["GuardianAngel"];
-            $ChEl = $metadata["ChineseElement"];
-            $eyCoMe = $metadata["EyeColorMeaning"];
-            $GrMyAr = $metadata["GreekMythologyArchetype"];
-            $NoMyPaDe = $metadata["NorseMythologyPatronDeity"];
-            $EgZoSi = $metadata["EgyptianZodiacSign"];
-            $MaZoSi =  $metadata["MayanZodiacSign"];
-            $loLaua = $metadata["LoveLanguage"];
-            $biSt = $metadata["Birthstone"];
-            $biFl = $metadata["BirthFlower"];
-            $blTy = $metadata["BloodType"];
-            $atchntyl = $metadata["AttachmentStyle"];
-            $chisTy = $metadata["CharismaType"];
-            $bunePeonit = $metadata["BusinessPersonality"];
-            $usDIC = $metadata["DISC"];
-            $soonsTy = $metadata["SocionicsType"];
-            $leniSte = $metadata["LearningStyle"];
-            $finclPsonityp = $metadata["FinancialPersonalityType"];
-            $prarotatnSle = $metadata["PrimaryMotivationStyle"];
-            $crtiSte = $metadata["CreativeStyle"];
-            $coliMagentyl = $metadata["ConflictManagementStyle"];
-            $teRoPrerc = $metadata["TeamRolePreference"];
-
-        InputIntoDatabase($TfMlCts, $usNa, $fiNa, $laNa, $niNa, $gede, $bihda, $eml, $pawo, $chZoSi, $weZoSi, $spiAna, $ceTrZoSi, $naAmZoSi, $veAsSi, $guAg, $ChEl, $eyCoMe, $GrMyAr, $NoMyPaDe, $EgZoSi, $MaZoSi, $loLaua, $biSt, $biFl, $blTy, $atchntyl, $chisTy, $bunePeonit, $usDIC, $soonsTy, $leniSte, $finclPsonityp, $prarotatnSle, $crtiSte, $coliMagentyl, $teRoPrerc);
-
-        header("Location: https://www.tsunamiflow.club");
-        exit;
-    } else if (isset($data["type"])) {
-        //Community
-        if($data["type"] === "Subscribers Signup") {
-        
-        $TfMlCts = validate_input("membershipLevel", $_POST);
-        $MembershipCost = validate_input("membershipCost", $_POST);
-        //$PaymentTypeFr = validate_input("PTFform", $_REQUEST);
-        $SCidBroIdk = validate_input("SCidFR", $_POST);
-
-        //Validate User Information Next.
-        if (empty($_POST["TFRegisterFirstName"]) || empty($_POST["TFRegisterLastName"]) || empty($_POST["TFRegisterNickName"]) || empty($_POST["TFRegisterGender"]) || empty($_POST["TFRegisterBirthday"]) || empty($_POST["TFRegisterEmail"]) || empty($_POST["TFRegisterUsername"]) || empty($_POST["TFRegisterPassword"])) {
-            echo ("Missing required fields");
-        } else {
-            $fiNa = validate_input("TFRegisterFirstName", $_POST);
-            $laNa = validate_input("TFRegisterLastName", $_POST);
-            $niNa = validate_input("TFRegisterNickName", $_POST);
-            $gede = validate_input("TFRegisterGender", $_POST);
-            $bihda = validate_input("TFRegisterBirthday", $_POST);
-            $eml = $_POST["TFRegisterEmail"];
-            //$eml = TsunamiInput($_POST["TFRegisterEmail"]);
-            $usNa = validate_input("TFRegisterUsername", $_POST);
-            $Checkpassword = validate_input("TFRegisterPassword", $_POST);
-            $pawo = password_hash($Checkpassword, PASSWORD_DEFAULT);
-            $chZoSi = validate_input("ChineseZodiacSign", $_POST);
-            $weZoSi = validate_input("WesternZodiacSign", $_POST);
-            $spiAna = validate_input("SpiritAnimal", $_POST);
-            $ceTrZoSi = validate_input("CelticTreeZodiacSign", $_POST);
-            $naAmZoSi = validate_input("NativeAmericanZodiacSign", $_POST);
-            $veAsSi = validate_input("VedicAstrologySign", $_POST);
-            $guAg = validate_input("GuardianAngel", $_POST);
-            $ChEl = validate_input("ChineseElement", $_POST);
-            $eyCoMe = validate_input("EyeColorMeaning", $_POST);
-            $GrMyAr = validate_input("GreekMythologyArchetype", $_POST);
-            $NoMyPaDe = validate_input("NorseMythologyPatronDeity", $_POST);
-            $EgZoSi = validate_input("EgyptianZodiacSign", $_POST);
-            $MaZoSi =  validate_input("MayanZodiacSign", $_POST);
-            $loLaua = validate_input("LoveLanguage", $_POST);
-            $biSt = validate_input("Birthstone", $_POST);
-            $biFl = validate_input("BirthFlower", $_POST);
-            $blTy = validate_input("BloodType", $_POST);
-            $atchntyl = validate_input("AttachmentStyle", $_POST);
-            $chisTy = validate_input("CharismaType", $_POST);
-            $bunePeonit = validate_input("BusinessPersonality", $_POST);
-            $usDIC = validate_input("DISC", $_POST);
-            $soonsTy = validate_input("SocionicsType", $_POST);
-            $leniSte = validate_input("LearningStyle", $_POST);
-            $finclPsonityp = validate_input("FinancialPersonalityType", $_POST);
-            $prarotatnSle = validate_input("PrimaryMotivationStyle", $_POST);
-            $crtiSte = validate_input("CreativeStyle", $_POST);
-            $coliMagentyl = validate_input("ConflictManagementStyle", $_POST);
-            $teRoPrerc = validate_input("TeamRolePreference", $_POST);
-
-            //Create Stripe Checkout
-            if ($TfMlCts === "free") {
-                InputIntoDatabase($TfMlCts, $usNa, $fiNa, $laNa, $niNa, $gede, $bihda, $eml, $pawo, $chZoSi, $weZoSi, $spiAna, $ceTrZoSi, $naAmZoSi, $veAsSi, $guAg, $ChEl, $eyCoMe, $GrMyAr, $NoMyPaDe, $EgZoSi, $MaZoSi, $loLaua, $biSt, $biFl, $blTy, $atchntyl, $chisTy, $bunePeonit, $usDIC, $soonsTy, $leniSte, $finclPsonityp, $prarotatnSle, $crtiSte, $coliMagentyl, $teRoPrerc);
-
-                // Use this for regular file shit file_put_contents("Database.csv", $TheEntireFormFr) 
-            } else {
-                global $StfPk;
-                    error_log("Stripe PaymentMethod ID received: $SCidBroIdk");
-
-                    if ($TfMlCts == "regular") {
-                        if ($membershipCost >= 0.49 || $membershipCost <= 4.01) {
-                            $membershipCost = 4;
-                        } else {
-                            $membershipCost = 4;
-                        }
-                    } else if ($TfMlCts == "vip") {
-                        if ($membershipCost >= 4 || $membershipCost <= 7.01) {
-                            $membershipCost = 4;
-                        } else {
-                            $membershipCost = 4;
-                        }
-                    } else if ($TfMlCts == "team") {
-                        if ($membershipCost >= 7 || $membershipCost <= 10.01) {
-                            $membershipCost = 10;
-                        } else {
-                            $membershipCost = 10;
-                        }
-                    } else {
-                        $membershipCost = 20;
-                    }
-
-                    $TsunamiFlowCheckoutAmount = $membershipCost;
-
-                    $TsunamiFlowStripeCheckoutSession =  \Stripe\Checkout\Session::create([
-                        "payment_method_types" => ["card"],
-                        "mode" => "payment", //subscription
-                        "line_items" => [[
-                            "price_data" => [
-                                "currency" => "usd",
-                                "unit_amount" => $membershipCost, //amount in cents
-                                "product_data" => [
-                                    "name" => "Community Member Signup Fee",
-                                ],
-                            ],
-                            "quantity" => 1,
-                        ]],
-                        "success_url" => "$TsunamiFlowClubDomain/server.php?session_id={CHECKOUT_SESSION_ID}",
-                        "cancel_url" => "$TsunamiFlowClubDomain/failed.php",
-                        "metadata" => [
-                            "membership" => $TfMlCts,
-                            "FirstName" => $fiNa,
-                            "LastName" => $laNa,
-                            "NickName" => $niNa,
-                            "Gender" => $gede,
-                            "Birthday" => $bihda,
-                            "Email" => $eml,
-                            "Username" => $usNa,
-                            "Password" => $Checkpassword,
-                            "ChineseZodiacSign" => $chZoSi,
-                            "WesternZodiacSign" => $weZoSi,
-                            "SpiritAnimal" => $spiAna,
-                            "CelticTreeZodiacSign" => $ceTrZoSi,
-                            "NativeAmericanZodiacSign" => $naAmZoSi,
-                            "VedicAstrologySign" => $veAsSi,
-                            "GuardianAngel" => $guAg,
-                            "ChineseElement" => $ChEl,
-                            "EyeColorMeaning" => $eyCoMe,
-                            "GreekMythologyArchetype" => $GrMyAr,
-                            "NorseMythologyPatronDeity" => $NoMyPaDe,
-                            "EgyptianZodiacSign" => $EgZoSi,
-                            "MayanZodiacSign" => $MaZoSi,
-                            "LoveLanguage" => $loLaua,
-                            "Birthstone" => $biSt,
-                            "BirthFlower" => $biFl, 
-                            "BloodType" => $blTy,
-                            "AttachmentStyle" => $atchntyl,
-                            "CharismaType" => $chisTy,
-                            "BusinessPersonality" => $bunePeonit,
-                            "DISC" => $usDIC,
-                            "SocionicsType" => $soonsTy,
-                            "LearningStyle" => $leniSte, 
-                            "FinancialPersonalityType" => $finclPsonityp,
-                            "PrimaryMotivationStyle" =>  $prarotatnSle,
-                            "CreativeStyle" => $crtiSte,
-                            "ConflictManagementStyle" => $coliMagentyl,
-                            "TeamRolePreference" => $teRoPrerc
-                        ],
-                    ]);
-
-                    header("Location: " . $TsunamiFlowStripeCheckoutSession->url);
-                    exit;
-                //Subscriptions Ends
-                }
-            }
-        } else if($data["type"] === "Navigation Login") {
-            if ($data["log in"] === true) {
-                // Allow specific headers
-                header("Access-Control-Allow-Headers: X-Requested-With, Content-Type");
-                // Allow specific methods
-                //NavLoginFr();
-                // use session_regenerate_id() for every login attempt.
-                $_SESSION["LoginStatus"] = "is the user logged in or nah";
-            } else {
-                //tfLogOut(); // logout function already created.
-            }
-        } else if($data["type"] === "Tsunami Flow Store") {
-            if ($data["shopping cart"] === true) {
-                //Shopping Cart
-                    UserShoppingCartWishList();
-            } else if ($data["tycadome order"]) {
-                $UserCity = validate_input("tfOrdPaymentCity", $_POST);
-                $UserCountry = validate_input("tfOrdPaymentCountry", $_POST);
-                $streetPOorCompanyName = validate_input("tfOrdPaymentAddress1", $_POST);
-                $ApartmentSuiteUnitBuilding = validate_input("tfOrdPaymentAddress2", $_POST);
-                $ZipOrPostalCode = validate_input("tfOrdPostalCode", $_POST);
-                $StateCountyProvinceRegion = validate_input("tfOrdState", $_POST);
-                $SomeStoreNumber = validate_input("tfOrdPhoneNumber", $_POST);
-
-            // Gather cart items (from session)
-                $items = [];
-                $totalPriceOk = 0;
-
-                foreach ($_SESSION["TfShoppingCartWish"] as $cartItem) {
-                    $items[] = [
-                        'product_id' => $cartItem['product_id'],
-                        'variant_id' => $cartItem['variant_id'],
-                        'quantity' => $cartItem['quantity'],
-                        'name' => $cartItem['name'],
-                        'price' => $cartItem['price']
-                    ];
-                    $totalPriceOk = $totalPriceOk + $cartItem['price'];
-                };
-
-            //Draft the Order in Printful
-                $oDtF = [
-                    "recipient" => [
-                        "name" => $CustomerName,
-                        "address1" => $streetPOorCompanyName,
-                        "address2" => $ApartmentSuiteUnitBuilding ?? '',
-                        "city" => $UserCity,
-                        "state_code" => $StateCountyProvinceRegion,
-                        "country_code" => $UserCountry,
-                        "zip" => $ZipOrPostalCode,
-                        "email" => $CustomersEmail
-                    ],
-                    "items" => [],
-                    //"shipping_method" => $shippingMethod, 
-                    //"packing_slip" => ["email" => "","phone" => "","message" => "","logo_url" => "",]
-                ];
-
-            //price total before tax
-                $estimatedTotalPrice0Tax = $totalPriceOK;
-
-            //Real Price 
-                $tfRealStorePrice = $estimatedTotalPrice0Tax;
-
-            //payment Method ID
-                $tsTFpmID = validate_input("pmIDtsTF", $_POST);
-
-                //Create a Customer Printful (hopefully I can use sStripe to .
-                //$CreatedCustomer = TcreateFCustomer($tsTFpmID);
-
-                //Draft the Order.
-                //NPOtfTS($oDtF);
-
-                //create Payment Intent
-                
-                $tsTFpiID = validate_input("SpPiTfFr", $_POST);
-
-            }
-        } else {
-                echo(json_encode([
-                    "error" => "",
-                    "log" => "",
-                    "url" => "",
-                    'status' => "", 
-                    'customer_email' => ""
-                ]));
-        };
-    } else {
-        http_response_code(403);
-        exit("Unauthorized");
-    }
-    /////Server php stuff now 
-} else if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    //$_SESSION["PermissionLevel"] = "are you over or under the age of 18";
-    //$_SESSION["TemporaryData"] = "I'm most likely gonna use localstorage or something like that instead of this.";
-
-    if (isset($_GET["Shopping Cart"])) {
-        $TfCart = [];
-        foreach($_GET["Shopping Cart"] as $product) {
-            array_push($TfCart, $product);
-            }
-            $_SESSION["ShoppingCartItems"] = $TfCart;
-
-        /*                        
-            header("Content-Type: application/json");
-            echo json_encode([
-                "ip" => $ip_address
-                "status" => "ok",
-                "visits" => $_SESSION["visit_count"],
-                "guest_visits" => $_SESSION["TfGuestCount"],
-                "member_visits" => $_SESSION["TfNifageCount"],
-                "free_visits" => $_SESSION["freeMembershipCount"],"low_visits" => $_SESSION["lowestMembershipCount"],
-                "middle_visits" => $_SESSION["middleMembershipCount"],
-                "high_visits" => $_SESSION["highestMembershipCount"],
-                "member" => $_SESSION["TfNifage"],
-                "member_level" => $_SESSION["TfAccess"],
-                "username" => $member
-            ]);
-        */
-    } else {
-
-    }
-} else {
-    http_response_code(400);
-    echo json_encode(["error" => "Invalid Request Type"]);
-exit;
-}
+//InputIntoDatabase($TfMlCts, $usNa, $fiNa, $laNa, $niNa, $gede, $bihda, $eml, $pawo, $chZoSi, $weZoSi, $spiAna, $ceTrZoSi, $naAmZoSi, $veAsSi, $guAg, $ChEl, $eyCoMe, $GrMyAr, $NoMyPaDe, $EgZoSi, $MaZoSi, $loLaua, $biSt, $biFl, $blTy, $atchntyl, $chisTy, $bunePeonit, $usDIC, $soonsTy, $leniSte, $finclPsonityp, $prarotatnSle, $crtiSte, $coliMagentyl, $teRoPrerc); 
 
 //If Statements End
 // Lets Begin the Process Now 
