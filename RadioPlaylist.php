@@ -12,6 +12,9 @@ use Aws\S3\S3Client;
 
 header("Content-Type: application/json; charset=utf-8");
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->load();
+
 // Ensure request type
 if (!isset($_SERVER["HTTP_X_REQUEST_TYPE"]) || $_SERVER["HTTP_X_REQUEST_TYPE"] !== "fetchRadioSongs") {
     http_response_code(400);
