@@ -125,16 +125,18 @@ function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Cli
                 $array[$index] = [];
             }
 
+            $decodedKey = urldecode(ltrim($key, '/'));
+
             // If index2 provided, ensure the subarray exists
             if ($index2 !== null) {
                 if (!isset($array[$index][$index2]) || !is_array($array[$index][$index2])) {
                     $array[$index][$index2] = [];
                 }
-                $array[$index][$index2][] = "https://www.tsunamiflow.club/" . ltrim($key, '/');
+                $array[$index][$index2][] = "https://www.tsunamiflow.club/" . $decodedKey;
             } else {
-                $array[$index][] = "https://www.tsunamiflow.club/" . ltrim($key, '/');
+                $array[$index][] = "https://www.tsunamiflow.club/" . $decodedKey;
             }
-            $array[11][] = "https://www.tsunamiflow.club/" . ltrim($key, '/');
+            $array[11][] = "https://www.tsunamiflow.club/" . $decodedKey;
         }
 
         error_log("Added songs to index $index" . ($index2 !== null ? " at sub-index $index2" : ""));
