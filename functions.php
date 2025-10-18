@@ -327,6 +327,84 @@ function NPOtfTS(array $orderData): ?int {
     return $decodedResponse['result']['id'] ?? null;
 }
 
+function CreatePrintfulOrder(array $cartItems, array $customer): array {
+    $apiKey = getenv('PrintfulApiKey');
+    if (!$apiKey) return ['error' => 'Missing Printful API key'];
+
+    $order = [
+        "recipient" => [
+            "name"         => $customer['name'] ?? 'Unknown',
+            "address1"     => $customer['address1'] ?? '',
+            "city"         => $customer['city'] ?? '',
+            "state_code"   => $customer['state_code'] ?? '',
+            "country_code" => $customer['country_code'] ?? '',
+            "zip"          => $customer['zip'] ?? '',
+            "email"        => $customer['email'] ?? '',
+            "phone"        => $customer['phone'] ?? ''
+        ],
+        "items" => []
+    ];
+
+    foreach ($cartItems as $item) {
+        $order['items'][] = [
+            "variant_id" => $item['variant_id'],
+            "quantity"   => $item['quantity']
+        ];
+    }
+
+    $ch = curl_init('https://api.printful.com/orders');
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        'Authorization: Bearer ' . $apiKey,
+        'Content-Type: application/json'
+    ]);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($order));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    $response = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+
+    $result = json_decode($response, true) ?? [];
+    if ($httpCode >= 200 && $httpCode < 300) return ['success' => true, 'result' => $result];
+
+    return ['success' => false, 'error' => $result['error'] ?? 'Unknown Printful error'];
+}
+
+// -------- Stripe Checkout Session --------
+function CreateStripeCheckout(array $cartItems, string $successUrl, string $cancelUrl): array {
+    $stripe = new \Stripe\StripeClient(getenv('StripeSecretKey'));
+    $lineItems = [];
+
+    foreach ($cartItems as $item) {
+        $price = floatval($item['price'] ?? 0);
+        if ($price <= 0) continue;
+        $lineItems[] = [
+            'price_data' => [
+                'currency' => 'usd',
+                'unit_amount' => (int)($price * 100), // Stripe in cents
+                'product_data' => ['name' => $item['name'] . ' - ' . $item['variant_name']]
+            ],
+            'quantity' => $item['quantity']
+        ];
+    }
+
+    if (empty($lineItems)) return ['success' => false, 'error' => 'No valid items in cart'];
+
+    try {
+        $session = $stripe->checkout->sessions->create([
+            'payment_method_types' => ['card'],
+            'mode' => 'payment',
+            'line_items' => $lineItems,
+            'success_url' => $successUrl . '?session_id={CHECKOUT_SESSION_ID}',
+            'cancel_url'  => $cancelUrl
+        ]);
+        return ['success' => true, 'url' => $session->url, 'id' => $session->id];
+    } catch (Exception $e) {
+        return ['success' => false, 'error' => $e->getMessage()];
+    }
+}
+
 
 //Webrtc Functions 
 //curl response to make php 
