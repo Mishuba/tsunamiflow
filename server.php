@@ -1,11 +1,11 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-ini_set("session.cookie_secure", true);
-ini_set("session.cookie_httponly", true);
-ini_set("session.gc_maxlifetime", 3600);
-ini_set("session.cookie_lifetime", 0);
-ini_set("session.use_strict_mode", true);
+//error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//ini_set("session.cookie_secure", true);
+//ini_set("session.cookie_httponly", true);
+//ini_set("session.gc_maxlifetime", 3600);
+//ini_set("session.cookie_lifetime", 0);
+//ini_set("session.use_strict_mode", true);
 
 session_start();
 
