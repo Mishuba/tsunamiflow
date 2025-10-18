@@ -53,6 +53,105 @@ try{
     if($method==='POST'){
         if(stripos($_SERVER['CONTENT_TYPE']??'','application/json')!==false)$data=json_decode(file_get_contents('php://input'),true)??[];
 
+// ---- Add to cart handling (paste right after: if ($method === 'POST') { ) ----
+if (isset($_POST['addProductToCart'])) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    $variantId = trim($_POST['product_id'] ?? '');
+    $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
+
+    if ($variantId === '') {
+        $error = ['error' => 'Missing product ID'];
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            respond($error, 400);
+        }
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
+        exit;
+    }
+
+    // Load Printful products
+    $allProducts = BasicPrintfulRequest();
+    $found = null;
+
+    if (isset($allProducts['result']) && is_array($allProducts['result'])) {
+        foreach ($allProducts['result'] as $product) {
+            $variants = $product['sync_variants'] ?? $product['variants'] ?? [];
+            if (!is_array($variants)) continue;
+
+            foreach ($variants as $v) {
+                if ((string)($v['id'] ?? '') === (string)$variantId) {
+                    $found = [
+                        'parent_product_id' => $product['id'] ?? null,
+                        'product_name'      => $product['name'] ?? ($v['name'] ?? 'Unknown'),
+                        'variant_id'        => $v['id'] ?? $variantId,
+                        'variant_name'      => $v['name'] ?? '',
+                        'price'             => $v['retail_price'] ?? ($v['price'] ?? 0),
+                        'size'              => $v['size'] ?? ($v['size_name'] ?? ''),
+                        'availability'      => $v['availability_status'] ?? ($v['availability'] ?? ''),
+                        'thumbnail'         => $product['thumbnail_url'] ?? ($product['image'] ?? ''),
+                    ];
+                    break 2;
+                }
+            }
+        }
+    }
+
+    if (!$found) {
+        $error = ['error' => 'Variant not found'];
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+            respond($error, 404);
+        }
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
+        exit;
+    }
+
+    $cartItem = [
+        'parent_product_id' => $found['parent_product_id'],
+        'name'              => $found['product_name'],
+        'variant_id'        => $found['variant_id'],
+        'variant_name'      => $found['variant_name'],
+        'price'             => (float)$found['price'],
+        'size'              => $found['size'],
+        'availability'      => $found['availability'],
+        'thumbnail'         => $found['thumbnail'],
+        'quantity'          => $quantity,
+        'added_at'          => date('c'),
+    ];
+
+    // Initialize cart if needed
+    $_SESSION['ShoppingCartItems'] ??= [];
+
+    // Merge quantity if item already exists
+    $merged = false;
+    foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
+        if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
+            $existing['quantity'] += $cartItem['quantity'];
+            $merged = true;
+            break;
+        }
+    }
+    unset($existing);
+
+    if (!$merged) {
+        $_SESSION['ShoppingCartItems'][] = $cartItem;
+    }
+
+    // AJAX or redirect response
+    if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+        respond([
+            'success'    => true,
+            'cart_count' => count($_SESSION['ShoppingCartItems']),
+            'item'       => $cartItem
+        ]);
+    } else {
+        header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
+        exit;
+    }
+}
+// ---- end add to cart handling ----
+
         if(($_POST['token']??'')===$Token){$sid=$_POST['session_id']??null;if(!$sid)respond(['error'=>'Missing session_id'],400);$s=\Stripe\Checkout\Session::retrieve($sid);$m=$s->metadata??[];if(!empty($m['TFRegisterPassword']))$m['TFRegisterPassword']=password_hash($m['TFRegisterPassword'],PASSWORD_DEFAULT);InputIntoDatabase(...array_values($m));header("Location: $domain");exit;}
 
         if(($data['type']??'')==='Subscribers Signup'){$m=$_POST['membershipLevel']??'free';$u=$_POST;if(!empty($u['TFRegisterPassword']))$u['TFRegisterPassword']=password_hash($u['TFRegisterPassword'],PASSWORD_DEFAULT);if($m==='free'){InputIntoDatabase($m,...array_values($u));respond(['success'=>true,'message'=>'Free membership created']);}$costMap=['regular'=>400,'vip'=>700,'team'=>1000];$s=\Stripe\Checkout\Session::create(['payment_method_types'=>['card'],'mode'=>'payment','line_items'=>[['price_data'=>['currency'=>'usd','unit_amount'=>$costMap[strtolower($m)]??2000,'product_data'=>['name'=>'Community Member Signup Fee']],'quantity'=>1]],'success_url'=>"$domain/server.php?session_id={CHECKOUT_SESSION_ID}",'cancel_url'=>"$domain/failed.php",'metadata'=>$u]);header("Location: ".$s->url);exit;}
