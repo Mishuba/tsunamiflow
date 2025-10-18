@@ -9,28 +9,16 @@ ini_set("session.use_strict_mode", true);
 
 session_start();
 
-// MP3
+// Headers
 header("Accept-Ranges: bytes");
-
 header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
-//header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
-//header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://world.tsunamiflow.club wss://www.tsunamiflow.club; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
 
-//header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
-
-/*
-header("X-Content-Type-Options: nosniff");
-header("X-Frame-Options: SAMEORIGIN");
-header("X-XSS-Protection: 1; mode=block");
-header("Referrer-Policy: no-referrer-when-downgrade");
-header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
-header("Cross-Origin-Opener-Policy: same-origin");
-header("Cross-Origin-Embedder-Policy: require-corp");
-header("Cross-Origin-Resource-Policy: same-origin");
-*/
 require_once "functions.php";
+use Aws\S3\S3Client;
+use Aws\Credentials\Credentials;
+use Aws\Exception\AwsException;
 
 //use Stripe\Stripe;
 //use Stripe\StripeClient;
@@ -38,24 +26,113 @@ require_once "functions.php";
 //$StripeKeyTf = Stripe::setApiKey(TfStripeSecretKey);
 //$StfPk = new StripeClient(TfStripeSecretKey);
 
-//ip address
-getIpAddress();
 
 $GetJson = @file_get_contents("php://ipnut");
 $data = json_decode($GetJson);
 
-//User Time
+// IP, time, and session defaults
+getIpAddress();
 $TfUserTime = time();
+$_SESSION["UserPreferences"] = ["Chosen_Companion" => "Ackma Hawk"];
+$_SESSION["Setting"] = ["font_style" => "auto"];
 
-//Community
-$_SESSION["UserPreferences"] = [
-    "Chosen_Companion" => "Ackma Hawk"
-];
+// Session tracking logic
+if(!isset($_SESSION["visit_count"])) $_SESSION["visit_count"] = 1; else $_SESSION["visit_count"]++;
+// [Other session increment logic can remain exactly as in your original code]
 
-$_SESSION["Setting"] = [
-    "font_style" => "auto"
-];
-/*
+// --- Request Handling ---
+$requestType = $_SERVER["REQUEST_METHOD"];
+
+// --- Fetch Radio Songs ---
+if ($requestType === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
+
+    // --- Category array shape ---
+    $sentToJsArray = array_fill(0, 24, []);
+    $multiSubArrays = [0 => 4, 1 => 4, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 6, 9 => 3, 12 => 4, 13 => 4, 14 => 4, 15 => 4, 16 => 4, 18 => 6, 19 => 4, 20 => 4];
+    foreach ($multiSubArrays as $idx => $count) $sentToJsArray[$idx] = array_fill(0, $count, []);
+
+    // --- Initialize Cloudflare R2 / S3 ---
+    $accessKey = getenv('CloudflareR2AccessKey');
+    $secretKey = getenv('CloudflareR2SecretKey');
+    $r2Endpoint = getenv('CloudflareR2Endpoint');
+    $bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
+
+    if (!$accessKey || !$secretKey || !$r2Endpoint) {
+        http_response_code(500);
+        echo json_encode(["error" => "Missing R2 credentials or endpoint."]);
+        exit;
+    }
+
+    try {
+        $credentials = new Credentials($accessKey, $secretKey);
+        $s3 = new S3Client([
+            "region" => "auto",
+            "endpoint" => $r2Endpoint,
+            "version" => "latest",
+            "credentials" => $credentials,
+            "use_path_style_endpoint" => false
+        ]);
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(["error" => "Failed to initialize S3 client: " . $e->getMessage()]);
+        exit;
+    }
+
+    // --- Function to add songs ---
+    function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3 = null, string $bucket = 'tsunami-radio') {
+        if (!$s3) return;
+        $prefix = rtrim(ltrim($path, '/'), '/') . '/';
+        try {
+            $Objects = $s3->listObjectsV2(["Bucket" => $bucket, "Prefix" => $prefix, "MaxKeys" => 1000]);
+            if (!isset($Objects["Contents"]) || !is_array($Objects["Contents"])) return;
+
+            foreach ($Objects["Contents"] as $obj) {
+                if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
+                $decodedKey = trim(urldecode(ltrim($obj['Key'], '/')));
+                $url = "https://www.tsunamiflow.club/" . $decodedKey;
+
+                if ($index2 !== null) $array[$index][$index2][] = $url;
+                else $array[$index][] = $url;
+
+                $array[11][] = $url; // All Music
+            }
+        } catch (AwsException $e) {
+            error_log("AWS Exception: " . $e->getMessage());
+        }
+    }
+
+    // --- Music mapping array ---
+    $musicMapping = [
+        0 => ['IceBreakers','Flirting','GetHerDone','Shots'], 1 => ['Twerking','LineDance','PopDance','Battle'], 2 => [null], 
+        3 => ['Foreplay','sex','Cuddle'], 4 => ['Memories','love','Intimacy'], 5 => ['Lifestyle','Values','Kids'], 6 => ['Motivation','Meditation','Something'], 
+        7 => ['DH','BAH','HFnineteen'], 8 => ['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'], 9 => ['Fighters','Shooters','Instrumentals'], 
+        10 => [null], 12 => ['Poems','SS','Instrumentals','Books'], 13 => ['Reviews','Fans','Updates','Disses'], 14 => ['News','Music','History','Instrumentals'], 
+        15 => ['Biology','Chemistry','Physics','Environmental'], 16 => ['EP','Seller','Mortgage','Buyer'], 17 => [null], 18 => ['NM','SHM','MH','VM','LS','CB'], 
+        19 => ['PD','LD','FH','SM'], 20 => ['FE','TOB','Insurance','TE'], 21 => [null], 22 => [null], 23 => [null]
+    ];
+
+    $categoryFolders = [
+        0=>'Rizz',1=>'Dance',2=>'Afterparty',3=>'Sex',4=>'Love',5=>'Family',6=>'Inspiration',7=>'History',8=>'Politics',9=>'Gaming',
+        10=>'Comedy',12=>'Literature',13=>'Sports',14=>'Tech',15=>'Science',16=>'RealEstate',17=>'DJshuba',18=>'Film',19=>'Fashion',
+        20=>'Business',21=>'Hustlin',22=>'Pregame',23=>'Outside'
+    ];
+
+    // --- Loop through mapping ---
+    foreach ($musicMapping as $catIndex => $subFolders) {
+        foreach ($subFolders as $subIndex => $folder) {
+            $catName = $categoryFolders[$catIndex] ?? '';
+            $fullPath = $folder ? "Music/$catName/$folder/" : "Music/$catName/";
+            addSongsToArray($fullPath, $sentToJsArray, $catIndex, $folder !== null ? $subIndex : null, $s3, $bucketName);
+        }
+    }
+
+    echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
+
+// --- Stripe / POST / GET logic can remain exactly as in your original code ---
+// [Keep your Stripe session handling, community signup, shopping cart, and GET request logic]
+
 curl_init(); //initializes the session
 curl_setopt(); //configure options like the URL, HTTP, method, headers, or data payload,
 curl_exec(); //executes the session and returns the response.
@@ -146,127 +223,8 @@ if(!isset($_SESSION["visit_count"])) {
     }
 }
 
-// Ensure request type
-if (isset($_SERVER["HTTP_X_REQUEST_TYPE"]) {
-if ($_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
-// --- Category array shape ---
-$sentToJsArray = array_fill(0, 24, []);
 
-// Subarrays for categories with multiple subfolders
-$multiSubArrays = [
-    0 => 4, 1 => 4, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 6,
-    9 => 3, 12 => 4, 13 => 4, 14 => 4, 15 => 4, 16 => 4, 18 => 6, 19 => 4, 20 => 4
-];
-foreach ($multiSubArrays as $idx => $count) {
-    $sentToJsArray[$idx] = array_fill(0, $count, []);
-}
-
-// --- Initialize S3 client ---
-$accessKey = getenv('CloudflareR2AccessKey');
-$secretKey = getenv('CloudflareR2SecretKey');
-$r2Endpoint = getenv('CloudflareR2Endpoint');
-$bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
-
-if (!$accessKey || !$secretKey || !$r2Endpoint) {
-    http_response_code(500);
-    echo json_encode(["error" => "Missing R2 credentials or endpoint."]);
-    exit;
-}
-
-try {
-    $credentials = new Credentials($accessKey, $secretKey);
-    $s3 = new S3Client([
-        "region" => "auto",
-        "endpoint" => $r2Endpoint,
-        "version" => "latest",
-        "credentials" => $credentials,
-        "use_path_style_endpoint" => false
-    ]);
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["error" => "Failed to initialize S3 client: " . $e->getMessage()]);
-    exit;
-}
-
-// --- Function to add songs ---
-function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3 = null, string $bucket = 'tsunami-radio') {
-    if (!$s3) return;
-    $prefix = rtrim(ltrim($path, '/'), '/') . '/';
-    try {
-        $Objects = $s3->listObjectsV2([
-            "Bucket" => $bucket,
-            "Prefix" => $prefix,
-            "MaxKeys" => 1000
-        ]);
-        if (!isset($Objects["Contents"]) || !is_array($Objects["Contents"])) return;
-
-        foreach ($Objects["Contents"] as $obj) {
-            if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
-            $decodedKey = trim(urldecode(ltrim($obj['Key'], '/')));
-            $url = "https://www.tsunamiflow.club/" . $decodedKey;
-
-            if ($index2 !== null) {
-                $array[$index][$index2][] = $url;
-            } else {
-                $array[$index][] = $url;
-            }
-            $array[11][] = $url; // All Music
-        }
-    } catch (AwsException $e) {
-        error_log("AWS Exception: " . $e->getMessage());
-    }
-}
-
-// --- Music mapping array ---
-$musicMapping = [
-    0 => ['IceBreakers','Flirting','GetHerDone','Shots'],
-    1 => ['Twerking','LineDance','PopDance','Battle'],
-    2 => [null], // Afterparty
-    3 => ['Foreplay','sex','Cuddle'],
-    4 => ['Memories','love','Intimacy'],
-    5 => ['Lifestyle','Values','Kids'],
-    6 => ['Motivation','Meditation','Something'],
-    7 => ['DH','BAH','HFnineteen'],
-    8 => ['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'],
-    9 => ['Fighters','Shooters','Instrumentals'],
-    10 => [null], // Comedy
-    12 => ['Poems','SS','Instrumentals','Books'],
-    13 => ['Reviews','Fans','Updates','Disses'],
-    14 => ['News','Music','History','Instrumentals'],
-    15 => ['Biology','Chemistry','Physics','Environmental'],
-    16 => ['EP','Seller','Mortgage','Buyer'],
-    17 => [null], // DJShuba
-    18 => ['NM','SHM','MH','VM','LS','CB'],
-    19 => ['PD','LD','FH','SM'],
-    20 => ['FE','TOB','Insurance','TE'],
-    21 => [null], // Hustlin
-    22 => [null], // Pregame
-    23 => [null], // Outside
-];
-
-// --- Loop through mapping ---
-foreach ($musicMapping as $catIndex => $subFolders) {
-    foreach ($subFolders as $subIndex => $folder) {
-        $path = $folder ? "Music/" . array_search($catIndex, array_keys($musicMapping)) . "/$folder/" : "Music/";
-        // Fix actual folder path based on category names
-        $categoryFolders = [
-            0=>'Rizz',1=>'Dance',2=>'Afterparty',3=>'Sex',4=>'Love',5=>'Family',
-            6=>'Inspiration',7=>'History',8=>'Politics',9=>'Gaming',10=>'Comedy',
-            12=>'Literature',13=>'Sports',14=>'Tech',15=>'Science',16=>'RealEstate',
-            17=>'DJshuba',18=>'Film',19=>'Fashion',20=>'Business',21=>'Hustlin',
-            22=>'Pregame',23=>'Outside'
-        ];
-        $catName = $categoryFolders[$catIndex] ?? '';
-        $fullPath = $folder ? "Music/$catName/$folder/" : "Music/$catName/";
-        addSongsToArray($fullPath, $sentToJsArray, $catIndex, $folder !== null ? $subIndex : null, $s3, $bucketName);
-    }
-}
-
-// --- Output JSON ---
-echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
-exit;
-}
-} else if ($_SERVER["REQUEST_METHOD"] === "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //Get javascript information.
     $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
 
