@@ -561,20 +561,11 @@ export class TfMusic {
         }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
         element.addEventListener("canplaythrough", async () => {
-    try {
-        // Only connect if both exist
-        if (audioctx && analyser && audiocontext) {
             audioctx.connect(analyser);
             analyser.connect(audiocontext.destination);
-        } else {
-            console.warn("Cannot connect nodes: audioctx, analyser, or audiocontext missing");
-        }
 
         // Call your method with your original variable name
         this.canplaythroughAudio(element, audiocontext);
-    } catch (error) {
-        console.error("Error connecting audio nodes in canplaythrough:", error);
-    }
 }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
         element.addEventListener("play", () => {
