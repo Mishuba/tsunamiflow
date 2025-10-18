@@ -10,19 +10,22 @@ ini_set("session.use_strict_mode", true);
 session_start();
 
 require_once "functions.php";
-use Aws\S3\S3Client, Aws\Credentials\Credentials, Aws\Exception\AwsException, Stripe\StripeClient;
+use Aws\S3\S3Client;
+use Aws\Credentials\Credentials;
+use Aws\Exception\AwsException;
+use Stripe\StripeClient;
 
-// --- Helper ---
-function respond(array $data, int $code = 200) {
+// --- Helper function ---
+function respond(array $data, int $code = 200): void {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
     exit(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
 }
 
 // --- CORS ---
-$allowed = ["https://www.tsunamiflow.club", "https://world.tsunamiflow.club", "https://tsunamiflow.club"];
-if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed)) {
-    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+$allowedOrigins = ["https://www.tsunamiflow.club", "https://world.tsunamiflow.club", "https://tsunamiflow.club"];
+if (!empty($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
 }
@@ -52,8 +55,9 @@ $_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
 $_SESSION["UserPreferences"] ??= ["Chosen_Companion" => "Ackma Hawk"];
 $_SESSION["Setting"] ??= ["font_style" => "auto"];
 
-foreach (["TfGuestCount", "freeMembershipCount", "lowestMembershipCount", "middleMembershipCount", "highestMembershipCount", "TfMemberCount"] as $c)
+foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
     $_SESSION[$c] ??= 0;
+}
 
 if (!($_SESSION["TfNifage"] ?? false)) {
     $_SESSION["TfGuestCount"]++;
@@ -76,14 +80,30 @@ $data = json_decode(file_get_contents("php://input"), true) ?? [];
 // --- Stripe Setup ---
 $stripe = new StripeClient(getenv("StripeSecretKey"));
 $domain = "https://www.tsunamiflow.club";
-$Token = "TsunamiFlowClubStripeToken";
+
+// --- Helper: Add item to cart ---
+function addToCart(array $product, int $quantity): array {
+    $cartItem = $product + ['quantity' => $quantity, 'added_at' => date('c')];
+    $_SESSION['ShoppingCartItems'] ??= [];
+
+    foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
+        if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
+            $existing['quantity'] += $cartItem['quantity'];
+            return ['merged' => true, 'item' => $existing];
+        }
+    }
+    unset($existing);
+
+    $_SESSION['ShoppingCartItems'][] = $cartItem;
+    return ['merged' => false, 'item' => $cartItem];
+}
 
 // --- Main Logic ---
 try {
     $method = $_SERVER['REQUEST_METHOD'];
 
     if ($method === 'POST') {
-        // ---- Add to Cart ----
+        // ---- Add Product to Cart ----
         if (isset($_POST['addProductToCart'])) {
             $variantId = trim($_POST['product_id'] ?? '');
             $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
@@ -110,23 +130,11 @@ try {
                     }
                 }
             }
+
             if (!$found) respond(['error' => 'Variant not found'], 404);
 
-            $cartItem = $found + ['quantity' => $quantity, 'added_at' => date('c')];
-            $_SESSION['ShoppingCartItems'] ??= [];
-
-            $merged = false;
-            foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
-                if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
-                    $existing['quantity'] += $cartItem['quantity'];
-                    $merged = true;
-                    break;
-                }
-            }
-            unset($existing);
-            if (!$merged) $_SESSION['ShoppingCartItems'][] = $cartItem;
-
-            respond(['success' => true, 'cart_count' => count($_SESSION['ShoppingCartItems']), 'item' => $cartItem]);
+            $result = addToCart($found, $quantity);
+            respond(['success' => true, 'cart_count' => count($_SESSION['ShoppingCartItems']), 'item' => $result['item']]);
         }
 
         // ---- Stripe Checkout ----
@@ -135,11 +143,12 @@ try {
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
 
             $checkout = CreateStripeCheckout($cartItems, "$domain/server.php?type=Printful Checkout", "$domain/checkout_cancel.php");
-            if (!empty($checkout['success'])) {
-                respond(['success' => true, 'checkout_url' => $checkout['url'], 'session_id' => $checkout['id']]);
-            } else {
-                respond(['success' => false, 'error' => $checkout['error'] ?? 'Stripe error'], 500);
-            }
+            respond([
+                'success' => !empty($checkout['success']),
+                'checkout_url' => $checkout['url'] ?? null,
+                'session_id' => $checkout['id'] ?? null,
+                'error' => $checkout['error'] ?? null
+            ]);
         }
 
         // ---- Printful Checkout ----
@@ -147,43 +156,42 @@ try {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
 
-            $customerData = $data['customer'] ?? [];
-            $result = CreatePrintfulOrder($cartItems, $customerData);
+            $result = CreatePrintfulOrder($cartItems, $data['customer'] ?? []);
+            if (!empty($result['success'])) unset($_SESSION['ShoppingCartItems']);
 
-            if (!empty($result['success'])) {
-                unset($_SESSION['ShoppingCartItems']);
-                respond(['success' => true, 'order' => $result['result']]);
-            } else {
-                respond(['success' => false, 'error' => $result['error'] ?? 'Printful order error'], 500);
-            }
+            respond([
+                'success' => !empty($result['success']),
+                'order' => $result['result'] ?? null,
+                'error' => $result['error'] ?? null
+            ]);
         }
 
         // ---- Subscribers Signup ----
         if (($data['type'] ?? '') === 'Subscribers Signup') {
-            $m = $_POST['membershipLevel'] ?? 'free';
-            $u = $_POST;
-            if (!empty($u['TFRegisterPassword'])) $u['TFRegisterPassword'] = password_hash($u['TFRegisterPassword'], PASSWORD_DEFAULT);
+            $membership = $_POST['membershipLevel'] ?? 'free';
+            $userData = $_POST;
+            if (!empty($userData['TFRegisterPassword'])) $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
 
-            if ($m === 'free') {
-                InputIntoDatabase($m, ...array_values($u));
+            if ($membership === 'free') {
+                InputIntoDatabase($membership, ...array_values($userData));
                 respond(['success' => true, 'message' => 'Free membership created']);
             }
 
             $costMap = ['regular' => 400, 'vip' => 700, 'team' => 1000];
-            $s = \Stripe\Checkout\Session::create([
+            $s = $stripe->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'mode' => 'payment',
                 'line_items' => [[
                     'price_data' => [
                         'currency' => 'usd',
-                        'unit_amount' => $costMap[strtolower($m)] ?? 2000,
+                        'unit_amount' => $costMap[strtolower($membership)] ?? 2000,
                         'product_data' => ['name' => 'Community Member Signup Fee']
                     ],
                     'quantity' => 1
                 ]],
                 'success_url' => "$domain/server.php?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url'  => "$domain/failed.php",
-                'metadata'    => $u
+                'metadata'    => $userData
             ]);
             header("Location: " . $s->url);
             exit;
@@ -196,8 +204,7 @@ try {
     if ($method === 'GET') {
         if (isset($_GET['cart_action'])) {
             switch ($_GET['cart_action']) {
-                case 'view':
-                    respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
+                case 'view': respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
                 case 'clear':
                     $_SESSION['ShoppingCartItems'] = [];
                     respond(['success' => true, 'message' => 'Cart cleared']);
@@ -207,16 +214,12 @@ try {
     }
 
     respond(['error' => 'Invalid request method'], 400);
+
 } catch (Exception $e) {
     respond(['error' => $e->getMessage()], 500);
 }
-?>
 
-// ---- Printful Fetch ----
+// --- Printful Fetch (legacy check) ---
 $myProductsFr = BasicPrintfulRequest();
-if (!$myProductsFr) {
-    echo "No data received from Printful API.";
-} else {
-    $showSuccess = true;
-}
+if (!$myProductsFr) echo "No data received from Printful API.";
 ?>
