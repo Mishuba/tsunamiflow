@@ -103,50 +103,48 @@ export class User {
     }
 }
     login() {
-        if (!this.username || !this.password) {
-            console.warn("Username or password is empty.");
-            return;
-        }
-
-        try {
-            const formData = new FormData();
-            formData.append("username", this.username);
-            formData.append("password", this.password);
-
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        document.getElementById("TFloginIcon").innerHTML = xhr.responseText;
-                        console.log("Login successful");
-                        // Optional: set cookies/sessionStorage here
-                    } else {
-                        console.error("Login failed:", xhr.statusText);
-                    }
-                }
-            };
-            xhr.open("POST", "server.php", true);
-            xhr.send(formData);
-        } catch (err) {
-            console.error("Login error:", err);
-        }
+    if (!this.username || !this.password) {
+        console.warn("Username or password is empty.");
+        return;
     }
 
-    PostThoughts() {
-        const thoughtInput = document.getElementById("TFthought");
-        if (!thoughtInput) return;
+    const formData = new FormData();
+    formData.append("NavUserName", this.username); // Match PHP expected keys
+    formData.append("NavPassword", this.password);
 
-        const formData = new FormData();
-        formData.append("thought", thoughtInput.value);
+    fetch("server.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.status === "success" || response.message?.includes("logged in")) {
+            console.log(`${this.username} is now logged in.`);
+            // Optional: store session info in localStorage if needed
+        } else {
+            console.error("Login failed:", response.message || response);
+        }
+    })
+    .catch(err => console.error("Login error:", err));
+}
 
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) console.log("Thought posted:", xhr.responseText);
-                else console.error("Failed to post thought:", xhr.statusText);
-            }
-        };
-        xhr.open("POST", "server.php", true);
-        xhr.send(formData);
-    }
+PostThoughts() {
+    const thoughtInput = document.getElementById("TFthought");
+    if (!thoughtInput) return;
+
+    const formData = new FormData();
+    formData.append("thought", thoughtInput.value);
+    formData.append("type", "PostThought"); // Optional type flag for PHP
+
+    fetch("server.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(res => res.json())
+    .then(response => {
+        if (response.success) console.log("Thought posted:", response);
+        else console.error("Failed to post thought:", response.message || response);
+    })
+    .catch(err => console.error("PostThought error:", err));
+}
 }
