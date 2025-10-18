@@ -20,9 +20,9 @@ include "server.php";
     <meta property="og:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
     <meta property="og:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
-    <meta property="og:url" content="https://example.com">
+    <meta property="og:url" content="https://www.tsunamiflow.club">
     <meta property="og:type" content="website">
-    <meta property="fb:app_id" content="Your_App_ID">
+    <!--meta property="fb:app_id" content="Your_App_ID"-->
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Tsunami Flow Club">
