@@ -367,12 +367,7 @@ Helps maintain brand consistency across user platforms-->
     <footer>
       <?php
 // Fetch Printful products
-$myProductsFr = BasicPrintfulRequest();
-$showSuccess = !empty($myProductsFr['result']);
-?>
-
 <?php if ($showSuccess): ?>
-<footer>
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
         <ul>
@@ -418,11 +413,10 @@ $showSuccess = !empty($myProductsFr['result']);
         </ul>
         <p>Cost:</p>
     </div>
-</footer>
-
+<?php endif; ?>
 <script type="module" crossorigin="anonymous">
     import "./JS/tfMain.js";
 </script>
-<?php endif; ?>
+</footer>
 </body>
 </html>
