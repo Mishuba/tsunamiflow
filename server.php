@@ -79,58 +79,75 @@ setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true
 // --- JSON Input ---
 $data = json_decode(file_get_contents("php://input"), true) ?: [];
 
-// --- Fetch Radio Songs ---
+// --- Fetch Radio Songs (Optimized) ---
 if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_SERVER["HTTP_X_REQUEST_TYPE"] ?? '') === "fetchRadioSongs") {
 
-    $sentToJsArray = array_fill(0, 24, []);
+    $sentToJsArray = array_map(fn() => [], range(0,23)); // initialize 24 empty arrays
     $multiSubArrays = [0=>4,1=>4,3=>3,4=>3,5=>3,6=>3,7=>3,8=>6,9=>3,12=>4,13=>4,14=>4,15=>4,16=>4,18=>6,19=>4,20=>4];
-    foreach ($multiSubArrays as $i=>$count) $sentToJsArray[$i] = array_fill(0,$count,[]);
+    foreach ($multiSubArrays as $idx=>$count) $sentToJsArray[$idx] = array_map(fn() => [], range(0,$count-1));
 
-    function addSongs($path, array &$array, int $i, $j = null, S3Client $s3, string $bucket) {
-    $prefix = rtrim(ltrim($path,'/'),'/') . '/';
-    try {
-        $paginator = $s3->getPaginator('ListObjectsV2', [
-            'Bucket' => $bucket,
-            'Prefix' => $prefix,
-        ]);
-
-        foreach ($paginator as $page) {
-            foreach ($page['Contents'] ?? [] as $obj) {
-                if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
-                $url = trim(urldecode(ltrim($obj['Key'], '/')));
-                if ($j !== null) $array[$i][$j][] = $url;
-                else $array[$i][] = $url;
-                $array[11][] = $url; // all music
+    function addSongsEfficient($path, array &$array, int $i, $j = null, S3Client $s3, string $bucket) {
+        $prefix = rtrim(ltrim($path,'/'),'/') . '/';
+        try {
+            $paginator = $s3->getPaginator('ListObjectsV2', ['Bucket'=>$bucket,'Prefix'=>$prefix]);
+            foreach ($paginator as $page) {
+                foreach ($page['Contents'] ?? [] as $obj) {
+                    if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
+                    $url = trim(urldecode(ltrim($obj['Key'], '/')));
+                    if ($j !== null) $array[$i][$j][] = $url;
+                    else $array[$i][] = $url;
+                    $array[11][] = $url; // all music collection
+                }
             }
+        } catch (AwsException $e) {
+            error_log("AWS Exception: " . $e->getMessage());
         }
-    } catch (AwsException $e) {
-        error_log("AWS Exception: " . $e->getMessage());
     }
-}
 
     $musicMapping = [
-        0=>['IceBreakers','Flirting','GetHerDone','Shots'],1=>['Twerking','LineDance','PopDance','Battle'],2=>[null],
-        3=>['Foreplay','sex','Cuddle'],4=>['Memories','love','Intimacy'],5=>['Lifestyle','Values','Kids'],6=>['Motivation','Meditation','Something'],
-        7=>['DH','BAH','HFnineteen'],8=>['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'],9=>['Fighters','Shooters','Instrumentals'],
-        10=>[null],12=>['Poems','SS','Instrumentals','Books'],13=>['Reviews','Fans','Updates','Disses'],14=>['News','Music','History','Instrumentals'],
-        15=>['Biology','Chemistry','Physics','Environmental'],16=>['EP','Seller','Mortgage','Buyer'],17=>[null],18=>['NM','SHM','MH','VM','LS','CB'],
-        19=>['PD','LD','FH','SM'],20=>['FE','TOB','Insurance','TE'],21=>[null],22=>[null],23=>[null]
+        0=>['IceBreakers','Flirting','GetHerDone','Shots'],
+        1=>['Twerking','LineDance','PopDance','Battle'],
+        2=>[null],
+        3=>['Foreplay','sex','Cuddle'],
+        4=>['Memories','love','Intimacy'],
+        5=>['Lifestyle','Values','Kids'],
+        6=>['Motivation','Meditation','Something'],
+        7=>['DH','BAH','HFnineteen'],
+        8=>['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'],
+        9=>['Fighters','Shooters','Instrumentals'],
+        10=>[null],
+        12=>['Poems','SS','Instrumentals','Books'],
+        13=>['Reviews','Fans','Updates','Disses'],
+        14=>['News','Music','History','Instrumentals'],
+        15=>['Biology','Chemistry','Physics','Environmental'],
+        16=>['EP','Seller','Mortgage','Buyer'],
+        17=>[null],
+        18=>['NM','SHM','MH','VM','LS','CB'],
+        19=>['PD','LD','FH','SM'],
+        20=>['FE','TOB','Insurance','TE'],
+        21=>[null],
+        22=>[null],
+        23=>[null]
     ];
 
     $categoryFolders = [
-        0=>'Rizz',1=>'Dance',2=>'Afterparty',3=>'Sex',4=>'Love',5=>'Family',6=>'Inspiration',7=>'History',8=>'Politics',9=>'Gaming',
-        10=>'Comedy',12=>'Literature',13=>'Sports',14=>'Tech',15=>'Science',16=>'RealEstate',17=>'DJshuba',18=>'Film',19=>'Fashion',
-        20=>'Business',21=>'Hustlin',22=>'Pregame',23=>'Outside'
+        0=>'Rizz',1=>'Dance',2=>'Afterparty',3=>'Sex',4=>'Love',5=>'Family',6=>'Inspiration',
+        7=>'History',8=>'Politics',9=>'Gaming',10=>'Comedy',12=>'Literature',13=>'Sports',14=>'Tech',
+        15=>'Science',16=>'RealEstate',17=>'DJshuba',18=>'Film',19=>'Fashion',20=>'Business',21=>'Hustlin',
+        22=>'Pregame',23=>'Outside'
     ];
 
-    foreach ($musicMapping as $cat=>$sub) {
-        foreach ($sub as $idx=>$folder) {
-            $fullPath = $folder ? "Music/{$categoryFolders[$cat]}/$folder/" : "Music/{$categoryFolders[$cat]}/";
-            addSongs($fullPath, $sentToJsArray, $cat, $folder!==null?$idx:null, $s3, $bucketName);
+    foreach ($musicMapping as $catIndex => $subFolders) {
+        foreach ($subFolders as $subIndex => $folder) {
+            $catName = $categoryFolders[$catIndex] ?? '';
+            $fullPath = $folder ? "Music/$catName/$folder/" : "Music/$catName/";
+            addSongsEfficient($fullPath, $sentToJsArray, $catIndex, $folder!==null?$subIndex:null, $s3, $bucketName);
         }
     }
 
-    exit(json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES));
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
+    exit;
 }
 
 // --- Stripe ---
