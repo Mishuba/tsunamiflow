@@ -2,78 +2,54 @@
 session_start();
 
 require_once "functions.php";
+
 use Aws\S3\S3Client;
 use Aws\Credentials\Credentials;
 use Aws\Exception\AwsException;
 use Stripe\StripeClient;
 
-// --- Helper function ---
+// ----------------------------
+// Helper Functions
+// ----------------------------
+function isApiRequest(): bool {
+    // Detect if this is an AJAX or JSON API request
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
+        || str_contains($contentType, 'application/json')
+        || ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST));
+}
+
 function respond(array $data, int $code = 200): void {
+    if (!isApiRequest()) return; // Do nothing if included in HTML page
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
     exit(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
 }
 
-// --- CORS ---
-$allowedOrigins = ["https://www.tsunamiflow.club", "https://world.tsunamiflow.club", "https://tsunamiflow.club"];
-if (!empty($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
-    header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
-}
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit(http_response_code(200));
+function initR2(): S3Client|null {
+    $ak = getenv('CloudflareR2AccessKey');
+    $sk = getenv('CloudflareR2SecretKey');
+    $ep = getenv('CloudflareR2Endpoint');
 
-// --- Cloudflare R2 Setup ---
-$bucket = getenv('CloudflareR2Name') ?: 'tsunami-radio';
-$ak = getenv('CloudflareR2AccessKey');
-$sk = getenv('CloudflareR2SecretKey');
-$ep = getenv('CloudflareR2Endpoint');
-if (!$ak || !$sk || !$ep) respond(["error" => "Missing R2 credentials"], 500);
-
-try {
-    $s3 = new S3Client([
-        "region" => "auto",
-        "endpoint" => $ep,
-        "version" => "latest",
-        "credentials" => new Credentials($ak, $sk),
-        "use_path_style_endpoint" => false
-    ]);
-} catch (Exception $e) {
-    respond(["error" => $e->getMessage()], 500);
-}
-
-// --- Session Defaults ---
-$_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
-$_SESSION["UserPreferences"] ??= ["Chosen_Companion" => "Ackma Hawk"];
-$_SESSION["Setting"] ??= ["font_style" => "auto"];
-
-foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
-    $_SESSION[$c] ??= 0;
-}
-
-if (!($_SESSION["TfNifage"] ?? false)) {
-    $_SESSION["TfGuestCount"]++;
-} else {
-    switch ($_SESSION["TfAccess"] ?? "free") {
-        case "Regular": $_SESSION["lowestMembershipCount"]++; break;
-        case "Vip": $_SESSION["middleMembershipCount"]++; break;
-        case "Team": $_SESSION["highestMembershipCount"]++; break;
-        default: $_SESSION["freeMembershipCount"]++;
+    if (!$ak || !$sk || !$ep) {
+        respond(["error" => "Missing R2 credentials"], 500);
+        return null;
     }
-    $_SESSION["TfMemberCount"]++;
+
+    try {
+        return new S3Client([
+            "region" => "auto",
+            "endpoint" => $ep,
+            "version" => "latest",
+            "credentials" => new Credentials($ak, $sk),
+            "use_path_style_endpoint" => false
+        ]);
+    } catch (Exception $e) {
+        respond(["error" => $e->getMessage()], 500);
+        return null;
+    }
 }
 
-setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400 * 30, "/", "", true, true);
-setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
-
-// --- Input Data ---
-$data = json_decode(file_get_contents("php://input"), true) ?? [];
-
-// --- Stripe Setup ---
-$stripe = new StripeClient(getenv("StripeSecretKey"));
-$domain = "https://www.tsunamiflow.club";
-
-// --- Helper: Add item to cart ---
 function addToCart(array $product, int $quantity): array {
     $cartItem = $product + ['quantity' => $quantity, 'added_at' => date('c')];
     $_SESSION['ShoppingCartItems'] ??= [];
@@ -90,11 +66,65 @@ function addToCart(array $product, int $quantity): array {
     return ['merged' => false, 'item' => $cartItem];
 }
 
-// --- Main Logic ---
-try {
-    $method = $_SERVER['REQUEST_METHOD'];
+// ----------------------------
+// CORS (only for API requests)
+// ----------------------------
+if (isApiRequest()) {
+    $allowedOrigins = [
+        "https://www.tsunamiflow.club",
+        "https://world.tsunamiflow.club",
+        "https://tsunamiflow.club"
+    ];
+    if (!empty($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
+        header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
+    }
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit(http_response_code(200));
+}
 
-    if ($method === 'POST') {
+// ----------------------------
+// Initialize Services
+// ----------------------------
+$s3 = initR2();
+$stripe = new StripeClient(getenv("StripeSecretKey"));
+$domain = "https://www.tsunamiflow.club";
+
+// ----------------------------
+// Session Defaults
+// ----------------------------
+$_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
+$_SESSION["UserPreferences"] ??= ["Chosen_Companion" => "Ackma Hawk"];
+$_SESSION["Setting"] ??= ["font_style" => "auto"];
+foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
+    $_SESSION[$c] ??= 0;
+}
+if (!($_SESSION["TfNifage"] ?? false)) {
+    $_SESSION["TfGuestCount"]++;
+} else {
+    switch ($_SESSION["TfAccess"] ?? "free") {
+        case "Regular": $_SESSION["lowestMembershipCount"]++; break;
+        case "Vip": $_SESSION["middleMembershipCount"]++; break;
+        case "Team": $_SESSION["highestMembershipCount"]++; break;
+        default: $_SESSION["freeMembershipCount"]++;
+    }
+    $_SESSION["TfMemberCount"]++;
+}
+setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400 * 30, "/", "", true, true);
+setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
+
+// ----------------------------
+// Input Data
+// ----------------------------
+$data = json_decode(file_get_contents("php://input"), true) ?? [];
+$method = $_SERVER['REQUEST_METHOD'];
+
+// ----------------------------
+// Main Logic
+// ----------------------------
+try {
+    if ($method === 'POST' && isApiRequest()) {
+
         // ---- Add Product to Cart ----
         if (isset($_POST['addProductToCart'])) {
             $variantId = trim($_POST['product_id'] ?? '');
@@ -102,10 +132,9 @@ try {
             if ($variantId === '') respond(['error' => 'Missing product ID'], 400);
 
             $myProducts = BasicPrintfulRequest();
-            $_SESSION['PrintfulItems'] = $myProducts; // <-- Store for reuse
+            $_SESSION['PrintfulItems'] = $myProducts;
 
             $found = null;
-
             foreach ($myProducts['result'] ?? [] as $product) {
                 $variants = $product['sync_variants'] ?? $product['variants'] ?? [];
                 foreach ($variants as $v) {
@@ -194,8 +223,7 @@ try {
         respond(['error' => 'Invalid POST type'], 400);
     }
 
-    // ---- GET Routes ----
-    if ($method === 'GET') {
+    if ($method === 'GET' && isApiRequest()) {
         if (isset($_GET['cart_action'])) {
             switch ($_GET['cart_action']) {
                 case 'view': respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
@@ -205,20 +233,13 @@ try {
             }
         }
 
-        // Return Printful items if requested
         if (isset($_GET['fetch_printful_items'])) {
-            respond([
-                'success' => true,
-                'items' => $_SESSION['PrintfulItems']['result'] ?? []
-            ]);
+            respond(['success' => true, 'items' => $_SESSION['PrintfulItems']['result'] ?? []]);
         }
 
         respond(['success' => true, 'message' => 'GET request received']);
     }
 
-    respond(['error' => 'Invalid request method'], 400);
-
 } catch (Exception $e) {
     respond(['error' => $e->getMessage()], 500);
 }
-?>
