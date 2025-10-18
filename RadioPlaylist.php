@@ -1,8 +1,8 @@
 <?php
 // Debug toggle (set environment variable DEBUG=1 to show PHP errors)
-$DEBUG = getenv('DEBUG') === '1';
-ini_set('display_errors', $DEBUG ? '1' : '0');
-error_reporting($DEBUG ? E_ALL : 0);
+//$DEBUG = getenv('DEBUG') === '1';
+//ini_set('display_errors', $DEBUG ? '1' : '0');
+//error_reporting($DEBUG ? E_ALL : 0);
 
 require "stripestuff/vendor/autoload.php";
 
