@@ -256,5 +256,5 @@ addSongsToArray("Music/Pregame/", $sentToJsArray, 22, null, $s3, $bucketName);
 addSongsToArray("Music/Outside/", $sentToJsArray, 23, null, $s3, $bucketName);
 
 // --- Finally output JSON ---
-echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE);
+echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
 exit;
