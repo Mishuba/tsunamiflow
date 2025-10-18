@@ -50,41 +50,58 @@ export class User {
             };
         });
     }
-
     signup() {
-        try {
-            let SubFormData = new FormData();
+    try {
+        let SubFormData = new FormData();
 
-            // Basic fields
-            const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
-            fields.forEach(f => {
-                if (this[f]) SubFormData.append(f, this[f].value);
-            });
+        // Basic fields
+        const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
+        fields.forEach(f => {
+            if (this[f]) SubFormData.append(f, this[f].value);
+        });
 
-            // Extra fields
-            for (let [key, elem] of Object.entries(this.extraFields)) {
-                if (elem) SubFormData.append(key, elem.value);
-            }
-
-            // Send the data
-            const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        const response = JSON.parse(xhr.responseText);
-                        console.log("Signup response:", response);
-                    } else {
-                        console.error("Signup request failed:", xhr.statusText);
-                    }
-                }
-            };
-            xhr.open("POST", "./../server.php", true);
-            xhr.send(SubFormData);
-        } catch (err) {
-            console.error("Signup error:", err);
+        // Extra fields
+        for (let [key, elem] of Object.entries(this.extraFields)) {
+            if (elem) SubFormData.append(key, elem.value);
         }
-    }
 
+        // Required for PHP to know this is a subscriber signup
+        SubFormData.append("type", "Subscribers Signup");
+
+        // Optional: include membership level explicitly for clarity
+        if (this.tfMembershipLevel) SubFormData.append("membershipLevel", this.tfMembershipLevel.value);
+
+        // Send the data
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    const response = JSON.parse(xhr.responseText);
+                    console.log("Signup response:", response);
+
+                    if (response.success && response.url) {
+                        // Paid membership → redirect to Stripe checkout
+                        window.location.href = response.url;
+                    } else if (response.success) {
+                        // Free membership → show confirmation
+                        alert(response.message || "Successfully registered as free member!");
+                    } else {
+                        // Error from PHP
+                        alert(response.error || "Signup failed.");
+                    }
+                } else {
+                    console.error("Signup request failed:", xhr.statusText);
+                    alert("Signup request failed. Check console for details.");
+                }
+            }
+        };
+        xhr.open("POST", "./../server.php", true);
+        xhr.send(SubFormData);
+    } catch (err) {
+        console.error("Signup error:", err);
+        alert("Signup error. Check console for details.");
+    }
+}
     login() {
         if (!this.username || !this.password) {
             console.warn("Username or password is empty.");
