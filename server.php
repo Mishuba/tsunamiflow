@@ -2,15 +2,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 ini_set("session.cookie_secure", true);
-ini_set("session.cookie_httponly", "1");
+ini_set("session.cookie_httponly", 1);
 ini_set("session.gc_maxlifetime", 3600);
 ini_set("session.cookie_lifetime", 0);
 ini_set("session.use_strict_mode", true);
 
 session_start();
 
-// Headers
-header("Accept-Ranges: bytes");
+// --- CORS ---
 $allowed = [
     "https://www.tsunamiflow.club",
     "https://world.tsunamiflow.club",
@@ -18,104 +17,135 @@ $allowed = [
 ];
 if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed)) {
     header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
 }
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
 
+// --- AWS / Cloudflare R2 ---
 require_once "functions.php";
 use Aws\S3\S3Client;
 use Aws\Credentials\Credentials;
 use Aws\Exception\AwsException;
 
-use Stripe\Stripe;
-use Stripe\StripeClient;
-use \Stripe\Exception\ApiErrorException;
-//$StripeKeyTf = Stripe::setApiKey(getEnv(StripeSecretKey));
-$StfPk = new StripeClient(getEnv(StripeSecretKey));
+$accessKey = getenv('CloudflareR2AccessKey');
+$secretKey = getenv('CloudflareR2SecretKey');
+$r2Endpoint = getenv('CloudflareR2Endpoint');
+$bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
 
+if (!$accessKey || !$secretKey || !$r2Endpoint) {
+    http_response_code(500);
+    echo json_encode(["error" => "Missing R2 credentials or endpoint."]);
+    exit;
+}
 
-$GetJson = @file_get_contents("php://input");
-$data = json_decode($GetJson);
+try {
+    $credentials = new Credentials($accessKey, $secretKey);
+    $s3 = new S3Client([
+        "region" => "auto",
+        "endpoint" => $r2Endpoint,
+        "version" => "latest",
+        "credentials" => $credentials,
+        "use_path_style_endpoint" => false
+    ]);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Failed to initialize S3 client: " . $e->getMessage()]);
+    exit;
+}
 
-// IP, time, and session defaults
-getIpAddress();
-$TfUserTime = time();
-$_SESSION["UserPreferences"] = ["Chosen_Companion" => "Ackma Hawk"];
-$_SESSION["Setting"] = ["font_style" => "auto"];
+// --- Session defaults ---
+if (!isset($_SESSION["visit_count"])) $_SESSION["visit_count"] = 0;
+$_SESSION["visit_count"] += 1;
 
-// Session tracking logic
-if(!isset($_SESSION["visit_count"])) $_SESSION["visit_count"] = 1; else $_SESSION["visit_count"]++;
-// [Other session increment logic can remain exactly as in your original code]
+if (!isset($_SESSION["UserPreferences"])) $_SESSION["UserPreferences"] = ["Chosen_Companion" => "Ackma Hawk"];
+if (!isset($_SESSION["Setting"])) $_SESSION["Setting"] = ["font_style" => "auto"];
 
-// --- Request Handling ---
-$requestType = $_SERVER["REQUEST_METHOD"];
+// --- Membership / visit counters ---
+function incrementMembershipCounters() {
+    if (!isset($_SESSION["TfGuestCount"])) $_SESSION["TfGuestCount"] = 0;
+    if (!isset($_SESSION["freeMembershipCount"])) $_SESSION["freeMembershipCount"] = 0;
+    if (!isset($_SESSION["lowestMembershipCount"])) $_SESSION["lowestMembershipCount"] = 0;
+    if (!isset($_SESSION["middleMembershipCount"])) $_SESSION["middleMembershipCount"] = 0;
+    if (!isset($_SESSION["highestMembershipCount"])) $_SESSION["highestMembershipCount"] = 0;
+    if (!isset($_SESSION["TfMemberCount"])) $_SESSION["TfMemberCount"] = 0;
+
+    if (!isset($_SESSION["TfNifage"]) || $_SESSION["TfNifage"] === false) {
+        $_SESSION["TfGuestCount"] += 1;
+    } else {
+        switch ($_SESSION["TfAccess"] ?? "free") {
+            case "Regular": $_SESSION["lowestMembershipCount"] += 1; break;
+            case "Vip": $_SESSION["middleMembershipCount"] += 1; break;
+            case "Team": $_SESSION["highestMembershipCount"] += 1; break;
+            default: $_SESSION["freeMembershipCount"] += 1;
+        }
+        $_SESSION["TfMemberCount"] += 1;
+    }
+}
+incrementMembershipCounters();
+
+// --- Cookies ---
+$TfAccessLevel = $_SESSION["TfAccess"] ?? "guest";
+setcookie("TfAccess", $TfAccessLevel, time() + 86400 * 30, "/", "", true, true);
+setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
+
+// --- JSON Input ---
+$inputJson = file_get_contents("php://input");
+$data = json_decode($inputJson, true); // true = associative array
 
 // --- Fetch Radio Songs ---
-if ($requestType === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
 
-    // --- Category array shape ---
     $sentToJsArray = array_fill(0, 24, []);
-    $multiSubArrays = [0 => 4, 1 => 4, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 6, 9 => 3, 12 => 4, 13 => 4, 14 => 4, 15 => 4, 16 => 4, 18 => 6, 19 => 4, 20 => 4];
-    foreach ($multiSubArrays as $idx => $count) $sentToJsArray[$idx] = array_fill(0, $count, []);
+    $multiSubArrays = [0=>4,1=>4,3=>3,4=>3,5=>3,6=>3,7=>3,8=>6,9=>3,12=>4,13=>4,14=>4,15=>4,16=>4,18=>6,19=>4,20=>4];
+    foreach ($multiSubArrays as $idx=>$count) $sentToJsArray[$idx] = array_fill(0,$count,[]);
 
-    // --- Initialize Cloudflare R2 / S3 ---
-    $accessKey = getenv('CloudflareR2AccessKey');
-    $secretKey = getenv('CloudflareR2SecretKey');
-    $r2Endpoint = getenv('CloudflareR2Endpoint');
-    $bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
-
-    if (!$accessKey || !$secretKey || !$r2Endpoint) {
-        http_response_code(500);
-        echo json_encode(["error" => "Missing R2 credentials or endpoint."]);
-        exit;
-    }
-
-    try {
-        $credentials = new Credentials($accessKey, $secretKey);
-        $s3 = new S3Client([
-            "region" => "auto",
-            "endpoint" => $r2Endpoint,
-            "version" => "latest",
-            "credentials" => $credentials,
-            "use_path_style_endpoint" => false
-        ]);
-    } catch (Exception $e) {
-        http_response_code(500);
-        echo json_encode(["error" => "Failed to initialize S3 client: " . $e->getMessage()]);
-        exit;
-    }
-
-    // --- Function to add songs ---
-    function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3 = null, string $bucket = 'tsunami-radio') {
-        if (!$s3) return;
+    function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3, string $bucket) {
         $prefix = rtrim(ltrim($path, '/'), '/') . '/';
         try {
-            $Objects = $s3->listObjectsV2(["Bucket" => $bucket, "Prefix" => $prefix, "MaxKeys" => 1000]);
-            if (!isset($Objects["Contents"]) || !is_array($Objects["Contents"])) return;
-
-            foreach ($Objects["Contents"] as $obj) {
+            $objects = $s3->listObjectsV2(["Bucket"=>$bucket,"Prefix"=>$prefix,"MaxKeys"=>1000]);
+            if (!isset($objects["Contents"])) return;
+            foreach ($objects["Contents"] as $obj) {
                 if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
                 $decodedKey = trim(urldecode(ltrim($obj['Key'], '/')));
-                $url = "https://www.tsunamiflow.club/" . $decodedKey;
-
+                $url = $decodedKey; // replace with public R2 URL if needed
                 if ($index2 !== null) $array[$index][$index2][] = $url;
                 else $array[$index][] = $url;
-
-                $array[11][] = $url; // All Music
+                $array[11][] = $url; // all music
             }
         } catch (AwsException $e) {
             error_log("AWS Exception: " . $e->getMessage());
         }
     }
 
-    // --- Music mapping array ---
+    // --- Music mapping ---
     $musicMapping = [
-        0 => ['IceBreakers','Flirting','GetHerDone','Shots'], 1 => ['Twerking','LineDance','PopDance','Battle'], 2 => [null], 
-        3 => ['Foreplay','sex','Cuddle'], 4 => ['Memories','love','Intimacy'], 5 => ['Lifestyle','Values','Kids'], 6 => ['Motivation','Meditation','Something'], 
-        7 => ['DH','BAH','HFnineteen'], 8 => ['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'], 9 => ['Fighters','Shooters','Instrumentals'], 
-        10 => [null], 12 => ['Poems','SS','Instrumentals','Books'], 13 => ['Reviews','Fans','Updates','Disses'], 14 => ['News','Music','History','Instrumentals'], 
-        15 => ['Biology','Chemistry','Physics','Environmental'], 16 => ['EP','Seller','Mortgage','Buyer'], 17 => [null], 18 => ['NM','SHM','MH','VM','LS','CB'], 
-        19 => ['PD','LD','FH','SM'], 20 => ['FE','TOB','Insurance','TE'], 21 => [null], 22 => [null], 23 => [null]
+        0=>['IceBreakers','Flirting','GetHerDone','Shots'],
+        1=>['Twerking','LineDance','PopDance','Battle'],
+        2=>[null],
+        3=>['Foreplay','sex','Cuddle'],
+        4=>['Memories','love','Intimacy'],
+        5=>['Lifestyle','Values','Kids'],
+        6=>['Motivation','Meditation','Something'],
+        7=>['DH','BAH','HFnineteen'],
+        8=>['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'],
+        9=>['Fighters','Shooters','Instrumentals'],
+        10=>[null],
+        12=>['Poems','SS','Instrumentals','Books'],
+        13=>['Reviews','Fans','Updates','Disses'],
+        14=>['News','Music','History','Instrumentals'],
+        15=>['Biology','Chemistry','Physics','Environmental'],
+        16=>['EP','Seller','Mortgage','Buyer'],
+        17=>[null],
+        18=>['NM','SHM','MH','VM','LS','CB'],
+        19=>['PD','LD','FH','SM'],
+        20=>['FE','TOB','Insurance','TE'],
+        21=>[null],
+        22=>[null],
+        23=>[null]
     ];
 
     $categoryFolders = [
@@ -124,12 +154,11 @@ if ($requestType === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVE
         20=>'Business',21=>'Hustlin',22=>'Pregame',23=>'Outside'
     ];
 
-    // --- Loop through mapping ---
-    foreach ($musicMapping as $catIndex => $subFolders) {
-        foreach ($subFolders as $subIndex => $folder) {
+    foreach ($musicMapping as $catIndex=>$subFolders) {
+        foreach ($subFolders as $subIndex=>$folder) {
             $catName = $categoryFolders[$catIndex] ?? '';
             $fullPath = $folder ? "Music/$catName/$folder/" : "Music/$catName/";
-            addSongsToArray($fullPath, $sentToJsArray, $catIndex, $folder !== null ? $subIndex : null, $s3, $bucketName);
+            addSongsToArray($fullPath, $sentToJsArray, $catIndex, $folder!==null?$subIndex:null, $s3, $bucketName);
         }
     }
 
@@ -137,9 +166,17 @@ if ($requestType === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVE
     exit;
 }
 
-// --- Stripe / POST / GET logic can remain exactly as in your original code ---
-// [Keep your Stripe session handling, community signup, shopping cart, and GET request logic]
+// --- Stripe Setup ---
+use Stripe\StripeClient;
+$StfPk = new StripeClient(getenv("StripeSecretKey"));
 
+// Add your Stripe POST / GET logic here, but remember:
+// - Multiply amounts by 100
+// - Use $data['type'] if JSON decoded with true
+// - Handle free vs paid memberships correctly
+
+
+/*
 curl_init(); //initializes the session
 curl_setopt(); //configure options like the URL, HTTP, method, headers, or data payload,
 curl_exec(); //executes the session and returns the response.
@@ -161,75 +198,6 @@ Turn Server Stuff Uncomment later when you ready
 // $_SESSION["regularMembership"]; 
 // $_SESSION["vipMembership"]; 
 // $_SESSION["teamMembership"];
-if(!isset($_SESSION["visit_count"])) {
-    $_SESSION["visit_count"] = 1;
-    if (isset($_COOKIE["visit_count"])) {
-        setcookie("visit_count", $_SESSION["visit_count"]);
-    } else {
-        setcookie("visit_count", $_SESSION["visit_count"], (time() + 86400));
-    }
-    if (!isset($_SESSION["TfNifage"])) {
-        if(!isset($_SESSION["TfGuest"])) {
-            $_SESSION["TfGuest"] = session_id();
-            $member = $_SESSION["TfGuest"];
-            $_SESSION["TfNifage"] = false;
-            $_SESSION["TfAccess"] = "guest";
-            $TfAccessLevel = $_SESSION["TfAccess"];
-            if (isset($_COOKIE["TfAccess"])) {
-                setcookie("TfAccess", $TfAccessLevel);
-            } else {
-                setcookie("TfAccess", $TfAccessLevel, (time() + 86400 * 30));
-            }
-            $_SESSION["TfGuestCount"] = 1;
-            setcookie("TfGuestCount", $_SESSION["TfGuestCount"], (time() + 86400));
-        }  else {
-            $_SESSION["TfGuestCount"] + 1;
-        }   
-    } else if ($_SESSION["TfNifage"] === false) {
-            $_SESSION["TfGuestCount"] + 1;
-    } else {
-        if($_SESSION["TfAccess"] !== "Team") {
-            if($_SESSION["TfAccess"] !== "Vip") {
-                if($_SESSION["TfAccess"] !== "Regular") {
-                    $_SESSION["freeMembershipCount"] + 1;
-                } else {
-                    $_SESSION["lowestMembershipCount"] + 1;
-                }
-            } else {
-                $_SESSION["middleMembershipCount"] + 1;
-            }
-        } else {
-            $_SESSION["highestMembershipCount"] + 1;
-        }
-        $_SESSION["TfMemberCount"] + 1;
-        if (isset($_COOKIE["TfAccess"])) {
-            setcookie("TfAccess", $TfAccessLevel);
-        } else {
-        setcookie("TfAccess", $TfAccessLevel, (time() + 86400 * 30));
-        }
-    }
-} else {
-    $_SESSION["visit_count"] + 1;
-    if ($_SESSION["TfNifage"] === false) { 
-            $_SESSION["TfGuestCount"] + 1;
-    } else {
-        if($_SESSION["TfAccess"] !== "Team") {
-            if($_SESSION["TfAccess"] !== "Vip") {
-                if($_SESSION["TfAccess"] !== "Regular") {
-                    $_SESSION["freeMembershipCount"] + 1;
-                } else {
-                    $_SESSION["lowestMembershipCount"] + 1;
-                }
-            } else {
-                $_SESSION["middleMembershipCount"] + 1;
-            }
-        } else {
-            $_SESSION["highestMembershipCount"] + 1;
-        }
-        $_SESSION["TfMemberCount"] + 1;
-    }
-}
-
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //Get javascript information.
