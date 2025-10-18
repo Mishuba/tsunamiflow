@@ -8,7 +8,7 @@ include "server.php";
         Tsunami Flow Club
     </title>
     <meta charset="utf-8" />
-    <meta name="viewpoint" width="device-width" height="device-height" inital-scale="1" minimum-scale="0.1"
+    <meta name="viewport" width="device-width" height="device-height" inital-scale="1" minimum-scale="0.1"
         user-scalable="1" interactive-widget="resizes-content" />
 
     <meta name="author" content="Hubert Christopher Maxwell" />
@@ -26,7 +26,7 @@ include "server.php";
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
-    <meta property="og:image" content="/Pictures/Logo/'Tsubnami Flow Logo.png'">
+    <meta property="og:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
     <meta property="og:url" content="https://example.com">
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="Your_App_ID" (ayo fam update and upgrade this shit. I think i have the info in my php already. Which config.php should be used.)
@@ -34,7 +34,7 @@ include "server.php";
     <meta name="twitter:title" content="Tsunami Flow Club">
     <meta name="twitter:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
-    <meta name="twitter:image" content="/Pictures/Logo/'Tsubnami Flow Logo.png'">
+    <meta name="twitter:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
     <meta name="theme-color" content="#ffffff"> -->
     <!--meta http-equiv="refresh" content="30"--> <!-- Refreshes the page every 30 seconds -->
     <!--meta name="referrer" content="no-referrer"-->
