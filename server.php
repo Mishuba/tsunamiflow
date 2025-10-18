@@ -146,7 +146,127 @@ if(!isset($_SESSION["visit_count"])) {
     }
 }
 
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
+// Ensure request type
+if (isset($_SERVER["HTTP_X_REQUEST_TYPE"]) {
+if ($_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
+// --- Category array shape ---
+$sentToJsArray = array_fill(0, 24, []);
+
+// Subarrays for categories with multiple subfolders
+$multiSubArrays = [
+    0 => 4, 1 => 4, 3 => 3, 4 => 3, 5 => 3, 6 => 3, 7 => 3, 8 => 6,
+    9 => 3, 12 => 4, 13 => 4, 14 => 4, 15 => 4, 16 => 4, 18 => 6, 19 => 4, 20 => 4
+];
+foreach ($multiSubArrays as $idx => $count) {
+    $sentToJsArray[$idx] = array_fill(0, $count, []);
+}
+
+// --- Initialize S3 client ---
+$accessKey = getenv('CloudflareR2AccessKey');
+$secretKey = getenv('CloudflareR2SecretKey');
+$r2Endpoint = getenv('CloudflareR2Endpoint');
+$bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
+
+if (!$accessKey || !$secretKey || !$r2Endpoint) {
+    http_response_code(500);
+    echo json_encode(["error" => "Missing R2 credentials or endpoint."]);
+    exit;
+}
+
+try {
+    $credentials = new Credentials($accessKey, $secretKey);
+    $s3 = new S3Client([
+        "region" => "auto",
+        "endpoint" => $r2Endpoint,
+        "version" => "latest",
+        "credentials" => $credentials,
+        "use_path_style_endpoint" => false
+    ]);
+} catch (Exception $e) {
+    http_response_code(500);
+    echo json_encode(["error" => "Failed to initialize S3 client: " . $e->getMessage()]);
+    exit;
+}
+
+// --- Function to add songs ---
+function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3 = null, string $bucket = 'tsunami-radio') {
+    if (!$s3) return;
+    $prefix = rtrim(ltrim($path, '/'), '/') . '/';
+    try {
+        $Objects = $s3->listObjectsV2([
+            "Bucket" => $bucket,
+            "Prefix" => $prefix,
+            "MaxKeys" => 1000
+        ]);
+        if (!isset($Objects["Contents"]) || !is_array($Objects["Contents"])) return;
+
+        foreach ($Objects["Contents"] as $obj) {
+            if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
+            $decodedKey = trim(urldecode(ltrim($obj['Key'], '/')));
+            $url = "https://www.tsunamiflow.club/" . $decodedKey;
+
+            if ($index2 !== null) {
+                $array[$index][$index2][] = $url;
+            } else {
+                $array[$index][] = $url;
+            }
+            $array[11][] = $url; // All Music
+        }
+    } catch (AwsException $e) {
+        error_log("AWS Exception: " . $e->getMessage());
+    }
+}
+
+// --- Music mapping array ---
+$musicMapping = [
+    0 => ['IceBreakers','Flirting','GetHerDone','Shots'],
+    1 => ['Twerking','LineDance','PopDance','Battle'],
+    2 => [null], // Afterparty
+    3 => ['Foreplay','sex','Cuddle'],
+    4 => ['Memories','love','Intimacy'],
+    5 => ['Lifestyle','Values','Kids'],
+    6 => ['Motivation','Meditation','Something'],
+    7 => ['DH','BAH','HFnineteen'],
+    8 => ['Neutral','Democracy','Republican','Socialism','Bureaucracy','Aristocratic'],
+    9 => ['Fighters','Shooters','Instrumentals'],
+    10 => [null], // Comedy
+    12 => ['Poems','SS','Instrumentals','Books'],
+    13 => ['Reviews','Fans','Updates','Disses'],
+    14 => ['News','Music','History','Instrumentals'],
+    15 => ['Biology','Chemistry','Physics','Environmental'],
+    16 => ['EP','Seller','Mortgage','Buyer'],
+    17 => [null], // DJShuba
+    18 => ['NM','SHM','MH','VM','LS','CB'],
+    19 => ['PD','LD','FH','SM'],
+    20 => ['FE','TOB','Insurance','TE'],
+    21 => [null], // Hustlin
+    22 => [null], // Pregame
+    23 => [null], // Outside
+];
+
+// --- Loop through mapping ---
+foreach ($musicMapping as $catIndex => $subFolders) {
+    foreach ($subFolders as $subIndex => $folder) {
+        $path = $folder ? "Music/" . array_search($catIndex, array_keys($musicMapping)) . "/$folder/" : "Music/";
+        // Fix actual folder path based on category names
+        $categoryFolders = [
+            0=>'Rizz',1=>'Dance',2=>'Afterparty',3=>'Sex',4=>'Love',5=>'Family',
+            6=>'Inspiration',7=>'History',8=>'Politics',9=>'Gaming',10=>'Comedy',
+            12=>'Literature',13=>'Sports',14=>'Tech',15=>'Science',16=>'RealEstate',
+            17=>'DJshuba',18=>'Film',19=>'Fashion',20=>'Business',21=>'Hustlin',
+            22=>'Pregame',23=>'Outside'
+        ];
+        $catName = $categoryFolders[$catIndex] ?? '';
+        $fullPath = $folder ? "Music/$catName/$folder/" : "Music/$catName/";
+        addSongsToArray($fullPath, $sentToJsArray, $catIndex, $folder !== null ? $subIndex : null, $s3, $bucketName);
+    }
+}
+
+// --- Output JSON ---
+echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
+exit;
+}
+} else if ($_SERVER["REQUEST_METHOD"] === "POST") {
     //Get javascript information.
     $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
 
@@ -469,7 +589,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     }
 } else {
-    echo json_encode(["error" => "this is not working."]);
+    http_response_code(400);
+    echo json_encode(["error" => "Invalid Request Type"]);
+exit;
 }
 
 //If Statements End
