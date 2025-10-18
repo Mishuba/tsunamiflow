@@ -170,11 +170,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE
 use Stripe\StripeClient;
 $StfPk = new StripeClient(getenv("StripeSecretKey"));
 
-<?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-session_start();
-
 // --- Configuration ---
 $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
 $StripeToken = "TsunamiFlowClubStripeToken";
