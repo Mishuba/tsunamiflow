@@ -249,377 +249,182 @@ function Login() {
 
 //Stripe && Handling Payments 
 //$StfPk = new StripeClient(TfStripeSecretKey); //Public Key
-//Create Payment Intent
 
-function createTpaymentFintent() {
-/*
-    global $StfPk;
-    $TpiF = @file_get_contents("php://input");
-    $JSpmInfo = json_decode($TpiF);
-    $PaymentAmount = $JSpmInfo["DoAmTf"];
-    $PaymentMethodId = $JSpmInfo["DoPMid"];
-    try {
-        if ($PaymentAmount <= 49) {
-            return json_encode(["error" => "Invalid amount"]);
-        } else {
-            $TpaymentFintent = $StfPk->paymentIntents->create([
-                "amount" => $PaymentAmount,
-                "currency" => "usd",
-                "payment_method" => $PaymentMethodId,
-                "automatic_payment_methods" => [
-                    "enabled" => true,
-                    "allow_redirects" => "always",
-                ],
-                "confirmation_method" => "manual",
-                "confirm" => true,
-                "statement_descriptor_suffix" => "TF",
-                //"description" => $somethingIdkYet,
-                //"metadata" => $someKeyValuePairArrayorObject
-                //"off_session" => true,
-                //"receipt_email" => $IntentEmail,
-                //"setup_future_usage" => "off_session",
-                //"payment_method_types" => ["card"],
-                //"shipping" => [], address infomation
-                //"statement_descriptor" => "",
+<?php
+use Stripe\StripeClient;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\CardException;
+use Stripe\Exception\RateLimitException;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\ApiConnectionException;
 
-                //"capture_method" => "automatic_async",
-                //confirmation_token" => $IntentConfirmation,
-                //"mandate" => $IntentMandate,
-                //"payment_method_configuration" => $IntentPaymentMethodConfiguration,
-                //"return_url" => "https://webhooks.tsunamiflow.club/webhook/StripePayments.php",
-                //"use_stripe_sdk" => true,
-            ]);
-            if (isset($TpaymentFintent->id)) {
-                return $TpaymentFintent;
-            } else {
-                return json_encode(["error" => "Failed to create payment intent"]);
-            }
-        }
-    } catch (ApiErrorException $e) {
-        return json_encode(["error" => $e->getMessage()]);
-    } catch (CardException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (RateLimitException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (InvalidRequestException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (AuthenticationException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (ApiConnectionException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    }
-        */
-}
+/**
+ * Stripe Helper Module for Tsunami Flow
+ * Handles: Customer creation, PaymentIntent, subscriptions, and confirmations
+ */
 
-//Create Payment Intent Ends.
-
-//Confirm Payment Intent
-
-function confirmTstripeFpaymentOk($PayIntentId, $TheIntentTFcs, $ClientSecret, $oneTimePayment, $DorS) {
-/*
-    global $StfPk;
-    try{
-        //Webhook Events
-        $eventData = json_decode(file_get_contents("php://input"), true);;
-        if (isset($eventData["event"])) {
-            if ($eventData["event"] == "payment_intent.succeeded") {
-                $newPaymentIntentId = $eventData["payment_intent_id"];
-
-                //file_put+contents("payment_log.txt" . Payment received: $newPaymentIntentId", FILE_APPEND);
-                http_response_code(200);
-            } else if ($eventData["event"] === "payment_intent.failed") {
-                $newPaymentIntentId = $eventData["payment_intent_id"];
-
-                http_response_code(200);
-            }
-        } 
-
-        if($oneTimePayment === true) {// Check status of payment intent.
-            //$TheIntentStatus = $StfPk->paymentIntents->confirm($PayIntentId, []); //maybe add a return url;
-            //$TheIntentStatus = $StfPk->paymentIntents->capture($PayIntentId->id, []);
-            if ($TheIntentTFcs == "succeeded") {
-                if ($DorS === "donation") {
-                    $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "Your donation was successful. We thank you here at Tsunami Flow.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                    ];
-                } else if ($DorS === "store") {
-                    $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "Your payment was successful. was successful. We thank you here at Tsunami Flow.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                    ];
-                    //Submit the Order (the order should have been drafted already before this.)
-                } else {
-                    $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                    ];
-                    //Digital store download link or something like that email maybe. 
-                }
-            } if ($TheIntentTFcs == "requires_action") { //authenication
-                $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => true, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "We require verification for you to complete this payment.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else if ($TheIntentTFcs === "requires_payment_method") {
-                $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => true,
-                    "message" => "Something went wrong with your payment information.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else if ($TheIntentTFcs == "requires_capture") {
-                $TheIntentStatus = $StfPk->paymentIntents->incrementAuthorization($PayIntentId);
-                
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => true, 
-                    "requires_source_action" => false,
-                    "message" => "Your bank requires you to confirm the payment", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-                
-            } else if ($TheIntentTFcs == "canceled") {
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "Your payment failed. You can try again later.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else if ($TheIntentTFcs == "requires_confirmation") {
-                    //$TheIntentStatus = $StfPk->paymentIntents->confirm($PayIntentId->id, []); //maybe add a return url;
-            }
-        } else {
-            //This is for subscribers
-            $TheIntentStatus = $StfPk->subsceriptions->retrieve($PayIntentId, []);
-            if ($TheIntentStatus->latest_invoice === "succeeded") {
-                $TheStatus = [
-                    "success" => true, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "Your payment was successful. We thank you here at Tsunami Flow.", 
-                    "payment_intent_client_secret" => "Unnecessary", 
-                    "error" => "no error"
-                ];
-            } else if($TheIntentStatus === "requires_action") {
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => true, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "We require an verification before we can accept your payment.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else if ($TheIntentStatus === "requires_confirmation") {
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => true, 
-                    "requires_source_action" => false,
-                    "message" => "Your bank requires you to confirm your payment.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else if ($TheIntentStatus === "requires_source_action") {
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => true,
-                    "message" => "Your bank requires you to do some extra steps", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "no error"
-                ];
-            } else {
-                $StfPk->subscriptions->cancel($PayIntentId->id, []);
-                $TheStatus = [
-                    "success" => false, 
-                    "requires_action" => false, 
-                    "requires_confirmation" => false, 
-                    "requires_source_action" => false,
-                    "message" => "Your payment failed.", 
-                    "payment_intent_client_secret" => $ClientSecret, 
-                    "error" => "unknown error"
-                ];
-            }
-        }
-        return json_encode($TheStatus);
-    } catch (ApiErrorException $e) {
-        return json_encode(["error" => $e->getMessage()]);
-    } catch (CardException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (RateLimitException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (InvalidRequestException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (AuthenticationException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (ApiConnectionException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    }
-        */
-}
-
-//Confirm Payment Intent Ends.
-
-function getTaxIdType($countryCode) {
-/*
+// Map country codes to Stripe tax ID types
+function getTaxIdType($countryCode): ?string {
+    $taxIdTypes = [
+        "US" => "us_ein",
+        "CA" => "ca_bn",
+        "GB" => "gb_vat",
+        // Extend as needed
+    ];
     return $taxIdTypes[$countryCode] ?? null;
-    */
 }
 
-function TcreateFcustomer($email, $name, $taxId, $countryCode, $description, $PaymentMethodId): Fiber {
-/*
-    return new Fiber(function () use ($email, $name, $taxId, $countryCode, $description, $PaymentMethodId) {
-        Fiber::suspend("Creating customer asynchroncously ... \n");
-    global $StfPk;
+// Initialize Stripe client
+function getStripeClient($secretKey): StripeClient {
+    return new StripeClient($secretKey);
+}
 
-            if (empty($PaymentMethodId)) {
-            return json_encode(["error" => "Payment Method ID is missing or invalid Payment Method ID"]);
-    }
+/**
+ * Create Stripe Customer asynchronously
+ */
+function createCustomerFiber($secretKey, $email, $name, $taxId, $countryCode, $description, $paymentMethodId): Fiber {
+    return new Fiber(function() use ($secretKey, $email, $name, $taxId, $countryCode, $description, $paymentMethodId) {
+        Fiber::suspend("Creating customer asynchronously...\n");
+        $stripe = getStripeClient($secretKey);
+
+        if (empty($paymentMethodId)) {
+            return json_encode(["error" => "Payment Method ID is missing or invalid"]);
+        }
+
         try {
-            $stripeTcustomerF = Customer::create([//$StfPk->customers->create([
+            $customer = $stripe->customers->create([
                 "email" => $email,
                 "name" => $name,
                 "description" => $description,
-                "address" => [
-                    "country" => $countryCode
-                ]
+                "address" => ["country" => $countryCode]
             ]);
 
-            Customer::update($stripeTcustomerF->id, [
-                "invoice_settings" => [
-                    "default_payment_method" => $PaymentMethodId
-                ]
+            $stripe->customers->update($customer->id, [
+                "invoice_settings" => ["default_payment_method" => $paymentMethodId]
             ]);
 
             if (!empty($taxId)) {
-                $taxIdType = getTaxIdType($countryCode);
-
-                if ($taxIdType) {
-                    Customer::createTaxId($stripeTcustomerF->id, [
-                        "type" => $taxIdType,
+                $taxType = getTaxIdType($countryCode);
+                if ($taxType) {
+                    $stripe->customers->createTaxId($customer->id, [
+                        "type" => $taxType,
                         "value" => $taxId
                     ]);
                 }
             }
 
-            if (isset($stripeTcustomerF->id)) {
-                return $stripeTcustomerF;
-            } else {
-                return json_encode(["error" => "Failed to create customer"]);
-            }
-        } catch (ApiErrorException $e) {
+            return $customer;
+
+        } catch (ApiErrorException | CardException | RateLimitException | InvalidRequestException | AuthenticationException | ApiConnectionException $e) {
             return json_encode(["error" => $e->getMessage()]);
-        } catch (CardException $e) {
-            return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-        } catch (RateLimitException $e) {
-            return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-        } catch (InvalidRequestException $e) {
-            return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-        } catch (AuthenticationException $e) {
-            return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-        } catch (ApiConnectionException $e) {
-            return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
         } catch (Exception $e) {
-            return json_encode(["error" => "An unexpected error occurred: " . $e->getMessage()]);
+            return json_encode(["error" => "Unexpected error: " . $e->getMessage()]);
         }
     });
-    */
 }
 
-function updateTpaymentFintent($RetrievedPaymentIntent, $RetrievedPaymentMethod) {
-/*
-    global $StfPk;
+/**
+ * Create PaymentIntent
+ */
+function createPaymentIntent($secretKey, $amount, $currency, $paymentMethodId): array|string {
+    $stripe = getStripeClient($secretKey);
+
+    if ($amount <= 0 || empty($paymentMethodId)) {
+        return json_encode(["error" => "Invalid amount or Payment Method ID"]);
+    }
+
     try {
-        if (!$RetrievedPaymentIntent || !$RetrievedPaymentMethod) {
-            return json_encode(["error" => "Invalid Payment Intent or Payment Method"]);
-        }
-        $TpFmSub = $StfPk->paymentIntents->retrieve($RetrievedPaymentMethod);
-    //Retrieve Payment Intent
-    $PaymentStatusFr = $StfPk->paymentIntents->update($RetrievedPaymentIntent, [
-        "payment_method" => $RetrievedPaymentMethod,
+        $intent = $stripe->paymentIntents->create([
+            "amount" => $amount,
+            "currency" => $currency,
+            "payment_method" => $paymentMethodId,
+            "confirmation_method" => "manual",
+            "confirm" => true,
+            "automatic_payment_methods" => ["enabled" => true]
         ]);
 
-        if (isset($PaymentStatusFr->id)) {
-        return $PaymentStatusFr;
+        return $intent;
+
+    } catch (ApiErrorException | CardException | RateLimitException | InvalidRequestException | AuthenticationException | ApiConnectionException $e) {
+        return json_encode(["error" => $e->getMessage()]);
+    }
+}
+
+/**
+ * Confirm PaymentIntent (one-time or subscription)
+ */
+function confirmStripePayment($secretKey, $intentId, $clientSecret, $isOneTime = true, $type = "store"): string {
+    $stripe = getStripeClient($secretKey);
+
+    try {
+        if ($isOneTime) {
+            $intent = $stripe->paymentIntents->retrieve($intentId);
+            $status = $intent->status;
+
+            $messages = [
+                "succeeded" => "Your payment was successful. Thank you!",
+                "requires_action" => "Verification required to complete payment.",
+                "requires_payment_method" => "Payment method issue. Try again.",
+                "requires_capture" => "Bank requires confirmation.",
+                "canceled" => "Payment failed. Try later."
+            ];
+
+            $response = [
+                "success" => $status === "succeeded",
+                "requires_action" => $status === "requires_action",
+                "requires_confirmation" => $status === "requires_capture",
+                "requires_source_action" => $status === "requires_payment_method",
+                "message" => $messages[$status] ?? "",
+                "payment_intent_client_secret" => $clientSecret,
+                "error" => "no error"
+            ];
+
+            return json_encode($response);
+
         } else {
-            return json_encode(["error" => "Failed to update payment intent or payment method"]);
+            // Subscription
+            $subscription = $stripe->subscriptions->retrieve($intentId);
+            $latestInvoiceStatus = $subscription->latest_invoice->status ?? "";
+
+            $response = [
+                "success" => $latestInvoiceStatus === "paid",
+                "requires_action" => $latestInvoiceStatus === "requires_action",
+                "requires_confirmation" => $latestInvoiceStatus === "requires_confirmation",
+                "requires_source_action" => $latestInvoiceStatus === "requires_source_action",
+                "message" => $latestInvoiceStatus === "paid" ? "Subscription successful. Thank you!" : "Payment requires action.",
+                "payment_intent_client_secret" => $clientSecret,
+                "error" => $latestInvoiceStatus === "paid" ? "no error" : "unknown error"
+            ];
+
+            return json_encode($response);
         }
 
-    } catch (ApiErrorException $e) {
+    } catch (ApiErrorException | CardException | RateLimitException | InvalidRequestException | AuthenticationException | ApiConnectionException $e) {
         return json_encode(["error" => $e->getMessage()]);
-    } catch (CardException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (RateLimitException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (InvalidRequestException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (AuthenticationException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (ApiConnectionException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-}
-        */
-}
-
-//Subscriber
-
-function updateTsubscriberFpayment($RetrievedSubscription, $RetrievedPaymentMethod) {
-/*
-    global $StfPk;
-    try {
-        $TpFmSub = $StfPk->paymentMethods->retrieve($RetrievedPaymentMethod);
-        $PaymentStatusFr = $StfPk->subscriptions->update($RetrievedSubscription, ["payment_method" =>$TpFmSub]);
-        return $PaymentStatusFr;
-    } catch (ApiErrorException $e) {
-        return json_encode(["error" => $e->getMessage()]);
-    } catch (CardException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (RateLimitException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (InvalidRequestException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (AuthenticationException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-    } catch (ApiConnectionException $e) {
-        return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
     }
-        */
 }
 
-//Choose Payment Type
+/**
+ * Update PaymentIntent or Subscription Payment Method
+ */
+function updatePaymentMethod($secretKey, $type, $id, $paymentMethodId) {
+    $stripe = getStripeClient($secretKey);
 
+    try {
+        if ($type === "intent") {
+            return $stripe->paymentIntents->update($id, ["payment_method" => $paymentMethodId]);
+        } else if ($type === "subscription") {
+            $paymentMethod = $stripe->paymentMethods->retrieve($paymentMethodId);
+            return $stripe->subscriptions->update($id, ["default_payment_method" => $paymentMethod->id]);
+        } else {
+            return json_encode(["error" => "Invalid type"]);
+        }
+
+    } catch (ApiErrorException | CardException | RateLimitException | InvalidRequestException | AuthenticationException | ApiConnectionException $e) {
+        return json_encode(["error" => $e->getMessage()]);
+    }
+}
         function WhichPaymentWeDoing($oneTimePayment, $PaymentMethod, $PaymentAmount){//, $TypeOfThing
         /*
             global $StfPk;
