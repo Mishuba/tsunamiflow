@@ -136,30 +136,6 @@ $which = "postgresql";
     //Connection Ends
 
     //Community
-    //Neon
-    // ProjectId square-dream-62052134
-
-    //connection string psql 'postgresql://neondb_owner:npg_YgHi6FV8AvwS@ep-lucky-frog-adhfxpug-pooler.c-2.us-east-1.aws.neon.tech/Tycadome?sslmode=require&channel_binding=require'
-
-    // 
-    //Mishuba api key napi_nxed9p8ea02lt36b94j2lz4eu0ddeu15jv1751sbi2zxymtavozhfl3uw1smythy
-            //napi_9obocc4dt41pr01thndeofnbnh05cmi4rd8hpngpow0b5t2654twm4gy7stufv47
-            // REST API  https://ep-lucky-frog-adhfxpug.apirest.c-2.us-east-1.aws.neon.tech/neondb/rest/v1
-        //Stack Auth Project Id 032f6796-a3ef-416e-9b2c-3139d6bfa530
-        //JWSK URL https://api.stack-auth.com/api/v1/projects/032f6796-a3ef-416e-9b2c-3139d6bfa530/.well-known/jwks.json
-
-        /*Javascript 
-        
-# Neon Auth environment variables for JavaScript/Node
-STACK_PROJECT_ID='032f6796-a3ef-416e-9b2c-3139d6bfa530'
-STACK_PUBLISHABLE_CLIENT_KEY='pck_tktvvg3ydey7fe19h8e56r9rfdqyqqhnrjs4q4yd7pbs8'
-STACK_SECRET_SERVER_KEY='ssk_4gxe0bzvd0bvxa24ctpcz3mn32v2bc3w76422x315hf6r'
-
-# Database owner connection string
-DATABASE_URL='postgresql://neondb_owner:npg_YgHi6FV8AvwS@ep-lucky-frog-adhfxpug-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require'
-
-        */
-
 
     function InputIntoDatabase($membership, $userName, $firstName, $lastName, $nickName, $gender, $birthdate, $email, $password, $chineseZodiacSign, $westernZodiacSign, $spiritAnimal, $celticTreeZodiacSign, $nativeAmericanZodiacSign, $vedicAstrologySign, $guardianAngel, $ChineseElement, $eyeColorMeaning, $GreekMythologyArchetype, $NorseMythologyPatronDeity, $EgyptianZodiacSign, $MayanZodiacSign, $loveLanguage, $birthStone, $birthFlower, $bloodType, $attachmentStyle, $charismaType, $businessPersonality, $TFuserDISC, $socionicsType, $learningStyle, $financialPersonalityType, $primaryMotivationStyle, $creativeStyle, $conflictManagementStyle, $teamRolePreference){
     switch ($membership) {
