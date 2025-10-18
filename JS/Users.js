@@ -52,54 +52,60 @@ export class User {
     }
     signup() {
     try {
-        let SubFormData = new FormData();
+        const formData = new FormData();
 
         // Basic fields
-        const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
-        fields.forEach(f => {
-            if (this[f]) SubFormData.append(f, this[f].value);
+        ["tfFN","tfLN","tfNN","tfGen","tfEM","tfBirth","tfUN","tfPsw","tfMembershipLevel"].forEach(f => {
+            if (this[f]) formData.append(f, this[f].value);
         });
 
         // Extra fields
         for (let [key, elem] of Object.entries(this.extraFields)) {
-            if (elem) SubFormData.append(key, elem.value);
+            if (elem) formData.append(key, elem.value);
         }
 
-        // Required for PHP to know this is a subscriber signup
-        SubFormData.append("type", "Subscribers Signup");
+        // Add type flag for PHP
+        formData.append("type", "Subscribers Signup");
 
-        // Optional: include membership level explicitly for clarity
-        if (this.tfMembershipLevel) SubFormData.append("membershipLevel", this.tfMembershipLevel.value);
+        const membership = (this.tfMembershipLevel?.value || "free").toLowerCase();
 
-        // Send the data
-        const xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    const response = JSON.parse(xhr.responseText);
-                    console.log("Signup response:", response);
+        if (membership === "free") {
+            // Free membership: direct PHP insert
+            fetch("./../server.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.success) console.log("Free membership created:", resp.message);
+                else console.error("Signup failed:", resp.message || resp);
+            })
+            .catch(err => console.error("Signup error:", err));
+        } else {
+            // Paid membership: create Stripe Checkout
+            const costMap = { regular: 400, vip: 700, team: 1000 };
+            const amount = costMap[membership] || 2000;
 
-                    if (response.success && response.url) {
-                        // Paid membership → redirect to Stripe checkout
-                        window.location.href = response.url;
-                    } else if (response.success) {
-                        // Free membership → show confirmation
-                        alert(response.message || "Successfully registered as free member!");
-                    } else {
-                        // Error from PHP
-                        alert(response.error || "Signup failed.");
-                    }
+            // Create checkout session via PHP
+            formData.append("membershipLevel", membership);
+            fetch("./../server.php", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.url) {
+                    // Redirect to Stripe Checkout
+                    window.location.href = resp.url;
                 } else {
-                    console.error("Signup request failed:", xhr.statusText);
-                    alert("Signup request failed. Check console for details.");
+                    console.error("Checkout creation failed:", resp.message || resp);
                 }
-            }
-        };
-        xhr.open("POST", "./../server.php", true);
-        xhr.send(SubFormData);
+            })
+            .catch(err => console.error("Stripe session error:", err));
+        }
+
     } catch (err) {
         console.error("Signup error:", err);
-        alert("Signup error. Check console for details.");
     }
 }
     login() {
