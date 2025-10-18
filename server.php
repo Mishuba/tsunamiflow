@@ -70,5 +70,7 @@ try{
     respond(['error'=>'Invalid request method'],400);
 }catch(Exception$e){respond(['error'=>$e->getMessage()],500);}
 
+myProductsFr = BasicPrintfulRequest();
+
 if(!($myProductsFr=false)) echo "No data received from Printful API.";
 ?>
