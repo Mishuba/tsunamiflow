@@ -4,68 +4,52 @@ include "server.php";
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>
-        Tsunami Flow Club
-    </title>
+    <title>Tsunami Flow Club</title>
     <meta charset="utf-8" />
-    <meta name="viewport" width="device-width" height="device-height" inital-scale="1" minimum-scale="0.1"
-        user-scalable="1" interactive-widget="resizes-content" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=0.1, user-scalable=yes" />
 
     <meta name="author" content="Hubert Christopher Maxwell" />
-    <meta name="keyword"
-        content="music, real estate, fashion, games, sports, literature, information, art, software development, current events, news, politics, business, stocks, research, artifical intelligence, robotic process automation, inspiration, entertainment" />
+    <meta name="keywords"
+        content="music, real estate, fashion, games, sports, literature, information, art, software development, current events, news, politics, business, stocks, research, artificial intelligence, robotic process automation, inspiration, entertainment" />
     <meta name="description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life" />
 
-    <!--meta name="format-detection" content="telephone=no"> <Instructs browsers not to detect and format telephone numbers automatically.
-    Useful for preventing unintended UI modifications, especially on mobile devices.
-    <meta name="theme-color" content="#0A0A0A" />
-    <meta name="robots" content="follow, index, max-snippet:-1, max-video-preview:-1, max-image-preview:large" />
-    <meta name="googlebot" content="index, follow">
-    <meta name="googlebot-news" content="index, follow">
+    <!-- SEO & Social Meta -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
     <meta property="og:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
     <meta property="og:url" content="https://example.com">
     <meta property="og:type" content="website">
-    <meta property="fb:app_id" content="Your_App_ID" (ayo fam update and upgrade this shit. I think i have the info in my php already. Which config.php should be used.)
-    <meta name="twitter:card" content="Tsunami Flow">
+    <meta property="fb:app_id" content="Your_App_ID">
+
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Tsunami Flow Club">
     <meta name="twitter:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
     <meta name="twitter:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
-    <meta name="theme-color" content="#ffffff"> -->
-    <!--meta http-equiv="refresh" content="30"--> <!-- Refreshes the page every 30 seconds -->
-    <!--meta name="referrer" content="no-referrer"-->
-    <!--Controls the amount of referrer information sent along with requests.-->
-    <!--meta http-equiv="X-Content-Type-Options" content="nosniff"-->
-    <!--Prevents the browser from MIME-sniffing a response away from the declared content-type-->
-    <!--meta http-equiv="Content-Security-Policy" content="default-src 'self'"-->
-    <!--Controls resources the user agent is allowed to load, enhancing security-->
 
+    <!-- Google verification & ads -->
     <meta name="google-site-verification" content="Yae7Q7bC5eK9FjTbjARZOisTwVTVknEe0tLWT4EiVqU" />
     <meta name="google-adsense-account" content="ca-pub-1650194129657038">
+
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1650194129657038"
         crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
-    <meta http-equiv="Content-Type" content="text/html">
-    <!--meta http-equiv="X-UA-Compatible" content="IE=edge"--> <!-- Compatibility mode for IE -->
-    <!--meta name="msapplication-TileColor" content="#000000"--> <!--Defines the color of the tile for Windows 8 and 10 when the user pins the site to their start menu.
-Helps maintain brand consistency across user platforms-->
-    <!--meta name="apple-mobile-web-app-capable" content="yes"-->
-    <!--meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"-->
-
-    <link rel="stylesheet" href="./MyStyle/tfMain.css" />
-
+    <!-- WebRTC Adapter -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.1.2/adapter.min.js"
         integrity="sha512-l40eBFtXx+ve5RryIELC3y6/OM6Nu89mLGQd7fg1C93tN6XrkC3supb+/YiD/Y+B8P37kdJjtG1MT1kOO2VzxA=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <!--meta name="application-name" content="Tsunami Flow Club"--> <!--Specifies the name of the web application-->
-    <!--link rel="mainfest" href="/JSon/mainfest.json" /-->
+    <!-- CSS -->
+    <link rel="stylesheet" href="./MyStyle/tfMain.css" />
+
+    <!-- Misc -->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="theme-color" content="#ffffff">
 </head>
 <body id="theBody">
     <header id="tfHeaderFr">
