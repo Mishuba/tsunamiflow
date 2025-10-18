@@ -530,7 +530,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_GET["Shopping Cart"])) {
         $TfCart = [];
         foreach($_GET["Shopping Cart"] as $product) {
-            array_push($product, $TfCart);
+            array_push($TfCart, $product);
             }
             $_SESSION["ShoppingCartItems"] = $TfCart;
 
