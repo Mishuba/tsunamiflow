@@ -82,97 +82,103 @@ try {
         if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false)
             $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
-        // ---- ADD TO CART ----
-        if (isset($_POST['addProductToCart'])) {
-            if (session_status() === PHP_SESSION_NONE) session_start();
+       if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true) ?? [];
 
-            $variantId = trim($_POST['product_id'] ?? '');
-            $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
+    // ---- 1. Add to Cart ----
+    if (isset($_POST['addProductToCart'])) {
+        $variantId = trim($_POST['product_id'] ?? '');
+        $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
+        if ($variantId === '') respond(['error' => 'Missing product ID'], 400);
 
-            if ($variantId === '') {
-                $error = ['error' => 'Missing product ID'];
-                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                    respond($error, 400);
+        $allProducts = BasicPrintfulRequest();
+        $found = null;
+
+        foreach ($allProducts['result'] ?? [] as $product) {
+            $variants = $product['sync_variants'] ?? $product['variants'] ?? [];
+            if (!is_array($variants)) continue;
+            foreach ($variants as $v) {
+                if ((string)($v['id'] ?? '') === (string)$variantId) {
+                    $found = [
+                        'parent_product_id' => $product['id'] ?? null,
+                        'name' => $product['name'] ?? ($v['name'] ?? 'Unknown'),
+                        'variant_id' => $v['id'] ?? $variantId,
+                        'variant_name' => $v['name'] ?? '',
+                        'price' => (float)($v['retail_price'] ?? ($v['price'] ?? 0)),
+                        'size' => $v['size'] ?? ($v['size_name'] ?? ''),
+                        'availability' => $v['availability_status'] ?? ($v['availability'] ?? ''),
+                        'thumbnail' => $product['thumbnail_url'] ?? ($product['image'] ?? '')
+                    ];
+                    break 2;
                 }
-                header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
-                exit;
-            }
-
-            $allProducts = BasicPrintfulRequest();
-            $found = null;
-
-            if (isset($allProducts['result']) && is_array($allProducts['result'])) {
-                foreach ($allProducts['result'] as $product) {
-                    $variants = $product['sync_variants'] ?? $product['variants'] ?? [];
-                    if (!is_array($variants)) continue;
-
-                    foreach ($variants as $v) {
-                        if ((string)($v['id'] ?? '') === (string)$variantId) {
-                            $found = [
-                                'parent_product_id' => $product['id'] ?? null,
-                                'product_name'      => $product['name'] ?? ($v['name'] ?? 'Unknown'),
-                                'variant_id'        => $v['id'] ?? $variantId,
-                                'variant_name'      => $v['name'] ?? '',
-                                'price'             => $v['retail_price'] ?? ($v['price'] ?? 0),
-                                'size'              => $v['size'] ?? ($v['size_name'] ?? ''),
-                                'availability'      => $v['availability_status'] ?? ($v['availability'] ?? ''),
-                                'thumbnail'         => $product['thumbnail_url'] ?? ($product['image'] ?? ''),
-                            ];
-                            break 2;
-                        }
-                    }
-                }
-            }
-
-            if (!$found) {
-                $error = ['error' => 'Variant not found'];
-                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                    respond($error, 404);
-                }
-                header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
-                exit;
-            }
-
-            $cartItem = [
-                'parent_product_id' => $found['parent_product_id'],
-                'name'              => $found['product_name'],
-                'variant_id'        => $found['variant_id'],
-                'variant_name'      => $found['variant_name'],
-                'price'             => (float)$found['price'],
-                'size'              => $found['size'],
-                'availability'      => $found['availability'],
-                'thumbnail'         => $found['thumbnail'],
-                'quantity'          => $quantity,
-                'added_at'          => date('c'),
-            ];
-
-            $_SESSION['ShoppingCartItems'] ??= [];
-
-            // Merge if variant already exists
-            $merged = false;
-            foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
-                if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
-                    $existing['quantity'] += $cartItem['quantity'];
-                    $merged = true;
-                    break;
-                }
-            }
-            unset($existing);
-
-            if (!$merged) $_SESSION['ShoppingCartItems'][] = $cartItem;
-
-            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                respond([
-                    'success'    => true,
-                    'cart_count' => count($_SESSION['ShoppingCartItems']),
-                    'item'       => $cartItem
-                ]);
-            } else {
-                header('Location: ' . ($_SERVER['HTTP_REFERER'] ?? 'index.php'));
-                exit;
             }
         }
-        // ---- END ADD TO CART ----
+
+        if (!$found) respond(['error' => 'Variant not found'], 404);
+
+        $cartItem = $found;
+        $cartItem['quantity'] = $quantity;
+        $cartItem['added_at'] = date('c');
+
+        $_SESSION['ShoppingCartItems'] ??= [];
+
+        // merge quantities if exists
+        $merged = false;
+        foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
+            if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
+                $existing['quantity'] += $cartItem['quantity'];
+                $merged = true;
+                break;
+            }
+        }
+        unset($existing);
+        if (!$merged) $_SESSION['ShoppingCartItems'][] = $cartItem;
+
+        respond([
+            'success' => true,
+            'cart_count' => count($_SESSION['ShoppingCartItems']),
+            'item' => $cartItem
+        ]);
+    }
+
+    // ---- 2. Stripe Checkout ----
+    if (($data['type'] ?? '') === 'Stripe Checkout') {
+        $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
+        if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
+
+        $successUrl = "https://www.tsunamiflow.club/server.php?type=Printful Checkout";
+        $cancelUrl  = "https://www.tsunamiflow.club/checkout_cancel.php";
+
+        $checkout = CreateStripeCheckout($cartItems, $successUrl, $cancelUrl);
+        if (!empty($checkout['success'])) {
+            respond(['success' => true, 'checkout_url' => $checkout['url'], 'session_id' => $checkout['id']]);
+        } else {
+            respond(['success' => false, 'error' => $checkout['error'] ?? 'Stripe error'], 500);
+        }
+    }
+
+    // ---- 3. Printful Checkout ----
+    if (($data['type'] ?? '') === 'Printful Checkout') {
+        $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
+        if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
+
+        $customerData = $data['customer'] ?? [];
+        $result = CreatePrintfulOrder($cartItems, $customerData);
+
+        if (!empty($result['success'])) {
+            unset($_SESSION['ShoppingCartItems']); // clear cart
+            respond(['success' => true, 'order' => $result['result']]);
+        } else {
+            respond(['success' => false, 'error' => $result['error'] ?? 'Printful order error'], 500);
+        }
+    }
+
+    respond(['error' => 'Invalid POST type'], 400);
+}
+
+// GET fallback
+respond(['success' => true, 'message' => 'GET request received']);
+
 
 
         // ---- STRIPE + ACCOUNT LOGIC ----
