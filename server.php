@@ -11,7 +11,14 @@ session_start();
 
 // Headers
 header("Accept-Ranges: bytes");
-header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
+$allowed = [
+    "https://www.tsunamiflow.club",
+    "https://world.tsunamiflow.club",
+    "https://tsunamiflow.club"
+];
+if (isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed)) {
+    header("Access-Control-Allow-Origin: " . $_SERVER['HTTP_ORIGIN']);
+}
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
 
@@ -27,7 +34,7 @@ use Aws\Exception\AwsException;
 //$StfPk = new StripeClient(TfStripeSecretKey);
 
 
-$GetJson = @file_get_contents("php://ipnut");
+$GetJson = @file_get_contents("php://input");
 $data = json_decode($GetJson);
 
 // IP, time, and session defaults
