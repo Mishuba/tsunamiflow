@@ -1,7 +1,6 @@
 <?php
 require_once "Arrays.php";
 require_once "Objects.php";
-/*
 require_once "stripestuff/vendor/autoload.php";
 
 use Stripe\Subscription;
@@ -10,12 +9,10 @@ use Stripe\StripeClient;
 use Stripe\PaymentIntent;
 use \Stripe\Exception\ApiErrorException;
 use \Stripe\Exception\CardException;
-+
 use \Stripe\Exception\RateLimitException;
 use \Stripe\Exception\InvalidRequestException;
 use \Stripe\Exception\AuthenticationException;
 use \Stripe\Exception\ApiConnectionException; 
-*/
 $TfRcI = @file_get_contents("php://input");
 $UseThis = json_decode($TfRcI);
 
@@ -95,10 +92,12 @@ function handleDatabaseError($e){
     //errors ends
 
     //Connection
-function TsunamiDatabaseFlow($which){
+function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
+$which = "postgresql";
+
     if ($which === "postgresql") {
-        //$TycadomeDatabase = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions);
+        $TycadomeDatabase = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions);
     } else if ($which === "mysql") {
         //headers
         /*
