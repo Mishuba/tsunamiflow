@@ -14,7 +14,7 @@ include "server.php";
     <meta name="description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life" />
 
-    <!-- SEO & Social Meta -->
+    <!-- SEO & Social Meta >
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
@@ -28,9 +28,8 @@ include "server.php";
     <meta name="twitter:title" content="Tsunami Flow Club">
     <meta name="twitter:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
-    <meta name="twitter:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
+    <meta name="twitter:image" content="/Pictures/Logo/Tsunami Flow Logo.png"-->
 
-    <!-- Google verification & ads -->
     <meta name="google-site-verification" content="Yae7Q7bC5eK9FjTbjARZOisTwVTVknEe0tLWT4EiVqU" />
     <meta name="google-adsense-account" content="ca-pub-1650194129657038">
 
