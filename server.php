@@ -72,5 +72,5 @@ try{
 
 myProductsFr = BasicPrintfulRequest();
 
-if(!($myProductsFr=false)) echo "No data received from Printful API.";
+if(!($myProductsFr=false)) {echo "No data received from Printful API.";} else{$showSucess = true};
 ?>
