@@ -27,11 +27,11 @@ use Aws\S3\S3Client;
 use Aws\Credentials\Credentials;
 use Aws\Exception\AwsException;
 
-//use Stripe\Stripe;
-//use Stripe\StripeClient;
-//use \Stripe\Exception\ApiErrorException;
-//$StripeKeyTf = Stripe::setApiKey(TfStripeSecretKey);
-//$StfPk = new StripeClient(TfStripeSecretKey);
+use Stripe\Stripe;
+use Stripe\StripeClient;
+use \Stripe\Exception\ApiErrorException;
+//$StripeKeyTf = Stripe::setApiKey(getEnv(StripeSecretKey));
+$StfPk = new StripeClient(getEnv(StripeSecretKey));
 
 
 $GetJson = @file_get_contents("php://input");
