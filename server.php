@@ -25,12 +25,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// --- AWS / Cloudflare R2 ---
+// --- Dependencies ---
 require_once "functions.php";
 use Aws\S3\S3Client;
 use Aws\Credentials\Credentials;
 use Aws\Exception\AwsException;
+use Stripe\StripeClient;
 
+// --- AWS / Cloudflare R2 ---
 $accessKey = getenv('CloudflareR2AccessKey');
 $secretKey = getenv('CloudflareR2SecretKey');
 $r2Endpoint = getenv('CloudflareR2Endpoint');
@@ -66,12 +68,12 @@ if (!isset($_SESSION["Setting"])) $_SESSION["Setting"] = ["font_style" => "auto"
 
 // --- Membership / visit counters ---
 function incrementMembershipCounters() {
-    if (!isset($_SESSION["TfGuestCount"])) $_SESSION["TfGuestCount"] = 0;
-    if (!isset($_SESSION["freeMembershipCount"])) $_SESSION["freeMembershipCount"] = 0;
-    if (!isset($_SESSION["lowestMembershipCount"])) $_SESSION["lowestMembershipCount"] = 0;
-    if (!isset($_SESSION["middleMembershipCount"])) $_SESSION["middleMembershipCount"] = 0;
-    if (!isset($_SESSION["highestMembershipCount"])) $_SESSION["highestMembershipCount"] = 0;
-    if (!isset($_SESSION["TfMemberCount"])) $_SESSION["TfMemberCount"] = 0;
+    $_SESSION["TfGuestCount"] = $_SESSION["TfGuestCount"] ?? 0;
+    $_SESSION["freeMembershipCount"] = $_SESSION["freeMembershipCount"] ?? 0;
+    $_SESSION["lowestMembershipCount"] = $_SESSION["lowestMembershipCount"] ?? 0;
+    $_SESSION["middleMembershipCount"] = $_SESSION["middleMembershipCount"] ?? 0;
+    $_SESSION["highestMembershipCount"] = $_SESSION["highestMembershipCount"] ?? 0;
+    $_SESSION["TfMemberCount"] = $_SESSION["TfMemberCount"] ?? 0;
 
     if (!isset($_SESSION["TfNifage"]) || $_SESSION["TfNifage"] === false) {
         $_SESSION["TfGuestCount"] += 1;
@@ -94,10 +96,10 @@ setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true
 
 // --- JSON Input ---
 $inputJson = file_get_contents("php://input");
-$data = json_decode($inputJson, true); // true = associative array
+$data = json_decode($inputJson, true) ?: [];
 
 // --- Fetch Radio Songs ---
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE"]) && $_SERVER["HTTP_X_REQUEST_TYPE"] === "fetchRadioSongs") {
+if ($_SERVER["REQUEST_METHOD"] === "POST" && ($_SERVER["HTTP_X_REQUEST_TYPE"] ?? '') === "fetchRadioSongs") {
 
     $sentToJsArray = array_fill(0, 24, []);
     $multiSubArrays = [0=>4,1=>4,3=>3,4=>3,5=>3,6=>3,7=>3,8=>6,9=>3,12=>4,13=>4,14=>4,15=>4,16=>4,18=>6,19=>4,20=>4];
@@ -111,9 +113,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE
             foreach ($objects["Contents"] as $obj) {
                 if (!isset($obj['Key']) || !str_ends_with(strtolower($obj['Key']), '.mp3')) continue;
                 $decodedKey = trim(urldecode(ltrim($obj['Key'], '/')));
-                $url = $decodedKey; // replace with public R2 URL if needed
+                $url = $decodedKey; // Replace with public R2 URL if needed
                 if ($index2 !== null) $array[$index][$index2][] = $url;
                 else $array[$index][] = $url;
+                $array[11] = $array[11] ?? [];
                 $array[11][] = $url; // all music
             }
         } catch (AwsException $e) {
@@ -167,10 +170,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_SERVER["HTTP_X_REQUEST_TYPE
 }
 
 // --- Stripe Setup ---
-use Stripe\StripeClient;
 $StfPk = new StripeClient(getenv("StripeSecretKey"));
-
-// --- Configuration ---
 $TsunamiFlowClubDomain = "https://www.tsunamiflow.club";
 $StripeToken = "TsunamiFlowClubStripeToken";
 
@@ -178,7 +178,6 @@ $StripeToken = "TsunamiFlowClubStripeToken";
 $method = $_SERVER['REQUEST_METHOD'];
 
 try {
-
     if ($method === 'POST') {
         // Parse JSON payload if Content-Type is application/json
         $data = [];
@@ -186,115 +185,91 @@ try {
             $data = json_decode(file_get_contents('php://input'), true) ?? [];
         }
 
-        // Stripe Checkout
+        // Stripe Checkout callback
         if (isset($_POST['token']) && $_POST['token'] === $StripeToken) {
+            $session_id = $_POST['session_id'] ?? null;
+            if (!$session_id) {
+                http_response_code(400);
+                echo json_encode(['error' => 'Missing session_id']);
+                exit;
+            }
 
-            $session_id = validate_input('session_id', $_POST);
-            $session = \Stripe\Checkout\Session::retrieve($session_id);
+            try {
+                $session = \Stripe\Checkout\Session::retrieve($session_id);
+                $metadata = $session->metadata ?? [];
+                if (!empty($metadata['TFRegisterPassword'])) {
+                    $metadata['TFRegisterPassword'] = password_hash($metadata['TFRegisterPassword'], PASSWORD_DEFAULT);
+                }
 
-            $metadata = $session->metadata;
+                InputIntoDatabase(
+                    $metadata['membership'] ?? 'free',
+                    $metadata['Username'] ?? '',
+                    $metadata['FirstName'] ?? '',
+                    $metadata['LastName'] ?? '',
+                    $metadata['NickName'] ?? '',
+                    $metadata['Gender'] ?? '',
+                    $metadata['Birthday'] ?? '',
+                    $metadata['Email'] ?? '',
+                    $metadata['TFRegisterPassword'] ?? '',
+                    $metadata['ChineseZodiacSign'] ?? '',
+                    $metadata['WesternZodiacSign'] ?? '',
+                    $metadata['SpiritAnimal'] ?? '',
+                    $metadata['CelticTreeZodiacSign'] ?? '',
+                    $metadata['NativeAmericanZodiacSign'] ?? '',
+                    $metadata['VedicAstrologySign'] ?? '',
+                    $metadata['GuardianAngel'] ?? '',
+                    $metadata['ChineseElement'] ?? '',
+                    $metadata['EyeColorMeaning'] ?? '',
+                    $metadata['GreekMythologyArchetype'] ?? '',
+                    $metadata['NorseMythologyPatronDeity'] ?? '',
+                    $metadata['EgyptianZodiacSign'] ?? '',
+                    $metadata['MayanZodiacSign'] ?? '',
+                    $metadata['LoveLanguage'] ?? '',
+                    $metadata['Birthstone'] ?? '',
+                    $metadata['BirthFlower'] ?? '',
+                    $metadata['BloodType'] ?? '',
+                    $metadata['AttachmentStyle'] ?? '',
+                    $metadata['CharismaType'] ?? '',
+                    $metadata['BusinessPersonality'] ?? '',
+                    $metadata['DISC'] ?? '',
+                    $metadata['SocionicsType'] ?? '',
+                    $metadata['LearningStyle'] ?? '',
+                    $metadata['FinancialPersonalityType'] ?? '',
+                    $metadata['PrimaryMotivationStyle'] ?? '',
+                    $metadata['CreativeStyle'] ?? '',
+                    $metadata['ConflictManagementStyle'] ?? '',
+                    $metadata['TeamRolePreference'] ?? ''
+                );
 
-            // Hash password before storing
-            $passwordHash = password_hash($metadata['TFRegisterPassword'], PASSWORD_DEFAULT);
+                header("Location: $TsunamiFlowClubDomain");
+                exit;
 
-            InputIntoDatabase(
-                $metadata['membership'],
-                $metadata['Username'],
-                $metadata['FirstName'],
-                $metadata['LastName'],
-                $metadata['NickName'],
-                $metadata['Gender'],
-                $metadata['Birthday'],
-                $metadata['Email'],
-                $passwordHash,
-                $metadata['ChineseZodiacSign'],
-                $metadata['WesternZodiacSign'],
-                $metadata['SpiritAnimal'],
-                $metadata['CelticTreeZodiacSign'],
-                $metadata['NativeAmericanZodiacSign'],
-                $metadata['VedicAstrologySign'],
-                $metadata['GuardianAngel'],
-                $metadata['ChineseElement'],
-                $metadata['EyeColorMeaning'],
-                $metadata['GreekMythologyArchetype'],
-                $metadata['NorseMythologyPatronDeity'],
-                $metadata['EgyptianZodiacSign'],
-                $metadata['MayanZodiacSign'],
-                $metadata['LoveLanguage'],
-                $metadata['Birthstone'],
-                $metadata['BirthFlower'],
-                $metadata['BloodType'],
-                $metadata['AttachmentStyle'],
-                $metadata['CharismaType'],
-                $metadata['BusinessPersonality'],
-                $metadata['DISC'],
-                $metadata['SocionicsType'],
-                $metadata['LearningStyle'],
-                $metadata['FinancialPersonalityType'],
-                $metadata['PrimaryMotivationStyle'],
-                $metadata['CreativeStyle'],
-                $metadata['ConflictManagementStyle'],
-                $metadata['TeamRolePreference']
-            );
+            } catch (\Exception $e) {
+                http_response_code(500);
+                echo json_encode(['error' => 'Stripe session error: ' . $e->getMessage()]);
+                exit;
+            }
 
-            header("Location: $TsunamiFlowClubDomain");
-            exit;
-
-        // Community Signup (free or paid)
+        // Community Signup
         } elseif (($data['type'] ?? '') === 'Subscribers Signup') {
-
-            $membership = validate_input('membershipLevel', $_POST);
+            $membership = $_POST['membershipLevel'] ?? 'free';
             $membershipCost = floatval($_POST['membershipCost'] ?? 0);
 
-            // Collect user info
-            $userData = [
-                'FirstName' => validate_input('TFRegisterFirstName', $_POST),
-                'LastName' => validate_input('TFRegisterLastName', $_POST),
-                'NickName' => validate_input('TFRegisterNickName', $_POST),
-                'Gender' => validate_input('TFRegisterGender', $_POST),
-                'Birthday' => validate_input('TFRegisterBirthday', $_POST),
-                'Email' => validate_input('TFRegisterEmail', $_POST),
-                'Username' => validate_input('TFRegisterUsername', $_POST),
-                'Password' => password_hash(validate_input('TFRegisterPassword', $_POST), PASSWORD_DEFAULT),
-                'ChineseZodiacSign' => validate_input('ChineseZodiacSign', $_POST, false),
-                'WesternZodiacSign' => validate_input('WesternZodiacSign', $_POST, false),
-                'SpiritAnimal' => validate_input('SpiritAnimal', $_POST, false),
-                'CelticTreeZodiacSign' => validate_input('CelticTreeZodiacSign', $_POST, false),
-                'NativeAmericanZodiacSign' => validate_input('NativeAmericanZodiacSign', $_POST, false),
-                'VedicAstrologySign' => validate_input('VedicAstrologySign', $_POST, false),
-                'GuardianAngel' => validate_input('GuardianAngel', $_POST, false),
-                'ChineseElement' => validate_input('ChineseElement', $_POST, false),
-                'EyeColorMeaning' => validate_input('EyeColorMeaning', $_POST, false),
-                'GreekMythologyArchetype' => validate_input('GreekMythologyArchetype', $_POST, false),
-                'NorseMythologyPatronDeity' => validate_input('NorseMythologyPatronDeity', $_POST, false),
-                'EgyptianZodiacSign' => validate_input('EgyptianZodiacSign', $_POST, false),
-                'MayanZodiacSign' => validate_input('MayanZodiacSign', $_POST, false),
-                'LoveLanguage' => validate_input('LoveLanguage', $_POST, false),
-                'Birthstone' => validate_input('Birthstone', $_POST, false),
-                'BirthFlower' => validate_input('BirthFlower', $_POST, false),
-                'BloodType' => validate_input('BloodType', $_POST, false),
-                'AttachmentStyle' => validate_input('AttachmentStyle', $_POST, false),
-                'CharismaType' => validate_input('CharismaType', $_POST, false),
-                'BusinessPersonality' => validate_input('BusinessPersonality', $_POST, false),
-                'DISC' => validate_input('DISC', $_POST, false),
-                'SocionicsType' => validate_input('SocionicsType', $_POST, false),
-                'LearningStyle' => validate_input('LearningStyle', $_POST, false),
-                'FinancialPersonalityType' => validate_input('FinancialPersonalityType', $_POST, false),
-                'PrimaryMotivationStyle' => validate_input('PrimaryMotivationStyle', $_POST, false),
-                'CreativeStyle' => validate_input('CreativeStyle', $_POST, false),
-                'ConflictManagementStyle' => validate_input('ConflictManagementStyle', $_POST, false),
-                'TeamRolePreference' => validate_input('TeamRolePreference', $_POST, false),
-            ];
+            $userData = [];
+            foreach ($_POST as $key => $val) {
+                $userData[$key] = $val;
+            }
+            if (!empty($userData['TFRegisterPassword'])) {
+                $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
+            }
 
             if ($membership === 'free') {
                 InputIntoDatabase($membership, ...array_values($userData));
                 echo json_encode(['success' => true, 'message' => 'Free membership created']);
             } else {
-                // Fix cost ranges
-                if ($membership === 'regular') $membershipCost = 400; // cents
-                elseif ($membership === 'vip') $membershipCost = 700;
-                elseif ($membership === 'team') $membershipCost = 1000;
-                else $membershipCost = 2000;
+                // Assign costs
+                $costMap = ['regular'=>400, 'vip'=>700, 'team'=>1000];
+                $membershipCost = $costMap[strtolower($membership)] ?? 2000;
 
                 $checkoutSession = \Stripe\Checkout\Session::create([
                     'payment_method_types' => ['card'],
@@ -316,9 +291,9 @@ try {
                 exit;
             }
 
-        // Navigation login
+        // Navigation Login
         } elseif (($data['type'] ?? '') === 'Navigation Login') {
-            if ($data['log in'] ?? false) {
+            if (!empty($data['log in'])) {
                 $_SESSION['LoginStatus'] = true;
                 echo json_encode(['success' => true]);
             } else {
@@ -326,10 +301,10 @@ try {
                 echo json_encode(['success' => true, 'message' => 'Logged out']);
             }
 
-        // Tsunami Flow Store (simplified)
+        // Tsunami Flow Store
         } elseif (($data['type'] ?? '') === 'Tsunami Flow Store') {
-            // Implement shopping cart / order processing here
             echo json_encode(['success' => true, 'message' => 'Store endpoint hit']);
+
         } else {
             http_response_code(400);
             echo json_encode(['error' => 'Invalid POST type']);
@@ -354,20 +329,7 @@ try {
     echo json_encode(['error' => $e->getMessage()]);
 }
 
-/*
-curl_init(); //initializes the session
-curl_setopt(); //configure options like the URL, HTTP, method, headers, or data payload,
-curl_exec(); //executes the session and returns the response.
-curl_close(); //close the cURL session to free resources.
-
-Turn Server Stuff Uncomment later when you ready
-*/ 
-
-//InputIntoDatabase($TfMlCts, $usNa, $fiNa, $laNa, $niNa, $gede, $bihda, $eml, $pawo, $chZoSi, $weZoSi, $spiAna, $ceTrZoSi, $naAmZoSi, $veAsSi, $guAg, $ChEl, $eyCoMe, $GrMyAr, $NoMyPaDe, $EgZoSi, $MaZoSi, $loLaua, $biSt, $biFl, $blTy, $atchntyl, $chisTy, $bunePeonit, $usDIC, $soonsTy, $leniSte, $finclPsonityp, $prarotatnSle, $crtiSte, $coliMagentyl, $teRoPrerc); 
-
-//If Statements End
-// Lets Begin the Process Now 
-
+// --- Printful / fallback ---
 // $myProductsFr = BasicPrintfulRequest();
 $myProductsFr = false;
 
@@ -377,5 +339,7 @@ if (!$myProductsFr) {
 } else {
     $showSuccess = isset($_GET["success"]) && $_GET["success"] === "true";
 }
-    
+
 ?>
+
+
