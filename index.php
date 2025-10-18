@@ -130,7 +130,7 @@ include "server.php";
             </p1>
         </aside>
         <section>
-            <div id="mainTsectionFdiv" height="800" width="800" src=""></div>
+            <div id="mainTsectionFdiv" height="800" width="800"></div>
         </section>
         <aside id="tfExtraSection">
             <span id="ThoughtsCss">
