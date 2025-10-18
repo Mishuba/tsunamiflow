@@ -3,6 +3,15 @@ export class User {
         this.username = username;
         this.password = password;
 
+        // Restore saved login state if any
+        const savedUser = localStorage.getItem("TFuser");
+        if (savedUser) {
+            const { username, password } = JSON.parse(savedUser);
+            this.username = username;
+            this.password = password;
+        }
+
+        // Wait for DOM
         document.addEventListener("DOMContentLoaded", () => {
             this.FreeSubmitButton = document.getElementById("TFCompleteForm");
             this.tfFN = document.getElementById("TfFirstName");
@@ -50,11 +59,13 @@ export class User {
 
     signup() {
         try {
-            let SubFormData = new FormData();
+            const SubFormData = new FormData();
             const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
-            fields.forEach(f => { if (this[f]) SubFormData.append(f, this[f].value); });
+            fields.forEach(f => {
+                if (this[f]) SubFormData.append(f, this[f].value);
+            });
 
-            for (let [key, elem] of Object.entries(this.extraFields)) {
+            for (const [key, elem] of Object.entries(this.extraFields)) {
                 if (elem) SubFormData.append(key, elem.value);
             }
 
@@ -64,14 +75,7 @@ export class User {
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
                         console.log("Signup response:", response);
-                        if (response.success) {
-                            // Store username/email in sessionStorage for client use
-                            sessionStorage.setItem("TFUsername", this.tfUN.value);
-                            sessionStorage.setItem("TFEmail", this.tfEM.value);
-                        }
-                    } else {
-                        console.error("Signup request failed:", xhr.statusText);
-                    }
+                    } else console.error("Signup request failed:", xhr.statusText);
                 }
             };
             xhr.open("POST", "./../server.php", true);
@@ -81,7 +85,7 @@ export class User {
         }
     }
 
-    login() {
+    login(saveSession = true) {
         if (!this.username || !this.password) {
             console.warn("Username or password is empty.");
             return;
@@ -96,13 +100,23 @@ export class User {
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
-                        document.getElementById("TFloginIcon").innerHTML = xhr.responseText;
-                        console.log("Login successful");
-                        // Store username/email in sessionStorage
-                        sessionStorage.setItem("TFUsername", this.username);
-                        // Email is not available here unless returned from server
+                        const res = xhr.responseText.trim();
+                        if (res === "success" || res.includes("Welcome")) {
+                            console.log("Login successful");
+
+                            // Save session
+                            if (saveSession) {
+                                const data = JSON.stringify({ username: this.username, password: this.password });
+                                localStorage.setItem("TFuser", data);
+                                sessionStorage.setItem("TFuser", data);
+                            }
+
+                            document.getElementById("TFloginIcon").innerHTML = res;
+                        } else {
+                            console.warn("Login failed:", res);
+                        }
                     } else {
-                        console.error("Login failed:", xhr.statusText);
+                        console.error("Login request error:", xhr.statusText);
                     }
                 }
             };
@@ -111,6 +125,14 @@ export class User {
         } catch (err) {
             console.error("Login error:", err);
         }
+    }
+
+    logout() {
+        localStorage.removeItem("TFuser");
+        sessionStorage.removeItem("TFuser");
+        this.username = "";
+        this.password = "";
+        console.log("User logged out.");
     }
 
     PostThoughts() {
