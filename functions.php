@@ -416,374 +416,101 @@ function updatePaymentMethod($secretKey, $type, $id, $paymentMethodId) {
         return json_encode(["error" => $e->getMessage()]);
     }
 }
-        function WhichPaymentWeDoing($oneTimePayment, $PaymentMethod, $PaymentAmount){//, $TypeOfThing
-        /*
-            global $StfPk;
-            $TfStoreShit = json_decode(file_get_contents("php://input"), true);
-            try {
-                $stripeTcustomerF = Customer::create([ //$StfPk->customers->create([
-                    "email" => $TfStoreShit["email"],
-                    "name" => $TfStoreShit["name"],
-                    "description" => $TfStoreShit["description"],
-                    "address" => [
-                        "country" => $TfStoreShit["countryCode"]
-                    ]
+
+function WhichPaymentWeDoing(
+    StripeClient $stripe,
+    bool $oneTimePayment,
+    string $paymentMethodId,
+    float $paymentAmount,
+    array $customerData, // ['email','name','description','countryCode','taxId']
+    string $type = "store" // store, donation, subscription
+): string {
+    try {
+        // Step 1: Create customer
+        $customer = $stripe->customers->create([
+            "email" => $customerData['email'],
+            "name" => $customerData['name'],
+            "description" => $customerData['description'] ?? "",
+            "address" => ["country" => $customerData['countryCode']]
+        ]);
+
+        if (!$customer || !isset($customer->id)) {
+            return json_encode(["error" => "Failed to create customer"]);
+        }
+
+        // Set default payment method
+        $stripe->customers->update($customer->id, [
+            "invoice_settings" => ["default_payment_method" => $paymentMethodId]
+        ]);
+
+        // Add tax ID if provided
+        if (!empty($customerData['taxId'])) {
+            $taxType = getTaxIdType($customerData['countryCode']);
+            if ($taxType) {
+                $stripe->customers->createTaxId($customer->id, [
+                    "type" => $taxType,
+                    "value" => $customerData['taxId']
                 ]);
+            }
+        }
 
-                if (isset($stripeTcustomerF->id)) {
-                    $TfCusId = $stripeTcustomerF->id;
-                        Customer::update($TfCusId, [
-                            "invoice_settings" => [
-                                "default_payment_method" => $PaymentMethod //TfStoreShit["PaymentMethod"]->id
-                            ]
-                        ]);
+        // Step 2: Create payment intent or subscription
+        if ($oneTimePayment) {
+            $intent = $stripe->paymentIntents->create([
+                "amount" => $paymentAmount,
+                "currency" => "usd",
+                "payment_method" => $paymentMethodId,
+                "confirmation_method" => "manual",
+                "confirm" => true,
+                "automatic_payment_methods" => ["enabled" => true],
+                "off_session" => true,
+                "receipt_email" => $customerData['email'],
+                "setup_future_usage" => "off_session"
+            ]);
 
-                        if (!empty($TfStoreShit["TaxId"])) {
-                            $taxIdType = getTaxIdType($TfStoreShit["countryCode"]);
+            $status = $intent->status;
+            $clientSecret = $intent->client_secret ?? null;
+        } else {
+            $subscription = $stripe->subscriptions->create([
+                "customer" => $customer->id,
+                "items" => [["price" => $paymentAmount]],
+                "collection_method" => "charge_automatically",
+                "payment_behavior" => "default_incomplete",
+                "expand" => ["latest_invoice.payment_intent"],
+                "off_session" => true
+            ]);
 
-                            if ($taxIdType) {
-                                Customer::createTaxId($TfCusId, [
-                                    "type" => $taxIdType,
-                                    "value" => $TfStoreShit["TaxId"]
-                                ]);
-                            }
-                        }
-                } else {
-                        return json_encode(["error" => "Failed to create customer"]);
-                }
-            } catch (ApiErrorException $e) {
-                return json_encode(["error" => $e->getMessage()]);
-            } catch (CardException $e) {
-                return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-            } catch (RateLimitException $e) {
-                return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-            } catch (InvalidRequestException $e) {
-                return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-            } catch (AuthenticationException $e) {
-                return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-            } catch (ApiConnectionException $e) {
-                return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-            } catch (Exception $e) {
-                return json_encode(["error" => "An unexpected error occurred: " . $e->getMessage()]);
-            } finally {
-                try {
-                    if($oneTimePayment === true) {
-                        $TfStoreIntent = $StfPk->paymentIntents->create([
-                            "amount" => $PaymentAmount,
-                            "currency" => "usd",
-                            "payment_method" => $PaymentMethod,
-                            "automatic_payment_methods" => [
-                                "enabled" => true,
-                                "allow_redirects" => "always",
-                            ],
-                            "confirmation_method" => "manual",
-                            "confirm" => true,
-                            "statement_descriptor_suffix" => "TF",
-                            //"description" => $somethingIdkYet,
-                            //"metadata" => $someKeyValuePairArrayorObject
-                            "off_session" => true,
-                            "receipt_email" => $TfStoreShit["email"],
-                            "setup_future_usage" => "off_session",
-                            "payment_method_types" => ["card"],
-                            //"shipping" => [], address infomation
-                            //"statement_descriptor" => "",
+            $intent = $subscription->latest_invoice->payment_intent ?? null;
+            $status = $intent->status ?? "unknown";
+            $clientSecret = $intent->client_secret ?? null;
+        }
 
-                            "capture_method" => "automatic_async",
-                            //confirmation_token" => $IntentConfirmation,
-                            //"mandate" => $IntentMandate,
-                            //"payment_method_configuration" => $IntentPaymentMethodConfiguration,
-                            //"return_url" => "https://webhooks.tsunamiflow.club/webhook/StripePayments.php",
-                            //"use_stripe_sdk" => true,
-                        ]);
-                    } else {//Monthly Payment
+        // Step 3: Build standard response
+        $messages = [
+            "succeeded" => "Payment successful. Thank you!",
+            "requires_action" => "Verification required to complete payment.",
+            "requires_payment_method" => "Payment method issue. Try again.",
+            "requires_capture" => "Bank requires confirmation.",
+            "canceled" => "Payment failed. Try later."
+        ];
 
-                        $TfStoreIntent = $StfPk->subscriptions->create([
-                            "customer" => $TfCusId,
-                            "automatic_tax" => [
-                                "enabled" => true,
-                            ],
-                            "currency" => "usd",
-                            "default_payment_method" => $PaymentMethod,
-                        "items" => [
-                            [
-                                //"discounts" => [
-                                //"coupon" => ,
-                                //"promotion_code" => ,
-                                //]
-                                "price" => $PaymentAmount,
-                            ],
-                        ],
-                        "collection_method" => "charge_automatically",
-                        "payment_behavior" => "default_incomplete",
-                        "off_session" => true,
-                        "trial_period_days" => 7,
-                        "expand" => ["lastest_invoice.payment_intent"],
-                        ]);
-                    } 
-                } catch (ApiErrorException $e) {
-                    return json_encode(["error" => $e->getMessage()]);
-                } catch (CardException $e) {
-                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                } catch (RateLimitException $e) {
-                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                } catch (InvalidRequestException $e) {
-                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                } catch (AuthenticationException $e) {
-                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                } catch (ApiConnectionException $e) {
-                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                } finally {
-                    if (isset($TfStoreIntent->id)) {
-                        $TfSiId = $TfStoreIntent->id; 
-                        if (isset($TfStoreIntent->client_secret)) {
-                            $TfUrCs = $TfStoreIntent->client_secret;
+        return json_encode([
+            "success" => $status === "succeeded",
+            "requires_action" => $status === "requires_action",
+            "requires_confirmation" => $status === "requires_capture",
+            "requires_source_action" => $status === "requires_payment_method",
+            "message" => $messages[$status] ?? "Unknown status",
+            "payment_intent_client_secret" => $clientSecret,
+            "next_step" => $status === "succeeded" ? ($type === "store" ? "Printful_Order" : "none") : null,
+            "error" => $status === "succeeded" ? "no error" : null
+        ]);
 
-                            try{
-                                if($oneTimePayment === true) {
-                                    $PaymentStatusFr = PaymentIntent::retrieve($TfSiId);
-                                    $RealStatus = $PaymentStatusFr->status;
-                                } else {
-                                    $PaymentStatusFr = Subscription::retrieve($TfSiId);  
-                                    $RealStatus = $PaymentStatusFr->latest_invoice->payment_intent;
-                                }
-                            } catch (ApiErrorException $e) {
-                                echo json_encode(["error" => $e->getMessage()]);
-                            } finally {
-                                $PayIntentId = $TfSiId;
-                                $TheIntentTFcs = $RealStatus;
-                                $ClientSecret = $TfUrCs; 
-                                $DorS = "donation";
-                                try {
-                                    if($oneTimePayment === true) {// Check status of payment intent.
-                                        //$TheIntentStatus = $StfPk->paymentIntents->confirm($PayIntentId, []); //maybe add a return url;
-                                        //$TheIntentStatus = $StfPk->paymentIntents->capture($PayIntentId->id, []);
-                                        if ($TheIntentTFcs == "succeeded") {
-                                            if ($DorS === "donation") {
-                                                $TheStatus = [
-                                                "success" => true, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your donation was successful. We thank you here at Tsunami Flow.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "none",
-                                                "error" => "no error"
-                                                ];
-                                            } else if ($DorS === "store") {
-                                                $TheStatus = [
-                                                "success" => true, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your payment was successful. was successful. We thank you here at Tsunami Flow.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "Printful_Order",
-                                                "error" => "no error"
-                                                ];
-                                                //Submit the Order (the order should have been drafted already before this.)
-                                            } else {
-                                                $TheStatus = [
-                                                "success" => true, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "none",
-                                                "error" => "no error"
-                                                ];
-                                                //Digital store download link or something like that email maybe. 
-                                            }
-                                        } if ($TheIntentTFcs == "requires_action") { //authenication
-                                            $TheStatus = [
-                                                "success" => true, 
-                                                "requires_action" => true, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "We require verification for you to complete this payment.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_action",
-                                                "error" => "no error"
-                                            ];
-                                        } else if ($TheIntentTFcs === "requires_payment_method") {
-                                            $TheStatus = [
-                                                "success" => true, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => true,
-                                                "message" => "Something went wrong with your payment information.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_source_action",
-                                                "error" => "no error"
-                                            ];
-                                        } else if ($TheIntentTFcs == "requires_capture") {
-                                            $TheIntentStatus = $StfPk->paymentIntents->incrementAuthorization($PayIntentId);
-                                            
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => true, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your bank requires you to confirm the payment", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_confirmation",
-                                                "error" => "no error"
-                                            ];
-                                            
-                                        } else if ($TheIntentTFcs == "canceled") {
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your payment failed. You can try again later.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "cancel_order",
-                                                "error" => "no error"
-                                            ];
-                                        } else if ($TheIntentTFcs == "requires_confirmation") {
-                                                $TheIntentStatus = $StfPk->paymentIntents->confirm($TfStoreIntent->id, []); //maybe add a return url  https://www.tsunamiflow.club/server.php
-                                        }
-                                    } else {
-                                        //This is for subscribers
-                                        $TheIntentStatus = $StfPk->subscriptions->retrieve($PayIntentId, []);
-                                        if ($TheIntentStatus->latest_invoice === "succeeded") {
-                                            //Community Level
-                                            if ($DorS === "Community") {
-                                                $TfMlCts = validate_input("membershipLevel", $_POST);
-                                                $fiNa = validate_input("TFRegisterFirstName", $_POST);
-                                                $laNa = validate_input("TFRegisterLastName", $_POST);
-                                                $niNa = validate_input("TFRegisterNickName", $_POST);
-                                                $gede = validate_input("TFRegisterGender", $_POST);
-                                                $bihda = validate_input("TFRegisterBirthday", $_POST);
-                                                $eml = $_POST["TFRegisterEmail"];
-                                                //$eml = TsunamiInput($_POST["TFRegisterEmail"]);
-                                                $usNa = validate_input("TFRegisterUsername", $_POST);
-                                                $Checkpassword = validate_input("TFRegisterPassword", $_POST);
-                                                $pawo = password_hash($Checkpassword, PASSWORD_DEFAULT);
-                                                $chZoSi = validate_input("ChineseZodiacSign", $_POST);
-                                                $weZoSi = validate_input("WesternZodiacSign", $_POST);
-                                                $spiAna = validate_input("SpiritAnimal", $_POST);
-                                                $ceTrZoSi = validate_input("CelticTreeZodiacSign", $_POST);
-                                                $naAmZoSi = validate_input("NativeAmericanZodiacSign", $_POST);
-                                                $veAsSi = validate_input("VedicAstrologySign", $_POST);
-                                                $guAg = validate_input("GuardianAngel", $_POST);
-                                                $ChEl = validate_input("ChineseElement", $_POST);
-                                                $eyCoMe = validate_input("EyeColorMeaning", $_POST);
-                                                $GrMyAr = validate_input("GreekMythologyArchetype", $_POST);
-                                                $NoMyPaDe = validate_input("NorseMythologyPatronDeity", $_POST);
-                                                $EgZoSi = validate_input("EgyptianZodiacSign", $_POST);
-                                                $MaZoSi =  validate_input("MayanZodiacSign", $_POST);
-                                                $loLaua = validate_input("LoveLanguage", $_POST);
-                                                $biSt = validate_input("Birthstone", $_POST);
-                                                $biFl = validate_input("BirthFlower", $_POST);
-                                                $blTy = validate_input("BloodType", $_POST);
-                                                $atchntyl = validate_input("AttachmentStyle", $_POST);
-                                                $chisTy = validate_input("CharismaType", $_POST);
-                                                $bunePeonit = validate_input("BusinessPersonality", $_POST);
-                                                $usDIC = validate_input("DISC", $_POST);
-                                                $soonsTy = validate_input("SocionicsType", $_POST);
-                                                $leniSte = validate_input("LearningStyle", $_POST);
-                                                $finclPsonityp = validate_input("FinancialPersonalityType", $_POST);
-                                                $prarotatnSle = validate_input("PrimaryMotivationStyle", $_POST);
-                                                $crtiSte = validate_input("CreativeStyle", $_POST);
-                                                $coliMagentyl = validate_input("ConflictManagementStyle", $_POST);
-                                                $teRoPrerc = validate_input("TeamRolePreference", $_POST);
-                                                InputIntoDatabase($TfMlCts, $usNa, $fiNa, $laNa, $niNa, $gede, $bihda, $eml, $pawo, $chZoSi, $weZoSi, $spiAna, $ceTrZoSi, $naAmZoSi, $veAsSi, $guAg, $ChEl, $eyCoMe, $GrMyAr, $NoMyPaDe, $EgZoSi, $MaZoSi, $loLaua, $biSt, $biFl, $blTy, $atchntyl, $chisTy, $bunePeonit, $usDIC, $soonsTy, $leniSte, $finclPsonityp, $prarotatnSle, $crtiSte, $coliMagentyl, $teRoPrerc);
-                                                $TheStatus = [
-                                                    "success" => true, 
-                                                    "requires_action" => false, 
-                                                    "requires_confirmation" => false, 
-                                                    "requires_source_action" => false,
-                                                    "message" => "Your payment was successful. We thank you here at Tsunami Flow.", 
-                                                    "payment_intent_client_secret" => "Unnecessary", 
-                                                    "next_step" => "none",
-                                                    "error" => "no error"
-                                                ];
-                                            } else {
-                                                $TheStatus = [
-                                                    "success" => true, 
-                                                    "requires_action" => false, 
-                                                    "requires_confirmation" => false, 
-                                                    "requires_source_action" => false,
-                                                    "message" => "Your payment was successful. We thank you here at Tsunami Flow.", 
-                                                    "payment_intent_client_secret" => "Unnecessary", 
-                                                    "next_step" => "none",
-                                                    "error" => "no error"
-                                                ];
-                                            }
-                                        } else if($TheIntentStatus === "requires_action") {
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => true, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "We require an verification before we can accept your payment.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_action",
-                                                "error" => "no error"
-                                            ];
-                                        } else if ($TheIntentStatus === "requires_confirmation") {
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => true, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your bank requires you to confirm your payment.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_confirmation",
-                                                "error" => "no error"
-                                            ];
-                                        } else if ($TheIntentStatus === "requires_source_action") {
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => true,
-                                                "message" => "Your bank requires you to do some extra steps", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "requires_confirmation",
-                                                "error" => "no error"
-                                            ];
-                                        } else {
-                                            //$StfPk->subscriptions->cancel($TfStoreIntent, []);
-                                            $TheStatus = [
-                                                "success" => false, 
-                                                "requires_action" => false, 
-                                                "requires_confirmation" => false, 
-                                                "requires_source_action" => false,
-                                                "message" => "Your payment failed.", 
-                                                "payment_intent_client_secret" => $ClientSecret, 
-                                                "next_step" => "cancel",
-                                                "error" => "unknown error"
-                                            ];
-                                        }
-                                    }
-                                } catch (ApiErrorException $e) {
-                                    return json_encode(["error" => $e->getMessage()]);
-                                } catch (CardException $e) {
-                                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                                } catch (RateLimitException $e) {
-                                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                                } catch (InvalidRequestException $e) {
-                                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                                } catch (AuthenticationException $e) {
-                                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                                } catch (ApiConnectionException $e) {
-                                    return json_encode(["error" => $e->getError()->message, "error_param" => $e->getError()->param, "error_code" => $e->getError()->code, "error_type" => $e->getError()->type, "error_status" => $e->getHttpStatus()]);
-                                } finally {
-                                    return json_encode($TheStatus);
-                                }
-                            }
-                        } else {
-                            return json_encode(["error" => "Failed to create client_secret"]);
-                        }
-                    } else {
-                        return json_encode(["error" => "Failed to create payment intent"]);
-                    }
-                }
+    } catch (CardException | ApiErrorException $e) {
+        return json_encode(["error" => $e->getMessage()]);
+    } catch (Exception $e) {
+        return json_encode(["error" => "Unexpected error: " . $e->getMessage()]);
     }
-*/}
+}
 
 // Basic Printful request: fetch all store products
 function BasicPrintfulRequest(): ?array {
