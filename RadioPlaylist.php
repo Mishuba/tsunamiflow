@@ -78,17 +78,6 @@ try {
     exit;
 }
 
-/**
- * Fetch .mp3 objects under $path prefix from R2 and push them into $array[$index] (or sub-index).
- *
- * @param string $path Path passed in by caller (example: "Music/Rizz/IceBreakers/")
- * @param array  &$array Reference to $sentToJsArray
- * @param int    $index Top-level index
- * @param int|null $index2 Optional sub-index
- * @param S3Client $s3 S3 client
- * @param string $bucket Bucket name
- * @return void
- */
 function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Client $s3 = null, string $bucket = 'tsunami-radio') {
     if (!$s3) {
         error_log("addSongsToArray: Missing S3 client");
@@ -125,7 +114,7 @@ function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Cli
                 $array[$index] = [];
             }
 
-            $decodedKey = urldecode(ltrim($key, '/'));
+            $decodedKey = trim(urldecode(ltrim($key, '/')));
 
             // If index2 provided, ensure the subarray exists
             if ($index2 !== null) {
