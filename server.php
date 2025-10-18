@@ -1,12 +1,4 @@
 <?php
-//error_reporting(E_ALL);
-//ini_set('display_errors', 1);
-//ini_set("session.cookie_secure", true);
-//ini_set("session.cookie_httponly", true);
-//ini_set("session.gc_maxlifetime", 3600);
-//ini_set("session.cookie_lifetime", 0);
-//ini_set("session.use_strict_mode", true);
-
 session_start();
 
 require_once "functions.php";
@@ -109,10 +101,12 @@ try {
             $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
             if ($variantId === '') respond(['error' => 'Missing product ID'], 400);
 
-            $allProducts = BasicPrintfulRequest();
+            $myProducts = BasicPrintfulRequest();
+            $_SESSION['PrintfulItems'] = $myProducts; // <-- Store for reuse
+
             $found = null;
 
-            foreach ($allProducts['result'] ?? [] as $product) {
+            foreach ($myProducts['result'] ?? [] as $product) {
                 $variants = $product['sync_variants'] ?? $product['variants'] ?? [];
                 foreach ($variants as $v) {
                     if ((string)($v['id'] ?? '') === (string)$variantId) {
@@ -210,6 +204,15 @@ try {
                     respond(['success' => true, 'message' => 'Cart cleared']);
             }
         }
+
+        // Return Printful items if requested
+        if (isset($_GET['fetch_printful_items'])) {
+            respond([
+                'success' => true,
+                'items' => $_SESSION['PrintfulItems']['result'] ?? []
+            ]);
+        }
+
         respond(['success' => true, 'message' => 'GET request received']);
     }
 
@@ -218,8 +221,4 @@ try {
 } catch (Exception $e) {
     respond(['error' => $e->getMessage()], 500);
 }
-
-// --- Printful Fetch (legacy check) ---
-$myProductsFr = BasicPrintfulRequest();
-if (!$myProductsFr) echo "No data received from Printful API.";
 ?>
