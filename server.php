@@ -60,11 +60,9 @@ try {
 }
 
 // --- Session defaults ---
-if (!isset($_SESSION["visit_count"])) $_SESSION["visit_count"] = 0;
-$_SESSION["visit_count"] += 1;
-
-if (!isset($_SESSION["UserPreferences"])) $_SESSION["UserPreferences"] = ["Chosen_Companion" => "Ackma Hawk"];
-if (!isset($_SESSION["Setting"])) $_SESSION["Setting"] = ["font_style" => "auto"];
+$_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
+$_SESSION["UserPreferences"] = $_SESSION["UserPreferences"] ?? ["Chosen_Companion" => "Ackma Hawk"];
+$_SESSION["Setting"] = $_SESSION["Setting"] ?? ["font_style" => "auto"];
 
 // --- Membership / visit counters ---
 function incrementMembershipCounters() {
@@ -179,10 +177,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 
 try {
     if ($method === 'POST') {
-        // Parse JSON payload if Content-Type is application/json
-        $data = [];
         if (stripos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
-            $data = json_decode(file_get_contents('php://input'), true) ?? [];
+            $data = json_decode(file_get_contents('php://input'), true) ?: [];
         }
 
         // Stripe Checkout callback
@@ -201,45 +197,7 @@ try {
                     $metadata['TFRegisterPassword'] = password_hash($metadata['TFRegisterPassword'], PASSWORD_DEFAULT);
                 }
 
-                InputIntoDatabase(
-                    $metadata['membership'] ?? 'free',
-                    $metadata['Username'] ?? '',
-                    $metadata['FirstName'] ?? '',
-                    $metadata['LastName'] ?? '',
-                    $metadata['NickName'] ?? '',
-                    $metadata['Gender'] ?? '',
-                    $metadata['Birthday'] ?? '',
-                    $metadata['Email'] ?? '',
-                    $metadata['TFRegisterPassword'] ?? '',
-                    $metadata['ChineseZodiacSign'] ?? '',
-                    $metadata['WesternZodiacSign'] ?? '',
-                    $metadata['SpiritAnimal'] ?? '',
-                    $metadata['CelticTreeZodiacSign'] ?? '',
-                    $metadata['NativeAmericanZodiacSign'] ?? '',
-                    $metadata['VedicAstrologySign'] ?? '',
-                    $metadata['GuardianAngel'] ?? '',
-                    $metadata['ChineseElement'] ?? '',
-                    $metadata['EyeColorMeaning'] ?? '',
-                    $metadata['GreekMythologyArchetype'] ?? '',
-                    $metadata['NorseMythologyPatronDeity'] ?? '',
-                    $metadata['EgyptianZodiacSign'] ?? '',
-                    $metadata['MayanZodiacSign'] ?? '',
-                    $metadata['LoveLanguage'] ?? '',
-                    $metadata['Birthstone'] ?? '',
-                    $metadata['BirthFlower'] ?? '',
-                    $metadata['BloodType'] ?? '',
-                    $metadata['AttachmentStyle'] ?? '',
-                    $metadata['CharismaType'] ?? '',
-                    $metadata['BusinessPersonality'] ?? '',
-                    $metadata['DISC'] ?? '',
-                    $metadata['SocionicsType'] ?? '',
-                    $metadata['LearningStyle'] ?? '',
-                    $metadata['FinancialPersonalityType'] ?? '',
-                    $metadata['PrimaryMotivationStyle'] ?? '',
-                    $metadata['CreativeStyle'] ?? '',
-                    $metadata['ConflictManagementStyle'] ?? '',
-                    $metadata['TeamRolePreference'] ?? ''
-                );
+                InputIntoDatabase(...array_values($metadata));
 
                 header("Location: $TsunamiFlowClubDomain");
                 exit;
@@ -250,15 +208,10 @@ try {
                 exit;
             }
 
-        // Community Signup
         } elseif (($data['type'] ?? '') === 'Subscribers Signup') {
+            // handle signup (free or paid)
             $membership = $_POST['membershipLevel'] ?? 'free';
-            $membershipCost = floatval($_POST['membershipCost'] ?? 0);
-
-            $userData = [];
-            foreach ($_POST as $key => $val) {
-                $userData[$key] = $val;
-            }
+            $userData = $_POST;
             if (!empty($userData['TFRegisterPassword'])) {
                 $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
             }
@@ -267,7 +220,6 @@ try {
                 InputIntoDatabase($membership, ...array_values($userData));
                 echo json_encode(['success' => true, 'message' => 'Free membership created']);
             } else {
-                // Assign costs
                 $costMap = ['regular'=>400, 'vip'=>700, 'team'=>1000];
                 $membershipCost = $costMap[strtolower($membership)] ?? 2000;
 
@@ -291,7 +243,6 @@ try {
                 exit;
             }
 
-        // Navigation Login
         } elseif (($data['type'] ?? '') === 'Navigation Login') {
             if (!empty($data['log in'])) {
                 $_SESSION['LoginStatus'] = true;
@@ -301,7 +252,6 @@ try {
                 echo json_encode(['success' => true, 'message' => 'Logged out']);
             }
 
-        // Tsunami Flow Store
         } elseif (($data['type'] ?? '') === 'Tsunami Flow Store') {
             echo json_encode(['success' => true, 'message' => 'Store endpoint hit']);
 
@@ -311,7 +261,6 @@ try {
         }
 
     } elseif ($method === 'GET') {
-        // Shopping cart
         if (isset($_GET['shopping_cart'])) {
             $_SESSION['ShoppingCartItems'] = $_GET['shopping_cart'];
             echo json_encode(['success' => true, 'items' => $_SESSION['ShoppingCartItems']]);
@@ -330,16 +279,11 @@ try {
 }
 
 // --- Printful / fallback ---
-// $myProductsFr = BasicPrintfulRequest();
-$myProductsFr = false;
-
+$myProductsFr = false; // Replace with actual Printful request if needed
 if (!$myProductsFr) {
-    $showSuccess = "No data received from Printful API. ";
-    echo ($showSuccess);
+    echo "No data received from Printful API.";
 } else {
     $showSuccess = isset($_GET["success"]) && $_GET["success"] === "true";
 }
 
 ?>
-
-
