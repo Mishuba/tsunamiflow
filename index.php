@@ -365,8 +365,6 @@ Helps maintain brand consistency across user platforms-->
         </audio> <!---->
     </article>
     <footer>
-      <?php
-// Fetch Printful products
 <?php if ($showSuccess): ?>
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
