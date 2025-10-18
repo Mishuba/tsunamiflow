@@ -8,12 +8,12 @@ use Stripe\Subscription;
 use Stripe\Customer;
 use Stripe\StripeClient;
 use Stripe\PaymentIntent;
-use \Stripe\Exception\ApiErrorException;
-use \Stripe\Exception\CardException;
-use \Stripe\Exception\RateLimitException;
-use \Stripe\Exception\InvalidRequestException;
-use \Stripe\Exception\AuthenticationException;
-use \Stripe\Exception\ApiConnectionException;
+use Stripe\Exception\ApiErrorException;
+use Stripe\Exception\CardException;
+use Stripe\Exception\RateLimitException;
+use Stripe\Exception\InvalidRequestException;
+use Stripe\Exception\AuthenticationException;
+use Stripe\Exception\ApiConnectionException;
 
 // --- Start session ---
 if (session_status() === PHP_SESSION_NONE) {
@@ -52,22 +52,19 @@ function TsunamiInput($data) {
     return htmlspecialchars(trim($data), ENT_QUOTES, 'UTF-8');
 }
 
-function validate_input($inputName, $inputArray) {
-    if (isset($inputArray[$inputName]) && !empty($inputArray[$inputName])) {
-        $inputValue = TsunamiInput($inputArray[$inputName]);
-        if (preg_match("/^[a-zA-Z0-9-']+$/", $inputValue)) return $inputValue;
-        return "Invalid characters in $inputName.";
-    } else {
-        switch ($inputArray) {
-            case 'number': return filter_var($inputName, FILTER_VALIDATE_INT);
-            case 'email': return filter_var($inputName, FILTER_VALIDATE_EMAIL);
-            default: return TsunamiInput($inputName);
-        }
+function validate_input($inputName, $inputArray, $type = 'string') {
+    if (!isset($inputArray[$inputName]) || empty($inputArray[$inputName])) {
+        return null;
     }
+    $value = TsunamiInput($inputArray[$inputName]);
+    if ($type === 'string' && preg_match("/^[a-zA-Z0-9-']+$/", $value)) return $value;
+    if ($type === 'number') return filter_var($value, FILTER_VALIDATE_INT);
+    if ($type === 'email') return filter_var($value, FILTER_VALIDATE_EMAIL);
+    return $value;
 }
 
 function handleDatabaseError($e){
-    if ($e->getCode() == 23000 && strpos($e->getMessage(), "1062 Duplicate entry") !== false) {
+    if ($e->getCode() == '23505') { // Postgres unique violation
         die("The username you choose is already being used. Please choose a new one.");
     } else {
         error_log($e->getMessage(), 0);
@@ -98,12 +95,13 @@ function InputIntoDatabase(
     try {
         $db = TsunamiDatabaseFlow();
 
-        // --- FreeLevelMembers insert ---
+        // --- FreeLevelMembers insert with hashed password ---
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $stmt = $db->prepare("INSERT INTO FreeLevelMembers (tfUN, tfFN, tfLN, tfNN, tfGen, tfBirth, tfEM, tfPSW, created)
             VALUES (:tfUN, :tfFN, :tfLN, :tfNN, :tfGen, :tfBirth, :tfEM, :tfPSW, NOW())");
         $stmt->execute([
             ":tfUN" => $userName, ":tfFN" => $firstName, ":tfLN" => $lastName, ":tfNN" => $nickName,
-            ":tfGen" => $gender, ":tfBirth" => $birthdate, ":tfEM" => $email, ":tfPSW" => $password
+            ":tfGen" => $gender, ":tfBirth" => $birthdate, ":tfEM" => $email, ":tfPSW" => $hashedPassword
         ]);
 
         // --- Set common cookies/session ---
@@ -200,7 +198,7 @@ function InputIntoDatabase(
             fclose($csvFile);
         }
 
-        // --- Final response ---
+ // --- Final response ---
         echo json_encode([
             "status" => "success",
             "message" => "User $userName successfully registered as $membership member."
@@ -210,12 +208,12 @@ function InputIntoDatabase(
         handleDatabaseError($e);
     } catch (Exception $e) {
         error_log($e->getMessage(), 0);
-        echo json_encode(["status"=>"error","message"=>"Unexpected error: ".$e->getMessage()]);
+        echo json_encode(["status" => "error", "message" => "Unexpected error: " . $e->getMessage()]);
     }
 }
 
 // --- Login function ---
-function Login(){
+function Login() {
     $tfUsername = $_POST["NavUserName"] ?? $_REQUEST["phpnun"] ?? null;
     $tfPassword = $_POST["NavPassword"] ?? $_REQUEST["phpnpsw"] ?? null;
 
@@ -241,57 +239,12 @@ function Login(){
 
     } catch (PDOException $e) {
         handleDatabaseError($e);
+    } catch (Exception $e) {
+        error_log($e->getMessage(), 0);
+        echo "Unexpected error: " . $e->getMessage();
     }
 }
 
-    //Nav Login
-function Login(){
-    if (!empty($_POST["NavUserName"])) {
-        $tfUsername = validate_input("NavUserName", $_POST);
-        $tfPassword = validate_input("NavPassword", $_POST);
-    } else if (!empty($_REQUEST["phpnun"])) {
-        $tfUsername = validate_input("phpnun", $_REQUEST);
-        $tfPassword =  validate_input("phpnpsw", $_REQUEST);
-    }
-    // Check for validation errors
-    if (is_string($tfUsername) && is_string($tfPassword)) {
-        try {
-            $pdo = TsunamiDatabaseFlow();
-
-            // Check user
-            $stmt = $pdo->prepare("SELECT * FROM FreeLevelMembers WHERE tfUN = :username");
-            $stmt->bindParam(':username', $tfUsername, PDO::PARAM_STR);
-            $stmt->execute();
-            $user = $stmt->fetch();
-
-            if ($user !== null) {
-                if ($user !== false) {
-                    if ($user['tfUN'] == $tfUsername) {
-                        if (password_verify($tfPassword, $user['tfPSW'])) {
-                            $_SESSION["UserName"] = $user['tfUN'];
-                            echo (htmlspecialchars($tfUsername) . " is now logged in.");
-                            session_start();
-                            session_regenerate_id(true);
-                        } else {
-                            echo ("Incorrect Password");
-                        }
-                    } else {
-                        echo ("Incorrect Username");
-                    }
-                } else {
-                    echo ("Unsuccessful login attempt.");
-                }
-            } else {
-                echo ("Unsuccessful login attempt.");
-            }
-        } catch (PDOException $e) {
-            handleDatabaseError($e);
-        }
-    } else {
-        // Output validation errors
-        echo json_encode(["username" => $tfUsername, "password" => htmlspecialchars($tfPassword)]);
-    }
-}
 //Nav Login ends
 
 //Stripe && Handling Payments 
