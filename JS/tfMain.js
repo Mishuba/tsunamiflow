@@ -47,13 +47,13 @@ console.log(`The user native human language setting on this computer is ${TfUser
 console.log(`The current online status of this computer is ${TfOnlineStatus}`);
 
 //The Frame
-export let twoMore = document.getElementById("mainTsectionFdiv");
+export const twoMore = document.getElementById("mainTsectionFdiv");
 
-export let TFiframe = document.createElement("iframe");
+export const TFiframe = document.createElement("iframe");
 TFiframe.title = "Main Website Content";
 TFiframe.id = "TsunamiContent";
 TFiframe.name = "TsunamiMainFlowContent";
-TFiframe.allow = "camera;microphone;geolocation";
+TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
@@ -63,34 +63,30 @@ TFiframe.style.background = "white";
 const oneMore = TFiframe;
 
 oneMore.addEventListener("load", async () => {
-console.log("Creating JSON to send to the iframe");
+    console.log("Creating JSON to send to the iframe");
 
-const HomePageJson = {
-    type: "start_updates",
-    info: HomepageUpdates.toJSON(),
-    message: "Starting the game",
-    username: "Mishuba",
-    error: null
-};
+    const HomePageJson = {
+        type: "start_updates",
+        info: HomepageUpdates?.toJSON?.() ?? {},
+        message: "Starting the game",
+        username: "Mishuba",
+        error: null
+    };
 
-console.log("Sending message to iframe...");
+    console.log("Sending message to iframe...");
 
-// Make sure iframe is fully loaded before messaging
-if (oneMore && oneMore.contentWindow) {
-    oneMore.contentWindow.postMessage(HomePageJson, "*");
-    console.log("Message sent successfully");
-} else if (oneMore && oneMore.contentdocument) {
-oneMore.contentWindow.postMessage(HomePageJson, "*");
-    console.log("Message sent successfully");
-} else {
-    console.error("Iframe not ready or missing contentWindow");
-}
+    if (oneMore.contentWindow) {
+        oneMore.contentWindow.postMessage(HomePageJson, "*");
+        console.log("Message sent successfully");
+    } else {
+        console.error("Iframe not ready or missing contentWindow");
+    }
 });
 
-if (twoMore === null) {
-
-} else {
+if (twoMore) {
     twoMore.appendChild(TFiframe);
+} else {
+    console.error("Element with id 'mainTsectionFdiv' not found.");
 }
 
 document.getElementById("freeLevelInputs").style.display = "none";
