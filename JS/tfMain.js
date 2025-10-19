@@ -57,7 +57,7 @@ TFiframe.allow = "camera;microphone;geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
-TFiframe.src = "about:blank";
+TFiframe.src = "./../homepage.php";
 TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
