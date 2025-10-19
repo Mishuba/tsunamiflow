@@ -12,6 +12,13 @@ import { HomepageUpdates } from "./sprite.js";
 let TfWeather = new Weather();
 let TfWotd = document.getElementById("tfWordOfTheDay");
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+document.body.addEventListener("click", () => {
+  if (TsunamiAudioCtx.state === "suspended") {
+    TsunamiAudioCtx.resume();
+  }
+});
+
 //Tsunami Radio Audio
 // Buttons
 let TsunamiRadio = document.getElementById("TFradioPlayer");
