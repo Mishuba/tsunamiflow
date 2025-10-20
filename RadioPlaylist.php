@@ -116,15 +116,13 @@ function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Cli
             "MaxKeys" => 1000
         ];
 
-        $Objects = $s3->listObjectsV2($params);
+        $Objects = $s3->getPaginator('ListObjectsV2', $params);
+foreach ($Objects as $page) {
+    if (!isset($page['Contents'])) continue;
+    foreach ($page['Contents'] as $obj) {
 
-        if (!isset($Objects["Contents"]) || !is_array($Objects["Contents"])) {
-            error_log("addSongsToArray: No contents for prefix {$prefix}");
-            return;
-        }
-
-        foreach ($Objects["Contents"] as $obj) {
-            if (!isset($obj['Key'])) continue;
+        // your mp3 handling logic
+        if (!isset($obj['Key'])) continue;
             $key = $obj['Key'];
 
             // only mp3
@@ -148,12 +146,6 @@ function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Cli
             }
             $array[11][] = "https://www.tsunamiflow.club/" . $decodedKey;
         }
-
-        error_log("Added songs to index $index" . ($index2 !== null ? " at sub-index $index2" : ""));
-    } catch (AwsException $e) {
-        error_log("AWS Exception: " . $e->getMessage());
-    } catch (Exception $e) {
-        error_log("Exception in addSongsToArray: " . $e->getMessage());
     }
 }
 
