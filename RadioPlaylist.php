@@ -266,6 +266,6 @@ $TsunamiFlowRadio = json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_IN
 
 echo $TsunamiFlowRadio;
 
-file_put_contents($cacheFile, json_encode($sentToJsArray, $TsunamiFlowRadio));
+file_put_contents($cacheFile, $TsunamiFlowRadio);
 
 exit;
