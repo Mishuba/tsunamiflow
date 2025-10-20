@@ -208,7 +208,7 @@ async function RadioTime(PSL, response = null) {
 
 async function fetchRadioSongs() {
     try {
-        phpRadio.open("GET", "./../server.php", true);
+        phpRadio.open("GET", "./../RadioPlaylist.php", true);
         phpRadio.setRequestHeader("X-Request-Type", "fetchRadioSongs");
         phpRadio.onreadystatechange = async function () {
             if (phpRadio.readyState === 4) {
