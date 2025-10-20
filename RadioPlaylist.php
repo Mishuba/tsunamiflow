@@ -19,11 +19,21 @@ if (!isset($_SERVER["HTTP_X_REQUEST_TYPE"]) || $_SERVER["HTTP_X_REQUEST_TYPE"] !
     exit;
 }
 
-$cacheFile = '/tmp/radioCache.json';
-if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
+$cacheDir = sys_get_temp_dir() . '/TfRadioCache';
+if (!is_dir($cacheDir)) mkdir($cacheDir, 0700, true);
+
+$cacheLock = '$cacheDir/radioCache.lock';
+if (file_exists($cacheLock) && time() - filemtime($cacheLock) < 60) {
+    // Another process is likely building cache, return old data if available
+    $cacheFile = '$cacheDir/radioCache.json';
+
+    if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
     echo file_get_contents($cacheFile);
     exit;
+   }
 }
+touch($cacheLock);
+
 
 // --- Your category array (kept same shape) ---
 $sentToJsArray = array(
@@ -270,6 +280,7 @@ $tmpFile = $cacheFile . '.tmp';
 file_put_contents($tmpFile, $TsunamiFlowRadio);
 rename($tmpFile, $cacheFile);
 
+@unlink($cacheLock);
 
 // Output once
 echo $TsunamiFlowRadio;
