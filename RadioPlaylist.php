@@ -145,6 +145,10 @@ foreach ($Objects as $page) {
                 $array[$index][] = "https://www.tsunamiflow.club/" . $decodedKey;
             }
             $array[11][] = "https://www.tsunamiflow.club/" . $decodedKey;
+        } catch (AwsException $e) {
+    error_log("AWS Exception in paginator: ".$e->getMessage());
+        } catch (Exception $e) {
+    error_log("Exception in paginator: ".$e->getMessage());
         }
     }
 }
