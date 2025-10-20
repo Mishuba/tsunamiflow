@@ -142,6 +142,11 @@ function addSongsToArray($path, array &$array, int $index, $index2 = null, S3Cli
     }
 }
 
+// Write cache first (safe write)
+$tmpFile = $cacheFile . '.tmp';
+file_put_contents($tmpFile, $TsunamiFlowRadio);
+rename($tmpFile, $cacheFile);
+
 // --- Calls (kept your original mapping) ---
 // 12 a.m Rizz IceBreakers Flirting GetHerDone Shot
 addSongsToArray("Music/Rizz/IceBreakers/", $sentToJsArray, 0, 0, $s3, $bucketName);
@@ -264,11 +269,6 @@ addSongsToArray("Music/Outside/", $sentToJsArray, 23, null, $s3, $bucketName);
 // --- Finally output JSON ---
 // --- Finally output JSON ---
 $TsunamiFlowRadio = json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
-
-// Write cache first (safe write)
-$tmpFile = $cacheFile . '.tmp';
-file_put_contents($tmpFile, $TsunamiFlowRadio);
-rename($tmpFile, $cacheFile);
 
 // Output once
 echo $TsunamiFlowRadio;
