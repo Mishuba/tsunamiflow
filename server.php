@@ -3,9 +3,6 @@ session_start();
 
 require_once "functions.php";
 
-use Aws\S3\S3Client;
-use Aws\Credentials\Credentials;
-use Aws\Exception\AwsException;
 use Stripe\StripeClient;
 
 // ----------------------------
@@ -24,30 +21,6 @@ function respond(array $data, int $code = 200): void {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
     exit(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
-}
-
-function initR2(): S3Client|null {
-    $ak = getenv('CloudflareR2AccessKey');
-    $sk = getenv('CloudflareR2SecretKey');
-    $ep = getenv('CloudflareR2Endpoint');
-
-    if (!$ak || !$sk || !$ep) {
-        respond(["error" => "Missing R2 credentials"], 500);
-        return null;
-    }
-
-    try {
-        return new S3Client([
-            "region" => "auto",
-            "endpoint" => $ep,
-            "version" => "latest",
-            "credentials" => new Credentials($ak, $sk),
-            "use_path_style_endpoint" => false
-        ]);
-    } catch (Exception $e) {
-        respond(["error" => $e->getMessage()], 500);
-        return null;
-    }
 }
 
 function addToCart(array $product, int $quantity): array {
@@ -86,7 +59,6 @@ if (isApiRequest()) {
 // ----------------------------
 // Initialize Services
 // ----------------------------
-$s3 = initR2();
 $stripe = new StripeClient(getenv("StripeSecretKey"));
 $domain = "https://www.tsunamiflow.club";
 
