@@ -282,6 +282,10 @@ $tmpFile = $cacheFile . '.tmp';
 file_put_contents($tmpFile, $TsunamiFlowRadio);
 rename($tmpFile, $cacheFile);
 
+if (!rename($tmpFile, $cacheFile)) {
+    error_log("Failed to rename cache file");
+}
+
 @unlink($cacheLock);
 
 // Output once
