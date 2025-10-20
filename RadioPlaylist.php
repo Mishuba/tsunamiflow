@@ -25,11 +25,15 @@ if (!is_dir($cacheDir)) mkdir($cacheDir, 0700, true);
 $cacheFile = $cacheDir . '/radioCache.json';
 $cacheLock = $cacheDir . '/radioCache.lock';
 
+if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
+    echo file_get_contents($cacheFile);
+    exit;
+}
+
 if (file_exists($cacheLock) && time() - filemtime($cacheLock) < 60) {
     // Another process is likely building cache, return old data if available
-
-    if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
-    echo file_get_contents($cacheFile);
+    if (file_exists($cacheFile)) {
+          echo file_get_contents($cacheFile);
     exit;
    }
 }
