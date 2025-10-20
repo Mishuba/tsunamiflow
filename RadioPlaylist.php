@@ -262,10 +262,16 @@ addSongsToArray("Music/Pregame/", $sentToJsArray, 22, null, $s3, $bucketName);
 addSongsToArray("Music/Outside/", $sentToJsArray, 23, null, $s3, $bucketName);
 
 // --- Finally output JSON ---
+// --- Finally output JSON ---
 $TsunamiFlowRadio = json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
 
-echo $TsunamiFlowRadio;
+// Write cache first (safe write)
+$tmpFile = $cacheFile . '.tmp';
+file_put_contents($tmpFile, $TsunamiFlowRadio);
+rename($tmpFile, $cacheFile);
 
-file_put_contents($cacheFile, $TsunamiFlowRadio);
+// Output once
+echo $TsunamiFlowRadio;
+exit;
 
 exit;
