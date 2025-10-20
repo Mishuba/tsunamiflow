@@ -256,5 +256,14 @@ addSongsToArray("Music/Pregame/", $sentToJsArray, 22, null, $s3, $bucketName);
 addSongsToArray("Music/Outside/", $sentToJsArray, 23, null, $s3, $bucketName);
 
 // --- Finally output JSON ---
-echo json_encode($sentToJsArray, JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
+
+$cacheFile = '/tmp/radioCache.json';
+if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
+    echo file_get_contents($cacheFile);
+    exit;
+}
+...
+file_put_contents($cacheFile, json_encode($sentToJsArray, JSON_UNESCAPED_SLASHES));
+
+echo json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
 exit;
