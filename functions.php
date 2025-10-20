@@ -67,7 +67,7 @@ function handleDatabaseError($e){
 function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
     try {
-    $pdo = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions ?? [])
+    $pdo = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions ?? []);
 
     // Create table if it doesn't exist
     $sql = "
@@ -123,6 +123,7 @@ function TsunamiDatabaseFlow(){
 
 } catch (PDOException $e) {
     echo "❌ Database error: " . $e->getMessage();
+    $pdo = null;
 }
     return $pdo;
 }
