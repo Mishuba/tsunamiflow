@@ -35,6 +35,8 @@ if (file_exists($cacheLock) && time() - filemtime($cacheLock) < 60) {
     if (file_exists($cacheFile)) {
           echo file_get_contents($cacheFile);
     exit;
+   } else {
+          $cacheFile = $cacheDir . '/radioCache.json';
    }
 }
 touch($cacheLock);
