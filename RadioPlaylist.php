@@ -91,7 +91,7 @@ try {
         "endpoint" => $r2Endpoint,
         "version" => "latest",
         "credentials" => $credentials,
-        "use_path_style_endpoint" => false
+        "use_path_style_endpoint" => true
     ]);
 } catch (Exception $e) {
     http_response_code(500);
