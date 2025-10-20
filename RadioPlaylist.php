@@ -25,7 +25,7 @@ if (!is_dir($cacheDir)) mkdir($cacheDir, 0700, true);
 $cacheFile = $cacheDir . '/radioCache.json';
 $cacheLock = $cacheDir . '/radioCache.lock';
 
-if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 300) {
+if (file_exists($cacheFile) && time() - filemtime($cacheFile) < 144000) {
     echo file_get_contents($cacheFile);
     exit;
 }
