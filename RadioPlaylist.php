@@ -57,7 +57,7 @@ $sentToJsArray = array(
 $accountId = getenv('CloudflareR2AccountId') ?: null;
 $accessKey = getenv('CloudflareR2AccessKey') ?: null;
 $secretKey = getenv('CloudflareR2SecretKey') ?: null;
-$r2Endpoint = getenv('CloudflareR2Endpoint') ?: "radio.tsunamiflow.club"; // e.g. https://<account-id>.r2.cloudflarestorage.com
+$r2Endpoint = getenv('CloudflareR2Endpoint') ?: "https://radio.tsunamiflow.club"; // e.g. https://<account-id>.r2.cloudflarestorage.com
 $bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
 
 if (!$accessKey || !$secretKey || !$r2Endpoint) {
@@ -262,8 +262,10 @@ addSongsToArray("Music/Pregame/", $sentToJsArray, 22, null, $s3, $bucketName);
 addSongsToArray("Music/Outside/", $sentToJsArray, 23, null, $s3, $bucketName);
 
 // --- Finally output JSON ---
-echo json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
+$TsunamiFlowRadio = json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_INVALID_UTF8_IGNORE | JSON_UNESCAPED_SLASHES);
 
-file_put_contents($cacheFile, json_encode($sentToJsArray, JSON_UNESCAPED_SLASHES));
+echo $TsunamiFlowRadio;
+
+file_put_contents($cacheFile, json_encode($sentToJsArray, $TsunamiFlowRadio));
 
 exit;
