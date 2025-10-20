@@ -57,7 +57,7 @@ $sentToJsArray = array(
 $accountId = getenv('CloudflareR2AccountId') ?: null;
 $accessKey = getenv('CloudflareR2AccessKey') ?: null;
 $secretKey = getenv('CloudflareR2SecretKey') ?: null;
-$r2Endpoint = getenv('CloudflareR2Endpoint') ?: radio.tsunamiflow.club; // e.g. https://<account-id>.r2.cloudflarestorage.com
+$r2Endpoint = getenv('CloudflareR2Endpoint') ?: "radio.tsunamiflow.club"; // e.g. https://<account-id>.r2.cloudflarestorage.com
 $bucketName = getenv('CloudflareR2Name') ?: 'tsunami-radio';
 
 if (!$accessKey || !$secretKey || !$r2Endpoint) {
