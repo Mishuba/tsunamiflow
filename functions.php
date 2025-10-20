@@ -66,7 +66,65 @@ function handleDatabaseError($e){
 
 function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
-    return new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions ?? []);
+    try {
+    $pdo = new PDO($nanoDSN, $nanoU, $nanoPsw, $tfSQLoptions ?? [])
+
+    // Create table if it doesn't exist
+    $sql = "
+    CREATE TABLE IF NOT EXISTS Members (
+        id SERIAL PRIMARY KEY,
+        membership_level VARCHAR(50) DEFAULT 'Free',
+        tfUN VARCHAR(100) UNIQUE NOT NULL,
+        tfFN VARCHAR(100),
+        tfLN VARCHAR(100),
+        tfNN VARCHAR(100),
+        tfGen VARCHAR(50),
+        tfBirth DATE,
+        tfEM VARCHAR(255) UNIQUE NOT NULL,
+        tfPSW VARCHAR(255) NOT NULL,
+
+        chineseZodiacSign VARCHAR(100),
+        westernZodiacSign VARCHAR(100),
+        spiritAnimal VARCHAR(100),
+        celticTreeZodiacSign VARCHAR(100),
+        nativeAmericanZodiacSign VARCHAR(100),
+        vedicAstrologySign VARCHAR(100),
+        guardianAngel VARCHAR(100),
+        chineseElement VARCHAR(100),
+        eyeColorMeaning VARCHAR(100),
+        greekMythologyArchetype VARCHAR(100),
+        norseMythologyPatronDeity VARCHAR(100),
+        egyptianZodiacSign VARCHAR(100),
+        mayanZodiacSign VARCHAR(100),
+        loveLanguage VARCHAR(100),
+        birthStone VARCHAR(100),
+        birthFlower VARCHAR(100),
+        bloodType VARCHAR(10),
+        attachmentStyle VARCHAR(100),
+        charismaType VARCHAR(100),
+        businessPersonality VARCHAR(100),
+        tfUserDISC VARCHAR(100),
+        socionicsType VARCHAR(100),
+        learningStyle VARCHAR(100),
+        financialPersonalityType VARCHAR(100),
+        primaryMotivationStyle VARCHAR(100),
+        creativeStyle VARCHAR(100),
+        conflictManagementStyle VARCHAR(100),
+        teamRolePreference VARCHAR(100),
+
+        created TIMESTAMP DEFAULT NOW(),
+        updated TIMESTAMP DEFAULT NOW()
+    );
+    ";
+
+    // Run the SQL
+    $pdo->exec($sql);
+    echo "✅ Table 'Members' verified or created successfully.";
+
+} catch (PDOException $e) {
+    echo "❌ Database error: " . $e->getMessage();
+}
+    return $pdo;
 }
 
 function createCookieAndSession($key, $value, $days = 365){
