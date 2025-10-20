@@ -152,7 +152,6 @@ foreach ($Objects as $page) {
         } catch (Exception $e) {
     error_log("Exception in paginator: ".$e->getMessage());
         }
-    }
 }
 
 // --- Calls (kept your original mapping) ---
