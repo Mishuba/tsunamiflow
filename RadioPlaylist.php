@@ -282,7 +282,6 @@ $TsunamiFlowRadio = json_encode($sentToJsArray, JSON_UNESCAPED_UNICODE | JSON_IN
 // Write cache first (safe write)
 $tmpFile = $cacheFile . '.tmp';
 file_put_contents($tmpFile, $TsunamiFlowRadio);
-rename($tmpFile, $cacheFile);
 
 if (!rename($tmpFile, $cacheFile)) {
     error_log("Failed to rename cache file");
