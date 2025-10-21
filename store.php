@@ -85,16 +85,54 @@ $products = getPrintfulProducts();
 </ul>
 
 <h2>Cart</h2>
-<ul>
 <?php if (!empty($_SESSION['cart'])): ?>
-    <?php foreach ($_SESSION['cart'] as $item): ?>
-        <li>Product ID: <?= $item['product_id'] ?> Quantity: <?= $item['quantity'] ?></li>
-    <?php endforeach; ?>
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Subtotal</th>
+            <th>Action</th>
+        </tr>
+        <?php
+        $total = 0;
+        foreach ($_SESSION['cart'] as $index => $item):
+            $subtotal = $item['price'] * $item['quantity'];
+            $total += $subtotal;
+        ?>
+        <tr>
+            <td><?= htmlspecialchars($item['product_id']) ?></td>
+            <td><?= $item['quantity'] ?></td>
+            <td>$<?= number_format($item['price'], 2) ?></td>
+            <td>$<?= number_format($subtotal, 2) ?></td>
+            <td>
+                <form method="POST">
+                    <input type="hidden" name="remove_index" value="<?= $index ?>">
+                    <button name="remove_from_cart">Remove</button>
+                </form>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+        <tr>
+            <td colspan="3"><strong>Total</strong></td>
+            <td colspan="2"><strong>$<?= number_format($total, 2) ?></strong></td>
+        </tr>
+    </table>
 <?php else: ?>
-    <li>Cart is empty</li>
+    <p>Cart is empty</p>
 <?php endif; ?>
-</ul>
 
+<?php
+// REMOVE FROM CART
+if (isset($_POST['remove_from_cart'])) {
+    $index = (int)$_POST['remove_index'];
+    if (isset($_SESSION['cart'][$index])) {
+        array_splice($_SESSION['cart'], $index, 1);
+    }
+    header('Location: ' . $_SERVER['PHP_SELF']);
+    exit;
+}
+?>
 <h2>Checkout</h2>
 <form action="create_checkout.php" method="POST">
     <input name="name" placeholder="Full Name" required>
