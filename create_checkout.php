@@ -6,7 +6,7 @@ require 'config.php';
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
-Stripe::setApiKey(TfStripeSecretKey);
+Stripe::setApiKey(getenv("TfStripeSecretKey"));
 
 if (empty($_SESSION['cart'])) die('Cart is empty');
 
