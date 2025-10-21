@@ -1,7 +1,6 @@
 <?php
 session_start();
 require '/stripestuff/vendor/autoload.php';
-require 'config.php';
 
 use Stripe\Stripe;
 use Stripe\Webhook;
