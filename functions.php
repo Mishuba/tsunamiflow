@@ -464,6 +464,28 @@ function CreateStripeCheckout(array $cartItems, string $successUrl, string $canc
     }
 }
 
+//Email
+function sendReceipt($to, $orderDetails) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.yourserver.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your@email.com';
+        $mail->Password = 'yourpassword';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->setFrom('your@email.com', 'Tsunami Flow Store');
+        $mail->addAddress($to);
+        $mail->Subject = 'Your Receipt';
+        $mail->Body = "Thank you for your order!\n\n" . print_r($orderDetails, true);
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("Mailer Error: ".$e->getMessage());
+    }
+}
+
 
 //Webrtc Functions 
 //curl response to make php 
