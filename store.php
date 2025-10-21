@@ -4,19 +4,13 @@ require '/stripestuff/vendor/autoload.php';
 require 'config.php';
 
 use Stripe\Stripe;
-use Stripe\Checkout\Session;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
-// INIT STRIPE
 Stripe::setApiKey(TfStripeSecretKey);
 
-// CART INIT
-if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
+// Init cart
+if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 
-// GET PRODUCTS FROM PRINTFUL
+// Fetch Printful products
 function getPrintfulProducts() {
     $ch = curl_init('https://api.printful.com/store/products');
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
@@ -27,21 +21,27 @@ function getPrintfulProducts() {
     return $data['result'] ?? [];
 }
 
-// ADD TO CART
-// ADD TO CART
+// Build a map of variant_id => name
+$products = getPrintfulProducts();
+$variantNames = [];
+foreach($products as $product){
+    foreach($product['sync_variants'] as $variant){
+        $variantNames[$variant['id']] = $product['name'] . ' - ' . $variant['name'];
+    }
+}
+
+// Add to cart
 if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
     $variant_id = $_POST['variant_id'];
     $quantity = (int)$_POST['quantity'];
 
-    // Fetch variant price from Printful
-    $products = getPrintfulProducts();
     $variant_price = 0;
     foreach ($products as $product) {
         if ($product['id'] == $product_id) {
             foreach ($product['sync_variants'] as $variant) {
                 if ($variant['id'] == $variant_id) {
-                    $variant_price = floatval($variant['retail_price']); // in dollars
+                    $variant_price = floatval($variant['retail_price']);
                     break 2;
                 }
             }
@@ -49,32 +49,42 @@ if (isset($_POST['add_to_cart'])) {
     }
 
     $_SESSION['cart'][] = [
-        'product_id' => $product_id,
         'variant_id' => $variant_id,
         'quantity' => $quantity,
         'price' => $variant_price
     ];
-    header('Location: ' . $_SERVER['PHP_SELF']);
+    header('Location: '.$_SERVER['PHP_SELF']);
     exit;
 }
 
-// SHOW STORE
-$products = getPrintfulProducts();
+// Remove from cart
+if (isset($_POST['remove_from_cart'])) {
+    $index = (int)$_POST['remove_index'];
+    if (isset($_SESSION['cart'][$index])) array_splice($_SESSION['cart'],$index,1);
+    header('Location: '.$_SERVER['PHP_SELF']);
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Tsunami Flow Store</title>
+</head>
 <body>
 <h1>Tsunami Flow Store</h1>
+
 <h2>Products</h2>
 <ul>
 <?php foreach ($products as $product): ?>
     <li>
-        <?php echo htmlspecialchars($product['name']); ?>
+        <?= htmlspecialchars($product['name']) ?>
         <form method="POST">
-            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+            <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
             <select name="variant_id">
                 <?php foreach ($product['sync_variants'] as $variant): ?>
-                    <option value="<?= $variant['id'] ?>"><?= htmlspecialchars($variant['name']) ?> - $<?= $variant['retail_price'] ?></option>
+                    <option value="<?= $variant['id'] ?>">
+                        <?= htmlspecialchars($variant['name']) ?> - $<?= $variant['retail_price'] ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <input type="number" name="quantity" value="1" min="1">
@@ -85,54 +95,41 @@ $products = getPrintfulProducts();
 </ul>
 
 <h2>Cart</h2>
-<?php if (!empty($_SESSION['cart'])): ?>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Subtotal</th>
-            <th>Action</th>
-        </tr>
-        <?php
-        $total = 0;
-        foreach ($_SESSION['cart'] as $index => $item):
-            $subtotal = $item['price'] * $item['quantity'];
-            $total += $subtotal;
-        ?>
-        <tr>
-            <td><?= htmlspecialchars($item['product_id']) ?></td>
-            <td><?= $item['quantity'] ?></td>
-            <td>$<?= number_format($item['price'], 2) ?></td>
-            <td>$<?= number_format($subtotal, 2) ?></td>
-            <td>
-                <form method="POST">
-                    <input type="hidden" name="remove_index" value="<?= $index ?>">
-                    <button name="remove_from_cart">Remove</button>
-                </form>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-        <tr>
-            <td colspan="3"><strong>Total</strong></td>
-            <td colspan="2"><strong>$<?= number_format($total, 2) ?></strong></td>
-        </tr>
-    </table>
+<?php if(!empty($_SESSION['cart'])): ?>
+<table border="1" cellpadding="5">
+<tr>
+    <th>Product</th>
+    <th>Quantity</th>
+    <th>Price</th>
+    <th>Subtotal</th>
+    <th>Action</th>
+</tr>
+<?php $total=0; foreach($_SESSION['cart'] as $i=>$item): 
+    $subtotal = $item['price']*$item['quantity'];
+    $total+=$subtotal;
+?>
+<tr>
+    <td><?= htmlspecialchars($variantNames[$item['variant_id']] ?? $item['variant_id']) ?></td>
+    <td><?= $item['quantity'] ?></td>
+    <td>$<?= number_format($item['price'],2) ?></td>
+    <td>$<?= number_format($subtotal,2) ?></td>
+    <td>
+        <form method="POST">
+            <input type="hidden" name="remove_index" value="<?= $i ?>">
+            <button name="remove_from_cart">Remove</button>
+        </form>
+    </td>
+</tr>
+<?php endforeach; ?>
+<tr>
+    <td colspan="3"><strong>Total</strong></td>
+    <td colspan="2"><strong>$<?= number_format($total,2) ?></strong></td>
+</tr>
+</table>
 <?php else: ?>
-    <p>Cart is empty</p>
+<p>Cart is empty</p>
 <?php endif; ?>
 
-<?php
-// REMOVE FROM CART
-if (isset($_POST['remove_from_cart'])) {
-    $index = (int)$_POST['remove_index'];
-    if (isset($_SESSION['cart'][$index])) {
-        array_splice($_SESSION['cart'], $index, 1);
-    }
-    header('Location: ' . $_SERVER['PHP_SELF']);
-    exit;
-}
-?>
 <h2>Checkout</h2>
 <form action="create_checkout.php" method="POST">
     <input name="name" placeholder="Full Name" required>
