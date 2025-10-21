@@ -14,7 +14,7 @@ include "server.php";
     <meta name="description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life" />
 
-    <!-- SEO & Social Meta >
+
     <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
@@ -22,7 +22,7 @@ include "server.php";
     <meta property="og:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
     <meta property="og:url" content="https://www.tsunamiflow.club">
     <meta property="og:type" content="website">
-    <!--meta property="fb:app_id" content="Your_App_ID"-->
+    <meta property="fb:app_id" content="Your_App_ID">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Tsunami Flow Club">
@@ -52,8 +52,7 @@ include "server.php";
         <meta name="mobile-web-app-capable" content="yes">
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
 
-    <!--meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="theme-color" content="#ffffff"-->
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <body id="theBody">
     <header id="tfHeaderFr">
@@ -402,6 +401,10 @@ include "server.php";
 <?php endif; ?>
 <script type="module" crossorigin="anonymous">
     import "./JS/tfMain.js";
+
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js").then(reg => console.log("Service Worker Register", reg.scope)).catch(err => console.warn("SW registration bad: ", err));
+    }
 </script>
 </footer>
 </body>
