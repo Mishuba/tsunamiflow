@@ -10,6 +10,11 @@ const PRECACHE = [
     "icons/192Logo.png",
     "icons/512Logo.png",
     "JS/tfMain.js",
+    "JS/Arrays.js",
+    "JS/Classes.js",
+    "JS/Objects.js",
+    "JS/Variables.js",
+    "JS/Words.js",
     "MyStyle/tfMain.css",
     OFFLINE_URL
 ];
