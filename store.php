@@ -28,11 +28,32 @@ function getPrintfulProducts() {
 }
 
 // ADD TO CART
+// ADD TO CART
 if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
     $variant_id = $_POST['variant_id'];
     $quantity = (int)$_POST['quantity'];
-    $_SESSION['cart'][] = compact('product_id', 'variant_id', 'quantity');
+
+    // Fetch variant price from Printful
+    $products = getPrintfulProducts();
+    $variant_price = 0;
+    foreach ($products as $product) {
+        if ($product['id'] == $product_id) {
+            foreach ($product['sync_variants'] as $variant) {
+                if ($variant['id'] == $variant_id) {
+                    $variant_price = floatval($variant['retail_price']); // in dollars
+                    break 2;
+                }
+            }
+        }
+    }
+
+    $_SESSION['cart'][] = [
+        'product_id' => $product_id,
+        'variant_id' => $variant_id,
+        'quantity' => $quantity,
+        'price' => $variant_price
+    ];
     header('Location: ' . $_SERVER['PHP_SELF']);
     exit;
 }
