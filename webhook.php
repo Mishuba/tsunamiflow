@@ -13,6 +13,27 @@ $payload = @file_get_contents('php://input');
 $sig_header = $_SERVER['HTTP_STRIPE_SIGNATURE'];
 $endpoint_secret = 'YOUR_STRIPE_WEBHOOK_SECRET';
 
+function sendReceipt($to, $orderDetails) {
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.yourserver.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'your@email.com';
+        $mail->Password = 'yourpassword';
+        $mail->SMTPSecure = 'tls';
+        $mail->Port = 587;
+
+        $mail->setFrom('your@email.com', 'Tsunami Flow Store');
+        $mail->addAddress($to);
+        $mail->Subject = 'Your Receipt';
+        $mail->Body = "Thank you for your order!\n\n" . print_r($orderDetails, true);
+        $mail->send();
+    } catch (Exception $e) {
+        error_log("Mailer Error: ".$e->getMessage());
+    }
+}
+
 try {
     $event = \Stripe\Webhook::constructEvent(
         $payload, $sig_header, $endpoint_secret
