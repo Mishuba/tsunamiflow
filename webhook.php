@@ -67,6 +67,9 @@ if ($event->type === 'checkout.session.completed') {
 
     // Send receipt
     sendReceipt($session->customer_email, $order_response);
+
+// Optional: clear cart after webhook triggers
+$_SESSION['cart'] = [];
 }
 
 http_response_code(200);
