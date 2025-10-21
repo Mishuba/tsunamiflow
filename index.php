@@ -19,7 +19,7 @@ include "server.php";
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
-    <meta property="og:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
+    <meta property="og:image" content="/icons/192Logo.png">
     <meta property="og:url" content="https://www.tsunamiflow.club">
     <meta property="og:type" content="website">
     <meta property="fb:app_id" content="Your_App_ID">
@@ -28,7 +28,7 @@ include "server.php";
     <meta name="twitter:title" content="Tsunami Flow Club">
     <meta name="twitter:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
-    <meta name="twitter:image" content="/Pictures/Logo/Tsunami Flow Logo.png">
+    <meta name="twitter:image" content="/icons/192Logo.png">
 
     <meta name="google-site-verification" content="Yae7Q7bC5eK9FjTbjARZOisTwVTVknEe0tLWT4EiVqU" />
     <meta name="google-adsense-account" content="ca-pub-1650194129657038"-->
@@ -50,7 +50,10 @@ include "server.php";
         <link rel="manifest" href="/manifest.json">
         <meta name="theme-color" content="#000000">
         <meta name="mobile-web-app-capable" content="yes">
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/icons/192Logo.png">
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
