@@ -5,7 +5,7 @@ require 'config.php';
 
 use Stripe\Stripe;
 
-Stripe::setApiKey(TfStripeSecretKey);
+Stripe::setApiKey(getenv("TfStripeSecretKey"));
 
 // Init cart
 if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
