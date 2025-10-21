@@ -21,7 +21,7 @@ foreach ($_SESSION['cart'] as $item) {
             'product_data' => [
                 'name' => 'Product '.$item['product_id'],
             ],
-            'unit_amount' => 2000, // replace with real price in cents
+            'unit_amount' => intval($item['price'] * 100), // Stripe wants cents
         ],
         'quantity' => $item['quantity'],
     ];
