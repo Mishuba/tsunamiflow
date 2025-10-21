@@ -13,7 +13,7 @@ if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 // Fetch Printful products
 function getPrintfulProducts() {
     $ch = curl_init('https://api.printful.com/store/products');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . printfulApiKey]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv("PrintfulApiKey")]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
     curl_close($ch);
