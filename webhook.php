@@ -37,7 +37,7 @@ function sendReceipt($to, $orderDetails) {
 // Helper: fetch Printful products
 function getPrintfulProducts() {
     $ch = curl_init('https://api.printful.com/store/products');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv("PrintfulApiKey")]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
     curl_close($ch);
@@ -99,7 +99,7 @@ if ($event->type === 'checkout.session.completed') {
     // Create order on Printful
     $ch = curl_init('https://api.printful.com/orders');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        "Authorization: Bearer " . getenv("PrintfulApiKey"),
+        "Authorization: Bearer " . PRINTFUL_API_KEY,
         "Content-Type: application/json"
     ]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
