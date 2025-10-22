@@ -1,6 +1,7 @@
 <?php
 // --- Required files & namespaces ---
 require_once "Arrays.php";
+require_once "config.php";
 require_once "stripestuff/vendor/autoload.php";
 
 use Stripe\StripeClient;
