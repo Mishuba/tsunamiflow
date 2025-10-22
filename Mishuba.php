@@ -32,6 +32,10 @@ async function startStream() {
     document.getElementById("preview").srcObject = mediaStream;
 
     // Use MediaRecorder to send WebM chunks
+   if(!MediaRecorder.isTypeSupported(mime)) {
+    alert("WebM VP8/Opus not supported in this browser");
+      return;
+    } else {
     const recorder = new MediaRecorder(mediaStream, { mimeType: "video/webm; codecs=vp8,opus" });
 
     recorder.ondataavailable = (event) => {
@@ -42,10 +46,15 @@ async function startStream() {
         }
     };
 
-    recorder.start(200); // 200ms chunks for low latency
+    recorder.start(300); // 200ms chunks for low latency
+     }
 }
 
 startStream();
+
+ws.onclose = () => {
+    if (ws) stop();
+};
 </script>
 </body>
 </html>
