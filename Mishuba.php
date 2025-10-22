@@ -1,126 +1,75 @@
-<?php
-
-?>
+<?php require "config.php"; ?>
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mishuba Go Live</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Mishuba Go Live</title>
 </head>
 <body>
-    <h1>Go Live</h1>
-    <video id="MishubaLive" autoplay muted playsinline></video>
+  <h1>Mishuba Go Live</h1>
 
-    <button id="StartLiveButton">Start Live</button>
-    <button id="StopLiveButton" disabled>Stop Live</button>
+  <video id="preview" autoplay muted playsinline></video><br>
+  <input id="streamKey" placeholder="Enter Stream Key" />
+  <button id="start">Start Live</button>
+  <button id="stop" disabled>Stop</button>
 
-    <h2>Stream Info</h2>
-    <form id="metaForm">
-        <label>Title</label><br />
-        <input name="title" id="title" placeholder="Stream Title" /><br />
+  <script>
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const preview = document.getElementById("preview");
+    let ws, rec, stream;
 
-        <label>Description</label><br />
-        <textarea name="description" id="description" placeholder="Stream Description"></textarea><br />
+    startBtn.onclick = async () => {
+      const key = document.getElementById("streamKey").value.trim();
+      if (!key) return alert("Enter stream key");
 
-        <button type="submit">Update Twitch Stream</button>
-    </form>
+      startBtn.disabled = true;
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
+      } catch (e) {
+        alert("Camera/mic denied");
+        startBtn.disabled = false;
+        return;
+      }
 
-    <script>
-        const StartButton = document.getElementById("StartLiveButton");
-        const StopButton = document.getElementById("StopLiveButton");
-        const videoEl = document.getElementById("MishubaLive");
+      preview.srcObject = stream;
 
-        let wss = null;
-        let mediaRecorder = null;
-        let localStream = null;
+      ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
+      ws.binaryType = "arraybuffer";
 
-        StartButton.addEventListener("click", start);
-        StopButton.addEventListener("click", stop);
+      ws.onopen = () => {
+        const mime = "video/webm;codecs=vp8,opus";
+        rec = new MediaRecorder(stream, { mimeType: mime });
+        rec.ondataavailable = async e => {
+          if (e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
+            const buf = await e.data.arrayBuffer();
+            ws.send(buf);
+          }
+        };
+        rec.start(1000);
+        stopBtn.disabled = false;
+        console.log("Streaming started");
+      };
 
-        document.getElementById("metaForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
-            const title = document.getElementById("title").value;
-            const description = document.getElementById("description").value;
-            try {
-                console.log("Would send Twitch metadata:", { title, description });
-                // Add your fetch() call here
-            } catch (error) {
-                console.error("Meta update error", error);
-                alert("Failed to update Twitch metadata");
-            }
-        });
+      ws.onerror = e => console.error("WS error", e);
+      ws.onclose = () => stop();
+    };
 
-        function log(...args) {
-            console.log("[MishubaLive]", ...args);
-        }
+    stopBtn.onclick = stop;
 
-        async function start() {
-            StartButton.disabled = true;
-            log("Requesting camera/mic...");
-            try {
-                localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-                videoEl.srcObject = localStream;
-                videoEl.play();
-            } catch (error) {
-                log("GetUserMedia error:", error);
-                StartButton.disabled = false;
-                return;
-            }
-
-            wss = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>");
-            wss.binaryType = "arraybuffer";
-
-            wss.onopen = () => {
-                log("WSS connected, starting MediaRecorder...");
-                let mime = "video/webm;codecs=vp8,opus";
-                if (!MediaRecorder.isTypeSupported(mime)) mime = "video/webm";
-
-                try {
-                    mediaRecorder = new MediaRecorder(localStream, { mimeType: mime });
-                } catch (error) {
-                    log("MediaRecorder error:", error);
-                    alert("MediaRecorder not supported");
-                    return;
-                }
-
-                mediaRecorder.ondataavailable = async (event) => {
-                    if (event.data && event.data.size > 0 && wss.readyState === WebSocket.OPEN) {
-                        const buffer = await event.data.arrayBuffer();
-                        wss.send(buffer);
-                    }
-                };
-
-                mediaRecorder.onstop = () => {
-                    log("Recorder stopped");
-                    if (wss.readyState === WebSocket.OPEN) {
-                        wss.send(JSON.stringify({ event: "END" }));
-                    }
-                };
-
-                mediaRecorder.start(1000);
-                StopButton.disabled = false;
-                log("Recording started");
-            };
-
-            wss.onmessage = (msg) => log("Server:", msg.data);
-            wss.onclose = () => { log("WSS closed"); stop(); };
-            wss.onerror = (err) => log("WSS error:", err);
-        }
-
-        function stop() {
-            StopButton.disabled = true;
-            StartButton.disabled = false;
-            if (mediaRecorder && mediaRecorder.state !== "inactive") mediaRecorder.stop();
-            if (localStream) {
-                localStream.getTracks().forEach(t => t.stop());
-                videoEl.srcObject = null;
-                localStream = null;
-            }
-            if (wss && wss.readyState === WebSocket.OPEN) wss.close();
-            wss = null;
-            log("Stopped live");
-        }
-    </script>
+    function stop() {
+      stopBtn.disabled = true;
+      startBtn.disabled = false;
+      if (rec && rec.state !== "inactive") rec.stop();
+      if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        preview.srcObject = null;
+      }
+      if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+      ws = null;
+      console.log("Streaming stopped");
+    }
+  </script>
 </body>
 </html>
