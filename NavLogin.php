@@ -1,4 +1,6 @@
 <?php
+
+require 'config.php';
 header("Access-Control-Allow-Origin: *");
 
 // Allow specific headers
@@ -6,11 +8,6 @@ header("Access-Control-Allow-Headers: X-Requested-With, Content-Type");
 
 // Allow specific methods
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-// Constants 
-define('TF_HOSTNAME', 'sql108.infinityfree.com');
-define('TF_DATABASE_NAME', 'epiz_33663768_tycadome');
-define('TF_DB_USERNAME', 'epiz_33663768');
-define('TF_DB_PASSWORD', 'MyLife34KT');
 
 /* Functions */
 // Input sanitization
@@ -55,7 +52,7 @@ if(!empty($_POST["NavUserName"])) {
 
     // Check for validation errors
     if (is_string($tfUsername) && is_string($tfPassword)) {
-        $dsn = "mysql:host=" . TF_HOSTNAME . ";dbname=" . TF_DATABASE_NAME;
+        $dsn = "mysql:host=" . NANO_HOST . ";dbname=" . NANO_DB;
         $options = [
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -63,7 +60,7 @@ if(!empty($_POST["NavUserName"])) {
         ];
 
         try {
-            $pdo = new PDO($dsn, TF_DB_USERNAME, TF_DB_PASSWORD, $options);
+            $pdo = new PDO($dsn, NANO_USER, NANO_PSW, $options);
 
             // Check user
             $stmt = $pdo->prepare("SELECT * FROM FreeLevelMembers WHERE tfUN = :username");
