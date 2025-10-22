@@ -14,11 +14,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // --- NanoTech Database Credentials ---
-$nanoH = getenv("NanoHost");
-$nanoP = getenv("NanoPort");
-$nanoDb = getenv("NanoDB");
-$nanoU = getenv("NanoUser");
-$nanoPsw = getenv("NanoPsw");
+$nanoH = NANO_HOST;
+$nanoP = NANO_PORT;
+$nanoDb = NANO_DB;
+$nanoU = NANO_USER;
+$nanoPsw = NANO_PSW;
 $nanoDSN = "pgsql:host=$nanoH;port=$nanoP;dbname=$nanoDb;sslmode=require;channel_binding=require";
 
 // --- Input ---
@@ -345,7 +345,7 @@ function Login() {
 // --- Printful functions ---
 function BasicPrintfulRequest(): ?array {
     $ch = curl_init('https://api.printful.com/' . "store/products");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv('PrintfulApiKey')]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
@@ -355,7 +355,7 @@ function BasicPrintfulRequest(): ?array {
 
 function PrintfulProductionDescription($productId): ?array {
     $ch = curl_init('https://api.printful.com/' . "store/products/$productId");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv('PrintfulApiKey')]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
@@ -372,7 +372,7 @@ function NPOtfTS(array $orderData): ?int {
     $ch = curl_init('https://api.printful.com/orders');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . getenv('PrintfulApiKey'),
+        'Authorization: Bearer ' . PRINTFUL_API_KEY,
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -387,7 +387,7 @@ function NPOtfTS(array $orderData): ?int {
 }
 
 function CreatePrintfulOrder(array $cartItems, array $customer): array {
-    $apiKey = getenv('PrintfulApiKey');
+    $apiKey = PRINTFUL_API_KEY;
     if (!$apiKey) return ['error' => 'Missing Printful API key'];
 
     $order = [
@@ -413,7 +413,7 @@ function CreatePrintfulOrder(array $cartItems, array $customer): array {
 
     $ch = curl_init('https://api.printful.com/orders');
     curl_setopt($ch, CURLOPT_HTTPHEADER, [
-        'Authorization: Bearer ' . getenv('PrintfulApiKey'),
+        'Authorization: Bearer ' . PRINTFUL_API_KEY,
         'Content-Type: application/json'
     ]);
     curl_setopt($ch, CURLOPT_POST, true);
@@ -432,7 +432,7 @@ function CreatePrintfulOrder(array $cartItems, array $customer): array {
 
 // -------- Stripe Checkout Session --------
 function CreateStripeCheckout(array $cartItems, string $successUrl, string $cancelUrl): array {
-    $stripe = new StripeClient(getenv('StripeSecretKey'));
+    $stripe = new StripeClient(STRIPE_SECRET_KEY);
     $lineItems = [];
 
     foreach ($cartItems as $item) {
