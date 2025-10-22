@@ -1,75 +1,51 @@
-<?php require "config.php"; ?>
+<?php
+require "config.php";
+?>
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Mishuba Go Live</title>
+    <meta charset="UTF-8">
+    <title>TsunamiFlow Stream</title>
 </head>
 <body>
-  <h1>Mishuba Go Live</h1>
+<video id="preview" autoplay muted></video>
 
-  <video id="preview" autoplay muted playsinline></video><br>
-  <input id="streamKey" placeholder="Enter Stream Key" />
-  <button id="start">Start Live</button>
-  <button id="stop" disabled>Stop</button>
+<script>
+const wsUrl = "<? EC2_WEBSOCKET ?>";
+const ws = new WebSocket(wsUrl);
 
-  <script>
-    const startBtn = document.getElementById("start");
-    const stopBtn = document.getElementById("stop");
-    const preview = document.getElementById("preview");
-    let ws, rec, stream;
+// Set binary type to send raw blobs
+ws.binaryType = "arraybuffer";
 
-    startBtn.onclick = async () => {
-      const key = document.getElementById("streamKey").value.trim();
-      if (!key) return alert("Enter stream key");
+ws.onopen = () => {
+    console.log("🌊 Connected to WebSocket server");
+};
 
-      startBtn.disabled = true;
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-      } catch (e) {
-        alert("Camera/mic denied");
-        startBtn.disabled = false;
-        return;
-      }
+ws.onmessage = (msg) => {
+    const data = JSON.parse(msg.data);
+    console.log("Received:", data);
+};
 
-      preview.srcObject = stream;
+// Capture webcam + microphone
+async function startStream() {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+    document.getElementById("preview").srcObject = mediaStream;
 
-      ws = new WebSocket("<?php echo(EC2_WEBSOCKET); ?>?key=" + encodeURIComponent(key));
-      ws.binaryType = "arraybuffer";
+    // Use MediaRecorder to send WebM chunks
+    const recorder = new MediaRecorder(mediaStream, { mimeType: "video/webm; codecs=vp8,opus" });
 
-      ws.onopen = () => {
-        const mime = "video/webm;codecs=vp8,opus";
-        rec = new MediaRecorder(stream, { mimeType: mime });
-        rec.ondataavailable = async e => {
-          if (e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
-            const buf = await e.data.arrayBuffer();
-            ws.send(buf);
-          }
-        };
-        rec.start(1000);
-        stopBtn.disabled = false;
-        console.log("Streaming started");
-      };
-
-      ws.onerror = e => console.error("WS error", e);
-      ws.onclose = () => stop();
+    recorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+            event.data.arrayBuffer().then(buffer => {
+                ws.send(buffer);
+            });
+        }
     };
 
-    stopBtn.onclick = stop;
+    recorder.start(200); // 200ms chunks for low latency
+}
 
-    function stop() {
-      stopBtn.disabled = true;
-      startBtn.disabled = false;
-      if (rec && rec.state !== "inactive") rec.stop();
-      if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-        preview.srcObject = null;
-      }
-      if (ws && ws.readyState === WebSocket.OPEN) ws.close();
-      ws = null;
-      console.log("Streaming stopped");
-    }
-  </script>
+startStream();
+</script>
 </body>
 </html>
