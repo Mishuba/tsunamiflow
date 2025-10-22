@@ -7,6 +7,8 @@ ini_set("session.gc_maxlifetime", 3600);
 ini_set("session.cookie_lifetime", 0);
 ini_set("session.use_strict_mode", true);
 
+require "config.php";
+
 session_start();
 
 header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
@@ -66,7 +68,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
     } else if (videoRemote.canPlayType('application/vnd.apple.mpegurl')) {
         videoRemote.src = videoSrc;
     }
-        const socket = new WebSocket("<?php echo(getenv("Ec2Websocket")) ?>");
+        const socket = new WebSocket("<?php echo(EC2_WEB_SOCKET) ?>");
 
         socket.onmessage = async function(event) {
             const data = JSON.parse(event.data);
