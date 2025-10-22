@@ -1,11 +1,12 @@
 <?php
 session_start();
 require '/stripestuff/vendor/autoload.php';
+require 'config.php';
 
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
-Stripe::setApiKey(getenv("StripeSecretKey"));
+Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 if (empty($_SESSION['cart'])) die('Cart is empty');
 
