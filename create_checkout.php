@@ -5,7 +5,7 @@ require '/stripestuff/vendor/autoload.php';
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 
-Stripe::setApiKey(getenv("TfStripeSecretKey"));
+Stripe::setApiKey(getenv("StripeSecretKey"));
 
 if (empty($_SESSION['cart'])) die('Cart is empty');
 
@@ -25,8 +25,8 @@ $session = Session::create([
     'payment_method_types'=>['card'],
     'line_items'=>$line_items,
     'mode'=>'payment',
-    'success_url'=>'https://yourdomain.com/success.php?session_id={CHECKOUT_SESSION_ID}',
-    'cancel_url'=>'https://yourdomain.com/cancel.php',
+    'success_url'=>'https://tsunamiflow.club/success.php?session_id={CHECKOUT_SESSION_ID}',
+    'cancel_url'=>'https://tsunamiflow.club/failed.php',
     'customer_email'=>$_POST['email'],
     'metadata'=>[
         'cart'=>json_encode($_SESSION['cart']),

@@ -109,5 +109,4 @@ function WorkgetThoughts(){
 }
 //Gets Thoughts Ends
 //Database Ends
-
 ?>

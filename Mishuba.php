@@ -72,7 +72,7 @@ require "config.php";
                     let source = document.createElement("video");
                     source.srcObject = localStream;
 
-                    wss = new WebSocket(<?php echo (tfWebSocket); ?>); //wss://world.tsunamiflow.club/websocket?secret="Mishuba2FlyLive"
+                    wss = new WebSocket(<?php echo (getenv("Ec2Websocket")); ?>); //wss://world.tsunamiflow.club/websocket?secret="Mishuba2FlyLive"
 
                     wss.binaryType = "arrayBuffer";
 

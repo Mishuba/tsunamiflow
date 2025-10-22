@@ -5,7 +5,6 @@ require '/stripestuff/vendor/autoload.php';
 use Stripe\Stripe;
 use Stripe\Webhook;
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
 
 Stripe::setApiKey(TfStripeSecretKey);
 
@@ -18,7 +17,7 @@ $endpoint_secret = 'YOUR_STRIPE_WEBHOOK_SECRET'; // Replace this
 function sendReceipt($to, $orderDetails) {
     $mail = new PHPMailer(true);
     try {
-        $mail->setFrom(TfEmailFr, 'Tsunami Flow Store');
+        $mail->setFrom(getenv("TfEmailFr"), 'Tsunami Flow Store');
         $mail->addAddress($to);
         $mail->Subject = 'Your Tsunami Flow Store Receipt';
 

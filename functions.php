@@ -432,7 +432,7 @@ function CreatePrintfulOrder(array $cartItems, array $customer): array {
 
 // -------- Stripe Checkout Session --------
 function CreateStripeCheckout(array $cartItems, string $successUrl, string $cancelUrl): array {
-    $stripe = new \Stripe\StripeClient(getenv('StripeSecretKey'));
+    $stripe = new StripeClient(getenv('StripeSecretKey'));
     $lineItems = [];
 
     foreach ($cartItems as $item) {
@@ -466,6 +466,7 @@ function CreateStripeCheckout(array $cartItems, string $successUrl, string $canc
 
 //Email
 function sendReceipt($to, $orderDetails) {
+    /*
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();
@@ -484,6 +485,7 @@ function sendReceipt($to, $orderDetails) {
     } catch (Exception $e) {
         error_log("Mailer Error: ".$e->getMessage());
     }
+        */
 }
 
 

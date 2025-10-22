@@ -137,7 +137,7 @@ try {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
 
-            $checkout = CreateStripeCheckout($cartItems, "$domain/server.php?type=Printful Checkout", "$domain/checkout_cancel.php");
+            $checkout = CreateStripeCheckout($cartItems, "$domain/server.php?type=Printful Checkout", "$domain/cancelled.php");
             respond([
                 'success' => !empty($checkout['success']),
                 'checkout_url' => $checkout['url'] ?? null,

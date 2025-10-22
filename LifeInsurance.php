@@ -58,7 +58,7 @@
             {word: "Lloyds of London", definition: "This is NOT an insurer but a group of individuals and companies that underwrite unusual insurance policies."},
             {word: "Marketing Division", definition: "This is the division that's responsible for acquiring prospective applicants through various advertising media."},
             {word: "Monoline Insurer", definition: "This is an insurance carrier that only sells one line of insurance."},
-            {word: "Multi-Line Insurer", definition: "This is an insurance company or independent agent that provides a "one-stop-shop" for businesses or individuals who are seeking coverage for all of their insurance needs. For example, many large insurers offer individual policies for automobile, homeowner, long-terms care, life and health insurance needs."},
+            {word: "Multi-Line Insurer", definition: "This is an insurance company or independent agent that provides a 'one-stop-shop' for businesses or individuals who are seeking coverage for all of their insurance needs. For example, many large insurers offer individual policies for automobile, homeowner, long-terms care, life and health insurance needs."},
             {word: "Mutual Insurance Company", definition: "This is an insurance comapny that's characterized by having no capital stock, being owned by their policy owners, and typically issuing participating insurance."},
             {word: "Non-Admitted (Unauthorized) Insurer", definition: "This is an insurer that has not received a certificiate of authority from a state's department of insurance which authorizes it to conduct insurance business in that state."},
             {word: "Nonparticipating Policy", definition: "This is a policy that's typically issued by stock companies. This tpe of policy doesn't allow policy owners to participate in dividends or to elect the boards of directors. "},
@@ -103,31 +103,31 @@
                     info3: "Self-Insurers: Although self-insurance is not a method of transferring risk, it's an important concept to understand. Rather than transfer risk to an insurance company, a self-insurer establishes a self-funded plan to cover potential losses.",
                     info4: ""
                 }
-            }
+            },
             {
                 section: "Insurer Classifications",
                 content: {
 
                 }
-            }
+            },
             {
                 section: "Departments Within an Insurance Company",
                 content: {
 
                 }
-            }
+            },
             {
                 section: "Key People Within an Insurance Company",
                 content: {
 
                 }
-            }
+            },
             {
                 section: "How Insurance is Sold",
                 content: {
 
                 }
-            }
+            },
             {
                 section: "Evolution of Industry Oversight",
                 content: {
@@ -144,10 +144,10 @@
                 }
             }
 
-        ]
+        ];
         let Chapter1 = LifeInsurance(Chapter1KeyTerms);
 
-        let ChapterKeyWords = [
+        let Chapter1KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -190,11 +190,11 @@
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""}
-        ]
+        ];
 
         let Chapter2 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter2KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -241,7 +241,7 @@
 
         let Chapter3 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter3KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -288,7 +288,7 @@
 
         let Chapter4 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter4KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -335,7 +335,7 @@
 
         let Chapter5 = new LifeInsurance();
 
-let ChapterKeyWords = [
+let Chapter5KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -381,7 +381,7 @@ let ChapterKeyWords = [
         ];
 
         let Chapter6 = new LifeInsurance();
-        let ChapterKeyWords = [
+        let Chapter6KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -427,7 +427,7 @@ let ChapterKeyWords = [
         ]
         let Chapter7 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter7KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -474,7 +474,7 @@ let ChapterKeyWords = [
 
         let Chapter9 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter9KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -521,7 +521,7 @@ let ChapterKeyWords = [
 
         let Chapter10 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter10KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -568,7 +568,7 @@ let ChapterKeyWords = [
 
         let Chapter11 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter11KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -615,7 +615,7 @@ let ChapterKeyWords = [
 
         let Chapter12 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter12KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -662,7 +662,7 @@ let ChapterKeyWords = [
 
         let Chapter13 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter13KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -709,7 +709,7 @@ let ChapterKeyWords = [
 
         let Chapter14 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter14KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -756,7 +756,7 @@ let ChapterKeyWords = [
 
         let Chapter15 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter15KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -803,7 +803,7 @@ let ChapterKeyWords = [
 
         let Chapter16 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter16KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -850,7 +850,7 @@ let ChapterKeyWords = [
 
         let Chapter17 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter17KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -897,7 +897,7 @@ let ChapterKeyWords = [
 
         let Chapter18 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter18KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},
@@ -944,7 +944,7 @@ let ChapterKeyWords = [
 
         let Chapter19 = new LifeInsurance();
 
-        let ChapterKeyWords = [
+        let Chapter19KeyWords = [
             {word: "", definition: ""},
             {word: "", definition: ""},
             {word: "", definition: ""},

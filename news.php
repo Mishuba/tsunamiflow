@@ -66,9 +66,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
     } else if (videoRemote.canPlayType('application/vnd.apple.mpegurl')) {
         videoRemote.src = videoSrc;
     }
-        const socket = new WebSocket('wss://world.tsunamiflow.club/websocket');
-        //(ws://world.tsunamiflow.club:8080)
-        //(wss://world.tsunamiflow.club/wss)
+        const socket = new WebSocket(<?php echo(getenv("Ec2Websocket")) ?>);
 
         socket.onmessage = async function(event) {
             const data = JSON.parse(event.data);
