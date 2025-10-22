@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+require_once "config,php";
 require_once "functions.php";
 
 use Stripe\StripeClient;
@@ -59,7 +60,7 @@ if (isApiRequest()) {
 // ----------------------------
 // Initialize Services
 // ----------------------------
-$stripe = new StripeClient(getenv("StripeSecretKey"));
+$stripe = new StripeClient(STRIPE_SECRET_KEY);
 $domain = "https://www.tsunamiflow.club";
 
 // ----------------------------
