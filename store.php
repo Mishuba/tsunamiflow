@@ -1,10 +1,11 @@
 <?php
 session_start();
+require 'config.php';
 require '/stripestuff/vendor/autoload.php';
 
 use Stripe\Stripe;
 
-Stripe::setApiKey(getenv("TfStripeSecretKey"));
+Stripe::setApiKey(STRIPE_SECRET_KEY);
 
 // Init cart
 if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
@@ -12,7 +13,7 @@ if (!isset($_SESSION['cart'])) $_SESSION['cart'] = [];
 // Fetch Printful products
 function getPrintfulProducts() {
     $ch = curl_init('https://api.printful.com/store/products');
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . getenv("PrintfulApiKey")]);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $result = curl_exec($ch);
     curl_close($ch);
