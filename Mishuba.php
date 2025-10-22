@@ -35,7 +35,7 @@
 
       preview.srcObject = stream;
 
-      ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
+      ws = new WebSocket("<?php echo(EC2_WEBSOCKET); ?>?key=" + encodeURIComponent(key));
       ws.binaryType = "arraybuffer";
 
       ws.onopen = () => {
