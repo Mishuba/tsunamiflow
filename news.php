@@ -1,44 +1,37 @@
 <?php
-// ====================
-// PHP CONFIG & SESSION
-// ====================
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Secure session settings
-ini_set("session.cookie_secure", 1); // HTTPS only
-ini_set("session.cookie_httponly", 1); // JS cannot access cookie
+// Secure session
+ini_set("session.cookie_secure", 1);
+ini_set("session.cookie_httponly", 1);
 ini_set("session.use_strict_mode", 1);
 ini_set("session.gc_maxlifetime", 3600);
 ini_set("session.cookie_lifetime", 0);
 
 // Load config
 require "config.php";
-
-// Start session
 session_start();
 
-// ====================
-// CORS HEADERS
-// ====================
+// -------------------------
+// CORS
+// -------------------------
 $allowedOrigins = [
     'https://www.tsunamiflow.club',
     'https://world.tsunamiflow.club',
     'https://tsunamiflow.club'
 ];
-
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 if (in_array($origin, $allowedOrigins)) {
     header("Access-Control-Allow-Origin: $origin");
     header("Access-Control-Allow-Credentials: true");
 }
-
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
 
-// ====================
+// -------------------------
 // SECURITY HEADERS
-// ====================
+// -------------------------
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: SAMEORIGIN");
@@ -48,6 +41,23 @@ header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Resource-Policy: same-origin");
+
+// -------------------------
+// Content Security Policy
+// -------------------------
+$csp = "
+default-src 'self';
+script-src 'self' https://cdn.jsdelivr.net https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club;
+style-src 'self' 'unsafe-inline';
+connect-src 'self' wss://world.tsunamiflow.club https://world.tsunamiflow.club https://www.tsunamiflow.club https://tsunamiflow.club;
+img-src 'self' data:;
+media-src https://world.tsunamiflow.club;
+object-src 'none';
+base-uri 'self';
+form-action 'self';
+frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club;
+";
+header("Content-Security-Policy: $csp");
 ?>
 <!DOCTYPE html>
 <html lang="en">
