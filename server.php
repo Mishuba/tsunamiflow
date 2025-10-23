@@ -19,7 +19,7 @@ if (isApiRequest()) {
     ];
     if (!empty($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+        header("Access-Control-Allow-Methods: GET, POST");
         header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
     }
     if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit(http_response_code(200));
