@@ -64,6 +64,29 @@ function handleDatabaseError($e){
     }
 }
 
+function respond(array $data, int $code = 200): void {
+    if (!isApiRequest()) return; // Do nothing if included in HTML page
+    http_response_code($code);
+    header('Content-Type: application/json; charset=utf-8');
+    exit(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
+}
+
+function addToCart(array $product, int $quantity): array {
+    $cartItem = $product + ['quantity' => $quantity, 'added_at' => date('c')];
+    $_SESSION['ShoppingCartItems'] ??= [];
+
+    foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
+        if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
+            $existing['quantity'] += $cartItem['quantity'];
+            return ['merged' => true, 'item' => $existing];
+        }
+    }
+    unset($existing);
+
+    $_SESSION['ShoppingCartItems'][] = $cartItem;
+    return ['merged' => false, 'item' => $cartItem];
+}
+
 function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
     try {
