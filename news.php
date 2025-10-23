@@ -1,6 +1,18 @@
 <?php
 // PHP section to safely output variables
 session_start();
+
+$allowedOrigins = [
+    'https://www.tsunamiflow.club',
+    'https://tsunamiflow.club',
+    'https://world.tsunamiflow.club'
+];
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+}
+
 $guest = $_SESSION['username'] ?? 'Guest';
 $videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
 ?>
