@@ -98,7 +98,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
         const chatBox = document.getElementById('chatBox');
         const input = document.getElementById('msg');
         const sendButton = document.getElementById("LiveStreamChat");
-        const guest = "<?php echo $_SESSION['username'] ?? 'Guest'; ?>";
+        const guest = "<?php echo json_encode($_SESSION['username'] ?? 'Guest'); ?>";
 
         // WebSocket connection
         const socket = new WebSocket("<?php echo EC2_WEB_SOCKET; ?>");
