@@ -1,25 +1,45 @@
 <?php
+// ====================
+// PHP CONFIG & SESSION
+// ====================
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-ini_set("session.cookie_secure", true);
-ini_set("session.cookie_httponly", "1");
+
+// Secure session settings
+ini_set("session.cookie_secure", 1); // HTTPS only
+ini_set("session.cookie_httponly", 1); // JS cannot access cookie
+ini_set("session.use_strict_mode", 1);
 ini_set("session.gc_maxlifetime", 3600);
 ini_set("session.cookie_lifetime", 0);
-ini_set("session.use_strict_mode", true);
 
+// Load config
 require "config.php";
 
+// Start session
 session_start();
 
-header("Access-Control-Allow-Origin: https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club");
-//header("Access-Control-Allow-Credentials: true");
+// ====================
+// CORS HEADERS
+// ====================
+$allowedOrigins = [
+    'https://www.tsunamiflow.club',
+    'https://world.tsunamiflow.club',
+    'https://tsunamiflow.club'
+];
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+}
+
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
-//header("Content-Security-Policy: default-src 'self'; script-src 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://world.tsunamiflow.club wss://www.tsunamiflow.club; img-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
-    /*
 
+// ====================
+// SECURITY HEADERS
+// ====================
 header("Strict-Transport-Security: max-age=31536000; includeSubDomains; preload");
-
 header("X-Content-Type-Options: nosniff");
 header("X-Frame-Options: SAMEORIGIN");
 header("X-XSS-Protection: 1; mode=block");
@@ -28,7 +48,6 @@ header("Permissions-Policy: camera=(), microphone=(), geolocation=()");
 header("Cross-Origin-Opener-Policy: same-origin");
 header("Cross-Origin-Embedder-Policy: require-corp");
 header("Cross-Origin-Resource-Policy: same-origin");
-*/
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,61 +56,89 @@ header("Cross-Origin-Resource-Policy: same-origin");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Chat</title>
     <style>
-        body { font-family: Arial, sans-serif; }
-        #chatBox { height: 300px; overflow-y: scroll; border: 1px solid black; margin-bottom: 10px; }
-        #msg { width: 80%; }
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #chatBox { height: 300px; overflow-y: scroll; border: 1px solid black; padding: 10px; margin-bottom: 10px; }
+        #msg { width: 80%; padding: 5px; }
+        #LiveStreamChat { padding: 5px 10px; }
+        video { width: 100%; max-width: 800px; margin-bottom: 20px; }
     </style>
-        <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-    <h1>Live Chat</h1>
-        <video id="stream" controls autoplay>
-            <!--type="application/x-mpegURL"-->
-        </video>
+    <h1>🎥 Live Chat</h1>
 
-    <h2>🎥 Live Chat</h2>
-        <div id="chatBox"></div>
-        <input id="msg" type="text" placeholder="Type a message...">
-        <button id="LiveStreamChat"></button></button>>Send</button>
+    <!-- VIDEO STREAM -->
+    <video id="stream" controls autoplay></video>
 
-    <script crossorigin="anonymous">
-        let videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
-        let videoRemote = document.getElementById("stream");
-        let chatBox = document.getElementById('chatBox');
-        let input = document.getElementById('msg');
-        let sendButton = document.getElementById("LiveStreamChat");
+    <!-- CHAT -->
+    <h2>💬 Live Chat</h2>
+    <div id="chatBox"></div>
+    <input id="msg" type="text" placeholder="Type a message...">
+    <button id="LiveStreamChat">Send</button>
 
-    if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(videoSrc);
-        hls.attachMedia(videoRemote);
-    } else if (videoRemote.canPlayType('application/vnd.apple.mpegurl')) {
-        videoRemote.src = videoSrc;
-    }
-        const socket = new WebSocket("<?php echo(EC2_WEB_SOCKET) ?>");
+    <script>
+        // ------------------------
+        // VIDEO STREAM SETUP
+        // ------------------------
+        const videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
+        const videoEl = document.getElementById("stream");
 
-        socket.onmessage = async function(event) {
-            const data = JSON.parse(event.data);
-            if(data["type"] === "welcome") {
-                chatBox.innerHTML += `<div><strong>${data.service}:</strong> ${data.message}</div><br />`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            } else if (data["type"] === "chat") {
-                chatBox.innerHTML += `<div><strong>${data.service}:</strong> ${data.message}</div><br />`;
-                chatBox.scrollTop = chatBox.scrollHeight;
-            } else {
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(videoEl);
+            hls.on(Hls.Events.ERROR, (event, data) => console.error("HLS error:", data));
+        } else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+            videoEl.src = videoSrc;
+        } else {
+            console.error("HLS not supported in this browser.");
+        }
 
+        // ------------------------
+        // CHAT SETUP
+        // ------------------------
+        const chatBox = document.getElementById('chatBox');
+        const input = document.getElementById('msg');
+        const sendButton = document.getElementById("LiveStreamChat");
+        const guest = "<?php echo $_SESSION['username'] ?? 'Guest'; ?>";
+
+        // WebSocket connection
+        const socket = new WebSocket("<?php echo EC2_WEB_SOCKET; ?>");
+
+        socket.onopen = () => console.log("WebSocket connected!");
+        socket.onclose = () => console.log("WebSocket disconnected.");
+        socket.onerror = (err) => console.error("WebSocket error:", err);
+
+        // Receive messages
+        socket.onmessage = function(event) {
+            try {
+                const data = JSON.parse(event.data);
+                if(data.type === "welcome" || data.type === "chat") {
+                    chatBox.innerHTML += `<div><strong>${data.service}:</strong> ${data.message}</div>`;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            } catch(e) {
+                console.error("Invalid WebSocket message:", event.data);
             }
         };
 
-        sendButton.addEventListener("click", async () => {
-            input.value
-            let newThing = {
+        // Send messages
+        sendButton.addEventListener("click", () => {
+            const message = input.value.trim();
+            if(!message) return;
+            const payload = {
                 type: "chat",
-                message: input.value,
+                message: message,
                 username: guest,
-                error: "",
-            } 
-            socket.postMessage(JSON.stringify(newThing));
+                error: ""
+            };
+            socket.send(JSON.stringify(payload));
+            input.value = "";
+        });
+
+        // Send on Enter key
+        input.addEventListener("keydown", (e) => {
+            if(e.key === "Enter") sendButton.click();
         });
     </script>
 </body>
