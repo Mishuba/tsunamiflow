@@ -34,7 +34,7 @@ $videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
 const chatBox = document.getElementById('chatBox');
 const input = document.getElementById('msg');
 const sendButton = document.getElementById("LiveStreamChat");
-const guest = <?php echo json_encode($_SESSION['username'] ?? 'Guest'); ?>;
+const guest = "<?php echo json_encode($_SESSION['username'] ?? 'Guest'); ?>";
 
 // ------------------------
 // VIDEO STREAM SETUP
@@ -60,7 +60,7 @@ let socket;
 let reconnectInterval = 2000;
 
 function connectWebSocket() {
-    socket = new WebSocket(<?php echo json_encode(EC2_WEB_SOCKET); ?>);
+    socket = new WebSocket("<?php echo json_encode(EC2_WEB_SOCKET); ?>");
 
     socket.onopen = () => console.log("WebSocket connected!");
     socket.onclose = () => {
