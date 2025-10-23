@@ -98,7 +98,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
         const chatBox = document.getElementById('chatBox');
         const input = document.getElementById('msg');
         const sendButton = document.getElementById("LiveStreamChat");
-        const guest = "tsunami flow guest";
+        const guest = "Guest";
 
         // WebSocket connection
         const socket = new WebSocket("<?php echo EC2_WEB_SOCKET; ?>");
