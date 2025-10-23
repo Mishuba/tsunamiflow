@@ -60,7 +60,7 @@ let socket;
 let reconnectInterval = 2000;
 
 function connectWebSocket() {
-    socket = new WebSocket("<?php echo json_encode(EC2_WEB_SOCKET); ?>");
+    socket = new WebSocket("<?php echo(EC2_WEB_SOCKET); ?>");
 
     socket.onopen = () => console.log("WebSocket connected!");
     socket.onclose = () => {
