@@ -7,13 +7,6 @@ use Stripe\StripeClient;
 // ----------------------------
 // Helper Functions
 // ----------------------------
-function isApiRequest(): bool {
-    // Detect if this is an AJAX or JSON API request
-    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
-        || str_contains($contentType, 'application/json')
-        || ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST));
-}
 
 // ----------------------------
 // CORS (only for API requests)
