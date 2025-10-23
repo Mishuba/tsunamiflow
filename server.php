@@ -172,6 +172,7 @@ try {
             }
 
             $costMap = ['regular' => 400, 'vip' => 700, 'team' => 1000];
+try {
             $s = $stripe->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'mode' => 'payment',
@@ -187,12 +188,21 @@ try {
                 'cancel_url'  => "$domain/failed.php",
                 'metadata'    => $userData
             ]);
+
+if (!empty($s->url)) {
+        header("Location: " . $s->url);
+        exit;
+    } else {
+        respond(['error' => 'Stripe session missing URL'], 500);
             header("Location: " . $s->url);
             exit;
         }
 
         respond(['error' => 'Invalid POST type'], 400);
     }
+} catch (\Stripe\Exception\ApiErrorException $e) {
+    respond(['error' => $e->getMessage()], 500);
+}
 
     if ($method === 'GET' && isApiRequest()) {
         if (isset($_GET['cart_action'])) {
