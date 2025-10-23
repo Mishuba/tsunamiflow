@@ -74,7 +74,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
     <input id="msg" type="text" placeholder="Type a message...">
     <button id="LiveStreamChat">Send</button>
 
-    <script>
+    <script data-cfasync>
         // ------------------------
         // VIDEO STREAM SETUP
         // ------------------------
