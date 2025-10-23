@@ -45,19 +45,7 @@ header("Cross-Origin-Resource-Policy: same-origin");
 // -------------------------
 // Content Security Policy
 // -------------------------
-$csp = "
-default-src 'self';
-script-src 'self' https://cdn.jsdelivr.net https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club;
-style-src 'self' 'unsafe-inline';
-connect-src 'self' wss://world.tsunamiflow.club https://world.tsunamiflow.club https://www.tsunamiflow.club https://tsunamiflow.club;
-img-src 'self' data:;
-media-src https://world.tsunamiflow.club;
-object-src 'none';
-base-uri 'self';
-form-action 'self';
-frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club;
-";
-header("Content-Security-Policy: $csp");
+$header("Content-Security-Policy: default-src 'self'; script-src 'self' https://cdn.jsdelivr.net https://www.tsunamiflow.club https://world.tsunamiflow.club https://tsunamiflow.club; style-src 'self' 'unsafe-inline'; connect-src 'self' wss://world.tsunamiflow.club https://world.tsunamiflow.club https://www.tsunamiflow.club https://tsunamiflow.club; img-src 'self' data:; media-src https://world.tsunamiflow.club; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self' https://www.tsunamiflow.club https://world.tsunamiflow.club");
 ?>
 <!DOCTYPE html>
 <html lang="en">
