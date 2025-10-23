@@ -34,7 +34,7 @@ $videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
 const chatBox = document.getElementById('chatBox');
 const input = document.getElementById('msg');
 const sendButton = document.getElementById("LiveStreamChat");
-const guest = "<?php echo json_encode($_SESSION['username'] ?? 'Guest'); ?>";
+const guest = "Guest";
 
 // ------------------------
 // VIDEO STREAM SETUP
