@@ -32,6 +32,14 @@ function getIpAddress() {
     return $_SERVER["REMOTE_ADDR"];
 }
 
+function isApiRequest(): bool {
+    // Detect if this is an AJAX or JSON API request
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
+        || str_contains($contentType, 'application/json')
+        || ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST));
+}
+
 function LogOut() {
     $_SESSION = [];
     session_unset();
@@ -142,7 +150,7 @@ function TsunamiDatabaseFlow(){
 
     // Run the SQL
     $pdo->exec($sql);
-    echo "✅ Table 'Members' verified or created successfully.";
+    error_log("✅ Table 'Members' verified or created successfully.");
 
 } catch (PDOException $e) {
     echo "❌ Database error: " . $e->getMessage();
@@ -280,7 +288,7 @@ function InputIntoDatabase(
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
 
         // --- Insert into FreeLevelMembers ---
-        $stmt = $db->prepare("INSERT INTO FreeLevelMembers (tfUN, tfFN, tfLN, tfNN, tfGen, tfBirth, tfEM, tfPSW, created)
+        $stmt = $db->prepare("INSERT INTO Members (tfUN, tfFN, tfLN, tfNN, tfGen, tfBirth, tfEM, tfPSW, created)
             VALUES (:tfUN, :tfFN, :tfLN, :tfNN, :tfGen, :tfBirth, :tfEM, :tfPSW, NOW())");
         $stmt->execute([
             ":tfUN" => $userName, ":tfFN" => $firstName, ":tfLN" => $lastName, ":tfNN" => $nickName,
@@ -344,7 +352,7 @@ function Login() {
 
     try {
         $pdo = TsunamiDatabaseFlow();
-        $stmt = $pdo->prepare("SELECT * FROM FreeLevelMembers WHERE tfUN = :username");
+        $stmt = $pdo->prepare("SELECT * FROM Members WHERE tfUN = :username");
         $stmt->bindParam(':username', $tfUsername, PDO::PARAM_STR);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -368,7 +376,7 @@ function Login() {
 // --- Printful functions ---
 function BasicPrintfulRequest(): ?array {
     $ch = curl_init('https://api.printful.com/' . "store/products");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
@@ -378,7 +386,7 @@ function BasicPrintfulRequest(): ?array {
 
 function PrintfulProductionDescription($productId): ?array {
     $ch = curl_init('https://api.printful.com/' . "store/products/$productId");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     if (curl_errno($ch)) { curl_close($ch); return null; }
