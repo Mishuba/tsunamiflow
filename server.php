@@ -4,6 +4,7 @@ require_once "config.php";
 require_once "functions.php";
 use Stripe\StripeClient;
 
+/*
 // ----------------------------
 // Helper Functions
 // ----------------------------
@@ -194,3 +195,4 @@ if (!empty($s->url)) {
 } catch (Exception $e) {
     respond(['error' => $e->getMessage()], 500);
 }
+*/
