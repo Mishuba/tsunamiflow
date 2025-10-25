@@ -354,7 +354,7 @@ include "server.php";
             Radio
         </audio> <!---->
     </article>
- <footer>
+<footer>
 <div id="TFstore">
     <h2>Tsunami Flow Store</h2>
     <ul>
@@ -371,10 +371,10 @@ include "server.php";
                 <?php $variants = getVariantandPrice($product['id']); ?>
                 <form class="cartForm" method="POST" action="server.php">
                     <?php if (!empty($variants['sync_variants'] ?? [])): ?>
-                        <select name="product_id" required>
+                        <select name="product_id" required class="variantSelect">
                             <?php foreach ($variants['sync_variants'] as $v): ?>
                                 <option value="<?php echo htmlspecialchars($v['id']); ?>"
-                                        data-price="<?php echo htmlspecialchars($v['retail_price'] ?? '0.00'); ?>">
+                                        data-price="<?php echo htmlspecialchars($v['retail_price'] ?? 0); ?>">
                                     <?php
                                     echo htmlspecialchars($v['name'] ?? 'Unknown');
                                     echo " (Price: $" . htmlspecialchars($v['retail_price'] ?? '0.00') . ")";
@@ -412,35 +412,58 @@ include "server.php";
 <script type="module" crossorigin="anonymous">
 import "./JS/tfMain.js";
 
-// Live cart total update
+// Update total dynamically based on actual cart
+async function fetchCartTotal() {
+    try {
+        const response = await fetch('/server.php?cart_action=view');
+        const data = await response.json();
+        if (data.success && Array.isArray(data.items)) {
+            let total = 0;
+            data.items.forEach(item => {
+                total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+            });
+            document.getElementById('cartTotal').textContent = total.toFixed(2);
+        }
+    } catch(err) {
+        console.error('Error fetching cart total:', err);
+    }
+}
+
+// Update total when quantity or variant changes in footer
 document.querySelectorAll('.cartForm').forEach(form => {
+    const quantityInput = form.querySelector('.quantityInput');
+    const variantSelect = form.querySelector('.variantSelect');
+
+    async function updateFormTotal() {
+        const selectedOption = variantSelect?.selectedOptions[0];
+        const price = selectedOption ? parseFloat(selectedOption.dataset.price || 0) : 0;
+        const quantity = parseInt(quantityInput.value || 1);
+        form.dataset.subtotal = (price * quantity).toFixed(2);
+        await fetchCartTotal();
+    }
+
+    quantityInput?.addEventListener('input', updateFormTotal);
+    variantSelect?.addEventListener('change', updateFormTotal);
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-
         const formData = new FormData(form);
-        const response = await fetch(form.action, {
-            method: 'POST',
-            body: formData
-        });
+        const response = await fetch(form.action, { method: 'POST', body: formData });
         const result = await response.json();
-
         if (result.success) {
-            updateCartTotal(result.cart_count, formData);
+            await fetchCartTotal();
         } else {
             console.warn('Cart error:', result.error);
         }
     });
+
+    updateFormTotal();
 });
 
-function updateCartTotal(cartCount, formData) {
-    const price = parseFloat(formData.get('product_id').match(/(\d+(\.\d+)?)/)[0]) || 0;
-    const quantity = parseInt(formData.get('StoreQuantity')) || 1;
-    const totalElem = document.getElementById('cartTotal');
-    let currentTotal = parseFloat(totalElem.textContent) || 0;
-    currentTotal += price * quantity;
-    totalElem.textContent = currentTotal.toFixed(2);
-}
+// Initialize total on page load
+fetchCartTotal();
 
+// Register service worker
 if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("/service-worker.js")
         .then(reg => console.log("Service Worker Registered:", reg.scope))
