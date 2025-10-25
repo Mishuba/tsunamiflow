@@ -10,6 +10,10 @@ require_once __DIR__ . "/stripestuff/vendor/autoload.php";
 
 use Stripe\StripeClient;
 
+// Fetch products for display in footer
+$myProductsFr = $_SESSION['PrintfulItems'] ?? BasicPrintfulRequest();
+//$showSuccess = true; // if you want the footer to show
+
 // ----------------------------
 // CORS (only for API requests)
 // ----------------------------
