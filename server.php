@@ -7,11 +7,8 @@ session_start();
 require_once "config.php";
 require_once "functions.php";
 require_once __DIR__ . "/stripestuff/vendor/autoload.php";
-use Stripe\StripeClient;
 
-// ----------------------------
-// Helper Functions
-// ----------------------------
+use Stripe\StripeClient;
 
 // ----------------------------
 // CORS (only for API requests)
@@ -24,15 +21,21 @@ if (isApiRequest()) {
     ];
     if (!empty($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowedOrigins)) {
         header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
-        header("Access-Control-Allow-Methods: GET, POST");
+        header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
         header("Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Requested-With");
     }
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') exit(http_response_code(200));
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        http_response_code(200);
+        exit;
+    }
 }
 
 // ----------------------------
 // Initialize Services
 // ----------------------------
+if (!defined('STRIPE_SECRET_KEY')) {
+    die("Error: STRIPE_SECRET_KEY is not defined in config.php");
+}
 $stripe = new StripeClient(STRIPE_SECRET_KEY);
 $domain = "https://www.tsunamiflow.club";
 
@@ -42,9 +45,11 @@ $domain = "https://www.tsunamiflow.club";
 $_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
 $_SESSION["UserPreferences"] ??= ["Chosen_Companion" => "Ackma Hawk"];
 $_SESSION["Setting"] ??= ["font_style" => "auto"];
+
 foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
     $_SESSION[$c] ??= 0;
 }
+
 if (!($_SESSION["TfNifage"] ?? false)) {
     $_SESSION["TfGuestCount"]++;
 } else {
@@ -56,6 +61,7 @@ if (!($_SESSION["TfNifage"] ?? false)) {
     }
     $_SESSION["TfMemberCount"]++;
 }
+
 setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400 * 30, "/", "", true, true);
 setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
 
@@ -139,7 +145,10 @@ try {
         if (($data['type'] ?? '') === 'Subscribers Signup') {
             $membership = $_POST['membershipLevel'] ?? 'free';
             $userData = $_POST;
-            if (!empty($userData['TFRegisterPassword'])) $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
+
+            if (!empty($userData['TFRegisterPassword'])) {
+                $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
+            }
 
             if ($membership === 'free') {
                 InputIntoDatabase($membership, ...array_values($userData));
@@ -147,7 +156,7 @@ try {
             }
 
             $costMap = ['regular' => 400, 'vip' => 700, 'team' => 1000];
-try {
+
             $s = $stripe->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'mode' => 'payment',
@@ -164,28 +173,28 @@ try {
                 'metadata'    => $userData
             ]);
 
-if (!empty($s->url)) {
-        header("Location: " . $s->url);
-        exit;
-    } else {
-        respond(['error' => 'Stripe session missing URL'], 500);
-            header("Location: " . $s->url);
-            exit;
+            if (!empty($s->url)) {
+                header("Location: " . $s->url);
+                exit;
+            } else {
+                respond(['error' => 'Stripe session missing URL'], 500);
+            }
         }
 
         respond(['error' => 'Invalid POST type'], 400);
     }
-} catch (\Stripe\Exception\ApiErrorException $e) {
-    respond(['error' => $e->getMessage()], 500);
-}
 
+    // ---- GET Requests ----
     if ($method === 'GET' && isApiRequest()) {
         if (isset($_GET['cart_action'])) {
             switch ($_GET['cart_action']) {
-                case 'view': respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
+                case 'view':
+                    respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
+                    break;
                 case 'clear':
                     $_SESSION['ShoppingCartItems'] = [];
                     respond(['success' => true, 'message' => 'Cart cleared']);
+                    break;
             }
         }
 
@@ -199,4 +208,3 @@ if (!empty($s->url)) {
 } catch (Exception $e) {
     respond(['error' => $e->getMessage()], 500);
 }
-
