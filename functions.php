@@ -374,29 +374,33 @@ function Login() {
 }
 
 // --- Printful functions ---
-function BasicPrintfulRequest(): ?array {
-    $ch = curl_init('https://api.printful.com/' . "store/products");
+function BasicPrintfulRequest(): array {
+    $ch = curl_init('https://api.printful.com/store/products');
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
-    if (curl_errno($ch)) { curl_close($ch); return null; }
+    if (curl_errno($ch)) { curl_close($ch); return ['result'=>[]]; }
     curl_close($ch);
-    return json_decode($response, true);
+
+    $decoded = json_decode($response, true);
+    return is_array($decoded) && isset($decoded['result']) ? $decoded : ['result'=>[]];
 }
 
-function PrintfulProductionDescription($productId): ?array {
-    $ch = curl_init('https://api.printful.com/' . "store/products/$productId");
+function PrintfulProductionDescription($productId): array {
+    $ch = curl_init("https://api.printful.com/store/products/$productId");
     curl_setopt($ch, CURLOPT_HTTPHEADER, ["Authorization: Bearer " . PRINTFUL_API_KEY]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
-    if (curl_errno($ch)) { curl_close($ch); return null; }
+    if (curl_errno($ch)) { curl_close($ch); return ['result'=>[]]; }
     curl_close($ch);
-    return json_decode($response, true);
+
+    $decoded = json_decode($response, true);
+    return is_array($decoded) && isset($decoded['result']) ? $decoded : ['result'=>[]];
 }
 
 function getVariantandPrice($productId): ?array {
     $prod = PrintfulProductionDescription($productId);
-    return $prod['result']['sync_variants'] ?? null;
+    return $prod['result'] ?? null; // Return full product
 }
 
 function NPOtfTS(array $orderData): ?int {
