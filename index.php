@@ -355,62 +355,58 @@ include "server.php";
         </audio> <!---->
     </article>
 <footer>
-<div id="TFstore">
-    <h2>Tsunami Flow Store</h2>
-    <ul>
-        <?php foreach ($myProductsFr['result'] ?? [] as $product): ?>
-            <?php 
-                $variants = getVariantandPrice($product['id']);
-            ?>
-            <li id="<?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?>">
-                <h4><?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?></h4>
-                <img src="<?php echo htmlspecialchars($product['thumbnail_url'] ?? ''); ?>" alt="Product Image">
-                <p>
-                    <?php
-                    $description = PrintfulProductionDescription($product['id'] ?? '');
-                    echo htmlspecialchars($description['result']['product']['description'] ?? 'Description Unavailable');
-                    ?>
-                </p>
+<?php if (!empty($showSuccess) && $showSuccess): ?>
+    <div id="TFstore">
+        <h2>Tsunami Flow Store</h2>
+        <?php if (!empty($myProductsFr['result']) && is_array($myProductsFr['result'])): ?>
+            <ul>
+                <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
+                    <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
+                        <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
+                        <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
+                        <p>
+                            <?php
+                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
+                            echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
+                            ?>
+                        </p>
+                        <?php
+                        $printfulVariants = getVariantandPrice($ItemsFr['id']);
+                        ?>
+                        <form method="POST" action="server.php">
+                            <?php if (is_array($printfulVariants['sync_variants'] ?? null) && !empty($printfulVariants['sync_variants'])): ?>
+                                <select name="product_id" required>
+                                    <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
+                                        <option value="<?php echo htmlspecialchars($variant['id']); ?>">
+                                            <?php 
+                                            echo htmlspecialchars($variant['name']); 
+                                            echo " (Price: " . htmlspecialchars($variant['retail_price']) . ")";
+                                            echo " (Size: " . htmlspecialchars($variant['size']) . ")";
+                                            echo " (Availability: " . htmlspecialchars($variant['availability_status']) . ")";
+                                            ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <br>
+                            <?php else: ?>
+                                <select>
+                                    <option value="">No Variants Available</option>
+                                </select>
+                            <?php endif; ?>
 
-                <form class="cartForm" method="POST" action="server.php" data-price="0">
-                    <?php if (!empty($variants['sync_variants'] ?? [])): ?>
-                        <select name="product_id" required class="variantSelect">
-                            <?php foreach ($variants['sync_variants'] as $v): ?>
-                                <option value="<?php echo htmlspecialchars($v['id']); ?>"
-                                        data-price="<?php echo htmlspecialchars($v['retail_price'] ?? 0); ?>">
-                                    <?php
-                                    echo htmlspecialchars($v['name'] ?? 'Unknown');
-                                    echo " (Price: $" . htmlspecialchars($v['retail_price'] ?? '0.00') . ")";
-                                    echo " (Size: " . htmlspecialchars($v['size'] ?? '') . ")";
-                                    echo " (Availability: " . htmlspecialchars($v['availability_status'] ?? '') . ")";
-                                    ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    <?php else: ?>
-                        <select disabled>
-                            <option value="">No Variants Available</option>
-                        </select>
-                    <?php endif; ?>
-
-                    <input type="number" name="StoreQuantity" value="1" min="1" max="1000" class="quantityInput">
-                    <p>Subtotal: $<span class="itemSubtotal">0.00</span></p>
-                    <button type="submit" name="addProductToCart">Add to Cart</button>
-                </form>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-
-    <p><strong>Grand Total:</strong> $<span id="cartTotal">
-        <?php
-        $grandTotal = 0;
-        foreach ($_SESSION['ShoppingCartItems'] ?? [] as $item) {
-            $grandTotal += ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
-        }
-        echo number_format($grandTotal, 2);
-        ?>
-    </span></p>
-</div>
+                            <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                            <button id="StoreButton" type="submit" name="addProductToCart">Add to Cart</button>
+                        </form>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>No products available.</p>
+        <?php endif; ?>
+        <p>Cost:</p>
+    </div>
+<?php endif; ?>
+</footer>
 
 <script type="module" crossorigin="anonymous">
 import "./JS/tfMain.js";
@@ -476,6 +472,5 @@ if ("serviceWorker" in navigator) {
         .catch(err => console.warn("SW registration failed:", err));
 }
 </script>
-</footer>
 </body>
 </html>
