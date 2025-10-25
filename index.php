@@ -359,6 +359,9 @@ include "server.php";
     <h2>Tsunami Flow Store</h2>
     <ul>
         <?php foreach ($myProductsFr['result'] ?? [] as $product): ?>
+            <?php 
+                $variants = getVariantandPrice($product['id']);
+            ?>
             <li id="<?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?>">
                 <h4><?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?></h4>
                 <img src="<?php echo htmlspecialchars($product['thumbnail_url'] ?? ''); ?>" alt="Product Image">
@@ -368,8 +371,8 @@ include "server.php";
                     echo htmlspecialchars($description['result']['product']['description'] ?? 'Description Unavailable');
                     ?>
                 </p>
-                <?php $variants = getVariantandPrice($product['id']); ?>
-                <form class="cartForm" method="POST" action="server.php">
+
+                <form class="cartForm" method="POST" action="server.php" data-price="0">
                     <?php if (!empty($variants['sync_variants'] ?? [])): ?>
                         <select name="product_id" required class="variantSelect">
                             <?php foreach ($variants['sync_variants'] as $v): ?>
@@ -384,7 +387,6 @@ include "server.php";
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <br>
                     <?php else: ?>
                         <select disabled>
                             <option value="">No Variants Available</option>
@@ -392,19 +394,20 @@ include "server.php";
                     <?php endif; ?>
 
                     <input type="number" name="StoreQuantity" value="1" min="1" max="1000" class="quantityInput">
+                    <p>Subtotal: $<span class="itemSubtotal">0.00</span></p>
                     <button type="submit" name="addProductToCart">Add to Cart</button>
                 </form>
             </li>
         <?php endforeach; ?>
     </ul>
 
-    <p><strong>Total Cost:</strong> $<span id="cartTotal">
+    <p><strong>Grand Total:</strong> $<span id="cartTotal">
         <?php
-        $totalCost = 0;
+        $grandTotal = 0;
         foreach ($_SESSION['ShoppingCartItems'] ?? [] as $item) {
-            $totalCost += ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
+            $grandTotal += ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
         }
-        echo number_format($totalCost, 2);
+        echo number_format($grandTotal, 2);
         ?>
     </span></p>
 </div>
@@ -412,56 +415,59 @@ include "server.php";
 <script type="module" crossorigin="anonymous">
 import "./JS/tfMain.js";
 
-// Update total dynamically based on actual cart
-async function fetchCartTotal() {
+async function fetchCart() {
     try {
-        const response = await fetch('/server.php?cart_action=view');
-        const data = await response.json();
-        if (data.success && Array.isArray(data.items)) {
-            let total = 0;
-            data.items.forEach(item => {
-                total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-            });
-            document.getElementById('cartTotal').textContent = total.toFixed(2);
-        }
+        const res = await fetch('/server.php?cart_action=view');
+        const data = await res.json();
+        return data.items || [];
     } catch(err) {
-        console.error('Error fetching cart total:', err);
+        console.error('Error fetching cart:', err);
+        return [];
     }
 }
 
-// Update total when quantity or variant changes in footer
+// Update subtotal per product and grand total
+function updateTotals() {
+    let grandTotal = 0;
+    document.querySelectorAll('.cartForm').forEach(form => {
+        const variant = form.querySelector('.variantSelect')?.selectedOptions[0];
+        const price = parseFloat(variant?.dataset.price || 0);
+        const quantity = parseInt(form.querySelector('.quantityInput').value || 1);
+        const subtotal = price * quantity;
+        form.dataset.price = subtotal.toFixed(2);
+        form.querySelector('.itemSubtotal').textContent = subtotal.toFixed(2);
+        grandTotal += subtotal;
+    });
+    document.getElementById('cartTotal').textContent = grandTotal.toFixed(2);
+}
+
+// Attach events
 document.querySelectorAll('.cartForm').forEach(form => {
     const quantityInput = form.querySelector('.quantityInput');
     const variantSelect = form.querySelector('.variantSelect');
 
-    async function updateFormTotal() {
-        const selectedOption = variantSelect?.selectedOptions[0];
-        const price = selectedOption ? parseFloat(selectedOption.dataset.price || 0) : 0;
-        const quantity = parseInt(quantityInput.value || 1);
-        form.dataset.subtotal = (price * quantity).toFixed(2);
-        await fetchCartTotal();
-    }
+    quantityInput?.addEventListener('input', updateTotals);
+    variantSelect?.addEventListener('change', updateTotals);
 
-    quantityInput?.addEventListener('input', updateFormTotal);
-    variantSelect?.addEventListener('change', updateFormTotal);
-
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener('submit', async e => {
         e.preventDefault();
         const formData = new FormData(form);
-        const response = await fetch(form.action, { method: 'POST', body: formData });
-        const result = await response.json();
+        const res = await fetch(form.action, { method: 'POST', body: formData });
+        const result = await res.json();
         if (result.success) {
-            await fetchCartTotal();
+            // Refresh totals after adding to cart
+            const cartItems = await fetchCart();
+            let total = 0;
+            cartItems.forEach(item => total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1));
+            document.getElementById('cartTotal').textContent = total.toFixed(2);
         } else {
             console.warn('Cart error:', result.error);
         }
     });
-
-    updateFormTotal();
 });
 
-// Initialize total on page load
-fetchCartTotal();
+// Initialize on load
+updateTotals();
 
 // Register service worker
 if ("serviceWorker" in navigator) {
