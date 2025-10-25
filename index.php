@@ -416,69 +416,115 @@ $myProductsFr['result'] = $myProductsFr['result'] ?? [];
 <?php endif; ?>
 </footer>
 
-<script type="module" crossorigin="anonymous">
+<script type="module">
 import "./JS/tfMain.js";
 
-// Fetch current cart items
-async function fetchCart() {
-    try {
-        const res = await fetch('/server.php?cart_action=view');
-        const data = await res.json();
-        return data.items || [];
-    } catch(err) {
-        console.error('Error fetching cart:', err);
-        return [];
-    }
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-// Update subtotal and grand total
-function updateTotals() {
-    let grandTotal = 0;
-    document.querySelectorAll('.cartForm').forEach(form => {
-        const variant = form.querySelector('.variantSelect')?.selectedOptions[0];
-        const price = parseFloat(variant?.dataset.price || 0);
-        const quantity = parseInt(form.querySelector('.quantityInput').value || 1);
-        const subtotal = price * quantity;
-        form.dataset.price = subtotal.toFixed(2);
-        form.querySelector('.itemSubtotal')?.textContent = subtotal.toFixed(2);
-        grandTotal += subtotal;
-    });
-    document.getElementById('cartTotal').textContent = grandTotal.toFixed(2);
-}
-
-// Attach events
-document.querySelectorAll('.cartForm').forEach(form => {
-    const quantityInput = form.querySelector('.quantityInput');
-    const variantSelect = form.querySelector('.variantSelect');
-
-    quantityInput?.addEventListener('input', updateTotals);
-    variantSelect?.addEventListener('change', updateTotals);
-
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-        const formData = new FormData(form);
-        const res = await fetch(form.action, { method: 'POST', body: formData });
-        const result = await res.json();
-        if (result.success) {
-            const cartItems = await fetchCart();
-            let total = 0;
-            cartItems.forEach(item => total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1));
-            document.getElementById('cartTotal').textContent = total.toFixed(2);
-        } else {
-            console.warn('Cart error:', result.error);
+    // ----------------------------
+    // Fetch current cart items
+    // ----------------------------
+    async function fetchCart() {
+        try {
+            const res = await fetch('/server.php?cart_action=view');
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            const data = await res.json();
+            return data.items || [];
+        } catch (err) {
+            console.error('Error fetching cart:', err);
+            return [];
         }
+    }
+
+    // ----------------------------
+    // Update subtotal and grand total
+    // ----------------------------
+    function updateTotals() {
+        let grandTotal = 0;
+
+        document.querySelectorAll('.cartForm').forEach(form => {
+            const variantSelect = form.querySelector('.variantSelect');
+            const quantityInput = form.querySelector('.quantityInput');
+            const itemSubtotalEl = form.querySelector('.itemSubtotal');
+
+            const variant = variantSelect?.selectedOptions[0];
+            const price = parseFloat(variant?.dataset.price || 0);
+            const quantity = parseInt(quantityInput?.value || 1);
+
+            const subtotal = price * quantity;
+
+            if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
+            form.dataset.price = subtotal.toFixed(2);
+
+            grandTotal += subtotal;
+        });
+
+        const totalEl = document.getElementById('cartTotal');
+        if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
+    }
+
+    // ----------------------------
+    // Attach events
+    // ----------------------------
+    document.querySelectorAll('.cartForm').forEach(form => {
+        const quantityInput = form.querySelector('.quantityInput');
+        const variantSelect = form.querySelector('.variantSelect');
+
+        quantityInput?.addEventListener('input', updateTotals);
+        variantSelect?.addEventListener('change', updateTotals);
+
+        form.addEventListener('submit', async e => {
+            e.preventDefault();
+
+            if (!form.action) {
+                console.warn('Form action is empty!');
+                return;
+            }
+
+            try {
+                const formData = new FormData(form);
+                const res = await fetch(form.action, { method: 'POST', body: formData });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const result = await res.json();
+
+                if (result.success) {
+                    // Refresh cart items and update totals
+                    const cartItems = await fetchCart();
+                    let total = 0;
+                    cartItems.forEach(item => {
+                        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+                    });
+                    const totalEl = document.getElementById('cartTotal');
+                    if (totalEl) totalEl.textContent = total.toFixed(2);
+
+                    // Also refresh individual item subtotals in DOM
+                    updateTotals();
+
+                } else {
+                    console.warn('Cart error:', result.error);
+                }
+            } catch (err) {
+                console.error('Form submission error:', err);
+            }
+        });
     });
+
+    // ----------------------------
+    // Initialize totals on load
+    // ----------------------------
+    updateTotals();
+
+    // ----------------------------
+    // Register service worker
+    // ----------------------------
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service-worker.js")
+            .then(reg => console.log("Service Worker Registered:", reg.scope))
+            .catch(err => console.warn("SW registration failed:", err));
+    }
+
 });
-
-// Initialize totals on load
-updateTotals();
-
-// Register service worker
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js")
-        .then(reg => console.log("Service Worker Registered:", reg.scope))
-        .catch(err => console.warn("SW registration failed:", err));
-}
 </script>
 </body>
 </html>
