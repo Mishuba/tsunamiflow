@@ -11,42 +11,6 @@ require_once __DIR__ . "/stripestuff/vendor/autoload.php";
 use Stripe\StripeClient;
 
 // ----------------------------
-// Helpers
-// ----------------------------
-function respond(array $data, int $status = 200) {
-    http_response_code($status);
-    header('Content-Type: application/json; charset=utf-8');
-    echo json_encode($data, JSON_UNESCAPED_UNICODE);
-    exit;
-}
-
-function isApiRequest(): bool {
-    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-    return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
-        || str_contains($contentType, 'application/json')
-        || ($_SERVER['REQUEST_METHOD'] === 'POST');
-}
-
-function addToCart(array $item, int $quantity): array {
-    if (!isset($_SESSION['ShoppingCartItems'])) $_SESSION['ShoppingCartItems'] = [];
-
-    $found = false;
-    foreach ($_SESSION['ShoppingCartItems'] as &$cartItem) {
-        if ($cartItem['variant_id'] === $item['variant_id']) {
-            $cartItem['quantity'] += $quantity;
-            $found = true;
-            break;
-        }
-    }
-    if (!$found) {
-        $item['quantity'] = $quantity;
-        $_SESSION['ShoppingCartItems'][] = $item;
-    }
-
-    return ['item' => $item];
-}
-
-// ----------------------------
 // Always fetch products for footer
 // ----------------------------
 $myProductsFr = $_SESSION['PrintfulItems'] ?? BasicPrintfulRequest();
