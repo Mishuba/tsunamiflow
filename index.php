@@ -354,7 +354,7 @@ include "server.php";
             Radio
         </audio> <!---->
     </article>
-    <footer>
+     <footer>
 <?php if ($showSuccess): ?>
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
