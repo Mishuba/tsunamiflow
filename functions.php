@@ -32,14 +32,6 @@ function getIpAddress() {
     return $_SERVER["REMOTE_ADDR"];
 }
 
-function isApiRequest(): bool {
-    // Detect if this is an AJAX or JSON API request
-    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
-    return isset($_SERVER['HTTP_X_REQUESTED_WITH']) 
-        || str_contains($contentType, 'application/json')
-        || ($_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST));
-}
-
 function LogOut() {
     $_SESSION = [];
     session_unset();
@@ -72,28 +64,39 @@ function handleDatabaseError($e){
     }
 }
 
-function respond(array $data, int $code = 200): void {
-    if (!isApiRequest()) return; // Do nothing if included in HTML page
-    http_response_code($code);
+function respond(array $data, int $status = 200) {
+    http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
-    exit(json_encode($data, JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_IGNORE));
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
 }
 
-function addToCart(array $product, int $quantity): array {
-    $cartItem = $product + ['quantity' => $quantity, 'added_at' => date('c')];
-    $_SESSION['ShoppingCartItems'] ??= [];
+function isApiRequest(): bool {
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+        || str_contains($contentType, 'application/json')
+        || ($_SERVER['REQUEST_METHOD'] === 'POST');
+}
 
-    foreach ($_SESSION['ShoppingCartItems'] as &$existing) {
-        if ((string)$existing['variant_id'] === (string)$cartItem['variant_id']) {
-            $existing['quantity'] += $cartItem['quantity'];
-            return ['merged' => true, 'item' => $existing];
+function addToCart(array $item, int $quantity): array {
+    if (!isset($_SESSION['ShoppingCartItems'])) $_SESSION['ShoppingCartItems'] = [];
+
+    $found = false;
+    foreach ($_SESSION['ShoppingCartItems'] as &$cartItem) {
+        if ($cartItem['variant_id'] === $item['variant_id']) {
+            $cartItem['quantity'] += $quantity;
+            $found = true;
+            break;
         }
     }
-    unset($existing);
+    if (!$found) {
+        $item['quantity'] = $quantity;
+        $_SESSION['ShoppingCartItems'][] = $item;
+    }
 
-    $_SESSION['ShoppingCartItems'][] = $cartItem;
-    return ['merged' => false, 'item' => $cartItem];
+    return ['item' => $item];
 }
+
 
 function TsunamiDatabaseFlow(){
     global $tfSQLoptions, $nanoDSN, $nanoU, $nanoPsw;
