@@ -354,6 +354,17 @@ include "server.php";
             Radio
         </audio> <!---->
     </article>
+<?php
+// ----------------------------
+// Ensure Printful Items exist
+// ----------------------------
+if (!isset($_SESSION['PrintfulItems']) || !is_array($_SESSION['PrintfulItems'])) {
+    $_SESSION['PrintfulItems'] = BasicPrintfulRequest();
+}
+$myProductsFr = $_SESSION['PrintfulItems'];
+$myProductsFr['result'] = $myProductsFr['result'] ?? [];
+?>
+
 <footer>
 <?php if (!empty($showSuccess) && $showSuccess): ?>
     <div id="TFstore">
@@ -366,36 +377,33 @@ include "server.php";
                         <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
                         <p>
                             <?php
-                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
+                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id'] ?? 0);
                             echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
                             ?>
                         </p>
-                        <?php
-                        $printfulVariants = getVariantandPrice($ItemsFr['id']);
-                        ?>
-                        <form method="POST" action="server.php">
-                            <?php if (is_array($printfulVariants['sync_variants'] ?? null) && !empty($printfulVariants['sync_variants'])): ?>
-                                <select name="product_id" required>
+                        <?php $printfulVariants = getVariantandPrice($ItemsFr['id'] ?? 0); ?>
+                        <form class="cartForm" method="POST" action="/server.php">
+                            <?php if (!empty($printfulVariants['sync_variants']) && is_array($printfulVariants['sync_variants'])): ?>
+                                <select class="variantSelect" name="product_id" required>
                                     <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
-                                        <option value="<?php echo htmlspecialchars($variant['id']); ?>">
+                                        <option 
+                                            value="<?php echo htmlspecialchars($variant['id']); ?>"
+                                            data-price="<?php echo htmlspecialchars($variant['retail_price'] ?? 0); ?>"
+                                        >
                                             <?php 
-                                            echo htmlspecialchars($variant['name']); 
-                                            echo " (Price: " . htmlspecialchars($variant['retail_price']) . ")";
-                                            echo " (Size: " . htmlspecialchars($variant['size']) . ")";
-                                            echo " (Availability: " . htmlspecialchars($variant['availability_status']) . ")";
+                                            echo htmlspecialchars($variant['name'] ?? 'Unknown'); 
+                                            echo " (Price: " . htmlspecialchars($variant['retail_price'] ?? 0) . ")";
+                                            echo " (Size: " . htmlspecialchars($variant['size'] ?? 'N/A') . ")";
+                                            echo " (Availability: " . htmlspecialchars($variant['availability_status'] ?? 'Unknown') . ")";
                                             ?>
                                         </option>
                                     <?php endforeach; ?>
                                 </select>
-                                <br>
                             <?php else: ?>
-                                <select>
-                                    <option value="">No Variants Available</option>
-                                </select>
+                                <select disabled><option>No Variants Available</option></select>
                             <?php endif; ?>
-
-                            <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
-                            <button id="StoreButton" type="submit" name="addProductToCart">Add to Cart</button>
+                            <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                            <button type="submit" name="addProductToCart">Add to Cart</button>
                         </form>
                     </li>
                 <?php endforeach; ?>
@@ -403,7 +411,7 @@ include "server.php";
         <?php else: ?>
             <p>No products available.</p>
         <?php endif; ?>
-        <p>Cost:</p>
+        <p>Cart Total: $<span id="cartTotal">0.00</span></p>
     </div>
 <?php endif; ?>
 </footer>
@@ -411,6 +419,7 @@ include "server.php";
 <script type="module" crossorigin="anonymous">
 import "./JS/tfMain.js";
 
+// Fetch current cart items
 async function fetchCart() {
     try {
         const res = await fetch('/server.php?cart_action=view');
@@ -422,7 +431,7 @@ async function fetchCart() {
     }
 }
 
-// Update subtotal per product and grand total
+// Update subtotal and grand total
 function updateTotals() {
     let grandTotal = 0;
     document.querySelectorAll('.cartForm').forEach(form => {
@@ -431,7 +440,7 @@ function updateTotals() {
         const quantity = parseInt(form.querySelector('.quantityInput').value || 1);
         const subtotal = price * quantity;
         form.dataset.price = subtotal.toFixed(2);
-        form.querySelector('.itemSubtotal').textContent = subtotal.toFixed(2);
+        form.querySelector('.itemSubtotal')?.textContent = subtotal.toFixed(2);
         grandTotal += subtotal;
     });
     document.getElementById('cartTotal').textContent = grandTotal.toFixed(2);
@@ -451,7 +460,6 @@ document.querySelectorAll('.cartForm').forEach(form => {
         const res = await fetch(form.action, { method: 'POST', body: formData });
         const result = await res.json();
         if (result.success) {
-            // Refresh totals after adding to cart
             const cartItems = await fetchCart();
             let total = 0;
             cartItems.forEach(item => total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1));
@@ -462,7 +470,7 @@ document.querySelectorAll('.cartForm').forEach(form => {
     });
 });
 
-// Initialize on load
+// Initialize totals on load
 updateTotals();
 
 // Register service worker
