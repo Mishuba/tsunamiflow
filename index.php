@@ -354,61 +354,83 @@ include "server.php";
             Radio
         </audio> <!---->
     </article>
-     <footer>
-<?php if ($showSuccess): ?>
+ <footer>
+    <!-- ======================== -->
+    <!-- 1. Success Message -->
+    <!-- ======================== -->
+    <?php if (!empty($showSuccess)): ?>
+        <div class="footer-success">
+            <h3>✅ Payment Successful!</h3>
+            <p>Thank you for your support. Your order or membership has been processed.</p>
+            <a href="/">Return Home</a>
+        </div>
+    <?php endif; ?>
+
+    <!-- ======================== -->
+    <!-- 2. Store Section -->
+    <!-- ======================== -->
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
-        <ul>
-            <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
-                <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
-                    <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
-                    <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
-                    <p>
-                        <?php
-                        $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
-                        echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
-                        ?>
-                    </p>
-                    <?php
-                    $printfulVariants = getVariantandPrice($ItemsFr['id']);
-                    ?>
-                    <form method="POST" action="server.php">
-                        <?php if (is_array($printfulVariants['sync_variants'] ?? null) && !empty($printfulVariants['sync_variants'])): ?>
-                            <select name="product_id" required>
-                                <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
-                                    <option value="<?php echo htmlspecialchars($variant['id']); ?>">
-                                        <?php 
-                                        echo htmlspecialchars($variant['name']); 
-                                        echo " (Price: " . htmlspecialchars($variant['retail_price']) . ")";
-                                        echo " (Size: " . htmlspecialchars($variant['size']) . ")";
-                                        echo " (Availability: " . htmlspecialchars($variant['availability_status']) . ")";
-                                        ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <br>
-                        <?php else: ?>
-                            <select>
-                                <option value="">No Variants Available</option>
-                            </select>
-                        <?php endif; ?>
+        <?php if (!empty($myProductsFr['result'])): ?>
+            <ul>
+                <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
+                    <li id="<?= htmlspecialchars($ItemsFr['name'] ?? 'No Name') ?>">
+                        <h4><?= htmlspecialchars($ItemsFr['name'] ?? 'No Name') ?></h4>
+                        <img src="<?= htmlspecialchars($ItemsFr['thumbnail_url'] ?? '') ?>" alt="Product Image">
+                        <p>
+                            <?php
+                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
+                            echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
+                            ?>
+                        </p>
 
-                        <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
-                        <button id="StoreButton" type="submit" name="addProductToCart">Add to Cart</button>
-                    </form>
-                </li>
-            <?php endforeach; ?>
-        </ul>
-        <p>Cost:</p>
+                        <?php $printfulVariants = getVariantandPrice($ItemsFr['id']); ?>
+                        <form method="POST" action="server.php">
+                            <?php if (!empty($printfulVariants['sync_variants'])): ?>
+                                <select name="product_id" required>
+                                    <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
+                                        <option value="<?= htmlspecialchars($variant['id']) ?>">
+                                            <?= htmlspecialchars($variant['name']) ?>
+                                            (Price: <?= htmlspecialchars($variant['retail_price']) ?>)
+                                            (Size: <?= htmlspecialchars($variant['size']) ?>)
+                                            (Availability: <?= htmlspecialchars($variant['availability_status']) ?>)
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select><br>
+                            <?php else: ?>
+                                <select><option value="">No Variants Available</option></select>
+                            <?php endif; ?>
+                            <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                            <button type="submit" name="addProductToCart">Add to Cart</button>
+                        </form>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <p>No products available at the moment.</p>
+        <?php endif; ?>
     </div>
-<?php endif; ?>
-<script type="module" crossorigin="anonymous">
-    import "./JS/tfMain.js";
 
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js").then(reg => console.log("Service Worker Register", reg.scope)).catch(err => console.warn("SW registration bad: ", err));
-    }
-</script>
+    <!-- ======================== -->
+    <!-- 3. Normal Footer -->
+    <!-- ======================== -->
+    <div class="footer-regular">
+        <p>&copy; <?= date('Y') ?> TsunamiFlow. All rights reserved.</p>
+        <p><a href="/terms.php">Terms & Conditions</a> | <a href="/privacy.php">Privacy Policy</a></p>
+    </div>
+
+    <!-- ======================== -->
+    <!-- 4. Scripts -->
+    <!-- ======================== -->
+    <script type="module" crossorigin="anonymous">
+        import "./JS/tfMain.js";
+
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/service-worker.js")
+                .then(reg => console.log("Service Worker Registered:", reg.scope))
+                .catch(err => console.warn("SW registration failed:", err));
+        }
+    </script>
 </footer>
 </body>
 </html>
