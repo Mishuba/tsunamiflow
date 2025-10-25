@@ -355,82 +355,98 @@ include "server.php";
         </audio> <!---->
     </article>
  <footer>
-    <!-- ======================== -->
-    <!-- 1. Success Message -->
-    <!-- ======================== -->
-    <?php if (!empty($showSuccess)): ?>
-        <div class="footer-success">
-            <h3>✅ Payment Successful!</h3>
-            <p>Thank you for your support. Your order or membership has been processed.</p>
-            <a href="/">Return Home</a>
-        </div>
-    <?php endif; ?>
+<div id="TFstore">
+    <h2>Tsunami Flow Store</h2>
+    <ul>
+        <?php foreach ($myProductsFr['result'] ?? [] as $product): ?>
+            <li id="<?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?>">
+                <h4><?php echo htmlspecialchars($product['name'] ?? 'No Name'); ?></h4>
+                <img src="<?php echo htmlspecialchars($product['thumbnail_url'] ?? ''); ?>" alt="Product Image">
+                <p>
+                    <?php
+                    $description = PrintfulProductionDescription($product['id'] ?? '');
+                    echo htmlspecialchars($description['result']['product']['description'] ?? 'Description Unavailable');
+                    ?>
+                </p>
+                <?php $variants = getVariantandPrice($product['id']); ?>
+                <form class="cartForm" method="POST" action="server.php">
+                    <?php if (!empty($variants['sync_variants'] ?? [])): ?>
+                        <select name="product_id" required>
+                            <?php foreach ($variants['sync_variants'] as $v): ?>
+                                <option value="<?php echo htmlspecialchars($v['id']); ?>"
+                                        data-price="<?php echo htmlspecialchars($v['retail_price'] ?? '0.00'); ?>">
+                                    <?php
+                                    echo htmlspecialchars($v['name'] ?? 'Unknown');
+                                    echo " (Price: $" . htmlspecialchars($v['retail_price'] ?? '0.00') . ")";
+                                    echo " (Size: " . htmlspecialchars($v['size'] ?? '') . ")";
+                                    echo " (Availability: " . htmlspecialchars($v['availability_status'] ?? '') . ")";
+                                    ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <br>
+                    <?php else: ?>
+                        <select disabled>
+                            <option value="">No Variants Available</option>
+                        </select>
+                    <?php endif; ?>
 
-    <!-- ======================== -->
-    <!-- 2. Store Section -->
-    <!-- ======================== -->
-    <div id="TFstore">
-        <h2>Tsunami Flow Store</h2>
-        <?php if (!empty($myProductsFr['result'])): ?>
-            <ul>
-                <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
-                    <li id="<?= htmlspecialchars($ItemsFr['name'] ?? 'No Name') ?>">
-                        <h4><?= htmlspecialchars($ItemsFr['name'] ?? 'No Name') ?></h4>
-                        <img src="<?= htmlspecialchars($ItemsFr['thumbnail_url'] ?? '') ?>" alt="Product Image">
-                        <p>
-                            <?php
-                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id']);
-                            echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
-                            ?>
-                        </p>
+                    <input type="number" name="StoreQuantity" value="1" min="1" max="1000" class="quantityInput">
+                    <button type="submit" name="addProductToCart">Add to Cart</button>
+                </form>
+            </li>
+        <?php endforeach; ?>
+    </ul>
 
-                        <?php $printfulVariants = getVariantandPrice($ItemsFr['id']); ?>
-                        <form method="POST" action="server.php">
-                            <?php if (!empty($printfulVariants['sync_variants'])): ?>
-                                <select name="product_id" required>
-                                    <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
-                                        <option value="<?= htmlspecialchars($variant['id']) ?>">
-                                            <?= htmlspecialchars($variant['name']) ?>
-                                            (Price: <?= htmlspecialchars($variant['retail_price']) ?>)
-                                            (Size: <?= htmlspecialchars($variant['size']) ?>)
-                                            (Availability: <?= htmlspecialchars($variant['availability_status']) ?>)
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select><br>
-                            <?php else: ?>
-                                <select><option value="">No Variants Available</option></select>
-                            <?php endif; ?>
-                            <input type="number" name="StoreQuantity" value="1" min="1" max="1000">
-                            <button type="submit" name="addProductToCart">Add to Cart</button>
-                        </form>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        <?php else: ?>
-            <p>No products available at the moment.</p>
-        <?php endif; ?>
-    </div>
-
-    <!-- ======================== -->
-    <!-- 3. Normal Footer -->
-    <!-- ======================== -->
-    <div class="footer-regular">
-        <p>&copy; <?= date('Y') ?> TsunamiFlow. All rights reserved.</p>
-        <p><a href="/terms.php">Terms & Conditions</a> | <a href="/privacy.php">Privacy Policy</a></p>
-    </div>
-
-    <!-- ======================== -->
-    <!-- 4. Scripts -->
-    <!-- ======================== -->
-    <script type="module" crossorigin="anonymous">
-        import "./JS/tfMain.js";
-
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("/service-worker.js")
-                .then(reg => console.log("Service Worker Registered:", reg.scope))
-                .catch(err => console.warn("SW registration failed:", err));
+    <p><strong>Total Cost:</strong> $<span id="cartTotal">
+        <?php
+        $totalCost = 0;
+        foreach ($_SESSION['ShoppingCartItems'] ?? [] as $item) {
+            $totalCost += ($item['price'] ?? 0) * ($item['quantity'] ?? 1);
         }
-    </script>
+        echo number_format($totalCost, 2);
+        ?>
+    </span></p>
+</div>
+
+<script type="module" crossorigin="anonymous">
+import "./JS/tfMain.js";
+
+// Live cart total update
+document.querySelectorAll('.cartForm').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData(form);
+        const response = await fetch(form.action, {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (result.success) {
+            updateCartTotal(result.cart_count, formData);
+        } else {
+            console.warn('Cart error:', result.error);
+        }
+    });
+});
+
+function updateCartTotal(cartCount, formData) {
+    const price = parseFloat(formData.get('product_id').match(/(\d+(\.\d+)?)/)[0]) || 0;
+    const quantity = parseInt(formData.get('StoreQuantity')) || 1;
+    const totalElem = document.getElementById('cartTotal');
+    let currentTotal = parseFloat(totalElem.textContent) || 0;
+    currentTotal += price * quantity;
+    totalElem.textContent = currentTotal.toFixed(2);
+}
+
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("Service Worker Registered:", reg.scope))
+        .catch(err => console.warn("SW registration failed:", err));
+}
+</script>
 </footer>
 </body>
 </html>
