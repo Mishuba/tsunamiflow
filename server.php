@@ -14,6 +14,12 @@ use Stripe\StripeClient;
 // Always fetch products for footer
 // ----------------------------
 $myProductsFr = $_SESSION['PrintfulItems'] ?? BasicPrintfulRequest();
+
+// Ensure 'result' is always an array
+if (!isset($myProductsFr['result']) || !is_array($myProductsFr['result'])) {
+    $myProductsFr['result'] = [];
+}
+
 $showSuccess = true; // always show footer
 
 // ----------------------------
