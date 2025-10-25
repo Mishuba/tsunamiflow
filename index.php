@@ -355,78 +355,76 @@ include "server.php";
         </audio> <!---->
     </article>
 <?php
-// ----------------------------
 // Ensure Printful Items exist
-// ----------------------------
 if (!isset($_SESSION['PrintfulItems']) || !is_array($_SESSION['PrintfulItems'])) {
-    $_SESSION['PrintfulItems'] = BasicPrintfulRequest();
+    $_SESSION['PrintfulItems'] = BasicPrintfulRequest() ?: ['result' => []];
 }
 $myProductsFr = $_SESSION['PrintfulItems'];
 $myProductsFr['result'] = $myProductsFr['result'] ?? [];
 ?>
 
 <footer>
-<?php if (!empty($showSuccess) && $showSuccess): ?>
+    <?php if (!empty($showSuccess) && $showSuccess): ?>
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
         <?php if (!empty($myProductsFr['result']) && is_array($myProductsFr['result'])): ?>
             <ul>
                 <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
-                    <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
-                        <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
-                        <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
-                        <p>
-                            <?php
-                            $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id'] ?? 0);
-                            echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
-                            ?>
-                        </p>
-                        <?php $printfulVariants = getVariantandPrice($ItemsFr['id'] ?? 0); ?>
-                        <form class="cartForm" method="POST" action="/server.php">
-                            <?php if (!empty($printfulVariants['sync_variants']) && is_array($printfulVariants['sync_variants'])): ?>
-                                <select class="variantSelect" name="product_id" required>
-                                    <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
-                                        <option 
-                                            value="<?php echo htmlspecialchars($variant['id']); ?>"
-                                            data-price="<?php echo htmlspecialchars($variant['retail_price'] ?? 0); ?>"
-                                        >
-                                            <?php 
-                                            echo htmlspecialchars($variant['name'] ?? 'Unknown'); 
-                                            echo " (Price: " . htmlspecialchars($variant['retail_price'] ?? 0) . ")";
-                                            echo " (Size: " . htmlspecialchars($variant['size'] ?? 'N/A') . ")";
-                                            echo " (Availability: " . htmlspecialchars($variant['availability_status'] ?? 'Unknown') . ")";
-                                            ?>
-                                        </option>
-                                    <?php endforeach; ?>
-                                </select>
-                            <?php else: ?>
-                                <select disabled><option>No Variants Available</option></select>
-                            <?php endif; ?>
-                            <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
-                            <button type="submit" name="addProductToCart">Add to Cart</button>
-                        </form>
-                    </li>
+                <?php $printfulVariants = getVariantandPrice($ItemsFr['id'] ?? 0); ?>
+                <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
+                    <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
+                    <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
+                    <p>
+                        <?php
+                        $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id'] ?? 0);
+                        echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
+                        ?>
+                    </p>
+
+                    <form class="cartForm" method="POST" action="/server.php">
+                        <?php if (!empty($printfulVariants['sync_variants']) && is_array($printfulVariants['sync_variants'])): ?>
+                        <select class="variantSelect" name="product_id" required>
+                            <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
+                            <option 
+                                value="<?php echo htmlspecialchars($variant['id']); ?>"
+                                data-price="<?php echo htmlspecialchars($variant['retail_price'] ?? 0); ?>"
+                            >
+                                <?php 
+                                echo htmlspecialchars($variant['name'] ?? 'Unknown'); 
+                                echo " (Price: " . htmlspecialchars($variant['retail_price'] ?? 0) . ")";
+                                ?>
+                            </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <?php else: ?>
+                        <select disabled><option>No Variants Available</option></select>
+                        <?php endif; ?>
+
+                        <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                        <span class="itemSubtotal">0.00</span>
+                        <button type="submit" name="addProductToCart">Add to Cart</button>
+                    </form>
+                </li>
                 <?php endforeach; ?>
             </ul>
         <?php else: ?>
             <p>No products available.</p>
         <?php endif; ?>
+
         <p>Cart Total: $<span id="cartTotal">0.00</span></p>
     </div>
-<?php endif; ?>
+    <?php endif; ?>
 </footer>
 
 <script type="module">
-import "./JS/tfMain.js";
-
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ----------------------------
-    // Fetch current cart items
-    // ----------------------------
+    // Fetch current cart items from server.php
     async function fetchCart() {
         try {
-            const res = await fetch('/server.php?cart_action=view');
+            const res = await fetch('/server.php?cart_action=view', {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
             const data = await res.json();
             return data.items || [];
@@ -436,12 +434,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // ----------------------------
     // Update subtotal and grand total
-    // ----------------------------
     function updateTotals() {
         let grandTotal = 0;
-
         document.querySelectorAll('.cartForm').forEach(form => {
             const variantSelect = form.querySelector('.variantSelect');
             const quantityInput = form.querySelector('.quantityInput');
@@ -463,9 +458,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
     }
 
-    // ----------------------------
-    // Attach events
-    // ----------------------------
+    // Attach events to forms
     document.querySelectorAll('.cartForm').forEach(form => {
         const quantityInput = form.querySelector('.quantityInput');
         const variantSelect = form.querySelector('.variantSelect');
@@ -476,31 +469,27 @@ document.addEventListener("DOMContentLoaded", () => {
         form.addEventListener('submit', async e => {
             e.preventDefault();
 
-            if (!form.action) {
-                console.warn('Form action is empty!');
-                return;
-            }
+            if (!form.action) return console.warn('Form action is empty!');
 
             try {
                 const formData = new FormData(form);
-                const res = await fetch(form.action, { method: 'POST', body: formData });
+                const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
                 const result = await res.json();
-
                 if (result.success) {
-                    // Refresh cart items and update totals
+                    // Refresh cart totals
                     const cartItems = await fetchCart();
                     let total = 0;
                     cartItems.forEach(item => {
                         total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
                     });
+
                     const totalEl = document.getElementById('cartTotal');
                     if (totalEl) totalEl.textContent = total.toFixed(2);
 
-                    // Also refresh individual item subtotals in DOM
+                    // Refresh item subtotals in DOM
                     updateTotals();
-
                 } else {
                     console.warn('Cart error:', result.error);
                 }
@@ -510,20 +499,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // ----------------------------
-    // Initialize totals on load
-    // ----------------------------
+    // Initialize totals on page load
     updateTotals();
-
-    // ----------------------------
-    // Register service worker
-    // ----------------------------
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service-worker.js")
-            .then(reg => console.log("Service Worker Registered:", reg.scope))
-            .catch(err => console.warn("SW registration failed:", err));
-    }
-
 });
 </script>
 </body>
