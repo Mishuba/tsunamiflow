@@ -10,12 +10,14 @@ require_once __DIR__ . "/stripestuff/vendor/autoload.php";
 
 use Stripe\StripeClient;
 
-// Fetch products for display in footer
+// ----------------------------
+// Always fetch products for footer
+// ----------------------------
 $myProductsFr = $_SESSION['PrintfulItems'] ?? BasicPrintfulRequest();
-//$showSuccess = true; // if you want the footer to show
+$showSuccess = true; // always show footer
 
 // ----------------------------
-// CORS (only for API requests)
+// CORS for API requests
 // ----------------------------
 if (isApiRequest()) {
     $allowedOrigins = [
@@ -35,21 +37,20 @@ if (isApiRequest()) {
 }
 
 // ----------------------------
-// Initialize Services
+// Stripe
 // ----------------------------
 if (!defined('STRIPE_SECRET_KEY')) {
-    die("Error: STRIPE_SECRET_KEY is not defined in config.php");
+    die("Error: STRIPE_SECRET_KEY not defined");
 }
 $stripe = new StripeClient(STRIPE_SECRET_KEY);
 $domain = "https://www.tsunamiflow.club";
 
 // ----------------------------
-// Session Defaults
+// Session defaults
 // ----------------------------
 $_SESSION["visit_count"] = ($_SESSION["visit_count"] ?? 0) + 1;
 $_SESSION["UserPreferences"] ??= ["Chosen_Companion" => "Ackma Hawk"];
 $_SESSION["Setting"] ??= ["font_style" => "auto"];
-
 foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
     $_SESSION[$c] ??= 0;
 }
@@ -66,26 +67,27 @@ if (!($_SESSION["TfNifage"] ?? false)) {
     $_SESSION["TfMemberCount"]++;
 }
 
-setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400 * 30, "/", "", true, true);
+setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400*30, "/", "", true, true);
 setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
 
 // ----------------------------
-// Input Data
+// Input data
 // ----------------------------
 $data = json_decode(file_get_contents("php://input"), true) ?? [];
 $method = $_SERVER['REQUEST_METHOD'];
 
 // ----------------------------
-// Main Logic
+// Main logic
 // ----------------------------
 try {
+    // ---- POST Requests ----
     if ($method === 'POST' && isApiRequest()) {
 
-        // ---- Add Product to Cart ----
+        // Add Product to Cart
         if (isset($_POST['addProductToCart'])) {
             $variantId = trim($_POST['product_id'] ?? '');
             $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
-            if ($variantId === '') respond(['error' => 'Missing product ID'], 400);
+            if (!$variantId) respond(['error' => 'Missing product ID'], 400);
 
             $myProducts = BasicPrintfulRequest();
             $_SESSION['PrintfulItems'] = $myProducts;
@@ -116,7 +118,7 @@ try {
             respond(['success' => true, 'cart_count' => count($_SESSION['ShoppingCartItems']), 'item' => $result['item']]);
         }
 
-        // ---- Stripe Checkout ----
+        // Stripe Checkout
         if (($data['type'] ?? '') === 'Stripe Checkout') {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
@@ -130,14 +132,13 @@ try {
             ]);
         }
 
-        // ---- Printful Checkout ----
+        // Printful Checkout
         if (($data['type'] ?? '') === 'Printful Checkout') {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
 
             $result = CreatePrintfulOrder($cartItems, $data['customer'] ?? []);
             if (!empty($result['success'])) unset($_SESSION['ShoppingCartItems']);
-
             respond([
                 'success' => !empty($result['success']),
                 'order' => $result['result'] ?? null,
@@ -145,11 +146,10 @@ try {
             ]);
         }
 
-        // ---- Subscribers Signup ----
+        // Subscribers Signup
         if (($data['type'] ?? '') === 'Subscribers Signup') {
             $membership = $_POST['membershipLevel'] ?? 'free';
             $userData = $_POST;
-
             if (!empty($userData['TFRegisterPassword'])) {
                 $userData['TFRegisterPassword'] = password_hash($userData['TFRegisterPassword'], PASSWORD_DEFAULT);
             }
@@ -160,7 +160,6 @@ try {
             }
 
             $costMap = ['regular' => 400, 'vip' => 700, 'team' => 1000];
-
             $s = $stripe->checkout->sessions->create([
                 'payment_method_types' => ['card'],
                 'mode' => 'payment',
@@ -173,8 +172,8 @@ try {
                     'quantity' => 1
                 ]],
                 'success_url' => "$domain/server.php?session_id={CHECKOUT_SESSION_ID}",
-                'cancel_url'  => "$domain/failed.php",
-                'metadata'    => $userData
+                'cancel_url' => "$domain/failed.php",
+                'metadata' => $userData
             ]);
 
             if (!empty($s->url)) {
@@ -194,11 +193,9 @@ try {
             switch ($_GET['cart_action']) {
                 case 'view':
                     respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
-                    break;
                 case 'clear':
                     $_SESSION['ShoppingCartItems'] = [];
                     respond(['success' => true, 'message' => 'Cart cleared']);
-                    break;
             }
         }
 
