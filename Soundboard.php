@@ -1,264 +1,249 @@
 <?php require "config.php"; ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mishuba Live Broadcaster Console</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Mishuba Live Broadcaster</title>
 <style>
     body {
-        font-family: system-ui, sans-serif;
-        background: #0b0b0b;
+        font-family: sans-serif;
+        background: #0c0c0c;
         color: #eee;
         text-align: center;
         padding: 20px;
     }
-    video, audio {
-        margin: 10px;
+    video {
+        border: 2px solid #444;
         border-radius: 10px;
-        background: #000;
+        margin-bottom: 10px;
     }
-    input, button, select {
+    .controls {
+        margin-top: 10px;
+    }
+    button, input[type="file"], select {
         margin: 5px;
-        padding: 8px 12px;
+        padding: 10px;
         border-radius: 8px;
         border: none;
-        outline: none;
-    }
-    button {
-        background: #1a1a1a;
-        color: #fff;
         cursor: pointer;
-        transition: 0.2s;
     }
-    button:hover { background: #333; }
-    .section { margin-top: 20px; }
-    .soundboard button {
-        display: inline-block;
-        margin: 6px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #333;
+    button:hover {
+        opacity: 0.8;
     }
-    .soundboard button:hover { background: #333; }
-    .sliders { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
-    .slider-group { margin: 10px; text-align: center; }
-    input[type=range] {
-        width: 150px;
-        cursor: pointer;
+    .fx-buttons button {
+        background: #1e1e1e;
+        color: #0ff;
     }
 </style>
 </head>
 <body>
-<h1>🌊 Mishuba Live Broadcaster Console</h1>
+    <h1>Mishuba Live Broadcaster</h1>
 
-<video id="preview" autoplay muted playsinline style="width:400px;height:auto;"></video><br>
+    <video id="preview" autoplay muted playsinline width="400" height="auto"></video><br>
 
-<div>
-    <input id="streamKey" placeholder="Enter Stream Key" />
-    <button id="start">Start Broadcast</button>
-    <button id="stop" disabled>Stop</button><br>
-    <label><input type="checkbox" id="videoToggle" checked> Include Video</label>
-    <label><input type="checkbox" id="musicToggle" checked> Include Music</label>
-</div>
-
-<div class="section playlist">
-    <h3>🎶 Music Player</h3>
-    <audio id="music" controls></audio><br>
-    <select id="playlist">
-        <option value="">-- Select Song --</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
-        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
-    </select>
-    <input type="file" id="fileInput" accept="audio/*">
-</div>
-
-<div class="section soundboard">
-    <h3>🎛️ Sound Effects</h3>
-    <button data-sound="crowd">Crowd Clapping</button>
-    <button data-sound="bomb">Bomb</button>
-    <button data-sound="gun">Gun Shots</button>
-    <button data-sound="laugh">Crowd Laughing</button>
-    <button data-sound="intro">Intro</button>
-    <button data-sound="hellnah">Hell Nah</button>
-    <button data-sound="shock">Shocked</button>
-    <button data-sound="wtf">Questioned (WTF)</button>
-    <button data-sound="other">Other</button>
-</div>
-
-<div class="section sliders">
-    <div class="slider-group">
-        <label>🎤 Mic Volume</label><br>
-        <input type="range" id="micVol" min="0" max="1" step="0.01" value="1">
+    <div class="controls">
+        <input id="streamKey" placeholder="Enter Stream Key" />
+        <button id="start">Start Broadcast</button>
+        <button id="stop" disabled>Stop</button>
+        <label><input type="checkbox" id="videoToggle" checked> Include Video</label>
     </div>
-    <div class="slider-group">
-        <label>🎵 Music Volume</label><br>
-        <input type="range" id="musicVol" min="0" max="1" step="0.01" value="0.8">
+
+    <hr style="margin:20px 0;">
+
+    <!-- Music player -->
+    <div>
+        <h3>Music Player</h3>
+        <audio id="music" controls></audio><br>
+        <input type="file" id="fileInput" accept="audio/*" />
+        <select id="playlist">
+            <option value="">-- Select from Playlist --</option>
+            <option value="/songs/track1.mp3">Track 1</option>
+            <option value="/songs/track2.mp3">Track 2</option>
+        </select>
     </div>
-    <div class="slider-group">
-        <label>💥 Effects Volume</label><br>
-        <input type="range" id="fxVol" min="0" max="1" step="0.01" value="0.9">
+
+    <!-- FX Buttons -->
+    <div class="fx-buttons">
+        <h3>Sound Effects</h3>
+        <button onclick="playEffect('clap')">👏 Crowd Clapping</button>
+        <button onclick="playEffect('bomb')">💣 Bomb</button>
+        <button onclick="playEffect('gun')">🔫 Gun Shots</button>
+        <button onclick="playEffect('laugh')">😂 Crowd Laughing</button>
+        <button onclick="playEffect('intro')">🎬 Intro</button>
+        <button onclick="playEffect('hellnah')">😤 Hell Nah</button>
+        <button onclick="playEffect('shock')">😱 Shocked</button>
+        <button onclick="playEffect('wtf')">🤨 What the F***</button>
+        <button onclick="playEffect('other')">🎵 Other</button>
     </div>
-</div>
 
-<script>
-const startBtn = document.getElementById("start");
-const stopBtn = document.getElementById("stop");
-const preview = document.getElementById("preview");
-const videoToggle = document.getElementById("videoToggle");
-const musicToggle = document.getElementById("musicToggle");
-const music = document.getElementById("music");
-const playlist = document.getElementById("playlist");
-const fileInput = document.getElementById("fileInput");
-const soundButtons = document.querySelectorAll(".soundboard button");
+    <canvas id="visualizer" width="400" height="100" style="display:block;margin:20px auto;background:#111;"></canvas>
 
-let ws, recorder, finalStream, audioCtx, mixedStream;
-let micGain, musicGain, fxGain;
+    <script type="module">
+    import { TfMusic } from './audio.js'; // <--- Update path to your actual class file
 
-// 🎧 Preload sounds
-const sounds = {
-    crowd: new Audio("https://actions.google.com/sounds/v1/crowds/applause.ogg"),
-    bomb: new Audio("https://actions.google.com/sounds/v1/explosions/explosion.ogg"),
-    gun: new Audio("https://actions.google.com/sounds/v1/weapons/gun.ogg"),
-    laugh: new Audio("https://actions.google.com/sounds/v1/human_voices/crowd_laughter.ogg"),
-    intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
-    hellnah: new Audio("https://actions.google.com/sounds/v1/human_voices/no_1.ogg"),
-    shock: new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"),
-    wtf: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"),
-    other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
-};
+    const startBtn = document.getElementById("start");
+    const stopBtn = document.getElementById("stop");
+    const preview = document.getElementById("preview");
+    const videoToggle = document.getElementById("videoToggle");
+    const music = document.getElementById("music");
+    const playlist = document.getElementById("playlist");
+    const fileInput = document.getElementById("fileInput");
 
-// 📂 Playlist + Upload
-playlist.onchange = () => {
-    if (playlist.value) {
-        music.src = playlist.value;
-        music.play();
+    let ws, recorder, stream;
+    let audioCtx, micGain, musicGain, fxGain;
+    let tfMusic, tfAnalyser;
+
+    // preload FX
+    const sounds = {
+        clap: new Audio("/fx/clap.mp3"),
+        bomb: new Audio("/fx/bomb.mp3"),
+        gun: new Audio("/fx/gun.mp3"),
+        laugh: new Audio("/fx/laugh.mp3"),
+        intro: new Audio("/fx/intro.mp3"),
+        hellnah: new Audio("/fx/hellnah.mp3"),
+        shock: new Audio("/fx/shock.mp3"),
+        wtf: new Audio("/fx/wtf.mp3"),
+        other: new Audio("/fx/other.mp3")
+    };
+
+    function playEffect(name) {
+        const s = sounds[name];
+        if (!s) return;
+        s.currentTime = 0;
+        s.play().catch(err => console.error("FX play error:", err));
     }
-};
-fileInput.onchange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-        music.src = URL.createObjectURL(file);
-        music.play();
-    }
-};
 
-// 🎚 Volume Controls
-document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
-document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
-document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
+    async function createMixedStream() {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        tfAnalyser = audioCtx.createAnalyser();
+        tfAnalyser.fftSize = 2048;
+        tfAnalyser.smoothingTimeConstant = 0.6;
 
-// 🔊 Soundboard
-soundButtons.forEach(btn => {
-    btn.onclick = () => playEffect(btn.dataset.sound);
-});
+        const destNode = audioCtx.createMediaStreamDestination();
+        micGain = audioCtx.createGain(); micGain.gain.value = 1.0;
+        musicGain = audioCtx.createGain(); musicGain.gain.value = 0.8;
+        fxGain = audioCtx.createGain(); fxGain.gain.value = 0.9;
 
-// 🧠 Create Mixed Stream
-async function createMixedStream() {
-    audioCtx = new AudioContext();
-    const destination = audioCtx.createMediaStreamDestination();
+        // mic
+        const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const micSource = audioCtx.createMediaStreamSource(micStream);
+        micSource.connect(micGain);
+        micGain.connect(destNode);
+        micGain.connect(tfAnalyser);
 
-    // Mic
-    const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const micSource = audioCtx.createMediaStreamSource(micStream);
-    micGain = audioCtx.createGain();
-    micGain.gain.value = document.getElementById("micVol").value;
-    micSource.connect(micGain).connect(destination);
-
-    // Music
-    if (musicToggle.checked) {
+        // music
         const musicSource = audioCtx.createMediaElementSource(music);
-        musicGain = audioCtx.createGain();
-        musicGain.gain.value = document.getElementById("musicVol").value;
-        musicSource.connect(musicGain).connect(destination);
-        musicSource.connect(audioCtx.destination);
-    }
+        musicSource.connect(musicGain);
+        musicGain.connect(destNode);
+        musicGain.connect(tfAnalyser);
+        musicGain.connect(audioCtx.destination);
 
-    // FX
-    fxGain = audioCtx.createGain();
-    fxGain.gain.value = document.getElementById("fxVol").value;
-    for (const k in sounds) {
-        const src = audioCtx.createMediaElementSource(sounds[k]);
-        src.connect(fxGain).connect(destination);
-        src.connect(audioCtx.destination);
-    }
-
-    mixedStream = destination.stream;
-    return mixedStream;
-}
-
-function playEffect(name) {
-    const s = sounds[name];
-    if (!s) return;
-    s.currentTime = 0;
-    s.play().catch(err => console.error(err));
-}
-
-async function startBroadcast() {
-    const key = document.getElementById("streamKey").value.trim();
-    if (!key) return alert("Enter stream key");
-
-    startBtn.disabled = true;
-
-    try {
-        const mixed = await createMixedStream();
-
-        let finalTracks = [];
-        if (videoToggle.checked) {
-            const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            preview.srcObject = camStream;
-            finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
-        } else {
-            preview.srcObject = mixed;
-            finalTracks = [...mixed.getAudioTracks()];
+        // fx
+        for (const key in sounds) {
+            const el = sounds[key];
+            const fxSource = audioCtx.createMediaElementSource(el);
+            fxSource.connect(fxGain);
+            fxGain.connect(destNode);
+            fxGain.connect(tfAnalyser);
+            fxGain.connect(audioCtx.destination);
         }
 
-        finalStream = new MediaStream(finalTracks);
-        ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
-        ws.binaryType = "arraybuffer";
+        // TfMusic instance
+        tfMusic = new TfMusic(
+            music, null, null, null, null, null, null,
+            document.getElementById("visualizer"),
+            audioCtx, tfAnalyser, music
+        );
+        window.tfMusic = tfMusic;
 
-        ws.onopen = () => {
-            const mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
-            recorder = new MediaRecorder(finalStream, { mimeType: mime });
+        // start visualizer
+        const canvas = document.getElementById("visualizer");
+        if (tfMusic && canvas) {
+            const bufferLength = tfAnalyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            tfMusic.Visualizer(canvas, tfAnalyser, dataArray, bufferLength, 50, 50, 1, 1, 10, "#00ffcc", 4, []);
+        }
 
-            recorder.ondataavailable = async (e) => {
-                if (e.data.size > 0 && ws.readyState === WebSocket.OPEN)
-                    ws.send(await e.data.arrayBuffer());
-            };
-
-            recorder.onstart = () => {
-                stopBtn.disabled = false;
-                console.log("🎥 Streaming started");
-            };
-
-            recorder.start(videoToggle.checked ? 300 : 1000);
-        };
-
-        ws.onclose = stopBroadcast;
-        ws.onerror = err => console.error("WebSocket Error:", err);
-
-    } catch (err) {
-        console.error(err);
-        alert("Media access denied or stream failed.");
-        startBtn.disabled = false;
+        return destNode.stream;
     }
-}
 
-function stopBroadcast() {
-    stopBtn.disabled = true;
-    startBtn.disabled = false;
+    playlist.onchange = () => {
+        if (playlist.value) {
+            music.src = playlist.value;
+            music.play();
+        }
+    };
+    fileInput.onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        music.src = URL.createObjectURL(file);
+        music.play();
+    };
 
-    if (recorder && recorder.state !== "inactive") recorder.stop();
-    if (finalStream) finalStream.getTracks().forEach(t => t.stop());
-    if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+    async function startBroadcast() {
+        const key = document.getElementById("streamKey").value.trim();
+        if (!key) return alert("Enter stream key");
 
-    preview.srcObject = null;
-    console.log("🛑 Broadcast stopped");
-}
+        startBtn.disabled = true;
 
-startBtn.onclick = startBroadcast;
-stopBtn.onclick = stopBroadcast;
-</script>
+        try {
+            const videoStream = videoToggle.checked 
+                ? await navigator.mediaDevices.getUserMedia({ video: true })
+                : null;
+
+            const audioStream = await createMixedStream();
+            const mixedTracks = [...audioStream.getTracks()];
+
+            if (videoStream) mixedTracks.push(...videoStream.getTracks());
+            stream = new MediaStream(mixedTracks);
+
+            preview.srcObject = stream;
+
+            const role = videoToggle.checked ? "broadcaster" : "audio_only";
+            ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key) + "&role=" + role);
+            ws.binaryType = "arraybuffer";
+
+            ws.onopen = () => {
+                console.log("🌊 Connected to WebSocket server");
+                const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") && videoToggle.checked
+                    ? "video/webm;codecs=vp8,opus"
+                    : "audio/webm;codecs=opus";
+
+                recorder = new MediaRecorder(stream, { mimeType: mime });
+                recorder.ondataavailable = async e => {
+                    if (e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
+                        ws.send(await e.data.arrayBuffer());
+                    }
+                };
+                recorder.start(500);
+                stopBtn.disabled = false;
+            };
+
+            ws.onclose = () => stopLocal();
+            ws.onerror = err => console.error("WebSocket error:", err);
+
+        } catch (e) {
+            alert("Error starting broadcast: " + e.message);
+            startBtn.disabled = false;
+        }
+    }
+
+    function stopLocal() {
+        stopBtn.disabled = true;
+        startBtn.disabled = false;
+        if (recorder && recorder.state !== "inactive") recorder.stop();
+        if (stream) {
+            stream.getTracks().forEach(t => t.stop());
+            preview.srcObject = null;
+            stream = null;
+        }
+        if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+        console.log("Streaming stopped");
+    }
+
+    startBtn.onclick = startBroadcast;
+    stopBtn.onclick = stopLocal;
+    </script>
 </body>
 </html>
