@@ -11,19 +11,52 @@ require_once __DIR__ . "/stripestuff/vendor/autoload.php";
 use Stripe\StripeClient;
 
 // ----------------------------
+// Helpers
+// ----------------------------
+function respond(array $data, int $status = 200) {
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+function isApiRequest(): bool {
+    $contentType = $_SERVER['CONTENT_TYPE'] ?? '';
+    return isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+        || str_contains($contentType, 'application/json')
+        || ($_SERVER['REQUEST_METHOD'] === 'POST');
+}
+
+function addToCart(array $item, int $quantity): array {
+    if (!isset($_SESSION['ShoppingCartItems'])) $_SESSION['ShoppingCartItems'] = [];
+
+    $found = false;
+    foreach ($_SESSION['ShoppingCartItems'] as &$cartItem) {
+        if ($cartItem['variant_id'] === $item['variant_id']) {
+            $cartItem['quantity'] += $quantity;
+            $found = true;
+            break;
+        }
+    }
+    if (!$found) {
+        $item['quantity'] = $quantity;
+        $_SESSION['ShoppingCartItems'][] = $item;
+    }
+
+    return ['item' => $item];
+}
+
+// ----------------------------
 // Always fetch products for footer
 // ----------------------------
 $myProductsFr = $_SESSION['PrintfulItems'] ?? BasicPrintfulRequest();
-
-// Ensure 'result' is always an array
 if (!isset($myProductsFr['result']) || !is_array($myProductsFr['result'])) {
     $myProductsFr['result'] = [];
 }
-
 $showSuccess = true; // always show footer
 
 // ----------------------------
-// CORS for API requests
+// CORS
 // ----------------------------
 if (isApiRequest()) {
     $allowedOrigins = [
@@ -45,9 +78,7 @@ if (isApiRequest()) {
 // ----------------------------
 // Stripe
 // ----------------------------
-if (!defined('STRIPE_SECRET_KEY')) {
-    die("Error: STRIPE_SECRET_KEY not defined");
-}
+if (!defined('STRIPE_SECRET_KEY')) die("Error: STRIPE_SECRET_KEY not defined");
 $stripe = new StripeClient(STRIPE_SECRET_KEY);
 $domain = "https://www.tsunamiflow.club";
 
@@ -60,7 +91,6 @@ $_SESSION["Setting"] ??= ["font_style" => "auto"];
 foreach (["TfGuestCount","freeMembershipCount","lowestMembershipCount","middleMembershipCount","highestMembershipCount","TfMemberCount"] as $c) {
     $_SESSION[$c] ??= 0;
 }
-
 if (!($_SESSION["TfNifage"] ?? false)) {
     $_SESSION["TfGuestCount"]++;
 } else {
@@ -72,7 +102,6 @@ if (!($_SESSION["TfNifage"] ?? false)) {
     }
     $_SESSION["TfMemberCount"]++;
 }
-
 setcookie("TfAccess", $_SESSION["TfAccess"] ?? "guest", time() + 86400*30, "/", "", true, true);
 setcookie("visit_count", $_SESSION["visit_count"], time() + 86400, "/", "", true, true);
 
@@ -86,10 +115,8 @@ $method = $_SERVER['REQUEST_METHOD'];
 // Main logic
 // ----------------------------
 try {
-    // ---- POST Requests ----
     if ($method === 'POST' && isApiRequest()) {
-
-        // Add Product to Cart
+        // ---- Add Product to Cart ----
         if (isset($_POST['addProductToCart'])) {
             $variantId = trim($_POST['product_id'] ?? '');
             $quantity = max(1, (int)($_POST['StoreQuantity'] ?? 1));
@@ -117,14 +144,13 @@ try {
                     }
                 }
             }
-
             if (!$found) respond(['error' => 'Variant not found'], 404);
 
             $result = addToCart($found, $quantity);
             respond(['success' => true, 'cart_count' => count($_SESSION['ShoppingCartItems']), 'item' => $result['item']]);
         }
 
-        // Stripe Checkout
+        // ---- Stripe Checkout ----
         if (($data['type'] ?? '') === 'Stripe Checkout') {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
@@ -138,7 +164,7 @@ try {
             ]);
         }
 
-        // Printful Checkout
+        // ---- Printful Checkout ----
         if (($data['type'] ?? '') === 'Printful Checkout') {
             $cartItems = $_SESSION['ShoppingCartItems'] ?? [];
             if (empty($cartItems)) respond(['error' => 'Cart is empty'], 400);
@@ -152,7 +178,7 @@ try {
             ]);
         }
 
-        // Subscribers Signup
+        // ---- Subscribers Signup ----
         if (($data['type'] ?? '') === 'Subscribers Signup') {
             $membership = $_POST['membershipLevel'] ?? 'free';
             $userData = $_POST;
@@ -199,9 +225,11 @@ try {
             switch ($_GET['cart_action']) {
                 case 'view':
                     respond(['success' => true, 'items' => $_SESSION['ShoppingCartItems'] ?? []]);
+                    break;
                 case 'clear':
                     $_SESSION['ShoppingCartItems'] = [];
                     respond(['success' => true, 'message' => 'Cart cleared']);
+                    break;
             }
         }
 
