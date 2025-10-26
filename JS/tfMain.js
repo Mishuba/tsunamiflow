@@ -274,7 +274,7 @@ let HomePageJson = {
                     error: "Nothing as of now"
                 };
                 console.log("sending the iframe message");
-                TFiframe.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
+                TFiframe.contentWindow.postMessage(HomePageJson, "./../homepage.php");
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
