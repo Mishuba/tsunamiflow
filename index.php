@@ -47,7 +47,7 @@ include "server.php";
     <link rel="stylesheet" href="./MyStyle/tfMain.css" />
 
     <!-- Misc -->
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="https://www.tsunamiflow.club/manifest.json">
         <meta name="theme-color" content="#000000">
         <meta name="mobile-web-app-capable" content="yes">
 
