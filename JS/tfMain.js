@@ -75,9 +75,9 @@ if (twoMore) {
     console.error("Element with id 'mainTsectionFdiv' not found.");
 }
 
-document.getElementById("freeLevelInputs").style.display = "none";
+document.getElementById("freeLevelInputs").style.display = "block";
 document.getElementById("TFMembershipLevel").addEventListener("change", function () {
-    var level = this.value;
+    var level = document.getElementById("TFMembershipLevel").value;
 
     let cost, paymentType;
     // Hide all extra sections
