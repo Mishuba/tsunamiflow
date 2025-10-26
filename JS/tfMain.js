@@ -64,7 +64,7 @@ TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
-TFiframe.src = "https://www.tsunamiflow.club/homepage.php";
+TFiframe.src = "./../homepage.php";
 TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
@@ -274,7 +274,7 @@ let HomePageJson = {
                     error: "Nothing as of now"
                 };
                 console.log("sending the iframe message");
-                oneMore.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
+                TFiframe.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
