@@ -75,72 +75,67 @@ if (twoMore) {
     console.error("Element with id 'mainTsectionFdiv' not found.");
 }
 
-document.getElementById("freeLevelInputs").style.display = "block";
-document.getElementById("TFMembershipLevel").addEventListener("change", function () {
-    var level = document.getElementById("TFMembershipLevel").value;
+document.addEventListener("DOMContentLoaded", () => {
+    const membershipSelect = document.getElementById("TFMembershipLevel");
 
-    let cost, paymentType;
-    // Hide all extra sections
-    document.getElementById("freeLevelInputs").style.display = "none";
-    document.getElementById("regularLevelInputs").style.display = "none";
-    document.getElementById("vipLevelInputs").style.display = "none";
-    document.getElementById("teamLevelInputs").style.display = "none";
-    document.getElementById("membershipCostInfo").style.display = "none"; // Show cost info
-    document.getElementById("AddressDetailsSubscibers").style.display = "none";
+    // Sections
+    const sections = {
+        free: document.getElementById("freeLevelInputs"),
+        regular: document.getElementById("regularLevelInputs"),
+        vip: document.getElementById("vipLevelInputs"),
+        team: document.getElementById("teamLevelInputs"),
+        address: document.getElementById("AddressDetailsSubscribers"), // if present
+        costInfo: document.getElementById("membershipCostInfo"),
+    };
 
-    // Clear previous cost and payment type
-    document.getElementById("membershipCost").innerHTML = "";
-    document.getElementById("paymentType").innerHTML = "";
+    // Output fields
+    const membershipCostEl = document.getElementById("membershipCost");
+    const paymentTypeEl = document.getElementById("paymentType");
+    const hiddenMC = document.getElementById("hiddenMC");
+    const hiddenPT = document.getElementById("hiddenPT");
 
-    // Show fields based on selected membership level
-    if (level === "none") {
-        cost = 0;
-        paymentType = "none";
-        document.getElementById("membershipCost").innerHTML = "Please Select a Level";
-        document.getElementById("paymentType").innerHTML = "";
-    } else if (level === "free") {
-        cost = 0;
-        paymentType = "none";
-        document.getElementById("freeLevelInputs").style.display = "block";
-        document.getElementById("AddressDetailsSubscibers").style.display = "block";
-        document.getElementById("membershipCostInfo").style.display = "block";
-        document.getElementById("membershipCost").innerHTML = "$0.00";
-        document.getElementById("paymentType").innerHTML = "No payment required";
-    } else if (level === "regular") {
-        cost = 4;
-        paymentType = "monthly";
-        document.getElementById("freeLevelInputs").style.display = "block";
-        document.getElementById("AddressDetailsSubscibers").style.display = "block";
-        document.getElementById("membershipCostInfo").style.display = "block";
-        document.getElementById("regularLevelInputs").style.display = "block";
-        document.getElementById("membershipCost").innerHTML = "$4.00";
-        document.getElementById("paymentType").innerHTML = "Monthly payment";
-    } else if (level === "vip") {
-        cost = 7;
-        paymentType = "monthly";
-        document.getElementById("freeLevelInputs").style.display = "block";
-        document.getElementById("AddressDetailsSubscibers").style.display = "block";
-        document.getElementById("membershipCostInfo").style.display = "block";
-        document.getElementById("regularLevelInputs").style.display = "block";
-        document.getElementById("vipLevelInputs").style.display = "block";
-        document.getElementById("membershipCost").innerHTML = "$7.00";
-        document.getElementById("paymentType").innerHTML = "Monthly payment";
-    } else if (level === "team") {
-        cost = 10;
-        paymentType = "none";
-        document.getElementById("freeLevelInputs").style.display = "block";
-        document.getElementById("AddressDetailsSubscibers").style.display = "block";
-        document.getElementById("membershipCostInfo").style.display = "block";
-        document.getElementById("regularLevelInputs").style.display = "block";
-        document.getElementById("vipLevelInputs").style.display = "block";
-        document.getElementById("teamLevelInputs").style.display = "block";
-        document.getElementById("membershipCost").innerHTML = "$10.00";
-        document.getElementById("paymentType").innerHTML = "Monthly payment";
-    }
-    document.getElementById("hiddenMC").value = cost;
-    document.getElementById("hiddenPT").value = paymentType;
+    // Membership configurations
+    const membershipLevels = {
+        none: { cost: 0, payment: "none", show: [], displayText: "Please Select a Level", paymentText: "" },
+        free: { cost: 0, payment: "none", show: ["free", "address", "costInfo"], displayText: "$0.00", paymentText: "No payment required" },
+        regular: { cost: 4, payment: "monthly", show: ["free", "regular", "address", "costInfo"], displayText: "$4.00", paymentText: "Monthly payment" },
+        vip: { cost: 7, payment: "monthly", show: ["free", "regular", "vip", "address", "costInfo"], displayText: "$7.00", paymentText: "Monthly payment" },
+        team: { cost: 10, payment: "monthly", show: ["free", "regular", "vip", "team", "address", "costInfo"], displayText: "$10.00", paymentText: "Monthly payment" },
+    };
+
+    // Hide all sections
+    const hideAllSections = () => {
+        Object.values(sections).forEach(el => {
+            if (el) el.style.display = "none";
+        });
+    };
+
+    // Update membership display
+    const updateMembership = () => {
+        const level = membershipSelect.value;
+        hideAllSections();
+
+        const config = membershipLevels[level] || membershipLevels.none;
+
+        // Show the necessary sections
+        config.show.forEach(sectionName => {
+            const el = sections[sectionName];
+            if (el) el.style.display = "block";
+        });
+
+        // Update cost/payment
+        if (membershipCostEl) membershipCostEl.innerHTML = config.displayText;
+        if (paymentTypeEl) paymentTypeEl.innerHTML = config.paymentText;
+        if (hiddenMC) hiddenMC.value = config.cost;
+        if (hiddenPT) hiddenPT.value = config.payment;
+    };
+
+    // Initialize on page load
+    updateMembership();
+
+    // Listen for changes
+    membershipSelect.addEventListener("change", updateMembership);
 });
-//Subscribers Ends
 
 //Web Workers Starts
 //News 
