@@ -417,6 +417,7 @@ $myProductsFr['result'] = $myProductsFr['result'] ?? [];
 </footer>
 
 <script type="module">
+import "./JS/tfMain.js";
 document.addEventListener("DOMContentLoaded", () => {
 
     // Fetch current cart items from server.php
