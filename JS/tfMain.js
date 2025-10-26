@@ -252,6 +252,8 @@ if (typeof (Worker) !== "undefined") {
 TfWeather.requestLocation();
 //Web Workers Ends
 
+DoTheThingMan(TFiframe);
+
 //Nav Begins
 for (const [key, button] of Object.entries(navButtons)) {
     button.addEventListener("click", () => {
@@ -261,7 +263,7 @@ for (const [key, button] of Object.entries(navButtons)) {
 };
 //Nav Ended
                 
-DoTheThingMan(TFiframe);
+
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
