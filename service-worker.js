@@ -49,7 +49,7 @@ self.addEventListener("fetch", event => {
     }
 
     event.respondWith(caches.match(req).then(cached => {
-        if (cached) return cached:
+        if (cached) return cached;
         return fetch(req).then(response => {
             //optionally cache resource
 
