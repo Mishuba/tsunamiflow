@@ -1,5 +1,5 @@
 export const navButtons = {
-    homepage: document.getElementById("tfHome"),
+    //homepage: //document.getElementById("tfHome"),
     roster: document.getElementById("tfRoster"),
     news: document.getElementById("tfNews"),
     Competitions: document.getElementById("tfCompetitions"),
