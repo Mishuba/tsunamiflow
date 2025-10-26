@@ -85,9 +85,6 @@ include "server.php";
             <tbody>
                 <tr>
                     <td>
-                        <button id="tfHome" type="button">Home</button>
-                    </td>
-                    <td>
                         <button id="tfRoster" type="button">Roster</button>
                     </td>
                     <td>
