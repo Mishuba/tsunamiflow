@@ -3,7 +3,7 @@ const OFFLINE_URL = "/offline.html"; //change to php please
 const PRECACHE = [
     "/",
     "/index.php",
-    "maniest.json",
+    "manifest.json",
     "icons/72Logo.png",
     "icons/96Logo.png",
     "icons/128Logo.png",
