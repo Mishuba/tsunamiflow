@@ -265,16 +265,8 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-
-let HomePageJson = {
-                    type: "start_updates",
-                    info: HomepageUpdates.toJSON(),
-                    message: "Starting the game",
-                    username: "Mishuba",
-                    error: "Nothing as of now"
-                };
-                console.log("sending the iframe message");
-                TFiframe.contentWindow.postMessage(HomePageJson, "./../homepage.php");
+                
+DoTheThingMan(TFiframe);
 
 //Websocket Stuff maybe create a database. do database calculations.
 //Tsunami Thoughts 
