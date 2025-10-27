@@ -110,12 +110,13 @@ const playlist = document.getElementById("playlist");
 const fileInput = document.getElementById("fileInput");
 const soundButtons = document.querySelectorAll(".soundboard button");
 
-let ws, recorder, finalStream, audioCtx, mixedStream;
+let ws, recorder, finalStream;
+let audioCtx, destination;
 let micGain, musicGain, fxGain;
-let destination, musicSource;
-let musicSourceCreated = false;
+let micSource, musicSource;
+let soundSources = {};
 
-// 🎧 Preload sound effects
+// 🎧 Sound effects
 const sounds = {
     crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
     bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
@@ -128,36 +129,40 @@ const sounds = {
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
 
-// Resume AudioContext if user triggers a sound while suspended
-Object.values(sounds).forEach(a => {
-    a.onplay = () => { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); };
-});
+function resumeAudioContext() {
+    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}
 
-// 🎚 Volume Controls
+// Volume sliders
 document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
 document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
 document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
 
-// 🔊 Soundboard
+// Soundboard
 soundButtons.forEach(btn => {
-    btn.onclick = () => playEffect(btn.dataset.sound);
+    btn.onclick = () => {
+        const s = sounds[btn.dataset.sound];
+        if (!s) return;
+        resumeAudioContext();
+        if (!soundSources[btn.dataset.sound]) {
+            const src = audioCtx.createMediaElementSource(s);
+            src.connect(fxGain).connect(destination);
+            src.connect(audioCtx.destination);
+            soundSources[btn.dataset.sound] = src;
+        }
+        s.currentTime = 0;
+        s.play().catch(()=>{});
+    };
 });
 
-function playEffect(name) {
-    const s = sounds[name];
-    if(!s) return;
-    s.currentTime = 0;
-    s.play().catch(err => console.error(err));
-}
-
-// 🧠 Create Mixed Stream
+// Create mixed stream
 async function createMixedStream() {
     audioCtx = new AudioContext();
     destination = audioCtx.createMediaStreamDestination();
 
     // Mic
     const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const micSource = audioCtx.createMediaStreamSource(micStream);
+    micSource = audioCtx.createMediaStreamSource(micStream);
     micGain = audioCtx.createGain();
     micGain.gain.value = document.getElementById("micVol").value;
     micSource.connect(micGain).connect(destination);
@@ -165,41 +170,39 @@ async function createMixedStream() {
     // Music
     musicGain = audioCtx.createGain();
     musicGain.gain.value = document.getElementById("musicVol").value;
-
-    if(musicToggle.checked) {
-        if(!musicSourceCreated) {
-            musicSource = audioCtx.createMediaElementSource(music);
-            musicSource.connect(musicGain).connect(destination);
-            musicSource.connect(audioCtx.destination);
-            musicSourceCreated = true;
-        }
+    if (musicToggle.checked && music.src) {
+        musicSource = audioCtx.createMediaElementSource(music);
+        musicSource.connect(musicGain).connect(destination);
+        musicSource.connect(audioCtx.destination);
     }
 
     // FX
     fxGain = audioCtx.createGain();
     fxGain.gain.value = document.getElementById("fxVol").value;
-    for(const key in sounds) {
-        const src = audioCtx.createMediaElementSource(sounds[key]);
-        src.connect(fxGain).connect(destination);
-        src.connect(audioCtx.destination);
-    }
 
-    mixedStream = destination.stream;
-    return mixedStream;
+    return destination.stream;
 }
 
-// 🔄 Update music source dynamically
-function setMusicSource(src) {
-    if(!audioCtx) return;
-    music.src = src;
-    music.play().catch(()=>{});
-}
-
-// 📂 Playlist + Upload
+// Playlist + upload
 playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
 fileInput.onchange = (e) => { const file = e.target.files[0]; if(file) setMusicSource(URL.createObjectURL(file)); };
 
-// 🚀 Start Broadcast
+// Set music source
+function setMusicSource(src) {
+    if(!audioCtx || !destination) return;
+    resumeAudioContext();
+    music.pause();
+    if(musicSource) try { musicSource.disconnect(); } catch(e) {}
+    music.src = src;
+    if(musicToggle.checked) {
+        musicSource = audioCtx.createMediaElementSource(music);
+        musicSource.connect(musicGain).connect(destination);
+        musicSource.connect(audioCtx.destination);
+        music.play().catch(()=>{});
+    }
+}
+
+// Start broadcast
 async function startBroadcast() {
     const key = document.getElementById("streamKey").value.trim();
     if(!key) return alert("Enter stream key");
@@ -225,22 +228,17 @@ async function startBroadcast() {
         ws.onopen = () => {
             const mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
             recorder = new MediaRecorder(finalStream, { mimeType: mime });
-
-            recorder.ondataavailable = async (e) => {
-                if(e.data.size > 0 && ws.readyState === WebSocket.OPEN)
+            recorder.ondataavailable = async e => {
+                if(e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
                     ws.send(await e.data.arrayBuffer());
+                }
             };
-
-            recorder.onstart = () => {
-                stopBtn.disabled = false;
-                console.log("🎥 Streaming started");
-            };
-
+            recorder.onstart = () => { stopBtn.disabled = false; console.log("🎥 Streaming started"); };
             recorder.start(videoToggle.checked ? 300 : 1000);
         };
 
         ws.onclose = stopBroadcast;
-        ws.onerror = err => console.error("WebSocket Error:", err);
+        ws.onerror = err => console.error(err);
 
     } catch(err) {
         console.error(err);
@@ -249,15 +247,13 @@ async function startBroadcast() {
     }
 }
 
-// 🛑 Stop Broadcast
+// Stop broadcast
 function stopBroadcast() {
     stopBtn.disabled = true;
     startBtn.disabled = false;
-
     if(recorder && recorder.state !== "inactive") recorder.stop();
     if(finalStream) finalStream.getTracks().forEach(t => t.stop());
     if(ws && ws.readyState === WebSocket.OPEN) ws.close();
-
     preview.srcObject = null;
     console.log("🛑 Broadcast stopped");
 }
