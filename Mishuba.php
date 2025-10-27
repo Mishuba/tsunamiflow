@@ -105,11 +105,8 @@
 
 <script type="module">
 // ------------------- CONFIG -------------------
-const defaultPlaylist = [
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
-];
+import { DefaultPlaylist } from "./JS/Arrays.js";
+const defaultPlaylist = DefaultPlaylist;
 
 // ------------------- ELEMENTS -------------------
 const startBtn = document.getElementById("start");
