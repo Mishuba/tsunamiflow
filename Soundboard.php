@@ -118,13 +118,13 @@ let micGain, musicGain, fxGain;
 
 // 🎧 Preload sound effects
 const sounds = {
-    crowd: new Audio("https://actions.google.com/sounds/v1/crowds/applause.ogg"),
+    crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
     bomb: new Audio("https://actions.google.com/sounds/v1/explosions/explosion.ogg"),
-    gun: new Audio("https://actions.google.com/sounds/v1/weapons/gun.ogg"),
-    laugh: new Audio("https://actions.google.com/sounds/v1/human_voices/crowd_laughter.ogg"),
+    gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effectb(Loading and shooting) (3_10 Guns).mp3"),
+    laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
     intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
-    hellnah: new Audio("https://actions.google.com/sounds/v1/human_voices/no_1.ogg"),
-    shock: new Audio("https://actions.google.com/sounds/v1/alarms/alarm_clock.ogg"),
+    hellnah: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
+    shock: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/I cant believe youve done this (Full Facepunch Meme) - Sound Effect for editing.mp3"),
     wtf: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"),
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
