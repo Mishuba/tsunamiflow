@@ -147,6 +147,8 @@ async function initAudio() {
     // Music
     musicGain = audioCtx.createGain();
     musicGain.gain.value = parseFloat(document.getElementById("musicVol").value);
+    musicSource = audioCtx.createMediaElementSource(music);
+    musicSource.connect(musicGain).connect(destination);
 
     // Effects
     fxGain = audioCtx.createGain();
@@ -205,16 +207,15 @@ async function setMusicSource(src,isBlob=false){
 
     // Stop previous
     music.pause();
-    if(musicSource) try{ musicSource.disconnect(); }catch(e){}
 
     // Revoke old blob URLs
-    blobURLs.forEach(u=>URL.revokeObjectURL(u));
-    blobURLs = isBlob?[src]:[];
+    if(blobURLs.length && !blobURLs.includes(src)){
+        blobURLs.forEach(u=>URL.revokeObjectURL(u));
+        blobURLs = [];
+    }
+    if(isBlob) blobURLs.push(src);
 
     music.src = src;
-    musicSource = audioCtx.createMediaElementSource(music);
-    musicSource.connect(musicGain).connect(destination);
-
     if(musicToggle.checked) music.play().catch(()=>{});
 
     if(isBlob){
@@ -266,8 +267,8 @@ async function startBroadcast(){
             recorder.start(1000);
         };
 
-        ws.onclose = stopBroadcast;
-        ws.onerror = err=>console.error(err);
+        ws.onclose = ()=>{ stopBroadcast(); };
+        ws.onerror = err=>{ console.error(err); stopBroadcast(); };
 
     }catch(err){
         console.error(err);
@@ -294,6 +295,12 @@ function stopBroadcast(){
 
 startBtn.onclick=async ()=>{ await resumeAudioContext(); startBroadcast(); };
 stopBtn.onclick=stopBroadcast;
+
+// Toggle music checkbox
+musicToggle.onchange = ()=>{
+    if(!musicToggle.checked) music.pause();
+    else if(music.src) music.play().catch(()=>{});
+};
 </script>
 </body>
 </html>
