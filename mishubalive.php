@@ -1,51 +1,4 @@
-<?php
-require "config.php";
-
-// List all music files from Cloudflare R2
-function listR2Files($prefix = 'Music/') {
-    $bucket = "tsunami-radio";
-    $endpoint = CLOUDFLARE_R2_ENDPOINT; // e.g. https://<your-account-id>.r2.cloudflarestorage.com
-    $accessKey = CLOUDFLARE_R2_ACCESS_KEY;
-    $secretKey = CLOUDFLARE_R2_SECRET_KEY;
-
-    $host = parse_url($endpoint, PHP_URL_HOST);
-    $url = "$endpoint/$bucket?prefix=" . urlencode($prefix);
-
-    $date = gmdate('D, d M Y H:i:s T');
-    $method = 'GET';
-    $canonical = "$method\n\n\n$date\n/$bucket?prefix=" . $prefix;
-
-    $signature = base64_encode(hash_hmac('sha1', $canonical, $secretKey, true));
-    $auth = "AWS $accessKey:$signature";
-
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_HTTPHEADER => [
-            "Date: $date",
-            "Authorization: $auth",
-            "Host: $host"
-        ]
-    ]);
-    $response = curl_exec($ch);
-    curl_close($ch);
-
-    $files = [];
-    if ($response && preg_match_all('/<Key>(.*?)<\/Key>/', $response, $matches)) {
-        foreach ($matches[1] as $key) {
-            if (str_starts_with($key, $prefix) && !str_ends_with($key, '/')) {
-                $files[] = [
-                    'name' => basename($key),
-                    'url' => "$endpoint/$bucket/$key"
-                ];
-            }
-        }
-    }
-    return $files;
-}
-
-$musicFiles = listR2Files();
-?>
+<?php require "config.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -53,47 +6,17 @@ $musicFiles = listR2Files();
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mishuba Live Broadcaster Console</title>
 <style>
-    body {
-        font-family: system-ui, sans-serif;
-        background: #0b0b0b;
-        color: #eee;
-        text-align: center;
-        padding: 20px;
-    }
-    video, audio {
-        margin: 10px;
-        border-radius: 10px;
-        background: #000;
-    }
-    input, button, select {
-        margin: 5px;
-        padding: 8px 12px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-    }
-    button {
-        background: #1a1a1a;
-        color: #fff;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    button:hover { background: #333; }
-    .section { margin-top: 20px; }
-    .soundboard button {
-        display: inline-block;
-        margin: 6px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
-    .soundboard button:hover { background: #333; }
-    .sliders { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
-    .slider-group { margin: 10px; text-align: center; }
-    input[type=range] {
-        width: 150px;
-        cursor: pointer;
-    }
+body { font-family: system-ui, sans-serif; background: #0b0b0b; color: #eee; text-align: center; padding: 20px; }
+video, audio { margin: 10px; border-radius: 10px; background: #000; }
+input, button, select { margin: 5px; padding: 8px 12px; border-radius: 8px; border: none; outline: none; }
+button { background: #1a1a1a; color: #fff; cursor: pointer; transition: 0.2s; }
+button:hover { background: #333; }
+.section { margin-top: 20px; }
+.soundboard button { display: inline-block; margin: 6px; padding: 10px 14px; border-radius: 10px; border: 1px solid #333; }
+.soundboard button:hover { background: #333; }
+.sliders { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+.slider-group { margin: 10px; text-align: center; }
+input[type=range] { width: 150px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -114,11 +37,7 @@ $musicFiles = listR2Files();
     <audio id="music" controls></audio><br>
     <select id="playlist">
         <option value="">-- Select Song --</option>
-        <?php foreach ($musicFiles as $f): ?>
-            <option value="<?= htmlspecialchars($f['url']) ?>"><?= htmlspecialchars($f['name']) ?></option>
-        <?php endforeach; ?>
     </select>
-    <input type="file" id="fileInput" accept="audio/*">
 </div>
 
 <div class="section soundboard">
@@ -149,10 +68,174 @@ $musicFiles = listR2Files();
     </div>
 </div>
 
+<!-- Include your Arrays.js first -->
+<script src="Arrays.js"></script>
+
 <script>
-// ---- JavaScript identical to the previous working version ----
-// (dynamic audio routing, streaming logic, etc.)
-// Just keep the JS part from the last working version I gave you.
+const startBtn = document.getElementById("start");
+const stopBtn = document.getElementById("stop");
+const preview = document.getElementById("preview");
+const videoToggle = document.getElementById("videoToggle");
+const musicToggle = document.getElementById("musicToggle");
+const music = document.getElementById("music");
+const playlist = document.getElementById("playlist");
+const soundButtons = document.querySelectorAll(".soundboard button");
+
+let ws, recorder, finalStream;
+let audioCtx, destination;
+let micGain, musicGain, fxGain;
+let micSource, musicSource;
+let soundSources = {};
+let initialized = false;
+
+// Sound effects
+const sounds = {
+    crowd: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Applause%20Crowd%20Cheering%20sound%20effect.mp3"),
+    bomb: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
+    gun: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Mossberg%20590%20a1%20Shotgun%20Sound%20Effect%20(Loading%20and%20shooting)%20(3_10%20Guns).mp3"),
+    laugh: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Big%20Crowd%20Laughing%20Sound%20Effect.mp3"),
+    intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
+    hellnah: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Oh%20my%20god%2C%20Oh%20hell%20nah%20-%20Meme%20Sound%20Effect.mp3"),
+    shock: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/I%20cant%20believe%20youve%20done%20this%20(Full%20Facepunch%20Meme)%20-%20Sound%20Effect%20for%20editing.mp3"),
+    wtf: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
+    other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
+};
+
+// Initialize AudioContext
+async function initAudio() {
+    if(initialized) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    destination = audioCtx.createMediaStreamDestination();
+
+    const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    micSource = audioCtx.createMediaStreamSource(micStream);
+    micGain = audioCtx.createGain();
+    micGain.gain.value = document.getElementById("micVol").value;
+    micSource.connect(micGain).connect(destination);
+
+    musicGain = audioCtx.createGain();
+    musicGain.gain.value = document.getElementById("musicVol").value;
+
+    fxGain = audioCtx.createGain();
+    fxGain.gain.value = document.getElementById("fxVol").value;
+
+    initialized = true;
+}
+
+function resumeAudioContext() { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); }
+
+// Volume sliders
+document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
+document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
+document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
+
+// Soundboard
+soundButtons.forEach(btn => {
+    btn.onclick = async () => {
+        if(!initialized) await initAudio();
+        resumeAudioContext();
+        const s = sounds[btn.dataset.sound];
+        if(!s) return;
+        if(soundSources[btn.dataset.sound]) try { soundSources[btn.dataset.sound].disconnect(); } catch(e){}
+        const src = audioCtx.createMediaElementSource(s);
+        src.connect(fxGain).connect(destination);
+        src.connect(audioCtx.destination);
+        soundSources[btn.dataset.sound] = src;
+        s.currentTime = 0;
+        s.play().catch(()=>{});
+    };
+});
+
+// Populate playlist from DefaultPlaylist in Arrays.js
+function loadPlaylist() {
+    playlist.innerHTML = '<option value="">-- Select Song --</option>';
+    DefaultPlaylist.forEach(song => {
+        const opt = document.createElement("option");
+        opt.value = song.url;
+        opt.textContent = song.name;
+        playlist.appendChild(opt);
+    });
+}
+loadPlaylist();
+
+// Set music source
+async function setMusicSource(src) {
+    if(!initialized) await initAudio();
+    resumeAudioContext();
+    music.pause();
+    if(musicSource) try { musicSource.disconnect(); } catch(e){}
+    music.src = src;
+    if(musicToggle.checked) {
+        musicSource = audioCtx.createMediaElementSource(music);
+        musicSource.connect(musicGain).connect(destination);
+        musicSource.connect(audioCtx.destination);
+        music.play().catch(()=>{});
+    }
+}
+
+playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
+
+// Mixed stream
+async function createMixedStream() {
+    if(!initialized) await initAudio();
+    return destination.stream;
+}
+
+// Broadcast
+async function startBroadcast() {
+    const key = document.getElementById("streamKey").value.trim();
+    if(!key) return alert("Enter stream key");
+    startBtn.disabled = true;
+    try {
+        const mixed = await createMixedStream();
+        let finalTracks = [];
+        if(videoToggle.checked) {
+            const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            preview.srcObject = camStream;
+            finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
+        } else {
+            preview.srcObject = mixed;
+            finalTracks = [...mixed.getAudioTracks()];
+        }
+
+        finalStream = new MediaStream(finalTracks);
+        const wsUrl = "<?php echo getenv('Ec2Websocket') ?: 'wss://default-url'; ?>";
+        ws = new WebSocket(wsUrl + "?key=" + encodeURIComponent(key));
+        ws.binaryType = "arraybuffer";
+
+        ws.onopen = () => {
+            let mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
+            if(!MediaRecorder.isTypeSupported(mime)) mime = videoToggle.checked ? "video/webm" : "audio/webm";
+            recorder = new MediaRecorder(finalStream, { mimeType: mime });
+            recorder.ondataavailable = async e => { if(e.data.size && ws.readyState === WebSocket.OPEN) ws.send(await e.data.arrayBuffer()); };
+            recorder.onstart = () => { stopBtn.disabled = false; console.log("🎥 Streaming started"); };
+            recorder.start(videoToggle.checked ? 300 : 1000);
+        };
+        ws.onclose = stopBroadcast;
+        ws.onerror = console.error;
+    } catch(err) {
+        console.error(err);
+        alert("Media access denied or stream failed.");
+        startBtn.disabled = false;
+    }
+}
+
+function stopBroadcast() {
+    stopBtn.disabled = true;
+    startBtn.disabled = false;
+    if(recorder && recorder.state !== "inactive") recorder.stop();
+    if(finalStream) finalStream.getTracks().forEach(t => t.stop());
+    if(ws && ws.readyState === WebSocket.OPEN) ws.close();
+    preview.srcObject = null;
+    music.pause();
+    Object.values(sounds).forEach(s => s.pause());
+    for(let src of Object.values(soundSources)) try { src.disconnect(); } catch(e){}
+    soundSources = {};
+    console.log("🛑 Broadcast stopped");
+}
+
+startBtn.onclick = () => { resumeAudioContext(); startBroadcast(); };
+stopBtn.onclick = stopBroadcast;
 </script>
 </body>
 </html>
