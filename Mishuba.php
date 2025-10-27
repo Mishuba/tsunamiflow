@@ -106,7 +106,8 @@
 </div>
 
 <script src="./JS/Arrays.js"></script>
-<script>
+<script type="module">
+import { DefaultPlaylist } from "./JS/Arrays.js";
 const startBtn = document.getElementById("start");
 const stopBtn = document.getElementById("stop");
 const preview = document.getElementById("preview");
