@@ -65,14 +65,13 @@
 <div class="section playlist">
     <h3>🎶 Music Player</h3>
     <audio id="music" controls></audio><br>
-    <select id="playlist"></select>
+    <select id="playlist">
+        <option value="">-- Select Song --</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
+    </select>
     <input type="file" id="fileInput" accept="audio/*">
-    <input type="url" id="songURL" placeholder="Enter song URL">
-    <button id="playURL">Play URL</button><br>
-    <button id="shuffleBtn">Shuffle: Off</button>
-    <button id="repeatBtn">Repeat: Off</button>
-    <button id="prevBtn">⏮️ Prev</button>
-    <button id="nextBtn">⏭️ Next</button>
 </div>
 
 <div class="section soundboard">
@@ -103,12 +102,7 @@
     </div>
 </div>
 
-<script type="module">
-// ------------------- CONFIG -------------------
-import { DefaultPlaylist } from "./JS/Arrays.js";
-const defaultPlaylist = DefaultPlaylist;
-
-// ------------------- ELEMENTS -------------------
+<script>
 const startBtn = document.getElementById("start");
 const stopBtn = document.getElementById("stop");
 const preview = document.getElementById("preview");
@@ -118,21 +112,12 @@ const music = document.getElementById("music");
 const playlist = document.getElementById("playlist");
 const fileInput = document.getElementById("fileInput");
 const soundButtons = document.querySelectorAll(".soundboard button");
-const playURLBtn = document.getElementById("playURL");
-const songURL = document.getElementById("songURL");
-const shuffleBtn = document.getElementById("shuffleBtn");
-const repeatBtn = document.getElementById("repeatBtn");
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
 
 let ws, recorder, finalStream, audioCtx, mixedStream;
 let micGain, musicGain, fxGain;
-let shuffle = false;
-let repeat = false;
-let currentIndex = 0;
-let dynamicPlaylist = [...defaultPlaylist];
+let destination, musicSource;
 
-// ------------------- SOUND FX -------------------
+// 🎧 Preload sound effects
 const sounds = {
     crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
     bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
@@ -145,87 +130,34 @@ const sounds = {
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
 
-// Populate playlist dropdown
-function populatePlaylist() {
-    playlist.innerHTML = "<option value=''>-- Select Song --</option>";
-    dynamicPlaylist.forEach(url => {
-        const option = document.createElement("option");
-        option.value = url;
-        option.textContent = url.split("/").pop();
-        playlist.appendChild(option);
-    });
-}
-populatePlaylist();
-
-// ------------------- PLAYER LOGIC -------------------
-function playTrack(index) {
-    if (index < 0 || index >= dynamicPlaylist.length) return;
-    currentIndex = index;
-    music.src = dynamicPlaylist[index];
-    music.play().catch(console.error);
-    playlist.value = dynamicPlaylist[index];
-}
-playlist.onchange = () => {
-    if (playlist.value) playTrack(dynamicPlaylist.indexOf(playlist.value));
-};
-fileInput.onchange = e => {
-    const file = e.target.files[0];
-    if (file) {
-        const url = URL.createObjectURL(file);
-        dynamicPlaylist.push(url);
-        populatePlaylist();
-        playTrack(dynamicPlaylist.length - 1);
-    }
-};
-playURLBtn.onclick = () => {
-    const url = songURL.value.trim();
-    if (!url) return alert("Enter a song URL");
-    dynamicPlaylist.push(url);
-    populatePlaylist();
-    playTrack(dynamicPlaylist.length - 1);
-};
-nextBtn.onclick = () => {
-    currentIndex = shuffle ? Math.floor(Math.random() * dynamicPlaylist.length)
-        : (currentIndex + 1) % dynamicPlaylist.length;
-    playTrack(currentIndex);
-};
-prevBtn.onclick = () => {
-    currentIndex = shuffle ? Math.floor(Math.random() * dynamicPlaylist.length)
-        : (currentIndex - 1 + dynamicPlaylist.length) % dynamicPlaylist.length;
-    playTrack(currentIndex);
-};
-shuffleBtn.onclick = () => {
-    shuffle = !shuffle;
-    shuffleBtn.textContent = `Shuffle: ${shuffle ? "On" : "Off"}`;
-};
-repeatBtn.onclick = () => {
-    repeat = !repeat;
-    repeatBtn.textContent = `Repeat: ${repeat ? "On" : "Off"}`;
-};
-music.addEventListener("ended", () => {
-    if (repeat) playTrack(currentIndex);
-    else nextBtn.onclick();
+// Resume AudioContext if user triggers a sound while suspended
+Object.values(sounds).forEach(a => {
+    a.onplay = () => {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+    };
 });
 
-// ------------------- VOLUME -------------------
+// 🎚 Volume Controls
 document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
 document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
 document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
 
-// ------------------- SOUNDBOARD -------------------
+// 🔊 Soundboard
 soundButtons.forEach(btn => {
-    btn.onclick = () => {
-        const s = sounds[btn.dataset.sound];
-        if (!s) return;
-        s.currentTime = 0;
-        s.play().catch(console.error);
-    };
+    btn.onclick = () => playEffect(btn.dataset.sound);
 });
 
-// ------------------- AUDIO MIXING -------------------
+function playEffect(name) {
+    const s = sounds[name];
+    if (!s) return;
+    s.currentTime = 0;
+    s.play().catch(err => console.error(err));
+}
+
+// 🧠 Create Mixed Stream
 async function createMixedStream() {
     audioCtx = new AudioContext();
-    const destination = audioCtx.createMediaStreamDestination();
+    destination = audioCtx.createMediaStreamDestination();
 
     // Mic
     const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -236,10 +168,11 @@ async function createMixedStream() {
 
     // Music
     if (musicToggle.checked) {
-        const musicSource = audioCtx.createMediaElementSource(music);
         musicGain = audioCtx.createGain();
         musicGain.gain.value = document.getElementById("musicVol").value;
+        musicSource = audioCtx.createMediaElementSource(music);
         musicSource.connect(musicGain).connect(destination);
+        musicSource.connect(audioCtx.destination);
     }
 
     // FX
@@ -248,61 +181,95 @@ async function createMixedStream() {
     for (const key in sounds) {
         const src = audioCtx.createMediaElementSource(sounds[key]);
         src.connect(fxGain).connect(destination);
+        src.connect(audioCtx.destination);
     }
 
     mixedStream = destination.stream;
     return mixedStream;
 }
 
-// ------------------- BROADCAST -------------------
+// 🔄 Update music source dynamically
+function setMusicSource(src) {
+    if (!audioCtx) return;
+    music.src = src;
+    music.play().catch(()=>{});
+
+    if (musicSource) musicSource.disconnect();
+
+    musicSource = audioCtx.createMediaElementSource(music);
+    musicSource.connect(musicGain).connect(destination);
+    musicSource.connect(audioCtx.destination);
+}
+
+// 📂 Playlist + Upload
+playlist.onchange = () => {
+    if (playlist.value) setMusicSource(playlist.value);
+};
+fileInput.onchange = (e) => {
+    const file = e.target.files[0];
+    if (file) setMusicSource(URL.createObjectURL(file));
+};
+
+// 🚀 Start Broadcast
 async function startBroadcast() {
     const key = document.getElementById("streamKey").value.trim();
     if (!key) return alert("Enter stream key");
 
     startBtn.disabled = true;
+
     try {
         const mixed = await createMixedStream();
-        let tracks = [];
 
+        let finalTracks = [];
         if (videoToggle.checked) {
             const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
             preview.srcObject = camStream;
-            tracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
+            finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
         } else {
             preview.srcObject = mixed;
-            tracks = [...mixed.getAudioTracks()];
+            finalTracks = [...mixed.getAudioTracks()];
         }
 
-        finalStream = new MediaStream(tracks);
-        const wsURL = "<?php echo getenv('Ec2Websocket') ?: 'wss://world.tsunamiflow.club:8443'; ?>";
-        ws = new WebSocket(`${wsURL}?key=${encodeURIComponent(key)}`);
+        finalStream = new MediaStream(finalTracks);
+        ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => {
             const mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
             recorder = new MediaRecorder(finalStream, { mimeType: mime });
 
-            recorder.ondataavailable = async e => {
+            recorder.ondataavailable = async (e) => {
                 if (e.data.size > 0 && ws.readyState === WebSocket.OPEN)
                     ws.send(await e.data.arrayBuffer());
             };
-            recorder.onstart = () => stopBtn.disabled = false;
+
+            recorder.onstart = () => {
+                stopBtn.disabled = false;
+                console.log("🎥 Streaming started");
+            };
+
             recorder.start(videoToggle.checked ? 300 : 1000);
         };
+
         ws.onclose = stopBroadcast;
-        ws.onerror = e => console.error("WebSocket Error:", e);
+        ws.onerror = err => console.error("WebSocket Error:", err);
+
     } catch (err) {
         console.error(err);
-        alert("Failed to access media.");
+        alert("Media access denied or stream failed.");
         startBtn.disabled = false;
     }
 }
+
+// 🛑 Stop Broadcast
 function stopBroadcast() {
     stopBtn.disabled = true;
     startBtn.disabled = false;
+
     if (recorder && recorder.state !== "inactive") recorder.stop();
     if (finalStream) finalStream.getTracks().forEach(t => t.stop());
     if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+
     preview.srcObject = null;
     console.log("🛑 Broadcast stopped");
 }
