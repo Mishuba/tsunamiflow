@@ -100,6 +100,7 @@ export class TfMusic {
         };
 this.audioSocket = Websocket;
 this.WeLive = false;
+this.LiveAudioLink;
     }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
         async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
