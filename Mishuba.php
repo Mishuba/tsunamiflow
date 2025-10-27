@@ -115,6 +115,7 @@ let audioCtx, destination;
 let micGain, musicGain, fxGain;
 let micSource, musicSource;
 let soundSources = {};
+let initialized = false;
 
 // 🎧 Sound effects
 const sounds = {
@@ -129,6 +130,31 @@ const sounds = {
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
 
+// Initialize AudioContext once
+async function initAudio() {
+    if(initialized) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    destination = audioCtx.createMediaStreamDestination();
+
+    // Mic
+    const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    micSource = audioCtx.createMediaStreamSource(micStream);
+    micGain = audioCtx.createGain();
+    micGain.gain.value = document.getElementById("micVol").value;
+    micSource.connect(micGain).connect(destination);
+
+    // Music Gain node
+    musicGain = audioCtx.createGain();
+    musicGain.gain.value = document.getElementById("musicVol").value;
+
+    // FX Gain node
+    fxGain = audioCtx.createGain();
+    fxGain.gain.value = document.getElementById("fxVol").value;
+
+    initialized = true;
+}
+
+// Resume AudioContext
 function resumeAudioContext() {
     if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 }
@@ -140,11 +166,12 @@ document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e
 
 // Soundboard
 soundButtons.forEach(btn => {
-    btn.onclick = () => {
+    btn.onclick = async () => {
+        if(!initialized) await initAudio();
         const s = sounds[btn.dataset.sound];
         if (!s) return;
         resumeAudioContext();
-        if (!soundSources[btn.dataset.sound]) {
+        if(!soundSources[btn.dataset.sound]) {
             const src = audioCtx.createMediaElementSource(s);
             src.connect(fxGain).connect(destination);
             src.connect(audioCtx.destination);
@@ -155,41 +182,19 @@ soundButtons.forEach(btn => {
     };
 });
 
-// Create mixed stream
-async function createMixedStream() {
-    audioCtx = new AudioContext();
-    destination = audioCtx.createMediaStreamDestination();
-
-    // Mic
-    const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    micSource = audioCtx.createMediaStreamSource(micStream);
-    micGain = audioCtx.createGain();
-    micGain.gain.value = document.getElementById("micVol").value;
-    micSource.connect(micGain).connect(destination);
-
-    // Music
-    musicGain = audioCtx.createGain();
-    musicGain.gain.value = document.getElementById("musicVol").value;
-    if (musicToggle.checked && music.src) {
-        musicSource = audioCtx.createMediaElementSource(music);
-        musicSource.connect(musicGain).connect(destination);
-        musicSource.connect(audioCtx.destination);
-    }
-
-    // FX
-    fxGain = audioCtx.createGain();
-    fxGain.gain.value = document.getElementById("fxVol").value;
-
-    return destination.stream;
-}
-
 // Playlist + upload
 playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
-fileInput.onchange = (e) => { const file = e.target.files[0]; if(file) setMusicSource(URL.createObjectURL(file)); };
+fileInput.onchange = (e) => { 
+    const file = e.target.files[0]; 
+    if(file) { 
+        playlist.value = ""; 
+        setMusicSource(URL.createObjectURL(file)); 
+    } 
+};
 
-// Set music source
-function setMusicSource(src) {
-    if(!audioCtx || !destination) return;
+// Set music source and auto-connect
+async function setMusicSource(src) {
+    if(!initialized) await initAudio();
     resumeAudioContext();
     music.pause();
     if(musicSource) try { musicSource.disconnect(); } catch(e) {}
@@ -200,6 +205,12 @@ function setMusicSource(src) {
         musicSource.connect(audioCtx.destination);
         music.play().catch(()=>{});
     }
+}
+
+// Create mixed stream
+async function createMixedStream() {
+    if(!initialized) await initAudio();
+    return destination.stream;
 }
 
 // Start broadcast
@@ -222,7 +233,9 @@ async function startBroadcast() {
         }
 
         finalStream = new MediaStream(finalTracks);
-        ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
+
+        const wsUrl = "<?php echo getenv('Ec2Websocket') ?: 'wss://default-url'; ?>";
+        ws = new WebSocket(wsUrl + "?key=" + encodeURIComponent(key));
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => {
@@ -251,10 +264,17 @@ async function startBroadcast() {
 function stopBroadcast() {
     stopBtn.disabled = true;
     startBtn.disabled = false;
+
     if(recorder && recorder.state !== "inactive") recorder.stop();
     if(finalStream) finalStream.getTracks().forEach(t => t.stop());
     if(ws && ws.readyState === WebSocket.OPEN) ws.close();
     preview.srcObject = null;
+
+    // Pause music and soundboard
+    music.pause();
+    Object.values(sounds).forEach(s => s.pause());
+    soundSources = {};
+
     console.log("🛑 Broadcast stopped");
 }
 
