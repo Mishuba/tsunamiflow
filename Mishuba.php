@@ -105,7 +105,6 @@
     </div>
 </div>
 
-<script src="./JS/Arrays.js"></script>
 <script type="module">
 import { DefaultPlaylist } from "./JS/Arrays.js";
 const startBtn = document.getElementById("start");
