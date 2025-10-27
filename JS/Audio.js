@@ -510,6 +510,25 @@ this.LiveAudioLink;
         console.log(this.SongList1st + " is the source of the current song.");
         return this.SongList1st;
     }
+    StartLiveAudio () {
+        if(this.WeLive) {
+             return;
+        } else {
+           this.WeLive = true;
+           this.TsunamiAudio.src = this.LiveAudioLink;
+//start audio with method
+
+        }
+    }
+    StopLiveAudio () {
+       if(!this.WeLive) {
+           this.WeLive = false;
+           this.TsunamiAudio.pause();
+           this.TsunamiAudio.src = "";
+       } else {
+
+       }
+    }
     HandleArrayBuffer(buffer, context) {
         if (context.state === "suspended") {
             context.resume();
