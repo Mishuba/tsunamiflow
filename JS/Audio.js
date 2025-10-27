@@ -1,7 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext, AudioAnalyser, AudioMedia) {
+    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext = null, AudioAnalyser = null, AudioMedia = null, Websocket = null) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
         this.TsunamiRadioButtons = Buttons;
@@ -98,6 +98,7 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
+this.audioSocket = Websocket;
     }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
         async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
