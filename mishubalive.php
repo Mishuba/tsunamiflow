@@ -2,7 +2,7 @@
 require "config.php";
 
 // List all music files from Cloudflare R2
-function listR2Files($prefix = 'music/') {
+function listR2Files($prefix = 'Music/') {
     $bucket = "tsunami-radio";
     $endpoint = CLOUDFLARE_R2_ENDPOINT; // e.g. https://<your-account-id>.r2.cloudflarestorage.com
     $accessKey = CLOUDFLARE_R2_ACCESS_KEY;
