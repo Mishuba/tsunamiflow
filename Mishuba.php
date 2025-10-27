@@ -6,47 +6,44 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Mishuba Live Broadcaster Console</title>
 <style>
-    body {
-        font-family: system-ui, sans-serif;
-        background: #0b0b0b;
-        color: #eee;
-        text-align: center;
-        padding: 20px;
-    }
-    video, audio {
-        margin: 10px;
-        border-radius: 10px;
-        background: #000;
-    }
-    input, button, select {
-        margin: 5px;
-        padding: 8px 12px;
-        border-radius: 8px;
-        border: none;
-        outline: none;
-    }
-    button {
-        background: #1a1a1a;
-        color: #fff;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    button:hover { background: #333; }
-    .section { margin-top: 20px; }
-    .soundboard button {
-        display: inline-block;
-        margin: 6px;
-        padding: 10px 14px;
-        border-radius: 10px;
-        border: 1px solid #333;
-    }
-    .soundboard button:hover { background: #333; }
-    .sliders { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
-    .slider-group { margin: 10px; text-align: center; }
-    input[type=range] {
-        width: 150px;
-        cursor: pointer;
-    }
+body {
+    font-family: system-ui, sans-serif;
+    background: #0b0b0b;
+    color: #eee;
+    text-align: center;
+    padding: 20px;
+}
+video, audio {
+    margin: 10px;
+    border-radius: 10px;
+    background: #000;
+}
+input, button, select {
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+button {
+    background: #1a1a1a;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+button:hover { background: #333; }
+.section { margin-top: 20px; }
+.soundboard button {
+    display: inline-block;
+    margin: 6px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #333;
+}
+.soundboard button:hover { background: #333; }
+.sliders { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 10px; }
+.slider-group { margin: 10px; text-align: center; }
+input[type=range] { width: 150px; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -116,6 +113,7 @@ const soundButtons = document.querySelectorAll(".soundboard button");
 let ws, recorder, finalStream, audioCtx, mixedStream;
 let micGain, musicGain, fxGain;
 let destination, musicSource;
+let musicSourceCreated = false;
 
 // 🎧 Preload sound effects
 const sounds = {
@@ -132,9 +130,7 @@ const sounds = {
 
 // Resume AudioContext if user triggers a sound while suspended
 Object.values(sounds).forEach(a => {
-    a.onplay = () => {
-        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-    };
+    a.onplay = () => { if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume(); };
 });
 
 // 🎚 Volume Controls
@@ -149,7 +145,7 @@ soundButtons.forEach(btn => {
 
 function playEffect(name) {
     const s = sounds[name];
-    if (!s) return;
+    if(!s) return;
     s.currentTime = 0;
     s.play().catch(err => console.error(err));
 }
@@ -167,18 +163,22 @@ async function createMixedStream() {
     micSource.connect(micGain).connect(destination);
 
     // Music
-    if (musicToggle.checked) {
-        musicGain = audioCtx.createGain();
-        musicGain.gain.value = document.getElementById("musicVol").value;
-        musicSource = audioCtx.createMediaElementSource(music);
-        musicSource.connect(musicGain).connect(destination);
-        musicSource.connect(audioCtx.destination);
+    musicGain = audioCtx.createGain();
+    musicGain.gain.value = document.getElementById("musicVol").value;
+
+    if(musicToggle.checked) {
+        if(!musicSourceCreated) {
+            musicSource = audioCtx.createMediaElementSource(music);
+            musicSource.connect(musicGain).connect(destination);
+            musicSource.connect(audioCtx.destination);
+            musicSourceCreated = true;
+        }
     }
 
     // FX
     fxGain = audioCtx.createGain();
     fxGain.gain.value = document.getElementById("fxVol").value;
-    for (const key in sounds) {
+    for(const key in sounds) {
         const src = audioCtx.createMediaElementSource(sounds[key]);
         src.connect(fxGain).connect(destination);
         src.connect(audioCtx.destination);
@@ -190,38 +190,26 @@ async function createMixedStream() {
 
 // 🔄 Update music source dynamically
 function setMusicSource(src) {
-    if (!audioCtx) return;
+    if(!audioCtx) return;
     music.src = src;
     music.play().catch(()=>{});
-
-    if (musicSource) musicSource.disconnect();
-
-    musicSource = audioCtx.createMediaElementSource(music);
-    musicSource.connect(musicGain).connect(destination);
-    musicSource.connect(audioCtx.destination);
 }
 
 // 📂 Playlist + Upload
-playlist.onchange = () => {
-    if (playlist.value) setMusicSource(playlist.value);
-};
-fileInput.onchange = (e) => {
-    const file = e.target.files[0];
-    if (file) setMusicSource(URL.createObjectURL(file));
-};
+playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
+fileInput.onchange = (e) => { const file = e.target.files[0]; if(file) setMusicSource(URL.createObjectURL(file)); };
 
 // 🚀 Start Broadcast
 async function startBroadcast() {
     const key = document.getElementById("streamKey").value.trim();
-    if (!key) return alert("Enter stream key");
-
+    if(!key) return alert("Enter stream key");
     startBtn.disabled = true;
 
     try {
         const mixed = await createMixedStream();
 
         let finalTracks = [];
-        if (videoToggle.checked) {
+        if(videoToggle.checked) {
             const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
             preview.srcObject = camStream;
             finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
@@ -239,7 +227,7 @@ async function startBroadcast() {
             recorder = new MediaRecorder(finalStream, { mimeType: mime });
 
             recorder.ondataavailable = async (e) => {
-                if (e.data.size > 0 && ws.readyState === WebSocket.OPEN)
+                if(e.data.size > 0 && ws.readyState === WebSocket.OPEN)
                     ws.send(await e.data.arrayBuffer());
             };
 
@@ -254,7 +242,7 @@ async function startBroadcast() {
         ws.onclose = stopBroadcast;
         ws.onerror = err => console.error("WebSocket Error:", err);
 
-    } catch (err) {
+    } catch(err) {
         console.error(err);
         alert("Media access denied or stream failed.");
         startBtn.disabled = false;
@@ -266,9 +254,9 @@ function stopBroadcast() {
     stopBtn.disabled = true;
     startBtn.disabled = false;
 
-    if (recorder && recorder.state !== "inactive") recorder.stop();
-    if (finalStream) finalStream.getTracks().forEach(t => t.stop());
-    if (ws && ws.readyState === WebSocket.OPEN) ws.close();
+    if(recorder && recorder.state !== "inactive") recorder.stop();
+    if(finalStream) finalStream.getTracks().forEach(t => t.stop());
+    if(ws && ws.readyState === WebSocket.OPEN) ws.close();
 
     preview.srcObject = null;
     console.log("🛑 Broadcast stopped");
