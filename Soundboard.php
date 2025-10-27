@@ -119,7 +119,7 @@ let micGain, musicGain, fxGain;
 // 🎧 Preload sound effects
 const sounds = {
     crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
-    bomb: new Audio("https://actions.google.com/sounds/v1/explosions/explosion.ogg"),
+    bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
     gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effectb(Loading and shooting) (3_10 Guns).mp3"),
     laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
     intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
