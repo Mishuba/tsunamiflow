@@ -117,37 +117,34 @@ let micSource, musicSource;
 let soundSources = {};
 let initialized = false;
 
-// 🎧 Sound effects
+// Sound effects (URLs encoded)
 const sounds = {
-    crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
-    bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
-    gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effect (Loading and shooting) (3_10 Guns).mp3"),
-    laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
+    crowd: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Applause%20Crowd%20Cheering%20sound%20effect.mp3"),
+    bomb: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
+    gun: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Mossberg%20590%20a1%20Shotgun%20Sound%20Effect%20(Loading%20and%20shooting)%20(3_10%20Guns).mp3"),
+    laugh: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Big%20Crowd%20Laughing%20Sound%20Effect.mp3"),
     intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
-    hellnah: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
-    shock: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/I cant believe youve done this (Full Facepunch Meme) - Sound Effect for editing.mp3"),
-    wtf: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
+    hellnah: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Oh%20my%20god%2C%20Oh%20hell%20nah%20-%20Meme%20Sound%20Effect.mp3"),
+    shock: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/I%20cant%20believe%20youve%20done%20this%20(Full%20Facepunch%20Meme)%20-%20Sound%20Effect%20for%20editing.mp3"),
+    wtf: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
 
-// Initialize AudioContext once
+// Initialize AudioContext
 async function initAudio() {
     if(initialized) return;
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     destination = audioCtx.createMediaStreamDestination();
 
-    // Mic
     const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     micSource = audioCtx.createMediaStreamSource(micStream);
     micGain = audioCtx.createGain();
     micGain.gain.value = document.getElementById("micVol").value;
     micSource.connect(micGain).connect(destination);
 
-    // Music Gain node
     musicGain = audioCtx.createGain();
     musicGain.gain.value = document.getElementById("musicVol").value;
 
-    // FX Gain node
     fxGain = audioCtx.createGain();
     fxGain.gain.value = document.getElementById("fxVol").value;
 
@@ -168,36 +165,38 @@ document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e
 soundButtons.forEach(btn => {
     btn.onclick = async () => {
         if(!initialized) await initAudio();
-        const s = sounds[btn.dataset.sound];
-        if (!s) return;
         resumeAudioContext();
-        if(!soundSources[btn.dataset.sound]) {
-            const src = audioCtx.createMediaElementSource(s);
-            src.connect(fxGain).connect(destination);
-            src.connect(audioCtx.destination);
-            soundSources[btn.dataset.sound] = src;
+        const s = sounds[btn.dataset.sound];
+        if(!s) return;
+
+        // Disconnect old source if exists
+        if(soundSources[btn.dataset.sound]) {
+            try { soundSources[btn.dataset.sound].disconnect(); } catch(e){}
         }
+
+        const src = audioCtx.createMediaElementSource(s);
+        src.connect(fxGain).connect(destination);
+        src.connect(audioCtx.destination);
+        soundSources[btn.dataset.sound] = src;
+
         s.currentTime = 0;
         s.play().catch(()=>{});
     };
 });
 
-// Playlist + upload
+// Playlist + file input
 playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
-fileInput.onchange = (e) => { 
+fileInput.onchange = e => { 
     const file = e.target.files[0]; 
-    if(file) { 
-        playlist.value = ""; 
-        setMusicSource(URL.createObjectURL(file)); 
-    } 
+    if(file) { playlist.value = ""; setMusicSource(URL.createObjectURL(file)); }
 };
 
-// Set music source and auto-connect
+// Set music source
 async function setMusicSource(src) {
     if(!initialized) await initAudio();
     resumeAudioContext();
     music.pause();
-    if(musicSource) try { musicSource.disconnect(); } catch(e) {}
+    if(musicSource) try { musicSource.disconnect(); } catch(e){}
     music.src = src;
     if(musicToggle.checked) {
         musicSource = audioCtx.createMediaElementSource(music);
@@ -218,7 +217,6 @@ async function startBroadcast() {
     const key = document.getElementById("streamKey").value.trim();
     if(!key) return alert("Enter stream key");
     startBtn.disabled = true;
-
     try {
         const mixed = await createMixedStream();
 
@@ -239,7 +237,8 @@ async function startBroadcast() {
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => {
-            const mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
+            let mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
+            if(!MediaRecorder.isTypeSupported(mime)) mime = videoToggle.checked ? "video/webm" : "audio/webm";
             recorder = new MediaRecorder(finalStream, { mimeType: mime });
             recorder.ondataavailable = async e => {
                 if(e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
@@ -270,15 +269,17 @@ function stopBroadcast() {
     if(ws && ws.readyState === WebSocket.OPEN) ws.close();
     preview.srcObject = null;
 
-    // Pause music and soundboard
     music.pause();
     Object.values(sounds).forEach(s => s.pause());
+    for(let src of Object.values(soundSources)) {
+        try { src.disconnect(); } catch(e){}
+    }
     soundSources = {};
 
     console.log("🛑 Broadcast stopped");
 }
 
-startBtn.onclick = startBroadcast;
+startBtn.onclick = () => { resumeAudioContext(); startBroadcast(); };
 stopBtn.onclick = stopBroadcast;
 </script>
 </body>
