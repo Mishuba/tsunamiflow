@@ -515,7 +515,8 @@ this.LiveAudioLink;
              return;
         } else {
            this.WeLive = true;
-           this.TsunamiAudio.src = this.LiveAudioLink;
+           this.TsunamiAudio.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
+
 //start audio with method
 
         }
