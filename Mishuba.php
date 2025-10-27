@@ -119,15 +119,15 @@ let initialized = false;
 
 // Sound effects (URLs encoded)
 const sounds = {
-    crowd: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Applause%20Crowd%20Cheering%20sound%20effect.mp3"),
-    bomb: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
-    gun: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Mossberg%20590%20a1%20Shotgun%20Sound%20Effect%20(Loading%20and%20shooting)%20(3_10%20Guns).mp3"),
-    laugh: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Big%20Crowd%20Laughing%20Sound%20Effect.mp3"),
-    intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
-    hellnah: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/Oh%20my%20god%2C%20Oh%20hell%20nah%20-%20Meme%20Sound%20Effect.mp3"),
-    shock: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/I%20cant%20believe%20youve%20done%20this%20(Full%20Facepunch%20Meme)%20-%20Sound%20Effect%20for%20editing.mp3"),
-    wtf: new Audio("https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3"),
-    other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
+    crowd: "https://radio.tsunamiflow.club/Sound%20Effects/Live/Applause%20Crowd%20Cheering%20sound%20effect.mp3",
+    bomb: "https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3",
+    gun: "https://radio.tsunamiflow.club/Sound%20Effects/Live/Mossberg%20590%20a1%20Shotgun%20Sound%20Effect%20(Loading%20and%20shooting)%20(3_10%20Guns).mp3",
+    laugh: "https://radio.tsunamiflow.club/Sound%20Effects/Live/Big%20Crowd%20Laughing%20Sound%20Effect.mp3",
+    intro: "https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg",
+    hellnah: "https://radio.tsunamiflow.club/Sound%20Effects/Live/Oh%20my%20god%2C%20Oh%20hell%20nah%20-%20Meme%20Sound%20Effect.mp3",
+    shock: "https://radio.tsunamiflow.club/Sound%20Effects/Live/I%20cant%20believe%20youve%20done%20this%20(Full%20Facepunch%20Meme)%20-%20Sound%20Effect%20for%20editing.mp3",
+    wtf: "https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3",
+    other: "https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"
 };
 
 // Initialize AudioContext
@@ -136,51 +136,52 @@ async function initAudio() {
     audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     destination = audioCtx.createMediaStreamDestination();
 
+    // Mic
     const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     micSource = audioCtx.createMediaStreamSource(micStream);
     micGain = audioCtx.createGain();
-    micGain.gain.value = document.getElementById("micVol").value;
+    micGain.gain.value = parseFloat(document.getElementById("micVol").value);
     micSource.connect(micGain).connect(destination);
 
+    // Music
     musicGain = audioCtx.createGain();
-    musicGain.gain.value = document.getElementById("musicVol").value;
+    musicGain.gain.value = parseFloat(document.getElementById("musicVol").value);
 
+    // Effects
     fxGain = audioCtx.createGain();
-    fxGain.gain.value = document.getElementById("fxVol").value;
+    fxGain.gain.value = parseFloat(document.getElementById("fxVol").value);
+
+    // Preload sound effect sources
+    for (let key in sounds) {
+        const audio = new Audio(sounds[key]);
+        audio.crossOrigin = "anonymous";
+        const src = audioCtx.createMediaElementSource(audio);
+        src.connect(fxGain).connect(destination);
+        soundSources[key] = { audio, src };
+    }
 
     initialized = true;
 }
 
 // Resume AudioContext
-function resumeAudioContext() {
-    if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+async function resumeAudioContext() {
+    if(audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
 }
 
 // Volume sliders
-document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
-document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
-document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
+document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = parseFloat(e.target.value));
+document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = parseFloat(e.target.value));
+document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = parseFloat(e.target.value));
 
 // Soundboard
 soundButtons.forEach(btn => {
     btn.onclick = async () => {
         if(!initialized) await initAudio();
-        resumeAudioContext();
-        const s = sounds[btn.dataset.sound];
-        if(!s) return;
-
-        // Disconnect old source if exists
-        if(soundSources[btn.dataset.sound]) {
-            try { soundSources[btn.dataset.sound].disconnect(); } catch(e){}
-        }
-
-        const src = audioCtx.createMediaElementSource(s);
-        src.connect(fxGain).connect(destination);
-        src.connect(audioCtx.destination);
-        soundSources[btn.dataset.sound] = src;
-
-        s.currentTime = 0;
-        s.play().catch(()=>{});
+        await resumeAudioContext();
+        const sObj = soundSources[btn.dataset.sound];
+        if(!sObj) return;
+        sObj.audio.currentTime = 0;
+        sObj.audio.play().catch(()=>{});
     };
 });
 
@@ -188,21 +189,23 @@ soundButtons.forEach(btn => {
 playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
 fileInput.onchange = e => { 
     const file = e.target.files[0]; 
-    if(file) { playlist.value = ""; setMusicSource(URL.createObjectURL(file)); }
+    if(file) { playlist.value = ""; setMusicSource(URL.createObjectURL(file), true); }
 };
 
 // Set music source
-async function setMusicSource(src) {
+async function setMusicSource(src, isBlob=false) {
     if(!initialized) await initAudio();
-    resumeAudioContext();
+    await resumeAudioContext();
     music.pause();
     if(musicSource) try { musicSource.disconnect(); } catch(e){}
     music.src = src;
     if(musicToggle.checked) {
         musicSource = audioCtx.createMediaElementSource(music);
         musicSource.connect(musicGain).connect(destination);
-        musicSource.connect(audioCtx.destination);
         music.play().catch(()=>{});
+    }
+    if(isBlob) {
+        music.onended = () => URL.revokeObjectURL(src);
     }
 }
 
@@ -246,7 +249,7 @@ async function startBroadcast() {
                 }
             };
             recorder.onstart = () => { stopBtn.disabled = false; console.log("🎥 Streaming started"); };
-            recorder.start(videoToggle.checked ? 300 : 1000);
+            recorder.start(videoToggle.checked ? 1000 : 1000); // 1s chunks
         };
 
         ws.onclose = stopBroadcast;
@@ -270,16 +273,12 @@ function stopBroadcast() {
     preview.srcObject = null;
 
     music.pause();
-    Object.values(sounds).forEach(s => s.pause());
-    for(let src of Object.values(soundSources)) {
-        try { src.disconnect(); } catch(e){}
-    }
-    soundSources = {};
+    for(let s of Object.values(soundSources)) s.audio.pause();
 
     console.log("🛑 Broadcast stopped");
 }
 
-startBtn.onclick = () => { resumeAudioContext(); startBroadcast(); };
+startBtn.onclick = async () => { await resumeAudioContext(); startBroadcast(); };
 stopBtn.onclick = stopBroadcast;
 </script>
 </body>
