@@ -115,9 +115,10 @@ let audioCtx, destination;
 let micGain, musicGain, fxGain;
 let micSource, musicSource;
 let soundSources = {};
+let blobURLs = [];
 let initialized = false;
 
-// Sound effects (URLs encoded)
+// Sound effects
 const sounds = {
     crowd: "https://radio.tsunamiflow.club/Sound%20Effects/Live/Applause%20Crowd%20Cheering%20sound%20effect.mp3",
     bomb: "https://radio.tsunamiflow.club/Sound%20Effects/Live/The%20sound%20of%20a%20bomb%20blast%20Sound%20Effect%20%20((HD)).mp3",
@@ -151,8 +152,8 @@ async function initAudio() {
     fxGain = audioCtx.createGain();
     fxGain.gain.value = parseFloat(document.getElementById("fxVol").value);
 
-    // Preload sound effect sources
-    for (let key in sounds) {
+    // Preload sound effects
+    for(let key in sounds){
         const audio = new Audio(sounds[key]);
         audio.crossOrigin = "anonymous";
         const src = audioCtx.createMediaElementSource(audio);
@@ -164,7 +165,7 @@ async function initAudio() {
 }
 
 // Resume AudioContext
-async function resumeAudioContext() {
+async function resumeAudioContext(){
     if(audioCtx && audioCtx.state === 'suspended') await audioCtx.resume();
 }
 
@@ -173,104 +174,117 @@ document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value 
 document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = parseFloat(e.target.value));
 document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = parseFloat(e.target.value));
 
-// Soundboard
-soundButtons.forEach(btn => {
-    btn.onclick = async () => {
+// Soundboard buttons
+soundButtons.forEach(btn=>{
+    btn.onclick = async ()=>{
         if(!initialized) await initAudio();
         await resumeAudioContext();
-        const sObj = soundSources[btn.dataset.sound];
-        if(!sObj) return;
-        sObj.audio.currentTime = 0;
-        sObj.audio.play().catch(()=>{});
+        const s = soundSources[btn.dataset.sound];
+        if(!s) return;
+        s.audio.currentTime = 0;
+        s.audio.play().catch(()=>{});
     };
 });
 
-// Playlist + file input
-playlist.onchange = () => { if(playlist.value) setMusicSource(playlist.value); };
-fileInput.onchange = e => { 
-    const file = e.target.files[0]; 
-    if(file) { playlist.value = ""; setMusicSource(URL.createObjectURL(file), true); }
+// Playlist and file input
+playlist.onchange = ()=>{ if(playlist.value) setMusicSource(playlist.value); };
+fileInput.onchange = e=>{
+    const file = e.target.files[0];
+    if(file){
+        playlist.value = "";
+        const url = URL.createObjectURL(file);
+        blobURLs.push(url);
+        setMusicSource(url,true);
+    }
 };
 
 // Set music source
-async function setMusicSource(src, isBlob=false) {
+async function setMusicSource(src,isBlob=false){
     if(!initialized) await initAudio();
     await resumeAudioContext();
+
+    // Stop previous
     music.pause();
-    if(musicSource) try { musicSource.disconnect(); } catch(e){}
+    if(musicSource) try{ musicSource.disconnect(); }catch(e){}
+
+    // Revoke old blob URLs
+    blobURLs.forEach(u=>URL.revokeObjectURL(u));
+    blobURLs = isBlob?[src]:[];
+
     music.src = src;
-    if(musicToggle.checked) {
-        musicSource = audioCtx.createMediaElementSource(music);
-        musicSource.connect(musicGain).connect(destination);
-        music.play().catch(()=>{});
-    }
-    if(isBlob) {
-        music.onended = () => URL.revokeObjectURL(src);
+    musicSource = audioCtx.createMediaElementSource(music);
+    musicSource.connect(musicGain).connect(destination);
+
+    if(musicToggle.checked) music.play().catch(()=>{});
+
+    if(isBlob){
+        music.onended = ()=>{ URL.revokeObjectURL(src); blobURLs=[]; };
     }
 }
 
 // Create mixed stream
-async function createMixedStream() {
+async function createMixedStream(){
     if(!initialized) await initAudio();
     return destination.stream;
 }
 
 // Start broadcast
-async function startBroadcast() {
+async function startBroadcast(){
     const key = document.getElementById("streamKey").value.trim();
     if(!key) return alert("Enter stream key");
+
     startBtn.disabled = true;
-    try {
+    try{
         const mixed = await createMixedStream();
 
-        let finalTracks = [];
-        if(videoToggle.checked) {
+        let finalTracks=[];
+        if(videoToggle.checked){
             const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
             preview.srcObject = camStream;
             finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
-        } else {
+        }else{
             preview.srcObject = mixed;
             finalTracks = [...mixed.getAudioTracks()];
         }
 
         finalStream = new MediaStream(finalTracks);
 
-        const wsUrl = "<?php echo getenv('Ec2Websocket') ?: 'wss://default-url'; ?>";
-        ws = new WebSocket(wsUrl + "?key=" + encodeURIComponent(key));
+        ws = new WebSocket("wss://world.tsunamiflow.club/websocket?key="+encodeURIComponent(key));
         ws.binaryType = "arraybuffer";
 
-        ws.onopen = () => {
-            let mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
-            if(!MediaRecorder.isTypeSupported(mime)) mime = videoToggle.checked ? "video/webm" : "audio/webm";
-            recorder = new MediaRecorder(finalStream, { mimeType: mime });
-            recorder.ondataavailable = async e => {
-                if(e.data.size > 0 && ws.readyState === WebSocket.OPEN) {
+        ws.onopen = ()=>{
+            let mime = videoToggle.checked?"video/webm;codecs=vp8,opus":"audio/webm;codecs=opus";
+            if(!MediaRecorder.isTypeSupported(mime)) mime = videoToggle.checked?"video/webm":"audio/webm";
+
+            recorder = new MediaRecorder(finalStream,{mimeType:mime});
+            recorder.ondataavailable=async e=>{
+                if(e.data.size>0 && ws.readyState===WebSocket.OPEN){
                     ws.send(await e.data.arrayBuffer());
                 }
             };
-            recorder.onstart = () => { stopBtn.disabled = false; console.log("🎥 Streaming started"); };
-            recorder.start(videoToggle.checked ? 1000 : 1000); // 1s chunks
+            recorder.onstart=()=>{ stopBtn.disabled=false; console.log("🎥 Streaming started"); };
+            recorder.start(1000);
         };
 
         ws.onclose = stopBroadcast;
-        ws.onerror = err => console.error(err);
+        ws.onerror = err=>console.error(err);
 
-    } catch(err) {
+    }catch(err){
         console.error(err);
         alert("Media access denied or stream failed.");
-        startBtn.disabled = false;
+        startBtn.disabled=false;
     }
 }
 
 // Stop broadcast
-function stopBroadcast() {
-    stopBtn.disabled = true;
-    startBtn.disabled = false;
+function stopBroadcast(){
+    stopBtn.disabled=true;
+    startBtn.disabled=false;
 
-    if(recorder && recorder.state !== "inactive") recorder.stop();
-    if(finalStream) finalStream.getTracks().forEach(t => t.stop());
-    if(ws && ws.readyState === WebSocket.OPEN) ws.close();
-    preview.srcObject = null;
+    if(recorder && recorder.state!=="inactive") recorder.stop();
+    if(finalStream) finalStream.getTracks().forEach(t=>t.stop());
+    if(ws && ws.readyState===WebSocket.OPEN) ws.close();
+    preview.srcObject=null;
 
     music.pause();
     for(let s of Object.values(soundSources)) s.audio.pause();
@@ -278,8 +292,8 @@ function stopBroadcast() {
     console.log("🛑 Broadcast stopped");
 }
 
-startBtn.onclick = async () => { await resumeAudioContext(); startBroadcast(); };
-stopBtn.onclick = stopBroadcast;
+startBtn.onclick=async ()=>{ await resumeAudioContext(); startBroadcast(); };
+stopBtn.onclick=stopBroadcast;
 </script>
 </body>
 </html>
