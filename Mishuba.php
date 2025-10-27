@@ -65,16 +65,14 @@
 <div class="section playlist">
     <h3>🎶 Music Player</h3>
     <audio id="music" controls></audio><br>
-    <select id="playlist">
-        <option value="">-- Select Song --</option>
-    </select>
+    <select id="playlist"></select>
     <input type="file" id="fileInput" accept="audio/*">
-    <input id="songURL" placeholder="Paste audio URL here" style="width: 300px;">
+    <input type="url" id="songURL" placeholder="Enter song URL">
     <button id="playURL">Play URL</button><br>
-    <button id="prevBtn">⏮️ Previous</button>
-    <button id="nextBtn">⏭️ Next</button>
     <button id="shuffleBtn">Shuffle: Off</button>
     <button id="repeatBtn">Repeat: Off</button>
+    <button id="prevBtn">⏮️ Prev</button>
+    <button id="nextBtn">⏭️ Next</button>
 </div>
 
 <div class="section soundboard">
@@ -106,18 +104,25 @@
 </div>
 
 <script type="module">
-import { DefaultPlaylist } from "./JS/Arrays.js";
+// ------------------- CONFIG -------------------
+const defaultPlaylist = [
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+    "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+];
+
+// ------------------- ELEMENTS -------------------
 const startBtn = document.getElementById("start");
 const stopBtn = document.getElementById("stop");
 const preview = document.getElementById("preview");
 const videoToggle = document.getElementById("videoToggle");
 const musicToggle = document.getElementById("musicToggle");
 const music = document.getElementById("music");
-const playlistSelect = document.getElementById("playlist");
+const playlist = document.getElementById("playlist");
 const fileInput = document.getElementById("fileInput");
-const playURLBtn = document.getElementById("playURL");
-const songURLInput = document.getElementById("songURL");
 const soundButtons = document.querySelectorAll(".soundboard button");
+const playURLBtn = document.getElementById("playURL");
+const songURL = document.getElementById("songURL");
 const shuffleBtn = document.getElementById("shuffleBtn");
 const repeatBtn = document.getElementById("repeatBtn");
 const nextBtn = document.getElementById("nextBtn");
@@ -125,15 +130,12 @@ const prevBtn = document.getElementById("prevBtn");
 
 let ws, recorder, finalStream, audioCtx, mixedStream;
 let micGain, musicGain, fxGain;
-let currentIndex = -1;
 let shuffle = false;
 let repeat = false;
+let currentIndex = 0;
+let dynamicPlaylist = [...defaultPlaylist];
 
-// Temporary playlist to include uploaded or manual URL songs
-let tempPlaylist = [];
-let combinedPlaylist = [...DefaultPlaylist];
-
-// 🎧 Sound effects
+// ------------------- SOUND FX -------------------
 const sounds = {
     crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
     bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
@@ -146,50 +148,55 @@ const sounds = {
     other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
 };
 
-// 📂 Populate playlist
-DefaultPlaylist.forEach((song) => {
-    const option = document.createElement("option");
-    option.value = song;
-    option.text = song.split("/").pop();
-    playlistSelect.appendChild(option);
-});
-
-// Play song from combinedPlaylist
-function playTrack(index) {
-    if (index < 0 || index >= combinedPlaylist.length) return;
-    currentIndex = index;
-    music.src = combinedPlaylist[currentIndex];
-    music.play();
-    playlistSelect.value = DefaultPlaylist.includes(combinedPlaylist[currentIndex])
-        ? combinedPlaylist[currentIndex] : "";
+// Populate playlist dropdown
+function populatePlaylist() {
+    playlist.innerHTML = "<option value=''>-- Select Song --</option>";
+    dynamicPlaylist.forEach(url => {
+        const option = document.createElement("option");
+        option.value = url;
+        option.textContent = url.split("/").pop();
+        playlist.appendChild(option);
+    });
 }
+populatePlaylist();
 
-// Playlist select
-playlistSelect.onchange = () => {
-    if (!playlistSelect.value) return;
-    playTrack(DefaultPlaylist.indexOf(playlistSelect.value));
+// ------------------- PLAYER LOGIC -------------------
+function playTrack(index) {
+    if (index < 0 || index >= dynamicPlaylist.length) return;
+    currentIndex = index;
+    music.src = dynamicPlaylist[index];
+    music.play().catch(console.error);
+    playlist.value = dynamicPlaylist[index];
+}
+playlist.onchange = () => {
+    if (playlist.value) playTrack(dynamicPlaylist.indexOf(playlist.value));
 };
-
-// File upload
 fileInput.onchange = e => {
     const file = e.target.files[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    tempPlaylist = [url];
-    combinedPlaylist = [...DefaultPlaylist, ...tempPlaylist];
-    playTrack(DefaultPlaylist.length); // Play uploaded
+    if (file) {
+        const url = URL.createObjectURL(file);
+        dynamicPlaylist.push(url);
+        populatePlaylist();
+        playTrack(dynamicPlaylist.length - 1);
+    }
 };
-
-// Manual URL
 playURLBtn.onclick = () => {
-    const url = songURLInput.value.trim();
+    const url = songURL.value.trim();
     if (!url) return alert("Enter a song URL");
-    tempPlaylist = [url];
-    combinedPlaylist = [...DefaultPlaylist, ...tempPlaylist];
-    playTrack(DefaultPlaylist.length); // Play manual URL
+    dynamicPlaylist.push(url);
+    populatePlaylist();
+    playTrack(dynamicPlaylist.length - 1);
 };
-
-// Shuffle & Repeat buttons
+nextBtn.onclick = () => {
+    currentIndex = shuffle ? Math.floor(Math.random() * dynamicPlaylist.length)
+        : (currentIndex + 1) % dynamicPlaylist.length;
+    playTrack(currentIndex);
+};
+prevBtn.onclick = () => {
+    currentIndex = shuffle ? Math.floor(Math.random() * dynamicPlaylist.length)
+        : (currentIndex - 1 + dynamicPlaylist.length) % dynamicPlaylist.length;
+    playTrack(currentIndex);
+};
 shuffleBtn.onclick = () => {
     shuffle = !shuffle;
     shuffleBtn.textContent = `Shuffle: ${shuffle ? "On" : "Off"}`;
@@ -198,144 +205,107 @@ repeatBtn.onclick = () => {
     repeat = !repeat;
     repeatBtn.textContent = `Repeat: ${repeat ? "On" : "Off"}`;
 };
-
-// Next/Previous buttons
-nextBtn.onclick = () => {
-    if (shuffle) currentIndex = Math.floor(Math.random() * combinedPlaylist.length);
-    else {
-        currentIndex++;
-        if (currentIndex >= combinedPlaylist.length) {
-            if (repeat) currentIndex = 0;
-            else return;
-        }
-    }
-    playTrack(currentIndex);
-};
-
-prevBtn.onclick = () => {
-    if (shuffle) currentIndex = Math.floor(Math.random() * combinedPlaylist.length);
-    else {
-        currentIndex--;
-        if (currentIndex < 0) {
-            if (repeat) currentIndex = combinedPlaylist.length - 1;
-            else return;
-        }
-    }
-    playTrack(currentIndex);
-};
-
-// Auto-next
 music.addEventListener("ended", () => {
-    if (currentIndex === -1) return;
-    nextBtn.onclick();
+    if (repeat) playTrack(currentIndex);
+    else nextBtn.onclick();
 });
 
-// 🎚 Volume Controls
+// ------------------- VOLUME -------------------
 document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
 document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
 document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
 
-// 🔊 Soundboard
+// ------------------- SOUNDBOARD -------------------
 soundButtons.forEach(btn => {
     btn.onclick = () => {
         const s = sounds[btn.dataset.sound];
         if (!s) return;
         s.currentTime = 0;
-        s.play().catch(err => console.error(err));
+        s.play().catch(console.error);
     };
 });
 
-// 🧠 Create Mixed Stream
+// ------------------- AUDIO MIXING -------------------
 async function createMixedStream() {
     audioCtx = new AudioContext();
     const destination = audioCtx.createMediaStreamDestination();
 
+    // Mic
     const micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const micSource = audioCtx.createMediaStreamSource(micStream);
     micGain = audioCtx.createGain();
     micGain.gain.value = document.getElementById("micVol").value;
     micSource.connect(micGain).connect(destination);
 
+    // Music
     if (musicToggle.checked) {
         const musicSource = audioCtx.createMediaElementSource(music);
         musicGain = audioCtx.createGain();
         musicGain.gain.value = document.getElementById("musicVol").value;
         musicSource.connect(musicGain).connect(destination);
-        musicSource.connect(audioCtx.destination);
     }
 
+    // FX
     fxGain = audioCtx.createGain();
     fxGain.gain.value = document.getElementById("fxVol").value;
     for (const key in sounds) {
         const src = audioCtx.createMediaElementSource(sounds[key]);
         src.connect(fxGain).connect(destination);
-        src.connect(audioCtx.destination);
     }
 
     mixedStream = destination.stream;
     return mixedStream;
 }
 
-// 🚀 Start Broadcast
+// ------------------- BROADCAST -------------------
 async function startBroadcast() {
     const key = document.getElementById("streamKey").value.trim();
     if (!key) return alert("Enter stream key");
 
     startBtn.disabled = true;
-
     try {
         const mixed = await createMixedStream();
-        let finalTracks = [];
+        let tracks = [];
 
         if (videoToggle.checked) {
             const camStream = await navigator.mediaDevices.getUserMedia({ video: true });
             preview.srcObject = camStream;
-            finalTracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
+            tracks = [...camStream.getVideoTracks(), ...mixed.getAudioTracks()];
         } else {
             preview.srcObject = mixed;
-            finalTracks = [...mixed.getAudioTracks()];
+            tracks = [...mixed.getAudioTracks()];
         }
 
-        finalStream = new MediaStream(finalTracks);
-        ws = new WebSocket("<?php echo getenv('Ec2Websocket'); ?>?key=" + encodeURIComponent(key));
+        finalStream = new MediaStream(tracks);
+        const wsURL = "<?php echo getenv('Ec2Websocket') ?: 'wss://world.tsunamiflow.club:8443'; ?>";
+        ws = new WebSocket(`${wsURL}?key=${encodeURIComponent(key)}`);
         ws.binaryType = "arraybuffer";
 
         ws.onopen = () => {
             const mime = videoToggle.checked ? "video/webm;codecs=vp8,opus" : "audio/webm;codecs=opus";
             recorder = new MediaRecorder(finalStream, { mimeType: mime });
 
-            recorder.ondataavailable = async (e) => {
+            recorder.ondataavailable = async e => {
                 if (e.data.size > 0 && ws.readyState === WebSocket.OPEN)
                     ws.send(await e.data.arrayBuffer());
             };
-
-            recorder.onstart = () => {
-                stopBtn.disabled = false;
-                console.log("🎥 Streaming started");
-            };
-
+            recorder.onstart = () => stopBtn.disabled = false;
             recorder.start(videoToggle.checked ? 300 : 1000);
         };
-
         ws.onclose = stopBroadcast;
-        ws.onerror = err => console.error("WebSocket Error:", err);
-
+        ws.onerror = e => console.error("WebSocket Error:", e);
     } catch (err) {
         console.error(err);
-        alert("Media access denied or stream failed.");
+        alert("Failed to access media.");
         startBtn.disabled = false;
     }
 }
-
-// 🛑 Stop Broadcast
 function stopBroadcast() {
     stopBtn.disabled = true;
     startBtn.disabled = false;
-
     if (recorder && recorder.state !== "inactive") recorder.stop();
     if (finalStream) finalStream.getTracks().forEach(t => t.stop());
     if (ws && ws.readyState === WebSocket.OPEN) ws.close();
-
     preview.srcObject = null;
     console.log("🛑 Broadcast stopped");
 }
