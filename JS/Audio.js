@@ -530,6 +530,22 @@ this.LiveAudioLink;
 
        }
     }
+handleSocketMessage(data) {
+    if (data.type === "live_stream") {
+      if (data.live) {
+        this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+      } else {
+        this.stopLiveStream();
+      }
+    }
+  }
+
+  attachSocketListeners() {
+    this.socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      this.handleSocketMessage(data);
+    };
+  }
     HandleArrayBuffer(buffer, context) {
         if (context.state === "suspended") {
             context.resume();
