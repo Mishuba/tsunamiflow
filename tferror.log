@@ -1,0 +1,13 @@
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tycadome.tycadomeusers' doesn't exist
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'tycadome.tycadomeusers' doesn't exist
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
+SQLSTATE[HY000] [2002] Connection refused
