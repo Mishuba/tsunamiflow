@@ -276,22 +276,27 @@ export class TfVideo {
             }
         }
     }
-    VideoState(element, context) {
-        console.log("pointless change VideoState() to VideoLoadStarted()");
-        if (context.state === "suspended") {
-            context.resume();
-        } else if (context.state === "running") {
-            console.log("The audio context state is running");
-            if (element.waiting) {
-                context.suspend();
-            }
-        } else {
-            console.log("The Audio context state must be closed");
-            if (element.pause) {
-                this.StopVisualizator();
-            }
+VideoState(element, context) {
+    console.log("pointless change VideoState() to VideoLoadStarted()");
+    if (!context) {
+        console.warn("AudioContext missing.");
+        return;
+    }
+
+    if (context.state === "suspended") {
+        context.resume();
+    } else if (context.state === "running") {
+        console.log("The audio context state is running");
+        if (element.waiting) {
+            context.suspend();
+        }
+    } else {
+        console.log("The Audio context state must be closed");
+        if (element.paused) {
+            this.StopVisualizator();
         }
     }
+}
     emptiedVideo() {
         this.VideoNetworkState();
     }
