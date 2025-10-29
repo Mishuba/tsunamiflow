@@ -247,27 +247,27 @@ export class TfVideo {
                 //No valid source
             }
 
-            if (element.ended) {
-                if (element.src = "") {
-
-                } else if (element.src = undefined) {
-
-                } else if (!element.src) {
-
-                } else {
-
-                }
-            } else {
-                if (element.paused) {
-                    if (element.currentTime === 0) {
-                        console.log("Tsunami Radio has not started yet.");
-                    } else {
-                        console.log("Paused at " + element.currentTime);
-                    }
-                } else {
-                    console.log("A song is still playing. Make the next song play using the functions");
-                }
-            }
+ if (element.ended) {
+    if (element.src === "") {
+        console.log("Radio source is empty string");
+    } else if (element.src === undefined) {
+        console.log("Radio source is undefined");
+    } else if (!element.src) {
+        console.log("Radio source missing");
+    } else {
+        console.log("Radio source ended normally");
+    }
+} else {
+    if (element.paused) {
+        if (element.currentTime === 0) {
+            console.log("Tsunami Radio has not started yet.");
+        } else {
+            console.log("Paused at " + element.currentTime);
+        }
+    } else {
+        console.log("A song is still playing. Make the next song play using the functions");
+    }
+}
         } else {
             if (element.networkState === 3) {
                 console.log("The network could not find the source.");
