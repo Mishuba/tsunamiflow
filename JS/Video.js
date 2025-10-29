@@ -537,7 +537,7 @@ VideoState(element, context) {
     }
     ColorPickerChromaKey(chroma) {
         const Tfhex = chroma.target.value;
-        const rgb = parseInt(hex.slice(1), 16);
+        const rgb = parseInt(Tfhex.slice(1), 16);
         this.chromaKeyColorWebcam.r = (rgb >> 16) & 255;
         this.chromaKeyColorWebcam.g = (rgb >> 8) & 255;
         this.chromaKeyColorWebcam.b = rgb & 255;
