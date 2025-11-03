@@ -48,9 +48,9 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
-console.log(TfUserAgentInfo);
-console.log(`The user native human language setting on this computer is ${TfUserLanguage} we will put this in a variable called TFuserLanguage`);
-console.log(`The current online status of this computer is ${TfOnlineStatus}`);
+//console.log(TfUserAgentInfo);
+//console.log(`The user native human language setting on this computer is ${TfUserLanguage} we will put this in a variable called TFuserLanguage`);
+//console.log(`The current online status of this computer is ${TfOnlineStatus}`);
 
 //The Frame
 export const twoMore = document.getElementById("mainTsectionFdiv");
