@@ -1,4 +1,3 @@
-import { MyNewTFTime, TfUserLanguage, TfUserAgentInfo, TfOnlineStatus } from "./Variables.js";
 import { navButtons } from "./Objects.js";
 import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
@@ -64,7 +63,7 @@ TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
-TFiframe.src = "./../homepage.php";
+TFiframe.src = "./../homepage.html";
 TFiframe.style.background = "white";
 
 const oneMore = TFiframe;
@@ -257,7 +256,7 @@ DoTheThingMan(TFiframe);
 //Nav Begins
 for (const [key, button] of Object.entries(navButtons)) {
     button.addEventListener("click", () => {
-        TFiframe.src = `${key}.php`;
+        TFiframe.src = `${key}.html`;
         DoTheThingMan(TFiframe);
     });
 };
