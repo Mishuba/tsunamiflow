@@ -329,7 +329,7 @@
         <canvas id="TFradioCanvas">
 
         </canvas>
-        <!--p id="TFradioInfo">
+        <p id="TFradioInfo">
             Song Name: , Song Title: , Album Name: , Artist: , Featured Artist: , Writers: , Composers: , Record Label: , Publisher: ,
                 </p>
             <p id="TFradioCurrentTIme">
@@ -343,73 +343,38 @@
                 </p>
             <p id="TFradioProcessBar">
 
-                </p-->
+                </p>
         <audio id="TFradioPlayer" src="" controls controlsList="nodownload"> 
             Radio
-        </audio> <!---->
+        </audio>
     </article>
-<?php
-// Ensure Printful Items exist
-if (!isset($_SESSION['PrintfulItems']) || !is_array($_SESSION['PrintfulItems'])) {
-    $_SESSION['PrintfulItems'] = BasicPrintfulRequest() ?: ['result' => []];
-}
-$myProductsFr = $_SESSION['PrintfulItems'];
-$myProductsFr['result'] = $myProductsFr['result'] ?? [];
-?>
-
 <footer>
-    <?php if (!empty($showSuccess) && $showSuccess): ?>
     <div id="TFstore">
         <h2>Tsunami Flow Store</h2>
-        <?php if (!empty($myProductsFr['result']) && is_array($myProductsFr['result'])): ?>
             <ul>
-                <?php foreach ($myProductsFr['result'] as $ItemsFr): ?>
-                <?php $printfulVariants = getVariantandPrice($ItemsFr['id'] ?? 0); ?>
-                <li id="<?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?>">
-                    <h4><?php echo htmlspecialchars($ItemsFr['name'] ?? 'No Name'); ?></h4>
-                    <img src="<?php echo htmlspecialchars($ItemsFr['thumbnail_url'] ?? ''); ?>" alt="Product Image">
+                <li id="">
+                    <h4></h4>
+                    <img src="" alt="Product Image">
                     <p>
-                        <?php
-                        $TheDescriptionFr = PrintfulProductionDescription($ItemsFr['id'] ?? 0);
-                        echo htmlspecialchars($TheDescriptionFr['result']['product']['description'] ?? 'Description Unavailable');
-                        ?>
                     </p>
 
                     <form class="cartForm" method="POST" action="/server.php">
-                        <?php if (!empty($printfulVariants['sync_variants']) && is_array($printfulVariants['sync_variants'])): ?>
                         <select class="variantSelect" name="product_id" required>
-                            <?php foreach ($printfulVariants['sync_variants'] as $variant): ?>
-                            <option 
-                                value="<?php echo htmlspecialchars($variant['id']); ?>"
-                                data-price="<?php echo htmlspecialchars($variant['retail_price'] ?? 0); ?>"
-                            >
-                                <?php 
-                                echo htmlspecialchars($variant['name'] ?? 'Unknown'); 
-                                echo " (Price: " . htmlspecialchars($variant['retail_price'] ?? 0) . ")";
-                                ?>
+                            <option value="" data-price="">
                             </option>
-                            <?php endforeach; ?>
                         </select>
-                        <?php else: ?>
                         <select disabled><option>No Variants Available</option></select>
-                        <?php endif; ?>
 
                         <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
                         <span class="itemSubtotal">0.00</span>
                         <button type="submit" name="addProductToCart">Add to Cart</button>
                     </form>
                 </li>
-                <?php endforeach; ?>
             </ul>
-        <?php else: ?>
             <p>No products available.</p>
-        <?php endif; ?>
-
         <p>Cart Total: $<span id="cartTotal">0.00</span></p>
     </div>
-    <?php endif; ?>
 </footer>
-
 <script type="module">
 import "./JS/tfMain.js";
 document.addEventListener("DOMContentLoaded", () => {
