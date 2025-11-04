@@ -54,9 +54,9 @@ export function loadBrowserSpecificScript() {
 }
 function doIframeThing(event, source) {
     switch (source.src) {
-        case "homepage.php":
-        case "https://tsunamiflow.club/homepage.php":
-        case "https://www.tsunamiflow.club/homepage.php":
+        case "homepage.html":
+        case "https://tsunamiflow.club/homepage.html":
+        case "https://www.tsunamiflow.club/homepage.html":
             console.log("iframe message received from the homepage");
             console.log("The event type is " + event.data.type);
             if (event.data.type === "Website Updates") {
@@ -69,15 +69,15 @@ function doIframeThing(event, source) {
                     error: "Nothing as of now"
                 };
                 console.log("sending the iframe message");
-                source.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.php");
+                source.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.html");
             } else {
 
             }
             console.log("the end of that");
             break;
-        case "roster.php":
-        case "https://tsunamiflow.club/roster.php":
-        case "https://www.tsunamiflow.club/roster.php":
+        case "roster.html":
+        case "https://tsunamiflow.club/roster.html":
+        case "https://www.tsunamiflow.club/roster.html":
             console.log("The iframe is from the roster page");
             let RosterJson = {
                 type: "roster",
@@ -86,11 +86,11 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for the roster right now"
             };
-            source.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.php");
+            source.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.html");
             break;
-        case "news.php":
-        case "https://tsunamiflow.club/news.php":
-        case "https://www.tsunamiflow.club/news.php":
+        case "news.html":
+        case "https://tsunamiflow.club/news.html":
+        case "https://www.tsunamiflow.club/news.html":
             console.log("The iframe is from the news page");
             let NewsJson = {
                 type: "live",
@@ -99,11 +99,11 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for community right now"
             }
-            source.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.php");
+            source.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.html");
             break;
-        case "Competitions.php":
-        case "https://tsunamiflow.club/Competitions.php":
-        case "https://www.tsunamiflow.club/Competitions.php":
+        case "Competitions.html":
+        case "https://tsunamiflow.club/Competitions.html":
+        case "https://www.tsunamiflow.club/Competitions.html":
             console.log("iframe competition message received");
             let CompetitionJson;
             console.log("checking the data type of the competitions iframe which is " + event.data.type);
@@ -117,7 +117,7 @@ function doIframeThing(event, source) {
                     error: "Nothing for competitions right now"
                 };
 
-                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.html");
             } else if (event.data.type === "game") {
                 CompetitionJson = {
                     type: "game",
@@ -127,14 +127,14 @@ function doIframeThing(event, source) {
                     error: "No errors as of now."
                 };
 
-                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.php");
+                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.html");
             } else {
 
             }
             break;
-        case "TFnetwork.php":
-        case "https://tsunamiflow.club/TFnetwork.php":
-        case "https://www.tsunamiflow.club/TFnetwork.php":
+        case "TFnetwork.html":
+        case "https://tsunamiflow.club/TFnetwork.html":
+        case "https://www.tsunamiflow.club/TFnetwork.html":
             console.log("The iframe is from the TFnetwork page");
             let TfNetworkJson = {
                 type: "network",
@@ -143,11 +143,11 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for network right now"
             };
-            source.contentWindow.postMessage(TfNetworkJson, "https://www.tsunamiflow.club/TFnetwork.php");
+            source.contentWindow.postMessage(TfNetworkJson, "https://www.tsunamiflow.club/TFnetwork.html");
             break;
-        case "Community.php":
-        case "https://tsunamiflow.club/Community.php":
-        case "https://www.tsunamiflow.club/Community.php":
+        case "Community.html":
+        case "https://tsunamiflow.club/Community.html":
+        case "https://www.tsunamiflow.club/Community.html":
             console.log("iframe commmunity message received");
             let CommunityJson = {
                 type: "community",
@@ -157,7 +157,7 @@ function doIframeThing(event, source) {
                 error: "ok no errors for community right now"
             };
 
-            source.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.php");
+            source.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.html");
             break;
         default:
             console.log("The iframe is from the default page " + source.src);
@@ -191,49 +191,49 @@ export async function DoTheThingMan(source) {
 
     console.log("creating and using the add event listener");
     switch (source.src) {
-        case "homepage.php":
-        case "https://tsunamiflow.club/homepage.php":
-        case "https://www.tsunamiflow.club/homepage.php":
+        case "homepage.html":
+        case "https://tsunamiflow.club/homepage.html":
+        case "https://www.tsunamiflow.club/homepage.html":
             console.log("The iframe is from the homepage");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
-        case "roster.php":
-        case "https://tsunamiflow.club/roster.php":
-        case "https://www.tsunamiflow.club/roster.php":
+        case "roster.html":
+        case "https://tsunamiflow.club/roster.html":
+        case "https://www.tsunamiflow.club/roster.html":
             console.log("The iframe is from the roster page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
-        case "news.php":
-        case "https://tsunamiflow.club/news.php":
-        case "https://www.tsunamiflow.club/news.php":
+        case "news.html":
+        case "https://tsunamiflow.club/news.html":
+        case "https://www.tsunamiflow.club/news.html":
             console.log("The iframe is from the news page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
-        case "Competitions.php":
-        case "https://tsunamiflow.club/Competitions.php":
-        case "https://www.tsunamiflow.club/Competitions.php":
+        case "Competitions.html":
+        case "https://tsunamiflow.club/Competitions.html":
+        case "https://www.tsunamiflow.club/Competitions.html":
             console.log("The iframe is from the competitions page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
-        case "TFnetwork.php":
-        case "https://tsunamiflow.club/TFnetwork.php":
-        case "https://www.tsunamiflow.club/TFnetwork.php":
+        case "TFnetwork.html":
+        case "https://tsunamiflow.club/TFnetwork.html":
+        case "https://www.tsunamiflow.club/TFnetwork.html":
             console.log("The iframe is from the Tsunami Flow Network");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
             });
             break;
-        case "Community.php":
-        case "https://tsunamiflow.club/Community.php":
-        case "https://www.tsunamiflow.club/Community.php":
+        case "Community.html":
+        case "https://tsunamiflow.club/Community.html":
+        case "https://www.tsunamiflow.club/Community.html":
             console.log("The iframe is from the community page");
             window.addEventListener("message", async (event) => {
                 checkIframeOrigin(event, source);
