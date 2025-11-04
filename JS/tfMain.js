@@ -9,6 +9,7 @@ import { DoTheThingMan } from "./Functions.js";
 import { HomepageUpdates } from "./sprite.js";
 
 let TfWeather = new Weather();
+let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
