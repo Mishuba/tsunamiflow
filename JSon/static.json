@@ -1,7 +1,16 @@
 {
   "headers": {
     "/**": {
-      "Access-Control-Allow-Origin": "https://www.tsunamiflow.club"
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "public, max-age=3600"
     }
-  }
+  },
+  "redirects": [
+    { "source": "/old", "destination": "/new", "statusCode": 301 }
+  ],
+  "rewrites": [
+    { "source": "/api/*", "destination": "https://api.example.com/:splat" }
+  ],
+  "cleanUrls": true,
+  "trailingSlash": false
 }
