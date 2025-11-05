@@ -5,6 +5,9 @@
       "Cache-Control": "public, max-age=3600"
     }
   },
+  "rewrites": [
+    { "source": "/world/*", "destination": "https://world.tsunamiflow.club/:splat" }
+  ],
   "cleanUrls": true,
   "trailingSlash": false
 }
