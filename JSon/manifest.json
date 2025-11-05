@@ -1,16 +1,52 @@
 {
-    "name": "Tsunami Flow",
-    "shortname": "TF",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#000000",
-    "theme_color": "0A0A0A",
-    "description": "Website Application",
-    "icons": [
-        {
-            "src": "/Pictures/Logo/'Tsunami Flow Logo.png'",
-            "sizes": "192X192",
-            "type": "image/png"
-        }
-    ]
+  "name": "Tsunami Flow Club",
+  "short_name": "TF",
+  "description": "Tycadome - The village of Hidden Dreams homebase.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": [
+    "information",
+    "live streaming",
+    "music",
+    "fashion",
+    "luxury items",
+    "games",
+    "videos"
+  ],
+  "icons": [
+    {
+      "src": "/icons/72Logo.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/96Logo.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/128Logo.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/192Logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/512Logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
