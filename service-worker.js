@@ -2,7 +2,7 @@ const CACHE_NAME = "tf-cache-v1";
 const OFFLINE_URL = "/offline.html"; //change to php please
 const PRECACHE = [
     "/",
-    "/index.php",
+    "/index.html",
     "manifest.json",
     "icons/72Logo.png",
     "icons/96Logo.png",
