@@ -18,7 +18,7 @@ const PRECACHE = [
     "JS/Objects.js",
     "JS/Variables.js",
     "JS/Words.js",
-    "MyStyle/tfMain.css",
+    "MyStyle/tfMain.css"
   //  OFFLINE_URL
 ];
 
