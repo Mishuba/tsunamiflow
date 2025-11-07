@@ -3,22 +3,22 @@ const CACHE_NAME = "tf-cache-v1";
 const PRECACHE = [
     "/",
     "/index.html",
-    "manifest.json",
-    "icons/72Logo.png",
-    "icons/96Logo.png",
-    "icons/128Logo.png",
-    "icons/192Logo.png",
-    "icons/512Logo.png",
-    "JS/tfMain.js",
-    "JS/Arrays.js",
-    "JS/Classes.js",
-    "JS/Functions.js",
-    "JS/News.js",
-    "JS/NewsTransformWorker.js",
-    "JS/Objects.js",
-    "JS/Variables.js",
-    "JS/Words.js",
-    "MyStyle/tfMain.css"
+    "/manifest.json",
+    "/icons/72Logo.png",
+    "/icons/96Logo.png",
+    "/icons/128Logo.png",
+    "/icons/192Logo.png",
+    "/icons/512Logo.png",
+    "/JS/tfMain.js",
+    "/JS/Arrays.js",
+    "/JS/Classes.js",
+    "/JS/Functions.js",
+    "/JS/News.js",
+    "/JS/NewsTransformWorker.js",
+    "/JS/Objects.js",
+    "/JS/Variables.js",
+    "/JS/Words.js",
+    "/MyStyle/tfMain.css"
   //  OFFLINE_URL
 ];
 
