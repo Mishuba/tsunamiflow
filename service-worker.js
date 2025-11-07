@@ -1,5 +1,5 @@
 const CACHE_NAME = "tf-cache-v1";
-const OFFLINE_URL = "/offline.html"; //change to php please
+//const OFFLINE_URL = "/offline.html"; //change to php please
 const PRECACHE = [
     "/",
     "/index.html",
@@ -19,7 +19,7 @@ const PRECACHE = [
     "JS/Variables.js",
     "JS/Words.js",
     "MyStyle/tfMain.css",
-    OFFLINE_URL
+  //  OFFLINE_URL
 ];
 
 self.addEventListener("install", event => {
