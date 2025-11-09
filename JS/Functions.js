@@ -69,7 +69,7 @@ function doIframeThing(event, source) {
                     error: "Nothing as of now"
                 };
                 console.log("sending the iframe message");
-                source.contentWindow.postMessage(HomePageJson, "https://www.tsunamiflow.club/homepage.html");
+                source.contentWindow.postMessage(HomePageJson, "https://tsunamiflow.club/homepage.html");
             } else {
 
             }
@@ -86,7 +86,7 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for the roster right now"
             };
-            source.contentWindow.postMessage(RosterJson, "https://www.tsunamiflow.club/roster.html");
+            source.contentWindow.postMessage(RosterJson, "https://tsunamiflow.club/roster.html");
             break;
         case "news.html":
         case "https://tsunamiflow.club/news.html":
@@ -99,7 +99,7 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for community right now"
             }
-            source.contentWindow.postMessage(NewsJson, "https://www.tsunamiflow.club/news.html");
+            source.contentWindow.postMessage(NewsJson, "https://tsunamiflow.club/news.html");
             break;
         case "Competitions.html":
         case "https://tsunamiflow.club/Competitions.html":
@@ -117,7 +117,7 @@ function doIframeThing(event, source) {
                     error: "Nothing for competitions right now"
                 };
 
-                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.html");
+                source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
             } else if (event.data.type === "game") {
                 CompetitionJson = {
                     type: "game",
@@ -127,7 +127,7 @@ function doIframeThing(event, source) {
                     error: "No errors as of now."
                 };
 
-                source.contentWindow.postMessage(CompetitionJson, "https://www.tsunamiflow.club/Competitions.html");
+                source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
             } else {
 
             }
@@ -143,7 +143,7 @@ function doIframeThing(event, source) {
                 username: "Mishuba",
                 error: "ok no errors for network right now"
             };
-            source.contentWindow.postMessage(TfNetworkJson, "https://www.tsunamiflow.club/TFnetwork.html");
+            source.contentWindow.postMessage(TfNetworkJson, "https:/tsunamiflow.club/TFnetwork.html");
             break;
         case "Community.html":
         case "https://tsunamiflow.club/Community.html":
@@ -157,7 +157,7 @@ function doIframeThing(event, source) {
                 error: "ok no errors for community right now"
             };
 
-            source.contentWindow.postMessage(CommunityJson, "https://www.tsunamiflow.club/Community.html");
+            source.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.html");
             break;
         default:
             console.log("The iframe is from the default page " + source.src);
