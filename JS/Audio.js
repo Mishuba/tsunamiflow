@@ -577,7 +577,7 @@ handleSocketMessage(data) {
         this.TsunamiCtxSrc.buffer = buffer;
     }
     TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, panner, delay, compressor, gain, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
-        this.TsunamiRadioReady(worker, element.src, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
+        this.TsunamiRadioReady(worker, element, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
         element.addEventListener("emptied", async (emptied) => {
             this.emptiedAudio(emptied);
         }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
@@ -647,7 +647,8 @@ handleSocketMessage(data) {
         });
     }
     BeginRadio(song, worker) {
-        this.TsunamiAudio.src = song
+        this.TsunamiAudio.crossOrigin = "anonymous";
+        this.TsunamiAudio.src = song;
         this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
     }
 }

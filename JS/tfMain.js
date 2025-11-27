@@ -71,6 +71,7 @@ document.body.addEventListener("click", () => {
 //Tsunami Radio Audio
 // Buttons
 let TsunamiRadio = document.getElementById("TFradioPlayer");
+TsunamiRadio.crossOrigin = "anonymous";
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
 let RadioLastButton = document.createElement("button");
