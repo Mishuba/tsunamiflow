@@ -10,12 +10,13 @@
   "theme_color": "#000000",
   "categories": [
     "information",
-    "live streaming",
+    "streaming",
     "music",
     "fashion",
     "luxury items",
     "games",
-    "videos"
+    "videos",
+    "literature"
   ],
   "icons": [
     {

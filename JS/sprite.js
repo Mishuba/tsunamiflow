@@ -1290,8 +1290,37 @@ export class letsDoIt {
         let badTop = object.y;
         let badBottom = object.y + (object.height);
         let crash = true;
-        if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-            crash = false;
+        switch (object.type) {
+            case "environment":
+                //Do not end game
+                break;
+            case "sprite":
+                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+                    crash = false;
+                } else {
+                    crash = true;
+                    //Create logic that determines who hit who first and also based on power, durability and weakness.
+                    this.damageTotal(player, object, this.ActionMechanics(player));
+                }
+                //input damage function
+                break;
+            case "obstacle":
+                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+                    crash = false;
+                }
+                // prevent from moving in that direction or jump/climb/swim over it.
+                break;
+            case "background":
+                //idk what ima do for it yet / maybe no crash maybe just prevent from going off screen
+                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+                    crash = false;
+                }
+                break;
+            default:
+                    if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+                crash = false;
+                break;
+            }     
         }
         return crash;
     }

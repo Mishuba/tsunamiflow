@@ -6,7 +6,8 @@
     }
   },
   "rewrites": [
-    { "source": "/world/*", "destination": "https://world.tsunamiflow.club/:splat" }
+    { "source": "/Server/*", "destination": "https://world.tsunamiflow.club/:splat" },
+    { "source": "/Music/*", "destination": "https://radio.tsunamiflow.club/Music/:splat"}
   ],
   "cleanUrls": true,
   "trailingSlash": false

@@ -1,5 +1,5 @@
-const CACHE_NAME = "tf-cache-v1";
-//const OFFLINE_URL = "/offline.html"; //change to php please
+const CACHE_NAME = "tf-cache-v2";
+const OFFLINE_URL = "/offline.html"; //change to php please
 const PRECACHE = [
     "/",
     "/index.html",
@@ -18,8 +18,8 @@ const PRECACHE = [
     "/JS/Objects.js",
     "/JS/Variables.js",
     "/JS/Words.js",
-    "/MyStyle/tfMain.css"
-  //  OFFLINE_URL
+    "/MyStyle/tfMain.css",
+    OFFLINE_URL
 ];
 
 self.addEventListener("install", event => {
@@ -52,7 +52,6 @@ self.addEventListener("fetch", event => {
         if (cached) return cached;
         return fetch(req).then(response => {
             //optionally cache resource
-
             return response;
         }).catch(() => {
             //i an image requested, return a placeholder optional

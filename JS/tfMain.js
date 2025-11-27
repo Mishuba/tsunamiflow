@@ -5,12 +5,61 @@ import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
 import { Weather } from "./Weather.js";
-import { DoTheThingMan } from "./Functions.js";
+import { DoTheThingMan, fetchCart, updateTotals } from "./Functions.js";
 import { HomepageUpdates } from "./sprite.js";
 
 let TfWeather = new Weather();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    // Attach events to forms
+    document.querySelectorAll('.cartForm').forEach(form => {
+        const quantityInput = form.querySelector('.quantityInput');
+        const variantSelect = form.querySelector('.variantSelect');
+
+        quantityInput?.addEventListener('input', updateTotals);
+        variantSelect?.addEventListener('change', updateTotals);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!form.action) return console.warn('Form action is empty!');
+
+            try {
+                const formData = new FormData(form);
+                const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const result = await res.json();
+                if (result.success) {
+                    // Refresh cart totals
+                    const cartItems = await fetchCart();
+                    let total = 0;
+                    cartItems.forEach(item => {
+                        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+                    });
+
+                    const totalEl = document.getElementById('cartTotal');
+                    if (totalEl) totalEl.textContent = total.toFixed(2);
+
+                    // Refresh item subtotals in DOM
+                    updateTotals();
+                } else {
+                    console.warn('Cart error:', result.error);
+                }
+            } catch (err) {
+                console.error('Form submission error:', err);
+            }
+        });
+    });
+
+    // Initialize totals on page load
+    updateTotals();
+});
+
+
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 document.body.addEventListener("click", () => {
@@ -34,8 +83,6 @@ let RadioCanvas = document.getElementById("TFradioCanvas");
 let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
-//RadioMedia.connect(RadioAnalyser);
-//RadioAnalyser.connect(TsunamiAudioCtx.destination);
 let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 
 //VideoGame Audio
@@ -106,8 +153,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Hide all sections
     const hideAllSections = () => {
         Object.values(sections).forEach(el => {
-            if (el) el.style.display = "none";
-        });
+            if (el) {
+                el.style.display = "none";
+            } else {
+                console.log("subscibers stuff");
+            }
+        })
     };
 
     // Update membership display
@@ -120,7 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
         // Show the necessary sections
         config.show.forEach(sectionName => {
             const el = sections[sectionName];
-            if (el) el.style.display = "block";
+            if (el.style.display === "none") {
+                el.style.display = "block";
+            } 
         });
 
         // Update cost/payment
@@ -134,7 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updateMembership();
 
     // Listen for changes
-    membershipSelect.addEventListener("change", updateMembership);
+    membershipSelect.addEventListener("click", updateMembership);
 });
 
 //Web Workers Starts
@@ -242,13 +295,20 @@ if (typeof (Worker) !== "undefined") {
     } else {
         console.log("Server Sent Events are not supported");
         //Do Xml, fetch or something.
-
-
     }
 } else {
     console.log("No Web Worker Support");
 }
 
+//database. do database calculations.
+//Tsunami Thoughts 
+document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
+    TsunamiThoughts.preventDefault();
+    //let tfUserThot = document.getElementById("TFthought");
+    //TfPostThot(tfUserThot);
+});
+
+//Start functions
 TfWeather.requestLocation();
 //Web Workers Ends
 
@@ -262,110 +322,3 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-                
-
-
-//Websocket Stuff maybe create a database. do database calculations.
-//Tsunami Thoughts 
-document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
-    TsunamiThoughts.preventDefault();
-    //let tfUserThot = document.getElementById("TFthought");
-    //TfPostThot(tfUserThot);
-});
-//Tsunami Thoughts Ends
-
-//Start non web worker stuff
-
-/*
-document.addEventListener("DOMContentLoaded", () => {
-
-    // Fetch current cart items from server.php
-    async function fetchCart() {
-        try {
-            const res = await fetch('/server.php?cart_action=view', {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            return data.items || [];
-        } catch (err) {
-            console.error('Error fetching cart:', err);
-            return [];
-        }
-    }
-
-    // Update subtotal and grand total
-    function updateTotals() {
-        let grandTotal = 0;
-        document.querySelectorAll('.cartForm').forEach(form => {
-            const variantSelect = form.querySelector('.variantSelect');
-            const quantityInput = form.querySelector('.quantityInput');
-            const itemSubtotalEl = form.querySelector('.itemSubtotal');
-
-            const variant = variantSelect?.selectedOptions[0];
-            const price = parseFloat(variant?.dataset.price || 0);
-            const quantity = parseInt(quantityInput?.value || 1);
-
-            const subtotal = price * quantity;
-
-            if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
-            form.dataset.price = subtotal.toFixed(2);
-
-            grandTotal += subtotal;
-        });
-
-        const totalEl = document.getElementById('cartTotal');
-        if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
-    }
-
-    // Attach events to forms
-    document.querySelectorAll('.cartForm').forEach(form => {
-        const quantityInput = form.querySelector('.quantityInput');
-        const variantSelect = form.querySelector('.variantSelect');
-
-        quantityInput?.addEventListener('input', updateTotals);
-        variantSelect?.addEventListener('change', updateTotals);
-
-        form.addEventListener('submit', async e => {
-            e.preventDefault();
-
-            if (!form.action) return console.warn('Form action is empty!');
-
-            try {
-                const formData = new FormData(form);
-                const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                const result = await res.json();
-                if (result.success) {
-                    // Refresh cart totals
-                    const cartItems = await fetchCart();
-                    let total = 0;
-                    cartItems.forEach(item => {
-                        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-                    });
-
-                    const totalEl = document.getElementById('cartTotal');
-                    if (totalEl) totalEl.textContent = total.toFixed(2);
-
-                    // Refresh item subtotals in DOM
-                    updateTotals();
-                } else {
-                    console.warn('Cart error:', result.error);
-                }
-            } catch (err) {
-                console.error('Form submission error:', err);
-            }
-        });
-    });
-
-    // Initialize totals on page load
-    updateTotals();
-});
-*/
-
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./../service-worker.js')
-    .then(reg => console.log('Service Worker registered:', reg))
-    .catch(err => console.error('Service Worker registration failed:', err));
-  }
