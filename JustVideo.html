@@ -65,7 +65,13 @@ async function connectWS(key, role) {
         reconnectTimer = setTimeout(() => connectWS(key, role), 3000);
     };
 
-    ws.onerror = err => log("❌ WebSocket error: " + err);
+    ws.onerror = (err) => {
+log("❌ WebSocket error: " + err);
+
+if (err instanceof Event) {
+ log("Event Type:" err.type);
+}
+}
 
     ws.onmessage = event => {
         try {
