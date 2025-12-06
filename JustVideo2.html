@@ -38,6 +38,8 @@
 let ws = null;
 let recorder = null;
 let stream = null;
+let reconnectTimer = null;
+let pc = null; // WebRTC fallback
 
 function log(msg) {
     const logBox = document.getElementById("log");
@@ -45,19 +47,10 @@ function log(msg) {
     logBox.scrollTop = logBox.scrollHeight;
 }
 
-document.getElementById("startBtn").onclick = async function () {
-    const key = document.getElementById("streamKey").value.trim();
-    const role = document.getElementById("role").value;
-
-    if (!key) {
-        alert("Enter a stream key.");
-        return;
-    }
-
-    const wsUrl = "wss://world.tsunamiflow.club:8080?key=" +
+// Connect WebSocket with auto-reconnect
+async function connectWS(key, role) {
+    const wsUrl = "ws://world.tsunamiflow.club:8080?key=" +
         encodeURIComponent(key) + "&role=" + encodeURIComponent(role);
-
-    log("Connecting to WebSocket...");
 
     ws = new WebSocket(wsUrl);
     ws.binaryType = "arraybuffer";
@@ -66,12 +59,12 @@ document.getElementById("startBtn").onclick = async function () {
         log("WebSocket connected.");
         document.getElementById("startBtn").disabled = true;
         document.getElementById("stopBtn").disabled = false;
+        if (reconnectTimer) clearTimeout(reconnectTimer);
     };
 
     ws.onclose = () => {
-        log("WebSocket closed.");
-        document.getElementById("startBtn").disabled = false;
-        document.getElementById("stopBtn").disabled = true;
+        log("WebSocket closed. Attempting reconnect in 3s...");
+        reconnectTimer = setTimeout(() => connectWS(key, role), 3000);
     };
 
     ws.onerror = err => log("WebSocket error: " + err);
@@ -79,52 +72,65 @@ document.getElementById("startBtn").onclick = async function () {
     ws.onmessage = event => {
         try {
             const data = JSON.parse(event.data);
-            if (data.type === "ffmpeg_stderr") {
-                log("[FFmpeg] " + data.message);
-            }
+            if (data.type === "ffmpeg_stderr") log("[FFmpeg] " + data.message);
         } catch {
-            // ignore non-JSON (binary)
+            // ignore non-JSON
         }
     };
+}
+
+document.getElementById("startBtn").onclick = async function () {
+    const key = document.getElementById("streamKey").value.trim();
+    const role = document.getElementById("role").value;
+    if (!key) { alert("Enter a stream key."); return; }
 
     stream = await navigator.mediaDevices.getUserMedia({
         video: true,
-        audio: (role !== "audio_only")
+        audio: role !== "audio_only"
     });
-
     document.getElementById("cam").srcObject = stream;
 
-    recorder = new MediaRecorder(stream, {
-        mimeType: "video/webm; codecs=vp8"
-    });
+    // Attempt WebSocket
+    try {
+        await connectWS(key, role);
 
-    recorder.ondataavailable = e => {
-        if (e.data.size > 0 && ws.readyState === 1) {
-            e.data.arrayBuffer().then(buf => ws.send(buf));
-        }
-    };
-
-    recorder.start(100);
-    log("Streaming started.");
+        recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp8" });
+        recorder.ondataavailable = e => {
+            if (e.data.size > 0 && ws.readyState === 1) {
+                e.data.arrayBuffer().then(buf => ws.send(buf));
+            }
+        };
+        recorder.start(100);
+        log("Streaming started via WebSocket.");
+    } catch (err) {
+        log("WebSocket failed, falling back to WebRTC: " + err);
+        startWebRTC(stream);
+    }
 };
 
+// Stop button
 document.getElementById("stopBtn").onclick = function () {
-    if (recorder) {
-        recorder.stop();
-        log("Recorder stopped.");
-    }
+    if (recorder) { recorder.stop(); log("Recorder stopped."); }
+    if (ws && ws.readyState === 1) { ws.send(JSON.stringify({ type: "stop_stream" })); ws.close(); }
+    if (stream) { stream.getTracks().forEach(t => t.stop()); log("Camera stopped."); }
+    if (pc) { pc.close(); pc = null; log("WebRTC stopped."); }
 
-    if (ws && ws.readyState === 1) {
-        ws.send(JSON.stringify({ type: "stop_stream" }));
-        ws.close();
-    }
-
-    if (stream) {
-        stream.getTracks().forEach(t => t.stop());
-        log("Camera stopped.");
-    }
+    document.getElementById("startBtn").disabled = false;
+    document.getElementById("stopBtn").disabled = true;
 };
-</script>
 
+// WebRTC fallback
+async function startWebRTC(localStream) {
+    pc = new RTCPeerConnection();
+    pc.onicecandidate = e => {
+        if (e.candidate) log("ICE candidate: " + JSON.stringify(e.candidate));
+    };
+    localStream.getTracks().forEach(track => pc.addTrack(track, localStream));
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    log("WebRTC offer created. Send SDP to server for connection.");
+}
+</script>
 </body>
 </html>
