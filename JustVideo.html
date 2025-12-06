@@ -71,7 +71,7 @@ function SomethingError(err) {
 log("❌ WebSocket error: " + err);
 
 if (err instanceof Event) {
- log("Event Type:" err.type);
+ log("Event Type:" + err.type);
 }
 }
 
