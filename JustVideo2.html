@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family:Arial;padding:20px;">
+
+<h2>Webcam Streaming Control</h2>
+
+<label>Stream Key:</label><br>
+<input id="streamKey" type="text" style="width:300px;"><br><br>
+
+<label>Role:</label><br>
+<select id="role" style="width:200px;">
+    <option value="broadcaster">broadcaster</option>
+    <option value="audio_only">audio_only</option>
+</select><br><br>
+
+<button id="startBtn">Start Stream</button>
+<button id="stopBtn" disabled>Stop Stream</button>
+
+<hr>
+
+<video id="cam" autoplay playsinline style="width:60%;border:1px solid #ccc;"></video>
+
+<hr>
+
+<h3>Log</h3>
+<div id="log" style="
+    width:80%;
+    height:200px;
+    background:#111;
+    color:#0f0;
+    padding:10px;
+    overflow-y:auto;
+    font-family:monospace;
+    font-size:14px;
+"></div>
+
+<script>
+let ws = null;
+let recorder = null;
+let stream = null;
+
+function log(msg) {
+    const logBox = document.getElementById("log");
+    logBox.innerText += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+document.getElementById("startBtn").onclick = async function () {
+    const key = document.getElementById("streamKey").value.trim();
+    const role = document.getElementById("role").value;
+
+    if (!key) {
+        alert("Enter a stream key.");
+        return;
+    }
+
+    const wsUrl = "wss://world.tsunamiflow.club:8080?key=" +
+        encodeURIComponent(key) + "&role=" + encodeURIComponent(role);
+
+    log("Connecting to WebSocket...");
+
+    ws = new WebSocket(wsUrl);
+    ws.binaryType = "arraybuffer";
+
+    ws.onopen = () => {
+        log("WebSocket connected.");
+        document.getElementById("startBtn").disabled = true;
+        document.getElementById("stopBtn").disabled = false;
+    };
+
+    ws.onclose = () => {
+        log("WebSocket closed.");
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("stopBtn").disabled = true;
+    };
+
+    ws.onerror = err => log("WebSocket error: " + err);
+
+    ws.onmessage = event => {
+        try {
+            const data = JSON.parse(event.data);
+            if (data.type === "ffmpeg_stderr") {
+                log("[FFmpeg] " + data.message);
+            }
+        } catch {
+            // ignore non-JSON (binary)
+        }
+    };
+
+    stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: (role !== "audio_only")
+    });
+
+    document.getElementById("cam").srcObject = stream;
+
+    recorder = new MediaRecorder(stream, {
+        mimeType: "video/webm; codecs=vp8"
+    });
+
+    recorder.ondataavailable = e => {
+        if (e.data.size > 0 && ws.readyState === 1) {
+            e.data.arrayBuffer().then(buf => ws.send(buf));
+        }
+    };
+
+    recorder.start(100);
+    log("Streaming started.");
+};
+
+document.getElementById("stopBtn").onclick = function () {
+    if (recorder) {
+        recorder.stop();
+        log("Recorder stopped.");
+    }
+
+    if (ws && ws.readyState === 1) {
+        ws.send(JSON.stringify({ type: "stop_stream" }));
+        ws.close();
+    }
+
+    if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        log("Camera stopped.");
+    }
+};
+</script>
+
+</body>
+</html>
