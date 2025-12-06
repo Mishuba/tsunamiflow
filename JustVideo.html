@@ -58,7 +58,7 @@ function log(msg) {
 
 // ---------------------- WebSocket ----------------------
 async function connectWS(key, role) {
-    const wsUrl = `wss://world.tsunamiflow.club:8443?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+    const wsUrl = `wss://world.tsunamiflow.club/ws?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
     ws = new WebSocket(wsUrl);
     ws.binaryType = "arraybuffer";
 
