@@ -1,39 +1,68 @@
 <!DOCTYPE html>
 <html>
-<body>
-<video id="cam" autoplay playsinline></video>
+<body style="font-family:Arial;padding:20px;">
+
+<h2>Start Webcam Stream</h2>
+
+<label>Stream Key:</label><br>
+<input id="streamKey" type="text" style="width:300px;"><br><br>
+
+<label>Role:</label><br>
+<select id="role" style="width:200px;">
+    <option value="broadcaster">broadcaster</option>
+    <option value="audio_only">audio_only</option>
+</select><br><br>
+
+<button id="startBtn">Start Stream</button>
+
+<hr>
+
+<video id="cam" autoplay playsinline style="width:60%;border:1px solid #ccc;"></video>
 
 <script>
-const ws = new WebSocket("wss://world.tsunamiflow.club:8443"); // your Ratchet server
-const video = document.getElementById("cam");
+document.getElementById("startBtn").onclick = async function () {
+    const key = document.getElementById("streamKey").value.trim();
+    const role = document.getElementById("role").value;
 
-navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-  .then(stream => {
-    video.srcObject = stream;
-    startSending(stream);
-  })
-  .catch(err => console.error("Camera error:", err));
-
-function startSending(stream) {
-  const track = stream.getVideoTracks()[0];
-  const imageCapture = new ImageCapture(track);
-
-  async function loop() {
-    try {
-      const bitmap = await imageCapture.grabFrame();
-      const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(bitmap, 0, 0);
-      const blob = await canvas.convertToBlob({ type: "image/jpeg", quality: 0.7 });
-      ws.send(await blob.arrayBuffer());
-    } catch (e) {
-      console.error(e);
+    if (!key) {
+        alert("Enter a stream key.");
+        return;
     }
-    requestAnimationFrame(loop);
-  }
 
-  loop();
-}
+    const wsUrl = "wss://world.tsunamiflow.club:8080?key=" + encodeURIComponent(key) + "&role=" + encodeURIComponent(role);
+    const ws = new WebSocket(wsUrl);
+
+    ws.binaryType = "arraybuffer";
+
+    ws.onopen = () => {
+        console.log("WebSocket connected:", wsUrl);
+    };
+
+    ws.onerror = (err) => console.error("WS error:", err);
+    ws.onclose = () => console.log("WebSocket closed");
+
+    // Start webcam
+    const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: (role !== "audio_only")
+    });
+
+    document.getElementById("cam").srcObject = stream;
+
+    // WebM encoder
+    const recorder = new MediaRecorder(stream, {
+        mimeType: "video/webm; codecs=vp8"
+    });
+
+    recorder.ondataavailable = e => {
+        if (e.data.size > 0 && ws.readyState === 1) {
+            e.data.arrayBuffer().then(buf => ws.send(buf));
+        }
+    };
+
+    recorder.start(100); // send chunks every 100ms
+};
 </script>
+
 </body>
 </html>
