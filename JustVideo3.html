@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TSF Stream Uplink</title>
+<style>
+    body { background:#111; color:#eee; font-family:Arial; padding:20px; }
+    #log { background:#000; padding:10px; height:200px; overflow-y:auto; border:1px solid #333; }
+    button { padding:10px 20px; margin-right:10px; }
+</style>
+</head>
+<body>
+
+<h2>TSF WebCam Stream → WebSocket (with WebRTC Fallback)</h2>
+
+<button id="startBtn">Start Stream</button>
+<button id="stopBtn" disabled>Stop Stream</button>
+
+<pre id="log"></pre>
+
+<script>
+/* -------------------------------------------------
+   LOGGING
+------------------------------------------------- */
+function log(msg) {
+    const logBox = document.getElementById("log");
+    logBox.textContent += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
+}
+
+/* -------------------------------------------------
+   STATE
+------------------------------------------------- */
+let ws = null;
+let stream = null;
+let wsUrl = "wss://world.tsunamiflow.club:8443"; // your server
+let reconnectTimeout = 2000;
+let reconnectInterval = null;
+let pc = null;
+let usingWebRTC = false;
+
+/* -------------------------------------------------
+   START STREAM
+------------------------------------------------- */
+document.getElementById("startBtn").onclick = async () => {
+    try {
+        stream = await navigator.mediaDevices.getUserMedia({ video:true, audio:true });
+        log("Webcam acquired.");
+
+        startWebSocket();
+        document.getElementById("stopBtn").disabled = false;
+    } catch (err) {
+        log("Camera Error: " + err);
+    }
+};
+
+/* -------------------------------------------------
+   STOP STREAM
+------------------------------------------------- */
+document.getElementById("stopBtn").onclick = () => {
+    if (stream) {
+        stream.getTracks().forEach(t => t.stop());
+        log("Stream stopped.");
+    }
+
+    if (ws) {
+        ws.close();
+        ws = null;
+    }
+
+    stopWebRTC();
+
+    clearInterval(reconnectInterval);
+};
+
+/* -------------------------------------------------
+   WEBSOCKET MODE
+------------------------------------------------- */
+function startWebSocket() {
+    if (usingWebRTC) return;
+
+    ws = new WebSocket(wsUrl);
+    ws.binaryType = "arraybuffer";
+
+    ws.onopen = () => {
+        log("WebSocket connected.");
+        startSendingFrames();
+    };
+
+    ws.onmessage = msg => {
+        log("WS Message: " + msg.data);
+    };
+
+    ws.onerror = err => {
+        log("WebSocket error: " + err);
+    };
+
+    ws.onclose = () => {
+        log("WebSocket closed. Attempting reconnect...");
+
+        if (!usingWebRTC) {
+            attemptReconnect();
+        }
+    };
+}
+
+/* -------------------------------------------------
+   AUTO RECONNECT
+------------------------------------------------- */
+function attemptReconnect() {
+    clearInterval(reconnectInterval);
+
+    reconnectInterval = setInterval(() => {
+        log("Reconnecting WebSocket...");
+        startWebSocket();
+    }, reconnectTimeout);
+
+    setTimeout(() => {
+        log("Falling back to WebRTC...");
+        startWebRTC();
+    }, 7000); // after 7 seconds switch to WebRTC
+}
+
+/* -------------------------------------------------
+   SEND VIDEO FRAMES OVER WS
+------------------------------------------------- */
+function startSendingFrames() {
+    const videoTrack = stream.getVideoTracks()[0];
+    const processor = new MediaStreamTrackProcessor({ track: videoTrack });
+    const reader = processor.readable.getReader();
+
+    async function pump() {
+        const result = await reader.read();
+        if (result.done || !ws || ws.readyState !== 1) return;
+
+        const frame = result.value;
+
+        try {
+            const blob = await frameToBlob(frame);
+            const arr = await blob.arrayBuffer();
+            ws.send(arr);
+        } catch (err) {
+            log("Frame send error: " + err);
+        }
+
+        frame.close();
+        pump();
+    }
+
+    pump();
+}
+
+function frameToBlob(frame) {
+    return new ImageBitmap(frame).then(bmp => {
+        const canvas = new OffscreenCanvas(bmp.width, bmp.height);
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(bmp, 0, 0);
+        return canvas.convertToBlob({ type: "image/jpeg", quality: 0.5 });
+    });
+}
+
+/* -------------------------------------------------
+   WEBRTC FALLBACK
+------------------------------------------------- */
+async function startWebRTC() {
+    if (usingWebRTC) return;
+    usingWebRTC = true;
+
+    log("Starting WebRTC fallback...");
+
+    pc = new RTCPeerConnection({
+        iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+    });
+
+    stream.getTracks().forEach(t => pc.addTrack(t, stream));
+
+    pc.onicecandidate = e => {
+        if (e.candidate) {
+            // send to your signaling server
+            log("ICE Candidate → server");
+        }
+    };
+
+    pc.onconnectionstatechange = () => {
+        log("WebRTC: " + pc.connectionState);
+    };
+
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+
+    log("Sending SDP offer to server...");
+
+    // You must handle this on your WebSocket/PHP signaling endpoint later.
+}
+
+function stopWebRTC() {
+    if (pc) {
+        pc.close();
+        pc = null;
+    }
+    usingWebRTC = false;
+    log("WebRTC stopped.");
+}
+</script>
+
+</body>
+</html>
