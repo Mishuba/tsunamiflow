@@ -49,7 +49,7 @@ function log(msg) {
 
 // Connect WebSocket with auto-reconnect
 async function connectWS(key, role) {
-    const wsUrl = "wss://world.tsunamiflow.club:8080?key=" +
+    const wsUrl = "wss://world.tsunamiflow.club:8443?key=" +
         encodeURIComponent(key) + "&role=" + encodeURIComponent(role);
 
     ws = new WebSocket(wsUrl);
