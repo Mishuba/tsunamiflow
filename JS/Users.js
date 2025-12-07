@@ -78,7 +78,7 @@ export class User {
                     } else console.error("Signup request failed:", xhr.statusText);
                 }
             };
-            xhr.open("POST", "./../server.php", true);
+            xhr.open("POST", "https://world.tsunamiflow.club/server.php", true);
             xhr.send(SubFormData);
         } catch (err) {
             console.error("Signup error:", err);
@@ -149,7 +149,7 @@ export class User {
                 else console.error("Failed to post thought:", xhr.statusText);
             }
         };
-        xhr.open("POST", "server.php", true);
+        xhr.open("POST", "https://world.tsunamiflow.club/server.php", true);
         xhr.send(formData);
     }
 }
