@@ -1,50 +1,18 @@
 export class TfVideo {
-    constructor() {
-        //Audio
-        this.VideoAudioElement;
-        this.VideoAudioContext;
-        this.VideoAudioAnalyser;
-        this.VideoAnalyserOption = {
-            fftSize: 2048, //32, 64, 128, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768 // defaults to 2048.
-            maxDecibels: 0, // 0 is the loudest
-            minDecibels: -100, // 0 is the loudest 
-            smoothingTimeConstant: 0.5, // between 0 and 1
-            //channelCount: ,
-            channelCountMode: "max",
-            //channelInterpretation: ,
-            //disableNormalization: true
-        }
-        this.VideoAudioMedia;
-        this.VideoAudioMediaDestination;
-        this.VideoAudioMediaSource;
-        this.VideoAudiopwoImag;
-        this.VideoAudioBuffer;
-        this.VideoAudioBufferLength;
-        this.VideoAudioDataArray;
-
-        this.VideoElement;
-        this.VideoContext;
-        this.VideoMedia;
-        //create
+    constructor(Radio = null, VideoElement = null) {
+        this.audioEngine = Radio;
+        this.VideoElement = VideoElement;
         this.VideoSystemControllerButton;
         this.VideoSystemControllerStopButton;
-        this.tfVidImgUploadButton;
-        this.tfVidImgRemoveImgButton;
-
-        this.tfVideoStuff;
-
-
         //Webcam
         this.WebcamStartButton;
-        ;
         this.WebcamStopButton;
+        this.TfWebcam;
         this.whichCamera = true;
         this.WebcamStreamVideoAndAudio;
         this.WebcamAudioStream;
         this.WebcamVideoStream;
         this.useChromaKeyWebcam = false;
-        this.TfWebcam;
-
         this.TmediaFstreamConstraints = {
             audio: {
                 deviceId: "f",
@@ -113,18 +81,7 @@ export class TfVideo {
                 facingMode: this.whichCamera ? "" || "" : "user" || "environment", // "user" for front camera, "environment" for back camera
             }
         };
-        //Canvas
-        this.VideoAudioCanvas;
-        this.VideoAudioX = 0;
-        this.VideoAudioY;
-        this.VideoAudioDx;
-        this.VideoAudioDy;
-        this.VideoAudioRadius;
-        this.VideoAudioBaseRadius;
-        this.VideoAudioColor;
-        this.VideoAudioVisualizatorController;
         this.VideoCanvas;
-
         //ChromaKey
         this.chromaKeyColorWebcam = {
             r: 0,
@@ -138,16 +95,11 @@ export class TfVideo {
         //background
         //Image
         this.backgroundImg = null;
-        //Video
+        this.tfVidImgUploadButton;
+        this.tfVidImgRemoveImgButton;
         this.backgroundVideo = null;
-        this.backgroundVideoButton;
+        this.uploadBackgroundVideoButton;
         this.removeBackgroundVideoButton;
-
-        //Stream
-        this.VideoProcessedStream;
-        this.VideoAudioProcessedStream;
-        this.LiveStream;
-
         //recording
         this.startRecordingButton;
         this.stopRecordingButton;
@@ -159,8 +111,7 @@ export class TfVideo {
         this.DownloadVideoRecordingButton;
 
         //websocket
-        this.VideoWebSocket;
-        this.VideoWebSocketMessage;
+        this.VideoWebSocket = null;
         //WebRTC
         this.VideoPc;
         this.VideoPcAnswer;
@@ -168,135 +119,106 @@ export class TfVideo {
         this.VideoFriendPc;
         this.VideoFriendPcOffer;
     }
+    StartWebcam() {
+      this.TfWebcam = await navigator.mediaDevices.getUserMedia(this.TmediaFstreamConstraints);
+    }
     VideoNetworkState(element) {
-        /*
-        if (element.networkState === element.NETWORK_NO_SOURCE) {
-            console.log("The Tsunami Community Video Network State is NETWORK_NO_SOURCE");
-        } else if (element.networkState === element.NETWORK_IDLE) {
-            console.log("The Tsunami Community Video Network State is NETWORK_IDLE");
-        } else if (element.networkState === element.NETWORK_LOADING) {
-            console.log("The Tsunami Community Video Network State is NETWORK_LOADING");
+        if (!element) {
+            return;
         }
-        */
-        if (element.readyState === 0) {
-            console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-            if (element.networkState == 0) {
-                console.log("Radio networkState has NETWORK_EMPTY");
-                if (element.src == "") {
-                    console.log("The radio source is ''");
-                } else if (!element.src) {
-                    ("The radio source does not exist");
-                } else if (element.src == " ") {
-                    console.log("The radio source is ' '");
-                } else if (element.src == "about:blank") {
-                    console.log("The radio source is about:blank");
-                }
-                else {
-                    console.log("Something else is going on and I dont know what it is.");
-                }
-            } else if (element.networkState == 2) {
-                console.log("Radio networkState is NETWORK_LOADING");
-                //Actively fetching the audio from the network.
-                //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
-                console.log("Radio networkState has NETWORK_NO_SOURCE");
-                //No valid source
-            }
-        } else if (element.readyState === 1) {
-            console.log("Radio readyState is HAVE_METADATA");
-            if (element.networkState == 1) {
-                console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
-                console.log("Radio networkState is NETWORK_LOADING");
-                //Actively fetching the audio from the network.
-                //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
-                console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
-                //No valid source
-            }
-        } else if (element.readyState === 2) {
-            console.log("Radio readyState is HAVE_CURRENT_DATA");
-            if (element.networkState == 1) {
-                console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
-                console.log("Radio networkState is NETWORK_LOADING");
-                //Actively fetching the audio from the network.
-                //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
-                console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
-                //No valid source
-            }
-        } else if (element.readyState === 3) {
-            console.log("Radio readyState is HAVE_FUTURE_DATA");
-            if (element.networkState == 1) {
-                console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 3) {
-                console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
-                //No valid source
-            }
-        } else if (element.readyState === 4) {
-            console.log("Radio readyState is HAVE_ENOUGH_DATA");
-            if (element.networkState == 1) {
-                console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
-                console.log("Radio networkState is NETWORK_LOADING");
-                //Actively fetching the audio from the network.
-                //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
-                console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
-                //No valid source
-            }
-
- if (element.ended) {
-    if (element.src === "") {
-        console.log("Radio source is empty string");
-    } else if (element.src === undefined) {
-        console.log("Radio source is undefined");
-    } else if (!element.src) {
-        console.log("Radio source missing");
-    } else {
-        console.log("Radio source ended normally");
-    }
-} else {
-    if (element.paused) {
-        if (element.currentTime === 0) {
-            console.log("Tsunami Radio has not started yet.");
-        } else {
-            console.log("Paused at " + element.currentTime);
+  // ---- NETWORK STATE ----
+        switch (element.networkState) {
+            case element.NETWORK_EMPTY:
+                console.log("Video network: EMPTY (no source)");
+            break;
+            case element.NETWORK_IDLE:
+                console.log("Video network: IDLE");
+            break;
+            case element.NETWORK_LOADING:
+                console.log("Video network: LOADING");
+            break;
+            case element.NETWORK_NO_SOURCE:
+                console.warn("Video network: NO SOURCE");
+            break;
         }
-    } else {
-        console.log("A song is still playing. Make the next song play using the functions");
-    }
-}
-        } else {
-            if (element.networkState === 3) {
-                console.log("The network could not find the source.");
+  // ---- READY STATE ----
+        switch (element.readyState) {
+            case element.HAVE_NOTHING:
+                console.log("Video readyState: HAVE_NOTHING");
+            break;
+            case element.HAVE_METADATA:
+                console.log("Video readyState: HAVE_METADATA");
+            break;
+            case element.HAVE_CURRENT_DATA:
+                console.log("Video readyState: HAVE_CURRENT_DATA");
+            break;
+            case element.HAVE_FUTURE_DATA:
+                console.log("Video readyState: HAVE_FUTURE_DATA");
+            break;
+            case element.HAVE_ENOUGH_DATA:
+                console.log("Video readyState: HAVE_ENOUGH_DATA");
+            break;
+        }
+  // ---- PLAYBACK STATE ----
+        if (element.ended) {
+            console.log("Video playback ended normally");
+            return;
+        }
+        if (element.paused) {
+            if (element.currentTime === 0) {
+                console.log("Video not started yet");
             } else {
-                console.log("Some unknown error is going on with the Radio");
+                console.log(`Video paused at ${element.currentTime.toFixed(2)}s`);
             }
+            return;
         }
+        console.log("Video is playing");
     }
 VideoState(element, context) {
-    console.log("pointless change VideoState() to VideoLoadStarted()");
-    if (!context) {
-        console.warn("AudioContext missing.");
-        return;
-    }
-
-    if (context.state === "suspended") {
-        context.resume();
-    } else if (context.state === "running") {
-        console.log("The audio context state is running");
-        if (element.waiting) {
-            context.suspend();
-        }
-    } else {
-        console.log("The Audio context state must be closed");
-        if (element.paused) {
-            this.StopVisualizator();
-        }
-    }
+  if (!context) {
+    console.warn("AudioContext missing");
+    return;
+  }
+  
+  if (context.state === "suspended" && !element.paused) {
+    context.resume();
+    console.log("AudioContext resumed for video");
+  }
+  
+  if (context.state === "running" && element.paused && element.currentTime === 0) {
+    console.log("Video idle, AudioContext left running");
+  }
 }
+startWebsocket(keyInput, roleSelect) {
+  const key = keyInput.value;
+  const role = roleSelect.value;
+
+  this.VideoWebSocket = new WebSocket(`wss://world.tsunamiflow.club:8443/?key=${key}&role=${role}`);
+  this.VideoWebSocket.binaryType = 'arraybuffer';
+  this.VideoWebSocket.onopen = async () => {
+      //log("🎥 Streaming started");
+      /*
+      this.VideoWebSocket.send(JSON.stringify({ 'offer': this.VideoFriendPcOffer }));
+      */
+      
+    };
+    
+    this.VideoWebSocket.onmessage = (TF) => {
+      console.log("WebSocket Message Sent");
+      this.VideoWebSocketMessage = JSON.parse(TF.data);
+      console.log("Received data:", this.VideoWebSocketMessage);
+    };
+
+    this.VideoWebSocket.onerror = (error) => {
+      console.log(`WebSocket connection is not working.  error: ${error}`);
+    };
+}
+    stopWebsocket() {
+        this.mediaRecorder.stop();
+        this.VideoWebSocket.send(JSON.stringify({ type: 'stop' }));
+        this.VideoWebsocket.close();
+        //log("🛑 Streaming stopped");
+    }
     emptiedVideo() {
         this.VideoNetworkState();
     }
@@ -316,95 +238,6 @@ VideoState(element, context) {
     }
     canPlayVideoThrough() {
         this.VideoState();
-    }
-    AudioVisualizer(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color) {
-        let particles = [];
-
-        async function updateVisualizer(volume, baseRadius, x, y, dx, dy) {
-            radius = baseRadius + volume / 50;
-            x += dx;
-            y += dy;
-
-            if (x + radius > canvas.width || x - radius < 0) {
-                dx = -dx;
-            }
-
-            if (y + radius > canvas.height || y - radius < 0) {
-                dy = -dy;
-            }
-        }
-
-        async function drawVisualizer(ctx, x, y, radius, color) {
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = color;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 20;
-            ctx.fill();
-        }
-
-        async function tfParticles(x, y, dx, dy, radius, color) {
-            return { x, y, dx, dy, radius, color };
-        }
-
-        async function particle(canvas, x, y, dx, dy, radius, color, particles) {
-            for (let i = 0; i < 100; i++) {
-
-                x = Math.random() * canvas.width;
-                y = Math.random() * canvas.height;
-                dx = (Math.random() - 0.5) * 0.5;
-                dy = (Math.random() - 0.5) * 0.5;
-                radius = Math.random() * 0.5 + 0.2;
-                color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-                particles.push(tfParticles(x, y, dx, dy, radius, color));
-            }
-        }
-
-        particles(canvas, x, y, dx, dy, radius, color, particles);
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        analyser.getByteFrequencyData(dataArray);
-
-        ctx.fillStyle = "rgb(10,10,30)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        //Get Average volume for particle reaction
-        let Total = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            Total += dataArray[i];
-        }
-        let averageVolume = Total / dataArray.length;
-
-        for (let i = 0; i < particles.length; i++) {
-            particles[i] = updateVisualizer(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
-
-            particles[i] = drawVisualizer(ctx, x, y, radius, color);
-        }
-
-        let barWidth = (100 / bufferLength) * 2.5;
-        let barHeight;
-        let X = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            barHeight = dataArray[i];
-
-            let R = barHeight + 25 * (i / bufferLength);
-            let G = 250 * (i / bufferLength);
-            let B = 50;
-
-            ctx.fillStyle = `rgb(${R}, ${G}, ${B})`;
-            ctx.fillRect(X, 100 - barHeight, barWidth, barHeight);
-
-            X += barWidth + 1;
-        }
-
-        this.VideoAudioVisualizerController = requestAnimationFrame(async () => {
-            this.AudioVisualizer(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles);
-        })
-    }
-    StopVisualizer() {
-        cancelAnimationFrame(this.VideoAudioVisualizerController);
     }
     playVideo() {
         this.VideoState();
@@ -550,21 +383,18 @@ VideoState(element, context) {
         if (thing === "webcam") {
             const frame = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
             const data = frame.data;
-
             for (let i = 0; i < data.length; i += 4) {
                 const r = data[i];
                 const g = data[i + 1];
                 const b = data[i + 2];
-
                 // Check if pixel matches the chroma key color for webcam
                 if (r === chromaKeyColorWebcam.r && g === chromaKeyColorWebcam.g && b === chromaKeyColorWebcam.b) {
                     data[i + 3] = 0; // Set alpha to 0
                 }
             }
             hpCC.putImageData(frame, 0, 0);
-
         } else if (thing === "canvas") {
-            //Apply chromakey after webcam is put on the canvas instead of before. 
+            //Apply chromakey after webcam is put on the canvas instead of before.
             let frameSkipCount = 2;
             let frameCounter = 0;
             if (this.tfVideoStuff.paused || this.tfVideoStuff.ended) {
@@ -572,37 +402,30 @@ VideoState(element, context) {
                 const imageData = hpCC.getImageData(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 const data = imageData.data;
                 const chromaColor = hexToRgb(colorPicker.value);
-
                 for (let i = 0; i < data.length; i += 4) {
                     if (data[i] === chromaColor.r && data[i + 1] === chromaColor.g && data[i + 2] === chromaColor.b) {
                         data[i + 3] = 0; // Set alpha to 0 for transparency
                     }
                 }
-
                 hpCC.putImageData(imageData, 0, 0);
-                requestAnimationFrame(animate);
+            requestAnimationFrame(animate);
             } else {
                 hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-
                 // Draw the uploaded background video or image
                 if (backgroundVideo) {
                     hpCC.drawImage(backgroundVideo, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 } else if (backgroundImage) {
                     hpCC.drawImage(backgroundImage, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 }
-
                 // Draw the webcam feed if it's active
                 if (isPlaying) {
                     hpCC.drawImage(video, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
                 }
-
                 // Apply chroma key for webcam, video, and image based on flags
                 if (frameCounter % frameSkipCount === 0) {
                     if (useChromaKeyWebcam) applyChromaKeyWebcam();
                 }
-
                 frameCounter++;
-
                 // Continue the animation loop
                 animationId = requestAnimationFrame(animate);
             }
@@ -610,10 +433,8 @@ VideoState(element, context) {
             //current code below is drawing the video to the canvas, and then getting the pixel data, and then turning it into GreenScreen or aka manipulating it.
             //Draw the video directly to canvas.
             ctx.drawImage(this.tfVideoStuff, 0, 0, canvas.width, canvas.height);
-
             //Get pixel data.
             const TfVidDrawFrame = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
             //mainpulate pixel
             ctx.putImageData(TfVidDrawFrame, 0, 0);
             requestAnimationFrame(DrawVideo);
@@ -622,121 +443,54 @@ VideoState(element, context) {
         }
     }
     RemoveChromaKeyColor() {
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.clearRect(0, 0, this.VideoCanvas.width, this.VideoCanvas.height);
         frameCounter = 0
         this.useChromaKeyWebcam = false;
     }
-    VideoScreenSharing() {
-        console.log("Start Video Sharing");
-        navigator.mediaDevices.getDisplayMedia(TmediaFstreamConstraints).then(async (stream) => {
-            //use stream
-        });
-    }
-    VideoWebRTC(stream) {
-        this.VideoDevice = new RTCPeerConnection();
-        stream.getTracks().forEach(track => this.VideoDevice.addTrack(track, stream));
-    }
     startRecording() {
         console.log("start recording");
-        //Do this once the record button is pressed
-        //MediaRecorder 
         this.VideoMime = "video/webm; codecs=vp8,opus";
-        this.mediaRecorder = new MediaRecorder(this.WebcamStreamVideoAndAudio, { mimeType: this.VideoMime, videoBitsPerSecond: 1500000 });
-
-        this.VideoWebSocket.binaryType = "arraybuffer";
-        this.VideoWebSocket.onopen = async () => {
-            this.mediaRecorder.start(1000);
-            console.log("recorder started");
-
-            this.VideoFriendPc = new RTCPeerConnection();
-
-            this.VideoFriendPcOffer = this.VideoFriendPc.createOffer();
-            this.VideoFriendPc.setLocalDescription(this.VideoFriendPcOffer);
-
-            this.VideoWebSocket.send(JSON.stringify({ 'offer': this.VideoFriendPcOffer }));
-        };
-
-        this.mediaRecorder.ondataavailable = (event) => {
-            if (event.data && event.data.size > 0 && this.VideoWebSocket.readyState === WebSocket.OPEN) {
+        this.mediaRecorder = new MediaRecorder(this.TfWebcam, { mimeType: this.VideoMime, videoBitsPerSecond: 1500000 });
+        this.mediaRecorder.ondataavailable = event => {
+            if (event.data.size) {
+              if (event.data && event.data.size > 0 && this.VideoWebSocket.readyState === WebSocket.OPEN) {
                 //send raw Blob / ArrayBuffer
                 //Blob
                 this.recordedChunks.push(event.data);
-
-
                 //ArrayBuffer
                 event.data.arrayBuffer().then(async (buff) => {
-                    this.VideoWebSocket.send(buff);
-                });
-
-                this.mediaRecorder.start();
-                IsRecording = true;
-                RecordingStartBtn.disabled = true;
-                RecordingStartBtn.style.display = "none";
-                RecordingSpotBtn.disabled = false;
-                RecordingStopBtn.style.display = "inline";
-            }
-        };
-
-        this.VideoWebSocket.onmessage = (TF) => {
-            console.log("WebSocket Message Sent");
-
-            this.VideoWebSocketMessage = JSON.parse(TF.data);
-            console.log("Received data:", this.VideoWebSocketMessage);
-
-            if (data.type === "offer") {
-                this.VideoPc.setRemoteDescription(new RTCSessionDescription(data.offer));
-                this.VideoPcAnswer = this.VideoPc.createAnswer();
-                this.VideoPc.setLocalDescription(this.VideoPcAnswer);
-                this.VideoWebSocket.send(JSON.stringify({ 'answer': this.VideoPcAnswer }));
-            } else if (data.type === "answer") {
-                this.VideoPc.setRemoteDescription(new RTCSessionDescription(data.answer));
-            } else if (data.type === "candidate") {
-                try {
-                    this.VideoPc.addIceCandidate(new RTCIceCandidate(data.candidate));
-                } catch (e) {
-                    console.error("ICE Error:", e);
+                  this.VideoWebSocket.send(buff);
+                 });
                 }
-            } else if (data.type === "start-offer") {
-                this.VideoPcOffer = this.VideoPc.createOffer();
-                this.VideoPc.setLocalDescription(this.VideoPcOffer);
-                TfWebSocket.send(JSON.stringify({ 'offer': this.VideoPcOffer }));
-            } else if (data.type === "stop-offer") {
-
-            } else {
-
-            }
-        };
-
-        this.VideoWebSocket.onclose = () => {
-            console.log("WebSocket closed.");
-        };
-
-        this.mediaRecorder.onstop = async () => {
-            this.VideoWebSocket.close();
-            this.VideoStreamBlob = new Blob(this.recordedChunks, { type: "video/webm" });
-
-            this.VideoStreamBlobUrl = URL.createObjectURL(this.VideoStreamBlob);
-            let VideoStreamBlobUrlHref = document.createElement("a");
-            VideoStreamBlobUrlHref.href = this.VideoStreamBlobUrl;
-            VideoStreamBlobUrlHref.style.display = "block";
-            VideoStreamBlobUrlHref.textContext = "Download Video";
-            VideoStreamBlobUrlHref.download = "recorded.webm";
-            document.body.appendChild(VideoStreamBlobUrlHref);
-            VideoStreamBlobUrlHref.click();
-            URL.revoke.ObjectURL(VideoStreamBlobUrl);
-            IsRecording = false;
-            RecordingStartBtn.disabled = false;
-            RecordingStartBtn.style.display = "inline";
-            RecordingSpotBtn.disabled = true;
-            RecordingStopBtn.style.display = "none";
-        }
-
-        this.VideoWebSocket.onerror = (error) => {
-            console.log(`WebSocket connection is not working.  error: ${error}`);
-        }
+           }
+       };
+       this.mediaRecorder.start(250);
+       //IsRecording = true;
+       //RecordingStartBtn.disabled = true;
+       //RecordingStartBtn.style.display = "none";
+       //RecordingSpotBtn.disabled = false;
+       //RecordingStopBtn.style.display = "inline";
     }
     stopRecording() {
         console.log("Stop Recording");
+        this.mediaRecorder.onstop = async () => {
+        this.VideoWebSocket.close();
+        this.VideoStreamBlob = new Blob(this.recordedChunks, { type: "video/webm" });
+        this.VideoStreamBlobUrl = URL.createObjectURL(this.VideoStreamBlob);
+        let VideoStreamBlobUrlHref = document.createElement("a");
+        VideoStreamBlobUrlHref.href = this.VideoStreamBlobUrl;
+        VideoStreamBlobUrlHref.style.display = "block";
+        VideoStreamBlobUrlHref.textContext = "Download Video";
+        VideoStreamBlobUrlHref.download = "recorded.webm";
+        document.body.appendChild(VideoStreamBlobUrlHref);
+        VideoStreamBlobUrlHref.click();
+        URL.revoke.ObjectURL(VideoStreamBlobUrl);
+        //IsRecording = false;
+        //RecordingStartBtn.disabled = false;
+        //RecordingStartBtn.style.display = "inline";
+        //RecordingSpotBtn.disabled = true;
+        //RecordingStopBtn.style.display = "none";
+    }
     }
     DownloadRecording() {
         console.log("Placeholder for download Video");
@@ -744,45 +498,44 @@ VideoState(element, context) {
     UploadImage(e) {
         const file = e.target.files[0];
         if (file) {
-            TbackgroundFImage = new Image();
-            TbackgroundFImage.src = URL.createObjectURL(file);
-            TframeStBtn.style.display = 'inline'; // Show start button
-            TframeByeImg.style.display = 'inline'; // Show remove image button
+            this.backgroundImg = new Image();
+            this.backgroundImg.src = URL.createObjectURL(file);
+            //TframeStBtn.style.display = 'inline'; // Show start button
+            //TframeByeImg.style.display = 'inline'; // Show remove image button
         }
     }
     RemoveImage() {
         console.log("placeholder for RemoveImage");
-        TbackgroundFImage = null;
-        hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
-        TframeStBtn.style.display = 'none'; // Hide start button
-        TframeByeImg.style.display = 'none'; // Hide remove button
+        this.backgroundImg = null;
+        this.CanvasContent.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
+        //TframeStBtn.style.display = 'none'; // Hide start button
+        //TframeByeImg.style.display = 'none'; // Hide remove button
     }
     UploadVideo(e) {
         const file = e.target.files[0];
         if (file) {
-            TbackgroundFVideo = document.createElement('video');
-            TbackgroundFVideo.src = URL.createObjectURL(file);
-            TbackgroundFVideo.muted = true; // Mute the video
-            TbackgroundFVideo.loop = true; // Loop the video
-            TbackgroundFVideo.load(); // Load the video
-            TframeStBtn.style.display = 'inline'; // Show start button
-            TframeByeVid.style.display = 'inline'; // Show remove video button
+            this.backgroundVideo = document.createElement('video');
+            this.backgroundVideo.src = URL.createObjectURL(file);
+            this.backgroundVideo.muted = true; // Mute the video
+            this.backgroundVideo.loop = true; // Loop the video
+            this.backgroundVideo.load(); // Load the video
+            //TframeStBtn.style.display = 'inline'; // Show start button
+            //TframeByeVid.style.display = 'inline'; // Show remove video button
         }
     }
     RemoveVideo() {
         console.log("Placeholder for remove video");
-        if (TbackgroundFVideo) {
-            TbackgroundFVideo.pause();
-            TbackgroundFVideo.currentTime = 0; // Reset the video to the beginning
-            TbackgroundFVideo = null; // Clear the video reference
+        if (this.backgroundVideo) {
+            this.backgroundVideo.pause();
+            this.backgroundVideo.currentTime = 0; // Reset the video to the beginning
+            this.backgroundVideo = null; // Clear the video reference
             hpCC.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT); // Clear the canvas
         }
-        TframeStBtn.style.display = 'none'; // Hide start button
-        TframeByeVid.style.display = 'none'; // Hide remove button
+        //TframeStBtn.style.display = 'none'; // Hide start button
+        //TframeByeVid.style.display = 'none'; // Hide remove button
     }
     VideoButtonsEventListeners() {
         console.log("placeholder for main");
-
         this.VideoSystemControllerButton = document.createElement("button");
         this.VideoSystemControllerStopButton = document.createElement("button");
         this.VideoSystemControllerButton.id = "TfControlShit";
@@ -791,7 +544,6 @@ VideoState(element, context) {
         this.tfVidImgUploadButton.id = "TfUploadImages";
         this.tfVidImgRemoveImgButton = createElement("button");
         this.tfVidImgRemoveImgButton.id = "rmvTFimg";
-
         this.VideoSystemControllerButton = document.createElement("button");
         this.VideoSystemControllerStopButton = document.createElement("button");
         this.VideoSystemControllerButton.id = "TfControlShit";
@@ -800,7 +552,6 @@ VideoState(element, context) {
         this.tfVidImgUploadButton.id = "TfUploadImages";
         this.tfVidImgRemoveImgButton = createElement("button");
         this.tfVidImgRemoveImgButton.id = "rmvTFimg";
-
         this.tfVideoStuff = document.createElement("video");
         this.tfVideoStuff.id = "TsunamiFlowVideoStuff";
         this.tfVideoStuff.controls = true;
@@ -808,65 +559,37 @@ VideoState(element, context) {
         this.tfVideoStuff.loop = false;
         this.tfVideoStuff.muted = false;
         this.tfVideoStuff.poster = "";
-
         //Webcam
         this.WebcamStartButton = document.createElement("button");
         this.WebcamStartButton.id = "TfStartShit";
         this.WebcamStopButton = document.createElement("button");
         this.WebcamStopButton.id = "TfStopShit";
+        //TFcolorPicker.addEventListener('input', (e) => {this.ColorPickerChromaKey(e);}); //Choose a color for the chroma key green screen
+        //TfCpBtn.addEventListener('click', () => {this.ApplyTfChromaKey();});// Use chroma key color for webcam
 
-        TFcolorPicker.addEventListener('input', (e) => {
-            this.ColorPickerChromaKey(e);
-        }); //Choose a color for the chroma key green screen
-
-        TfCpBtn.addEventListener('click', () => {
-            this.ApplyTfChromaKey();
-        });// Use chroma key color for webcam
-
-        TfCpRm.addEventListener('click', () => {
-            this.RemoveChromaKeyColor();
-        }); // Remove chroma key color button
+        //TfCpRm.addEventListener('click', () => {this.RemoveChromaKeyColor();}); // Remove chroma key color button
 
         //Green Screen Ends
-        TframeSpBtn.addEventListener('click', () => {
+        //TframeSpBtn.addEventListener('click', () => {});//Create Record Button
 
-        });//Create Record Button
+        //TframeStRec.addEventListener('click', () => {this.startRecording();}); //Start Recording
 
-        TframeStRec.addEventListener('click', () => {
-            this.startRecording();
-        }); //Start Recording
+        //TframeSpRec.addEventListener('click', () => {this.stopRecording();}); //Stop Recording
 
-        TframeSpRec.addEventListener('click', () => {
-            this.stopRecording();
-        }); //Stop Recording
-
-        Tframe4u.addEventListener('click', () => {
-
-        }); //I cant remember yet
+        //Tframe4u.addEventListener('click', () => { }); //I cant remember yet
+        
         //Upload Image
-        TframeULimg.addEventListener('change', (e) => {
-            this.UploadImage();
-        });
+        //TframeULimg.addEventListener('change', (e) => {this.UploadImage();});
         //Upload VIdeo
-        TframeULvid.addEventListener('change', (e) => {
-            this.UploadVideo();
-        });
+        //TframeULvid.addEventListener('change', (e) => {this.UploadVideo();});
         //Remove Image
-        TframeByeImg.addEventListener('click', () => {
-            this.removeImage();
-        });
+        //TframeByeImg.addEventListener('click', () => {this.removeImage();});
         //Remove Video
-        TframeByeVid.addEventListener('click', () => {
-            this.removeVideo();
-        });
+        //TframeByeVid.addEventListener('click', () => {this.removeVideo();});
         //Control Camera
-        document.getElementById("TcameraFlipButton").onclick = () => {
-            whichCamera = !whichCamera;
-        }
+        //document.getElementById("TcameraFlipButton").onclick = () => {this.whichCamera = !whichCamera;}
 
-        TframeCtrBtn.addEventListener('click', () => {
-
-        });
+        //TframeCtrBtn.addEventListener('click', () => {});
     }
     VideoSystemStart() {
         console.log("Placeholder for system start");
@@ -874,38 +597,66 @@ VideoState(element, context) {
             isPlaying = false;
             cancelAnimationFrame(animationId);
             tfVidStuff.pause();
-            if (TbackgroundFVideo) {
-                TbackgroundFVideo.pause();
+            if (this.backgroundVideo) {
+                this.backgroundVideo.pause();
             }
         } else {
-            isPlaying = true;
-
+            //this.isPlaying = true;
             // Play the webcam feed if it's active
-            if (webcamStream) {
+            if (this.TfWebcam) {
                 tfVidStuff.play();
             }
-
             // Always play the background video if it exists
-            if (TbackgroundFVideo) {
-                TbackgroundFVideo.play();
+            if (this.backgroundVideo) {
+                this.backgroundVideo.play();
             }
-
             animate();
         }
     }
     VideoSystemStop() {
         this.isPlaying = false;
         //cancelAnimationFrame(animationId);
-        ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        ctx.clearRect(0, 0, this.VideoCanvas.width, this.VideoCanvas.height);
 
-        if (webcamStream) {
-            const tracks = webcamStream.getTracks();
+        if (this.TfWebcam) {
+            const tracks = this.TfWebcam.getTracks();
             tracks.forEach(track => track.stop());
             tfVidStuff.srcObject = null;
-            webcamStream = null;
+            this.TfWebcam = null;
         }
 
         this.VideoSystemControllerStopButton.style.display = "none";
+    }
+    VideoWebRTC(stream) {
+        this.VideoPc = new RTCPeerConnection();
+        
+        this.VideoFriendPcOffer = this.VideoFriendPc.createOffer();
+        this.VideoFriendPc.setLocalDescription(this.VideoFriendPcOffer);
+
+        stream.getTracks().forEach(track => this.VideoPc.addTrack(track, stream));
+  
+        if (data.type === "offer") {
+            this.VideoPc.setRemoteDescription(new RTCSessionDescription(data.offer));
+            this.VideoPcAnswer = this.VideoPc.createAnswer();
+            this.VideoPc.setLocalDescription(this.VideoPcAnswer);
+             this.VideoWebSocket.send(JSON.stringify({ 'answer': this.VideoPcAnswer }));
+        } else if (data.type === "answer") {
+            this.VideoPc.setRemoteDescription(new RTCSessionDescription(data.answer));
+        } else if (data.type === "candidate") {
+            try {
+                 this.VideoPc.addIceCandidate(new RTCIceCandidate(data.candidate));
+            } catch (e) {
+                console.error("ICE Error:", e);
+            }
+        } else if (data.type === "start-offer") {
+            this.VideoPcOffer = this.VideoPc.createOffer();
+            this.VideoPc.setLocalDescription(this.VideoPcOffer);
+            this.VideoWebSocket.send(JSON.stringify({ 'offer': this.VideoPcOffer }));
+        } else if (data.type === "stop-offer") {
+  
+        } else {
+  
+        }
     }
     VideoWebCodecs(stream) {
         this.VideoProcessor = new MediaStreamTrackProcess({
@@ -913,21 +664,15 @@ VideoState(element, context) {
         });
         this.VideoReader = this.VideoProcessor.readable.getReader();
     }
+    VideoScreenSharing() {
+        console.log("Start Video Sharing");
+        navigator.mediaDevices.getDisplayMedia(this.TmediaFstreamConstraints).then(async (stream) => {
+            //use stream
+        });
+    }
     LetsBegin(stream, audioContext, videoElement) {
-        //create audio Element and video Element Here
-        //video
-        videoElement.srcObject = stream;
-        audioContext
-        wcS = webcamStream;
-        // create video canvas
-
-        //Audio
-        this.VideoAudioCanvas = canvas1;
-
-        //Use event listener on video Element
+        //videoElement.srcObject = stream;
         this.VideoEventListeners(videoElement);
-
-        //Create buttons for event listener. 
         this.VideoButtonsEventListeners();
     }
 }
