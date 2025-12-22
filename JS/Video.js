@@ -1,6 +1,7 @@
 export class TfVideo {
-    constructor(Radio = null, VideoElement = null, TfCanvas) {
+    constructor(Socket = null, Radio = null, VideoElement = null, TfCanvas = null) {
         //implemented classes
+        this.VideoSocket = Socket;
         this.audioEngine = Radio;
         //dom elements
         this.tfVidStuff = VideoElement;
@@ -10,7 +11,7 @@ export class TfVideo {
         //buttons
         this.VideoSystemControllerButton;
         this.VideoSystemControllerStopButton;
-        this.useChromaKeyWebcam;
+        this.useChromaKeyWebcam = false;
         this.chromaColorPicker;
         this.useChromaColor;
         this.removeChromaColor;
@@ -28,8 +29,8 @@ export class TfVideo {
         this.chromaData;
         this.Tfhex;
         this.rgb;
-        this.frameSkipCount;
-        this.frameCounter;
+        this.frameSkipCount = 2;
+        this.frameCounter = 0;
         this.animationId;
         //Image
         this.backgroundImg = null;
@@ -39,6 +40,7 @@ export class TfVideo {
         this.TfVidDrawFrame;
         this.VideoProcessor;
         this.VideoReader;
+        this.isPlaying = false;
     }
     VideoNetworkState(element) {
         if (element === null) {
@@ -107,47 +109,47 @@ VideoState(element, context) {
     console.log("Video idle, AudioContext left running");
   }
 }
-    emptiedVideo() {
-        this.VideoNetworkState();
+    emptiedVideo(element) {
+        this.VideoNetworkState(element);
     }
-    loadVideo() {
-        this.VideoNetworkState();
+    loadVideo(element) {
+        this.VideoNetworkState(element);
     }
     loadedVideoMetadata(element) {
         this.VideoNetworkState(element);
         this.VideoCanvas.width = element.videoWidth;
         this.VideoCanvas.height = element.videoHeight;
     }
-    loadedVideoData() {
-        this.VideoState();
+    loadedVideoData(element, context) {
+        this.VideoState(element, context);
     }
-    canPlayVideo() {
-        this.VideoState();
+    canPlayVideo(element, context) {
+        this.VideoState(element, context);
     }
-    canPlayVideoThrough() {
-        this.VideoState();
+    canPlayVideoThrough(element, context) {
+        this.VideoState(element, context);
     }
-    playVideo() {
-        this.VideoState();
+    playVideo(element, context) {
+        this.VideoState(element, context);
     }
-    pauseVideo() {
-        this.VideoState();
+    pauseVideo(element, context) {
+        this.VideoState(element, context);
     }
-    VideoEnded() {
-        this.VideoState();
+    VideoEnded(element, context) {
+        this.VideoState(element, context);
         console.log("The video has ended");
     }
-    VideoWaiting() {
-        this.VideoState();
+    VideoWaiting(element, context) {
+        this.VideoState(element, context);
     }
-    VideoPlaying() {
-        this.VideoState();
+    VideoPlaying(element, context) {
+        this.VideoState(element, context);
     }
     VideoStalled() {
         console.log("The video has stalled");
     }
-    VideoSuspended() {
-        this.VideoNetworkState();
+    VideoSuspended(element) {
+        this.VideoNetworkState(element);
     }
     FormatVideoTime(seconds) {
         let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2, "0")}`;
@@ -195,7 +197,6 @@ VideoState(element, context) {
 
         element.addEventListener("canplay", async () => {
             console.log("The Tsunami Video Community can play this part.");
-
             //create canvas for audio and video
         });
 
@@ -259,15 +260,16 @@ VideoState(element, context) {
     ColorPickerChromaKey(chroma) {
         this.Tfhex = chroma.target.value;
         this.rgb = parseInt(this.Tfhex.slice(1), 16);
-        this.chromaKeyColorWebcam.r = (rgb >> 16) & 255;
-        this.chromaKeyColorWebcam.g = (rgb >> 8) & 255;
-        this.chromaKeyColorWebcam.b = rgb & 255;
+        this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
+        this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
+        this.chromaKeyColorWebcam.b = this.rgb & 255;
     }
     usePickedColor(useChroma) {
         this.useChromaKeyWebcam = true;
         useChroma.style.display = "inline";
     }
-    ApplyTfChromaKey(thing, ctx, canvas_width, canvas_height) {
+    
+    ApplyTfChromaKey(thing, ctx, canvas_width, canvas_height, stream) {
         if (thing === "webcam") {
             this.chromaFrame = ctx.getImageData(0, 0, canvas_width, canvas_height);
             this.chromaData = this.chromaFrame.data;
@@ -277,55 +279,63 @@ VideoState(element, context) {
                 const b = this.chromaData[i + 2];
                 // Check if pixel matches the chroma key color for webcam
                 if (r === this.chromaKeyColorWebcam.r && g === this.chromaKeyColorWebcam.g && b === this.chromaKeyColorWebcam.b) {
-                    data[i + 3] = 0; // Set alpha to 0
+                    this.chromaData[i + 3] = 0; // Set alpha to 0
                 }
             }
             ctx.putImageData(this.chromaFrame, 0, 0);
         } else if (thing === "canvas") {
             //Apply chromakey after webcam is put on the canvas instead of before.
-            this.frameSkipCount = 2;
-            this.frameCounter = 0;
-            if (this.tfVideoStuff.paused || this.tfVideoStuff.ended) {
-                ctx.drawImage(this.tfVideoStuff, 0, 0, canvas_width, canvas_height);
+            if (this.tfVidStuff.paused || this.tfVidStuff.ended) {
+                ctx.drawImage(this.tfVidStuff, 0, 0, canvas_width, canvas_height);
                 const imageData = ctx.getImageData(0, 0, canvas_width, canvas_height);
                 this.chromaData = imageData.data;
-                const chromaColor = this.chromaKey(colorPicker.value);
+                const chromaColor = this.chromaKey(this.Tfhex);
                 for (let i = 0; i < this.chromaData.length; i += 4) {
-                    if (this.chromaData[i] === chromaColor.r && data[i + 1] === chromaColor.g && data[i + 2] === chromaColor.b) {
+                    if (this.chromaData[i] === chromaColor.r && this.chromaData[i + 1] === chromaColor.g && this.chromaData[i + 2] === chromaColor.b) {
                         this.chromaData[i + 3] = 0; // Set alpha to 0 for transparency
                     }
                 }
                 ctx.putImageData(imageData, 0, 0);
-                this.animationId = requestAnimationFrame( );
+                this.animationId = requestAnimationFrame(() => {
+                    this.ApplyTfChromaKey(thing, ctx, canvas_width, canvas_height, stream);
+                });
             } else {
                 ctx.clearRect(0, 0, canvas_width, canvas_height);
                 // Draw the uploaded background video or image
-                if (backgroundVideo) {
-                    ctx.drawImage(backgroundVideo, 0, 0, canvas_width, canvas_height);
-                } else if (backgroundImage) {
-                    ctx.drawImage(backgroundImage, 0, 0, canvas_width, canvas_height);
+                if (this.backgroundVideo) {
+                    ctx.drawImage(this.backgroundVideo, 0, 0, canvas_width, canvas_height);
+                } else if (this.backgroundImg) {
+                    ctx.drawImage(this.backgroundImg, 0, 0, canvas_width, canvas_height);
                 }
                 // Draw the webcam feed if it's active
-                if (isPlaying) {
-                    ctx.drawImage(video, 0, 0, canvas_width, canvas_height);
+                if (this.isPlaying === true) {
+                    ctx.drawImage(stream, 0, 0, canvas_width, canvas_height);
                 }
                 // Apply chroma key for webcam, video, and image based on flags
                 if (this.frameCounter % this.frameSkipCount === 0) {
-                    if (useChromaKeyWebcam) applyChromaKeyWebcam();
+                    if (this.useChromaKeyWebcam) { 
+                    this.ColorPickerChromaKey(this.Tfhex);
+                    } else {
+                        
+                    }
                 }
                 this.frameCounter++;
                 // Continue the animation loop
-                this.animationId = requestAnimationFrame( );
+                this.animationId = requestAnimationFrame(() => {
+                    this.ApplyTfChromaKey(thing, ctx, canvas_width, canvas_height, stream);
+                });
             }
         } else if (thing === "video") {
             //current code below is drawing the video to the canvas, and then getting the pixel data, and then turning it into GreenScreen or aka manipulating it.
             //Draw the video directly to canvas.
-            ctx.drawImage(this.tfVideoStuff, 0, 0, canvas_width, canvas_height);
+            ctx.drawImage(this.tfVidStuff, 0, 0, canvas_width, canvas_height);
             //Get pixel data.
             this.TfVidDrawFrame = ctx.getImageData(0, 0, canvas_width, canvas_height);
             //mainpulate pixel
             ctx.putImageData(this.TfVidDrawFrame, 0, 0);
-            this.animationId = requestAnimationFrame( );
+            this.animationId = requestAnimationFrame(() => {
+                this.ApplyTfChromaKey(thing, ctx, canvas_width, canvas_height, stream);
+            });
         } else {
             //nothing 
         }
@@ -373,119 +383,16 @@ VideoState(element, context) {
         //TframeStBtn.style.display = 'none'; // Hide start button
         //TframeByeVid.style.display = 'none'; // Hide remove button
     }
-    VideoButtonsEventListeners(element, startSystem, stopSystem, uploadImg, removeImg, startWebcam, cameraControl, stopWebcam, chromaColor, useChroma, removeChroma, uploadImg, removeImg, uploadVid, removeVid, startRec, stopRec, downloadRec) {
-        console.log("placeholder for main");
-        if (startSystem === null) {
-            startSystem = document.createElement("button");
-        }
-        startSystem.id = "TfControlShit";
-        if (stopSystem === null) {
-            stopSystem = document.createElement("button");
-        }
-        stopSystem.id = "TfControlStopStart";
-        
-        if (uploadImg === null) {
-            uploadImg = document.createElement("button");
-        }
-        uploadImg.id = "TfUploadImages";
-        
-        if (removeImg === null) {
-           removeImg = createElement("button"); 
-        }
-        removeImg.id = "rmvTFimg";
-        
-        if (element === null) {
-            element = document.createElement("video");   
-        }
-        element.id = "TsunamiFlowVideoStuff";
-        element.controls = true;
-        element.autoplay = false;
-        element.loop = false;
-        element.muted = false;
-        element.poster = "";
-        //Webcam
-        
-        if (startWebcam === null) {
-            startWebcam = document.createElement("button");  
-        }
-        startWebcam.id = "Start Webcam";
-        
-        if (cameraControl === null) {
-            //create camera control flip buttom
-        }
-        
-        cameraControl.addEventListener('click', () => {
-            this.whichCamera = !whichCamera; 
-        });
-        
-        if (stopWebcam) {
-            stopWebcam = document.createElement("button");  
-        }
-        stopWebcam.id = "TfStopShit";
-        
-        chromaColor.addEventListener('input', (e) => {this.ColorPickerChromaKey(e);}); 
-        useChroma.addEventListener('click', () => {this.ApplyTfChromaKey();});
-        removeChroma.addEventListener('click', () => {
-            this.RemoveChromaKeyColor();
-        });
-        
-        if (uploadImg === null) {
-            //create upload img button
-        }
-        uploadImg.addEventListener('change', (e) => {
-            this.UploadImage();
-        });
-
-        if (removeImg === null) {
-            // create remove kmg button
-        }
-        removeImg.addEventListener('click', () => {
-            this.removeImage();
-        });
-        
-        if (uploadVid === null) {
-            
-        }
-        uploadVid.addEventListener('change', (e) => {this.UploadVideo();});
-    
-        if (removeVid === null) {
-            // create remove vid button
-        }
-        removeVid.addEventListener('click', () => {
-            this.removeVideo();
-        });
-        
-        if (startRec === null) {
-           //Create Record Button 
-        }
-        startRec.addEventListener('click', () => {
-            //Start Recording
-        });
-
-        if (stopRec === null) {
-          //Create Stop Recording
-        }
-        stopRec.addEventListener('click', () => {
-            //Stop Recording
-        }); 
-        
-        if (downloadRec === null) {
-            // create download recording button
-        }
-        downloadRec.addEventListener('click', () => {
-            // downloading recording
-        });
-    }
-    VideoSystemStart(element, stream, isPlaying) {
-        if (isPlaying) {
-            isPlaying = false;
+    VideoSystemStart(element, stream) {
+        if (this.isPlaying === true) {
+            this.isPlaying = false;
             cancelAnimationFrame(this.animationId);
             element.pause();
             if (this.backgroundVideo) {
                 this.backgroundVideo.pause();
             }
         } else {
-            isPlaying = true;
+            this.isPlaying = true;
             if (stream) {
                 element.play();
             }
@@ -497,7 +404,7 @@ VideoState(element, context) {
         }
     }
     VideoSystemStop(stopSystem, element, stream, ctx, canvas_height, canvas_width) {
-        //cancelAnimationFrame(animationId);
+        cancelAnimationFrame(this.animationId);
         ctx.clearRect(0, 0, canvas_width, canvas_height);
         if (stream) {
             const tracks = stream.getTracks();
@@ -508,14 +415,13 @@ VideoState(element, context) {
         stopSystem.style.display = "none";
     }
     VideoWebCodecs(stream) {
-        this.VideoProcessor = new MediaStreamTrackProcess({
-            track: stream.getVideoTracks()[0]
-        });
+        const track = stream.getVideoTracks()[0];
+        this.VideoProcessor = new MediaStreamTrackProcessor({ track });
         this.VideoReader = this.VideoProcessor.readable.getReader();
     }
     LetsBegin() {
         //videoElement.srcObject = stream;
-        this.VideoEventListeners(videoElement);
+        this.VideoEventListeners(this.tfVidStuff, this.VideoCanvas);
         this.VideoButtonsEventListeners();
     }
 }
