@@ -166,6 +166,99 @@ function doIframeThing(event, source) {
     };
 }
 
+
+export async function VideoEventListeners(element, canvas, context) {
+    if (element === null) {
+        element = document.createElement("video");
+    }
+    element.id = "TsunamiFlowVideoStuff";
+    element.controls = true;
+    element.autoplay = false;
+    element.loop = false;
+    element.muted = false;
+    element.poster = "";
+    element.addEventListener("emptied", async () => {
+        console.log("The Tsunami Community Video has been emptied.");
+        element.emptiedVideo(element);
+    });
+
+    element.addEventListener("load", async () => {
+        element.loadVideo(element);
+    });
+
+    element.addEventListener("loadstart", async () => {
+        console.log("The Tsunami Community Video has started loading.");
+
+    });
+
+    element.addEventListener("loadedmetadata", async (metadata) => {
+        console.log("The Tsunami COmmunity Video metadata has started to load.");
+        element.loadedVideoMetadata(element);
+    });
+
+    element.addEventListener("loadeddata", async (data) => {
+        console.log("The data has loaded");
+        element.loadedVideoData(element, context);
+    }); // The first frame of the mdeia has finished loading.
+
+    element.addEventListener("canplay", async () => {
+        console.log("The Tsunami Video Community can play this part.");
+        //create canvas for audio and video
+        element.canPlayVideo(element, context);
+    });
+
+    element.addEventListener("canplaythrough", async () => {
+        element.canPlayVideoThrough(element, context);
+    }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
+
+    element.addEventListener("play", () => {
+        console.log("The Video should be playing");
+        //this.playVideo();
+        //Capture processed canvas as MediaStream with button
+        this.processedStream = canvas.captureStream(30);
+        element.playVideo(element, context);
+    });
+
+    element.addEventListener("pause", async () => {
+        //this.pauseVideo();
+        element.pauseVideo(element, context);
+    }); //playback has been paused.
+
+    element.addEventListener("ended", async () => {
+        console.log("The video should have ended");
+        //this.VideoEnded();
+        element.VideoEnded(element, context);
+    });
+
+    element.addEventListener("waiting", async (waiting) => {
+        console.log("The Video should be waiting");
+        element.VideoWaiting(element, context);
+    });
+
+    element.addEventListener("playing", async () => {
+        console.log("The video should be playing");
+        element.VideoPlaying(element, context);
+    });
+
+    element.addEventListener("stalled", async (stalled) => {
+        console.log(`The Tsunami Community Video has stalled for some reason. ${stalled} <br /> here is the supposed song path: input the real path here later.`);
+        element.VideoStalled();
+    });
+
+    element.addEventListener("suspended", async (suspend) => {
+        element.VideoSuspended(element);
+    });
+
+    element.addEventListener("timeupdate", () => {
+        //function 
+        element.UpdateVideoTime(element);
+    });
+
+    element.addEventListener("volumechange", async () => {
+        element.VideoVolumeChange();
+    });
+}
+
 function checkIframeOrigin(event, source) {
     console.log("the iframe origin is " + event.origin)
     switch (event.origin) {
@@ -245,44 +338,44 @@ export async function DoTheThingMan(source) {
     }
 };
 
-    // Fetch current cart items from server.php
+// Fetch current cart items from server.php
 export async function fetchCart() {
-        try {
-            const res = await fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            });
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
-            const data = await res.json();
-            return data.items || [];
-        } catch (err) {
-            console.error('Error fetching cart:', err);
-            return [];
-        }
+    try {
+        const res = await fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        return data.items || [];
+    } catch (err) {
+        console.error('Error fetching cart:', err);
+        return [];
+    }
 }
 
-    // Update subtotal and grand total
+// Update subtotal and grand total
 export function updateTotals() {
-        let grandTotal = 0;
-        document.querySelectorAll('.cartForm').forEach(form => {
-            const variantSelect = form.querySelector('.variantSelect');
-            const quantityInput = form.querySelector('.quantityInput');
-            const itemSubtotalEl = form.querySelector('.itemSubtotal');
+    let grandTotal = 0;
+    document.querySelectorAll('.cartForm').forEach(form => {
+        const variantSelect = form.querySelector('.variantSelect');
+        const quantityInput = form.querySelector('.quantityInput');
+        const itemSubtotalEl = form.querySelector('.itemSubtotal');
 
-            const variant = variantSelect?.selectedOptions[0];
-            const price = parseFloat(variant?.dataset.price || 0);
-            const quantity = parseInt(quantityInput?.value || 1);
+        const variant = variantSelect?.selectedOptions[0];
+        const price = parseFloat(variant?.dataset.price || 0);
+        const quantity = parseInt(quantityInput?.value || 1);
 
-            const subtotal = price * quantity;
+        const subtotal = price * quantity;
 
-            if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
-            form.dataset.price = subtotal.toFixed(2);
+        if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
+        form.dataset.price = subtotal.toFixed(2);
 
-            grandTotal += subtotal;
-        });
+        grandTotal += subtotal;
+    });
 
-        const totalEl = document.getElementById('cartTotal');
-        if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
-    }
+    const totalEl = document.getElementById('cartTotal');
+    if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
+}
 // Game Mechanics
 /* 
 Air Division 

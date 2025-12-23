@@ -4,10 +4,14 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
 import { TfMusic } from "./Audio.js";
+import { TfVideo } from "./Video.js";
+import { TfWebsocket } from "./TfWebSocket.js";
+import { TfEffects } from "./../WebWorker/Effects.js";
 import { Weather } from "./Weather.js";
-import { DoTheThingMan, fetchCart, updateTotals } from "./Functions.js";
+import { DoTheThingMan, VideoEventListeners, fetchCart, updateTotals } from "./Functions.js";
 import { HomepageUpdates } from "./sprite.js";
 
+let Socket = new TfWebsocket("");
 let TfWeather = new Weather();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -63,9 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 document.body.addEventListener("click", () => {
-  if (TsunamiAudioCtx.state === "suspended") {
-    TsunamiAudioCtx.resume();
-  }
+    if (TsunamiAudioCtx.state === "suspended") {
+        TsunamiAudioCtx.resume();
+    }
 });
 
 //Tsunami Radio Audio
@@ -85,7 +89,6 @@ let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
 let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia);
-
 //VideoGame Audio
 let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
 
@@ -96,6 +99,8 @@ if (navigator.cookieEnabled) {
     //don't use cookies 
     console.log("Cookies are not enabled");
 }
+
+
 
 //console.log(TfUserAgentInfo);
 //console.log(`The user native human language setting on this computer is ${TfUserLanguage} we will put this in a variable called TFuserLanguage`);
@@ -174,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const el = sections[sectionName];
             if (el.style.display === "none") {
                 el.style.display = "block";
-            } 
+            }
         });
 
         // Update cost/payment
@@ -323,3 +328,6 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
+let Effects = new TfEffects();
+let Live = new TfVideo(Socket, Radio, null, null, Effects);
+//VideoEventListeners(Live.tfVidStuff, Live.VideoCanvas, Live.audioEngine.TsunamiRadioAudio);
