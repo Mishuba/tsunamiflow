@@ -1,9 +1,4 @@
-/*
-const TfWebSocket = new WebSocket("wss://3.143.179.123/websocket");
 
-new WebSocket("wss://world.tsunamiflow.club:8080");
-
-*/
 //env variable
 /*
 const TfWebSocket = new WebSocket("wss://world.tsunamiflow.club/websocket");
