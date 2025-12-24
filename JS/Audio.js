@@ -99,6 +99,7 @@ export class TfMusic {
             threshold: -24 // -100 - 0
         };
 this.audioSocket = Websocket;
+this.TfEffects = Effects;
 this.WeLive = false;
 this.LiveAudioLink;
     }
