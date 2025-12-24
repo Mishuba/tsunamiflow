@@ -1,7 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext = null, AudioAnalyser = null, AudioMedia = null, Websocket = null) {
+    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext = null, AudioAnalyser = null, AudioMedia = null, Websocket = null, Effects = null) {
         this.TsunamiAudio = audioElement;
         this.TsunamiRadioTitle = Title;
         this.TsunamiRadioButtons = Buttons;
