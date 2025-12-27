@@ -106,19 +106,19 @@ on(id, handler) {
   }
   bindVideo() {
     this.on("", (color) => {
-      this.usePickedColor(color);
+    //  this.usePickedColor(color);
     });
     this.on("", (image) => {
-      this.UploadImage(image);
+   //   this.UploadImage(image);
     });
     this.on("", (image) => {
-      this.RemoveImage(image);
+  //    this.RemoveImage(image);
     });
     this.on("", (video) => {
-      this.UploadVideo(video);
+    //  this.UploadVideo(video);
     });
     this.on("", (video) => {
-      this.RemoveVideo(video);
+   //   this.RemoveVideo(video);
     });
   }
   bindGame() {
