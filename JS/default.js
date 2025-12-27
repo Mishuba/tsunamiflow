@@ -100,8 +100,26 @@ on(id, handler) {
       }
     )
   }
+  usePickedColor(useChroma) {
+  this.VidEffects.useChromaKey = true;
+  useChroma.style.display = "inline";
+  }
   bindVideo() {
-    
+    this.on("", (color) => {
+      this.usePickedColor(color);
+    });
+    this.on("", (image) => {
+      this.UploadImage(image);
+    });
+    this.on("", (image) => {
+      this.RemoveImage(image);
+    });
+    this.on("", (video) => {
+      this.UploadVideo(video);
+    });
+    this.on("", (video) => {
+      this.RemoveVideo(video);
+    });
   }
   bindGame() {
     
