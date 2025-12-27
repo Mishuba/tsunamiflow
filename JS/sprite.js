@@ -1,36 +1,3 @@
-
-//env variable
-/*
-const TfWebSocket = new WebSocket("wss://world.tsunamiflow.club/websocket");
-
-TfWebSocket.onopen = async (event) => {
-    let data = event.data;
-    //alert(data.message);
-    let testingData = {
-        type: "start_game",
-        message: "testing message",
-        username: "Mishuba",
-        error: "nothing right now"
-    };
-    TfWebSocket.send(JSON.stringify(testingData));
-}
-
-TfWebSocket.onmessage = async (event) => {
-    let data = event.data;
-    console.log(data);
-}
-
-TfWebSocket.onerror = async (event) => {
-    let data = event.data;
-    console.log(data);
-}
-
-TfWebSocket.onclose = async (event) => {
-    let data = event;
-    console.log(data);
-}
-*/
-
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
 const StickMan = new Image();
