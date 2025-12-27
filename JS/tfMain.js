@@ -12,6 +12,7 @@ import { DoTheThingMan, VideoEventListeners, fetchCart, updateTotals } from "./F
 import { HomepageUpdates } from "./sprite.js";
 
 let Socket = new TfWebsocket("");
+let Effects = new TfEffects();
 let TfWeather = new Weather();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -88,7 +89,7 @@ let RadioCanvas = document.getElementById("TFradioCanvas");
 let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
-let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia);
+let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia, Socket);
 //VideoGame Audio
 let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
 
@@ -99,12 +100,6 @@ if (navigator.cookieEnabled) {
     //don't use cookies 
     console.log("Cookies are not enabled");
 }
-
-
-
-//console.log(TfUserAgentInfo);
-//console.log(`The user native human language setting on this computer is ${TfUserLanguage} we will put this in a variable called TFuserLanguage`);
-//console.log(`The current online status of this computer is ${TfOnlineStatus}`);
 
 //The Frame
 export const twoMore = document.getElementById("mainTsectionFdiv");
@@ -328,6 +323,52 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-let Effects = new TfEffects();
-let Live = new TfVideo(Socket, Radio, null, null, Effects);
-//VideoEventListeners(Live.tfVidStuff, Live.VideoCanvas, Live.audioEngine.TsunamiRadioAudio);
+//let Live = new TfVideo(Radio.audioSocket, Radio, null, null, Radio.TfEffects);
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Attach events to forms
+  document.querySelectorAll('.cartForm').forEach(form => {
+    const quantityInput = form.querySelector('.quantityInput');
+    const variantSelect = form.querySelector('.variantSelect');
+    
+    quantityInput?.addEventListener('input', updateTotals);
+    variantSelect?.addEventListener('change', updateTotals);
+    
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      if (!form.action) return console.warn('Form action is empty!');
+      
+      try {
+        const formData = new FormData(form);
+        const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        
+        const result = await res.json();
+        if (result.success) {
+          // Refresh cart totals
+          const cartItems = await fetchCart();
+          let total = 0;
+          cartItems.forEach(item => {
+            total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+          });
+          
+          const totalEl = document.getElementById('cartTotal');
+          if (totalEl) totalEl.textContent = total.toFixed(2);
+          
+          // Refresh item subtotals in DOM
+          updateTotals();
+        } else {
+          console.warn('Cart error:', result.error);
+        }
+      } catch (err) {
+        console.error('Form submission error:', err);
+      }
+    });
+  });
+  
+  // Initialize totals on page load
+  updateTotals();
+});
+
+//VideoEventListeners(Live.tfVidStuff, Live.VideoCanvas, Live.audioEngine.TsunamiRadioAudio);''
