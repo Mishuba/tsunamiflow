@@ -12,6 +12,7 @@ export class TfEffects {
         this.frameSkipCount = 2;
         this.frameCounter = 0;
         this.useChromaKey = false;
+        this.visualizatorController;
     }
     update(p, volume, baseRadius, canvas) {
             p.radius = baseRadius + volume / 80; // pulse based on volume
