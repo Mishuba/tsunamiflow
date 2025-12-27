@@ -120,6 +120,17 @@ on(id, handler) {
     this.on("", (video) => {
       this.RemoveVideo(video);
     });
+    /*
+<video
+  controls
+  autoplay
+  muted
+  playsinline
+  width="925"
+>
+  <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
+</video>
+    */
   }
   bindGame() {
     
