@@ -14,6 +14,36 @@ export class TfEffects {
         this.useChromaKey = false;
         this.visualizatorController;
     }
+    UploadImage(e) {
+    const file = e.target.files[0];
+    if (file) {
+        this.backgroundImg = new Image();
+        this.backgroundImg.src = URL.createObjectURL(file);
+    }
+}
+RemoveImage(ctx, canvas_width, canvas_height) {
+    this.backgroundImg = null;
+    ctx.clearRect(0, 0, canvas_width, canvas_height);
+}
+UploadVideo(e) {
+    const file = e.target.files[0];
+    if (file) {
+        this.backgroundVideo = document.createElement('video');
+        this.backgroundVideo.src = URL.createObjectURL(file);
+        this.backgroundVideo.muted = true; // Mute the video
+        this.backgroundVideo.loop = true; // Loop the video
+        this.backgroundVideo.load();
+    }
+}
+RemoveVideo(ctx, canvas_height, canvas_width) {
+    console.log("Placeholder for remove video");
+    if (this.backgroundVideo) {
+        this.backgroundVideo.pause();
+        this.backgroundVideo.currentTime = 0; // Reset the video to the beginning
+        this.backgroundVideo = null; // Clear the video reference
+        ctx.clearRect(0, 0, canvas_width, canvas_height); // Clear the canvas
+    }
+}
     update(p, volume, baseRadius, canvas) {
             p.radius = baseRadius + volume / 80; // pulse based on volume
             p.x += p.dx;
@@ -96,6 +126,30 @@ export class TfEffects {
                 }
             );
     }
+    drawingFrame(vidCanv, vidElem){
+        const ctx = vidCanv.getContext("2d");
+const w = vidCanv.width;
+const h = vidCanv.height;
+
+// 1. background (user-uploaded assets)
+if (this.backgroundVideo) {
+    ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
+} else if (this.backgroundImg) {
+    ctx.drawImage(this.backgroundImg, 0, 0, w, h);
+}
+
+// 2. webcam / video
+if (this.isPlaying) {
+    ctx.drawImage(vidElem, 0, 0, w, h);
+}
+
+// 3. effects (pixel-level)
+if (this.useChromaKey) {
+    const frame = ctx.getImageData(0, 0, w, h);
+    const processed = this.webcam(frame);
+    ctx.putImageData(processed, 0, 0);
+}
+    }
     setChromaHex(hex) {
         this.rgb = parseInt(hex.slice(1), 16);
         this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
@@ -111,6 +165,10 @@ export class TfEffects {
         return (
             Math.abs(r - key.r) < tolerance && Math.abs(g - key.g) < tolerance && Math.abs(b - key.b) < tolerance
         );
+    }
+    disableChromaKey() {
+       this.frameCounter = 0;
+       this.useChromaKey = false;
     }
     webcam(frameData, ctx, canvas_width, canvas_height) {
         let chromaData = frameData.data;
