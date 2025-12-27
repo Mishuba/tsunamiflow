@@ -52,7 +52,17 @@ on(id, handler) {
     );
     
     this.on("tfNetwork", () => {
-      this.iframe.MenuSwitch(this.iframe.frame);
+      /*
+         <video
+             controls
+  autoplay
+  muted
+  playsinline
+  width="925"
+>
+  <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
+</video>
+      */
       }
     );
     
