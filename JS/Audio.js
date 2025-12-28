@@ -98,10 +98,10 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
-this.audioSocket = Websocket;
-this.TfEffects = Effects;
-this.WeLive = false;
-this.LiveAudioLink;
+        this.audioSocket = Websocket;
+        this.TfEffects = Effects;
+        this.WeLive = false;
+        this.LiveAudioLink;
     }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
         async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
@@ -464,7 +464,7 @@ this.LiveAudioLink;
         console.log("The audio should have ended");
         element.src = "";
         worker.postMessage({ type: "radio", system: "file" });
-   }
+    }
     waitingAudio(element, context) {
         this.MusicState(element, context);
     }
@@ -511,42 +511,42 @@ this.LiveAudioLink;
         console.log(this.SongList1st + " is the source of the current song.");
         return this.SongList1st;
     }
-    StartLiveAudio () {
-        if(this.WeLive) {
-             return;
+    StartLiveAudio() {
+        if (this.WeLive) {
+            return;
         } else {
-           this.WeLive = true;
-           this.TsunamiAudio.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
+            this.WeLive = true;
+            this.TsunamiAudio.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
 
-//start audio with method
+            //start audio with method
 
         }
     }
-    StopLiveAudio () {
-       if(!this.WeLive) {
-           this.WeLive = false;
-           this.TsunamiAudio.pause();
-           this.TsunamiAudio.src = "";
-       } else {
+    StopLiveAudio() {
+        if (!this.WeLive) {
+            this.WeLive = false;
+            this.TsunamiAudio.pause();
+            this.TsunamiAudio.src = "";
+        } else {
 
-       }
+        }
     }
-handleSocketMessage(data) {
-    if (data.type === "live_stream") {
-      if (data.live) {
-        this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
-      } else {
-        this.stopLiveStream();
-      }
+    handleSocketMessage(data) {
+        if (data.type === "live_stream") {
+            if (data.live) {
+                this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+            } else {
+                this.stopLiveStream();
+            }
+        }
     }
-  }
 
-  attachSocketListeners() {
-    this.socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      this.handleSocketMessage(data);
-    };
-  }
+    attachSocketListeners() {
+        this.socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            this.handleSocketMessage(data);
+        };
+    }
     HandleArrayBuffer(buffer, context) {
         if (context.state === "suspended") {
             context.resume();
@@ -577,7 +577,7 @@ handleSocketMessage(data) {
         this.TsunamiCtxSrc = context.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
     }
-    TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, panner, delay, compressor, gain, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
+    TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
         this.TsunamiRadioReady(worker, element, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
         element.addEventListener("emptied", async (emptied) => {
             this.emptiedAudio(emptied);
@@ -604,9 +604,9 @@ handleSocketMessage(data) {
             audioctx.connect(analyser);
             analyser.connect(audiocontext.destination);
 
-        // Call your method with your original variable name
-        this.canplaythroughAudio(element, audiocontext);
-}); //The browser estimates it can play the media up to its ends without stopping for content buffering.
+            // Call your method with your original variable name
+            this.canplaythroughAudio(element, audiocontext);
+        }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
 
         element.addEventListener("play", () => {
             this.playAudio(element, audiocontext);
@@ -650,6 +650,6 @@ handleSocketMessage(data) {
     BeginRadio(song, worker) {
         this.TsunamiAudio.crossOrigin = "anonymous";
         this.TsunamiAudio.src = song;
-        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiPanner, this.TsunamiDelay, this.TsunamiCompressor, this.TsunamiGain, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
+        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
     }
 }

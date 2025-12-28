@@ -2,7 +2,7 @@ export class tfIframe {
   constructor(element = null) {
     this.frame = element;
   }
-  MenuSwitch(event, source) {
+  doIframeThing(event, source) {
     switch (source.src) {
       case "homepage.html":
       case "https://tsunamiflow.club/homepage.html":
@@ -21,7 +21,7 @@ export class tfIframe {
           console.log("sending the iframe message");
           source.contentWindow.postMessage(HomePageJson, "https://tsunamiflow.club/homepage.html");
         } else {
-          
+
         }
         console.log("the end of that");
         break;
@@ -66,7 +66,7 @@ export class tfIframe {
             username: "Mishuba",
             error: "Nothing for competitions right now"
           };
-          
+
           source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
         } else if (event.data.type === "game") {
           CompetitionJson = {
@@ -76,10 +76,10 @@ export class tfIframe {
             username: "Mishuba",
             error: "No errors as of now."
           };
-          
+
           source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
         } else {
-          
+
         }
         break;
       case "TFnetwork.html":
@@ -106,7 +106,7 @@ export class tfIframe {
           username: "Mishuba",
           error: "ok no errors for community right now"
         };
-        
+
         source.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.html");
         break;
       default:
@@ -115,17 +115,81 @@ export class tfIframe {
         break;
     };
   }
-  TfNetwork() {
-    //youtube
-    
-    //twitch
-    
-    //live
-    
-    //pateron
-    
-    //onlyfans
-    
-    //etc
+  checkIframeOrigin(event, source) {
+    console.log("the iframe origin is " + event.origin)
+    switch (event.origin) {
+      case "https://www.tsunamiflow.club":
+      case "https://tsunamiflow.club":
+        this.doIframeThing(event, source);
+        break;
+      case "https://world.tsunamiflow.club":
+
+        break;
+      case "https://m.stripe.com":
+
+        break;
+      default:
+        console.log(event.origin);
+        break;
+    };
+  };
+  MenuSwitch(source) {
+    console.log("starting the main page navigation system.");
+    console.log("checking the iframe source");
+
+    console.log("creating and using the add event listener");
+    switch (source.src) {
+      case "homepage.html":
+      case "https://tsunamiflow.club/homepage.html":
+      case "https://www.tsunamiflow.club/homepage.html":
+        console.log("The iframe is from the homepage");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      case "roster.html":
+      case "https://tsunamiflow.club/roster.html":
+      case "https://www.tsunamiflow.club/roster.html":
+        console.log("The iframe is from the roster page");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      case "news.html":
+      case "https://tsunamiflow.club/news.html":
+      case "https://www.tsunamiflow.club/news.html":
+        console.log("The iframe is from the news page");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      case "Competitions.html":
+      case "https://tsunamiflow.club/Competitions.html":
+      case "https://www.tsunamiflow.club/Competitions.html":
+        console.log("The iframe is from the competitions page");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      case "TFnetwork.html":
+      case "https://tsunamiflow.club/TFnetwork.html":
+      case "https://www.tsunamiflow.club/TFnetwork.html":
+        console.log("The iframe is from the Tsunami Flow Network");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      case "Community.html":
+      case "https://tsunamiflow.club/Community.html":
+      case "https://www.tsunamiflow.club/Community.html":
+        console.log("The iframe is from the community page");
+        window.addEventListener("message", async (event) => {
+          this.checkIframeOrigin(event, source);
+        });
+        break;
+      default:
+        console.log(`Some outside source is trying to send my homepage a message. the origin is ${source.origin}`);
+        break;
+    }
   }
 }

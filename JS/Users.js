@@ -2,6 +2,13 @@ export class User {
     constructor(username = "", password = "") {
         this.username = username;
         this.password = password;
+        this.membershipLevels = {
+            none: { cost: 0, payment: "none", show: [], displayText: "Please Select a Level", paymentText: "" },
+            free: { cost: 0, payment: "none", show: ["free", "address", "costInfo"], displayText: "$0.00", paymentText: "No payment required" },
+            regular: { cost: 4, payment: "monthly", show: ["free", "regular", "address", "costInfo"], displayText: "$4.00", paymentText: "Monthly payment" },
+            vip: { cost: 7, payment: "monthly", show: ["free", "regular", "vip", "address", "costInfo"], displayText: "$7.00", paymentText: "Monthly payment" },
+            team: { cost: 10, payment: "monthly", show: ["free", "regular", "vip", "team", "address", "costInfo"], displayText: "$10.00", paymentText: "Monthly payment" },
+        }
 
         // Restore saved login state if any
         const savedUser = localStorage.getItem("TFuser");
@@ -56,7 +63,35 @@ export class User {
             };
         });
     }
+    hideAllSections(sections) {
+        Object.values(sections).forEach(el => {
+            if (el) {
+                el.style.display = "none";
+            } else {
+                console.log("subscibers stuff");
+            }
+        })
+    }
+    updateMembership(membershipSelect) {
+        const level = membershipSelect.value;
+        this.hideAllSections();
 
+        const config = this.membershipLevels[level] || membershipLevels.none;
+
+        // Show the necessary sections
+        config.show.forEach(sectionName => {
+            const el = sections[sectionName];
+            if (el.style.display === "none") {
+                el.style.display = "block";
+            }
+        });
+
+        // Update cost/payment
+        if (membershipCostEl) membershipCostEl.innerHTML = config.displayText;
+        if (paymentTypeEl) paymentTypeEl.innerHTML = config.paymentText;
+        if (hiddenMC) hiddenMC.value = config.cost;
+        if (hiddenPT) hiddenPT.value = config.payment;
+    }
     signup() {
         try {
             const SubFormData = new FormData();

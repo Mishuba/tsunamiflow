@@ -3,13 +3,15 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
-import { TfMusic } from "./Audio.js";
-import { TfVideo } from "./Video.js";
+import { Weather } from "./Weather.js";
+import { DoTheThingMan, fetchCart, updateTotals } from "./Functions.js";
 import { TfWebsocket } from "./TfWebSocket.js";
 import { TfEffects } from "./../WebWorker/Effects.js";
-import { Weather } from "./Weather.js";
-import { DoTheThingMan, VideoEventListeners, fetchCart, updateTotals } from "./Functions.js";
-import { HomepageUpdates } from "./sprite.js";
+import { User } from "./Users.js";
+import { TfMusic } from "./Audio.js";
+import { TfVideo } from "./Video.js";
+import { tfIframe } from "./TfIframe.js";
+import { MishubaController } from "./default.js";
 
 let Socket = new TfWebsocket("");
 let Effects = new TfEffects();
@@ -90,8 +92,6 @@ let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
 let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia, Socket);
-//VideoGame Audio
-let GameAudio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas);
 
 if (navigator.cookieEnabled) {
     //use cookies
@@ -115,13 +115,13 @@ TFiframe.height = 430;
 TFiframe.src = "./../homepage.html";
 TFiframe.style.background = "white";
 
-const oneMore = TFiframe;
-
 if (twoMore) {
     twoMore.appendChild(TFiframe);
 } else {
     console.error("Element with id 'mainTsectionFdiv' not found.");
 }
+
+let frameTF = new tfIframe(TFiframe)
 
 document.addEventListener("DOMContentLoaded", () => {
     const membershipSelect = document.getElementById("TFMembershipLevel");
@@ -153,9 +153,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Hide all sections
     const hideAllSections = () => {
-        Object.values(sections).forEach(el => {
-            if (el) {
-                el.style.display = "none";
+        Object.values(sections).forEach(ele => {
+            if (ele) {
+                ele.style.display = "none";
             } else {
                 console.log("subscibers stuff");
             }
@@ -323,52 +323,53 @@ for (const [key, button] of Object.entries(navButtons)) {
     });
 };
 //Nav Ended
-//let Live = new TfVideo(Radio.audioSocket, Radio, null, null, Radio.TfEffects);
+let Live = new TfVideo(Socket, Radio, Effects);
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Attach events to forms
-  document.querySelectorAll('.cartForm').forEach(form => {
-    const quantityInput = form.querySelector('.quantityInput');
-    const variantSelect = form.querySelector('.variantSelect');
-    
-    quantityInput?.addEventListener('input', updateTotals);
-    variantSelect?.addEventListener('change', updateTotals);
-    
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      if (!form.action) return console.warn('Form action is empty!');
-      
-      try {
-        const formData = new FormData(form);
-        const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        
-        const result = await res.json();
-        if (result.success) {
-          // Refresh cart totals
-          const cartItems = await fetchCart();
-          let total = 0;
-          cartItems.forEach(item => {
-            total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-          });
-          
-          const totalEl = document.getElementById('cartTotal');
-          if (totalEl) totalEl.textContent = total.toFixed(2);
-          
-          // Refresh item subtotals in DOM
-          updateTotals();
-        } else {
-          console.warn('Cart error:', result.error);
-        }
-      } catch (err) {
-        console.error('Form submission error:', err);
-      }
+    // Attach events to forms
+    document.querySelectorAll('.cartForm').forEach(form => {
+        const quantityInput = form.querySelector('.quantityInput');
+        const variantSelect = form.querySelector('.variantSelect');
+
+        quantityInput?.addEventListener('input', updateTotals);
+        variantSelect?.addEventListener('change', updateTotals);
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            if (!form.action) return console.warn('Form action is empty!');
+
+            try {
+                const formData = new FormData(form);
+                const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+                const result = await res.json();
+                if (result.success) {
+                    // Refresh cart totals
+                    const cartItems = await fetchCart();
+                    let total = 0;
+                    cartItems.forEach(item => {
+                        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+                    });
+
+                    const totalEl = document.getElementById('cartTotal');
+                    if (totalEl) totalEl.textContent = total.toFixed(2);
+
+                    // Refresh item subtotals in DOM
+                    updateTotals();
+                } else {
+                    console.warn('Cart error:', result.error);
+                }
+            } catch (err) {
+                console.error('Form submission error:', err);
+            }
+        });
     });
-  });
-  
-  // Initialize totals on page load
-  updateTotals();
+
+    // Initialize totals on page load
+    updateTotals();
 });
 
-//VideoEventListeners(Live.tfVidStuff, Live.VideoCanvas, Live.audioEngine.TsunamiRadioAudio);''
+//
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null);

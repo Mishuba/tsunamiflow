@@ -1,15 +1,9 @@
 export class TfVideo {
-    constructor(Socket = null, Radio = null, VideoElement = null, TfCanvas = null, TfEffect = null) {
+    constructor(Socket = null, Radio = null, TfEffect = null) {
         //implemented classes
         this.VideoSocket = Socket;
         this.audioEngine = Radio;
-        //dom elements
-        this.tfVidStuff = VideoElement;
-        this.VideoCanvas = TfCanvas;
         this.VidEffects = TfEffect;
-        this.TimingVideo;
-        this.UsingTfVidTk;
-        this.VideoProcessBar;
         //buttons
         this.VideoSystemControllerButton;
         this.VideoSystemControllerStopButton;
@@ -94,10 +88,10 @@ export class TfVideo {
     loadVideo(element) {
         this.VideoNetworkState(element);
     }
-    loadedVideoMetadata(element) {
+    loadedVideoMetadata(element, canvas) {
         this.VideoNetworkState(element);
-        this.VideoCanvas.width = element.videoWidth;
-        this.VideoCanvas.height = element.videoHeight;
+        canvas = element.videoWidth;
+        canvas = element.videoHeight;
     }
     loadedVideoData(element, context) {
         this.VideoState(element, context);
@@ -134,17 +128,17 @@ export class TfVideo {
         let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2, "0")}`;
     }
     UpdateVideoTime(element) {
-        this.TimingVideo = Math.floor(element.currentTime);
-        this.UsingTfVidTk = `Time: ${this.FormatVideoTime(this.TimingVideo)}`;
-        this.VideoProcessBar = (element.currentTime / element.duration) * 100;
+        //let TimingVideo = Math.floor(element.currentTime);
+        //let UsingTfVidTk = `Time: ${this.FormatVideoTime(TimingVideo)}`;
+        //let VideoProcessBar = (element.currentTime / element.duration) * 100;
     }
     VideoVolumeChange() {
         console.log("The video volume has changed");
     }
-    drawFrame(stream) {
-    this.VidEffects.drawingFrame(this.VideoCanvas, this.tfVidStuff);
-    
-    this.animationId = requestAnimationFrame(() => this.drawFrame(stream));
+    drawFrame(stream, canvas, video) {
+        this.VidEffects.drawingFrame(canvas, video);
+
+        this.animationId = requestAnimationFrame(() => this.drawFrame(stream));
     }
     RemoveChromaKeyColor(ctx, canvas_width, canvas_height) {
         ctx.clearRect(0, 0, canvas_width, canvas_height);
