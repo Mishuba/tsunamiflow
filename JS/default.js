@@ -387,4 +387,7 @@ export class MishubaController {
   bindStore() {
 
   }
+bindWorker() {
+
+  }
 }
