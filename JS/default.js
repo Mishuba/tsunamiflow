@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store) {
     this.user = user;
     this.iframe = iframe;
     if (document.getElementById("tfNavLoginForm")) {
@@ -55,8 +55,13 @@ export class MishubaController {
       this.bindVideo();
     }
     this.game = game;
-    if (game !== null) {
+    if (this.game !== null) {
       this.bindGame();
+    }
+    this.store = store;
+    if (this.store !== null) {
+      this.bindStore();
+      this.bindCart();
     }
   }
   on(id, handler) {
@@ -102,7 +107,7 @@ export class MishubaController {
     );
 
     this.on("NavLoginButton", () => {
-      this.iframe.MenuSwitch(this.iframe.frame);
+      //this.user.login(this.user.username, this.user.password);
     }
     );
   }
@@ -303,6 +308,84 @@ export class MishubaController {
   }
   bindGame() {
 
+  }
+  fetchCart() {
+    try {
+      const res = fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = res.json();
+      return data.items || [];
+    } catch (err) {
+      console.error('Error fetching cart:', err);
+      return [];
+    }
+  }
+  updateTotals() {
+    let grandTotal = 0;
+    document.querySelectorAll('.cartForm').forEach(form => {
+      const variantSelect = form.querySelector('.variantSelect');
+      const quantityInput = form.querySelector('.quantityInput');
+      const itemSubtotalEl = form.querySelector('.itemSubtotal');
+
+      const variant = variantSelect?.selectedOptions[0];
+      const price = parseFloat(variant?.dataset.price || 0);
+      const quantity = parseInt(quantityInput?.value || 1);
+
+      const subtotal = price * quantity;
+
+      if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
+      form.dataset.price = subtotal.toFixed(2);
+
+      grandTotal += subtotal;
+    });
+
+    const totalEl = document.getElementById('cartTotal');
+    if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
+  }
+  bindCart() {
+    document.querySelectorAll('.cartForm').forEach(form => {
+      const quantityInput = form.querySelector('.quantityInput');
+      const variantSelect = form.querySelector('.variantSelect');
+
+      quantityInput?.addEventListener('input', updateTotals);
+      variantSelect?.addEventListener('change', updateTotals);
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!form.action) return console.warn('Form action is empty!');
+
+        try {
+          const formData = new FormData(form);
+          const res = fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const result = res.json();
+          if (result.success) {
+            // Refresh cart totals
+            const cartItems = this.fetchCart();
+            let total = 0;
+            cartItems.forEach(item => {
+              total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
+            });
+
+            const totalEl = document.getElementById('cartTotal');
+            if (totalEl) totalEl.textContent = total.toFixed(2);
+
+            // Refresh item subtotals in DOM
+            this.updateTotals();
+          } else {
+            console.warn('Cart error:', result.error);
+          }
+        } catch (err) {
+          console.error('Form submission error:', err);
+        }
+      });
+    });
+    // Initialize totals on page load
+    this.updateTotals();
   }
   bindStore() {
 
