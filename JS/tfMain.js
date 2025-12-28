@@ -10,6 +10,7 @@ import { User } from "./Users.js";
 import { TfMusic } from "./Audio.js";
 import { TfVideo } from "./Video.js";
 import { tfIframe } from "./TfIframe.js";
+import { HomepageUpdates, FirstGame } from "./sprite";
 import { WorkerManager } from "./../WebWorker/workers.js";
 import { MishubaController } from "./default.js";
 
