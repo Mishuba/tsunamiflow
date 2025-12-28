@@ -15,7 +15,7 @@ export class tfIframe {
           console.log("creating the json to send to the iframe");
           let HomePageJson = {
             type: "start_updates",
-            info: HomepageUpdates.toJSON(),
+            info: this.HomepageUpdates.toJSON(),
             message: "Starting the game",
             username: "Mishuba",
             error: "Nothing as of now"
@@ -23,7 +23,7 @@ export class tfIframe {
           console.log("sending the iframe message");
           source.contentWindow.postMessage(HomePageJson, "https://tsunamiflow.club/homepage.html");
         } else {
-
+          
         }
         console.log("the end of that");
         break;
@@ -63,25 +63,25 @@ export class tfIframe {
           console.log("sending the game data over now");
           CompetitionJson = {
             type: "game_begin",
-            info: FirstGame.toJSON(),
+            info: this.FirstGame.toJSON(),
             message: "start the first game once the page opens.",
             username: "Mishuba",
             error: "Nothing for competitions right now"
           };
-
+          
           source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
         } else if (event.data.type === "game") {
           CompetitionJson = {
             type: "game",
-            info: FirstGame.toJSON(),
+            info: this.FirstGame.toJSON(),
             message: "this will be the first game message i send from outside of the game for some reason and to the game maybe",
             username: "Mishuba",
             error: "No errors as of now."
           };
-
+          
           source.contentWindow.postMessage(CompetitionJson, "https://tsunamiflow.club/Competitions.html");
         } else {
-
+          
         }
         break;
       case "TFnetwork.html":
@@ -108,7 +108,7 @@ export class tfIframe {
           username: "Mishuba",
           error: "ok no errors for community right now"
         };
-
+        
         source.contentWindow.postMessage(CommunityJson, "https://tsunamiflow.club/Community.html");
         break;
       default:
@@ -125,10 +125,10 @@ export class tfIframe {
         this.doIframeThing(event, source);
         break;
       case "https://world.tsunamiflow.club":
-
+        
         break;
       case "https://m.stripe.com":
-
+        
         break;
       default:
         console.log(event.origin);
@@ -138,7 +138,7 @@ export class tfIframe {
   MenuSwitch(source) {
     console.log("starting the main page navigation system.");
     console.log("checking the iframe source");
-
+    
     console.log("creating and using the add event listener");
     switch (source.src) {
       case "homepage.html":
