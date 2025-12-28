@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null) {
     this.user = user;
     this.iframe = iframe;
     if (document.getElementById("TFMembershipLevel")) {
