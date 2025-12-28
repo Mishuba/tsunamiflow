@@ -1,6 +1,8 @@
 export class tfIframe {
-  constructor(element = null) {
+  constructor(element = null, Homepage, Game1) {
     this.frame = element;
+    this.HomepageUpdates = Homepage;
+    this.FirstGame = Game1;
   }
   doIframeThing(event, source) {
     switch (source.src) {
