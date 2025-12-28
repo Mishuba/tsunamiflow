@@ -19,54 +19,6 @@ let TfWeather = new Weather();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
 
-document.addEventListener("DOMContentLoaded", () => {
-
-    // Attach events to forms
-    document.querySelectorAll('.cartForm').forEach(form => {
-        const quantityInput = form.querySelector('.quantityInput');
-        const variantSelect = form.querySelector('.variantSelect');
-
-        quantityInput?.addEventListener('input', updateTotals);
-        variantSelect?.addEventListener('change', updateTotals);
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            if (!form.action) return console.warn('Form action is empty!');
-
-            try {
-                const formData = new FormData(form);
-                const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-                const result = await res.json();
-                if (result.success) {
-                    // Refresh cart totals
-                    const cartItems = await fetchCart();
-                    let total = 0;
-                    cartItems.forEach(item => {
-                        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-                    });
-
-                    const totalEl = document.getElementById('cartTotal');
-                    if (totalEl) totalEl.textContent = total.toFixed(2);
-
-                    // Refresh item subtotals in DOM
-                    updateTotals();
-                } else {
-                    console.warn('Cart error:', result.error);
-                }
-            } catch (err) {
-                console.error('Form submission error:', err);
-            }
-        });
-    });
-
-    // Initialize totals on page load
-    updateTotals();
-});
-
-
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 document.body.addEventListener("click", () => {
@@ -313,17 +265,24 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
 TfWeather.requestLocation();
 //Web Workers Ends
 
-DoTheThingMan(TFiframe);
-
-//Nav Begins
-for (const [key, button] of Object.entries(navButtons)) {
-    button.addEventListener("click", () => {
-        TFiframe.src = `${key}.html`;
-        DoTheThingMan(TFiframe);
-    });
-};
 //Nav Ended
 let Live = new TfVideo(Socket, Radio, Effects);
 
 //
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null);
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null);
+
+//Nav Begins
+//Controller.bindNavBar();
+DoTheThingMan(TFiframe);
+for (const [key, button] of Object.entries(navButtons)) {
+    button.addEventListener("click", () => {
+        //Controller.iframe.src = `${key}.html`;
+        //Controller.bindNavBar();
+        TFiframe.src = `${key}.html`;
+        DoTheThingMan(TFiframe);
+    });
+};
+document.addEventListener("DOMContentLoaded", () => {
+    //Controller.bindSignUp();
+    Controller.bindCart();
+});

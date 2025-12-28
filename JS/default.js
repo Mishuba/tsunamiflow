@@ -2,9 +2,6 @@ export class MishubaController {
   constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store) {
     this.user = user;
     this.iframe = iframe;
-    if (document.getElementById("tfNavLoginForm")) {
-      this.bindNavBar();
-    }
     if (document.getElementById("TFMembershipLevel")) {
       this.membershipSelect = document.getElementById("TFMembershipLevel");
       this.membershipCostEl = document.getElementById("membershipCost");
@@ -61,7 +58,7 @@ export class MishubaController {
     this.store = store;
     if (this.store !== null) {
       this.bindStore();
-      this.bindCart();
+      //this.bindCart();
     }
   }
   on(id, handler) {
