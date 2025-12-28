@@ -1,14 +1,7 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 
 export class TfMusic {
-    constructor(audioElement = null, Title = null, Buttons = null, Last = null, Restart = null, Start = null, Skip = null, TfCanvas = null, AudioContext = null, AudioAnalyser = null, AudioMedia = null, Websocket = null, Effects = null) {
-        this.TsunamiAudio = audioElement;
-        this.TsunamiRadioTitle = Title;
-        this.TsunamiRadioButtons = Buttons;
-        this.TsunamiLastButton = Last;
-        this.TsunamiRestartButton = Restart;
-        this.TsunamiStartButton = Start;
-        this.TsunamiSkipButton = Skip;
+    constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null) {
         this.textTrackOptions = {
             kind: "subtitles", // caption, descriptions, chapters, metadata
             label: "name",
@@ -45,7 +38,6 @@ export class TfMusic {
         this.TsunamiCtxSrc;
         this.TsunamiRadioDataArray;
         this.TfNextPlayTime = 0;
-        this.RadioCanvas = TfCanvas;
         this.x = 0;
         this.y;
         this.dx; // x velocity
@@ -98,86 +90,12 @@ export class TfMusic {
             release: 0.250, // 0-1
             threshold: -24 // -100 - 0
         };
-        this.audioSocket = Websocket;
-        this.TfEffects = Effects;
         this.WeLive = false;
         this.LiveAudioLink;
     }
     hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
-        async function update(volume, radius, baseRadius, x, y, dx, dy, canvas) {
-            radius = baseRadius + volume / 80; // pulse based on volume
-            x += dx;
-            y += dy;
 
-            // bounce off edges
-            if (x + radius > canvas.width || x - radius < 0) {
-                dx = -dx;
-            }
-            if (y + radius > canvas.height || y - radius < 0) {
-                dy = -dy;
-            }
-        }
-        async function draw(ctx, x, y, radius, color) {
-            ctx.beginPath();
-            ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-            ctx.fillStyle = color;
-            ctx.shadowColor = color;
-            ctx.shadowBlur = 20;
-            ctx.fill();
-        }
-        async function tfParticles(x, y, dx, dy, radius, color) {
-            return { x, y, dx, dy, radius, color };
-        }
-        async function particle(canvas, x, y, dx, dy, radius, color, particles) {
-            for (let i = 0; i < 100; i++) {
-                x = Math.random() * canvas.width;
-                y = Math.random() * canvas.height;
-                dx = (Math.random() - 0.5) * 0.5;
-                dy = (Math.random() - 0.5) * 0.5;
-                radius = Math.random() * 0.5 + 0.2;
-                color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-                particles.push(tfParticles(x, y, dx, dy, radius, color));
-            }
-        }
-        particle(canvas, x, y, dx, dy, radius, color, particles);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        //analyser.getFloatTimeDomainData(this.TsunamiRadioDataArray);
-        //analyser.getByteTimeDomainData(this.TsunamiRadioDataArray);
-        analyser.getByteFrequencyData(dataArray);
-
-        ctx.fillStyle = "rgb(10, 10, 30)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        //Get Average volume for particle reaction
-        let CtxTotal = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            CtxTotal += dataArray[i];
-        }
-        let averageVolume = CtxTotal / dataArray.length;
-
-        for (let i = 0; i < particles.length; i++) {
-            particles[i] = update(averageVolume, radius, baseRadius, x, y, dx, dy, canvas);
-            particles[i] = draw(ctx, x, y, radius, color);
-        }
-
-        let barWidth = (100 / bufferLength) * 2.5;
-        let barHeight;
-        let CtxX = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            barHeight = dataArray[i];
-
-            let CtxR = barHeight + 25 * (i / bufferLength);
-            let CtxG = 250 * (i / bufferLength);
-            let CtxB = 50;
-
-            ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-            ctx.fillRect(CtxX, 100 - barHeight, barWidth, barHeight);
-
-            CtxX += barWidth + 1;
-        }
-
+        //this.effects.something();
         this.visualizatorController = requestAnimationFrame(async () => this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles));
     }
     Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
@@ -236,56 +154,6 @@ export class TfMusic {
     restartSong(element, music) {
         element.src = music;
         element.play();
-    }
-    TFgameIterable() {
-        //yield * [1, 2, 3];
-    }
-    TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
-        title.innerHTML = "Welcome to TFN Radio";
-
-        last.id = "TFradioPreviousButton";
-        last.innerHTML = "Previous";
-        last.addEventListener("click", async () => {
-            RadioWorker.postMessage({
-                type: "radio",
-                system: "previous",
-            });
-            //this.previousSong(element, oldSong);
-        });
-        buttonSpot.appendChild(last);
-
-        restart.id = "TFRadioRestartButton";
-        restart.innerHTML = "Restart";
-        restart.addEventListener("click", async () => {
-            element.currentTime = 0;
-            this.startMusic(element);
-            start.innerHTML = "Pause Tsunami Radio";
-        });
-        buttonSpot.appendChild(restart);
-
-        start.id = "TFradioButton";
-        start.innerHTML = "Start Radio";
-        start.addEventListener("click", async () => {
-            if (element.paused) {
-                this.startMusic(element);
-                start.innerHTML = "Pause Tsuanmi Radio";
-            } else {
-                this.stopMusic(element);
-                start.innerHTML = "Play Tsunami Radio";
-            }
-        });
-        buttonSpot.appendChild(start);
-
-        skip.id = "TFradioSkipButton";
-        skip.innerHTML = "Next";
-        skip.addEventListener("click", async () => {
-            element.src = "";
-            RadioWorker.postMessage({
-                type: "radio",
-                system: "skip",
-            })
-        });
-        buttonSpot.appendChild(skip);
     }
     MusicNetworkState(RadioWorker, element) {
         if (element.readyState === 0) {
@@ -511,22 +379,22 @@ export class TfMusic {
         console.log(this.SongList1st + " is the source of the current song.");
         return this.SongList1st;
     }
-    StartLiveAudio() {
+    StartLiveAudio(element) {
         if (this.WeLive) {
             return;
         } else {
             this.WeLive = true;
-            this.TsunamiAudio.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
+            element.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
 
             //start audio with method
 
         }
     }
-    StopLiveAudio() {
+    StopLiveAudio(element) {
         if (!this.WeLive) {
             this.WeLive = false;
-            this.TsunamiAudio.pause();
-            this.TsunamiAudio.src = "";
+            element.pause();
+            element.src = "";
         } else {
 
         }
@@ -577,79 +445,9 @@ export class TfMusic {
         this.TsunamiCtxSrc = context.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
     }
-    TfRadioEventListeners(element, worker, audiocontext, audioctx, analyser, bufferLength, dataArray, canvas, x, y, dx, dy, radius, color, timing, processBar, someTime, baseRadius, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn, particles) {
-        this.TsunamiRadioReady(worker, element, PlayerTitle, buttonSpot, LastBtn, RestartBtn, StartBtn, SkipBtn);
-        element.addEventListener("emptied", async (emptied) => {
-            this.emptiedAudio(emptied);
-        }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
-
-        element.addEventListener("loadstart", async () => {
-            this.loadstartAudio(element, audiocontext);
-            //this.MusicNetworkState(worker, element);
-        }); // Fired when the browser has started to load the resource.
-
-        element.addEventListener("loadedmetadata", async () => {
-            this.loadedmetadataAudio(element, audiocontext);
-        }); //The metadata has been loaded.
-
-        element.addEventListener("loadeddata", (data) => {
-            this.loadeddataAudio(element, audiocontext);
-        }); //The first frame of the media has finished loading.
-
-        element.addEventListener("canplay", () => {
-            this.canplayAudio(element, audiocontext);
-        }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
-
-        element.addEventListener("canplaythrough", async () => {
-            audioctx.connect(analyser);
-            analyser.connect(audiocontext.destination);
-
-            // Call your method with your original variable name
-            this.canplaythroughAudio(element, audiocontext);
-        }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
-
-        element.addEventListener("play", () => {
-            this.playAudio(element, audiocontext);
-        }); //Playback has begun.
-
-        element.addEventListener("pause", () => {
-            this.pauseAudio(element, audiocontext);
-        }); // Playback has been paused.
-
-        element.addEventListener("ended", async (ended) => {
-            this.endedAudio(element, worker);
-        }); //Playback has stopped because of the end of the media was reached.
-
-        element.addEventListener("waiting", (waiting) => {
-            console.log("The audio has been waiting because: " + waiting);
-            this.waitingAudio(audiocontext);
-        }); //Playback has stopped because of a temporary lack of data.
-
-        element.addEventListener("playing", () => {
-            this.playingAudio(element, audiocontext, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
-        }); // Playback is ready to start after having been paused or delayed due to lack of data.
-
-        element.addEventListener("stalled", (stalled) => {
-            console.log("the audio has stalled because: " + stalled);
-            this.stalledAudio(stalled);
-        });//The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
-
-        element.addEventListener("suspended", (suspend) => {
-            console.log("The audio has suspened because:" + suspend);
-            this.suspendAudio(suspend);
-        }); //Media data loading has been suspended.
-
-        element.addEventListener("timeupdate", () => {
-            this.timeupdateAudio(element, timing, processBar, someTime);
-        }); //The time indicated by the currentTime attribute has been updated.
-
-        element.addEventListener("volumechange", (volumechange) => {
-            this.volumechangeAudio(volumechange);
-        });
-    }
-    BeginRadio(song, worker) {
-        this.TsunamiAudio.crossOrigin = "anonymous";
-        this.TsunamiAudio.src = song;
-        this.TfRadioEventListeners(this.TsunamiAudio, worker, this.TsunamiRadioAudio, this.TsunamiRadioMedia, this.TsunamiAnalyser, this.TsunamiRadioBufferLength, this.TsunamiRadioDataArray, this.RadioCanvas, this.x, this.y, this.dx, this.dy, this.radius, this.color, this.Timing, this.RadioProcessBar, this.TaudioFtime, this.baseRadius, this.TsunamiRadioTitle, this.TsunamiRadioButtons, this.TsunamiLastButton, this.TsunamiRestartButton, this.TsunamiStartButton, this.TsunamiSkipButton, this.particles);
+    
+    BeginRadio(element, title, button, last, restart, start, skip, song, canvas,  particles, worker) {
+        element.crossOrigin = "anonymous";
+        element.src = song;
     }
 }
