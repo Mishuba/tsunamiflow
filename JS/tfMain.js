@@ -11,6 +11,7 @@ import { User } from "./Users.js";
 import { TfMusic } from "./Audio.js";
 import { TfVideo } from "./Video.js";
 import { tfIframe } from "./TfIframe.js";
+import { WorkerManager } from "./../WebWorker/workers.js";
 import { MishubaController } from "./default.js";
 
 let Socket = new TfWebsocket("");
@@ -83,8 +84,6 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
     //TfPostThot(tfUserThot);
 });
 
-import WorkerManager from "./../WebWorker/workers.js";
-
 const workers = new WorkerManager({
     Radio,
     TfWeather,
@@ -99,7 +98,6 @@ const workers = new WorkerManager({
 
 //Start functions
 TfWeather.requestLocation();
-//Web Workers Ends
 
 //Nav Ended
 let Live = new TfVideo(Socket, Radio, Effects);
@@ -107,22 +105,19 @@ let Live = new TfVideo(Socket, Radio, Effects);
 //
 let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null, workers);
 
-/*
-workers.init();
-*/
 //Nav Begins
-//Controller.bindNavBar();
-DoTheThingMan(TFiframe);
+Controller.bindNavBar();
+//DoTheThingMan(TFiframe);
 for (const [key, button] of Object.entries(navButtons)) {
     button.addEventListener("click", () => {
-        //Controller.iframe.src = `${key}.html`;
-        //Controller.bindNavBar();
-        TFiframe.src = `${key}.html`;
-        DoTheThingMan(TFiframe);
+        Controller.iframe.src = `${key}.html`;
+        Controller.bindNavBar();
+        //TFiframe.src = `${key}.html`;
+        //DoTheThingMan(TFiframe);
     });
 };
 document.addEventListener("DOMContentLoaded", () => {
     //Controller.bindSignUp();
-    Controller.bindCart();
-    //Controller.bindWorker();
+    //Controller.bindCart();
+    Controller.bindWorker();
 });
