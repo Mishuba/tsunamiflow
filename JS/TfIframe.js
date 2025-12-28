@@ -1,5 +1,5 @@
 export class tfIframe {
-  constructor(element = null, Homepage, Game1) {
+  constructor(element = null, Homepage = null, Game1 = null) {
     this.frame = element;
     this.HomepageUpdates = Homepage;
     this.FirstGame = Game1;
