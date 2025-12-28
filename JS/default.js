@@ -60,6 +60,7 @@ export class MishubaController {
       this.bindStore();
       //this.bindCart();
     }
+this.worker = worker;
   }
   on(id, handler) {
     const el = document.getElementById(id);
@@ -388,6 +389,6 @@ export class MishubaController {
 
   }
 bindWorker() {
-
+   this.worker.workers.init();
   }
 }
