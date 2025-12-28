@@ -1,4 +1,4 @@
-export default class WorkerManager {
+export class WorkerManager {
     constructor(deps) {
         this.timeWorker = null;
         this.radioWorker = null;
