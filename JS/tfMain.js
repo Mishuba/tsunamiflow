@@ -271,6 +271,23 @@ let Live = new TfVideo(Socket, Radio, Effects);
 //
 let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null);
 
+/*
+import WorkerManager from "./WorkerManager.js";
+
+const workers = new WorkerManager({
+    Radio,
+    TfWeather,
+    WordTimes,
+    RadioTimes,
+    WordOfTheDay,
+    NewsTimer,
+    TsunamiAudioCtx,
+    MyNewTFTime,
+    TfWotd
+});
+
+workers.init();
+*/
 //Nav Begins
 //Controller.bindNavBar();
 DoTheThingMan(TFiframe);
