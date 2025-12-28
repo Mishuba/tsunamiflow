@@ -4,7 +4,6 @@ import { RadioTimes, WordTimes } from "./Arrays.js";
 import { WordOfTheDay } from "./Words.js";
 import { NewsTimer } from "./News.js";
 import { Weather } from "./Weather.js";
-import { DoTheThingMan, fetchCart, updateTotals } from "./Functions.js";
 import { TfWebsocket } from "./TfWebSocket.js";
 import { TfEffects } from "./../WebWorker/Effects.js";
 import { User } from "./Users.js";
