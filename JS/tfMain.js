@@ -261,18 +261,7 @@ document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoug
     //TfPostThot(tfUserThot);
 });
 
-//Start functions
-TfWeather.requestLocation();
-//Web Workers Ends
-
-//Nav Ended
-let Live = new TfVideo(Socket, Radio, Effects);
-
-//
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null);
-
-/*
-import WorkerManager from "./WorkerManager.js";
+import WorkerManager from "./../WebWorker/workers.js";
 
 const workers = new WorkerManager({
     Radio,
@@ -286,6 +275,17 @@ const workers = new WorkerManager({
     TfWotd
 });
 
+//Start functions
+TfWeather.requestLocation();
+//Web Workers Ends
+
+//Nav Ended
+let Live = new TfVideo(Socket, Radio, Effects);
+
+//
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null);
+
+/*
 workers.init();
 */
 //Nav Begins
@@ -302,4 +302,5 @@ for (const [key, button] of Object.entries(navButtons)) {
 document.addEventListener("DOMContentLoaded", () => {
     //Controller.bindSignUp();
     Controller.bindCart();
+    //Controller.bindWorker();
 });
