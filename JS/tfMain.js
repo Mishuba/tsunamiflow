@@ -74,7 +74,7 @@ if (twoMore) {
     console.error("Element with id 'mainTsectionFdiv' not found.");
 }
 
-let frameTF = new tfIframe(TFiframe)
+let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
 
 //database. do database calculations.
 //Tsunami Thoughts 
