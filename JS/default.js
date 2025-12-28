@@ -168,7 +168,76 @@ this.worker = worker;
     });
     buttonSpot.appendChild(skip);
   }
-
+TfRadioEventListeners(worker, particles) {
+  this.TsunamiRadioReady(this.worker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+  this.audioElem.addEventListener("emptied", async (emptied) => {
+    this.audio.emptiedAudio(emptied);
+  }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
+  
+  this.audioElem.addEventListener("loadstart", async () => {
+    this.audio.loadstartAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+    //this.MusicNetworkState(worker, element);
+  }); // Fired when the browser has started to load the resource.
+  
+  this.audioElem.addEventListener("loadedmetadata", async () => {
+    this.audio.loadedmetadataAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); //The metadata has been loaded.
+  
+  this.audioElem.addEventListener("loadeddata", (data) => {
+    this.audio.loadeddataAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); //The first frame of the media has finished loading.
+  
+  this.audioElem.addEventListener("canplay", () => {
+    this.audio.canplayAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
+  
+  this.audioElem.addEventListener("canplaythrough", async () => {
+    this.radio.TsunamiRadioMedia.connect(this.radio.TsunamiAnalyser);
+    this.radio.TsunamiAnalyser.connect(this.radio.TsunamiRadioAudio.destination);
+    
+    // Call your method with your original variable name
+    this.audio.canplaythroughAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); //The browser estimates it can play the media up to its ends without stopping for content buffering.
+  
+  this.audioElem.addEventListener("play", () => {
+    this.audio.playAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); //Playback has begun.
+  
+  this.audioElem.addEventListener("pause", () => {
+    this.audio.pauseAudio(this.audioElem, this.radio.TsunamiRadioAudio);
+  }); // Playback has been paused.
+  
+  this.audioElem.addEventListener("ended", async (ended) => {
+    this.audio.endedAudio(this.audioElem, worker);
+  }); //Playback has stopped because of the end of the media was reached.
+  
+  this.audioElem.addEventListener("waiting", (waiting) => {
+    console.log("The audio has been waiting because: " + waiting);
+    this.audio.waitingAudio(this.radio.TsunamiRadioAudio);
+  }); //Playback has stopped because of a temporary lack of data.
+  
+  this.audioElem.addEventListener("playing", () => {
+    this.audio.playingAudio(this.audioElem, this.radio.TsunamiRadioAudio, this.audioCanv, this.radio.TsunamiAnalyser, this.radio.TsunamiRadioDataArray, this.radio.TsunamiRadioBufferLength, this.radio.x, this.radio.y, this.radio.dx, this.radio.dy, this.radio.radius, this.radio.color, this.radio.baseRadius, particles);
+  }); // Playback is ready to start after having been paused or delayed due to lack of data.
+  
+  this.audioElem.addEventListener("stalled", (stalled) => {
+    console.log("the audio has stalled because: " + stalled);
+    this.audio.stalledAudio(stalled);
+  }); //The user agent is trying to fetch media data, but data is unexpectedly not forthcoming.
+  
+  this.audioElem.addEventListener("suspended", (suspend) => {
+    console.log("The audio has suspened because:" + suspend);
+    this.audio.suspendAudio(suspend);
+  }); //Media data loading has been suspended.
+  
+  this.audioElem.addEventListener("timeupdate", () => {
+    this.audio.timeupdateAudio(this.audioElem, this.radio.Timing, this.radio.RadioProcessBar, this.radio.TaudioFtime);
+  }); //The time indicated by the currentTime attribute has been updated.
+  
+  this.audioElem.addEventListener("volumechange", (volumechange) => {
+    this.audio.volumechangeAudio(volumechange);
+  });
+}
   bindAudio() {
     this.on("TFradioPreviousButton", () => {
       this.audio.previousSong();
