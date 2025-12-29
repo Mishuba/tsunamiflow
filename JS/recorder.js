@@ -11,16 +11,12 @@ export class TfRecorder {
         this.chunkMs = chunkMs;
 
         this.stream = null;
-        this.mediaRecorder = null;
+        this.recorder = null;
         this.audioDest = null;
         this.recording = false;
     }
 
-    buildStream({ canvas, audioContext = null, analyser = null }) {
-        if (!canvas) {
-            throw new Error("Recorder requires a canvas");
-        }
-
+    buildStream({ canvas, audioContext, analyser }) {
         const stream = canvas.captureStream(this.fps);
 
         if (audioContext && analyser) {
@@ -29,12 +25,10 @@ export class TfRecorder {
 
             analyser.connect(this.audioDest);
 
-            const audioTrack =
+            const track =
                 this.audioDest.stream.getAudioTracks()[0];
 
-            if (audioTrack) {
-                stream.addTrack(audioTrack);
-            }
+            if (track) stream.addTrack(track);
         }
 
         this.stream = stream;
@@ -45,49 +39,47 @@ export class TfRecorder {
         canvas,
         audioContext = null,
         analyser = null,
-        websocket = null
+        websocket
     }) {
         if (this.recording) return;
+        if (!websocket?.isOpen()) {
+            console.warn("Recorder: websocket not open");
+            return;
+        }
 
         if (!this.stream) {
             this.buildStream({ canvas, audioContext, analyser });
         }
 
-        this.mediaRecorder = new MediaRecorder(this.stream, {
+        this.recorder = new MediaRecorder(this.stream, {
             mimeType: this.mimeType,
             videoBitsPerSecond: this.videoBitrate
         });
 
-        this.mediaRecorder.ondataavailable = (e) => {
+        this.recorder.ondataavailable = (e) => {
             if (!e.data || e.data.size === 0) return;
-            if (websocket?.isOpen()) {
-                websocket.sendBinary(e.data);
-            }
+            websocket.sendBinary(e.data); // ← EXACT match to PHP
         };
 
-        this.mediaRecorder.start(this.chunkMs);
+        this.recorder.start(this.chunkMs);
         this.recording = true;
     }
 
-    stop() {
+    stop(websocket = null) {
         if (!this.recording) return;
 
-        this.mediaRecorder?.stop();
-        this.mediaRecorder = null;
+        this.recorder.stop();
+        this.recorder = null;
         this.recording = false;
+
+        websocket?.send?.(JSON.stringify({
+            type: "stop_stream"
+        }));
     }
 
     reset() {
         this.stop();
         this.stream = null;
         this.audioDest = null;
-    }
-
-    toJson() {
-        return {
-            recording: this.recording,
-            fps: this.fps,
-            mimeType: this.mimeType
-        };
     }
 }
