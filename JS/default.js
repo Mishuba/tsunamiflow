@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null) {
     this.user = user;
     this.iframe = iframe;
     if (document.getElementById("TFMembershipLevel")) {
@@ -57,8 +57,8 @@ export class MishubaController {
       this.VideoEventListeners(this.video, this.VidElem, this.VidCanv);
       this.bindVideo();
     }
-    this.TfWebcam = null;
-    this.stream = null;
+    this.TfWebcam = webcam;
+    this.recorder = recorder;
     this.game = game;
     if (this.game !== null) {
       this.bindGame();
@@ -384,18 +384,11 @@ export class MishubaController {
   bindVideo() {
     this.on("TfStartShit", () => {
       //start webcam
-      this.TfWebcam = navigator.mediaDevices.getUserMedia(Shuba.TmediaFstreamConstraints).then(async (stream) => {
-        //take stream and put it as video source.
-        this.stream = stream;
-        //make a blob 2.
-
-        //putf as source
-        //this.VidElem.srcObj = this.stream;
-        //this.VidElem.src = stream;
-      });
+      this.TfWebcam.start();
+      this.TfWebcam.attach(this.VidElem);
     });
     this.on("TfStopShit", () => {
-      //stop webcam
+      this.TfWebcam.stop();
     });
     this.on("TuseFthisKeycolor", () => {
       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
@@ -426,7 +419,7 @@ export class MishubaController {
     });
   }
   bindGame() {
-    //gme butftfons.
+    //game butftfons.
   }
   fetchCart() {
     try {

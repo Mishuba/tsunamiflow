@@ -12,6 +12,7 @@ import { TfVideo } from "./Video.js";
 import { tfIframe } from "./TfIframe.js";
 import { HomepageUpdates, FirstGame } from "./sprite";
 import { WorkerManager } from "./../WebWorker/workers.js";
+import { TfWebcam } from "./webcam.js";
 import { MishubaController } from "./default.js";
 
 if (navigator.cookieEnabled) {
@@ -61,9 +62,11 @@ let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 
 let Live = new TfVideo(Socket, Effects);
 
-const workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
+let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers);
+let cam = new TfWebcam();
+
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam);
 
 document.addEventListener("DOMContentLoaded", () => {
     if (twoMore) {
