@@ -38,6 +38,8 @@ export class MishubaController {
       if (this.VidElem !== null) {
         this.VidCanv = VideoCanvas;
         if (this.VidElem === document.getElementById("TsunamiFlowVideoStuff")) {
+          //check existfences
+
           if (this.VidCanv !== null) {
             if (this.VidCanv === document.getElementById("TFcanvas")) {
               //community or live here.
@@ -55,6 +57,8 @@ export class MishubaController {
       this.VideoEventListeners(this.video, this.VidElem, this.VidCanv);
       this.bindVideo();
     }
+    this.TfWebcam = null;
+    this.stream = null;
     this.game = game;
     if (this.game !== null) {
       this.bindGame();
@@ -371,25 +375,58 @@ export class MishubaController {
       engine.VideoVolumeChange();
     });
   }
+  bindVidSystem() {
+    this.on("TfControlShit", () => {
+      this.bindVideo();
+      //webcam now
+    });
+  }
   bindVideo() {
-    this.on("", (color) => {
-      this.usePickedColor(color);
+    this.on("TfStartShit", () => {
+      //start webcam
+      this.TfWebcam = navigator.mediaDevices.getUserMedia(Shuba.TmediaFstreamConstraints).then(async (stream) => {
+        //take stream and put it as video source.
+        this.stream = stream;
+        //make a blob 2.
+
+        //putf as source
+        //this.VidElem.srcObj = this.stream;
+        //this.VidElem.src = stream;
+      });
     });
-    this.on("", (image) => {
-      this.UploadImage(image);
+    this.on("TfStopShit", () => {
+      //stop webcam
     });
-    this.on("", (image) => {
-      this.RemoveImage(image);
+    this.on("TuseFthisKeycolor", () => {
+      this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
+      this.effects.drawingFrame(this.VidCanv, this.VidElem);
     });
-    this.on("", (video) => {
-      this.UploadVideo(video);
+    this.on("rmvTFchromakey", () => {
+      this.effects.disableChromaKey()
     });
-    this.on("", (video) => {
-      this.RemoveVideo(video);
+    this.on("TFuploadImage", (image) => {
+      this.effects.UploadImage(image);
+    });
+    this.on("rmvTFimg", (image) => {
+      this.effects.RemoveImage(image);
+    });
+    this.on("TFuploadVideo", (video) => {
+      this.effects.UploadVideo(video);
+    });
+    this.on("rmvTFvid", (video) => {
+      this.effects.RemoveVideo(video);
+    });
+    this.on("TfStartRecPlz", () => {
+      //record canvas
+      //record vid element extra
+      //send to websocketf tfhatf push tfo rtfmp. 
+    });
+    this.on("TfStopRecPlz", () => {
+      //stop recording and downloaa
     });
   }
   bindGame() {
-
+    //gme butftfons.
   }
   fetchCart() {
     try {

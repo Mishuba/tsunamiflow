@@ -159,7 +159,8 @@ export class TfEffects {
 
     ColorPickerChromaKey(chroma) {
         this.Tfhex = chroma.target.value;
-        this.setChromaHex(this.Tfhex);
+        this.setfChromaHex(this.Tfhex);
+        this.useChromaKey = true;
     }
     isChromaMatch(r, g, b, key, tolerance = 40) {
         return (
@@ -170,7 +171,7 @@ export class TfEffects {
         this.frameCounter = 0;
         this.useChromaKey = false;
     }
-    webcam(frameData, ctx, canvas_width, canvas_height) {
+    webcam(frameData) {
         let chromaData = frameData.data;
         const key = this.chromaKeyColorWebcam;
         for (let i = 0; i < chromaData.length; i += 4) {

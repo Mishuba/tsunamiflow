@@ -14,12 +14,7 @@ export async function StartVideoOrWebcam(Shuba, videoElement) {
     Shuba.VideoNetworkState(Shuba.VideoElement);
 
     Shuba.TfWebcam = navigator.mediaDevices.getUserMedia(Shuba.TmediaFstreamConstraints).then(async (stream) => {
-        Shuba.WebcamVideoStream = new MediaStream(stream);
-        Shuba.VideoAudioAnalyser = Shuba.VideoAudioContext.createAnalyser();
-        Shuba.VideoAudioAnalyser.fftSize = 2048;
-        Shuba.VideoAudioMedia = Shuba.VideoAudioContext.createMediaStreamSourceStream(stream);
-        Shuba.VideoAudioMediaDestination = Shuba.VideoAudioContext.createMediaStreamDestination();
-        Shuba.VideoAudioAnalyser.connect(Shuba.VideoAudioMediaDestination);
+
 
         Shuba.LetsBegin(Shuba.WebcamStreamVideoAndAudio, Shuba.VideoElement);
 
