@@ -15,25 +15,20 @@ export class TfRecorder {
         this.audioDest = null;
         this.recording = false;
     }
+buildStream({ canvas, audioContext, analyser, sourceNode }) {
+    const stream = canvas.captureStream(this.fps);
 
-    buildStream({ canvas, audioContext, analyser }) {
-        const stream = canvas.captureStream(this.fps);
+    if (audioContext && sourceNode) {
+        this.audioDest = audioContext.createMediaStreamDestination();
+        sourceNode.connect(this.audioDest);
 
-        if (audioContext && analyser) {
-            this.audioDest =
-                audioContext.createMediaStreamDestination();
-
-            analyser.connect(this.audioDest);
-
-            const track =
-                this.audioDest.stream.getAudioTracks()[0];
-
-            if (track) stream.addTrack(track);
-        }
-
-        this.stream = stream;
-        return stream;
+        const track = this.audioDest.stream.getAudioTracks()[0];
+        if (track) stream.addTrack(track);
     }
+
+    this.stream = stream;
+    return stream;
+}
 
     start({
         canvas,
