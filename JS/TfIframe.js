@@ -3,6 +3,7 @@ export class tfIframe {
     this.frame = element;
     this.HomepageUpdates = Homepage;
     this.FirstGame = Game1;
+    this.Video = video;
   }
   doIframeThing(event, source) {
     switch (source.src) {
