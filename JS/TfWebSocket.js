@@ -66,6 +66,18 @@ export class TfWebsocket {
     }
     this.listeners[event].push(fn);
   }
+
+isOpen() {
+    return (
+        this.tfSocket &&
+        this.tfSocket.readyState === WebSocket.OPEN
+    );
+}
+
+sendBinary(data) {
+    if (!this.isOpen()) return;
+    this.tfSocket.send(data);
+}
   
   close() {
     if (this.tfSocket !== null) {
