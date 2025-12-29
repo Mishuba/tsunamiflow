@@ -76,7 +76,11 @@ isOpen() {
 
 sendBinary(data) {
     if (!this.isOpen()) return;
-    this.tfSocket.send(data);
+    if (data instanceof Blob) {
+        data.arrayBuffer().then(buf => this.tfSocket.send(buf));
+    } else {
+        this.tfSocket.send(data);
+    }
 }
   
   close() {
