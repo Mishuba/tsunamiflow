@@ -1,5 +1,4 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
-
 export class TfMusic {
     constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null) {
         this.textTrackOptions = {
@@ -92,18 +91,6 @@ export class TfMusic {
         };
         this.WeLive = false;
         this.LiveAudioLink;
-    }
-    hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles) {
-
-        //this.effects.something();
-        this.visualizatorController = requestAnimationFrame(async () => this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles));
-    }
-    Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
-        let ctx = canvas.getContext("2d");
-        this.hereDude(canvas, ctx, analyser, dataArray, bufferLength, radius, baseRadius, x, y, dx, dy, color, particles);
-    }
-    StopVisualizator() {
-        cancelAnimationFrame(this.visualizationController);
     }
     startMusic(element) {
         if (element.paused) {
@@ -283,13 +270,13 @@ export class TfMusic {
         }
         return this.SongList;
     }
-    MusicState(element, context) {
-        if (context.state === "suspended") {
-            context.resume();
-        } else if (context.state === "running") {
+    MusicState(element) {
+        if (this.TsunamiRadioAudio.state === "suspended") {
+            this.TsunamiRadioAudio.resume();
+        } else if (this.TsunamiRadioAudio.state === "running") {
             console.log("The audio context state is running");
             if (element.waiting) {
-                context.suspend();
+                this.TsunamiRadioAudio.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
@@ -301,49 +288,51 @@ export class TfMusic {
     emptiedAudio(empty) {
         console.log("The audio is empty" + empty);
     }
-    loadstartAudio(element, context) {
+    loadstartAudio(element) {
 
-        this.MusicState(element, context);
+        this.MusicState(element);
         let RadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", RadioLoadStartTime);
     }
-    loadedmetadataAudio(element, context) {
+    loadedmetadataAudio(element) {
         //create html data
-        this.MusicState(element, context);
+        this.MusicState(element);
     }
-    loadeddataAudio(element, context) {
+    loadeddataAudio(element) {
         console.log("The audio data is loaded");
-        this.MusicState(element, context);
+        this.MusicState(element);
     }
-    canplayAudio(element, context) {
-        this.MusicState(element, context);
+    canplayAudio(element) {
+        this.MusicState(element);
     }
-    canplaythroughAudio(element, context) {
-        this.MusicState(element, context);
+    canplaythroughAudio(element) {
+        this.MusicState(element);
         this.startMusic(element);
     }
-    playAudio(element, context) {
-        this.MusicState(element, context);
+    playAudio(element) {
+        this.MusicState(element);
     }
-    pauseAudio(element, context) {
-        this.MusicState(element, context);
+    pauseAudio(element) {
+        this.MusicState(element);
     }
     endedAudio(element, worker) {
         console.log("The audio should have ended");
         element.src = "";
         worker.postMessage({ type: "radio", system: "file" });
     }
-    waitingAudio(element, context) {
-        this.MusicState(element, context);
+    waitingAudio(element) {
+        this.MusicState(element);
     }
-    playingAudio(element, context, canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles) {
-        this.MusicState(element, context);
-        bufferLength = analyser.frequencyBinCount;
-        dataArray = new Uint8Array(bufferLength);
+    playingAudio(element, canvas) {
+        this.MusicState(element);
+        this.TsunamiRadioBufferLength = this.TsunamiAnalyser.frequencyBinCount;
+        this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);
         if (canvas !== null) {
-            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
+            let ctx = canvas.getContext("2d");
+            return ctx;
         } else {
-            this.Visualizer(canvas, analyser, dataArray, bufferLength, x, y, dx, dy, radius, color, baseRadius, particles);
+            let ctx = canvas.getContext("2d");
+            return ctx;
         }
     }
     stalledAudio(stalled) {
@@ -357,15 +346,14 @@ export class TfMusic {
         let seconds = second % 60;
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }
-    timeupdateAudio(element, timing, radioProcessBar, time) {
-        timing = Math.floor(element.currentTime);
-        radioProcessBar = (element.currentTime / element.duration) * 100;
-        time = `Time: ${this.FormatAudioTime(timing)}`
+    timeupdateAudio(element) {
+        this.Timing = Math.floor(element.currentTime);
+        this.RadioProcessBar = (element.currentTime / element.duration) * 100;
+        this.TaudioFtime = `Time: ${this.FormatAudioTime(timing)}`
     }
     volumechangeAudio() {
         console.log("The volume has changed");
     }
-
     RadioWorkerReceivedMessage(event) {
         if (typeof event.data.file == undefined) {
             this.SongList1st = this.MusicFile(event);
@@ -384,10 +372,8 @@ export class TfMusic {
             return;
         } else {
             this.WeLive = true;
-            element.src = this.LiveAudioLin = "https://world.tsunamiflow.club/hls/anything.m3u8";
-
+            element.src = "https://world.tsunamiflow.club/hls/anything.m3u8";
             //start audio with method
-
         }
     }
     StopLiveAudio(element) {
@@ -408,19 +394,18 @@ export class TfMusic {
             }
         }
     }
-
     attachSocketListeners() {
         this.socket.onmessage = (event) => {
             const data = JSON.parse(event.data);
             this.handleSocketMessage(data);
         };
     }
-    HandleArrayBuffer(buffer, context) {
-        if (context.state === "suspended") {
-            context.resume();
+    HandleArrayBuffer(buffer) {
+        if (this.TsunamiRadioAudio.state === "suspended") {
+            this.TsunamiRadioAudio.resume();
 
             try {
-                this.TFaudioBuffer = context.decodeAudioData(buffer);
+                this.TFaudioBuffer = this.TsunamiRadioAudio.decodeAudioData(buffer);
 
                 //this.RadioChannel1 = this.TFaudioBuffer.getChannelData(0);
                 //this.TfRcCopy1 = new Float32Array(this.RadioChannel1);
@@ -434,19 +419,19 @@ export class TfMusic {
             }
         }
     }
-    RadioWorkerArrayBuffer(buffer, context) {
+    RadioWorkerArrayBuffer(buffer) {
         //decode audio data (get AudioBuffer);
-        let decode = this.HandleArrayBuffer(buffer, context);
+        let decode = this.HandleArrayBuffer(buffer, this.TsunamiRadioAudio);
         //Visualizator
         this.TFpwoImag = new Float32Array(buffer);
         return decode;
     }
-    TfScheduleBuffer(buffer, context) {
-        this.TsunamiCtxSrc = context.createBufferSource();
+    TfScheduleBuffer(buffer) {
+        this.TsunamiCtxSrc = this.TsunamiRadioAudio.createBufferSource();
         this.TsunamiCtxSrc.buffer = buffer;
     }
-    
-    BeginRadio(element, title, button, last, restart, start, skip, song, canvas,  particles, worker) {
+
+    BeginRadio(element, song) {
         element.crossOrigin = "anonymous";
         element.src = song;
     }

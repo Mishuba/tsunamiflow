@@ -1,8 +1,7 @@
 export class TfVideo {
-    constructor(Socket = null, Radio = null, TfEffect = null) {
+    constructor(Socket = null, TfEffect = null) {
         //implemented classes
         this.VideoSocket = Socket;
-        this.audioEngine = Radio;
         this.VidEffects = TfEffect;
         //buttons
         this.VideoSystemControllerButton;

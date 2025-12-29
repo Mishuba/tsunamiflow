@@ -14,38 +14,6 @@ import { HomepageUpdates, FirstGame } from "./sprite";
 import { WorkerManager } from "./../WebWorker/workers.js";
 import { MishubaController } from "./default.js";
 
-let Socket = new TfWebsocket("");
-let Effects = new TfEffects();
-let TfWeather = new Weather();
-let MyNewTFTime = document.getElementById("TFtime");
-let TfWotd = document.getElementById("tfWordOfTheDay");
-
-let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-document.body.addEventListener("click", () => {
-    if (TsunamiAudioCtx.state === "suspended") {
-        TsunamiAudioCtx.resume();
-    }
-});
-
-//Tsunami Radio Audio
-// Buttons
-let TsunamiRadio = document.getElementById("TFradioPlayer");
-TsunamiRadio.crossOrigin = "anonymous";
-let RadioTitle = document.getElementById("TfRadioStuff");
-let RadioButtons = document.getElementById("CheckRadio");
-let RadioLastButton = document.createElement("button");
-let RadioRestartButton = document.createElement("button");
-let RadioStartButton = document.createElement("button");
-let RadioSkipButton = document.createElement("button");
-//visualizer
-let RadioCanvas = document.getElementById("TFradioCanvas");
-//Radio
-let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
-RadioAnalyser.fftSize = 2048;
-let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
-let Radio = new TfMusic(TsunamiRadio, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, RadioCanvas, TsunamiAudioCtx, RadioAnalyser, RadioMedia, Socket);
-
 if (navigator.cookieEnabled) {
     //use cookies
     console.log("Cookies are enabled");
@@ -54,8 +22,15 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
+let MyNewTFTime = document.getElementById("TFtime");
+let TfWotd = document.getElementById("tfWordOfTheDay");
+let TsunamiRadio = document.getElementById("TFradioPlayer");
+TsunamiRadio.crossOrigin = "anonymous";
+let RadioTitle = document.getElementById("TfRadioStuff");
+let RadioButtons = document.getElementById("CheckRadio");
 //The Frame
 export const twoMore = document.getElementById("mainTsectionFdiv");
+let RadioCanvas = document.getElementById("TFradioCanvas");
 
 export const TFiframe = document.createElement("iframe");
 TFiframe.title = "Main Website Content";
@@ -68,55 +43,56 @@ TFiframe.height = 430;
 TFiframe.src = "./../homepage.html";
 TFiframe.style.background = "white";
 
-if (twoMore) {
-    twoMore.appendChild(TFiframe);
-} else {
-    console.error("Element with id 'mainTsectionFdiv' not found.");
-}
-
 let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
 
-//database. do database calculations.
-//Tsunami Thoughts 
-document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
-    TsunamiThoughts.preventDefault();
-    //let tfUserThot = document.getElementById("TFthought");
-    //TfPostThot(tfUserThot);
-});
+let RadioLastButton = document.createElement("button");
+let RadioRestartButton = document.createElement("button");
+let RadioStartButton = document.createElement("button");
+let RadioSkipButton = document.createElement("button");
 
-const workers = new WorkerManager({
-    Radio,
-    TfWeather,
-    WordTimes,
-    RadioTimes,
-    WordOfTheDay,
-    NewsTimer,
-    TsunamiAudioCtx,
-    MyNewTFTime,
-    TfWotd
-});
+let Socket = new TfWebsocket("wss://world.tsunamiflow.club/websocket");
+let Effects = new TfEffects();
+let TfWeather = new Weather();
+let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
+RadioAnalyser.fftSize = 2048;
+let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
+let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 
-//Start functions
-TfWeather.requestLocation();
+let Live = new TfVideo(Socket, Effects);
 
-//Nav Ended
-let Live = new TfVideo(Socket, Radio, Effects);
+const workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
-//
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, null, null, workers);
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers);
 
-//Nav Begins
-Controller.bindNavBar();
-//DoTheThingMan(TFiframe);
-for (const [key, button] of Object.entries(navButtons)) {
-    button.addEventListener("click", () => {
-        Controller.iframe.src = `${key}.html`;
-        Controller.bindNavBar();
-        //TFiframe.src = `${key}.html`;
-        //DoTheThingMan(TFiframe);
-    });
-};
 document.addEventListener("DOMContentLoaded", () => {
+    if (twoMore) {
+        twoMore.appendChild(TFiframe);
+    } else {
+        console.error("Element with id 'mainTsectionFdiv' not found.");
+    }
+
+    for (const [key, button] of Object.entries(navButtons)) {
+        button.addEventListener("click", () => {
+            Controller.iframe.src = `${key}.html`;
+            Controller.bindNavBar();
+        });
+    };
+
+    document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
+        TsunamiThoughts.preventDefault();
+        //let tfUserThot = document.getElementById("TFthought");
+        //TfPostThot(tfUserThot);
+    });
+
+    document.body.addEventListener("click", () => {
+        if (TsunamiAudioCtx.state === "suspended") {
+            TsunamiAudioCtx.resume();
+        }
+    });
+
+    TfWeather.requestLocation();
+    Controller.bindNavBar();
     //Controller.bindSignUp();
     //Controller.bindCart();
     Controller.bindWorker();
