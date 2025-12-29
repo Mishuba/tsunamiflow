@@ -104,9 +104,9 @@ export class tfIframe {
         console.log("iframe commmunity message received");
         let CommunityJson = {
           type: "community",
-          info: "idk community",
+          info: this.Video.toJson,
           message: "this is the community message",
-          username: "Mishuba",
+          username: "",
           error: "ok no errors for community right now"
         };
         
