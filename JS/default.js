@@ -410,13 +410,20 @@ export class MishubaController {
       this.effects.RemoveVideo(video);
     });
     this.on("TfStartRecPlz", () => {
-      //record canvas
-      //record vid element extra
-      //send to websocketf tfhatf push tfo rtfmp. 
+    this.websocket.connect();
+
+    this.recorder.start({
+        canvas: this.VidCanv,
+        audioContext: this.audio?.TsunamiRadioAudio,
+        analyser: this.audio?.TsunamiAnalyser,
+        websocket: this.websocket
     });
-    this.on("TfStopRecPlz", () => {
-      //stop recording and downloaa
-    });
+});
+
+this.on("TfStopRecPlz", () => {
+    this.recorder.stop();
+    this.websocket.close();
+});
   }
   bindGame() {
     //game butftfons.
