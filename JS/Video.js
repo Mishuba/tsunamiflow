@@ -176,4 +176,40 @@ export class TfVideo {
     LetsBegin() {
         //videoElement.srcObject = stream;
     }
+    toJson() {
+    return {
+        isPlaying: this.isPlaying,
+
+        // animation / rendering state
+        animationActive: Boolean(this.animationId),
+
+        // feature presence (not the objects themselves)
+        hasSocket: Boolean(this.VideoSocket),
+        hasEffects: Boolean(this.VidEffects),
+
+        // video processing pipeline
+        webCodecs: {
+            enabled: Boolean(this.VideoProcessor),
+            hasReader: Boolean(this.VideoReader)
+        },
+
+        // UI bindings
+        controls: {
+            hasStartButton: Boolean(this.VideoSystemControllerButton),
+            hasStopButton: Boolean(this.VideoSystemControllerStopButton)
+        },
+
+        // draw / frame state
+        drawFrameActive: Boolean(this.TfVidDrawFrame),
+
+        // debug-friendly metadata
+        timestamp: Date.now(),
+        class: "TfVideo"
+    };
+}
+    static fromJson(data, socket, effects) {
+    const v = new TfVideo(socket, effects);
+    v.isPlaying = data.isPlaying;
+    return v;
+}
 }
