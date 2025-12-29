@@ -415,7 +415,7 @@ export class MishubaController {
     this.recorder.start({
         canvas: this.VidCanv,
         audioContext: this.audio?.TsunamiRadioAudio,
-        analyser: this.audio?.TsunamiAnalyser,
+        sourceNode: this.audio?.TsunamiRadioMedia,
         websocket: this.websocket
     });
 });
