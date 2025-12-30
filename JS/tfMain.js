@@ -25,6 +25,7 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
+let Nifage = new User();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
 let TsunamiRadio = document.getElementById("TFradioPlayer");
@@ -69,7 +70,7 @@ let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordO
 
 let cam = new TfWebcam();
 let recorder = new TfRecorder();
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
+let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
 
 document.addEventListener("DOMContentLoaded", () => {
     if (twoMore) {
