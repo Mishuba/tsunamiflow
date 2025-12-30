@@ -54,7 +54,7 @@ let socket;
 let reconnectInterval = 2000;
 
 function connectWebSocket() {
-    socket = new WebSocket("ws://world.tsunamiflow.club/ws");
+    socket = new WebSocket("wss://world.tsunamiflow.club/ws");
 
     socket.onopen = () => console.log("WebSocket connected!");
     socket.onclose = () => {
