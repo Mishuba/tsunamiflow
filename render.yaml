@@ -2,7 +2,7 @@ services:
   - type: static
     name: tsunamiflow-static
     branch: main
-    publishPath: public  # replace with the folder where your index.html lives
+    publishPath: . # replace with the folder where your index.html lives
     routes:
       - path: /*
         headers:
