@@ -43,7 +43,7 @@ TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
-TFiframe.src = "./../homepage.html";
+TFiframe.src = "homepage.html";
 TFiframe.style.background = "white";
 
 let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
