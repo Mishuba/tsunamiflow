@@ -2,7 +2,8 @@
   "headers": {
     "/**": {
       "Access-Control-Allow-Origin": "*",
-      "Cache-Control": "public, max-age=86400"
+      "Cache-Control": "public, max-age=86400",
+"Content-Security-Policy": "default-src 'self'; connect-src 'self' wss://world.tsunamiflow.club:8443"
     }
   },
   "rewrites": [
