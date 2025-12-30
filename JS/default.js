@@ -114,11 +114,26 @@ export class MishubaController {
     }
     this.worker = worker;
   }
-  on(id, handler) {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.addEventListener('click', handler);
-  }
+  on(id, handler, preventDefault = false) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  const isForm = el instanceof HTMLFormElement;
+  const isSubmitButton =
+    (el instanceof HTMLButtonElement && el.type === "submit") ||
+    (el instanceof HTMLInputElement &&
+      ["submit", "image"].includes(el.type));
+
+  const eventType = isForm ? "submit" : "click";
+
+  el.addEventListener(eventType, (event) => {
+    if (isForm || isSubmitButton || preventDefault) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+    handler(event);
+  });
+}
   bindNavBar() {
     // navigation menu
     this.on("tfRoster", () => {
@@ -162,18 +177,14 @@ export class MishubaController {
     }
     );
 
-    this.on("NavLoginButton", (event) => {
-      event.preventDefault();
-      this.user.login(this.user.username, this.user.password);
-    }
-    );
+    this.on("NavLoginButton", () => {
+      this.user.login();
+    }, true);
   }
   bindSignUp() {
-    this.on("TFCompleteForm", (event) => {
-      event.preventDefault();
-      this.user.signup(this.extraFields);
-    }
-    )
+    this.on("TFCompleteForm", () => {
+      this.user.signup(this.userFields, this.extraFields);
+    }, true);
   }
   bindEffects() {
 
