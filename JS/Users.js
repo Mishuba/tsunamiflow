@@ -1,5 +1,5 @@
 export class User {
-    constructor(username = "", password = "") {
+    constructor(username = null, password = null) {
         this.username = username;
         this.password = password;
         this.membershipLevels = {
@@ -13,55 +13,9 @@ export class User {
         // Restore saved login state if any
         const savedUser = localStorage.getItem("TFuser");
         if (savedUser) {
-            const { username, password } = JSON.parse(savedUser);
+            const { username } = JSON.parse(savedUser);
             this.username = username;
-            this.password = password;
         }
-
-        // Wait for DOM
-        document.addEventListener("DOMContentLoaded", () => {
-            this.FreeSubmitButton = document.getElementById("TFCompleteForm");
-            this.tfFN = document.getElementById("TfFirstName");
-            this.tfLN = document.getElementById("TfLastName");
-            this.tfNN = document.getElementById("TfNickName");
-            this.tfGen = document.getElementById("TfGender");
-            this.tfEM = document.getElementById("TfEmail");
-            this.tfBirth = document.getElementById("TfBirthday");
-            this.tfUN = document.getElementById("TFuserName");
-            this.tfPsw = document.getElementById("TFpassword");
-            this.tfMembershipLevel = document.getElementById("TFMembershipLevel");
-
-            this.extraFields = {
-                ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
-                WesternZodiacSign: document.getElementById("WesternZodiacSign"),
-                SpiritAnimal: document.getElementById("SpiritAnimal"),
-                CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
-                NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
-                VedicAstrologySign: document.getElementById("VedicAstrologySign"),
-                GuardianAngel: document.getElementById("GuardianAngel"),
-                ChineseElement: document.getElementById("ChineseElement"),
-                EyeColorMeaning: document.getElementById("EyeColorMeaning"),
-                GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
-                NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
-                EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
-                MayanZodiacSign: document.getElementById("MayanZodiacSign"),
-                LoveLanguage: document.getElementById("LoveLanguage"),
-                Birthstone: document.getElementById("Birthstone"),
-                BirthFlower: document.getElementById("BirthFlower"),
-                BloodType: document.getElementById("BloodType"),
-                AttachmentStyle: document.getElementById("AttachmentStyle"),
-                CharismaType: document.getElementById("CharismaType"),
-                BusinessPersonality: document.getElementById("BusinessPersonality"),
-                DISC: document.getElementById("DISC"),
-                SocionicsType: document.getElementById("SocionicsType"),
-                LearningStyle: document.getElementById("LearningStyle"),
-                FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
-                PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
-                CreativeStyle: document.getElementById("CreativeStyle"),
-                ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
-                TeamRolePreference: document.getElementById("TeamRolePreference")
-            };
-        });
     }
     hideAllSections(sections) {
         Object.values(sections).forEach(el => {
@@ -70,11 +24,11 @@ export class User {
             } else {
                 console.log("subscibers stuff");
             }
-        })
+        });
     }
-    updateMembership(membershipSelect) {
+    updateMembership(membershipSelect, sections, membershipCostEl, paymentTypeEl) {
         const level = membershipSelect.value;
-        this.hideAllSections();
+        this.hideAllSections(sections);
 
         const config = this.membershipLevels[level] || membershipLevels.none;
 
@@ -89,18 +43,18 @@ export class User {
         // Update cost/payment
         if (membershipCostEl) membershipCostEl.innerHTML = config.displayText;
         if (paymentTypeEl) paymentTypeEl.innerHTML = config.paymentText;
-        if (hiddenMC) hiddenMC.value = config.cost;
-        if (hiddenPT) hiddenPT.value = config.payment;
+        //if (hiddenMC) hiddenMC.value = config.cost;
+        //if (hiddenPT) hiddenPT.value = config.payment;
     }
-    signup() {
+    signup(fields, extraFields) {
         try {
             const SubFormData = new FormData();
-            const fields = ["tfFN", "tfLN", "tfNN", "tfGen", "tfEM", "tfBirth", "tfUN", "tfPsw", "tfMembershipLevel"];
-            fields.forEach(f => {
-                if (this[f]) SubFormData.append(f, this[f].value);
-            });
 
-            for (const [key, elem] of Object.entries(this.extraFields)) {
+            for (const [tf, yj] of Object.entries(fields)) {
+                if (yj) SubFormData.append(tf, yj.value);
+            }
+
+            for (const [key, elem] of Object.entries(extraFields)) {
                 if (elem) SubFormData.append(key, elem.value);
             }
 
@@ -155,7 +109,7 @@ export class User {
                     }
                 }
             };
-            xhr.open("POST", "server.php", true);
+            xhr.open("POST", "https://world.tsunamiflow.club/server.php", true);
             xhr.send(formData);
         } catch (err) {
             console.error("Login error:", err);

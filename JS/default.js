@@ -1,6 +1,49 @@
 export class MishubaController {
   constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null) {
     this.user = user;
+    if (this.user !== null) {
+      this.userFields = {
+        tfFN: document.getElementById("TfFirstName"),
+        tfLN: document.getElementById("TfLastName"),
+        tfNN: document.getElementById("TfNickName"),
+        tfGen: document.getElementById("TfGender"),
+        tfEM: document.getElementById("TfEmail"),
+        tfBirth: document.getElementById("TfBirthday"),
+        tfUN: document.getElementById("TFuserName"),
+        tfPsw: document.getElementById("TFpassword"),
+        tfMembershipLevel: document.getElementById("TFMembershipLevel"),
+      };
+      this.extraFields = {
+        ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
+        WesternZodiacSign: document.getElementById("WesternZodiacSign"),
+        SpiritAnimal: document.getElementById("SpiritAnimal"),
+        CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
+        NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
+        VedicAstrologySign: document.getElementById("VedicAstrologySign"),
+        GuardianAngel: document.getElementById("GuardianAngel"),
+        ChineseElement: document.getElementById("ChineseElement"),
+        EyeColorMeaning: document.getElementById("EyeColorMeaning"),
+        GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
+        NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
+        EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
+        MayanZodiacSign: document.getElementById("MayanZodiacSign"),
+        LoveLanguage: document.getElementById("LoveLanguage"),
+        Birthstone: document.getElementById("Birthstone"),
+        BirthFlower: document.getElementById("BirthFlower"),
+        BloodType: document.getElementById("BloodType"),
+        AttachmentStyle: document.getElementById("AttachmentStyle"),
+        CharismaType: document.getElementById("CharismaType"),
+        BusinessPersonality: document.getElementById("BusinessPersonality"),
+        DISC: document.getElementById("DISC"),
+        SocionicsType: document.getElementById("SocionicsType"),
+        LearningStyle: document.getElementById("LearningStyle"),
+        FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
+        PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
+        CreativeStyle: document.getElementById("CreativeStyle"),
+        ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
+        TeamRolePreference: document.getElementById("TeamRolePreference")
+      };
+    }
     this.iframe = iframe;
     if (document.getElementById("TFMembershipLevel")) {
       this.membershipSelect = document.getElementById("TFMembershipLevel");
@@ -119,14 +162,16 @@ export class MishubaController {
     }
     );
 
-    this.on("NavLoginButton", () => {
+    this.on("NavLoginButton", (event) => {
+      event.preventDefault();
       this.user.login(this.user.username, this.user.password);
     }
     );
   }
   bindSignUp() {
-    this.on("", () => {
-      this.user.signup();
+    this.on("TFCompleteForm", (event) => {
+      event.preventDefault();
+      this.user.signup(this.extraFields);
     }
     )
   }
