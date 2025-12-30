@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mishuba Live Broadcaster Console</title>
+<title>Mishuba Live WebSocket Stream</title>
 <style>
     body { font-family: Arial; padding: 20px; }
     video { width: 60%; border: 1px solid #ccc; }
@@ -58,7 +58,7 @@ function log(msg) {
 
 // ---------------------- WebSocket ----------------------
 async function connectWS(key, role) {
-    const wsUrl = `wss://world.tsunamiflow.club/ws?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+    const wsUrl = `wss://world.tsunamiflow.club:8443?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
     ws = new WebSocket(wsUrl);
     ws.binaryType = "arraybuffer";
 
@@ -70,13 +70,13 @@ async function connectWS(key, role) {
     };
 
     ws.onclose = () => {
-        log("⚠️ WebSocket closed, falling back to RTMP...");
-        startFallbackRTMP(stream, key);
+        log("⚠️ WebSocket closed.");
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("stopBtn").disabled = true;
     };
 
     ws.onerror = (err) => {
         log("❌ WebSocket error: " + err);
-        if (err instanceof Event) log("Event Type: " + err.type);
     };
 
     ws.onmessage = event => {
@@ -87,26 +87,6 @@ async function connectWS(key, role) {
             // ignore non-JSON
         }
     };
-}
-
-// ---------------------- Fallback RTMP ----------------------
-function startFallbackRTMP(localStream, key) {
-    if (!localStream) { log("❌ No media stream available for RTMP fallback."); return; }
-    log("🚨 Using RTMP fallback...");
-
-    recorder = new MediaRecorder(localStream, { mimeType: "video/webm; codecs=vp8" });
-    recorder.ondataavailable = async e => {
-        if (e.data.size > 0) {
-            const form = new FormData();
-            form.append('key', key);
-            form.append('chunk', e.data);
-
-            fetch('world.tsunamiflow.club/TfRTMP.php', { method: 'POST', body: form })
-                .then(r => log("📡 Chunk sent to RTMP server"))
-                .catch(err => log("❌ Failed to send chunk: " + err));
-        }
-    };
-    recorder.start(100);
 }
 
 // ---------------------- Button Events ----------------------
@@ -126,11 +106,20 @@ document.getElementById("startBtn").onclick = async function () {
         return;
     }
 
-    // Try WebSocket first
-    try { await connectWS(key, role); }
-    catch (err) {
-        log("⚠️ WebSocket failed, falling back to RTMP: " + err);
-        startFallbackRTMP(stream, key);
+    // Connect WebSocket
+    try { 
+        await connectWS(key, role);
+
+        recorder = new MediaRecorder(stream, { mimeType: "video/webm; codecs=vp8" });
+        recorder.ondataavailable = e => {
+            if (e.data.size > 0 && ws.readyState === 1) {
+                e.data.arrayBuffer().then(buf => ws.send(buf));
+            }
+        };
+        recorder.start(100);
+        log("🚀 Streaming started via WebSocket.");
+    } catch (err) {
+        log("❌ WebSocket failed: " + err);
     }
 };
 
