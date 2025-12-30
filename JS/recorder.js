@@ -48,6 +48,12 @@ buildStream({ canvas }) {
 
         this.recorder.ondataavailable = (e) => {
             if (!e.data || e.data.size === 0) return;
+
+const xhr = new XMLHttpRequest();
+  xhr.open("POST", `/ingest.php?key=${STREAM_KEY}`, true);
+  xhr.setRequestHeader("Content-Type", "application/octet-stream");
+
+  xhr.send(e.data);
             
         };
 
