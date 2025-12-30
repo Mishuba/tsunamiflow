@@ -34,13 +34,8 @@ buildStream({ canvas }) {
         canvas,
         audioContext = null,
         analyser = null,
-        websocket
     }) {
         if (this.recording) return;
-        if (!websocket?.isOpen()) {
-            console.warn("Recorder: websocket not open");
-            return;
-        }
 
         if (!this.stream) {
             this.buildStream({ canvas, audioContext, analyser });
@@ -53,23 +48,19 @@ buildStream({ canvas }) {
 
         this.recorder.ondataavailable = (e) => {
             if (!e.data || e.data.size === 0) return;
-            websocket.sendBinary(e.data); // ← EXACT match to PHP
+            
         };
 
         this.recorder.start(this.chunkMs);
         this.recording = true;
     }
 
-    stop(websocket = null) {
+    stop() {
         if (!this.recording) return;
 
         this.recorder.stop();
         this.recorder = null;
         this.recording = false;
-
-        websocket?.send?.(JSON.stringify({
-            type: "stop_stream"
-        }));
     }
 
     reset() {
