@@ -80,20 +80,25 @@ export class MishubaController {
     // navigation menu
     this.on("tfRoster", () => {
       //i have a function for this already.
+      this.iframe.frame.src = "roster.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
     this.on("tfNews", () => {
+      this.iframe.frame.src = "news.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
 
     this.on("tfCompetitions", () => {
+      this.iframe.frame.src = "Competitions.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
 
     this.on("tfNetwork", () => {
+      this.iframe.frame.src = "TFnetwork.html";
+      this.iframe.MenuSwitch(this.iframe.frame);
       /*
          <video
              controls
@@ -109,6 +114,7 @@ export class MishubaController {
     );
 
     this.on("tfCommunity", () => {
+      this.iframe.frame.src = "Community.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
