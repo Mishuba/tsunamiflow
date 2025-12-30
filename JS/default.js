@@ -512,6 +512,6 @@ export class MishubaController {
 
   }
   bindWorker() {
-    this.worker.workers.init();
+    this.worker.init();
   }
 }
