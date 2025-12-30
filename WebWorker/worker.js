@@ -16,7 +16,7 @@ export class WorkerManager {
         this.TfWotd = deps.TfWotd;
     }
 
-    init() {
+    init(audioElem) {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             return;
@@ -27,13 +27,13 @@ export class WorkerManager {
             return;
         }
 
-        this.initTimeWorker();
+        this.initTimeWorker(audioElem);
     }
 
-    initTimeWorker() {
+    initTimeWorker(audioElement) {
         if (!this.timeWorker) {
             this.timeWorker = new Worker("WebWorker/Timer.js", { type: "module" });
-            this.timeWorker.onmessage = (e) => this.handleTimeMessage(e);
+            this.timeWorker.onmessage = (e) => this.handleTimeMessage(e, audioElement);
             this.timeWorker.onerror = (e) => this.handleError("TimeWorker", e);
         }
     }
@@ -46,7 +46,7 @@ export class WorkerManager {
         }
     }
 
-    async handleTimeMessage(event) {
+    async handleTimeMessage(event, elem) {
         const { time: TimerTime, type } = event.data;
 
         this.MyNewTFTime.innerHTML = TimerTime;
@@ -55,7 +55,7 @@ export class WorkerManager {
         if (type === "Tf Schedule") {
             await this.handleSchedule(TimerTime);
         } else if (type === "Tf Time") {
-            this.handleGenericTime();
+            this.handleGenericTime(elem);
         } else {
             this.handleFallback();
         }
@@ -79,11 +79,11 @@ export class WorkerManager {
         this.ensureRadioPlaying();
     }
 
-    handleGenericTime() {
+    handleGenericTime(audioElem) {
         this.NewsTimer();
         document.getElementById("TFweather").innerHTML =
             this.TfWeather.requestLocation();
-        this.Radio.MusicNetworkState(this.radioWorker, this.Radio.TsunamiAudio);
+        this.Radio.MusicNetworkState(this.radioWorker, audioElem);
     }
 
     handleFallback() {
