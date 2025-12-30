@@ -1,0 +1,6 @@
+headers:
+  - path: /*
+    headers:
+      Content-Security-Policy: >
+        default-src 'self';
+        connect-src 'self' wss://world.tsunamiflow.club:8443;
