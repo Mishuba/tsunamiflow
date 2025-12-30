@@ -3,35 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Live Chat</title>
+<title>TsunamiFlow Live</title>
 <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    #chatBox { height: 300px; overflow-y: scroll; border: 1px solid black; padding: 10px; margin-bottom: 10px; }
-    #msg { width: 80%; padding: 5px; }
-    #LiveStreamChat { padding: 5px 10px; }
-    video { width: 100%; max-width: 800px; margin-bottom: 20px; }
+    body { font-family: Arial, sans-serif; margin: 20px; background: #111; color: #eee; }
+    #chatBox { height: 300px; overflow-y: scroll; border: 1px solid #444; padding: 10px; margin-bottom: 10px; background: #222; }
+    #msg { width: 75%; padding: 5px; background: #333; color: #eee; border: 1px solid #555; }
+    #LiveStreamChat { padding: 5px 10px; background: #1e90ff; color: #fff; border: none; cursor: pointer; }
+    #LiveStreamChat:hover { background: #0f78d1; }
+    video { width: 100%; max-width: 800px; margin-bottom: 20px; background: black; }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 </head>
 <body>
-<h1>🎥 Live Chat</h1>
+<h1>🎥 TsunamiFlow Live</h1>
 
 <!-- VIDEO STREAM -->
-<video id="stream" controls autoplay></video>
+<video id="stream" controls autoplay muted></video>
 
 <!-- CHAT -->
 <h2>💬 Live Chat</h2>
 <div id="chatBox"></div>
 <input id="msg" type="text" placeholder="Type a message...">
 <button id="LiveStreamChat">Send</button>
+
 <script>
 const chatBox = document.getElementById('chatBox');
 const input = document.getElementById('msg');
 const sendButton = document.getElementById("LiveStreamChat");
-const guest = "Guest";
+
+// You can replace "Guest" with your logged-in username logic
+const username = "Guest";
 
 // ------------------------
-// VIDEO STREAM SETUP
+// VIDEO STREAM SETUP (HLS)
 // ------------------------
 const videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
 const videoEl = document.getElementById("stream");
@@ -54,7 +58,7 @@ let socket;
 let reconnectInterval = 2000;
 
 function connectWebSocket() {
-    socket = new WebSocket("wss://world.tsunamiflow.club:8443");
+    socket = new WebSocket("wss://world.tsunamiflow.club:8443?role=guest");
 
     socket.onopen = () => console.log("WebSocket connected!");
     socket.onclose = () => {
@@ -66,11 +70,16 @@ function connectWebSocket() {
     socket.onmessage = function(event) {
         try {
             const data = JSON.parse(event.data);
-            if (data.type === "welcome") {
-                chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
-            }
-            if (data.type === "chat") {
-                chatBox.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
+            switch(data.type) {
+                case "welcome":
+                    chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
+                    break;
+                case "chat":
+                    chatBox.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
+                    break;
+                case "ffmpeg_stderr":
+                    chatBox.innerHTML += `<div style="color:#f88;"><em>FFmpeg: ${data.message}</em></div>`;
+                    break;
             }
             chatBox.scrollTop = chatBox.scrollHeight;
         } catch (e) {
@@ -88,7 +97,7 @@ connectWebSocket();
 function sendMessage() {
     const message = input.value.trim();
     if (!message || socket.readyState !== WebSocket.OPEN) return;
-    const payload = { type: "chat", message: message, username: guest };
+    const payload = { type: "chat", message: message, username };
     socket.send(JSON.stringify(payload));
     input.value = "";
 }
