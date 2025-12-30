@@ -11,7 +11,7 @@ import { TfMusic } from "./Audio.js";
 import { TfVideo } from "./Video.js";
 import { tfIframe } from "./TfIframe.js";
 import { HomepageUpdates, FirstGame } from "./sprite.js";
-import { WorkerManager } from "./../WebWorker/workers.js";
+import { WorkerManager } from "./../WebWorker/worker.js";
 import { TfWebcam } from "./webcam.js";
 import { TfRecorder } from "./recorder.js";
 import { TfAudioMixer } from "./Mixer.js";
