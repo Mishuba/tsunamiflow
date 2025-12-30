@@ -74,6 +74,9 @@ let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, mi
 document.addEventListener("DOMContentLoaded", () => {
     if (twoMore) {
         twoMore.appendChild(TFiframe);
+
+Controller.iframe.MenuSwitch(Controller.iframe.frame);
+        Controller.bindNavBar();
     } else {
         console.error("Element with id 'mainTsectionFdiv' not found.");
     }
@@ -98,8 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     TfWeather.requestLocation();
-    Controller.bindNavBar();
-    Controller.iframe.MenuSwitch(Controller.iframe.frame);
     //Controller.bindSignUp();
     //Controller.bindCart();
     Controller.bindWorker();
