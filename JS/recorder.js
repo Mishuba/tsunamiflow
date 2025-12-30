@@ -15,21 +15,21 @@ export class TfRecorder {
         this.audioDest = null;
         this.recording = false;
     }
-buildStream({ canvas, audioContext, analyser, sourceNode }) {
+useExternalAudioStream(audioStream) {
+    this.externalAudioStream = audioStream;
+}
+buildStream({ canvas }) {
     const stream = canvas.captureStream(this.fps);
 
-    if (audioContext && sourceNode) {
-        this.audioDest = audioContext.createMediaStreamDestination();
-        sourceNode.connect(this.audioDest);
-
-        const track = this.audioDest.stream.getAudioTracks()[0];
-        if (track) stream.addTrack(track);
+    if (this.externalAudioStream) {
+        this.externalAudioStream
+            .getAudioTracks()
+            .forEach(track => stream.addTrack(track));
     }
 
     this.stream = stream;
     return stream;
 }
-
     start({
         canvas,
         audioContext = null,
