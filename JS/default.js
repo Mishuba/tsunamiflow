@@ -120,7 +120,7 @@ export class MishubaController {
     );
 
     this.on("NavLoginButton", () => {
-      //this.user.login(this.user.username, this.user.password);
+      this.user.login(this.user.username, this.user.password);
     }
     );
   }
