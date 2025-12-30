@@ -99,6 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     TfWeather.requestLocation();
     Controller.bindNavBar();
+    Controller.iframe.MenuSwitch(Controller.iframe.frame);
     //Controller.bindSignUp();
     //Controller.bindCart();
     Controller.bindWorker();
