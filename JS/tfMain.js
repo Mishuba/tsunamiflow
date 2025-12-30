@@ -13,6 +13,8 @@ import { tfIframe } from "./TfIframe.js";
 import { HomepageUpdates, FirstGame } from "./sprite";
 import { WorkerManager } from "./../WebWorker/workers.js";
 import { TfWebcam } from "./webcam.js";
+import { TfRecorder } from "./recorder.js";
+import { TfAudioMixer } from "./Mixer.js";
 import { MishubaController } from "./default.js";
 
 if (navigator.cookieEnabled) {
@@ -59,14 +61,15 @@ let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
 let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia);
+let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
 
 let Live = new TfVideo(Socket, Effects);
 
 let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
 let cam = new TfWebcam();
-
-let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam);
+let recorder = new TfRecorder();
+let Controller = new MishubaController(null, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
 
 document.addEventListener("DOMContentLoaded", () => {
     if (twoMore) {

@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null) {
     this.user = user;
     this.iframe = iframe;
     if (document.getElementById("TFMembershipLevel")) {
@@ -21,6 +21,7 @@ export class MishubaController {
     this.effects = effects;
     this.websocket = websocket;
     this.audio = audio;
+    this.mixer = mixer;
     if (audio !== null) {
       this.audioElem = AudioElement;
       this.audioCanv = AudioCanvas;
@@ -410,20 +411,21 @@ export class MishubaController {
       this.effects.RemoveVideo(video);
     });
     this.on("TfStartRecPlz", () => {
-    this.websocket.connect();
-
-    this.recorder.start({
-        canvas: this.VidCanv,
-        audioContext: this.audio?.TsunamiRadioAudio,
-        sourceNode: this.audio?.TsunamiRadioMedia,
-        websocket: this.websocket
+      this.websocket.connect();
+      this.websocket.on("open", () => {
+        this.recorder.start({
+          canvas: this.VidCanv,
+          audioContext: this.audio?.TsunamiRadioAudio,
+          sourceNode: this.audio?.TsunamiRadioMedia,
+          websocket: this.websocket
+        });
+      });
     });
-});
 
-this.on("TfStopRecPlz", () => {
-    this.recorder.stop();
-    this.websocket.close();
-});
+    this.on("TfStopRecPlz", () => {
+      this.recorder.stop();
+      this.websocket.close();
+    });
   }
   bindGame() {
     //game butftfons.
