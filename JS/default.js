@@ -512,6 +512,6 @@ export class MishubaController {
 
   }
   bindWorker() {
-    this.worker.init();
+    this.worker.init(this.audioElem);
   }
 }
