@@ -68,9 +68,9 @@ import { MishubaController } from "./default.js";
 
 
         let TFpostActualObject = {
-            type: "Website Updates",
-            info: "this is the array stuff",
-            message: "make this the first character maybe.",
+            type: "stream",
+            info: "controller",
+            message: "please send over the ui controller.",
             username: "Mishuba",
             error: "currently no error fam."
         };
@@ -88,12 +88,12 @@ import { MishubaController } from "./default.js";
                 console.log(data.info);
                 console.log(data);
 
-                if (data.type === "start_updates") {
+                if (data.type === "live") {
                     const game = MishubaController.fromJson(ev.data.info);
                     //game.start();
 
                     /*TFpostActualObject = {
-                        type: "updates",
+                        type: "live",
                         info: game.toJSON(),
                         message: "the message should be showing.",
                         username: "Mishuba",
@@ -113,7 +113,6 @@ import { MishubaController } from "./default.js";
                 return console.log(`Some outside source is trying to send my homepage a message.`);
             }
         });
-*/
     </script>
 </body>
 </html>
