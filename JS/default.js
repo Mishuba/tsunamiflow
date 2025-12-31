@@ -95,7 +95,7 @@ let el;
 if (iframe === null) {
   el = document.getElementById(id);
 } else {
-el = iframe.contentDocument.getElementById(id);
+el = iframe?.contentDocument?.getElementById(id);
 }
   if (!el) return;
 
@@ -159,7 +159,6 @@ el = iframe.contentDocument.getElementById(id);
 this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
 });
-    }
     );
 
     this.on("NavLoginButton", () => {
