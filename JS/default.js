@@ -161,7 +161,6 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
 };
 });
-    );
 
     this.on("NavLoginButton", () => {
       this.user.login();
