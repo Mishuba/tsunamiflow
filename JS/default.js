@@ -211,10 +211,10 @@ element.currentTime = 0;
 
     this.on("TFradioButton", () => {
       if (element.paused) {
-        this.audio.startMusic(element);
+        this.audio.playAudio(element);
         start.innerHTML = "Pause Tsuanmi Radio";
       } else {
-        this.audio.stopMusic(element);
+        element.pause();
         start.innerHTML = "Play Tsunami Radio";
       //this.audio.startMusic();
       //this.audio.stopMusic();
