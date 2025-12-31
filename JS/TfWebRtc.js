@@ -1,5 +1,5 @@
 export class TfWebRTCRecorder {
-    constructor({ recorder = null, websocket = null, localVideo = null, remoteVideo = null } = {}) {
+    constructor({ localVideo = null, remoteVideo = null } = {}) {
         this.recorder = recorder;            // Your existing TfRecorder
         this.websocket = websocket;          // Your TfWebsocket
         this.localVideo = localVideo;        // Local preview video
