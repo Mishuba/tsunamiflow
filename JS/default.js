@@ -115,10 +115,11 @@ export class MishubaController {
     this.worker = worker;
   }
   on(id, handler, preventDefault = false, iframe = null) {
+let el;
 if (iframe === null) {
-  let el = document.getElementById(id);
+  el = document.getElementById(id);
 } else {
-let el = iframe.contentDocument.getElementById(id);
+el = iframe.contentDocument.getElementById(id);
 }
   if (!el) return;
 
@@ -177,8 +178,9 @@ let el = iframe.contentDocument.getElementById(id);
 
     this.on("tfCommunity", () => {
       this.iframe.frame.src = "Community.html";
-      this.iframe.MenuSwitch(this.iframe.frame); .then(() => {
-      this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
+      this.iframe.MenuSwitch(this.iframe.frame)
+
+this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
 });
     }
