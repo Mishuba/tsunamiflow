@@ -197,11 +197,8 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
     buttonSpot.appendChild(skip);
 
     this.on("TFradioPreviousButton", () => {
-      //this.audio.previousSong();
-      RadioWorker.postMessage({
-        type: "radio",
-        system: "previous",
-      });
+      this.audio.previousSong();
+      //RadioWorker.postMessage({type: "radio",system: "previous"});
     }
     );
 
@@ -227,8 +224,8 @@ element.currentTime = 0;
     this.on("TFradioSkipButton", () => {
 element.src = "";
       RadioWorker.postMessage({
-        type: "file",
-        system: "skip",
+        type: "radio",
+        system: "file",
       });
     }
     );
