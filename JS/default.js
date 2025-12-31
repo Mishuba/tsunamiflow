@@ -173,7 +173,9 @@ export class MishubaController {
 
     this.on("tfCommunity", () => {
       this.iframe.frame.src = "Community.html";
-      this.iframe.MenuSwitch(this.iframe.frame);
+      this.iframe.MenuSwitch(this.iframe.frame); /*.then(() => {
+      
+});*/
     }
     );
 
