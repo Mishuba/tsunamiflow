@@ -44,6 +44,7 @@ TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.width = 925;
 TFiframe.height = 430;
+TFiframe.sandbox = "allow-scripts allow-same-origin";
 TFiframe.src = "homepage.html";
 TFiframe.style.background = "white";
 
