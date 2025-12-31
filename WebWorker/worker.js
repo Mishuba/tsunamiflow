@@ -107,7 +107,7 @@ export class WorkerManager {
 
         if (system === "file") {
             const update = this.Radio.RadioWorkerReceivedMessage(event);
-            this.Radio.BeginRadio(update, this.radioWorker);
+            this.Radio.BeginRadio(this.Radio, update);
         }
 
         if (system === "arraybuffer") {
