@@ -434,45 +434,53 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
       //start webcam
       this.TfWebcam.start();
       this.TfWebcam.attach(this.VidElem);
-    });
+    }, false, this.iframe.frame);
+
     this.on("TfStopShit", () => {
       this.TfWebcam.stop();
-    });
+    }, false, this.iframe.frame);
+
     this.on("TuseFthisKeycolor", () => {
       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
       this.effects.drawingFrame(this.VidCanv, this.VidElem);
-    });
+    }, false, this.iframe.frame);
+
     this.on("rmvTFchromakey", () => {
       this.effects.disableChromaKey()
-    });
+    }, false, this.iframe.frame);
+
     this.on("TFuploadImage", (image) => {
       this.effects.UploadImage(image);
-    });
+    }, false, this.iframe.frame);
+
     this.on("rmvTFimg", (image) => {
       this.effects.RemoveImage(image);
-    });
+    }, false, this.iframe.frame);
+
     this.on("TFuploadVideo", (video) => {
       this.effects.UploadVideo(video);
-    });
+    }, false, this.iframe.frame);
+
     this.on("rmvTFvid", (video) => {
       this.effects.RemoveVideo(video);
-    });
+    }, false, this.iframe.frame);
+
     this.on("TfStartRecPlz", () => {
-      this.websocket.connect();
-      this.websocket.on("open", () => {
-        this.recorder.start({
+
+this.recorder.start({
           canvas: this.VidCanv,
           audioContext: this.audio?.TsunamiRadioAudio,
           sourceNode: this.audio?.TsunamiRadioMedia,
-          websocket: this.websocket
-        });
       });
-    });
+
+      //this.websocket.connect();
+      //this.websocket.on("open", () => {});
+    }, false, this.iframe.frame);
 
     this.on("TfStopRecPlz", () => {
       this.recorder.stop();
-      this.websocket.close();
-    });
+     // this.websocket.close();
+    },false, this.iframe.frame);
   }
   bindGame() {
     //game butftfons.
