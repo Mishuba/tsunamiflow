@@ -67,7 +67,7 @@ let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
 
 let Live = new TfVideo(Socket, Effects);
 
-let workers = new WorkerManager({ TsunamiRadio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
+let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
 let cam = new TfWebcam();
 let recorder = new TfRecorder();
