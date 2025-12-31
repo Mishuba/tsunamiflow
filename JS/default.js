@@ -182,13 +182,6 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
 
     last.id = "TFradioPreviousButton";
     last.innerHTML = "Previous";
-    last.addEventListener("click", async () => {
-      RadioWorker.postMessage({
-        type: "radio",
-        system: "previous",
-      });
-      //this.previousSong(element, oldSong);
-    });
     buttonSpot.appendChild(last);
 
     restart.id = "TFRadioRestartButton";
@@ -215,14 +208,36 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
 
     skip.id = "TFradioSkipButton";
     skip.innerHTML = "Next";
-    skip.addEventListener("click", async () => {
-      element.src = "";
+    buttonSpot.appendChild(skip);
+
+    this.on("TFradioPreviousButton", () => {
+      //this.audio.previousSong();
       RadioWorker.postMessage({
         type: "radio",
+        system: "previous",
+      });
+    }
+    );
+
+    this.on("TFRadioRestartButton", () => {
+      this.audio.restartSong();
+    }
+    );
+
+    this.on("TFradioButton", () => {
+      this.audio.startMusic();
+      //this.audio.stopMusic();
+    }
+    );
+
+    this.on("TFradioSkipButton", () => {
+element.src = "";
+      RadioWorker.postMessage({
+        type: "file",
         system: "skip",
-      })
-    });
-    buttonSpot.appendChild(skip);
+      });
+    }
+    );
   }
   TfRadioEventListeners() {
     this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
@@ -304,29 +319,6 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
     this.audioElem.addEventListener("volumechange", (volumechange) => {
       this.audio.volumechangeAudio();
     });
-  }
-  bindAudio() {
-this.TfRadioEventListeners();
-    this.on("TFradioPreviousButton", () => {
-      this.audio.previousSong();
-    }
-    );
-
-    this.on("TFRadioRestartButton", () => {
-      this.audio.restartSong();
-    }
-    );
-
-    this.on("TFradioButton", () => {
-      this.audio.startMusic();
-      //this.audio.stopMusic();
-    }
-    );
-
-    this.on("TFradioSkipButton", () => {
-
-    }
-    )
   }
   usePickedColor(useChroma) {
     this.VidEffects.useChromaKey = true;
