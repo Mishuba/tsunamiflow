@@ -114,8 +114,12 @@ export class MishubaController {
     }
     this.worker = worker;
   }
-  on(id, handler, preventDefault = false) {
-  const el = document.getElementById(id);
+  on(id, handler, preventDefault = false, iframe = null) {
+if (iframe === null) {
+  let el = document.getElementById(id);
+} else {
+let el = iframe.document.getElementById(id);
+}
   if (!el) return;
 
   const isForm = el instanceof HTMLFormElement;
