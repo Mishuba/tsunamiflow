@@ -61,10 +61,12 @@ import { tfIframe } from "./TfIframe.js";
 import { FirstGame } from "./sprite.js";
 import { WorkerManager } from "./../WebWorker/workers.js";
 import { MishubaController } from "./default.js";
+
+
         let TFpostMessageLinks = "https://tsunamiflow.club"; //
         let TfPostMessageLink = "https://www.tsunamiflow.club"; 
 
-/*
+
         let TFpostActualObject = {
             type: "Website Updates",
             info: "this is the array stuff",
@@ -72,9 +74,8 @@ import { MishubaController } from "./default.js";
             username: "Mishuba",
             error: "currently no error fam."
         };
-*/
 
-/* window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
+ window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
 
         window.addEventListener("message", async (ev) => {
             console.log("homepage iframe message received");
@@ -88,8 +89,8 @@ import { MishubaController } from "./default.js";
                 console.log(data);
 
                 if (data.type === "start_updates") {
-                    const game = letsDoIt.from(ev.data.info);
-                    game.start();
+                    const game = MishubaController.fromJson(ev.data.info);
+                    //game.start();
 
                     /*TFpostActualObject = {
                         type: "updates",
@@ -99,6 +100,7 @@ import { MishubaController } from "./default.js";
                         error: "Nothing as of now."
                     }
                     window.parent.postMessage(TFpostActualObject,TFpostMessageLinks);
+*/
                 } else if (data.type === "game") {
 
                 } else {
@@ -111,7 +113,6 @@ import { MishubaController } from "./default.js";
                 return console.log(`Some outside source is trying to send my homepage a message.`);
             }
         });
-
 */
     </script>
 </body>
