@@ -156,8 +156,10 @@ el = iframe?.contentDocument?.getElementById(id);
       this.iframe.frame.src = "Community.html";
       this.iframe.MenuSwitch(this.iframe.frame)
 
+this.iframe.frame.onload = () => {
 this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
+};
 });
     );
 
