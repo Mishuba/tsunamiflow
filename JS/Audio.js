@@ -315,6 +315,7 @@ export class TfMusic {
     }
     pauseAudio(element) {
         this.MusicState(element);
+        this.stopMusic(element);
     }
     endedAudio(element, worker) {
         console.log("The audio should have ended");
