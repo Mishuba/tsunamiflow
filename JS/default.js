@@ -306,6 +306,7 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
     });
   }
   bindAudio() {
+this.TfRadioEventListeners();
     this.on("TFradioPreviousButton", () => {
       this.audio.previousSong();
     }
