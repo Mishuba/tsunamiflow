@@ -74,7 +74,7 @@ export class MishubaController {
       this.audioRestart = AudioOver;
       this.audioStart = AudioStart;
       this.audioSkip = AudioSkip;
-      this.bindAudio();
+      this.TfRadioEventListeners();
     }
     this.video = video;
     this.TfWebcam = webcam;
