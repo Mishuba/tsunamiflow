@@ -218,7 +218,7 @@ element.currentTime = 0;
         start.innerHTML = "Play Tsunami Radio";
       //this.audio.startMusic();
       //this.audio.stopMusic();
-    }
+    }}
     );
 
     this.on("TFradioSkipButton", () => {
