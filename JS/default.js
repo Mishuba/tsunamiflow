@@ -177,9 +177,9 @@ let el = iframe.document.getElementById(id);
 
     this.on("tfCommunity", () => {
       this.iframe.frame.src = "Community.html";
-      this.iframe.MenuSwitch(this.iframe.frame); /*.then(() => {
-      
-});*/
+      this.iframe.MenuSwitch(this.iframe.frame); .then(() => {
+      this.VidElem = this.iframe.frame.document.getElementById("");
+});
     }
     );
 
