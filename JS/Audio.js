@@ -311,6 +311,7 @@ export class TfMusic {
     }
     playAudio(element) {
         this.MusicState(element);
+        this.startMusic(element);
     }
     pauseAudio(element) {
         this.MusicState(element);
