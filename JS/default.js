@@ -214,7 +214,7 @@ element.currentTime = 0;
         this.audio.playAudio(element);
         start.innerHTML = "Pause Tsuanmi Radio";
       } else {
-        element.pause();
+        this.audio.stopMusic(element);
         start.innerHTML = "Play Tsunami Radio";
       //this.audio.startMusic();
       //this.audio.stopMusic();
