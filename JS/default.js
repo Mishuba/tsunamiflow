@@ -186,24 +186,10 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
 
     restart.id = "TFRadioRestartButton";
     restart.innerHTML = "Restart";
-    restart.addEventListener("click", async () => {
-      element.currentTime = 0;
-      this.startMusic(element);
-      start.innerHTML = "Pause Tsunami Radio";
-    });
     buttonSpot.appendChild(restart);
 
     start.id = "TFradioButton";
     start.innerHTML = "Start Radio";
-    start.addEventListener("click", async () => {
-      if (element.paused) {
-        this.startMusic(element);
-        start.innerHTML = "Pause Tsuanmi Radio";
-      } else {
-        this.stopMusic(element);
-        start.innerHTML = "Play Tsunami Radio";
-      }
-    });
     buttonSpot.appendChild(start);
 
     skip.id = "TFradioSkipButton";
@@ -220,12 +206,20 @@ this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVide
     );
 
     this.on("TFRadioRestartButton", () => {
-      this.audio.restartSong();
+element.currentTime = 0;
+      this.audio.startMusic(element);
+      start.innerHTML = "Pause Tsunami Radio";
     }
     );
 
     this.on("TFradioButton", () => {
-      this.audio.startMusic();
+      if (element.paused) {
+        this.audio.startMusic(element);
+        start.innerHTML = "Pause Tsuanmi Radio";
+      } else {
+        this.audio.stopMusic(element);
+        start.innerHTML = "Play Tsunami Radio";
+      //this.audio.startMusic();
       //this.audio.stopMusic();
     }
     );
