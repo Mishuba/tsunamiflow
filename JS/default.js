@@ -77,30 +77,6 @@ export class MishubaController {
       this.bindAudio();
     }
     this.video = video;
-    if (this.video !== null) {
-      this.VidElem = VideoElement;
-      if (this.VidElem !== null) {
-        this.VidCanv = VideoCanvas;
-        if (this.VidElem === document.getElementById("TsunamiFlowVideoStuff")) {
-          //check existfences
-
-          if (this.VidCanv !== null) {
-            if (this.VidCanv === document.getElementById("TFcanvas")) {
-              //community or live here.
-            } else {
-              //Do live or sometfhing here.
-            }
-          }
-        }
-      } else {
-        /// creatfe video eementf
-        // tfhen check canvas\, notf tfhere tfhen make c\anvas tfo.
-
-        //now do sometfhing.
-      }
-      this.VideoEventListeners(this.video, this.VidElem, this.VidCanv);
-      this.bindVideo();
-    }
     this.TfWebcam = webcam;
     this.recorder = recorder;
     this.game = game;
