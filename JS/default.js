@@ -414,7 +414,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     this.on("TfStopShit", () => post("TfStopShit"), false, iframe);
 
     this.on("TuseFthisKeycolor", () => post("TuseFthisKeycolor", {
-        value: document.getElementById("TFchromaKey").value;
+        value: document.getElementById("TFchromaKey").value
     }), false, iframe);
 
     this.on("rmvTFchromakey", () => post("rmvTFchromakey"), false, iframe);
