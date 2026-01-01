@@ -407,10 +407,12 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
   }
   bindVideo() {
     this.on("TfStartShit", () => {
-      //start webcam
-      this.TfWebcam.start();
-      this.TfWebcam.attach(this.VidElem);
-    }, false, this.iframe.frame);
+    if (!this.TfWebcam.stream) {
+        this.TfWebcam.start().then(() => {
+            this.TfWebcam.attach(this.VidElem);
+        });
+    }
+}, false, this.iframe.frame);
 
     this.on("TfStopShit", () => {
       this.TfWebcam.stop();
