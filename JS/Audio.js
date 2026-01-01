@@ -145,82 +145,82 @@ export class TfMusic {
     MusicNetworkState(RadioWorker, element) {
         if (element.readyState === 0) {
             console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-            if (element.networkState == 0) {
+            if (element.networkState === 0) {
                 console.log("Radio networkState has NETWORK_EMPTY");
-                if (element.src == "") {
+                if (element.src === "") {
                     console.log("The radio source is ''");
                     RadioWorker.postMessage({ type: "radio", system: "file", file: "none", message: "the radio source is ''", buffer: "nothing should be buffering." });
                 } else if (!element.src) {
                     ("The radio source does not exist");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
-                } else if (element.src == " ") {
+                } else if (element.src === " ") {
                     console.log("The radio source is ' '");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
-                } else if (element.src == "about:blank") {
+                } else if (element.src === "about:blank") {
                     console.log("The radio source is about:blank");
                     RadioWorker.postMessage({ type: "radio", system: "file" });
                 }
                 else {
                     console.log("Something else is going on and I dont know what it is.");
                 }
-            } else if (element.networkState == 2) {
+            } else if (element.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
+            } else if (element.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
                 RadioWorker.postMessage({ type: "radio", system: "file" });
             }
         } else if (element.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
-            if (element.networkState == 1) {
+            if (element.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
+            } else if (element.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
+            } else if (element.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
                 //No valid source
             }
         } else if (element.readyState === 2) {
             console.log("Radio readyState is HAVE_CURRENT_DATA");
-            if (element.networkState == 1) {
+            if (element.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
+            } else if (element.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
+            } else if (element.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
                 //No valid source
             }
         } else if (element.readyState === 3) {
             console.log("Radio readyState is HAVE_FUTURE_DATA");
-            if (element.networkState == 1) {
+            if (element.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 3) {
+            } else if (element.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
                 //No valid source
             }
         } else if (element.readyState === 4) {
             console.log("Radio readyState is HAVE_ENOUGH_DATA");
-            if (element.networkState == 1) {
+            if (element.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState == 2) {
+            } else if (element.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState == 3) {
+            } else if (element.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
                 //No valid source
             }
 
             if (element.ended) {
-                if (element.src = "") {
+                if (element.src === "") {
                     RadioWorker.postMessage({ type: "radio", system: "file" });
-                } else if (element.src = undefined) {
+                } else if (element.src === undefined) {
                     RadioWorker.postMessage({ type: "radio", system: "file" });
                 } else if (!element.src) {
                     RadioWorker.postMessage({ type: "radio", system: "file" });
