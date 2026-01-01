@@ -161,6 +161,7 @@ el = iframe?.contentDocument?.getElementById(id);
       this.iframe.MenuSwitch(this.iframe.frame)
 
 this.iframe.frame.onload = () => {
+this.iframe.contentWindow.controller = this;
 this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
 };
