@@ -76,6 +76,7 @@ export class MishubaController {
       this.audioStart = AudioStart;
       this.audioSkip = AudioSkip;
 this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+this.TfRadioEventListeners();
     }
     this.video = video;
     this.TfWebcam = webcam;
