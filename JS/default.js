@@ -160,9 +160,6 @@ el = iframe?.contentDocument?.getElementById(id);
       this.iframe.frame.src = "Community.html";
       this.iframe.MenuSwitch(this.iframe.frame)
 
-this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
-      this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
-
 });
 
     this.on("NavLoginButton", () => {
@@ -418,7 +415,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
 
     this.on("TuseFthisKeycolor", () => post("TuseFthisKeycolor", {
         value: document.getElementById("TFchromaKey").value
-    })), false, iframe);
+    }), false, iframe);
 
     this.on("rmvTFchromakey", () => post("rmvTFchromakey"), false, iframe);
     this.on("TFuploadImage", (image) => post("TFuploadImage", { image }), false, iframe);
