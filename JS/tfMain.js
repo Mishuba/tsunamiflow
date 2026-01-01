@@ -25,7 +25,6 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
-let twoMore = document.getElementById("mainTsectionFdiv");
 let Nifage = new User();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
