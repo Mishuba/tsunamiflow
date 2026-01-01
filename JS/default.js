@@ -69,6 +69,7 @@ export class MishubaController {
     if (audio !== null) {
       this.audioElem = AudioElement;
       this.audioCanv = AudioCanvas;
+      this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
       this.audioTitle = AudioTitle;
       this.audioSystem = AudioButtonSpot;
       this.audioLast = AudioPrevious;
