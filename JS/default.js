@@ -278,7 +278,7 @@ element.src = "";
 
     this.audioElem.addEventListener("playing", () => {
       this.audio.playingAudio(this.audioElem, this.audioCanv); 
-this.effects.hereDude(this.audioCanv, ctx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
+this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
     }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
     this.audioElem.addEventListener("stalled", (stalled) => {
