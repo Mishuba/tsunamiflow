@@ -1,7 +1,7 @@
 export class TfWebcam {
     constructor({
         video = true,
-        audio = false,
+        audio = true,
         constraints = {},
         onReady = null
     } = {}) {
