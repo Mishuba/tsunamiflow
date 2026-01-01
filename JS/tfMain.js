@@ -37,16 +37,6 @@ export const twoMore = document.getElementById("mainTsectionFdiv");
 let RadioCanvas = document.getElementById("TFradioCanvas");
 
 export const TFiframe = document.createElement("iframe");
-TFiframe.title = "Main Website Content";
-TFiframe.id = "TsunamiContent";
-TFiframe.name = "TsunamiMainFlowContent";
-TFiframe.allow = "camera; microphone; geolocation";
-TFiframe.allowFullscreen = true;
-TFiframe.width = 925;
-TFiframe.height = 430;
-TFiframe.sandbox = "allow-scripts allow-same-origin";
-TFiframe.src = "homepage.html";
-TFiframe.style.background = "white";
 
 let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
 
@@ -75,6 +65,17 @@ let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, 
 
 document.addEventListener("DOMContentLoaded", () => {
 frameTF.contentWindow.controller = MishubaController;
+
+TFiframe.title = "Main Website Content";
+TFiframe.id = "TsunamiContent";
+TFiframe.name = "TsunamiMainFlowContent";
+TFiframe.allow = "camera; microphone; geolocation";
+TFiframe.allowFullscreen = true;
+TFiframe.width = 925;
+TFiframe.height = 430;
+TFiframe.sandbox = "allow-scripts allow-same-origin";
+TFiframe.src = "homepage.html";
+TFiframe.style.background = "white";
 
     if (twoMore) {
         twoMore.appendChild(TFiframe);
