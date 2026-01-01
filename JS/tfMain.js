@@ -37,6 +37,9 @@ export const twoMore = document.getElementById("mainTsectionFdiv");
 let RadioCanvas = document.getElementById("TFradioCanvas");
 
 export const TFiframe = document.createElement("iframe");
+TFiframe.allow = "camera; microphone; geolocation";
+TFiframe.allowFullscreen = true;
+TFiframe.sandbox = "allow-scripts allow-same-origin";
 
 let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
 
@@ -66,11 +69,8 @@ let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, 
 Controller.iframe.frame.title = "Main Website Content";
 Controller.iframe.frame.id = "TsunamiContent";
 Controller.iframe.frame.name = "TsunamiMainFlowContent";
-Controller.iframe.frame.allow = "camera; microphone; geolocation";
-Controller.iframe.frame.allowFullscreen = true;
 Controller.iframe.frame.width = 925;
 Controller.iframe.frame.height = 430;
-Controller.iframe.frame.sandbox = "allow-scripts allow-same-origin";
 Controller.iframe.frame.style.background = "white";
 
     if (twoMore) {
