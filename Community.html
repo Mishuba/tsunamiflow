@@ -62,6 +62,58 @@ import { FirstGame } from "./JS/sprite.js";
 import { WorkerManager } from "./../WebWorker/workers.js";
 import { MishubaController } from "./JS/default.js";
 
+window.addEventListener("message", async (event) => {
+    const data = event.data;
+
+    switch (data.type) {
+        case "TfStartShit":
+            await TfWebcam.start();
+            TfWebcam.attach(document.getElementById("videoElem"));
+            break;
+
+        case "TfStopShit":
+            TfWebcam.stop();
+            break;
+
+        case "TuseFthisKeycolor":
+            effects.ColorPickerChromaKey(data.value);
+            effects.drawingFrame(document.getElementById("VidCanv"), document.getElementById("videoElem"));
+            break;
+
+        case "rmvTFchromakey":
+            effects.disableChromaKey();
+            break;
+
+        case "TFuploadImage":
+            effects.UploadImage(data.image);
+            break;
+
+        case "rmvTFimg":
+            effects.RemoveImage(data.image);
+            break;
+
+        case "TFuploadVideo":
+            effects.UploadVideo(data.video);
+            break;
+
+        case "rmvTFvid":
+            effects.RemoveVideo(data.video);
+            break;
+
+        case "TfStartRecPlz":
+            recorder.start({
+                canvas: document.getElementById("VidCanv"),
+                audioContext: audio?.TsunamiRadioAudio,
+                sourceNode: audio?.TsunamiRadioMedia,
+            });
+            break;
+
+        case "TfStopRecPlz":
+            recorder.stop();
+            break;
+    }
+});
+
 /*
         let TFpostMessageLinks = "https://tsunamiflow.club"; //
         let TfPostMessageLink = "https://www.tsunamiflow.club"; 
