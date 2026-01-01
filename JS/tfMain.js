@@ -98,7 +98,6 @@ Controller.iframe.MenuSwitch(Controller.iframe.frame);
 
 Controller.iframe.frame.onload = () => {
 Controller.iframe.contentWindow.controller = Controller;
-            Controller.bindNavBar();
 };
         });
     };
