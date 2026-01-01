@@ -108,7 +108,7 @@ export class WorkerManager {
     if (system === "file") {
       const update = this.Radio.RadioWorkerReceivedMessage(event);
       this.Radio.BeginRadio(element, update);
-      this.Radio.MusicNetworkState(this.RadioWorker, element);
+      this.Radio.MusicNetworkState(this.radioWorker, element);
       this.Radio.playAudio(element);
     }
     
