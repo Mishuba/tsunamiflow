@@ -543,8 +543,8 @@ this.recorder.start({
   bindWorker() {
     this.worker.init(this.audioElem);
     
-    this.TfRadioEventListeners();
-this.audio.MusicNetworkState(this.worker.radioWorker, this.audioElem);
-this.audio.MusicState(this.audioElem);
+    //this.TfRadioEventListeners();
+//this.audio.MusicNetworkState(this.worker.radioWorker, this.audioElem);
+//this.audio.MusicState(this.audioElem);
   }
 }
