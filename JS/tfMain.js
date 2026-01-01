@@ -65,24 +65,24 @@ let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, 
 
 document.addEventListener("DOMContentLoaded", () => {
 
-TFiframe.title = "Main Website Content";
-TFiframe.id = "TsunamiContent";
-TFiframe.name = "TsunamiMainFlowContent";
-TFiframe.allow = "camera; microphone; geolocation";
-TFiframe.allowFullscreen = true;
-TFiframe.width = 925;
-TFiframe.height = 430;
-TFiframe.sandbox = "allow-scripts allow-same-origin";
-TFiframe.style.background = "white";
+Controller.iframe.frame.title = "Main Website Content";
+Controller.iframe.frame.id = "TsunamiContent";
+Controller.iframe.frame.name = "TsunamiMainFlowContent";
+Controller.iframe.frame.allow = "camera; microphone; geolocation";
+Controller.iframe.frame.allowFullscreen = true;
+Controller.iframe.frame.width = 925;
+Controller.iframe.frame.height = 430;
+Controller.iframe.frame.sandbox = "allow-scripts allow-same-origin";
+Controller.iframe.frame.style.background = "white";
 
     if (twoMore) {
-        twoMore.appendChild(TFiframe);
+        twoMore.appendChild(Controller.iframe.frame);
 
-TFiframe.src = "homepage.html";
+Controller.iframe.frame.src = "homepage.html";
 
-TFiframe.onload = () => {
+Controller.iframe.frame.onload = () => {
 
-TFiframe.contentWindow.controller = Controller;
+Controller.iframe.frame.contentWindow.controller = Controller;
 
 Controller.iframe.MenuSwitch(Controller.iframe.frame);
         Controller.bindNavBar();
