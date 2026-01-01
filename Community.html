@@ -52,12 +52,18 @@
     <input type="file" id="TFuploadVideo" accept="video/*">
     <button id="rmvTFvid" style="display:none;">Remove Video</button>
     <script type="module" crossorigin="anonymous">
-document.addEventListener("DOMContentLoaded", () => {
+function waitForController(cb) {
     if (window.controller) {
-        window.controller.bindVidSystem(); // safe, controller exists
+        cb();
     } else {
-        console.warn("Controller not set yet");
+        setTimeout(() => waitForController(cb), 25);
     }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    waitForController(() => {
+        window.controller.bindVidSystem();
+    });
 });
     </script>
 </body>
