@@ -120,7 +120,6 @@ el = iframe?.contentDocument?.getElementById(id);
   });
 }
   bindNavBar() {
-this.iframe.contentWindow.controller = this;
     // navigation menu
     this.on("tfRoster", () => {
       //i have a function for this already.
