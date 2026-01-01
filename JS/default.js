@@ -120,6 +120,7 @@ el = iframe?.contentDocument?.getElementById(id);
   });
 }
   bindNavBar() {
+this.iframe.contentWindow.controller = this;
     // navigation menu
     this.on("tfRoster", () => {
       //i have a function for this already.
@@ -160,7 +161,6 @@ el = iframe?.contentDocument?.getElementById(id);
       this.iframe.frame.src = "Community.html";
       this.iframe.MenuSwitch(this.iframe.frame)
 
-this.iframe.contentWindow.controller = this;
 this.VidElem = this.iframe.frame.contentDocument.getElementById("TsunamiFlowVideoStuff");
       this.VidCanv = this.iframe.frame.contentDocument.getElementById("TFcanvas");
 
