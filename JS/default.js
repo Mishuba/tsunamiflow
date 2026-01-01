@@ -65,6 +65,7 @@ export class MishubaController {
     this.websocket = websocket;
     this.audio = audio;
     this.mixer = mixer;
+    this.worker = worker;
     if (audio !== null) {
       this.audioElem = AudioElement;
       this.audioCanv = AudioCanvas;
@@ -74,6 +75,7 @@ export class MishubaController {
       this.audioRestart = AudioOver;
       this.audioStart = AudioStart;
       this.audioSkip = AudioSkip;
+this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
     }
     this.video = video;
     this.TfWebcam = webcam;
@@ -87,7 +89,6 @@ export class MishubaController {
       this.bindStore();
       //this.bindCart();
     }
-    this.worker = worker;
   }
   on(id, handler, preventDefault = false, iframe = null) {
 let el;
@@ -230,8 +231,7 @@ element.src = "";
     );
   }
   TfRadioEventListeners() {
-    this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
-    this.audioElem.addEventListener("emptied", async (emptied) => {
+   this.audioElem.addEventListener("emptied", async (emptied) => {
       this.audio.emptiedAudio(emptied);  cancelAnimationFrame(this.effects.visualizatorController);
     }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
