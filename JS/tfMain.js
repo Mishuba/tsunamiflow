@@ -63,8 +63,6 @@ let cam = new TfWebcam();
 let recorder = new TfRecorder();
 let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
 
-document.addEventListener("DOMContentLoaded", () => {
-
 Controller.iframe.frame.title = "Main Website Content";
 Controller.iframe.frame.id = "TsunamiContent";
 Controller.iframe.frame.name = "TsunamiMainFlowContent";
@@ -77,7 +75,10 @@ Controller.iframe.frame.style.background = "white";
 
     if (twoMore) {
         twoMore.appendChild(Controller.iframe.frame);
-
+    } else {
+        console.error("Element with id 'mainTsectionFdiv' not found.");
+    }
+document.addEventListener("DOMContentLoaded", () => {
 Controller.iframe.frame.src = "homepage.html";
 
 Controller.iframe.frame.onload = () => {
@@ -88,10 +89,6 @@ Controller.iframe.MenuSwitch(Controller.iframe.frame);
         Controller.bindNavBar();
 
 }
-    } else {
-        console.error("Element with id 'mainTsectionFdiv' not found.");
-    }
-
     for (const [key, button] of Object.entries(navButtons)) {
         button.addEventListener("click", () => {
             Controller.iframe.src = `${key}.html`;
