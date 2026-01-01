@@ -62,6 +62,11 @@ import { FirstGame } from "./JS/sprite.js";
 import { WorkerManager } from "./WebWorker/worker.js";
 import { MishubaController } from "./JS/default.js";
 
+document.addEventListener("DOMContentLoaded", () => {
+
+window.controller.bindVidSystem();
+/*
+
 window.addEventListener("message", async (event) => {
     const data = event.data;
 
@@ -114,7 +119,7 @@ window.addEventListener("message", async (event) => {
     }
 });
 
-/*
+
         let TFpostMessageLinks = "https://tsunamiflow.club"; //
         let TfPostMessageLink = "https://www.tsunamiflow.club"; 
 
