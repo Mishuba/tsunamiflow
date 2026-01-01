@@ -68,7 +68,7 @@ window.addEventListener("message", async (event) => {
     switch (data.type) {
         case "TfStartShit":
             await TfWebcam.start();
-            TfWebcam.attach(document.getElementById("videoElem"));
+            TfWebcam.attach(document.getElementById("TsunamiFlowVideoStuff"));
             break;
 
         case "TfStopShit":
@@ -77,7 +77,7 @@ window.addEventListener("message", async (event) => {
 
         case "TuseFthisKeycolor":
             effects.ColorPickerChromaKey(data.value);
-            effects.drawingFrame(document.getElementById("VidCanv"), document.getElementById("videoElem"));
+            effects.drawingFrame(document.getElementById("TFcanvas"), document.getElementById("TsunamiFlowVideoStuff"));
             break;
 
         case "rmvTFchromakey":
@@ -102,7 +102,7 @@ window.addEventListener("message", async (event) => {
 
         case "TfStartRecPlz":
             recorder.start({
-                canvas: document.getElementById("VidCanv"),
+                canvas: document.getElementById("TFcanvas"),
                 audioContext: audio?.TsunamiRadioAudio,
                 sourceNode: audio?.TsunamiRadioMedia,
             });
