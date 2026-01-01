@@ -80,6 +80,8 @@ this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle,
 this.TfRadioEventListeners();
     }
     this.video = video;
+    this.videoElem = VideoElement;
+    this.videoCanv = VideoCanvas;
     this.TfWebcam = webcam;
     this.recorder = recorder;
     this.game = game;
