@@ -232,9 +232,7 @@ element.src = "";
   TfRadioEventListeners() {
     this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
     this.audioElem.addEventListener("emptied", async (emptied) => {
-      this.audio.emptiedAudio(emptied).then(() => {
-        cancelAnimationFrame(this.effects.visualizatorController);
-      });
+      this.audio.emptiedAudio(emptied);  cancelAnimationFrame(this.effects.visualizatorController);
     }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
     this.audioElem.addEventListener("loadstart", async () => {
