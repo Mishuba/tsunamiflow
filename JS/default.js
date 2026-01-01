@@ -254,9 +254,7 @@ element.src = "";
 
     this.audioElem.addEventListener("canplaythrough", async () => {
       this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
-      this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination).then(() => {
-        this.audio.canplaythroughAudio(this.audioElem);
-      });
+      this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination); this.audio.canplaythroughAudio(this.audioElem);
     });
 
     this.audioElem.addEventListener("play", () => {
@@ -264,15 +262,11 @@ element.src = "";
     }); //Playback has begun.
 
     this.audioElem.addEventListener("pause", () => {
-      this.audio.pauseAudio(this.audioElem).then(() => {
-        cancelAnimationFrame(this.effects.visualizatorController);
-      });
+      this.audio.pauseAudio(this.audioElem); cancelAnimationFrame(this.effects.visualizatorController);
     }); // Playback has been paused.
 
     this.audioElem.addEventListener("ended", async (ended) => {
-      this.audio.endedAudio(this.audioElem, this.worker.radioWorker).then(() => {
-        cancelAnimationFrame(this.effects.visualizatorController);
-      });
+      this.audio.endedAudio(this.audioElem, this.worker.radioWorker); cancelAnimationFrame(this.effects.visualizatorController);
     }); //Playback has stopped because of the end of the media was reached.
 
     this.audioElem.addEventListener("waiting", (waiting) => {
@@ -281,9 +275,8 @@ element.src = "";
     }); //Playback has stopped because of a temporary lack of data.
 
     this.audioElem.addEventListener("playing", () => {
-      this.audio.playingAudio(this.audioElem, this.audioCanv).then((ctx) => {
-        this.effects.hereDude(this.audioCanv, ctx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
-      });
+      this.audio.playingAudio(this.audioElem, this.audioCanv); 
+this.effects.hereDude(this.audioCanv, ctx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
     }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
     this.audioElem.addEventListener("stalled", (stalled) => {
