@@ -82,7 +82,7 @@ TFiframe.src = "homepage.html";
 
 TFiframe.onload = () => {
 
-frameTF.contentWindow.controller = Controller;
+TFiframe.contentWindow.controller = Controller;
 
 Controller.iframe.MenuSwitch(Controller.iframe.frame);
         Controller.bindNavBar();
@@ -95,8 +95,11 @@ Controller.iframe.MenuSwitch(Controller.iframe.frame);
     for (const [key, button] of Object.entries(navButtons)) {
         button.addEventListener("click", () => {
             Controller.iframe.src = `${key}.html`;
+
+Controller.iframe.frame.onload = () => {
 Controller.iframe.contentWindow.controller = Controller;
             Controller.bindNavBar();
+};
         });
     };
 
