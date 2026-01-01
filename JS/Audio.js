@@ -351,7 +351,7 @@ export class TfMusic {
     timeupdateAudio(element) {
         this.Timing = Math.floor(element.currentTime);
         this.RadioProcessBar = (element.currentTime / element.duration) * 100;
-        this.TaudioFtime = `Time: ${this.FormatAudioTime(timing)}`
+        this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
     }
     volumechangeAudio() {
         console.log("The volume has changed");
