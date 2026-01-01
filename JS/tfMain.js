@@ -74,6 +74,8 @@ let recorder = new TfRecorder();
 let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
 
 document.addEventListener("DOMContentLoaded", () => {
+frameTF.contentWindow.controller = MishubaController;
+
     if (twoMore) {
         twoMore.appendChild(TFiframe);
 
