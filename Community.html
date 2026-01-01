@@ -52,20 +52,6 @@
     <input type="file" id="TFuploadVideo" accept="video/*">
     <button id="rmvTFvid" style="display:none;">Remove Video</button>
     <script type="module" crossorigin="anonymous">
-//import { } from "./Classes.js";
-import { TfWebsocket } from "./JS/TfWebSocket.js";
-import { TfEffects } from "./WebWorker/Effects.js";
-import { User } from "./JS/Users.js";
-import { TfMusic } from "./JS/Audio.js";
-import { TfVideo } from "./JS/Video.js";
-import { tfIframe } from "./JS/TfIframe.js";
-import { HomepageUpdates, FirstGame } from "./JS/sprite.js";
-import { WorkerManager } from "./WebWorker/worker.js";
-import { TfWebcam } from "./JS/webcam.js";
-import { TfRecorder } from "./JS/recorder.js";
-import { TfAudioMixer } from "./JS/Mixer.js";
-import { MishubaController } from "./JS/default.js";
-
 document.addEventListener("DOMContentLoaded", () => {
     if (window.controller) {
         window.controller.bindVidSystem(); // safe, controller exists
@@ -73,115 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
         console.warn("Controller not set yet");
     }
 });
-/*
-
-window.addEventListener("message", async (event) => {
-    const data = event.data;
-
-    switch (data.type) {
-        case "TfStartShit":
-            await TfWebcam.start();
-            TfWebcam.attach(document.getElementById("TsunamiFlowVideoStuff"));
-            break;
-
-        case "TfStopShit":
-            TfWebcam.stop();
-            break;
-
-        case "TuseFthisKeycolor":
-            effects.ColorPickerChromaKey(data.value);
-            effects.drawingFrame(document.getElementById("TFcanvas"), document.getElementById("TsunamiFlowVideoStuff"));
-            break;
-
-        case "rmvTFchromakey":
-            effects.disableChromaKey();
-            break;
-
-        case "TFuploadImage":
-            effects.UploadImage(data.image);
-            break;
-
-        case "rmvTFimg":
-            effects.RemoveImage(data.image);
-            break;
-
-        case "TFuploadVideo":
-            effects.UploadVideo(data.video);
-            break;
-
-        case "rmvTFvid":
-            effects.RemoveVideo(data.video);
-            break;
-
-        case "TfStartRecPlz":
-            recorder.start({
-                canvas: document.getElementById("TFcanvas"),
-                audioContext: audio?.TsunamiRadioAudio,
-                sourceNode: audio?.TsunamiRadioMedia,
-            });
-            break;
-
-        case "TfStopRecPlz":
-            recorder.stop();
-            break;
-    }
-});
-
-
-        let TFpostMessageLinks = "https://tsunamiflow.club"; //
-        let TfPostMessageLink = "https://www.tsunamiflow.club"; 
-
-
-        let TFpostActualObject = {
-            type: "stream",
-            info: "controller",
-            message: "please send over the ui controller.",
-            username: "Mishuba",
-            error: "currently no error fam."
-        };
-
- window.parent.postMessage(TFpostActualObject, TFpostMessageLinks);
-
-        window.addEventListener("message", async (ev) => {
-            console.log("homepage iframe message received");
-            console.log(ev.origin);
-            let data = ev.data;
-            let origin = ev.origin;
-            let source = ev.source;
-
-            if (origin === "https://www.tsunamiflow.club" || origin === "https://tsunamiflow.club") {
-                console.log(data.info);
-                console.log(data);
-
-                if (data.type === "live") {
-                    const game = MishubaController.fromJson(ev.data.info);
-                    //game.start();
-
-                    /*TFpostActualObject = {
-                        type: "live",
-                        info: game.toJSON(),
-                        message: "the message should be showing.",
-                        username: "Mishuba",
-                        error: "Nothing as of now."
-                    }
-                    window.parent.postMessage(TFpostActualObject,TFpostMessageLinks);
-*/
-
-/*
-                } else if (data.type === "game") {
-
-                } else {
-
-                }
-            } else if (ev.origin === "https://js.stripe.com") {
-                console.log(ev.data);
-                console.log(ev.source);
-            } else {
-                return console.log(`Some outside source is trying to send my homepage a message.`);
-            }
-        });
-
-*/
     </script>
 </body>
 </html>
