@@ -414,6 +414,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     };
     this.on("TfStartShit", () => {
     if (!this.TfWebcam.stream) {
+        this.find("TsunamiFlowVideoStuff");
         this.TfWebcam.start().then(() => {
             this.TfWebcam.attach(this.VidElem);
         });
