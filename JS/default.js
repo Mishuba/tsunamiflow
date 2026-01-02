@@ -418,7 +418,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
 }, false);
 
     this.on("TuseFthisKeycolor", () => {
-       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey");
+       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
 this.effects.drawingFrame(this.videoElem, this.videoCanv);
 }, false);
 
