@@ -423,7 +423,8 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     };
     this.on("TfStartShit", () => {
     if (!this.TfWebcam.stream) {
-        this.find("TsunamiFlowVideoStuff");
+        this.find("TsunamiFlowVideoStuff", "video", true);
+this.find("TFcanvas", "canvas", true);
         this.TfWebcam.start().then(() => {
             this.TfWebcam.attach(this.VidElem);
         });
@@ -435,7 +436,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     }, false, this.iframe.frame);
 
     this.on("TuseFthisKeycolor", () => {
-      this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
+ this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
       this.effects.drawingFrame(this.VidCanv, this.VidElem);
     }, false, this.iframe.frame);
 
@@ -444,6 +445,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     }, false, this.iframe.frame);
 
     this.on("TFuploadImage", (image) => {
+
       this.effects.UploadImage(image);
     }, false, this.iframe.frame);
 
