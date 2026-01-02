@@ -96,8 +96,8 @@ Controller.iframe.frame.addEventListener("load", () => {
 try {
     console.log("contentWindow:", Controller.iframe.frame.contentWindow);
 if (Controller.iframe.frame.src === "Community.html") {
-Controller.find("TsunamiFlowVideoStuff", true);
-Controller.find("TFcanvas", true);
+Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);
+Controller.videoCanv = Controller.find("TFcanvas", true);
 }
 Controller.iframe.frame.contentWindow.controller = Controller;
     console.log("Controller injected into iframe");
