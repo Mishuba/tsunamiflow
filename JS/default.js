@@ -93,9 +93,18 @@ this.TfRadioEventListeners();
       this.bindStore();
       //this.bindCart();
     }
+    this.extraElem = null;
   }
-  find (elem) {
+  find (elem, type = null, frame = null) {
+if (frame !== null) {
+if (type === "video") {
     this.videoElem = this.iframe.frame.getElementById(elem);
+} else if (type === "canvas") {
+    this.vidCanv = this.iframe.frame.getElementById(elem);
+}
+} else {
+   this.extraElem =  document.getElementById(elem);
+} 
 }
   on(id, handler, preventDefault = false, iframe = null) {
 let el;
