@@ -94,6 +94,9 @@ this.TfRadioEventListeners();
       //this.bindCart();
     }
   }
+  find (elem) {
+    this.videoElem = this.iframe.frame.getElementById(elem);
+}
   on(id, handler, preventDefault = false, iframe = null) {
 let el;
 if (iframe === null) {
