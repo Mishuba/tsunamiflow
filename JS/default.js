@@ -95,16 +95,16 @@ this.TfRadioEventListeners();
     }
     this.extraElem = null;
   }
-  find (elem, type = null, frame = null) {
-if (frame !== null) {
-if (type === "video") {
-    this.videoElem = this.iframe.frame.getElementById(elem);
-} else if (type === "canvas") {
-    this.vidCanv = this.iframe.frame.getElementById(elem);
-}
+  find(elem, type = null, frame = null) {
+if (frame === true) {
+   if (type === "video") {
+      this.videoElem = this.iframe.frame.getElementById(elem);
+   } else if (type === "canvas") {
+      this.vidCanv = this.iframe.frame.getElementById(elem);
+   }
 } else {
-   this.extraElem =  document.getElementById(elem);
-} 
+      this.extraElem =  document.getElementById(elem);
+   } 
 }
   on(id, handler, preventDefault = false, iframe = null) {
 let el;
