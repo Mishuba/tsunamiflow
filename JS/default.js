@@ -412,76 +412,74 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     }, false, this.iframe.frame);
   }
   bindVideo() {
-    let iframe = this.iframe.frame;
+    const iframe = this.iframe.frame;
 
-    let post = (type, payload = {}) => {
+    const post = (type, payload = {}) => {
         iframe.contentWindow.postMessage({ type, ...payload }, "*");
     };
-    this.on("TfStartShit", () => {
-    if (!this.TfWebcam.stream) {
-        this.TfWebcam.start().then(() => {
-            this.TfWebcam.attach(this.videoElem);
-        });
-    }
-}, false, this.iframe.frame);
 
+    // START WEBCAM + DRAW LOOP
+    this.on("TfStartShit", async () => {
+        if (!this.TfWebcam.stream) {
+            try {
+                await this.TfWebcam.start();            // get MediaStream
+                this.TfWebcam.attach(this.videoElem);   // attach to <video>
+                this.effects.isPlaying = true;
+
+                // FRAME DRAW LOOP
+                const drawLoop = () => {
+                    if (!this.effects.isPlaying) return;
+                    this.effects.drawingFrame(this.videoCanv, this.videoElem);
+                    requestAnimationFrame(drawLoop);
+                };
+                drawLoop();
+            } catch (err) {
+                console.error("Webcam start failed:", err);
+            }
+        }
+    }, false, iframe);
+
+    // STOP WEBCAM
     this.on("TfStopShit", () => {
-      this.TfWebcam.stop();
-    }, false, this.iframe.frame);
+        this.TfWebcam.stop();
+        this.effects.isPlaying = false;
+    }, false, iframe);
 
+    // ENABLE CHROMA KEY
     this.on("TuseFthisKeycolor", () => {
+        const keyInput = this.find("TFchromaKey", true); // color input inside iframe
+        this.effects.ColorPickerChromaKey(keyInput);
+        this.effects.useChromaKey = true;
+    }, false, iframe);
 
-let ValueTF = this.find("TFchromaKey", true);
-this.effects.ColorPickerChromaKey(ValueTF);
-     const drawLoop = () => {
-        this.effects.drawingFrame(this.videoCanv, this.videoElem);
-        requestAnimationFrame(drawLoop);
-    };
-    drawLoop();
-})
-.catch(err => {
-    console.error("Webcam access denied:", err);
-});
-    }, false, this.iframe.frame);
-
+    // DISABLE CHROMA KEY
     this.on("rmvTFchromakey", () => {
-      this.effects.disableChromaKey()
-    }, false, this.iframe.frame);
+        this.effects.disableChromaKey();
+    }, false, iframe);
 
-    this.on("TFuploadImage", (image) => {
+    // UPLOAD / REMOVE BACKGROUND IMAGE
+    this.on("TFuploadImage", (e) => this.effects.UploadImage(e), false, iframe);
+    this.on("rmvTFimg", () => this.effects.RemoveImage(this.videoCanv, this.videoCanv.width, this.videoCanv.height), false, iframe);
 
-      this.effects.UploadImage(image);
-    }, false, this.iframe.frame);
+    // UPLOAD / REMOVE BACKGROUND VIDEO
+    this.on("TFuploadVideo", (e) => this.effects.UploadVideo(e), false, iframe);
+    this.on("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
 
-    this.on("rmvTFimg", (image) => {
-      this.effects.RemoveImage(image);
-    }, false, this.iframe.frame);
+    // START / STOP RECORDING if recorder exists
+    if (this.recorder) {
+        this.on("TfStartRecPlz", () => {
+            this.recorder.start({
+                canvas: this.videoCanv,
+                audioContext: this.audio?.TsunamiRadioAudio,
+                sourceNode: this.audio?.TsunamiRadioMedia,
+            });
+        }, false, iframe);
 
-    this.on("TFuploadVideo", (video) => {
-      this.effects.UploadVideo(video);
-    }, false, this.iframe.frame);
-
-    this.on("rmvTFvid", (video) => {
-      this.effects.RemoveVideo(video);
-    }, false, this.iframe.frame);
-
-    this.on("TfStartRecPlz", () => {
-
-this.recorder.start({
-          canvas: this.videoCanv,
-          audioContext: this.audio?.TsunamiRadioAudio,
-          sourceNode: this.audio?.TsunamiRadioMedia,
-      });
-
-      //this.websocket.connect();
-      //this.websocket.on("open", () => {});
-    }, false, this.iframe.frame);
-
-    this.on("TfStopRecPlz", () => {
-      this.recorder.stop();
-     // this.websocket.close();
-    },false, this.iframe.frame);
-  }
+        this.on("TfStopRecPlz", () => {
+            this.recorder.stop();
+        }, false, iframe);
+    }
+}
   bindGame() {
     //game butftfons.
   }
