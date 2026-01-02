@@ -81,14 +81,11 @@ Controller.iframe.frame.style.background = "white";
 document.addEventListener("DOMContentLoaded", () => {
 Controller.iframe.frame.src = "homepage.html";
 
-Controller.iframe.frame.onload = () => {
-
 Controller.iframe.frame.contentWindow.controller = Controller;
 
 Controller.iframe.MenuSwitch(Controller.iframe.frame);
         Controller.bindNavBar();
 
-}
     for (const [key, button] of Object.entries(navButtons)) {
         button.addEventListener("click", () => {
             Controller.iframe.src = `${key}.html`;
