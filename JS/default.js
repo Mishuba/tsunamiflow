@@ -310,7 +310,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     });
   }
   usePickedColor(useChroma) {
-    this.VidEffects.useChromaKey = true;
+    this.effects.useChromaKey = true;
     useChroma.style.display = "inline";
   }
   VideoEventListeners(engine, element, canvas) {
@@ -568,7 +568,7 @@ this._videoBound = true;
   }
   bindWorker() {
     this.worker.init(this.audioElem);
-    
+
     //this.TfRadioEventListeners();
 //this.audio.MusicNetworkState(this.worker.radioWorker, this.audioElem);
 //this.audio.MusicState(this.audioElem);
