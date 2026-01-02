@@ -401,7 +401,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     this.on("TfControlShit", () => {
       this.bindVideo();
       //webcam now
-    });
+    }, false, this.iframe.frame);
   }
   bindVideo() {
     let iframe = this.iframe.frame;
