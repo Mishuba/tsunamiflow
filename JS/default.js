@@ -437,7 +437,7 @@ this.find("TFcanvas", "canvas", true);
 
     this.on("TuseFthisKeycolor", () => {
  this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
-      this.effects.drawingFrame(this.VidCanv, this.VidElem);
+      this.effects.drawingFrame(this.videoCanv, this.videoElem);
     }, false, this.iframe.frame);
 
     this.on("rmvTFchromakey", () => {
