@@ -464,7 +464,7 @@ this.find("TFcanvas", "canvas", true);
     this.on("TfStartRecPlz", () => {
 
 this.recorder.start({
-          canvas: this.VidCanv,
+          canvas: this.videoCanv,
           audioContext: this.audio?.TsunamiRadioAudio,
           sourceNode: this.audio?.TsunamiRadioMedia,
       });
