@@ -412,6 +412,8 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     }, false, this.iframe.frame);
   }
   bindVideo() {
+if (this._videoBound) return;
+this._videoBound = true;
     const iframe = this.iframe.frame;
 
     const post = (type, payload = {}) => {
