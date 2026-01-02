@@ -441,7 +441,7 @@ this.effects.ColorPickerChromaKey(ValueTF);
 })
 .catch(err => {
     console.error("Webcam access denied:", err);
-}); 
+};
     }, false, this.iframe.frame);
 
     this.on("rmvTFchromakey", () => {
