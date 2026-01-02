@@ -98,12 +98,12 @@ this.TfRadioEventListeners();
   find(elem, type = null, frame = null) {
 if (frame === true) {
    if (type === "video") {
-     return this.iframe.frame.getElementById(elem);
+     return this.iframe.frame.contentDocument.getElementById(elem);
    } else if (type === "canvas") {
-      return this.iframe.frame.getElementById(elem);
+      return this.iframe.frame.contentDocument.getElementById(elem);
    }
 } else {
-      this.extraElem =  document.getElementById(elem);
+      return document.getElementById(elem);
    } 
 }
   on(id, handler, preventDefault = false, iframe = null) {
