@@ -84,12 +84,6 @@ Controller.iframe.frame.src = "homepage.html";
 Controller.iframe.MenuSwitch(Controller.iframe.frame);
         Controller.bindNavBar();
 
-    for (const [key, button] of Object.entries(navButtons)) {
-        button.addEventListener("click", () => {
-            Controller.iframe.frame.src = `${key}.html`;
-        });
-    };
-
 Controller.iframe.frame.addEventListener("load", () => {
     console.log("Iframe loaded:", Controller.iframe.frame.src);
 
