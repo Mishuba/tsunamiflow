@@ -446,7 +446,7 @@ this.effects.disableChromaKey();
     }, false, this.iframe.frame);
 
     this.on("TuseFthisKeycolor", () => {
-      this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
+      this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value));
       this.effects.drawingFrame(this.VidCanv, this.VidElem);
     }, false, this.iframe.frame);
 
