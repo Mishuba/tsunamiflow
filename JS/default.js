@@ -426,7 +426,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
         this.find("TsunamiFlowVideoStuff", "video", true);
 this.find("TFcanvas", "canvas", true);
         this.TfWebcam.start().then(() => {
-            this.TfWebcam.attach(this.VidElem);
+            this.TfWebcam.attach(this.videoElem);
         });
     }
 }, false, this.iframe.frame);
