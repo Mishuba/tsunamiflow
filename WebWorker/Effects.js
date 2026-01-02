@@ -158,7 +158,7 @@ export class TfEffects {
     }
 
     ColorPickerChromaKey(chroma) {
-        this.Tfhex = chroma.target.value;
+        this.Tfhex = chroma.value;
         this.setfChromaHex(this.Tfhex);
         this.useChromaKey = true;
     }
