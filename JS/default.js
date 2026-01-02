@@ -410,14 +410,21 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
         iframe.contentWindow.postMessage({ type, ...payload }, "*");
     };
 
-    this.on("TfStartShit", () => post("TfStartShit"), false, iframe);
-    this.on("TfStopShit", () => post("TfStopShit"), false, iframe);
+    this.on("TfStartShit", () => {
+      this.TfWebcam.start();
+}, false);
+    this.on("TfStopShit", () => {
+      this.TfWebcam.stop();
+}, false);
 
-    this.on("TuseFthisKeycolor", () => post("TuseFthisKeycolor", {
-        value: document.getElementById("TFchromaKey").value
-    }), false, iframe);
+    this.on("TuseFthisKeycolor", () => {
+       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey");
+this.effects.drawingFrame(this.videoElem, this.videoCanv);
+}, false);
 
-    this.on("rmvTFchromakey", () => post("rmvTFchromakey"), false, iframe);
+    this.on("rmvTFchromakey", () => {
+this.effects.disableChromaKey();
+}, false);
     this.on("TFuploadImage", (image) => post("TFuploadImage", { image }), false, iframe);
     this.on("rmvTFimg", (image) => post("rmvTFimg", { image }), false, iframe);
     this.on("TFuploadVideo", (video) => post("TFuploadVideo", { video }), false, iframe);
