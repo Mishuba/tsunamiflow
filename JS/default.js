@@ -95,13 +95,9 @@ this.TfRadioEventListeners();
     }
     this.extraElem = null;
   }
-  find(elem, type = null, frame = null) {
+  find(elem, frame = null) {
 if (frame === true) {
-   if (type === "video") {
-     return this.iframe.frame.contentDocument.getElementById(elem);
-   } else if (type === "canvas") {
-      return this.iframe.frame.contentDocument.getElementById(elem);
-   }
+return this.iframe.frame.contentDocument.getElementById(elem);
 } else {
       return document.getElementById(elem);
    } 
