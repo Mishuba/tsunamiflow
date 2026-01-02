@@ -409,30 +409,6 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     let post = (type, payload = {}) => {
         iframe.contentWindow.postMessage({ type, ...payload }, "*");
     };
-
-    this.on("TfStartShit", () => {
-      this.TfWebcam.start();
-}, false);
-    this.on("TfStopShit", () => {
-      this.TfWebcam.stop();
-}, false);
-
-    this.on("TuseFthisKeycolor", () => {
-       this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
-this.effects.drawingFrame(this.videoElem, this.videoCanv);
-}, false);
-
-    this.on("rmvTFchromakey", () => {
-this.effects.disableChromaKey();
-}, false);
-    this.on("TFuploadImage", (image) => post("TFuploadImage", { image }), false, iframe);
-    this.on("rmvTFimg", (image) => post("rmvTFimg", { image }), false, iframe);
-    this.on("TFuploadVideo", (video) => post("TFuploadVideo", { video }), false, iframe);
-    this.on("rmvTFvid", (video) => post("rmvTFvid", { video }), false, iframe);
-
-    this.on("TfStartRecPlz", () => post("TfStartRecPlz"), false, iframe);
-    this.on("TfStopRecPlz", () => post("TfStopRecPlz"), false, iframe);
-/*
     this.on("TfStartShit", () => {
     if (!this.TfWebcam.stream) {
         this.TfWebcam.start().then(() => {
@@ -486,7 +462,6 @@ this.recorder.start({
       this.recorder.stop();
      // this.websocket.close();
     },false, this.iframe.frame);
-*/
   }
   bindGame() {
     //game butftfons.
