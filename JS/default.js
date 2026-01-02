@@ -433,7 +433,15 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
 
 let ValueTF = this.find("TFchromaKey", true);
 this.effects.ColorPickerChromaKey(ValueTF);
-      this.effects.drawingFrame(this.videoCanv, this.videoElem);
+     const drawLoop = () => {
+        this.effects.drawingFrame(this.videoCanv, this.videoElem);
+        requestAnimationFrame(drawLoop);
+    };
+    drawLoop();
+})
+.catch(err => {
+    console.error("Webcam access denied:", err);
+}); 
     }, false, this.iframe.frame);
 
     this.on("rmvTFchromakey", () => {
