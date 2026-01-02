@@ -95,7 +95,7 @@ Controller.iframe.frame.addEventListener("load", () => {
 
 try {
     console.log("contentWindow:", Controller.iframe.frame.contentWindow);
-if (Controller.iframe.frame.src === "Community.html") {
+if (Controller.iframe.frame.src.endsWith("Community.html")) {
 Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);
 Controller.videoCanv = Controller.find("TFcanvas", true);
 }
