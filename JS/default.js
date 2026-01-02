@@ -98,9 +98,9 @@ this.TfRadioEventListeners();
   find(elem, type = null, frame = null) {
 if (frame === true) {
    if (type === "video") {
-      this.videoElem = this.iframe.frame.getElementById(elem);
+     return this.iframe.frame.getElementById(elem);
    } else if (type === "canvas") {
-      this.vidCanv = this.iframe.frame.getElementById(elem);
+      return this.iframe.frame.getElementById(elem);
    }
 } else {
       this.extraElem =  document.getElementById(elem);
@@ -423,8 +423,8 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     };
     this.on("TfStartShit", () => {
     if (!this.TfWebcam.stream) {
-        this.find("TsunamiFlowVideoStuff", "video", true);
-this.find("TFcanvas", "canvas", true);
+        this.videoElem = this.find("TsunamiFlowVideoStuff", "video", true);
+        this.videoCanv = this.find("TFcanvas", "canvas", true);
         this.TfWebcam.start().then(() => {
             this.TfWebcam.attach(this.videoElem);
         });
