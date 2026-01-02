@@ -430,7 +430,9 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     }, false, this.iframe.frame);
 
     this.on("TuseFthisKeycolor", () => {
- this.effects.ColorPickerChromaKey(document.getElementById("TFchromaKey").value);
+
+let ValueTF = this.find(TFchromaKey);
+this.effects.ColorPickerChromaKey(ValueTF).value);
       this.effects.drawingFrame(this.videoCanv, this.videoElem);
     }, false, this.iframe.frame);
 
