@@ -468,7 +468,6 @@ this._videoBound = true;
     this.on("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
 
     // START / STOP RECORDING if recorder exists
-    if (this.recorder) {
         this.on("TfStartRecPlz", () => {
 this.websocket.connect();
 this.websocket.on("open", () => {
@@ -481,12 +480,11 @@ this.websocket.on("open", () => {
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
         }, false, iframe);
-
+}, false, iframe);
         this.on("TfStopRecPlz", () => {
             this.recorder.stop();
         }, false, iframe);
     }
-}
   bindGame() {
     //game butftfons.
   }
