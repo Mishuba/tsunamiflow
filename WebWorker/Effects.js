@@ -13,6 +13,8 @@ export class TfEffects {
         this.frameCounter = 0;
         this.useChromaKey = false;
         this.visualizatorController;
+this.webcamCanvas = document.createElement("canvas");
+this.webcamCtx = this.webcamCanvas.getContext("2d");
     }
     UploadImage(e) {
         const file = e.target.files[0];
@@ -127,29 +129,40 @@ export class TfEffects {
         );
     }
     drawingFrame(vidCanv, vidElem) {
-        const ctx = vidCanv.getContext("2d");
-        const w = vidCanv.width;
-        const h = vidCanv.height;
+    const ctx = vidCanv.getContext("2d");
+    const w = vidCanv.width;
+    const h = vidCanv.height;
 
-        // 1. background (user-uploaded assets)
-        if (this.backgroundVideo) {
+    // sync offscreen canvas
+    this.webcamCanvas.width = w;
+    this.webcamCanvas.height = h;
+
+    // 1. draw background FIRST
+    ctx.clearRect(0, 0, w, h);
+
+    if (this.backgroundVideo) {
+        if (this.backgroundVideo.readyState >= 2) {
             ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
-        } else if (this.backgroundImg) {
-            ctx.drawImage(this.backgroundImg, 0, 0, w, h);
         }
-
-        // 2. webcam / video
-        if (this.isPlaying) {
-            ctx.drawImage(vidElem, 0, 0, w, h);
-        }
-
-        // 3. effects (pixel-level)
-        if (this.useChromaKey) {
-            const frame = ctx.getImageData(0, 0, w, h);
-            const processed = this.webcam(frame);
-            ctx.putImageData(processed, 0, 0);
-        }
+    } else if (this.backgroundImg) {
+        ctx.drawImage(this.backgroundImg, 0, 0, w, h);
     }
+
+    // 2. draw webcam to OFFSCREEN buffer
+    if (this.isPlaying) {
+        this.webcamCtx.clearRect(0, 0, w, h);
+        this.webcamCtx.drawImage(vidElem, 0, 0, w, h);
+
+        if (this.useChromaKey) {
+            const frame = this.webcamCtx.getImageData(0, 0, w, h);
+            const processed = this.webcam(frame);
+            this.webcamCtx.putImageData(processed, 0, 0);
+        }
+
+        // 3. composite webcam ON TOP of background
+        ctx.drawImage(this.webcamCanvas, 0, 0);
+    }
+}
     setChromaHex(hex) {
         this.rgb = parseInt(hex.slice(1), 16);
         this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
