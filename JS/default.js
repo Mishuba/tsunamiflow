@@ -470,12 +470,17 @@ this._videoBound = true;
     // START / STOP RECORDING if recorder exists
     if (this.recorder) {
         this.on("TfStartRecPlz", () => {
+
+this.websocket.on("open", () => {
+    console.log("WebSocket ready, starting recorder...");
             this.recorder.streamkey = "anything";
             this.recorder.start({
                 canvas: this.videoCanv,
+                ws: this.websocket,
                 audioContext: this.audio?.TsunamiRadioAudio,
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
+this.websocket.connect();
         }, false, iframe);
 
         this.on("TfStopRecPlz", () => {
