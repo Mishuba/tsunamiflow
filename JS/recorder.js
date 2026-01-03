@@ -33,6 +33,7 @@ buildStream({ canvas }) {
 }
     start({
         canvas,
+        ws,
         audioContext = null,
         analyser = null,
     }) {
