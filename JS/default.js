@@ -470,6 +470,7 @@ this._videoBound = true;
     // START / STOP RECORDING if recorder exists
     if (this.recorder) {
         this.on("TfStartRecPlz", () => {
+            this.recorder.streamkey = "anything";
             this.recorder.start({
                 canvas: this.videoCanv,
                 audioContext: this.audio?.TsunamiRadioAudio,
