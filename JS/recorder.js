@@ -48,14 +48,15 @@ buildStream({ canvas }) {
         });
 
         this.recorder.ondataavailable = (e) => {
-            if (!e.data || e.data.size === 0) return;
+                if (!e.data || e.data.size === 0) return;
 
-const xhr = new XMLHttpRequest();
-  xhr.open("POST", `/TfRTMP.php?key=${this.streamkey}`, true);
-  xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    const arrayBuffer = await e.data.arrayBuffer();
+    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
 
-  xhr.send(e.data);
-            
+ws.send(JSON.stringify({
+        type: 'stream_chunk',
+        chunk: base64
+    }));
         };
 
         this.recorder.start(this.chunkMs);
