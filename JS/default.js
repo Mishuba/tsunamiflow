@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, recorder = null, streamer = null) {
     this.user = user;
     if (this.user !== null) {
       this.userFields = {
@@ -84,6 +84,7 @@ this.TfRadioEventListeners();
     this.videoCanv = VideoCanvas;
     this.TfWebcam = webcam;
     this.recorder = recorder;
+    this.streamer = streamer;
     this.game = game;
     if (this.game !== null) {
       this.bindGame();
@@ -472,14 +473,14 @@ this._videoBound = true;
 this.websocket.connect();
 this.websocket.on("open", () => {
     console.log("WebSocket ready, starting recorder...");
-            this.recorder.streamkey = "anything";
-            this.recorder.start({
+
+       let tStream = this.streamer.start({
                 canvas: this.videoCanv,
                 audioContext: this.audio?.TsunamiRadioAudio,
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
 
-this.webrtc.localStream = this.recorder.stream;
+this.webrtc.localStream = tStream;
 this.webrtc.websocket = this.websocket;
 this.webrtc.startStreaming({ streamKey: "anything" });
 
