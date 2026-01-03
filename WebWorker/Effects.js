@@ -28,15 +28,21 @@ this.webcamCtx = this.webcamCanvas.getContext("2d");
         ctx.clearRect(0, 0, canvas_width, canvas_height);
     }
     UploadVideo(e) {
-        const file = e.target.files[0];
-        if (file) {
-            this.backgroundVideo = document.createElement('video');
-            this.backgroundVideo.src = URL.createObjectURL(file);
-            this.backgroundVideo.muted = true; // Mute the video
-            this.backgroundVideo.loop = true; // Loop the video
-            this.backgroundVideo.load();
-        }
+    const file = e.target.files[0];
+    if (file) {
+        this.backgroundVideo = document.createElement("video");
+        this.backgroundVideo.src = URL.createObjectURL(file);
+        this.backgroundVideo.muted = true;
+        this.backgroundVideo.loop = true;
+        this.backgroundVideo.playsInline = true;
+
+        this.backgroundVideo.oncanplay = () => {
+            this.backgroundVideo.play();
+        };
+
+        this.backgroundVideo.load();
     }
+}
     RemoveVideo(ctx, canvas_height, canvas_width) {
         console.log("Placeholder for remove video");
         if (this.backgroundVideo) {
