@@ -286,7 +286,9 @@ this._radioBound = true;
 
     this.audioElem.addEventListener("canplaythrough", async () => {
       this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
-      this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination); this.audio.canplaythroughAudio(this.audioElem);
+      this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination); 
+this.audio.TsunamiAnalyser.connect(this.audio.StreamDestination);
+this.audio.canplaythroughAudio(this.audioElem);
     });
 
     this.audioElem.addEventListener("play", () => {
