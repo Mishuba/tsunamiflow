@@ -48,7 +48,7 @@ let RadioRestartButton = document.createElement("button");
 let RadioStartButton = document.createElement("button");
 let RadioSkipButton = document.createElement("button");
 
-let Socket = new TfWebsocket("ws://world.tsunamiflow.club:8443/ws");
+let Socket = new TfWebsocket("wss://world.tsunamiflow.club:8443/ws");
 let Effects = new TfEffects();
 let TfWeather = new Weather();
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
