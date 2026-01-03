@@ -105,29 +105,43 @@ return this.iframe.frame.contentDocument.getElementById(elem);
    } 
 }
   on(id, handler, preventDefault = false, iframe = null) {
-let el;
-if (iframe === null) {
-  el = document.getElementById(id);
-} else {
-el = iframe?.contentDocument?.getElementById(id);
-}
-  if (!el) return;
-
-  const isForm = el instanceof HTMLFormElement;
-  const isSubmitButton =
-    (el instanceof HTMLButtonElement && el.type === "submit") ||
-    (el instanceof HTMLInputElement &&
-      ["submit", "image"].includes(el.type));
-
-  const eventType = isForm ? "submit" : "click";
-
-  el.addEventListener(eventType, (event) => {
-    if (isForm || isSubmitButton || preventDefault) {
-      event.preventDefault();
-      event.stopPropagation();
+    let el;
+    if (iframe === null) {
+        el = document.getElementById(id);
+    } else {
+        el = iframe?.contentDocument?.getElementById(id);
     }
-    handler(event);
-  });
+    if (!el) return;
+
+    const isForm = el instanceof HTMLFormElement;
+    const isSubmitButton =
+        (el instanceof HTMLButtonElement && el.type === "submit") ||
+        (el instanceof HTMLInputElement &&
+            ["submit", "image"].includes(el.type));
+
+    const runHandler = (event) => {
+        if (isForm || isSubmitButton || preventDefault) {
+            event.preventDefault(); // prevent form submit or default action
+            event.stopPropagation(); // stop bubbling if needed
+        }
+        handler(event);
+    };
+
+    // Original desktop click / submit
+    const eventType = isForm ? "submit" : "click";
+    el.addEventListener(eventType, runHandler);
+
+    // Mobile touch: use touchend instead of touchstart
+    el.addEventListener(
+        "touchend",
+        (e) => {
+            runHandler(e);
+        },
+        { passive: false } // allow preventDefault inside runHandler
+    );
+
+    // Pointer events for stylus / hybrid devices
+    el.addEventListener("pointerdown", runHandler);
 }
   bindNavBar() {
     // navigation menu
