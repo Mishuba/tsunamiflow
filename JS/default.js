@@ -480,7 +480,7 @@ this.websocket.on("open", () => {
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
 
-this.webrtc.localStream = tStream;
+this.webrtc.localStream = tStream.stream;
 this.webrtc.websocket = this.websocket;
 this.webrtc.startStreaming({ streamKey: "anything" });
 
