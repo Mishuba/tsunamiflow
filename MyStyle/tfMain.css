@@ -27,6 +27,11 @@ body {
     overflow-y: auto;
 }
 
+iframe { 
+    pointer-events: auto; 
+    touch-action: manipulation; 
+}
+
 /*
 #id
 .class 
