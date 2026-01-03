@@ -100,18 +100,6 @@
 </div>
 </div>
     <script type="module" crossorigin="anonymous">
-function waitForController(cb) {
-    if (window.controller) {
-        cb();
-    } else {
-        setTimeout(() => waitForController(cb), 25);
-    }
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    waitForController(() => {
-        window.controller.bindVidSystem();
-    });
 
 const sounds = {
 crowd:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
