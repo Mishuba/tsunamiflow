@@ -121,27 +121,31 @@ return this.iframe.frame.contentDocument.getElementById(elem);
 
     const runHandler = (event) => {
         if (isForm || isSubmitButton || preventDefault) {
-            event.preventDefault(); // prevent form submit or default action
-            event.stopPropagation(); // stop bubbling if needed
+            event.preventDefault();
+            event.stopPropagation();
         }
         handler(event);
     };
 
-    // Original desktop click / submit
+    // Desktop click / form submit
     const eventType = isForm ? "submit" : "click";
     el.addEventListener(eventType, runHandler);
 
-    // Mobile touch: use touchend instead of touchstart
+    // Mobile touch: prevent scrolling / double-tap zoom
     el.addEventListener(
         "touchend",
         (e) => {
             runHandler(e);
+            if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
         },
-        { passive: false } // allow preventDefault inside runHandler
+        { passive: false }
     );
 
     // Pointer events for stylus / hybrid devices
-    el.addEventListener("pointerdown", runHandler);
+    el.addEventListener("pointerdown", (e) => {
+        runHandler(e);
+        if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
+    });
 }
   bindNavBar() {
     // navigation menu
