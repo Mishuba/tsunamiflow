@@ -28,6 +28,7 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
+let MishubaScreen = new ScreenShare();
 let TsunamiStream = new TfMediaStream();
 let TfRTC = new TfWebRTCRecorder();
 let Nifage = new User();
@@ -69,7 +70,7 @@ let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordO
 
 let cam = new TfWebcam();
 let recorder = new TfRecorder();
-let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam,  TfRTC, recorder, TsunamiStream);
+let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam,  TfRTC, recorder, TsunamiStream, MishubaScreen);
 
 Controller.iframe.frame.title = "Main Website Content";
 Controller.iframe.frame.id = "TsunamiContent";
