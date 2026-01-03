@@ -474,19 +474,21 @@ this._videoBound = true;
 
     // START / STOP RECORDING if recorder exists
         this.on("TfStartRecPlz", () => {
+this.websocket.socketLink = ""; // get the type and role then add it to the link to properly push as well as the streamkey.
+this.recorder.ws = this.websocket;
 this.websocket.connect();
 this.websocket.on("open", () => {
     console.log("WebSocket ready, starting recorder...");
 
-       let tStream = this.streamer.start({
+       let tStream = this.recorder.start({
                 canvas: this.videoCanv,
                 audioContext: this.audio?.TsunamiRadioAudio,
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
 
-this.webrtc.localStream = tStream.stream;
-this.webrtc.websocket = this.websocket;
-this.webrtc.startStreaming({ streamKey: "anything" });
+//this.webrtc.localStream = tStream.stream; // or tStream.recorder;
+//this.webrtc.websocket = this.websocket;
+//this.webrtc.startStreaming({ streamKey: "anything" });
 
         }, false, iframe);
 }, false, iframe);
