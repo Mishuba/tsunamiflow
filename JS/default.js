@@ -285,9 +285,12 @@ this._radioBound = true;
     }); // The browser can play the media, but estimates that not enough data has been loaded to play the media up to its end without having to stop for further buffering of content.
 
     this.audioElem.addEventListener("canplaythrough", async () => {
-      this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
-      this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination); 
-this.audio.TsunamiAnalyser.connect(this.audio.StreamDestination);
+      if (!this.audio._wired) {
+  this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
+  this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination);
+  this.audio.TsunamiAnalyser.connect(this.audio.StreamDestination);
+  this.audio._wired = true;
+}
 this.audio.canplaythroughAudio(this.audioElem);
     });
 
