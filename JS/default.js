@@ -475,19 +475,20 @@ this.websocket.on("open", () => {
             this.recorder.streamkey = "anything";
             this.recorder.start({
                 canvas: this.videoCanv,
-                ws: this.websocket,
                 audioContext: this.audio?.TsunamiRadioAudio,
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
 
-this.webrtc.localStream = this.recorder.recorder;
+this.webrtc.localStream = this.recorder.stream;
 this.webrtc.websocket = this.websocket;
 this.webrtc.startStreaming({ streamKey: "anything" });
 
         }, false, iframe);
 }, false, iframe);
+
         this.on("TfStopRecPlz", () => {
             this.recorder.stop();
+this.webrtc.stopStreaming();
         }, false, iframe);
     }
   bindGame() {
