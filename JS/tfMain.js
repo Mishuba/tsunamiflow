@@ -28,6 +28,7 @@ if (navigator.cookieEnabled) {
 }
 
 let TsunamiStream = new TfMediaStream();
+let TfRTC = new TfWebRTCRecorder();
 let Nifage = new User();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
