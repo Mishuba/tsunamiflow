@@ -46,10 +46,10 @@ TsunamiRadio.crossOrigin = "anonymous";
 let RadioTitle = document.getElementById("TfRadioStuff");
 let RadioButtons = document.getElementById("CheckRadio");
 //The Frame
-export const twoMore = document.getElementById("mainTsectionFdiv");
+const twoMore = document.getElementById("mainTsectionFdiv");
 let RadioCanvas = document.getElementById("TFradioCanvas");
 
-export const TFiframe = document.createElement("iframe");
+const TFiframe = document.createElement("iframe");
 TFiframe.allow = "camera; microphone; geolocation";
 TFiframe.allowFullscreen = true;
 TFiframe.sandbox = "allow-scripts allow-same-origin";
