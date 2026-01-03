@@ -15,32 +15,31 @@ export class TfRecorder {
         this.audioDest = null;
         this.recording = false;
         this.streamkey = null;
-    }
-useExternalAudioStream(audioStream) {
-    this.externalAudioStream = audioStream;
-}
-buildStream({ canvas }) {
-    const stream = canvas.captureStream(this.fps);
-
-    if (this.externalAudioStream) {
-        this.externalAudioStream
-            .getAudioTracks()
-            .forEach(track => stream.addTrack(track));
+        this.chunks = []; // store chunks locally if needed
     }
 
-    this.stream = stream;
-    return stream;
-}
-    start({
-        canvas,
-        ws,
-        audioContext = null,
-        analyser = null,
-    }) {
+    useExternalAudioStream(audioStream) {
+        this.externalAudioStream = audioStream;
+    }
+
+    buildStream({ canvas }) {
+        const stream = canvas.captureStream(this.fps);
+
+        if (this.externalAudioStream) {
+            this.externalAudioStream
+                .getAudioTracks()
+                .forEach(track => stream.addTrack(track));
+        }
+
+        this.stream = stream;
+        return stream;
+    }
+
+    start({ canvas }) {
         if (this.recording) return;
 
         if (!this.stream) {
-            this.buildStream({ canvas, audioContext, analyser });
+            this.buildStream({ canvas });
         }
 
         this.recorder = new MediaRecorder(this.stream, {
@@ -48,16 +47,10 @@ buildStream({ canvas }) {
             videoBitsPerSecond: this.videoBitrate
         });
 
-        this.recorder.ondataavailable = async (e) => {
-                if (!e.data || e.data.size === 0) return;
-
-    const arrayBuffer = await e.data.arrayBuffer();
-    const base64 = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
-
-ws.send(JSON.stringify({
-        type: 'stream_chunk',
-        chunk: base64
-    }));
+        // Collect chunks locally
+        this.recorder.ondataavailable = (e) => {
+            if (!e.data || e.data.size === 0) return;
+            this.chunks.push(e.data);
         };
 
         this.recorder.start(this.chunkMs);
@@ -76,5 +69,25 @@ ws.send(JSON.stringify({
         this.stop();
         this.stream = null;
         this.audioDest = null;
+        this.chunks = [];
+    }
+
+    // Optional: get the recorded Blob
+    getBlob() {
+        if (!this.chunks.length) return null;
+        return new Blob(this.chunks, { type: this.mimeType });
+    }
+
+    // Optional: download recorded video
+    download(filename = 'recording.webm') {
+        const blob = this.getBlob();
+        if (!blob) return;
+
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
     }
 }
