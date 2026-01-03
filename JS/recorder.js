@@ -14,6 +14,7 @@ export class TfRecorder {
         this.recorder = null;
         this.audioDest = null;
         this.recording = false;
+        this.streamkey = null;
     }
 useExternalAudioStream(audioStream) {
     this.externalAudioStream = audioStream;
