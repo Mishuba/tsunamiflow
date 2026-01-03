@@ -95,7 +95,7 @@ Controller.videoCanv = Controller.find("TFcanvas", true);
 }
 Controller.iframe.frame.contentWindow.controller = Controller;
     console.log("Controller injected into iframe");
-Controller.bindVidSystem();
+Controller.iframe.frame.bindVidSystem();
 } catch (e) {
     console.error("Cross-origin block:", e);
 }
