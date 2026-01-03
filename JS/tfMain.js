@@ -1,4 +1,4 @@
-import {} from "./Streamer.js";
+import { TfMediaStream} from "./Streamer.js";
 import { navButtons } from "./Objects.js";
 import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
@@ -26,6 +26,7 @@ if (navigator.cookieEnabled) {
     console.log("Cookies are not enabled");
 }
 
+let TsunamiStream = new TfMediaStream();
 let Nifage = new User();
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
@@ -65,7 +66,7 @@ let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordO
 
 let cam = new TfWebcam();
 let recorder = new TfRecorder();
-let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder);
+let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder, TsunamiStream);
 
 Controller.iframe.frame.title = "Main Website Content";
 Controller.iframe.frame.id = "TsunamiContent";
