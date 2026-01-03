@@ -68,7 +68,7 @@ let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordO
 
 let cam = new TfWebcam();
 let recorder = new TfRecorder();
-let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, recorder, TsunamiStream);
+let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam,  TfRTC, recorder, TsunamiStream);
 
 Controller.iframe.frame.title = "Main Website Content";
 Controller.iframe.frame.id = "TsunamiContent";
