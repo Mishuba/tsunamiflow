@@ -76,6 +76,8 @@ Controller.iframe.frame.name = "TsunamiMainFlowContent";
 Controller.iframe.frame.width = 925;
 Controller.iframe.frame.height = 430;
 Controller.iframe.frame.style.background = "white";
+Controller.iframe.frame.style.touchAction = "manipulation"; // prevent double-tap zoom and unwanted scrolling
+Controller.iframe.frame.style.pointerEvents = "auto";      // ensure pointer events fire
 
     if (twoMore) {
         twoMore.appendChild(Controller.iframe.frame);
