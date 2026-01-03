@@ -458,7 +458,7 @@ this._videoBound = true;
                 this.effects.isPlaying = true;
 
 let webcamAudioStream = new MediaStream();
-webcamAudioStream.addTrack(tfWebcam.audioTrack);
+webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
 let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudioStream);
 
 sourceNode.connect(this.audio.TsunamiAnalyser);
