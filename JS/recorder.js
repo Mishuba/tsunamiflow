@@ -85,6 +85,7 @@ export class TfRecorder {
 
         this.recorder.start(this.chunkMs); // chunkMs controls chunk frequency
         this.recording = true;
+return this.stream;
     }
 
     stop() {
