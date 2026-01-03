@@ -482,6 +482,7 @@ this.websocket.on("open", () => {
 
 this.webrtc.localStream = this.recorder.recorder;
 this.webrtc.websocket = this.websocket;
+this.webrtc.startStreaming({ streamKey: "anything" });
 
         }, false, iframe);
 }, false, iframe);
