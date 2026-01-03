@@ -241,6 +241,9 @@ element.src = "";
     );
   }
   TfRadioEventListeners() {
+
+if (this._radioBound) return;
+this._radioBound = true;
    this.audioElem.addEventListener("emptied", async (emptied) => {
       this.audio.emptiedAudio(emptied);  cancelAnimationFrame(this.effects.visualizatorController);
     }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
