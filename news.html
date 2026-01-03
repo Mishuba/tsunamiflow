@@ -18,7 +18,7 @@
 <h1>🎥 TsunamiFlow Live</h1>
 
 <!-- VIDEO STREAM -->
-<video id="stream" controls autoplay muted></video>
+<video id="stream" type="application/vnd.apple.mpegurl" controls autoplay muted></video>
 
 <!-- CHAT -->
 <h2>💬 Live Chat</h2>
@@ -58,7 +58,7 @@ let socket;
 let reconnectInterval = 2000;
 
 function connectWebSocket() {
-    socket = new WebSocket("wss://world.tsunamiflow.club/ws");
+    socket = new WebSocket("wss://world.tsunamiflow.club/ws?key=bye?role=chat");
 
     socket.onopen = () => console.log("WebSocket connected!");
     socket.onclose = () => {
