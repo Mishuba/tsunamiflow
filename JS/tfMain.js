@@ -66,8 +66,8 @@ let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
 let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
-let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia);
 let StreamDestination = TsunamiAudioCtx.createMediaStreamDestination();
+let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia, StreamDestination);
 let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
 
 let Live = new TfVideo(Socket, Effects);
