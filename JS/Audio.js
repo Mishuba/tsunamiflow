@@ -1,6 +1,6 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 export class TfMusic {
-    constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null) {
+    constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null, AudioStream = null) {
         this.textTrackOptions = {
             kind: "subtitles", // caption, descriptions, chapters, metadata
             label: "name",
@@ -91,6 +91,7 @@ export class TfMusic {
         };
         this.WeLive = false;
         this.LiveAudioLink;
+        this.StreamDestination = AudioStream;
     }
     startMusic(element) {
         if (element.paused) {
