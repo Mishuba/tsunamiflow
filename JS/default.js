@@ -504,11 +504,10 @@ this.websocket.connect();
 this.websocket.on("open", () => {
     console.log("WebSocket ready, starting recorder...");
 
-       let tStream = this.recorder.start({
-                canvas: this.videoCanv,
-                audioContext: this.audio?.TsunamiRadioAudio,
-                sourceNode: this.audio?.TsunamiRadioMedia,
-            });
+this.recorder.useExternalAudioStream(
+    this.audio.StreamDestination.stream
+);
+       let tStream = this.recorder.start(this.videoCanv);
 
 //this.webrtc.localStream = tStream.stream; // or tStream.recorder;
 //this.webrtc.websocket = this.websocket;
