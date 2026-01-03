@@ -53,7 +53,7 @@ export class TfRecorder {
             this.chunks.push(e.data);
         };
 
-        this.recorder.start(this.chunkMs);
+       // this.recorder.start(this.chunkMs);
         this.recording = true;
     }
 
