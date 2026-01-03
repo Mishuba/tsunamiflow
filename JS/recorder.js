@@ -47,7 +47,7 @@ buildStream({ canvas }) {
             videoBitsPerSecond: this.videoBitrate
         });
 
-        this.recorder.ondataavailable = (e) => {
+        this.recorder.ondataavailable = async (e) => {
                 if (!e.data || e.data.size === 0) return;
 
     const arrayBuffer = await e.data.arrayBuffer();
