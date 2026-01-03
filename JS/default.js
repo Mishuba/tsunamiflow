@@ -462,6 +462,7 @@ webcamAudioStream.addTrack(tfWebcam.audioTrack);
 let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudioStream);
 
 sourceNode.connect(this.audio.TsunamiAnalyser);
+sourceNode.connect(this.audio.StreamDestination);
                 // FRAME DRAW LOOP
                 const drawLoop = () => {
                     if (!this.effects.isPlaying) return;
