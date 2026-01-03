@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
     if (this.user !== null) {
       this.userFields = {
@@ -96,6 +96,7 @@ this.TfRadioEventListeners();
       //this.bindCart();
     }
     this.extraElem = null;
+    this.MyScreen = screenshare;
   }
   find(elem, frame = null) {
 if (frame === true) {
