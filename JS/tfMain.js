@@ -1,4 +1,5 @@
-import { TfMediaStream} from "./Streamer.js";
+import { TfMediaStream } from "./Streamer.js";
+import { TfWebRTCRecorder } from "./TfWebRtc.js";
 import { navButtons } from "./Objects.js";
 import { RadioTimes, WordTimes } from "./Arrays.js";
 //import { } from "./Classes.js";
