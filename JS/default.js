@@ -479,6 +479,10 @@ this.websocket.on("open", () => {
                 audioContext: this.audio?.TsunamiRadioAudio,
                 sourceNode: this.audio?.TsunamiRadioMedia,
             });
+
+this.webrtc.localStream = this.recorder.recorder;
+this.webrtc.websocket = this.websocket;
+
         }, false, iframe);
 }, false, iframe);
         this.on("TfStopRecPlz", () => {
