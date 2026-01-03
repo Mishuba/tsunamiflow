@@ -462,7 +462,6 @@ webcamAudioStream.addTrack(tfWebcam.audioTrack);
 let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudioStream);
 
 sourceNode.connect(this.audio.TsunamiAnalyser);
-
                 // FRAME DRAW LOOP
                 const drawLoop = () => {
                     if (!this.effects.isPlaying) return;
@@ -510,7 +509,6 @@ this.websocket.connect();
 this.websocket.on("open", () => {
     console.log("WebSocket ready, starting recorder...");
 
-recorder.useExternalAudioStream(webcamAudioStream);
 this.recorder.useExternalAudioStream(
     this.audio.StreamDestination.stream
 );
