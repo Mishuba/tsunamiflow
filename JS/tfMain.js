@@ -32,6 +32,13 @@ let MishubaScreen = new ScreenShare();
 let TsunamiStream = new TfMediaStream();
 let TfRTC = new TfWebRTCRecorder();
 let Nifage = new User();
+let Effects = new TfEffects();
+let TfWeather = new Weather();
+let cam = new TfWebcam();
+let recorder = new TfRecorder();
+
+document.addEventListener("DOMContentLoaded", () => {
+
 let MyNewTFTime = document.getElementById("TFtime");
 let TfWotd = document.getElementById("tfWordOfTheDay");
 let TsunamiRadio = document.getElementById("TFradioPlayer");
@@ -55,8 +62,6 @@ let RadioStartButton = document.createElement("button");
 let RadioSkipButton = document.createElement("button");
 
 let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");
-let Effects = new TfEffects();
-let TfWeather = new Weather();
 let TsunamiAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
 RadioAnalyser.fftSize = 2048;
@@ -67,9 +72,6 @@ let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
 let Live = new TfVideo(Socket, Effects);
 
 let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
-
-let cam = new TfWebcam();
-let recorder = new TfRecorder();
 let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam,  TfRTC, recorder, TsunamiStream, MishubaScreen);
 
 Controller.iframe.frame.title = "Main Website Content";
@@ -81,12 +83,12 @@ Controller.iframe.frame.style.background = "white";
 Controller.iframe.frame.style.touchAction = "manipulation"; // prevent double-tap zoom and unwanted scrolling
 Controller.iframe.frame.style.pointerEvents = "auto";      // ensure pointer events fire
 
-    if (twoMore) {
+if (twoMore) {
         twoMore.appendChild(Controller.iframe.frame);
     } else {
         console.error("Element with id 'mainTsectionFdiv' not found.");
     }
-document.addEventListener("DOMContentLoaded", () => {
+
 Controller.iframe.frame.src = "homepage.html";
 
 Controller.iframe.MenuSwitch(Controller.iframe.frame);
