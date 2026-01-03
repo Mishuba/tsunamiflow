@@ -42,7 +42,7 @@ export class TfRecorder {
 
     connectWebSocket() {
         if (!this.streamKey) throw new Error('streamKey required');
-        this.ws = new WebSocket(`${this.wsUrl}?key=${this.streamKey}&role=broadcaster`);
+        //this.ws = new WebSocket(`${this.wsUrl}?key=${this.streamKey}&role=broadcaster`);
         this.ws.binaryType = 'arraybuffer';
 
         this.ws.onopen = () => {
@@ -59,7 +59,7 @@ export class TfRecorder {
         };
     }
 
-    start({ canvas }) {
+    start( canvas, ws ) {
         if (this.recording) return;
 
         if (!this.stream) this.buildStream({ canvas });
