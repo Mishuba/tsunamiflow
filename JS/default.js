@@ -506,7 +506,7 @@ sourceNode.connect(this.audio.StreamDestination);
         this.on("TfStartRecPlz", () => {
 this.websocket.socketLink = `wss://world.tsunamiflow.club/ws?key=anything&role=broadcaster`; // get the type and role then add it to the link to properly push as well as the streamkey.
 this.recorder.streamKey = "anything";
-this.recorder.ws = this.websocket;
+this.recorder.ws = this.websocket.tfSocket;
 this.websocket.connect();
 this.websocket.on("open", () => {
     console.log("WebSocket ready, starting recorder...");
