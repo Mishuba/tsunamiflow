@@ -1,7 +1,7 @@
 {
   "headers": {
     "/**": {
-      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Origin": "https://www.tsunamiflow.club",
       "Cache-Control": "public, max-age=86400",
 "Content-Security-Policy": "default-src 'self'; connect-src 'self' wss://world.tsunamiflow.club:8443; media-src 'self' https://radio.tsunamiflow.club"
     }
