@@ -11,5 +11,5 @@ services:
       - path: /Music/*
         rewrite: https://radio.tsunamiflow.club/Music/:splat
         headers:
-          Access-Control-Allow-Origin: "*"
+          Access-Control-Allow-Origin: "https://tsunamiflow.club"
           Cache-Control: "public, max-age=86400"
