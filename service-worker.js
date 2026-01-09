@@ -1,4 +1,4 @@
-const CACHE_NAME = "tf-cache-v2";
+const CACHE_NAME = "tf-cache-v3";
 const OFFLINE_URL = "/offline.html"; //change to php please
 const PRECACHE = [
     "/",
