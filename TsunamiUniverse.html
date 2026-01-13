@@ -13,63 +13,67 @@
   </header>
   <main>
     <section id="image">
-    <input type="file" id="TFuploadImage" accept="image/*">
-    <button id="rmvTFimg">Remove Image</button>
+      <input type="file" id="TFuploadImage" accept="image/*">
+      <button id="rmvTFimg">Remove Image</button>
     </section>
     <section id="video">
-     <button id="TfControlShit">Control I Guess.</button>
-         <input type="file" id="TFuploadVideo" accept="video/*">
-         <br>
-    <button id="rmvTFvid">Remove Video</button>
-     <video id="TsunamiFlowVideoStuff" width="640" height="480" autoplay></video>
-     
+      <button id="TfControlShit">Control I Guess.</button>
+      <input type="file" id="TFuploadVideo" accept="video/*">
+      <br>
+      <button id="rmvTFvid">Remove Video</button>
+      <video id="TsunamiFlowVideoStuff" width="640" height="480" autoplay></video>
+      
     </section>
     <section id="text">
-      
+                      <form id="TFthoughtsNow" method="POST" action="server.php" target="_blank">
+                  <label for="TFthoughtLabel"><textarea name="tfThoughtArea" id="TFthought" cols="14" rows="5" placeholder="Share your thoughts with everyone."></textarea></label>
+                  <br />
+                  <input type="submit" id="ThoughtsButtonTFok" name="tfTbutton" value="Release" />
+                </form>
     </section>
     <section id="broadcast">
       <button id="TfStartShit">Start</button>
       <button id="TfStopShit">Stop</button>
-          <input type="color" id="TFchromaKey" value="#00ff00">
-    <button id="TuseFthisKeycolor">Use Webcam Chroma Key Color</button>
-    
-    <button id="rmvTFchromakey">Remove Chroma Key Color</button>
+      <input type="color" id="TFchromaKey" value="#00ff00">
+      <button id="TuseFthisKeycolor">Use Webcam Chroma Key Color</button>
+      
+      <button id="rmvTFchromakey">Remove Chroma Key Color</button>
       <canvas id="TFcanvas" width="640" height="480"></canvas>
-    <button id="start">Start Broadcast</button>
-<button id="stop" disabled>Stop</button><br>
-<label><input type="checkbox" id="videoToggle" checked> Include Video</label>
-<label><input type="checkbox" id="musicToggle" checked> Include Music</label>
+      <button id="start">Start Broadcast</button>
+      <button id="stop" disabled>Stop</button><br>
+      <label><input type="checkbox" id="videoToggle" checked> Include Video</label>
+      <label><input type="checkbox" id="musicToggle" checked> Include Music</label>
     </section>
     <section id="audio">
       <h3>🎶 Music Player</h3>
-<audio id="music" controls></audio><br>
-<select id="playlist">
-  <option value="">-- Select Song --</option>
-  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
-  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
-  <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
-</select>
-<input type="file" id="fileInput" accept="audio/*">
-<h3>🎛️ Sound Effects</h3>
-<button data-sound="crowd">Crowd Clapping</button>
-<button data-sound="bomb">Bomb</button>
-<button data-sound="gun">Gun Shots</button>
-<button data-sound="laugh">Crowd Laughing</button>
-<button data-sound="intro">Intro</button>
-<button data-sound="hellnah">Hell Nah</button>
-<button data-sound="shock">Shocked</button>
-<button data-sound="wtf">Questioned (WTF)</button>
-<button data-sound="other">Other</button>
-<label>🎤 Mic Volume</label><br>
-<input type="range" id="micVol" min="0" max="1" step="0.01" value="1">
-</div>
-<div class="slider-group">
-  <label>🎵 Music Volume</label><br>
-  <input type="range" id="musicVol" min="0" max="1" step="0.01" value="0.8">
-</div>
-<div class="slider-group">
-  <label>💥 Effects Volume</label><br>
-  <input type="range" id="fxVol" min="0" max="1" step="0.01" value="0.9">
+      <audio id="music" controls></audio><br>
+      <select id="playlist">
+        <option value="">-- Select Song --</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
+        <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
+      </select>
+      <input type="file" id="fileInput" accept="audio/*">
+      <h3>🎛️ Sound Effects</h3>
+      <button data-sound="crowd">Crowd Clapping</button>
+      <button data-sound="bomb">Bomb</button>
+      <button data-sound="gun">Gun Shots</button>
+      <button data-sound="laugh">Crowd Laughing</button>
+      <button data-sound="intro">Intro</button>
+      <button data-sound="hellnah">Hell Nah</button>
+      <button data-sound="shock">Shocked</button>
+      <button data-sound="wtf">Questioned (WTF)</button>
+      <button data-sound="other">Other</button>
+      <label>🎤 Mic Volume</label><br>
+      <input type="range" id="micVol" min="0" max="1" step="0.01" value="1">
+      </div>
+      <div class="slider-group">
+        <label>🎵 Music Volume</label><br>
+        <input type="range" id="musicVol" min="0" max="1" step="0.01" value="0.8">
+      </div>
+      <div class="slider-group">
+        <label>💥 Effects Volume</label><br>
+        <input type="range" id="fxVol" min="0" max="1" step="0.01" value="0.9">
     </section>
   </main>
   <footer>
