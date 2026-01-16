@@ -231,6 +231,128 @@ document.addEventListener("DOMContentLoaded", () => {
   let StreamDestination = TsunamiAudioCtx.createMediaStreamDestination();
   let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia, StreamDestination);
   let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
+
+let player1 = new gameComponent(tfSNW, tfSNH, "blue", tfSPX, tfSPY, "player", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, homePageArray, PlayerState, AckmaHawkBattleBackground, "Tsunami", "Flow", "TF", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+
+let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+
+let Mishuba = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Mishuba", "Feilong", "2Fly", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+
+let AckmaHawk = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Sagoonma", "", "Ackma Hawk", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+
+let Halu = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Sagoonma", "", "Ackma Hawk", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+
+//default character
+export let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
+
+//Characters
+    //Shapes
+    export let FirstGame = new letsDoIt("Homepage Game", player1); //default page setup without sprite
+    //Stickman
+    export let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
+
+    //Mishuba
+    export let mishuba = new letsDoIt("", Mishuba); //mishuba aka my user setup using images.
+    //Know Tyme
+    //Lockdown
+    //Shadow
+
+    //My book.
+    export let ackmaHawk = new letsDoIt("", AckmaHawk); // my super hero setup 
+    export let halu = new letsDoIt("", Halu); //my super villain setup.
+    //Duwen
+// 
+
+//Characters End
+
+/*
+    //Make canvas a blob
+    function theBlobImage(blob) {
+        const canvaBlobImage = document.createElement("img");
+        const canvaURLblobImage = URL.createObjectURL(blob);
+
+        canvaBlobImage.onload = () => {
+        // no longer need to read the blob so it's revoked
+        URL.revokeObjectURL(canvaURLblobImage);
+        };
+
+        canvaBlobImage.src = canvaURLblobImage;
+        document.body.appendChild(canvaBlobImage);
+    }
+
+    FirstGame.canvas.toBlob(theBlobImage, image/jpg, 1); //this if for images.
+        //Exceptions 
+            //SecurityError
+
+    //Make Canvas an image.
+
+    //Context Stuff
+    FirstGame.context.createImageData(width,height,settings);
+
+    //imageData
+        //An ImageData object containing the array of pixel values.
+    let imageData = FirstGame.context.getImageData(sx, sy, sw, sh, settings);
+
+    //Green Screen 
+        for (let i = 0; i < imageData.data.length; i += 4) {
+        //Modify pixel data
+        imageData.data[i + 0] = 190; //red
+        imageData.data[i + 1] = 0; //Green
+        imageData.data[i + 2] = 210; //Blue
+        imageData.data[i + 3] = 255; //A (what is a);
+    }
+
+    
+    FirstGame.context.putImageData(imageData,dx,dy,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
+    */
+/*
+    dx
+    Horizontal position (x coordinate) at which to place the image data in the destination canvas.
+
+    dy
+    Vertical position (y coordinate) at which to place the image data in the destination canvas.
+
+    dirtyX Optional
+    Horizontal position (x coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
+
+    dirtyY Optional
+    Vertical position (y coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
+
+    dirtyWidth Optional
+    Width of the rectangle to be painted. Defaults to the width of the image data.
+
+    dirtyHeight Optional
+    Height of the rectangle to be painted. Defaults to the height of the image data.
+*/
+
+/*
+FirstGame.context.
+FirstGame.context.canvas;
+FirstGame.context.save();
+FirstGame.context.restore();
+FirstGame.context.reset();
+FirstGame.context.scale(x,y);
+FirstGame.context.rotate(angle);
+FirstGame.context.translate(x,y);
+FirstGame.context.transform(a,b,c,d,e,f);
+FirstGame.context.setTransform(a,b,c,d,e,f);
+FirstGame.context.resetTransform();
+FirstGame.context.globalAlpha;
+FirstGame.context.globalCompositeOperation;
+FirstGame.context.imageSmoothingEnabled;
+
+    //do this inside the iframe.
+        window.addEventListener("message", (event) => {
+            const { type, info } = event.data;
+ 
+            if (type === "game") {
+                const game = letsDoIt.from(event.data.info);
+            }
+        });
+
+        FirstGame.start() 
+        //startGame(FirstGame); // Original but startGame code is deleted.
+*/
   
   let Live = new TfVideo(Socket, Effects);
   
