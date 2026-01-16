@@ -28,6 +28,168 @@ if (navigator.cookieEnabled) {
   console.log("Cookies are not enabled");
 }
 
+const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
+const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
+const StickMan = new Image();
+StickMan.src = linkToSpriteSheet;
+
+let AckmaHawkSpriteSheet = "";
+
+let tfSSCX = 0; //Character State Location Row
+let AckmaHawkSpriteSheetState = 0;
+let tfSSCY = 0; //Character State Frame Column
+let AckmaHawkSpriteSheetFrame = 0;
+let tfSCW = 120; // Character Size in image file width
+let AckmaHawkSpritSheetWidth = 120;
+let tfSCH = 120; // Character Size in image file height
+let AckmaHawkSpriteSheetHeight = 120;
+let tfSPX = 60; //position of character Left and Right Movement
+let AckmaHawkCanvasX = 60; //CanvasWidth / 2
+let tfSPY = 160; // position of character Up and Down Movement
+let AckmaHawkCanvasY = 160; //CanvasHeight /2 
+let tfSNW = 30; //Size of character The width 
+let AckmaHawkCanvasWidth = 30; //CanvasWidth * 0.25;
+let tfSNH = 30; //Size of character The Height
+let AckmaHawkCanvasHeight = 30; //CanvasHeight * 0.25;
+let AckmaHawkType = "sprite";
+/*
+export const StickmanStates = [
+    { name: "stand", frames: 2 },
+    { name: "walk", frames: 2 },
+    { name: "run", frames: 2 },
+    { name: "jump", frames: 2 },
+    { name: "double jump", frames: 2 },
+    { name: "crouch", frames: 2 },
+    { name: "crawl", frames: 2 },
+    { name: "climb", frames: 2 },
+    { name: "swim", frames: 2 },
+    { name: "dive", frames: 2 },
+    { name: "fly", frames: 2 },
+    { name: "Cycle Through Items", frames: 2 },
+    { name: "Pick Up", frames: 2 },
+    { name: "World Interaction", frames: 2 },
+    { name: "Use Item", frames: 2 },
+    { name: "weak attack", frames: 2 },
+    { name: "strong attack", frames: 2 },
+    { name: "special attack", frames: 2 },
+    { name: "main skill", frames: 2 },
+    { name: "aoe skill", frames: 2 },
+    { name: "range skill", frames: 2 },
+    { name: "knockback skill", frames: 2 },
+    { name: "evade skill", frames: 2 },
+    { name: "defense skill", frames: 2 },
+    { name: "buff skill", frames: 2 },
+    { name: "debuff skill", frames: 2 },
+    { name: "ultimate skill", frames: 2 },
+    { name: "block", frames: 2 },
+    { name: "parry", frames: 2 }
+];
+*/
+let AckmaHawkTextWidth = 280;
+let AckmaHawkTextHeight = 40;
+let AckmaHawkTextSize = "30px";
+let AckmaHawkTextStyle = "Consolas";
+let AckmaHawkTextAlign = "center"; //end, left, right, center
+let AckmaHawkTextBaseLine = "alphabetic"; //top, hanging, middle, ideographic, bottom
+let AckmaHawkTextDirection = "inherit"; //ltr, rtl
+let AckmaHawkLetterSpacing = 0;
+let AckmaHawkFontKerning = "auto";
+let AckmaHawkFontStretch = "normal"; //ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
+let AckmaHawkFontVariantCaps = "normal" //small-caps, all-small-caps, petite-caps, all-petite-caps, unicase, titling-caps
+let AckmaHawkTextRendering = "auto"; //optimizeSpeed, optimizeLegibility, geometricPrecision
+let AckmaHawkWordSpacing = 0;
+let AckmaHawkTextSettings;
+let AckmaHawkDialog = "testing";
+let StickManDialog = [];
+let homePageArray = [
+    "Welcome to tsunamiflow.club",
+    "This is the homebase for Tsunami Flow",
+    "We are currently working on content for the website.",
+    "Come by often and check for updates.",
+    "Please be patient"
+];
+let PhysicalAbility = [
+    { name: "health", points: 1 },
+    { name: "stamina", points: 1 },
+    { name: "weight", points: 1 },
+    { name: "strength", points: 1 },
+    { name: "agility", points: 1 }
+];
+let AckmaHawkIntellectualIntelligence = [
+    { name: "Science", level: 0, experience: 0 },
+    { name: "Creativity", level: 0, experience: 0 },
+    { name: "Math", level: 0, Engineering: 0 },
+    { name: "Memory", level: 0, experience: 0 },
+    { name: "Awareness", level: 0, experience: 0 }
+];
+let AckmaHawkSocialIntelligence = [
+    { name: "Reflection", level: 0, experience: 0 },
+    { name: "honesty", level: 0, experience: 0 },
+    { name: "deception", level: 0, experience: 0 },
+    { name: "manipulation", level: 0, experience: 0 },
+    { name: "charisma", level: 0, experience: 0 }
+];
+let AckmaHawkEmotionalIntelligence = [
+    { name: "feelings", level: 0, experience: 0 },
+    { name: "mood", level: 0, experience: 0 },
+    { name: "temper", level: 0, experience: 0 },
+    { name: "attitude", level: 0, experience: 0 },
+    { name: "perspective", level: 0, experience: 0 }
+];
+let AckmaHawkExistentialIntelligence = [
+    { name: "consciousness", level: 0, experience: 0 },
+    { name: "time", level: 0, experience: 0 },
+    { name: "dimension", level: 0, experience: 0 },
+    { name: "space", level: 0, experience: 0 },
+    { name: "defense", level: 0, experience: 0 }
+];
+let AckmaHawkEnergeticIntelligence = [
+    { name: "fire", level: 0, experience: 0 },
+    { name: "water", level: 0, experience: 0 },
+    { name: "air", level: 0, experience: 0 },
+    { name: "lightning", level: 0, experience: 0 },
+    { name: "earth", level: 0, experience: 0 }
+];
+let AckmaHawkMetaCognitiveIntelligence = [
+    { name: "magic", level: 0, experience: 0 },
+    { name: "ESP", level: 0, experience: 0 },
+    { name: "dexterity", level: 0, experience: 0 },
+    { name: "genetic", level: 0, experience: 0 },
+    { name: "personal", level: 0, experience: 0 }
+];
+let AckmaHawkHeadArmor = 1;
+let AckmaHawkBodyArmor = 1;
+let AckmaHawkLegArmor = 1;
+let AckmaHawkarmArmor = 1;
+let AckmaHawkweakAttack = 1;
+let AckmaHawkstrongAttack = 1;
+let AckmaHawkspecialAttack = 1;
+let AckmaHawkknockBackSkill = 1;
+let AckmaHawkaoeSkill = 1;
+let AckmaHawkbuffSkill = 1;
+let AckmaHawkmainSkill = 1;
+let AckmaHawkevadeSkill = 1;
+let AckmaHawkrangeSkill = 1;
+let AckmaHawkdebuffSkill = 1;
+let AckmaHawkdefenseSkill = 1;
+let AckmaHawkultimateSkill = 1;
+let PlayerState = "stand";
+
+// items
+var fullHeal;
+var fullStamina;
+var fullMagic;
+
+// Armour
+var armourSet1;
+var armourSet2;
+var armourSet3;
+var armourSet4;
+var armourSet5;
+var armourSet6;
+var armourSet7;
+var armourSet8;
+
 let MishubaScreen = new ScreenShare();
 let TsunamiStream = new TfMediaStream();
 let TfRTC = new TfWebRTCRecorder();
