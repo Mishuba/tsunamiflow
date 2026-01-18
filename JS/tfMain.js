@@ -243,22 +243,22 @@ let AckmaHawk = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, A
 let Halu = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Sagoonma", "", "Ackma Hawk", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
 
 //default character
-export let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
+let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
 
 //Characters
     //Shapes
-    export let FirstGame = new letsDoIt("Homepage Game", player1); //default page setup without sprite
+    let FirstGame = new letsDoIt("Homepage Game", player1); //default page setup without sprite
     //Stickman
-    export let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
+    let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
     //Mishuba
-    export let mishuba = new letsDoIt("", Mishuba); //mishuba aka my user setup using images.
+    let mishuba = new letsDoIt("", Mishuba); //mishuba aka my user setup using images.
     //Know Tyme
     //Lockdown
     //Shadow
 
     //My book.
-    export let ackmaHawk = new letsDoIt("", AckmaHawk); // my super hero setup 
+    let ackmaHawk = new letsDoIt("", AckmaHawk); // my super hero setup 
     export let halu = new letsDoIt("", Halu); //my super villain setup.
     //Duwen
 // 
