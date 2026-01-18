@@ -1,4 +1,4 @@
-import { gamecomponent } from "./planetuniverse.js";
+import { gameComponent } from "./planetuniverse.js";
 import { letsDoIt } from "./gamemechanics.js";
 import { ScreenShare } from "./ScreenSharer.js";
 import { TfMediaStream } from "./Streamer.js";
