@@ -259,7 +259,7 @@ let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i
 
     //My book.
     let ackmaHawk = new letsDoIt("", AckmaHawk); // my super hero setup 
-    export let halu = new letsDoIt("", Halu); //my super villain setup.
+    let halu = new letsDoIt("", Halu); //my super villain setup.
     //Duwen
 // 
 
