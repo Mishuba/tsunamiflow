@@ -528,6 +528,32 @@ this.recorder.useExternalAudioStream(
 this.webrtc.stopStreaming();
         }, false, iframe);
     }
+  getControllerType(gamepad) {
+        // Detect controller type based on button layout
+        if (gamepad.buttons[0].value === 1) {
+            return 'playstation';
+        } else if (gamepad.buttons[1].value === 1) {
+            return 'xbox';
+        } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
+            return 'switch';
+        } //else {return pcControls();}; 
+    };
+    gamepadHandler(event, connected) {
+        const gamepad = event.gamepad;
+        if (connected) {
+            this.game.controllerIndex = gamepad.index;
+            console.log("Controller connected at index:", controllerIndex);
+            this.game.controllerType = this.getControllerType(gamepad);
+            console.log("Controller type detected:", this.game.controllerType);
+            gamepads[gamepad.index] = gamepad;
+            console.log(`Gamepad connected: ${gamepad.id}`);
+        } else {
+            this.game.controllerIndex = null;
+            this.game.controllerType = null;
+            delete gamepads[gamepad.index];
+            console.log(`Gamepad disconnected: ${gamepad.id}`);
+        }
+    }
   bindGame() {
     //game butftfons.
   }
