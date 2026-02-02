@@ -37,6 +37,11 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
+const url = new URL(event.request.url);
+
+  if (url.hostname === "world.tsunamiflow.club") {
+    return; // Let the network handle it
+  }
     const req = event.request;
 
     if (req.mode === "navigate") {
