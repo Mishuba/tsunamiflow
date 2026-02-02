@@ -50,7 +50,7 @@ export class TfRecorder {
             this.chunks.push(e.data);
                 const arrayBuffer = await e.data.arrayBuffer();
                 
-
+}
         this.recorder.start(this.chunkMs); // chunkMs controls chunk frequency
         this.recording = true;
 return this.stream;
