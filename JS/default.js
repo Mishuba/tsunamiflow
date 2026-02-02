@@ -514,8 +514,6 @@ this.recorder.useExternalAudioStream(
 //this.webrtc.localStream = tStream.stream; // or tStream.recorder;
 //this.webrtc.websocket = this.websocket;
 //this.webrtc.startStreaming({ streamKey: "anything" });
-
-        }, false, iframe);
 }, false, iframe);
 
         this.on("TfStopRecPlz", () => {
