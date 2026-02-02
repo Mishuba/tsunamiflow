@@ -11,16 +11,10 @@ export class TfRecorder {
         this.mimeType = mimeType;
         this.videoBitrate = videoBitrate;
         this.chunkMs = chunkMs;
-
-        this.wsUrl = wsUrl;
-        this.streamKey = streamKey;
-
         this.stream = null;
         this.recorder = null;
         this.externalAudioStream = null;
         this.recording = false;
-        this.ws = null;
-
         this.chunks = []; // optional local storage
     }
 
@@ -39,31 +33,10 @@ export class TfRecorder {
         this.stream = stream;
         return stream;
     }
-
-    connectWebSocket() {
-        if (!this.streamKey) throw new Error('streamKey required');
-        //this.ws = new WebSocket(`${this.wsUrl}?key=${this.streamKey}&role=broadcaster`);
-        this.ws.binaryType = 'arraybuffer';
-
-        this.ws.onopen = () => {
-            // Tell the server to start FFmpeg
-            this.ws.send(JSON.stringify({ type: 'start_stream' }));
-        };
-
-        this.ws.onclose = () => {
-            console.log('WebSocket closed');
-        };
-
-        this.ws.onerror = (err) => {
-            console.error('WebSocket error', err);
-        };
-    }
-
     start( canvas, ws ) {
         if (this.recording) return;
 
         if (!this.stream) this.buildStream({ canvas });
-        if (!this.ws || this.ws.readyState !== WebSocket.OPEN) this.connectWebSocket();
 
         this.recorder = new MediaRecorder(this.stream, {
             mimeType: this.mimeType,
@@ -75,13 +48,8 @@ export class TfRecorder {
 
             // Optional local copy
             this.chunks.push(e.data);
-
-            // Send to WebSocket for FFmpeg
-            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
                 const arrayBuffer = await e.data.arrayBuffer();
-                this.ws.send(arrayBuffer);
-            }
-        };
+                
 
         this.recorder.start(this.chunkMs); // chunkMs controls chunk frequency
         this.recording = true;
@@ -94,14 +62,7 @@ return this.stream;
         if (this.recorder && this.recorder.state !== 'inactive') {
             this.recorder.stop();
         }
-
-        if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-            this.ws.send(JSON.stringify({ type: 'stop_stream' }));
-            this.ws.close();
-        }
-
         this.recorder = null;
-        this.ws = null;
         this.recording = false;
     }
 
