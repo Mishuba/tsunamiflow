@@ -1,5 +1,6 @@
 const CACHE_NAME = "tf-cache-v3";
-const OFFLINE_URL = "/offline.html"; //change to php please
+const OFFLINE_URL = "/offline.php";
+
 const PRECACHE = [
     "/",
     "/index.html",
@@ -24,44 +25,49 @@ const PRECACHE = [
 
 self.addEventListener("install", event => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(cache => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
+        caches.open(CACHE_NAME)
+            .then(cache => cache.addAll(PRECACHE))
+            .then(() => self.skipWaiting())
     );
 });
 
 self.addEventListener("activate", event => {
-    event.waitUntil(caches.keys().then(keys => Promise.all(
-        keys.map(k => (k !== CACHE_NAME) ? caches.delete(k) : null)
-    ))
+    event.waitUntil(
+        caches.keys().then(keys =>
+            Promise.all(keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null))
+        )
     );
     self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
-const url = new URL(event.request.url);
+    const url = new URL(event.request.url);
 
-  if (url.hostname === "world.tsunamiflow.club") {
-    return; // Let the network handle it
-  }
-    const req = event.request;
-
-    if (req.mode === "navigate") {
-        event.respondWith(
-            fetch(req).then(res => {
-                return res;
-            }).catch(() => caches.match(OFFLINE_URL))
-        );
-        return;
+    // 🚫 Never touch backend
+    if (url.hostname === "world.tsunamiflow.club") {
+        return event.respondWith(fetch(event.request));
     }
 
-    event.respondWith(caches.match(req).then(cached => {
-        if (cached) return cached;
-        return fetch(req).then(response => {
-            //optionally cache resource
-            return response;
-        }).catch(() => {
-            //i an image requested, return a placeholder optional
-            return caches.match(OFFLINE_URL);
-        });
-    })
+    // 🚫 Never cache non-GET (POST, PUT, etc.)
+    if (event.request.method !== "GET") {
+        return event.respondWith(fetch(event.request));
+    }
+
+    // Page navigation
+    if (event.request.mode === "navigate") {
+        return event.respondWith(
+            fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+        );
+    }
+
+    // Static assets
+    event.respondWith(
+        caches.match(event.request).then(cached => {
+            if (cached) return cached;
+
+            return fetch(event.request).catch(() =>
+                caches.match(OFFLINE_URL)
+            );
+        })
     );
 });
