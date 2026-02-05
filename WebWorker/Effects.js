@@ -11,6 +11,8 @@ export class TfEffects {
         this.visualizatorController;
         this.webcamCanvas = document.createElement("canvas");
         this.webcamCtx = this.webcamCanvas.getContext("2d");
+        this.backgroundVideo = null;
+        this.backgroundVideo = null;
     }
 
     UploadImage(e) {
@@ -25,7 +27,9 @@ export class TfEffects {
         this.backgroundImg = null;
         ctx.clearRect(0, 0, canvas_width, canvas_height);
     }
-
+    UseImage(ctx) {
+        ctx.drawImage(this.backgroundImg, 0, 0, w, h);
+    }
     UploadVideo(e) {
         const file = e.target.files[0];
         if (file) {
@@ -50,6 +54,9 @@ export class TfEffects {
             this.backgroundVideo = null;
             ctx.clearRect(0, 0, canvas_width, canvas_height);
         }
+    }
+    UseVideo(ctx){
+    ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
     }
 
     update(p, volume, baseRadius, canvas) {
@@ -137,12 +144,15 @@ export class TfEffects {
 
         // 1. Draw background first
         ctx.clearRect(0, 0, w, h);
-
-        if (this.backgroundVideo && this.backgroundVideo.readyState >= 2) {
-            ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
-        } else if (this.backgroundImg) {
-            ctx.drawImage(this.backgroundImg, 0, 0, w, h);
+        if (this.backgroundImg !== null && this.backgroundVideo === null) {
+            this.UseImage(ctx);
+        } else if (this.backgroundImg !== null && this.backgroundVideo !== null) {
+            // put image in the corner like a logo or we just make a logo one to.
+} else {
+        if (this.backgroundVideo !== null) {
+              this.UseVideo(ctx);
         }
+}
 
         // 2. Draw webcam to OFFSCREEN buffer
         this.webcamCtx.clearRect(0, 0, w, h);
