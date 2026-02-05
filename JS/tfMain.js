@@ -460,4 +460,3 @@ FirstGame.context.imageSmoothingEnabled;
   //Controller.bindSignUp();
   //Controller.bindCart();
   Controller.bindWorker();
-});
