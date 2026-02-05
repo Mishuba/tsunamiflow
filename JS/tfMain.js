@@ -30,85 +30,57 @@ if (navigator.cookieEnabled) {
   console.log("Cookies are not enabled");  
 }  
   
-const xhr = new XMLHttpRequest();  
-  
-xhr.open(  
-  "GET",  
-  "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1",  
-  true  
-);  
-  
-xhr.withCredentials = true; // 🔑 REQUIRED for PHP sessions  
-  
-const xhr1 = new XMLHttpRequest();  
-  
-xhr1.open(  
-  "POST",  
-  "https://world.tsunamiflow.club/tfMain.php",  
-  true  
-);  
-  
-xhr1.withCredentials = true; // 🔑 REQUIRED  
-xhr1.setRequestHeader(  
-  "Content-Type",  
-  "application/x-www-form-urlencoded"  
-);  
-  
-const xhr2 = new XMLHttpRequest();  
-  
-xhr2.open(  
-  "POST",  
-  "https://world.tsunamiflow.club/tfMain.php",  
-  true  
-);  
-  
-xhr2.withCredentials = true; // 🔑 REQUIRED  
-xhr2.setRequestHeader("Content-Type", "application/json");  
-  
-xhr.onload = () => {  
-  if (xhr.status === 200) {  
-    const data = JSON.parse(xhr.responseText);  
-    console.log("Printful items:", data.items);  
-  
-    xhr1.send(  
-      "addProductToCart=1" +  
-      "&product_id=12345" +  
-      "&StoreQuantity=2"  
-    );  
-  
-    xhr.onerror = () => {  
-      console.error("Network error");  
-    };  
-  
-    xhr.send();  
-  
-    xhr1.onload = () => {  
-      const data = JSON.parse(xhr1.responseText);  
-      console.log("Cart response:", data);  
-  
-      xhr2.send(JSON.stringify({  
-        type: "Stripe Checkout"  
-      }));  
-    };  
-  } else {  
-    console.error("Request failed:", xhr.status);  
-    console.error(xhr.responseText);  
-  }  
-};  
-  
-xhr2.onload = () => {  
-  const data = JSON.parse(xhr2.responseText);  
-  
-  if (data.checkout_url) {  
-    window.location.href = data.checkout_url;  
-  } else {  
-    console.error("Stripe error:", data);  
-  }  
-};  
-  
-xhr2.onerror = () => {  
-  console.error(xhr2.responseText);  
-}  
+const xhr = new XMLHttpRequest();
+xhr.open("GET", "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1", true);
+xhr.withCredentials = true;
+
+xhr.onerror = () => console.error("XHR fetch items failed");
+
+xhr.onload = () => {
+  if (xhr.status !== 200) {
+    console.error("Fetch failed:", xhr.responseText);
+    return;
+  }
+
+  const data = JSON.parse(xhr.responseText);
+  console.log("Printful items:", data.items);
+
+  // ---- ADD TO CART ----
+  const xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "https://world.tsunamiflow.club/tfMain.php", true);
+  xhr1.withCredentials = true;
+  xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+  xhr1.onerror = () => console.error("Add to cart failed");
+
+  xhr1.onload = () => {
+    const cartData = JSON.parse(xhr1.responseText);
+    console.log("Cart response:", cartData);
+
+    // ---- STRIPE CHECKOUT ----
+    const xhr2 = new XMLHttpRequest();
+    xhr2.open("POST", "https://world.tsunamiflow.club/tfMain.php", true);
+    xhr2.withCredentials = true;
+    xhr2.setRequestHeader("Content-Type", "application/json");
+
+    xhr2.onerror = () => console.error("Stripe request failed");
+
+    xhr2.onload = () => {
+      const stripe = JSON.parse(xhr2.responseText);
+      if (stripe.checkout_url) {
+        window.location.href = stripe.checkout_url;
+      } else {
+        console.error("Stripe error:", stripe);
+      }
+    };
+
+    xhr2.send(JSON.stringify({ type: "Stripe Checkout" }));
+  };
+
+  xhr1.send("addProductToCart=1&product_id=12345&StoreQuantity=2");
+};
+
+xhr.send();
   
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";  
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";  
