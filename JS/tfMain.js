@@ -23,7 +23,7 @@ import { TfAudioMixer } from "./Mixer.js";
 import { MishubaController } from "./default.js";  
   
 
-function renderStoreItems(items) {
+function renderPrintfulItems(items) {
   const store = document.getElementById("TFstore");
   if (!store) return;
 
