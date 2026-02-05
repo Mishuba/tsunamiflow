@@ -24,7 +24,7 @@ import { MishubaController } from "./default.js";
   
 
 function renderPrintfulItems(items) {
-  const container = document.getElementById("printfulItems");
+  const container = document.getElementById("TFstore");
 
   if (!container) {
     console.error("❌ printfulItems container missing");
