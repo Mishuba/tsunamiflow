@@ -46,6 +46,7 @@ if (navigator.cookieEnabled) {
       console.log("Printful items:", data.items);
     } else {
       console.error("Request failed:", xhr.status);
+      console.error(xhr.responseText);
     }
   };
   
@@ -104,6 +105,10 @@ if (navigator.cookieEnabled) {
   xhr2.send(JSON.stringify({
     type: "Stripe Checkout"
   }));
+
+  xhr2.onerror = () => {
+    console.error(xhr2.responseText);
+}
 
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
