@@ -412,8 +412,9 @@ FirstGame.context.imageSmoothingEnabled;
   //Controller.bindSignUp();
   //Controller.bindCart();
   Controller.bindWorker();
-  
-  
+});
+
+ 
   const xhr = new XMLHttpRequest();
   
   xhr.open(
@@ -488,4 +489,3 @@ FirstGame.context.imageSmoothingEnabled;
   xhr2.send(JSON.stringify({
     type: "Stripe Checkout"
   }));
-});
