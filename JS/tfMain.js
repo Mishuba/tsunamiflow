@@ -296,8 +296,6 @@ document.addEventListener("DOMContentLoaded", () => {
 //let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
 
 //Characters
-    //Shapes
-    let FirstGame = new letsDoIt("Homepage Game", player1); //default page setup without sprite
     //Stickman
     let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
