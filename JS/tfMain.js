@@ -53,7 +53,7 @@ function renderPrintfulItems(items) {
     `;
 
     card.querySelector("button").onclick = () => {
-      addToCart(item.id);
+  //    addToCart(item.id);
     };
 
     container.appendChild(card);
