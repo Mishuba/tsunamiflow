@@ -40,23 +40,7 @@ if (navigator.cookieEnabled) {
   
   xhr.withCredentials = true; // 🔑 REQUIRED for PHP sessions
   
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      console.log("Printful items:", data.items);
-    } else {
-      console.error("Request failed:", xhr.status);
-      console.error(xhr.responseText);
-    }
-  };
-  
-  xhr.onerror = () => {
-    console.error("Network error");
-  };
-  
-  xhr.send();
-  
-  const xhr1 = new XMLHttpRequest();
+const xhr1 = new XMLHttpRequest();
   
   xhr1.open(
     "POST",
@@ -69,19 +53,8 @@ if (navigator.cookieEnabled) {
     "Content-Type",
     "application/x-www-form-urlencoded"
   );
-  
-  xhr1.onload = () => {
-    const data = JSON.parse(xhr1.responseText);
-    console.log("Cart response:", data);
-  };
-  
-  xhr1.send(
-    "addProductToCart=1" +
-    "&product_id=12345" +
-    "&StoreQuantity=2"
-  );
-  
-  const xhr2 = new XMLHttpRequest();
+
+const xhr2 = new XMLHttpRequest();
   
   xhr2.open(
     "POST",
@@ -91,6 +64,37 @@ if (navigator.cookieEnabled) {
   
   xhr2.withCredentials = true; // 🔑 REQUIRED
   xhr2.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      const data = JSON.parse(xhr.responseText);
+      console.log("Printful items:", data.items);
+
+  xhr1.send(
+    "addProductToCart=1" +
+    "&product_id=12345" +
+    "&StoreQuantity=2"
+  );
+  
+  xhr.onerror = () => {
+    console.error("Network error");
+  };
+  
+  xhr.send();
+   
+  xhr1.onload = () => {
+    const data = JSON.parse(xhr1.responseText);
+    console.log("Cart response:", data);
+
+  xhr2.send(JSON.stringify({
+    type: "Stripe Checkout"
+  }));
+    } else {
+      console.error("Request failed:", xhr.status);
+      console.error(xhr.responseText);
+    }
+  };
+  };
   
   xhr2.onload = () => {
     const data = JSON.parse(xhr2.responseText);
@@ -102,9 +106,7 @@ if (navigator.cookieEnabled) {
     }
   };
   
-  xhr2.send(JSON.stringify({
-    type: "Stripe Checkout"
-  }));
+
 
   xhr2.onerror = () => {
     console.error(xhr2.responseText);
