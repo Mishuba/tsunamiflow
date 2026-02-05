@@ -159,11 +159,9 @@ const imageCapture = new ImageCapture(TfWebcm);
 // Capture frame
 const bitmap = await imageCapture.grabFrame();
 
-window.lastFrame = bitmap;
-
         // 2. Draw webcam to OFFSCREEN buffer
         this.webcamCtx.clearRect(0, 0, w, h);
-        this.webcamCtx.drawImage(window.lastFrame, 0, 0, w, h);
+        this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
 
         if (this.useChromaKey) {
             const frame = this.webcamCtx.getImageData(0, 0, w, h);
