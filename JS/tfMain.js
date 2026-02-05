@@ -273,6 +273,9 @@ document.addEventListener("DOMContentLoaded", () => {
   TFiframe.allowFullscreen = true;  
   TFiframe.sandbox = "allow-scripts allow-same-origin";  
 
+ let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
+  
+
   let RadioLastButton = document.createElement("button");  
   let RadioRestartButton = document.createElement("button");  
   let RadioStartButton = document.createElement("button");  
@@ -405,8 +408,6 @@ FirstGame.context.imageSmoothingEnabled;
         FirstGame.start() 
         //startGame(FirstGame); // Original but startGame code is deleted.
 */
-  let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
-  
   let Live = new TfVideo(Socket, Effects);
   
   let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
