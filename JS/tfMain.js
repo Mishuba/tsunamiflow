@@ -23,40 +23,68 @@ import { TfAudioMixer } from "./Mixer.js";
 import { MishubaController } from "./default.js";  
   
 
-function renderPrintfulItems(items) {
-  const container = document.getElementById("TFstore");
+function renderStoreItems(items) {
+  const store = document.getElementById("TFstore");
+  if (!store) return;
 
-  if (!container) {
-    console.error("❌ printfulItems container missing");
-    return;
-  }
+  const list = store.querySelector("ul");
+  const template = list.querySelector("li");
+  const emptyMsg = store.querySelector("p");
 
-  container.innerHTML = "";
+  list.innerHTML = ""; // clear template
+  emptyMsg.style.display = items.length ? "none" : "block";
 
-  if (!items || items.length === 0) {
-    container.innerHTML = "<p>No products found.</p>";
-    return;
-  }
+  if (!items.length) return;
 
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.style.border = "1px solid #ccc";
-    card.style.padding = "10px";
-    card.style.background = "#fff";
+  items.forEach(product => {
+    const li = template.cloneNode(true);
 
-    card.innerHTML = `
-      <img src="${item.thumbnail || ""}"
-           style="width:100%;height:auto;">
-      <h3>${item.name}</h3>
-      <p>$${item.price}</p>
-      <button data-id="${item.id}">Add to cart</button>
-    `;
+    const title = li.querySelector("h4");
+    const img = li.querySelector("img");
+    const desc = li.querySelector("p");
+    const variantSelect = li.querySelector(".variantSelect");
+    const qtyInput = li.querySelector(".quantityInput");
+    const subtotal = li.querySelector(".itemSubtotal");
 
-    card.querySelector("button").onclick = () => {
-  //    addToCart(item.id);
+    title.textContent = product.name || "Unnamed Product";
+    img.src = product.thumbnail || "";
+    desc.textContent = product.description || "";
+
+    variantSelect.innerHTML = "";
+
+    const variants = product.sync_variants || product.variants || [];
+
+    if (!variants.length) {
+      const opt = document.createElement("option");
+      opt.textContent = "No variants available";
+      variantSelect.appendChild(opt);
+      variantSelect.disabled = true;
+    } else {
+      variantSelect.disabled = false;
+
+      variants.forEach(v => {
+        const opt = document.createElement("option");
+        opt.value = v.id;
+        opt.dataset.price = v.retail_price || v.price || 0;
+        opt.textContent = `${v.name} - $${opt.dataset.price}`;
+        variantSelect.appendChild(opt);
+      });
+    }
+
+    // price calc
+    const recalc = () => {
+      const price = parseFloat(
+        variantSelect.selectedOptions[0]?.dataset.price || 0
+      );
+      const qty = parseInt(qtyInput.value || 1);
+      subtotal.textContent = (price * qty).toFixed(2);
     };
 
-    container.appendChild(card);
+    variantSelect.onchange = recalc;
+    qtyInput.oninput = recalc;
+    recalc();
+
+    list.appendChild(li);
   });
 }
 
