@@ -1,328 +1,296 @@
-import { gameComponent } from "./planetuniverse.js";
-import { letsDoIt } from "./gamemechanics.js";
-import { ScreenShare } from "./ScreenSharer.js";
-import { TfMediaStream } from "./Streamer.js";
-import { TfWebRTCRecorder } from "./TfWebRtc.js";
-import { navButtons } from "./Objects.js";
-import { RadioTimes, WordTimes } from "./Arrays.js";
-//import { } from "./Classes.js";
-import { WordOfTheDay } from "./Words.js";
-import { NewsTimer } from "./News.js";
-import { Weather } from "./Weather.js";
-import { TfWebsocket } from "./TfWebSocket.js";
-import { TfEffects } from "./../WebWorker/Effects.js";
-import { User } from "./Users.js";
-import { TfMusic } from "./Audio.js";
-import { TfVideo } from "./Video.js";
-import { tfIframe } from "./TfIframe.js";
-import { HomepageUpdates, FirstGame } from "./sprite.js";
-import { WorkerManager } from "./../WebWorker/worker.js";
-import { TfWebcam } from "./webcam.js";
-import { TfRecorder } from "./recorder.js";
-import { TfAudioMixer } from "./Mixer.js";
-import { MishubaController } from "./default.js";
-
-if (navigator.cookieEnabled) {
-  //use cookies
-  console.log("Cookies are enabled");
-} else {
-  //don't use cookies 
-  console.log("Cookies are not enabled");
-}
-
-  const xhr = new XMLHttpRequest();
+import { gameComponent } from "./planetuniverse.js";  
+import { letsDoIt } from "./gamemechanics.js";  
+import { ScreenShare } from "./ScreenSharer.js";  
+import { TfMediaStream } from "./Streamer.js";  
+import { TfWebRTCRecorder } from "./TfWebRtc.js";  
+import { navButtons } from "./Objects.js";  
+import { RadioTimes, WordTimes } from "./Arrays.js";  
+//import { } from "./Classes.js";  
+import { WordOfTheDay } from "./Words.js";  
+import { NewsTimer } from "./News.js";  
+import { Weather } from "./Weather.js";  
+import { TfWebsocket } from "./TfWebSocket.js";  
+import { TfEffects } from "./../WebWorker/Effects.js";  
+import { User } from "./Users.js";  
+import { TfMusic } from "./Audio.js";  
+import { TfVideo } from "./Video.js";  
+import { tfIframe } from "./TfIframe.js";  
+import { HomepageUpdates, FirstGame } from "./sprite.js";  
+import { WorkerManager } from "./../WebWorker/worker.js";  
+import { TfWebcam } from "./webcam.js";  
+import { TfRecorder } from "./recorder.js";  
+import { TfAudioMixer } from "./Mixer.js";  
+import { MishubaController } from "./default.js";  
   
-  xhr.open(
-    "GET",
-    "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1",
-    true
-  );
+if (navigator.cookieEnabled) {  
+  //use cookies  
+  console.log("Cookies are enabled");  
+} else {  
+  //don't use cookies   
+  console.log("Cookies are not enabled");  
+}  
   
-  xhr.withCredentials = true; // 🔑 REQUIRED for PHP sessions
+const xhr = new XMLHttpRequest();  
   
-const xhr1 = new XMLHttpRequest();
+xhr.open(  
+  "GET",  
+  "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1",  
+  true  
+);  
   
-  xhr1.open(
-    "POST",
-    "https://world.tsunamiflow.club/tfMain.php",
-    true
-  );
+xhr.withCredentials = true; // 🔑 REQUIRED for PHP sessions  
   
-  xhr1.withCredentials = true; // 🔑 REQUIRED
-  xhr1.setRequestHeader(
-    "Content-Type",
-    "application/x-www-form-urlencoded"
-  );
-
-const xhr2 = new XMLHttpRequest();
+const xhr1 = new XMLHttpRequest();  
   
-  xhr2.open(
-    "POST",
-    "https://world.tsunamiflow.club/tfMain.php",
-    true
-  );
+xhr1.open(  
+  "POST",  
+  "https://world.tsunamiflow.club/tfMain.php",  
+  true  
+);  
   
-  xhr2.withCredentials = true; // 🔑 REQUIRED
-  xhr2.setRequestHeader("Content-Type", "application/json");
-
-  xhr.onload = () => {
-    if (xhr.status === 200) {
-      const data = JSON.parse(xhr.responseText);
-      console.log("Printful items:", data.items);
-
-  xhr1.send(
-    "addProductToCart=1" +
-    "&product_id=12345" +
-    "&StoreQuantity=2"
-  );
+xhr1.withCredentials = true; // 🔑 REQUIRED  
+xhr1.setRequestHeader(  
+  "Content-Type",  
+  "application/x-www-form-urlencoded"  
+);  
   
-  xhr.onerror = () => {
-    console.error("Network error");
-  };
+const xhr2 = new XMLHttpRequest();  
   
-  xhr.send();
-   
-  xhr1.onload = () => {
-    const data = JSON.parse(xhr1.responseText);
-    console.log("Cart response:", data);
-
-  xhr2.send(JSON.stringify({
-    type: "Stripe Checkout"
-  }));
-    } else {
-      console.error("Request failed:", xhr.status);
-      console.error(xhr.responseText);
-    }
-  };
-  };
+xhr2.open(  
+  "POST",  
+  "https://world.tsunamiflow.club/tfMain.php",  
+  true  
+);  
   
-  xhr2.onload = () => {
-    const data = JSON.parse(xhr2.responseText);
-    
-    if (data.checkout_url) {
-      window.location.href = data.checkout_url;
-    } else {
-      console.error("Stripe error:", data);
-    }
-  };
+xhr2.withCredentials = true; // 🔑 REQUIRED  
+xhr2.setRequestHeader("Content-Type", "application/json");  
   
-
-
-  xhr2.onerror = () => {
-    console.error(xhr2.responseText);
-}
-
-const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
-const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
-const StickMan = new Image();
-StickMan.src = linkToSpriteSheet;
-
-let AckmaHawkSpriteSheet = "";
-
-let tfSSCX = 0; //Character State Location Row
-let AckmaHawkSpriteSheetState = 0;
-let tfSSCY = 0; //Character State Frame Column
-let AckmaHawkSpriteSheetFrame = 0;
-let tfSCW = 120; // Character Size in image file width
-let AckmaHawkSpritSheetWidth = 120;
-let tfSCH = 120; // Character Size in image file height
-let AckmaHawkSpriteSheetHeight = 120;
-let tfSPX = 60; //position of character Left and Right Movement
-let AckmaHawkCanvasX = 60; //CanvasWidth / 2
-let tfSPY = 160; // position of character Up and Down Movement
-let AckmaHawkCanvasY = 160; //CanvasHeight /2 
-let tfSNW = 30; //Size of character The width 
-let AckmaHawkCanvasWidth = 30; //CanvasWidth * 0.25;
-let tfSNH = 30; //Size of character The Height
-let AckmaHawkCanvasHeight = 30; //CanvasHeight * 0.25;
-let AckmaHawkType = "sprite";
-/*
-export const StickmanStates = [
-    { name: "stand", frames: 2 },
-    { name: "walk", frames: 2 },
-    { name: "run", frames: 2 },
-    { name: "jump", frames: 2 },
-    { name: "double jump", frames: 2 },
-    { name: "crouch", frames: 2 },
-    { name: "crawl", frames: 2 },
-    { name: "climb", frames: 2 },
-    { name: "swim", frames: 2 },
-    { name: "dive", frames: 2 },
-    { name: "fly", frames: 2 },
-    { name: "Cycle Through Items", frames: 2 },
-    { name: "Pick Up", frames: 2 },
-    { name: "World Interaction", frames: 2 },
-    { name: "Use Item", frames: 2 },
-    { name: "weak attack", frames: 2 },
-    { name: "strong attack", frames: 2 },
-    { name: "special attack", frames: 2 },
-    { name: "main skill", frames: 2 },
-    { name: "aoe skill", frames: 2 },
-    { name: "range skill", frames: 2 },
-    { name: "knockback skill", frames: 2 },
-    { name: "evade skill", frames: 2 },
-    { name: "defense skill", frames: 2 },
-    { name: "buff skill", frames: 2 },
-    { name: "debuff skill", frames: 2 },
-    { name: "ultimate skill", frames: 2 },
-    { name: "block", frames: 2 },
-    { name: "parry", frames: 2 }
-];
-*/
-let AckmaHawkTextWidth = 280;
-let AckmaHawkTextHeight = 40;
-let AckmaHawkTextSize = "30px";
-let AckmaHawkTextStyle = "Consolas";
-let AckmaHawkTextAlign = "center"; //end, left, right, center
-let AckmaHawkTextBaseLine = "alphabetic"; //top, hanging, middle, ideographic, bottom
-let AckmaHawkTextDirection = "inherit"; //ltr, rtl
-let AckmaHawkLetterSpacing = 0;
-let AckmaHawkFontKerning = "auto";
-let AckmaHawkFontStretch = "normal"; //ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded
-let AckmaHawkFontVariantCaps = "normal" //small-caps, all-small-caps, petite-caps, all-petite-caps, unicase, titling-caps
-let AckmaHawkTextRendering = "auto"; //optimizeSpeed, optimizeLegibility, geometricPrecision
-let AckmaHawkWordSpacing = 0;
-let AckmaHawkTextSettings;
-let AckmaHawkDialog = "testing";
-let StickManDialog = [];
-let homePageArray = [
-    "Welcome to tsunamiflow.club",
-    "This is the homebase for Tsunami Flow",
-    "We are currently working on content for the website.",
-    "Come by often and check for updates.",
-    "Please be patient"
-];
-let PhysicalAbility = [
-    { name: "health", points: 1 },
-    { name: "stamina", points: 1 },
-    { name: "weight", points: 1 },
-    { name: "strength", points: 1 },
-    { name: "agility", points: 1 }
-];
-let AckmaHawkIntellectualIntelligence = [
-    { name: "Science", level: 0, experience: 0 },
-    { name: "Creativity", level: 0, experience: 0 },
-    { name: "Math", level: 0, Engineering: 0 },
-    { name: "Memory", level: 0, experience: 0 },
-    { name: "Awareness", level: 0, experience: 0 }
-];
-let AckmaHawkSocialIntelligence = [
-    { name: "Reflection", level: 0, experience: 0 },
-    { name: "honesty", level: 0, experience: 0 },
-    { name: "deception", level: 0, experience: 0 },
-    { name: "manipulation", level: 0, experience: 0 },
-    { name: "charisma", level: 0, experience: 0 }
-];
-let AckmaHawkEmotionalIntelligence = [
-    { name: "feelings", level: 0, experience: 0 },
-    { name: "mood", level: 0, experience: 0 },
-    { name: "temper", level: 0, experience: 0 },
-    { name: "attitude", level: 0, experience: 0 },
-    { name: "perspective", level: 0, experience: 0 }
-];
-let AckmaHawkExistentialIntelligence = [
-    { name: "consciousness", level: 0, experience: 0 },
-    { name: "time", level: 0, experience: 0 },
-    { name: "dimension", level: 0, experience: 0 },
-    { name: "space", level: 0, experience: 0 },
-    { name: "defense", level: 0, experience: 0 }
-];
-let AckmaHawkEnergeticIntelligence = [
-    { name: "fire", level: 0, experience: 0 },
-    { name: "water", level: 0, experience: 0 },
-    { name: "air", level: 0, experience: 0 },
-    { name: "lightning", level: 0, experience: 0 },
-    { name: "earth", level: 0, experience: 0 }
-];
-let AckmaHawkMetaCognitiveIntelligence = [
-    { name: "magic", level: 0, experience: 0 },
-    { name: "ESP", level: 0, experience: 0 },
-    { name: "dexterity", level: 0, experience: 0 },
-    { name: "genetic", level: 0, experience: 0 },
-    { name: "personal", level: 0, experience: 0 }
-];
-let AckmaHawkHeadArmor = 1;
-let AckmaHawkBodyArmor = 1;
-let AckmaHawkLegArmor = 1;
-let AckmaHawkarmArmor = 1;
-let AckmaHawkweakAttack = 1;
-let AckmaHawkstrongAttack = 1;
-let AckmaHawkspecialAttack = 1;
-let AckmaHawkknockBackSkill = 1;
-let AckmaHawkaoeSkill = 1;
-let AckmaHawkbuffSkill = 1;
-let AckmaHawkmainSkill = 1;
-let AckmaHawkevadeSkill = 1;
-let AckmaHawkrangeSkill = 1;
-let AckmaHawkdebuffSkill = 1;
-let AckmaHawkdefenseSkill = 1;
-let AckmaHawkultimateSkill = 1;
-let PlayerState = "stand";
-
-// items
-var fullHeal;
-var fullStamina;
-var fullMagic;
-
-// Armour
-var armourSet1;
-var armourSet2;
-var armourSet3;
-var armourSet4;
-var armourSet5;
-var armourSet6;
-var armourSet7;
-var armourSet8;
-
-let MishubaScreen = new ScreenShare();
-let TsunamiStream = new TfMediaStream();
-let TfRTC = new TfWebRTCRecorder();
-let Nifage = new User();
-let Effects = new TfEffects();
-let TfWeather = new Weather();
-let cam = new TfWebcam();
-let recorder = new TfRecorder();
-
-document.addEventListener("DOMContentLoaded", () => {
+xhr.onload = () => {  
+  if (xhr.status === 200) {  
+    const data = JSON.parse(xhr.responseText);  
+    console.log("Printful items:", data.items);  
   
-  let MyNewTFTime = document.getElementById("TFtime");
-  let TfWotd = document.getElementById("tfWordOfTheDay");
-  let TsunamiRadio = document.getElementById("TFradioPlayer");
-  TsunamiRadio.crossOrigin = "anonymous";
-  let RadioTitle = document.getElementById("TfRadioStuff");
-  let RadioButtons = document.getElementById("CheckRadio");
-  //The Frame
-  const twoMore = document.getElementById("mainTsectionFdiv");
-  let RadioCanvas = document.getElementById("TFradioCanvas");
+    xhr1.send(  
+      "addProductToCart=1" +  
+      "&product_id=12345" +  
+      "&StoreQuantity=2"  
+    );  
   
-  const TFiframe = document.createElement("iframe");
-  TFiframe.allow = "camera; microphone; geolocation";
-  TFiframe.allowFullscreen = true;
-  TFiframe.sandbox = "allow-scripts allow-same-origin";
+    xhr.onerror = () => {  
+      console.error("Network error");  
+    };  
   
-  let RadioLastButton = document.createElement("button");
-  let RadioRestartButton = document.createElement("button");
-  let RadioStartButton = document.createElement("button");
-  let RadioSkipButton = document.createElement("button");
+    xhr.send();  
   
-  let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");
-  let TsunamiAudioCtx = new(window.AudioContext || window.webkitAudioContext)();
-  let RadioAnalyser = TsunamiAudioCtx.createAnalyser();
-  RadioAnalyser.fftSize = 2048;
-  let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);
-  let StreamDestination = TsunamiAudioCtx.createMediaStreamDestination();
-  let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia, StreamDestination);
-  let mixSounds = new TfAudioMixer(TsunamiAudioCtx);
+    xhr1.onload = () => {  
+      const data = JSON.parse(xhr1.responseText);  
+      console.log("Cart response:", data);  
+  
+      xhr2.send(JSON.stringify({  
+        type: "Stripe Checkout"  
+      }));  
+    };  
+  } else {  
+    console.error("Request failed:", xhr.status);  
+    console.error(xhr.responseText);  
+  }  
+};  
+  
+xhr2.onload = () => {  
+  const data = JSON.parse(xhr2.responseText);  
+  
+  if (data.checkout_url) {  
+    window.location.href = data.checkout_url;  
+  } else {  
+    console.error("Stripe error:", data);  
+  }  
+};  
+  
+xhr2.onerror = () => {  
+  console.error(xhr2.responseText);  
+}  
+  
+const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";  
+const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";  
+const StickMan = new Image();  
+StickMan.src = linkToSpriteSheet;  
+  
+let AckmaHawkSpriteSheet = "";  
+  
+let tfSSCX = 0; //Character State Location Row  
+let AckmaHawkSpriteSheetState = 0;  
+let tfSSCY = 0; //Character State Frame Column  
+let AckmaHawkSpriteSheetFrame = 0;  
+let tfSCW = 120; // Character Size in image file width  
+let AckmaHawkSpritSheetWidth = 120;  
+let tfSCH = 120; // Character Size in image file height  
+let AckmaHawkSpriteSheetHeight = 120;  
+let tfSPX = 60; //position of character Left and Right Movement  
+let AckmaHawkCanvasX = 60; //CanvasWidth / 2  
+let tfSPY = 160; // position of character Up and Down Movement  
+let AckmaHawkCanvasY = 160; //CanvasHeight /2   
+let tfSNW = 30; //Size of character The width   
+let AckmaHawkCanvasWidth = 30; //CanvasWidth * 0.25;  
+let tfSNH = 30; //Size of character The Height  
+let AckmaHawkCanvasHeight = 30; //CanvasHeight * 0.25;  
+let AckmaHawkType = "sprite";  
 
-let player1 = new gameComponent(tfSNW, tfSNH, "blue", tfSPX, tfSPY, "player", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, homePageArray, PlayerState, AckmaHawkBattleBackground, "Tsunami", "Flow", "TF", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+let AckmaHawkTextWidth = 280;  
+let AckmaHawkTextHeight = 40;  
+let AckmaHawkTextSize = "30px";  
+let AckmaHawkTextStyle = "Consolas";  
+let AckmaHawkTextAlign = "center"; //end, left, right, center  
+let AckmaHawkTextBaseLine = "alphabetic"; //top, hanging, middle, ideographic, bottom  
+let AckmaHawkTextDirection = "inherit"; //ltr, rtl  
+let AckmaHawkLetterSpacing = 0;  
+let AckmaHawkFontKerning = "auto";  
+let AckmaHawkFontStretch = "normal"; //ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded  
+let AckmaHawkFontVariantCaps = "normal" //small-caps, all-small-caps, petite-caps, all-petite-caps, unicase, titling-caps  
+let AckmaHawkTextRendering = "auto"; //optimizeSpeed, optimizeLegibility, geometricPrecision  
+let AckmaHawkWordSpacing = 0;  
+let AckmaHawkTextSettings;  
+let AckmaHawkDialog = "testing";  
+let StickManDialog = [];  
 
-let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+let homePageArray = [  
+  "Welcome to tsunamiflow.club",  
+  "This is the homebase for Tsunami Flow",  
+  "We are currently working on content for the website.",  
+  "Come by often and check for updates.",  
+  "Please be patient"  
+];  
 
-let Mishuba = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Mishuba", "Feilong", "2Fly", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+let PhysicalAbility = [  
+  { name: "health", points: 1 },  
+  { name: "stamina", points: 1 },  
+  { name: "weight", points: 1 },  
+  { name: "strength", points: 1 },  
+  { name: "agility", points: 1 }  
+];  
 
-let AckmaHawk = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Sagoonma", "", "Ackma Hawk", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+let AckmaHawkIntellectualIntelligence = [  
+  { name: "Science", level: 0, experience: 0 },  
+  { name: "Creativity", level: 0, experience: 0 },  
+  { name: "Math", level: 0, Engineering: 0 },  
+  { name: "Memory", level: 0, experience: 0 },  
+  { name: "Awareness", level: 0, experience: 0 }  
+];  
 
-let Halu = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Sagoonma", "", "Ackma Hawk", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+let AckmaHawkSocialIntelligence = [  
+  { name: "Reflection", level: 0, experience: 0 },  
+  { name: "honesty", level: 0, experience: 0 },  
+  { name: "deception", level: 0, experience: 0 },  
+  { name: "manipulation", level: 0, experience: 0 },  
+  { name: "charisma", level: 0, experience: 0 }  
+];  
+
+let AckmaHawkEmotionalIntelligence = [  
+  { name: "feelings", level: 0, experience: 0 },  
+  { name: "mood", level: 0, experience: 0 },  
+  { name: "temper", level: 0, experience: 0 },  
+  { name: "attitude", level: 0, experience: 0 },  
+  { name: "perspective", level: 0, experience: 0 }  
+];  
+
+let AckmaHawkExistentialIntelligence = [  
+  { name: "consciousness", level: 0, experience: 0 },  
+  { name: "time", level: 0, experience: 0 },  
+  { name: "dimension", level: 0, experience: 0 },  
+  { name: "space", level: 0, experience: 0 },  
+  { name: "defense", level: 0, experience: 0 }  
+];  
+
+let AckmaHawkEnergeticIntelligence = [  
+  { name: "fire", level: 0, experience: 0 },  
+  { name: "water", level: 0, experience: 0 },  
+  { name: "air", level: 0, experience: 0 },  
+  { name: "lightning", level: 0, experience: 0 },  
+  { name: "earth", level: 0, experience: 0 }  
+];  
+
+let AckmaHawkMetaCognitiveIntelligence = [  
+  { name: "magic", level: 0, experience: 0 },  
+  { name: "ESP", level: 0, experience: 0 },  
+  { name: "dexterity", level: 0, experience: 0 },  
+  { name: "genetic", level: 0, experience: 0 },  
+  { name: "personal", level: 0, experience: 0 }  
+];  
+
+let AckmaHawkHeadArmor = 1;  
+let AckmaHawkBodyArmor = 1;  
+let AckmaHawkLegArmor = 1;  
+let AckmaHawkarArmor = 1;  
+let AckmaHawkweakAttack = 1;  
+let AckmaHawkstrongAttack = 1;  
+let AckmaHawkspecialAttack = 1;  
+let AckmaHawkknockBackSkill = 1;  
+let AckmaHawkaoeSkill = 1;  
+let AckmaHawkbuffSkill = 1;  
+let AckmaHawkmainSkill = 1;  
+let AckmaHawkevadeSkill = 1;  
+let AckmaHawkrangeSkill = 1;  
+let AckmaHawkdebuffSkill = 1;  
+let AckmaHawkdefenseSkill = 1;  
+let AckmaHawkultimateSkill = 1;  
+let PlayerState = "stand";  
+
+// items  
+var fullHeal;  
+var fullStamina;  
+var fullMagic;  
+
+// Armour  
+var armourSet1;  
+var armourSet2;  
+var armourSet3;  
+var armourSet4;  
+var armourSet5;  
+var armourSet6;  
+var armourSet7;  
+var armourSet8;  
+
+let MishubaScreen = new ScreenShare();  
+let TsunamiStream = new TfMediaStream();  
+let TfRTC = new TfWebRTCRecorder();  
+let Nifage = new User();  
+let Effects = new TfEffects();  
+let TfWeather = new Weather();  
+let cam = new TfWebcam();  
+let recorder = new TfRecorder();  
+
+document.addEventListener("DOMContentLoaded", () => {  
+  let MyNewTFTime = document.getElementById("TFtime");  
+  let TfWotd = document.getElementById("tfWordOfTheDay");  
+  let TsunamiRadio = document.getElementById("TFradioPlayer");  
+  TsunamiRadio.crossOrigin = "anonymous";  
+  let RadioTitle = document.getElementById("TfRadioStuff");  
+  let RadioButtons = document.getElementById("CheckRadio");  
+  const twoMore = document.getElementById("mainTsectionFdiv");  
+  let RadioCanvas = document.getElementById("TFradioCanvas");  
+
+  const TFiframe = document.createElement("iframe");  
+  TFiframe.allow = "camera; microphone; geolocation";  
+  TFiframe.allowFullscreen = true;  
+  TFiframe.sandbox = "allow-scripts allow-same-origin";  
+
+  let RadioLastButton = document.createElement("button");  
+  let RadioRestartButton = document.createElement("button");  
+  let RadioStartButton = document.createElement("button");  
+  let RadioSkipButton = document.createElement("button");  
+
+  let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");  
+  let TsunamiAudioCtx = new(window.AudioContext || window.webkitAudioContext)();  
+  let RadioAnalyser = TsunamiAudioCtx.createAnalyser();  
+  RadioAnalyser.fftSize = 2048;  
+  let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);  
+  let StreamDestination = TsunamiAudioCtx.createMediaStreamDestination();  
+  let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia, StreamDestination);  
+  let mixSounds = new TfAudioMixer(TsunamiAudioCtx);  
+
+  let player1 = new gameComponent(tfSNW, tfSNH, "blue", tfSPX, tfSPY, "player", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, homePageArray, PlayerState, AckmaHawkBattleBackground, "Tsunami", "Flow", "TF", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);  
+
+  // ... rest of your code continues exactly as above
+});
 
 //default character
 let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
