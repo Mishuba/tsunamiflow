@@ -146,7 +146,14 @@ renderPrintfulItems(data.items);
     xhr2.send(JSON.stringify({ type: "Stripe Checkout" }));
   };
 
-  xhr1.send("addProductToCart=1&product_id=12345&StoreQuantity=2");
+ const selectedLi = document.querySelector("#TFstore ul li"); // or event target
+const variantSelect = selectedLi.querySelector(".variantSelect");
+const qtyInput = selectedLi.querySelector(".quantityInput");
+
+const productId = variantSelect.value;
+const qty = qtyInput.value;
+
+xhr1.send(`addProductToCart=1&product_id=${productId}&StoreQuantity=${qty}`);
 };
 
 xhr.send();
