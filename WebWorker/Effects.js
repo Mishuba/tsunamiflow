@@ -154,7 +154,7 @@ export class TfEffects {
         }
 }
 
-const imageCapture = new ImageCapture(TfWebcm);
+const imageCapture = new ImageCapture(TfWebcam);
 
 // Capture frame
 const bitmap = await imageCapture.grabFrame();
@@ -163,6 +163,7 @@ const bitmap = await imageCapture.grabFrame();
         this.webcamCtx.clearRect(0, 0, w, h);
         this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
 
+bitmap.close();
         if (this.useChromaKey) {
             const frame = this.webcamCtx.getImageData(0, 0, w, h);
             const processed = this.webcam(frame);
