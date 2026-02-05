@@ -157,7 +157,7 @@ export class TfEffects {
 const imageCapture = new ImageCapture(TfWebcam);
 
 // Capture frame
-const bitmap = await imageCapture.grabFrame();
+const bitmap = imageCapture.grabFrame();
 
         // 2. Draw webcam to OFFSCREEN buffer
         this.webcamCtx.clearRect(0, 0, w, h);
