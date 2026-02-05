@@ -22,6 +22,44 @@ import { TfRecorder } from "./recorder.js";
 import { TfAudioMixer } from "./Mixer.js";  
 import { MishubaController } from "./default.js";  
   
+
+function renderPrintfulItems(items) {
+  const container = document.getElementById("printfulItems");
+
+  if (!container) {
+    console.error("❌ printfulItems container missing");
+    return;
+  }
+
+  container.innerHTML = "";
+
+  if (!items || items.length === 0) {
+    container.innerHTML = "<p>No products found.</p>";
+    return;
+  }
+
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.style.border = "1px solid #ccc";
+    card.style.padding = "10px";
+    card.style.background = "#fff";
+
+    card.innerHTML = `
+      <img src="${item.thumbnail || ""}"
+           style="width:100%;height:auto;">
+      <h3>${item.name}</h3>
+      <p>$${item.price}</p>
+      <button data-id="${item.id}">Add to cart</button>
+    `;
+
+    card.querySelector("button").onclick = () => {
+      addToCart(item.id);
+    };
+
+    container.appendChild(card);
+  });
+}
+
 if (navigator.cookieEnabled) {  
   //use cookies  
   console.log("Cookies are enabled");  
@@ -37,6 +75,8 @@ xhr.withCredentials = true;
 xhr.onerror = () => console.error("XHR fetch items failed");
 
 xhr.onload = () => {
+console.log("Printful XHR status:", xhr.status);
+  console.log("Raw response:", xhr.responseText);
   if (xhr.status !== 200) {
     console.error("Fetch failed:", xhr.responseText);
     return;
@@ -44,6 +84,7 @@ xhr.onload = () => {
 
   const data = JSON.parse(xhr.responseText);
   console.log("Printful items:", data.items);
+renderPrintfulItems(data.items);
 
   // ---- ADD TO CART ----
   const xhr1 = new XMLHttpRequest();
