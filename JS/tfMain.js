@@ -45,13 +45,13 @@ function renderStoreItems(items) {
     const variantSelect = li.querySelector(".variantSelect");
     const qtyInput = li.querySelector(".quantityInput");
     const subtotal = li.querySelector(".itemSubtotal");
+    const addButton = li.querySelector("button"); // your add-to-cart button
 
     title.textContent = product.name || "Unnamed Product";
     img.src = product.thumbnail || "";
     desc.textContent = product.description || "";
 
     variantSelect.innerHTML = "";
-
     const variants = product.sync_variants || product.variants || [];
 
     if (!variants.length) {
@@ -71,7 +71,7 @@ function renderStoreItems(items) {
       });
     }
 
-    // price calc
+    // price calculation
     const recalc = () => {
       const price = parseFloat(
         variantSelect.selectedOptions[0]?.dataset.price || 0
@@ -84,10 +84,70 @@ function renderStoreItems(items) {
     qtyInput.oninput = recalc;
     recalc();
 
+    // ------------------------------
+    // ADD TO CART + STRIPE HANDLER
+    // ------------------------------
+    addButton.onclick = (e) => {
+      e.preventDefault();
+
+      const variantId = variantSelect.value;
+      const qty = qtyInput.value;
+
+      // Add to Cart
+      const xhr1 = new XMLHttpRequest();
+      xhr1.open("POST", "https://world.tsunamiflow.club/tfMain.php", true);
+      xhr1.withCredentials = true;
+      xhr1.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+      xhr1.onerror = () => console.error("Add to cart failed");
+
+      xhr1.onload = () => {
+        let cartData;
+        try {
+          cartData = JSON.parse(xhr1.responseText);
+        } catch (err) {
+          console.error("Invalid cart JSON", err);
+          return;
+        }
+
+        if (!cartData.success) {
+          console.error("Cart error:", cartData);
+          return;
+        }
+
+        // Stripe Checkout
+        const xhr2 = new XMLHttpRequest();
+        xhr2.open("POST", "https://world.tsunamiflow.club/tfMain.php", true);
+        xhr2.withCredentials = true;
+        xhr2.setRequestHeader("Content-Type", "application/json");
+
+        xhr2.onerror = () => console.error("Stripe request failed");
+
+        xhr2.onload = () => {
+          let stripe;
+          try {
+            stripe = JSON.parse(xhr2.responseText);
+          } catch (err) {
+            console.error("Invalid Stripe JSON", err);
+            return;
+          }
+
+          if (stripe.checkout_url) {
+            window.location.href = stripe.checkout_url;
+          } else {
+            console.error("Stripe error:", stripe);
+          }
+        };
+
+        xhr2.send(JSON.stringify({ type: "Stripe Checkout" }));
+      };
+
+      xhr1.send(`addProductToCart=1&product_id=${variantId}&StoreQuantity=${qty}`);
+    };
+
     list.appendChild(li);
   });
 }
-
 if (navigator.cookieEnabled) {  
   //use cookies  
   console.log("Cookies are enabled");  
