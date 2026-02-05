@@ -316,6 +316,51 @@ let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordO
   
 
   // ... rest of your code continues exactly as above
+
+if (twoMore) {    
+    twoMore.appendChild(Controller.iframe.frame);    
+  } else {    
+    console.error("Element with id 'mainTsectionFdiv' not found.");    
+  }    
+    
+  Controller.iframe.frame.src = "homepage.html";    
+    
+  Controller.iframe.MenuSwitch(Controller.iframe.frame);    
+  Controller.bindNavBar();    
+    
+  Controller.iframe.frame.addEventListener("load", () => {    
+    console.log("Iframe loaded:", Controller.iframe.frame.src);    
+    
+    try {    
+      console.log("contentWindow:", Controller.iframe.frame.contentWindow);    
+      if (Controller.iframe.frame.src.endsWith("Community.html")) {    
+        Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);    
+        Controller.videoCanv = Controller.find("TFcanvas", true);    
+      }    
+      Controller.iframe.frame.contentWindow.controller = Controller;    
+      console.log("Controller injected into iframe");    
+      Controller.bindVidSystem();    
+    } catch (e) {    
+      console.error("Cross-origin block:", e);    
+    }    
+  });    
+  document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {    
+    TsunamiThoughts.preventDefault();    
+    //let tfUserThot = document.getElementById("TFthought");    
+    //TfPostThot(tfUserThot);    
+  });    
+    
+  document.body.addEventListener("click", () => {    
+    if (TsunamiAudioCtx.state === "suspended") {    
+      TsunamiAudioCtx.resume();    
+    }    
+  });    
+    
+  TfWeather.requestLocation();    
+  //Controller.bindSignUp();    
+  //Controller.bindCart();    
+  Controller.bindWorker();    
+});
 });
 
 //default character
@@ -426,47 +471,3 @@ FirstGame.context.imageSmoothingEnabled;
         FirstGame.start() 
         //startGame(FirstGame); // Original but startGame code is deleted.
 */
-
-  if (twoMore) {
-    twoMore.appendChild(Controller.iframe.frame);
-  } else {
-    console.error("Element with id 'mainTsectionFdiv' not found.");
-  }
-  
-  Controller.iframe.frame.src = "homepage.html";
-  
-  Controller.iframe.MenuSwitch(Controller.iframe.frame);
-  Controller.bindNavBar();
-  
-  Controller.iframe.frame.addEventListener("load", () => {
-    console.log("Iframe loaded:", Controller.iframe.frame.src);
-    
-    try {
-      console.log("contentWindow:", Controller.iframe.frame.contentWindow);
-      if (Controller.iframe.frame.src.endsWith("Community.html")) {
-        Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);
-        Controller.videoCanv = Controller.find("TFcanvas", true);
-      }
-      Controller.iframe.frame.contentWindow.controller = Controller;
-      console.log("Controller injected into iframe");
-      Controller.bindVidSystem();
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-  });
-  document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {
-    TsunamiThoughts.preventDefault();
-    //let tfUserThot = document.getElementById("TFthought");
-    //TfPostThot(tfUserThot);
-  });
-  
-  document.body.addEventListener("click", () => {
-    if (TsunamiAudioCtx.state === "suspended") {
-      TsunamiAudioCtx.resume();
-    }
-  });
-  
-  TfWeather.requestLocation();
-  //Controller.bindSignUp();
-  //Controller.bindCart();
-  Controller.bindWorker();
