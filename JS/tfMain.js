@@ -282,6 +282,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let RadioSkipButton = document.createElement("button");  
 
   let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");  
+
+  let Live = new TfVideo(Socket, Effects);
+  
   let TsunamiAudioCtx = new(window.AudioContext || window.webkitAudioContext)();  
   let RadioAnalyser = TsunamiAudioCtx.createAnalyser();  
   RadioAnalyser.fftSize = 2048;  
@@ -292,22 +295,37 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let player1 = new gameComponent(tfSNW, tfSNH, "blue", tfSPX, tfSPY, "player", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, homePageArray, PlayerState, AckmaHawkBattleBackground, "Tsunami", "Flow", "TF", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);  
 
-  // ... rest of your code continues exactly as above
-});
-
 let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);    
     
 let Mishuba = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Mishuba", "Feilong", "2Fly", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);    
+
+let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
+
+let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
+
+  let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
+  
+  Controller.iframe.frame.title = "Main Website Content";
+  Controller.iframe.frame.id = "TsunamiContent";
+  Controller.iframe.frame.name = "TsunamiMainFlowContent";
+  Controller.iframe.frame.width = 925;
+  Controller.iframe.frame.height = 430;
+  Controller.iframe.frame.style.background = "white";
+  Controller.iframe.frame.style.touchAction = "manipulation"; // prevent double-tap zoom and unwanted scrolling
+  Controller.iframe.frame.style.pointerEvents = "auto"; // ensure pointer events fire
+  
+
+  // ... rest of your code continues exactly as above
+});
 
 //default character
 //let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
 
 //Characters
     //Stickman
-    let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
     //Mishuba
-    let mishuba = new letsDoIt("", Mishuba); //mishuba aka my user setup using images.
+   // let mishuba = new letsDoIt("", Mishuba); //mishuba aka my user setup using images.
     //Know Tyme
     //Lockdown
     //Shadow
@@ -408,20 +426,7 @@ FirstGame.context.imageSmoothingEnabled;
         FirstGame.start() 
         //startGame(FirstGame); // Original but startGame code is deleted.
 */
-  let Live = new TfVideo(Socket, Effects);
-  
-  let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
-  let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
-  
-  Controller.iframe.frame.title = "Main Website Content";
-  Controller.iframe.frame.id = "TsunamiContent";
-  Controller.iframe.frame.name = "TsunamiMainFlowContent";
-  Controller.iframe.frame.width = 925;
-  Controller.iframe.frame.height = 430;
-  Controller.iframe.frame.style.background = "white";
-  Controller.iframe.frame.style.touchAction = "manipulation"; // prevent double-tap zoom and unwanted scrolling
-  Controller.iframe.frame.style.pointerEvents = "auto"; // ensure pointer events fire
-  
+
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
   } else {
