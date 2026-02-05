@@ -465,7 +465,7 @@ sourceNode.connect(this.audio.StreamDestination);
                 // FRAME DRAW LOOP
                 const drawLoop = () => {
                     if (!this.effects.isPlaying) return;
-                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.VideoTrack);
+                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.videoTrack);
                     requestAnimationFrame(drawLoop);
                 };
                 drawLoop();
