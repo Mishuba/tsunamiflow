@@ -454,7 +454,6 @@ this._videoBound = true;
         if (!this.TfWebcam.stream) {
             try {
                 await this.TfWebcam.start();            // get MediaStream
-                this.TfWebcam.attach(this.videoElem);   // attach to <video>
                 this.effects.isPlaying = true;
 
 let webcamAudioStream = new MediaStream();
