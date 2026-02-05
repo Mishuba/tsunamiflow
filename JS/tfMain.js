@@ -361,7 +361,6 @@ if (twoMore) {
   //Controller.bindCart();    
   Controller.bindWorker();    
 });
-});
 
 //default character
 //let HomepageUpdates = new letsDoIt("Tsunami Flow Updates", player1); //default i should just make this it's own class tbh. page setup without sprite
