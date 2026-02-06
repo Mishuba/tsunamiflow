@@ -1,3 +1,11 @@
+export class UniqueOriginal {
+   constructor(){
+   this.TsunamiServer = "https://world.tsunamiflow.club/tfMain.php?";
+   this.printfulList = "fetch_printful_items=7";
+   }
+   
+}
+
 const xhr = new XMLHttpRequest();
 
 xhr.open("GET", "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1", true);
