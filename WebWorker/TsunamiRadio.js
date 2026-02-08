@@ -213,12 +213,16 @@ async function fetchRadioSongs() {
         phpRadio.onreadystatechange = async function () {
             if (phpRadio.readyState === 4) {
                 if (phpRadio.status === 200) {
+if (phpRadio.responseText.startsWith('<')) {
+postMessage({ type: "radio", file: undefined, system: "file", message: "could not obtain the music list", buffer: "nothing" });;
+} else {
                     phpSongList = JSON.parse(phpRadio.responseText);
                     console.log("Parsed Songs:", phpSongList);
 
                     //RadioResponseOk = phpRadio.response;
                     RadioTime(phpSongList);
                     nextRadioItem = phpSongList;
+}
                 } else {
                     console.log(phpRadio.response + phpRadio.responseText); //const xmlDoc = phpRadio.responseXML;
                     // For Blobs
