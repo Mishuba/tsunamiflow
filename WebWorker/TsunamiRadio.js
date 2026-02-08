@@ -206,42 +206,42 @@ async function RadioTime(PSL, response = null) {
     }
 }
 
-async function fetchRadioSongs() {
-    try {
-        phpRadio.open("GET", "https://world.tsunamiflow.club/RadioPlaylist.php", true);
-        phpRadio.setRequestHeader("X-Request-Type", "fetchRadioSongs");
-        phpRadio.onreadystatechange = async function () {
-            if (phpRadio.readyState === 4) {
-                if (phpRadio.status === 200) {
-if (phpRadio.responseText.startsWith('<')) {
-postMessage({ type: "radio", file: undefined, system: "file", message: "could not obtain the music list", buffer: "nothing" });;
-} else {
-                    phpSongList = JSON.parse(phpRadio.responseText);
-                    console.log("Parsed Songs:", phpSongList);
+function fetchRadioSongs() {
+    phpRadio.open("GET", "https://world.tsunamiflow.club/RadioPlaylist.php", true);
+    phpRadio.setRequestHeader("X-Request-Type", "fetchRadioSongs");
 
-                    //RadioResponseOk = phpRadio.response;
-                    RadioTime(phpSongList);
-                    nextRadioItem = phpSongList;
+    phpRadio.onreadystatechange = function () {
+        if (phpRadio.readyState !== 4) return;
+
+        const text = phpRadio.responseText?.trim();
+
+        if (phpRadio.status !== 200 || !text || text.startsWith("<")) {
+            postMessage({
+                type: "radio",
+                file: undefined,
+                system: "file",
+                message: "could not obtain the music list",
+                buffer: "nothing"
+            });
+            return;
+        }
+
+        try {
+            const songList = JSON.parse(text);
+            console.log("Parsed Songs:", songList);
+            RadioTime(songList);
+            nextRadioItem = songList;
+        } catch (e) {
+            console.error("JSON parse error:", e);
+        }
+    };
+
+    phpRadio.onerror = function () {
+        console.error("Network Error");
+    };
+
+    phpRadio.send();
 }
-                } else {
-                    console.log(phpRadio.response + phpRadio.responseText); //const xmlDoc = phpRadio.responseXML;
-                    // For Blobs
-                    // phpRadio.responseType = "blob";
-                    // function () { const blob = phpRadio.response; const blobURL = URL.createObjectURL(blob); document.getElementById("the Element").src = bloblURL; }
-                    console.error("It did not do JSON.parse");
-                            postMessage({ type: "radio", file: undefined, system: "file", message: "could not obtain the music list", buffer: "nothing" });;
-                }
-            }
-        };
-        phpRadio.onerror = async function () {
-            console.error("Network Error: Unable to reach the server.");
-        };
-        phpRadio.send();
-    } catch (error) {
-        console.error("Error fetching or parsing songs:", error);
-    } finally {
-    }
-};
 
 async function fetchRadioArrayBuffer(file) {
     try {
