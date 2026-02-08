@@ -31,7 +31,7 @@ if (navigator.cookieEnabled) {
 }  
   
 const xhr = new XMLHttpRequest();
-xhr.open("GET", "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1", true);
+xhr.open("GET", "https://world.tsunamiflow.club/store.php?fetch_printful_items=1", true);
 xhr.withCredentials = true;
 
 xhr.onerror = () => console.error("XHR fetch items failed");
