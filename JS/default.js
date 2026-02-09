@@ -549,6 +549,9 @@ this.webrtc.stopStreaming();
   bindGame() {
     //game butftfons.
   }
+  bindDonation() {
+
+  }
   fetchCart() {
     try {
       const res = fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
