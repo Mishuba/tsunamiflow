@@ -119,6 +119,28 @@
                     <p itemprop="c">Planet: Earth<br />Galaxy: Milky Way<br /></p>
                 </address>
             </span>
+<div id="card-element"></div>
+<button id="donateBtn">Donate $5</button>
+<button id="subscribeBtn">Subscribe</button>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+const stripeDonation = new StripeDonation('pk_test_YOUR_PUBLIC_KEY');
+stripeDonation.mountCard('card-element');
+
+document.getElementById('donateBtn').addEventListener('click', async () => {
+    const result = await stripeDonation.donate(5); // $5
+    if (result.error) alert(result.error.message);
+    else alert("Donation successful!");
+});
+
+document.getElementById('subscribeBtn').addEventListener('click', async () => {
+    const result = await stripeDonation.subscribe('user@example.com', 'price_1234');
+    if (result.error) alert(result.error.message);
+    else alert("Subscription successful!");
+});
+</script>
+
             <p1 id="TFdonation"></p1>
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick" />
