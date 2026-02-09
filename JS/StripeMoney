@@ -59,4 +59,28 @@ class StripeDonation {
         this.cardElement = elements.create('card');
         this.cardElement.mount(`#${elementId}`);
     }
+getClientSecret(action, data, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://world.tsunamiflow.club/stripeBackend.php", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.withCredentials = true; // Required if backend sends Access-Control-Allow-Credentials
+
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+            try {
+                const response = JSON.parse(xhr.responseText);
+                if (xhr.status === 200 && !response.error) {
+                    callback(null, response.clientSecret);
+                } else {
+                    callback(response.error || 'Unknown error');
+                }
+            } catch (err) {
+                callback(err.message || 'JSON parse error');
+            }
+        }
+    };
+
+    const payload = { action, ...data };
+    xhr.send(JSON.stringify(payload));
+}
 }
