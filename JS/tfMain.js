@@ -403,8 +403,6 @@ FirstGame.context.imageSmoothingEnabled;
 console.log("created printful request");
 xhr.open("GET", "https://world.tsunamiflow.club/store.php?fetch_printful_items=7", true);
 
-xhr.withCredentials = true;
-
 xhr.onload = () => {
   console.log("Printful XHR status:", xhr.status);
   console.log("Raw response:", xhr.responseText);
