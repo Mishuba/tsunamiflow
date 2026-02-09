@@ -347,6 +347,7 @@ xhr.onload = () => {
     ul.appendChild(li);
   });
 };
+xhr.send();
   });    
   document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {    
     TsunamiThoughts.preventDefault();    
