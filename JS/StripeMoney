@@ -3,16 +3,15 @@ class StripeDonation {
         this.stripe = Stripe(stripePublicKey);
         this.backendUrl = backendUrl;
         this.cardElement = null;
+        this.customerId = localStorage.getItem('stripeCustomerId') || null; // saved customer
     }
 
-    // Generic XMLHttpRequest helper returning a Promise
     request(data) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open("POST", this.backendUrl, true);
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.withCredentials = true; // Required if backend sends credentials
-
+            xhr.withCredentials = true;
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     try {
@@ -24,49 +23,62 @@ class StripeDonation {
                     }
                 }
             };
-
             xhr.send(JSON.stringify(data));
         });
     }
 
-    // Mount Stripe Card Element
     mountCard(elementId) {
         const elements = this.stripe.elements();
         this.cardElement = elements.create('card');
         this.cardElement.mount(`#${elementId}`);
     }
 
-    // One-time donation (PaymentIntent)
-    async donate(amount, currency = 'usd') {
+    // Donate (one-time) with optional saved customer
+    async donate(amount, currency = 'usd', saveCustomer = true, email = null) {
         if (!this.cardElement) throw new Error("Card element not mounted");
 
-        const data = await this.request({
+        const payload = {
             action: 'createPaymentIntent',
-            amount: Math.round(amount * 100), // convert dollars to cents
-            currency
-        });
+            amount: Math.round(amount * 100),
+            currency,
+            saveCustomer: saveCustomer,
+            email: email
+        };
 
-        const { clientSecret } = data;
+        if (this.customerId) payload.customerId = this.customerId;
+
+        const data = await this.request(payload);
+        const { clientSecret, customerId } = data;
+
+        if (saveCustomer && customerId) this.customerId = customerId;
+        if (customerId) localStorage.setItem('stripeCustomerId', customerId);
+
         return this.stripe.confirmCardPayment(clientSecret, {
             payment_method: { card: this.cardElement }
         });
     }
 
-    // Subscription (Setup + PaymentIntent)
-    async subscribe(email, priceId) {
+    // Subscribe (recurring) with optional saved customer
+    async subscribe(email, priceId, saveCustomer = true) {
         if (!this.cardElement) throw new Error("Card element not mounted");
 
-        const data = await this.request({
+        const payload = {
             action: 'createSubscription',
             email,
-            priceId
-        });
+            priceId,
+            saveCustomer: saveCustomer
+        };
 
-        const { clientSecret } = data;
+        if (this.customerId) payload.customerId = this.customerId;
+
+        const data = await this.request(payload);
+        const { clientSecret, subscriptionId, customerId } = data;
+
+        if (saveCustomer && customerId) this.customerId = customerId;
+        if (customerId) localStorage.setItem('stripeCustomerId', customerId);
 
         if (!clientSecret) {
-            // No payment required (free trial / free plan)
-            return { status: 'success', message: 'No payment required' };
+            return { status: 'success', message: 'No payment required', subscriptionId };
         }
 
         return this.stripe.confirmCardPayment(clientSecret, {
@@ -74,14 +86,12 @@ class StripeDonation {
         });
     }
 
-    // Generic client secret fetch
     getClientSecret(action, data) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open("POST", this.backendUrl, true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.withCredentials = true;
-
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     try {
@@ -93,7 +103,6 @@ class StripeDonation {
                     }
                 }
             };
-
             xhr.send(JSON.stringify({ action, ...data }));
         });
     }
