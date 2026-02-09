@@ -405,8 +405,6 @@ xhr.open("GET", "https://world.tsunamiflow.club/store.php?fetch_printful_items=7
 
 xhr.withCredentials = true;
 
-xhr.onerror = () => console.error("XHR fetch items failed");
-
 xhr.onload = () => {
   console.log("Printful XHR status:", xhr.status);
   console.log("Raw response:", xhr.responseText);
@@ -478,3 +476,5 @@ xhr.onload = () => {
   });
 };
 xhr.send();
+
+xhr.onerror = (e) => console.error("XHR fetch items failed error: " + e);
