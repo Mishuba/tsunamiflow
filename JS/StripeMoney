@@ -1,30 +1,45 @@
 class StripeDonation {
-    constructor(stripePublicKey) {
+    constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/stripeBackend.php") {
         this.stripe = Stripe(stripePublicKey);
-        this.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+        this.backendUrl = backendUrl;
+        this.cardElement = null;
     }
 
+    // Generic XMLHttpRequest helper returning a Promise
     request(data) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
             xhr.open("POST", this.backendUrl, true);
             xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true; // Required if backend sends credentials
+
             xhr.onreadystatechange = () => {
                 if (xhr.readyState === 4) {
                     try {
                         const response = JSON.parse(xhr.responseText);
-                        if (xhr.status === 200) resolve(response);
-                        else reject(response);
+                        if (xhr.status === 200 && !response.error) resolve(response);
+                        else reject(response.error || 'Unknown error');
                     } catch (err) {
-                        reject(err);
+                        reject(err.message || 'JSON parse error');
                     }
                 }
             };
+
             xhr.send(JSON.stringify(data));
         });
     }
 
+    // Mount Stripe Card Element
+    mountCard(elementId) {
+        const elements = this.stripe.elements();
+        this.cardElement = elements.create('card');
+        this.cardElement.mount(`#${elementId}`);
+    }
+
+    // One-time donation (PaymentIntent)
     async donate(amount, currency = 'usd') {
+        if (!this.cardElement) throw new Error("Card element not mounted");
+
         const data = await this.request({
             action: 'createPaymentIntent',
             amount: Math.round(amount * 100), // convert dollars to cents
@@ -33,13 +48,14 @@ class StripeDonation {
 
         const { clientSecret } = data;
         return this.stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: this.cardElement
-            }
+            payment_method: { card: this.cardElement }
         });
     }
 
+    // Subscription (Setup + PaymentIntent)
     async subscribe(email, priceId) {
+        if (!this.cardElement) throw new Error("Card element not mounted");
+
         const data = await this.request({
             action: 'createSubscription',
             email,
@@ -47,40 +63,38 @@ class StripeDonation {
         });
 
         const { clientSecret } = data;
+
+        if (!clientSecret) {
+            // No payment required (free trial / free plan)
+            return { status: 'success', message: 'No payment required' };
+        }
+
         return this.stripe.confirmCardPayment(clientSecret, {
-            payment_method: {
-                card: this.cardElement
-            }
+            payment_method: { card: this.cardElement }
         });
     }
 
-    mountCard(elementId) {
-        const elements = this.stripe.elements();
-        this.cardElement = elements.create('card');
-        this.cardElement.mount(`#${elementId}`);
-    }
-getClientSecret(action, data, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://world.tsunamiflow.club/stripeBackend.php", true);
-    xhr.setRequestHeader("Content-Type", "application/json");
-    xhr.withCredentials = true; // Required if backend sends Access-Control-Allow-Credentials
+    // Generic client secret fetch
+    getClientSecret(action, data) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", this.backendUrl, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
 
-    xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-            try {
-                const response = JSON.parse(xhr.responseText);
-                if (xhr.status === 200 && !response.error) {
-                    callback(null, response.clientSecret);
-                } else {
-                    callback(response.error || 'Unknown error');
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    try {
+                        const response = JSON.parse(xhr.responseText);
+                        if (xhr.status === 200 && !response.error) resolve(response.clientSecret);
+                        else reject(response.error || 'Unknown error');
+                    } catch (err) {
+                        reject(err.message || 'JSON parse error');
+                    }
                 }
-            } catch (err) {
-                callback(err.message || 'JSON parse error');
-            }
-        }
-    };
+            };
 
-    const payload = { action, ...data };
-    xhr.send(JSON.stringify(payload));
-}
+            xhr.send(JSON.stringify({ action, ...data }));
+        });
+    }
 }
