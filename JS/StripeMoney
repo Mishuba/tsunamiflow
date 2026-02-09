@@ -1,5 +1,5 @@
 class StripeDonation {
-    constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/stripeBackend.php") {
+    constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
         this.stripe = Stripe(stripePublicKey);
         this.backendUrl = backendUrl;
         this.cardElement = null;
