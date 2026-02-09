@@ -401,7 +401,7 @@ FirstGame.context.imageSmoothingEnabled;
 //////////////starting store//////////////////
     const xhr = new XMLHttpRequest();
 console.log("created printful request");
-xhr.open("GET", "https://world.tsunamiflow.club/tfMain.php", true);
+xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
 xhr.setRequestHeader("X-Request-Type", "fetch_printful_items");
 
 xhr.onload = () => {
