@@ -1,4 +1,4 @@
-class StripeDonation {
+export class StripeDonation {
     constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
         this.stripe = Stripe(stripePublicKey);
         this.backendUrl = backendUrl;
