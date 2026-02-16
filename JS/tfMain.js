@@ -262,8 +262,7 @@ if (twoMore) {
   Controller.bindNavBar();    
   Controller.bindAudio();
   Controller.bindUsers();
-  Controller.bindStore();
-  Controller.bindPayments();
+  Controller.bindStore().then(() => Controller.bindPayments());
     
   Controller.iframe.frame.addEventListener("load", () => {    
     console.log("Iframe loaded:", Controller.iframe.frame.src);    
