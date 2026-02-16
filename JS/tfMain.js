@@ -33,7 +33,7 @@ if (navigator.cookieEnabled) {
 
  
 /// create an xmlhttprequest for the client key and then put it below
-let TsunamiPay = new StripeDonation("testClientKey");
+let TsunamiPay = new StripeDonation("pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ'");
 
 /*
   const data = JSON.parse(xhr.responseText);
