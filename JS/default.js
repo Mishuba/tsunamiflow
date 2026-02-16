@@ -1,84 +1,21 @@
 export class MishubaController {
   constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, pay = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
-    if (this.user !== null) {
-      this.userFields = {
-        tfFN: document.getElementById("TfFirstName"),
-        tfLN: document.getElementById("TfLastName"),
-        tfNN: document.getElementById("TfNickName"),
-        tfGen: document.getElementById("TfGender"),
-        tfEM: document.getElementById("TfEmail"),
-        tfBirth: document.getElementById("TfBirthday"),
-        tfUN: document.getElementById("TFuserName"),
-        tfPsw: document.getElementById("TFpassword"),
-        tfMembershipLevel: document.getElementById("TFMembershipLevel"),
-      };
-      this.extraFields = {
-        ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
-        WesternZodiacSign: document.getElementById("WesternZodiacSign"),
-        SpiritAnimal: document.getElementById("SpiritAnimal"),
-        CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
-        NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
-        VedicAstrologySign: document.getElementById("VedicAstrologySign"),
-        GuardianAngel: document.getElementById("GuardianAngel"),
-        ChineseElement: document.getElementById("ChineseElement"),
-        EyeColorMeaning: document.getElementById("EyeColorMeaning"),
-        GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
-        NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
-        EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
-        MayanZodiacSign: document.getElementById("MayanZodiacSign"),
-        LoveLanguage: document.getElementById("LoveLanguage"),
-        Birthstone: document.getElementById("Birthstone"),
-        BirthFlower: document.getElementById("BirthFlower"),
-        BloodType: document.getElementById("BloodType"),
-        AttachmentStyle: document.getElementById("AttachmentStyle"),
-        CharismaType: document.getElementById("CharismaType"),
-        BusinessPersonality: document.getElementById("BusinessPersonality"),
-        DISC: document.getElementById("DISC"),
-        SocionicsType: document.getElementById("SocionicsType"),
-        LearningStyle: document.getElementById("LearningStyle"),
-        FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
-        PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
-        CreativeStyle: document.getElementById("CreativeStyle"),
-        ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
-        TeamRolePreference: document.getElementById("TeamRolePreference")
-      };
-    }
     this.iframe = iframe;
-    if (document.getElementById("TFMembershipLevel")) {
-      this.membershipSelect = document.getElementById("TFMembershipLevel");
-      this.membershipCostEl = document.getElementById("membershipCost");
-      this.paymentTypeEl = document.getElementById("paymentType");
-      this.hiddenMC = document.getElementById("hiddenMC");
-      this.hiddenPT = document.getElementById("hiddenPT");
-      this.sections = {
-        free: document.getElementById("freeLevelInputs"),
-        regular: document.getElementById("regularLevelInputs"),
-        vip: document.getElementById("vipLevelInputs"),
-        team: document.getElementById("teamLevelInputs"),
-        address: document.getElementById("AddressDetailsSubscribers"), // if present
-        costInfo: document.getElementById("membershipCostInfo"),
-      };
-      this.bindSignUp();
-    }
     this.effects = effects;
     this.websocket = websocket;
     this.audio = audio;
+    this.audioElem = AudioElement;
+this.audioCanv = AudioCanvas;
+this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
+this.audioTitle = AudioTitle;
+this.audioSystem = AudioButtonSpot;
+this.audioLast = AudioPrevious;
+this.audioRestart = AudioOver;
+this.audioStart = AudioStart;
+this.audioSkip = AudioSkip;
     this.mixer = mixer;
     this.worker = worker;
-    if (audio !== null) {
-      this.audioElem = AudioElement;
-      this.audioCanv = AudioCanvas;
-      this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
-      this.audioTitle = AudioTitle;
-      this.audioSystem = AudioButtonSpot;
-      this.audioLast = AudioPrevious;
-      this.audioRestart = AudioOver;
-      this.audioStart = AudioStart;
-      this.audioSkip = AudioSkip;
-this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
-this.TfRadioEventListeners();
-    }
     this.video = video;
     this.videoElem = VideoElement;
     this.videoCanv = VideoCanvas;
@@ -87,18 +24,8 @@ this.TfRadioEventListeners();
     this.recorder = recorder;
     this.streamer = streamer;
     this.game = game;
-    if (this.game !== null) {
-      this.bindGame();
-    }
     this.store = store;
-    if (this.store !== null) {
-      this.bindStore();
-      //this.bindCart();
-    }
     this.payment = pay;
-    if (this.payment !== null) {
-      this.bindPayments();
-    }
     this.extraElem = null;
     this.MyScreen = screenshare;
   }
@@ -199,11 +126,6 @@ return this.iframe.frame.contentDocument.getElementById(elem);
       this.user.login();
     }, true);
   }
-  bindSignUp() {
-    this.on("TFCompleteForm", () => {
-      this.user.signup(this.userFields, this.extraFields);
-    }, true);
-  }
   
   TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
     title.innerHTML = "Welcome to TFN Radio";
@@ -259,7 +181,6 @@ element.src = "";
     );
   }
   TfRadioEventListeners() {
-
 if (this._radioBound) return;
 this._radioBound = true;
    this.audioElem.addEventListener("emptied", async (emptied) => {
@@ -336,6 +257,10 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     this.audioElem.addEventListener("volumechange", (volumechange) => {
       this.audio.volumechangeAudio();
     });
+  }
+  bindAudio() {
+this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+this.TfRadioEventListeners();
   }
   usePickedColor(useChroma) {
     this.effects.useChromaKey = true;
@@ -553,6 +478,69 @@ this.webrtc.stopStreaming();
     //game butfons.
   }
   
+  bindSignUp() {
+  this.on("TFCompleteForm", () => {
+    this.user.signup(this.userFields, this.extraFields);
+  }, true);
+}
+
+  bindUsers() {
+  this.userFields = {
+    tfFN: document.getElementById("TfFirstName"),
+    tfLN: document.getElementById("TfLastName"),
+    tfNN: document.getElementById("TfNickName"),
+    tfGen: document.getElementById("TfGender"),
+    tfEM: document.getElementById("TfEmail"),
+    tfBirth: document.getElementById("TfBirthday"),
+    tfUN: document.getElementById("TFuserName"),
+    tfPsw: document.getElementById("TFpassword"),
+    tfMembershipLevel: document.getElementById("TFMembershipLevel"),
+  };
+  this.extraFields = {
+    ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
+    WesternZodiacSign: document.getElementById("WesternZodiacSign"),
+    SpiritAnimal: document.getElementById("SpiritAnimal"),
+    CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
+    NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
+    VedicAstrologySign: document.getElementById("VedicAstrologySign"),
+    GuardianAngel: document.getElementById("GuardianAngel"),
+    ChineseElement: document.getElementById("ChineseElement"),
+    EyeColorMeaning: document.getElementById("EyeColorMeaning"),
+    GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
+    NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
+    EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
+    MayanZodiacSign: document.getElementById("MayanZodiacSign"),
+    LoveLanguage: document.getElementById("LoveLanguage"),
+    Birthstone: document.getElementById("Birthstone"),
+    BirthFlower: document.getElementById("BirthFlower"),
+    BloodType: document.getElementById("BloodType"),
+    AttachmentStyle: document.getElementById("AttachmentStyle"),
+    CharismaType: document.getElementById("CharismaType"),
+    BusinessPersonality: document.getElementById("BusinessPersonality"),
+    DISC: document.getElementById("DISC"),
+    SocionicsType: document.getElementById("SocionicsType"),
+    LearningStyle: document.getElementById("LearningStyle"),
+    FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
+    PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
+    CreativeStyle: document.getElementById("CreativeStyle"),
+    ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
+    TeamRolePreference: document.getElementById("TeamRolePreference")
+  };
+  this.membershipSelect = document.getElementById("TFMembershipLevel");
+  this.membershipCostEl = document.getElementById("membershipCost");
+  this.paymentTypeEl = document.getElementById("paymentType");
+  this.hiddenMC = document.getElementById("hiddenMC");
+  this.hiddenPT = document.getElementById("hiddenPT");
+  this.sections = {
+    free: document.getElementById("freeLevelInputs"),
+    regular: document.getElementById("regularLevelInputs"),
+    vip: document.getElementById("vipLevelInputs"),
+    team: document.getElementById("teamLevelInputs"),
+    address: document.getElementById("AddressDetailsSubscribers"), // if present
+    costInfo: document.getElementById("membershipCostInfo"),
+  };
+  this.bindSignUp();
+  }
   async fetchCart() {
     try {
       const res = await fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
@@ -631,91 +619,12 @@ this.webrtc.stopStreaming();
   }
   
   bindStore() {
-    const xhr = new XMLHttpRequest();
-    console.log("created printful request");
-    xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
-    xhr.setRequestHeader("X-Request-Type", "fetch_printful_items");
-    
-    xhr.onload = () => {
-      console.log("Printful XHR status:", xhr.status);
-      console.log("Raw response:", xhr.responseText);
-      
-      if (xhr.status !== 200) {
-        console.error("Fetch failed:", xhr.responseText);
-        return;
-      }
-      
-      const data = JSON.parse(xhr.responseText);
-      console.log("Printful items:", data.items);
-      
-      const store = document.getElementById("TFstore");
-      const ul = store.querySelector("ul");
-      
-      ul.innerHTML = "";
-      
-      if (!data.items.length) {
-        store.querySelector("p").style.display = "block";
-        return;
-      }
-      
-      data.items.forEach(item => {
-        const li = document.createElement("li");
-        
-        li.innerHTML = `
-      <h4>${item.name}</h4>
-      <img src="${item.thumbnail}" alt="Product Image">
-      <p>${item.description || ""}</p>
-
-      <form class="cartForm" method="POST" action="/server.php">
-        <select class="variantSelect" name="product_id" required></select>
-        <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
-        <span class="itemSubtotal">0.00</span>
-        <button type="submit" name="addProductToCart">Add to Cart</button>
-      </form>
-    `;
-        
-        const variantSelect = li.querySelector(".variantSelect");
-        
-        if (item.variants.length) {
-          item.variants.forEach(variant => {
-            const opt = document.createElement("option");
-            opt.value = variant.variant_id;
-            opt.dataset.price = variant.price;
-            opt.textContent = `${variant.name} — $${variant.price}`;
-            variantSelect.appendChild(opt);
-          });
-        } else {
-          variantSelect.innerHTML = `<option>No Variants Available</option>`;
-          variantSelect.disabled = true;
-        }
-        
-        // Subtotal calculation
-        const qtyInput = li.querySelector(".quantityInput");
-        const subtotalSpan = li.querySelector(".itemSubtotal");
-        
-        function updateSubtotal() {
-          const price = parseFloat(variantSelect.selectedOptions[0]?.dataset.price || 0);
-          const qty = parseInt(qtyInput.value || 1);
-          subtotalSpan.textContent = (price * qty).toFixed(2);
-        }
-        
-        variantSelect.addEventListener("change", updateSubtotal);
-        qtyInput.addEventListener("input", updateSubtotal);
-        updateSubtotal();
-        
-        ul.appendChild(li);
-      });
-      this.bindCart();
-    };
-    xhr.send();
-    
-    xhr.onerror = (e) => console.error("XHR fetch items failed error: " + e);
+    this.store.showProducts();
   }
   
   bindPayments() {
-    if (this.store !== null) {
-      //this.payment.mountCard("UniqueOriginal");
-      /*
+      this.payment.mountCard("UniqueOriginal");
+      
       document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
   const email = emailInput.value || null;
   try {
@@ -728,12 +637,9 @@ this.webrtc.stopStreaming();
     alert("Purchase failed: " + err.message);
   }
 });
-      */
-    }
-    if (this.user !== null) {
-      //this.payment.mountCard("SubscribeUsers");
-      /*
-      document.getElementById("SubscribeUsersBtn").addEventListener("click", async () => {
+      this.payment.mountCard("SubscribeUsers");
+      
+      document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
   const email = emailInput.value || null;
   const priceId = "price_123456789"; // Stripe Price ID for subscription
   try {
@@ -747,8 +653,6 @@ this.webrtc.stopStreaming();
     alert("Subscription failed: " + err.message);
   }
 });
-      */
-    }
     
     this.payment.mountCard("TfDonation"); //div
     
@@ -768,4 +672,5 @@ this.webrtc.stopStreaming();
   bindWorker() {
     this.worker.init(this.audioElem);
   }
+  
 }
