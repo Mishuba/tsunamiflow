@@ -1,5 +1,5 @@
 import { StripeDonation } from "./tfPayments.js";
-import { UniqueOriginal } from ",/TfPrintful.js";
+import { UniqueOriginal } from "./TfPrintful.js";
 import { gameComponent } from "./planetuniverse.js";  
 import { letsDoIt } from "./gamemechanics.js";  
 import { ScreenShare } from "./ScreenSharer.js";  
