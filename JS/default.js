@@ -1,5 +1,5 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, pay = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
     if (this.user !== null) {
       this.userFields = {
@@ -94,6 +94,10 @@ this.TfRadioEventListeners();
     if (this.store !== null) {
       this.bindStore();
       //this.bindCart();
+    }
+    this.payment = pay;
+    if (this.payment !== null) {
+      this.bindPayments();
     }
     this.extraElem = null;
     this.MyScreen = screenshare;
@@ -200,12 +204,7 @@ return this.iframe.frame.contentDocument.getElementById(elem);
       this.user.signup(this.userFields, this.extraFields);
     }, true);
   }
-  bindEffects() {
-
-  }
-  bindSocket() {
-
-  }
+  
   TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
     title.innerHTML = "Welcome to TFN Radio";
 
@@ -342,6 +341,7 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     this.effects.useChromaKey = true;
     useChroma.style.display = "inline";
   }
+  
   VideoEventListeners(engine, element, canvas) {
     if (element === null) {
       element = document.createElement("video");
@@ -434,12 +434,14 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
       engine.VideoVolumeChange();
     });
   }
+  
   bindVidSystem() {
     this.on("TfControlShit", () => {
       this.bindVideo();
       //webcam now
     }, false, this.iframe.frame);
   }
+  
   bindVideo() {
 if (this._videoBound) return;
 this._videoBound = true;
@@ -534,7 +536,7 @@ this.webrtc.stopStreaming();
         const gamepad = event.gamepad;
         if (connected) {
             this.game.controllerIndex = gamepad.index;
-            console.log("Controller connected at index:", controllerIndex);
+            console.log("Controller connected at index:", this.controllerIndex);
             this.game.controllerType = this.getControllerType(gamepad);
             console.log("Controller type detected:", this.game.controllerType);
             gamepads[gamepad.index] = gamepad;
@@ -546,26 +548,26 @@ this.webrtc.stopStreaming();
             console.log(`Gamepad disconnected: ${gamepad.id}`);
         }
     }
+    
   bindGame() {
-    //game butftfons.
+    //game butfons.
   }
-  bindDonation() {
-
-  }
-  fetchCart() {
+  
+  async fetchCart() {
     try {
-      const res = fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
+      const res = await fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = res.json();
+      const data = await res.json();
       return data.items || [];
     } catch (err) {
       console.error('Error fetching cart:', err);
       return [];
     }
   }
-  updateTotals() {
+  
+  async updateTotals() {
     let grandTotal = 0;
     document.querySelectorAll('.cartForm').forEach(form => {
       const variantSelect = form.querySelector('.variantSelect');
@@ -587,57 +589,183 @@ this.webrtc.stopStreaming();
     const totalEl = document.getElementById('cartTotal');
     if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
   }
+  
   bindCart() {
     document.querySelectorAll('.cartForm').forEach(form => {
       const quantityInput = form.querySelector('.quantityInput');
       const variantSelect = form.querySelector('.variantSelect');
 
-      quantityInput?.addEventListener('input', updateTotals);
-      variantSelect?.addEventListener('change', updateTotals);
+      quantityInput?.addEventListener('input', () => this.updateTotals());
+      variantSelect?.addEventListener('change', () => this.updateTotals());
 
       form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (!form.action) return console.warn('Form action is empty!');
-
-        try {
-          const formData = new FormData(form);
-          const res = fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-          const result = res.json();
-          if (result.success) {
-            // Refresh cart totals
-            const cartItems = this.fetchCart();
-            let total = 0;
-            cartItems.forEach(item => {
-              total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-            });
-
-            const totalEl = document.getElementById('cartTotal');
-            if (totalEl) totalEl.textContent = total.toFixed(2);
-
-            // Refresh item subtotals in DOM
-            this.updateTotals();
-          } else {
-            console.warn('Cart error:', result.error);
-          }
-        } catch (err) {
-          console.error('Form submission error:', err);
-        }
+  e.preventDefault();
+  if (!form.action) return console.warn('Form action is empty!');
+  try {
+    const formData = new FormData(form);
+    const res = await fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const result = await res.json();
+    
+    if (result.success) {
+      // Refresh totals
+      const cartItems = await this.fetchCart();
+      let total = 0;
+      cartItems.forEach(item => {
+        total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
       });
+      const totalEl = document.getElementById('cartTotal');
+      if (totalEl) totalEl.textContent = total.toFixed(2);
+      
+      this.updateTotals(); // DOM subtotals
+    } else {
+      console.warn('Cart error:', result.error);
+    }
+  } catch (err) {
+    console.error('Form submission error:', err);
+  }
+});
     });
     // Initialize totals on page load
     this.updateTotals();
   }
+  
   bindStore() {
+    const xhr = new XMLHttpRequest();
+    console.log("created printful request");
+    xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
+    xhr.setRequestHeader("X-Request-Type", "fetch_printful_items");
+    
+    xhr.onload = () => {
+      console.log("Printful XHR status:", xhr.status);
+      console.log("Raw response:", xhr.responseText);
+      
+      if (xhr.status !== 200) {
+        console.error("Fetch failed:", xhr.responseText);
+        return;
+      }
+      
+      const data = JSON.parse(xhr.responseText);
+      console.log("Printful items:", data.items);
+      
+      const store = document.getElementById("TFstore");
+      const ul = store.querySelector("ul");
+      
+      ul.innerHTML = "";
+      
+      if (!data.items.length) {
+        store.querySelector("p").style.display = "block";
+        return;
+      }
+      
+      data.items.forEach(item => {
+        const li = document.createElement("li");
+        
+        li.innerHTML = `
+      <h4>${item.name}</h4>
+      <img src="${item.thumbnail}" alt="Product Image">
+      <p>${item.description || ""}</p>
 
+      <form class="cartForm" method="POST" action="/server.php">
+        <select class="variantSelect" name="product_id" required></select>
+        <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
+        <span class="itemSubtotal">0.00</span>
+        <button type="submit" name="addProductToCart">Add to Cart</button>
+      </form>
+    `;
+        
+        const variantSelect = li.querySelector(".variantSelect");
+        
+        if (item.variants.length) {
+          item.variants.forEach(variant => {
+            const opt = document.createElement("option");
+            opt.value = variant.variant_id;
+            opt.dataset.price = variant.price;
+            opt.textContent = `${variant.name} — $${variant.price}`;
+            variantSelect.appendChild(opt);
+          });
+        } else {
+          variantSelect.innerHTML = `<option>No Variants Available</option>`;
+          variantSelect.disabled = true;
+        }
+        
+        // Subtotal calculation
+        const qtyInput = li.querySelector(".quantityInput");
+        const subtotalSpan = li.querySelector(".itemSubtotal");
+        
+        function updateSubtotal() {
+          const price = parseFloat(variantSelect.selectedOptions[0]?.dataset.price || 0);
+          const qty = parseInt(qtyInput.value || 1);
+          subtotalSpan.textContent = (price * qty).toFixed(2);
+        }
+        
+        variantSelect.addEventListener("change", updateSubtotal);
+        qtyInput.addEventListener("input", updateSubtotal);
+        updateSubtotal();
+        
+        ul.appendChild(li);
+      });
+      this.bindCart();
+    };
+    xhr.send();
+    
+    xhr.onerror = (e) => console.error("XHR fetch items failed error: " + e);
   }
+  
+  bindPayments() {
+    if (this.store !== null) {
+      //this.payment.mountCard("UniqueOriginal");
+      /*
+      document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
+  const email = emailInput.value || null;
+  try {
+    const result = await this.payment.donate(20, 'usd', true, email); // $20 item
+    if (result.payment && result.payment.status === 'succeeded') {
+      alert("Purchase successful! Thank you.");
+      // Optionally, you can trigger your order fulfillment logic here
+    }
+  } catch (err) {
+    alert("Purchase failed: " + err.message);
+  }
+});
+      */
+    }
+    if (this.user !== null) {
+      //this.payment.mountCard("SubscribeUsers");
+      /*
+      document.getElementById("SubscribeUsersBtn").addEventListener("click", async () => {
+  const email = emailInput.value || null;
+  const priceId = "price_123456789"; // Stripe Price ID for subscription
+  try {
+    const result = await this.payment.subscribe(email, priceId, true);
+    if (result.status === 'success') {
+      alert("Subscription successful!");
+    } else if (result.payment && result.payment.status === 'succeeded') {
+      alert("Subscription payment successful!");
+    }
+  } catch (err) {
+    alert("Subscription failed: " + err.message);
+  }
+});
+      */
+    }
+    
+    this.payment.mountCard("TfDonation"); //div
+    
+    document.getElementById("TfDonateBtn").addEventListener("click", async () => {
+        try {
+          const result = await this.payment.donate(10, 'usd', true, email); // $10 donation
+          if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+              alert("Donation successful! Thank you.");
+          }
+        } catch (err) {
+          alert("Donation failed: " + err.message);
+        }
+      }
+    );
+  }
+  
   bindWorker() {
     this.worker.init(this.audioElem);
-
-    //this.TfRadioEventListeners();
-//this.audio.MusicNetworkState(this.worker.radioWorker, this.audioElem);
-//this.audio.MusicState(this.audioElem);
   }
 }
