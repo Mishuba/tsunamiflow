@@ -10,9 +10,12 @@ export class TfWebcam {
         this.audioTrack = null;
 
         this.constraints = {
-            video,
-            audio,
-            ...constraints
+            audio: {
+    echoCancellation: true,
+    noiseSuppression: true,
+    autoGainControl: true
+  },
+  video: true,
         };
 
         this.onReady = onReady;
