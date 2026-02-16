@@ -1,4 +1,5 @@
 import { StripeDonation } from "./tfPayments.js";
+import { UniqueOriginal } from ",/TfPrintful.js";
 import { gameComponent } from "./planetuniverse.js";  
 import { letsDoIt } from "./gamemechanics.js";  
 import { ScreenShare } from "./ScreenSharer.js";  
@@ -34,6 +35,8 @@ if (navigator.cookieEnabled) {
  
 /// create an xmlhttprequest for the client key and then put it below
 let TsunamiPay = new StripeDonation("pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ");
+
+let TsunamiPrintful = new UniqueOriginal();
 
 /*
   const data = JSON.parse(xhr.responseText);
@@ -233,7 +236,7 @@ let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup
 
 let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
-  let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, null, TsunamiPay, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
+  let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, TsunamiPrintful, TsunamiPay, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
   
   Controller.iframe.frame.title = "Main Website Content";
   Controller.iframe.frame.id = "TsunamiContent";
