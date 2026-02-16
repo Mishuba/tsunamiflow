@@ -1,89 +1,86 @@
 export class UniqueOriginal {
    constructor(){
-   this.TsunamiServer = "https://world.tsunamiflow.club/tfMain.php?";
-   this.printfulList = "fetch_printful_items=7";
-   this.store = document.getElementById("TFstore");
-   }
-   DisplayStoreItems(items) {
-  
-  if (!this.store) return;
 
-  let list = store.querySelector("ul");
-  let template = list.querySelector("li");
-  let emptyMsg = store.querySelector("p");
-
-  list.innerHTML = ""; // clear template
-  emptyMsg.style.display = items.length ? "none" : "block";
-
-  if (!items.length) return;
-
-  items.forEach(product => {
-    const li = template.cloneNode(true);
-
-    const title = li.querySelector("h4");
-    const img = li.querySelector("img");
-    const desc = li.querySelector("p");
-    const variantSelect = li.querySelector(".variantSelect");
-    const qtyInput = li.querySelector(".quantityInput");
-    const subtotal = li.querySelector(".itemSubtotal");
-    const addButton = li.querySelector("button"); // your add-to-cart button
-
-    title.textContent = product.name || "Unnamed Product";
-    img.src = product.thumbnail || "";
-    desc.textContent = product.description || "";
-
-    variantSelect.innerHTML = "";
-    const variants = product.sync_variants || product.variants || [];
-
-    if (!variants.length) {
-      const opt = document.createElement("option");
-      opt.textContent = "No variants available";
-      variantSelect.appendChild(opt);
-      variantSelect.disabled = true;
-    } else {
-      variantSelect.disabled = false;
-
-      variants.forEach(v => {
-        const opt = document.createElement("option");
-        opt.value = v.id;
-        opt.dataset.price = v.retail_price || v.price || 0;
-        opt.textContent = `${v.name} - $${opt.dataset.price}`;
-        variantSelect.appendChild(opt);
-      });
-    }
-
-    // price calculation
-    const recalc = () => {
-      const price = parseFloat(
-        variantSelect.selectedOptions[0]?.dataset.price || 0
-      );
-      const qty = parseInt(qtyInput.value || 1);
-      subtotal.textContent = (price * qty).toFixed(2);
-    };
-
-    variantSelect.onchange = recalc;
-    qtyInput.oninput = recalc;
-    recalc();
-   }
-   
-}
-
+  } 
+  showProducts() {
 const xhr = new XMLHttpRequest();
+    console.log("created printful request");
+    xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
+    xhr.setRequestHeader("X-Request-Type", "fetch_printful_items");
+    
+    xhr.onload = () => {
+      console.log("Printful XHR status:", xhr.status);
+      console.log("Raw response:", xhr.responseText);
+      
+      if (xhr.status !== 200) {
+        console.error("Fetch failed:", xhr.responseText);
+        return;
+      }
+      
+      const data = JSON.parse(xhr.responseText);
+      console.log("Printful items:", data.items);
+      
+      const store = document.getElementById("TFstore");
+      const ul = store.querySelector("ul");
+      
+      ul.innerHTML = "";
+      
+      if (!data.items.length) {
+        store.querySelector("p").style.display = "block";
+        return;
+      }
+      
+      data.items.forEach(item => {
+        const li = document.createElement("li");
+        
+        li.innerHTML = `
+      <h4>${item.name}</h4>
+      <img src="${item.thumbnail}" alt="Product Image">
+      <p>${item.description || ""}</p>
 
-xhr.open("GET", "https://world.tsunamiflow.club/tfMain.php?fetch_printful_items=1", true);
-xhr.withCredentials = true;
-
-xhr.onerror = () => console.error("XHR fetch items failed");
-
-xhr.onload = () => {
-   console.log("Printful XHR status:", xhr.status);
-   console.log("Raw response:", xhr.responseText);
-  if (xhr.status !== 200) {
-    console.error("Fetch failed:", xhr.responseText);
-    return;
-  } else {
-     const data = JSON.parse(xhr.responseText);
-     console.log("Printful items:", data);
-     return data;
-  }
+      <form class="cartForm" method="POST" action="/server.php">
+        <select class="variantSelect" name="product_id" required></select>
+        <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
+        <span class="itemSubtotal">0.00</span>
+        <button type="submit" name="addProductToCart">Add to Cart</button>
+      </form>
+    `;
+        
+        const variantSelect = li.querySelector(".variantSelect");
+        
+        if (item.variants.length) {
+          item.variants.forEach(variant => {
+            const opt = document.createElement("option");
+            opt.value = variant.variant_id;
+            opt.dataset.price = variant.price;
+            opt.textContent = `${variant.name} — $${variant.price}`;
+            variantSelect.appendChild(opt);
+          });
+        } else {
+          variantSelect.innerHTML = `<option>No Variants Available</option>`;
+          variantSelect.disabled = true;
+        }
+        
+        // Subtotal calculation
+        const qtyInput = li.querySelector(".quantityInput");
+        const subtotalSpan = li.querySelector(".itemSubtotal");
+        
+        function updateSubtotal() {
+          const price = parseFloat(variantSelect.selectedOptions[0]?.dataset.price || 0);
+          const qty = parseInt(qtyInput.value || 1);
+          subtotalSpan.textContent = (price * qty).toFixed(2);
+        }
+        
+        variantSelect.addEventListener("change", updateSubtotal);
+        qtyInput.addEventListener("input", updateSubtotal);
+        updateSubtotal();
+        
+        ul.appendChild(li);
+      });
+      this.bindCart();
+    };
+    xhr.send();
+    
+    xhr.onerror = (e) => console.error("XHR fetch items failed error: " + e);
+}
 };
