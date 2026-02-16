@@ -542,9 +542,9 @@ this.webrtc.stopStreaming();
   this.bindSignUp();
   }
   
-  bindStore() {
-    this.store.showProducts();
-  }
+  async bindStore() {
+    await this.store.showProducts();
+}
   
   bindPayments() {
       this.payment.mountCard("UniqueOriginal");
