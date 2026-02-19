@@ -24,30 +24,37 @@ form.addEventListener("submit", async (e) => {
   };
   
   try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      credentials: "include",
-      body: JSON.stringify(payload)
-    });
-    
-    let data;
-    try {
-      data = await res.json();
-    } catch {
-      data = await res.text();
-    }
-    
-    if (!res.ok) {
-      throw data;
-    }
-    
-    output.textContent = JSON.stringify(data, null, 2);
-  } catch (err) {
-    output.textContent = JSON.stringify(err, null, 2);
-  } finally {
-    submitBtn.disabled = false;
+  const res = await fetch(API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    credentials: "include",
+    body: JSON.stringify(payload)
+  });
+
+  // Read body ONCE
+  const raw = await res.text();
+
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch {
+    data = raw;
   }
+
+  if (!res.ok) {
+    throw data;
+  }
+
+  output.textContent = JSON.stringify(data, null, 2);
+
+} catch (err) {
+  output.textContent =
+    typeof err === "string"
+      ? err
+      : JSON.stringify(err, null, 2);
+} finally {
+  submitBtn.disabled = false;
+}
 });
