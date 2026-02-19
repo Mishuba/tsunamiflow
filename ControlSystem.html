@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tsunami Flow – UiPath Trigger</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0b0f1a;
+      color: #e6e9f0;
+      padding: 2rem;
+      max-width: 720px;
+      margin: auto;
+    }
+
+    h1 { margin-bottom: 1rem; }
+
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.3rem;
+      background: #121829;
+      color: #fff;
+      border: 1px solid #2a3150;
+      border-radius: 6px;
+    }
+
+    button {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.2rem;
+      background: #5b7cff;
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    pre {
+      background: #0f1324;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 6px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  </style>
+</head>
+<body>
+  <h1>Trigger UiPath Job</h1>
+<form id="jobForm">
+  <label>What We Doin Bro?
+    <input id="WhatWeDoinBro" required maxlength="200" />
+  </label>
+  
+  <label>Message Subject
+    <input id="MessageSubject" required maxlength="200" />
+  </label>
+  
+  <label>Message Start
+    <input id="MessageStart" required maxlength="200" />
+  </label>
+  
+  <label>Message Continue
+    <input id="MessageContinue" required maxlength="200" />
+  </label>
+  
+  <label>YouTube Link
+    <input id="YoutubeLink" type="url" required />
+  </label>
+  
+  <label>Spotify Link
+    <input id="SpotifyLink" type="url" required />
+  </label>
+  
+  <label>Apple Music Link
+    <input id="AppleLink" type="url" required />
+  </label>
+  
+  <label>WAV Download Link
+    <input id="WavDownloadLink" type="url" required />
+  </label>
+  
+  <label>MP3 Download Link
+    <input id="Mp3DownloadLink" type="url" required />
+  </label>
+  
+  <button id="submitBtn" type="submit">Launch Automation</button>
+</form>
+
+  <pre id="output">Idle.</pre>
+
+  <script src="./JS/uipath.js"></script>
+</body>
+</html>
