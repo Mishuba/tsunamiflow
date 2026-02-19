@@ -12,17 +12,17 @@ form.addEventListener("submit", async (e) => {
   output.textContent = "Launching job...";
   
   const payload = {
-  WhatWeDoinBro: document.getElementById("WhatWeDoinBro").value.trim(),
-  MessageSubject: document.getElementById("MessageSubject").value.trim(),
-  MessageStart: document.getElementById("MessageStart").value.trim(),
-  MessageContinue: document.getElementById("MessageContinue").value.trim(),
-  YoutubeLink: document.getElementById("YoutubeLink").value.trim(),
-  SpotifyLink: document.getElementById("SpotifyLink").value.trim(),
-  AppleLink: document.getElementById("AppleLink").value.trim(),
-  WavDownloadLink: document.getElementById("WavDownloadLink").value.trim(),
-  Mp3DownloadLink: document.getElementById("Mp3DownloadLink").value.trim()
-};
-
+    WhatWeDoinBro: document.getElementById("WhatWeDoinBro").value.trim(),
+    MessageSubject: document.getElementById("MessageSubject").value.trim(),
+    MessageStart: document.getElementById("MessageStart").value.trim(),
+    MessageContinue: document.getElementById("MessageContinue").value.trim(),
+    YoutubeLink: document.getElementById("YoutubeLink").value.trim(),
+    SpotifyLink: document.getElementById("SpotifyLink").value.trim(),
+    AppleLink: document.getElementById("AppleLink").value.trim(),
+    WavDownloadLink: document.getElementById("WavDownloadLink").value.trim(),
+    Mp3DownloadLink: document.getElementById("Mp3DownloadLink").value.trim()
+  };
+  
   try {
     const res = await fetch(API_URL, {
       method: "POST",
@@ -34,15 +34,15 @@ form.addEventListener("submit", async (e) => {
     });
     
     let data;
-try {
-  data = await res.json();
-} catch {
-  data = await res.text();
-}
-
-if (!res.ok) {
-  throw data;
-}
+    try {
+      data = await res.json();
+    } catch {
+      data = await res.text();
+    }
+    
+    if (!res.ok) {
+      throw data;
+    }
     
     output.textContent = JSON.stringify(data, null, 2);
   } catch (err) {
