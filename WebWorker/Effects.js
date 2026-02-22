@@ -136,8 +136,8 @@ export class TfEffects {
 
     drawingFrame(vidCanv, TfWebcam) {
         const ctx = vidCanv.getContext("2d");
-        const w = vidCanv.width;
-        const h = vidCanv.height;
+        const w = 600;
+        const h = 480;
 
         this.webcamCanvas.width = w;
         this.webcamCanvas.height = h;
