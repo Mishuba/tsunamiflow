@@ -378,6 +378,9 @@ this._videoBound = true;
 
     // START WEBCAM + DRAW LOOP
     this.on("TfStartShit", async () => {
+        if (this.videoCanv === null) {
+
+        }
         if (!this.TfWebcam.stream) {
             try {
                 await this.TfWebcam.start();            // get MediaStream
