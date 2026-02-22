@@ -379,7 +379,7 @@ this._videoBound = true;
     // START WEBCAM + DRAW LOOP
     this.on("TfStartShit", async () => {
         if (this.videoCanv === null) {
-
+            this.videoCanv = this.iframe.frame.getElementById("TFcanvas");
         }
         if (!this.TfWebcam.stream) {
             try {
