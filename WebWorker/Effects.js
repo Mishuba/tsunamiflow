@@ -163,14 +163,16 @@ const bitmap = await imageCapture.grabFrame();
         ctx.drawImage(bitmap, 0, 0, w, h);
 
 //bitmap.close();
-        if (this.useChromaKey) {
-            const frame = ctx.getImageData(0, 0, w, h);
-            const processed = this.webcam(frame);
-            ctx.putImageData(processed, 0, 0);
-        }
+ if (this.useChromaKey) {
+    const frame = ctx.getImageData(0, 0, w, h);
+    const processed = this.webcam(frame);
+    this.webcamCanvas.width = w;
+    this.webcamCanvas.height = h;
+    this.webcamCtx.putImageData(processed, 0, 0);
+}
 
-        // 3. Composite webcam on top of background
-        ctx.drawImage(vidCanv, 0, 0);
+// Composite on top of background
+ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
     }
 
     setChromaHex(hex) {
