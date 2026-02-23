@@ -137,7 +137,7 @@ export class TfEffects {
         });
     }
 
-    async drawingFrame(vidCanv, TfWebcam) {
+    drawingFrame(vidCanv, TfWebcam) {
         const ctx = vidCanv.getContext("2d");
         const w = 600;
         const h = 480;
@@ -156,7 +156,7 @@ export class TfEffects {
 
         // Capture webcam
         const imageCapture = new ImageCapture(TfWebcam);
-        const bitmap = await imageCapture.grabFrame();
+        const bitmap = imageCapture.grabFrame();
 
         // Draw to offscreen for chroma key
         this.webcamCanvas.width = w;
