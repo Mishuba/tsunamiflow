@@ -27,7 +27,7 @@ export class TfEffects {
         this.backgroundImg = null;
         ctx.clearRect(0, 0, canvas_width, canvas_height);
     }
-    UseImage(ctx) {
+    UseImage(ctx, w, h) {
         ctx.drawImage(this.backgroundImg, 0, 0, w, h);
     }
     UploadVideo(e) {
@@ -55,7 +55,7 @@ export class TfEffects {
             ctx.clearRect(0, 0, canvas_width, canvas_height);
         }
     }
-    UseVideo(ctx){
+    UseVideo(ctx, w, h){
     ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
     }
 
