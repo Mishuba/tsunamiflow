@@ -3,8 +3,6 @@ export class TfEffects {
         this.Tfhex;
         this.rgb;
         this.chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
-        this.chromaFrame;
-        this.chromaData;
         this.frameSkipCount = 2;
         this.frameCounter = 0;
         this.useChromaKey = false;
@@ -12,7 +10,7 @@ export class TfEffects {
         this.webcamCanvas = document.createElement("canvas");
         this.webcamCtx = this.webcamCanvas.getContext("2d");
         this.backgroundVideo = null;
-        this.backgroundVideo = null;
+        this.backgroundImg = null;
     }
 
     UploadImage(e) {
@@ -27,9 +25,17 @@ export class TfEffects {
         this.backgroundImg = null;
         ctx.clearRect(0, 0, canvas_width, canvas_height);
     }
-    UseImage(ctx, w, h) {
-        ctx.drawImage(this.backgroundImg, 0, 0, w, h);
+
+    UseImage(ctx, w, h, corner = false) {
+        if (corner) {
+            const logoW = w / 4;
+            const logoH = h / 4;
+            ctx.drawImage(this.backgroundImg, w - logoW - 10, 10, logoW, logoH);
+        } else {
+            ctx.drawImage(this.backgroundImg, 0, 0, w, h);
+        }
     }
+
     UploadVideo(e) {
         const file = e.target.files[0];
         if (file) {
@@ -40,7 +46,7 @@ export class TfEffects {
             this.backgroundVideo.playsInline = true;
 
             this.backgroundVideo.oncanplay = () => {
-                this.backgroundVideo.play();
+                this.backgroundVideo.play().catch(() => {});
             };
 
             this.backgroundVideo.load();
@@ -55,8 +61,9 @@ export class TfEffects {
             ctx.clearRect(0, 0, canvas_width, canvas_height);
         }
     }
-    UseVideo(ctx, w, h){
-    ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
+
+    UseVideo(ctx, w, h) {
+        if (this.backgroundVideo) ctx.drawImage(this.backgroundVideo, 0, 0, w, h);
     }
 
     update(p, volume, baseRadius, canvas) {
@@ -83,14 +90,14 @@ export class TfEffects {
         return { x, y, dx, dy, radius, color };
     }
 
-    particle(canvas, x, y, dx, dy, radius, color, particles) {
+    particle(canvas, particles) {
         for (let i = 0; i < 100; i++) {
-            x = Math.random() * canvas.width;
-            y = Math.random() * canvas.height;
-            dx = (Math.random() - 0.5) * 0.5;
-            dy = (Math.random() - 0.5) * 0.5;
-            radius = Math.random() * 0.5 + 0.2;
-            color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const dx = (Math.random() - 0.5) * 0.5;
+            const dy = (Math.random() - 0.5) * 0.5;
+            const radius = Math.random() * 0.5 + 0.2;
+            const color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
             particles.push(this.tfParticles(x, y, dx, dy, radius, color));
         }
     }
@@ -105,27 +112,23 @@ export class TfEffects {
         for (let i = 0; i < dataArray.length; i++) {
             CtxTotal += dataArray[i];
         }
-        let averageVolume = CtxTotal / dataArray.length;
+        const averageVolume = CtxTotal / dataArray.length;
 
         for (let i = 0; i < particles.length; i++) {
             this.update(particles[i], averageVolume, baseRadius, canvas);
             this.draw(ctx, particles[i]);
         }
 
-        let barWidth = canvas.width / bufferLength;
-        let barHeight;
+        const barWidth = canvas.width / bufferLength;
         let CtxX = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-            barHeight = dataArray[i];
-
-            let CtxR = barHeight + 25 * (i / bufferLength);
-            let CtxG = 250 * (i / bufferLength);
-            let CtxB = 50;
-
+            const barHeight = dataArray[i];
+            const CtxR = barHeight + 25 * (i / bufferLength);
+            const CtxG = 250 * (i / bufferLength);
+            const CtxB = 50;
             ctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
             ctx.fillRect(CtxX, canvas.height - barHeight, barWidth, barHeight);
-
             CtxX += barWidth + 1;
         }
 
@@ -141,40 +144,33 @@ export class TfEffects {
 
         vidCanv.width = w;
         vidCanv.height = h;
-
-        // 1. Draw background first
         ctx.clearRect(0, 0, w, h);
-        if (this.backgroundImg !== null && this.backgroundVideo === null) {
-            this.UseImage(ctx);
-        } else if (this.backgroundImg !== null && this.backgroundVideo !== null) {
-            // put image in the corner like a logo or we just make a logo one to.
-} else {
-        if (this.backgroundVideo !== null) {
-              this.UseVideo(ctx);
+
+        // Draw background
+        if (this.backgroundVideo) {
+            this.UseVideo(ctx, w, h);
+            if (this.backgroundImg) this.UseImage(ctx, w, h, true); // corner logo
+        } else if (this.backgroundImg) {
+            this.UseImage(ctx, w, h);
         }
-}
 
-const imageCapture = new ImageCapture(TfWebcam);
+        // Capture webcam
+        const imageCapture = new ImageCapture(TfWebcam);
+        const bitmap = await imageCapture.grabFrame();
 
-// Capture frame
-const bitmap = await imageCapture.grabFrame();
+        // Draw to offscreen for chroma key
+        this.webcamCanvas.width = w;
+        this.webcamCanvas.height = h;
+        this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
 
-        // 2. Draw webcam to OFFSCREEN buffer
-        ctx.drawImage(bitmap, 0, 0, w, h);
+        if (this.useChromaKey) {
+            const frame = this.webcamCtx.getImageData(0, 0, w, h);
+            const processed = this.webcam(frame);
+            this.webcamCtx.putImageData(processed, 0, 0);
+        }
 
-//bitmap.close();
- this.webcamCanvas.width = w;
-this.webcamCanvas.height = h;
-this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
-
-if (this.useChromaKey) {
-    const frame = this.webcamCtx.getImageData(0, 0, w, h);
-    const processed = this.webcam(frame);
-    this.webcamCtx.putImageData(processed, 0, 0);
-}
-
-// Composite webcam on top of background
-ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
+        // Composite webcam over background
+        ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
     }
 
     setChromaHex(hex) {
@@ -190,11 +186,6 @@ ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
         this.useChromaKey = true;
     }
 
-    // improved green detection with soft alpha
-    isChromaMatch(r, g, b, key, tolerance = 40) {
-        return g > r + tolerance && g > b + tolerance && g > key.g - tolerance;
-    }
-
     disableChromaKey() {
         this.frameCounter = 0;
         this.useChromaKey = false;
@@ -205,17 +196,9 @@ ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
         const key = this.chromaKeyColorWebcam;
 
         for (let i = 0; i < chromaData.length; i += 4) {
-            const r = chromaData[i],
-                g = chromaData[i + 1],
-                b = chromaData[i + 2];
-
-            // calculate distance for soft alpha
+            const r = chromaData[i], g = chromaData[i + 1], b = chromaData[i + 2];
             const diff = Math.abs(r - key.r) + Math.abs(g - key.g) + Math.abs(b - key.b);
-
-            if (diff < 120) {
-                // soft edge alpha
-                chromaData[i + 3] = 255 - Math.min(diff, 120) / 120 * 255;
-            }
+            if (diff < 120) chromaData[i + 3] = 255 - Math.min(diff, 120) / 120 * 255;
         }
         return frameData;
     }
