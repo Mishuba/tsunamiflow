@@ -212,7 +212,7 @@ ctx.drawImage(this.webcamCanvas, 0, 0, w, h);
 
             if (diff < 120) {
                 // soft edge alpha
-                chromaData[i + 3] = Math.max(0, (diff / 120) * 255);
+                chromaData[i + 3] = 255 - Math.min(diff, 120) / 120 * 255;
             }
         }
         return frameData;
