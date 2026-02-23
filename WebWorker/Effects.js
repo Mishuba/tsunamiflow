@@ -134,7 +134,7 @@ export class TfEffects {
         });
     }
 
-    drawingFrame(vidCanv, TfWebcam) {
+    async drawingFrame(vidCanv, TfWebcam) {
         const ctx = vidCanv.getContext("2d");
         const w = 600;
         const h = 480;
@@ -160,10 +160,9 @@ const imageCapture = new ImageCapture(TfWebcam);
 const bitmap = await imageCapture.grabFrame();
 
         // 2. Draw webcam to OFFSCREEN buffer
-        ctx.clearRect(0, 0, w, h);
         ctx.drawImage(bitmap, 0, 0, w, h);
 
-bitmap.close();
+//bitmap.close();
         if (this.useChromaKey) {
             const frame = ctx.getImageData(0, 0, w, h);
             const processed = this.webcam(frame);
@@ -171,7 +170,7 @@ bitmap.close();
         }
 
         // 3. Composite webcam on top of background
-        ctx.drawImage(this.webcamCanvas, 0, 0);
+        ctx.drawImage(vidCanv, 0, 0);
     }
 
     setChromaHex(hex) {
