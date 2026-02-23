@@ -161,12 +161,12 @@ export class TfEffects {
         // Draw to offscreen for chroma key
         this.webcamCanvas.width = w;
         this.webcamCanvas.height = h;
-        this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
+        this.webcamCanvas.drawImage(bitmap, 0, 0, w, h);
 
         if (this.useChromaKey) {
-            const frame = this.webcamCtx.getImageData(0, 0, w, h);
+            const frame = this.webcamCanvas.getImageData(0, 0, w, h);
             const processed = this.webcam(frame);
-            this.webcamCtx.putImageData(processed, 0, 0);
+            this.webcamCanvas.putImageData(processed, 0, 0);
         }
 
         // Composite webcam over background
