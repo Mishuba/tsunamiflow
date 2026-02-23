@@ -387,7 +387,7 @@ this._videoBound = true;
                 this.effects.isPlaying = true;
 
 let webcamAudioStream = new MediaStream();
-webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
+webcamAudioStream.addTrack(this.TfWebcam.audioTrack()[0]);
 let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudioStream);
 
 sourceNode.connect(this.audio.TsunamiAnalyser);
@@ -395,7 +395,7 @@ sourceNode.connect(this.audio.StreamDestination);
                 // FRAME DRAW LOOP
                 const drawLoop = () => {
                     if (!this.effects.isPlaying) return;
-                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.videoTrack);
+                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.getVideoTracks()[0]);
                     requestAnimationFrame(drawLoop);
                 };
                 drawLoop();
