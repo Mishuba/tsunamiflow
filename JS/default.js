@@ -393,9 +393,9 @@ let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudi
 sourceNode.connect(this.audio.TsunamiAnalyser);
 sourceNode.connect(this.audio.StreamDestination);
                 // FRAME DRAW LOOP
-                const drawLoop = () => {
+                const drawLoop = async () => {
                     if (!this.effects.isPlaying) return;
-                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.videoTrack);
+                    await this.effects.drawingFrame(this.videoCanv, this.TfWebcam.videoTrack);
                     requestAnimationFrame(drawLoop);
                 };
                 drawLoop();
