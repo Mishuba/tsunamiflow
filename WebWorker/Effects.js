@@ -192,14 +192,29 @@ export class TfEffects {
     }
 
     webcam(frameData) {
-        const chromaData = frameData.data;
-        const key = this.chromaKeyColorWebcam;
-
-        for (let i = 0; i < chromaData.length; i += 4) {
-            const r = chromaData[i], g = chromaData[i + 1], b = chromaData[i + 2];
-            const diff = Math.abs(r - key.r) + Math.abs(g - key.g) + Math.abs(b - key.b);
-            if (diff < 120) chromaData[i + 3] = 255 - Math.min(diff, 120) / 120 * 255;
-        }
+    this.frameCounter++;
+    if (this.frameCounter % this.frameSkipCount !== 0) {
         return frameData;
     }
+
+    const chromaData = frameData.data;
+    const key = this.chromaKeyColorWebcam;
+
+    for (let i = 0; i < chromaData.length; i += 4) {
+        const r = chromaData[i];
+        const g = chromaData[i + 1];
+        const b = chromaData[i + 2];
+
+        const diff =
+            Math.abs(r - key.r) +
+            Math.abs(g - key.g) +
+            Math.abs(b - key.b);
+
+        if (diff < 120) {
+            chromaData[i + 3] = 0; // true transparency
+        }
+    }
+
+    return frameData;
+}
 }
