@@ -137,7 +137,7 @@ export class TfEffects {
         });
     }
 
-    drawingFrame(vidCanv, TfWebcam) {
+    async drawingFrame(vidCanv, TfWebcam) {
         const ctx = vidCanv.getContext("2d");
         const w = 600;
         const h = 480;
@@ -156,17 +156,17 @@ export class TfEffects {
 
         // Capture webcam
         const imageCapture = new ImageCapture(TfWebcam);
-        const bitmap = imageCapture.grabFrame();
+        const bitmap = await imageCapture.grabFrame();
 
         // Draw to offscreen for chroma key
         this.webcamCanvas.width = w;
         this.webcamCanvas.height = h;
-        this.webcamCanvas.drawImage(bitmap, 0, 0, w, h);
+        this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
 
         if (this.useChromaKey) {
-            const frame = this.webcamCanvas.getImageData(0, 0, w, h);
+            const frame = this.webcamCtx.getImageData(0, 0, w, h);
             const processed = this.webcam(frame);
-            this.webcamCanvas.putImageData(processed, 0, 0);
+            this.webcamCtx.putImageData(processed, 0, 0);
         }
 
         // Composite webcam over background
