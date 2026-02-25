@@ -18,6 +18,64 @@
     <button id="stop">Stop Stream</button>
   </div>
 
-  <script src="stream.js"></script>
+  <script>
+    const video = document.getElementById('cam');
+const canvas = document.getElementById('stage');
+const ctx = canvas.getContext('2d');
+
+const STREAM_KEY = "test123"; // generate per user in prod
+const ws = new WebSocket(`wss://tsunamiflow.club:8443?role=streamer&key=${STREAM_KEY}`);
+
+let mediaRecorder;
+let drawLoop;
+
+async function initMedia() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { width: 1280, height: 720, frameRate: 30 },
+    audio: true
+  });
+
+  video.srcObject = stream;
+
+  // Draw video to canvas
+  function draw() {
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    drawLoop = requestAnimationFrame(draw);
+  }
+  draw();
+
+  // Capture canvas stream
+  const canvasStream = canvas.captureStream(30);
+  const audioTrack = stream.getAudioTracks()[0];
+  canvasStream.addTrack(audioTrack);
+
+  mediaRecorder = new MediaRecorder(canvasStream, {
+    mimeType: 'video/webm; codecs=vp8,opus',
+    videoBitsPerSecond: 2500000
+  });
+
+  mediaRecorder.ondataavailable = e => {
+    if (e.data.size && ws.readyState === WebSocket.OPEN) {
+      ws.send(e.data);
+    }
+  };
+}
+
+ws.onopen = () => {
+  console.log("🟢 WS connected");
+};
+
+document.getElementById('start').onclick = async () => {
+  if (!mediaRecorder) await initMedia();
+  ws.send(JSON.stringify({ type: 'start_stream' }));
+  mediaRecorder.start(100); // 100ms chunks
+};
+
+document.getElementById('stop').onclick = () => {
+  mediaRecorder.stop();
+  ws.send(JSON.stringify({ type: 'stop_stream' }));
+  cancelAnimationFrame(drawLoop);
+};
+  </script>
 </body>
 </html>
