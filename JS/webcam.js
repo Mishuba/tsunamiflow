@@ -15,7 +15,21 @@ export class TfWebcam {
     noiseSuppression: true,
     autoGainControl: true
   },
-  video: true,
+  video: { 
+     frameRate: {
+       min: 15,
+       ideal: 30, 
+       max: 60 
+     },
+     width: 600,
+     height: 480,
+     resizeMode: "crop-and-scale"
+     //aspectRatio:
+     //facingMode: 
+     //zoom:
+     //torch:
+     //focusMode:
+  }
         };
 
         this.onReady = onReady;
