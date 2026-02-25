@@ -8,7 +8,7 @@ export class TfWebcam {
         this.stream = null;
         this.videoTrack = null;
         this.audioTrack = null;
-
+        this.wcBlob = null;
         this.constraints = {
             audio: {
     echoCancellation: true,
