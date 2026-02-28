@@ -16,7 +16,11 @@
             border: 1px solid black;
         }
         #TsunamiFlowVideoStuff {
-           // display: none; /* Hide the video element */
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip-path: inset(100%);
         }
         #TFchromaKey {
             margin-top: 10px;
