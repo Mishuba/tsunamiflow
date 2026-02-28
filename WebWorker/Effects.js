@@ -1,5 +1,6 @@
 export class TfEffects {
     constructor() {
+this.imageCapture = null;
         this.Tfhex;
         this.rgb;
         this.chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
@@ -154,14 +155,10 @@ export class TfEffects {
             this.UseImage(ctx, w, h);
         }
 
-        // Capture webcam
-        const imageCapture = new ImageCapture(TfWebcam);
-        const bitmap = await imageCapture.grabFrame();
-
         // Draw to offscreen for chroma key
         this.webcamCanvas.width = w;
         this.webcamCanvas.height = h;
-        this.webcamCtx.drawImage(bitmap, 0, 0, w, h);
+        this.webcamCtx.drawImage(TfWebcam, 0, 0, w, h);
 
         if (this.useChromaKey) {
             const frame = this.webcamCtx.getImageData(0, 0, w, h);
