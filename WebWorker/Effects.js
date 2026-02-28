@@ -7,7 +7,7 @@ export class TfEffects {
         this.frameCounter = 0;
         this.useChromaKey = false;
         this.visualizatorController;
-        this.webcamCanvas = document.createElement("canvas");
+        this.webcamCanvas = new OffscreenCanvas(600, 480);
         this.webcamCtx = this.webcamCanvas.getContext("2d");
         this.backgroundVideo = null;
         this.backgroundImg = null;
