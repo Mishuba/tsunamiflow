@@ -463,6 +463,12 @@ this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
         this.effects.isPlaying = false;
     }, false, iframe);
 
+// START Video From Bin
+this.on("TFplayFromBin", async () => {
+  const id = this.find("TFmediaSelect", true).value;
+  await this.playFromBin(id);
+}, false, iframe);
+
     // ENABLE CHROMA KEY
     this.on("TuseFthisKeycolor", () => {
         const keyInput = this.find("TFchromaKey", true); // color input inside iframe
