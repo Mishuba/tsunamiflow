@@ -67,6 +67,10 @@ removeFromBin(id) {
   URL.revokeObjectURL(item.url);
   delete this.mediaBin.videos[id];
 }
+listVideos() {
+  return Object.values(this.mediaBin.videos)
+    .sort((a, b) => b.created - a.created);
+}
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
     if (iframe === null) {
