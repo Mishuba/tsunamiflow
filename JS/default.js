@@ -437,14 +437,14 @@ this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
 
     // START / STOP RECORDING if recorder exists
         this.on("TfStartRecPlz", () => {
-this.recorder.UserCanvas = this.videoCanv.captureStream(30);
+//this.recorder.UserCanvas = this.videoCanv.captureStream(30);
 
 this.recorder.streamKey = "anything";
 
 this.recorder.useExternalAudioStream(
     this.audio.StreamDestination.stream
 );
- this.recorder.start(this.videoCanv);
+ this.recorder.start(this.videoCanv, this.websocket);
 
 //this.webrtc.localStream = this.recorder.UserCanvas;
 }, false, iframe);
