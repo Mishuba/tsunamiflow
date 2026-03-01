@@ -42,6 +42,19 @@ return this.iframe.frame.contentDocument.getElementById(elem);
       return document.getElementById(elem);
    } 
 }
+async addVideoToBin(file) {
+  const id = crypto.randomUUID();
+  const url = URL.createObjectURL(file);
+
+  this.mediaBin.videos[id] = {
+    id,
+    type: "video",
+    url,
+    created: Date.now()
+  };
+
+  return id;
+}
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
     if (iframe === null) {
