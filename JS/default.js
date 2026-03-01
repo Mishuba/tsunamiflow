@@ -456,6 +456,7 @@ this.audio.webcamSourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSour
 
 this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
 this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
+this.audio._webcamWired = true;
 }
                 // FRAME DRAW LOOP
                 const drawLoop = async () => {
