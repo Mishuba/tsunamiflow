@@ -1,6 +1,8 @@
 import { DefaultPlaylist } from "./../JS/Arrays.js";
 export class TfMusic {
     constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null, AudioStream = null) {
+        this.webcamSourceNode = null;
+        this.webcamMediaStream = null;
         this.textTrackOptions = {
             kind: "subtitles", // caption, descriptions, chapters, metadata
             label: "name",
