@@ -126,7 +126,7 @@ return this.iframe.frame.contentDocument.getElementById(elem);
       this.user.login();
     }, true);
   }
-  
+
   TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
     title.innerHTML = "Welcome to TFN Radio";
 
@@ -266,7 +266,7 @@ this.TfRadioEventListeners();
     this.effects.useChromaKey = true;
     useChroma.style.display = "inline";
   }
-  
+
   VideoEventListeners(engine, element, canvas) {
     if (element === null) {
       element = document.createElement("video");
@@ -359,14 +359,14 @@ this.TfRadioEventListeners();
       engine.VideoVolumeChange();
     });
   }
-  
+
   bindVidSystem() {
     this.on("TfControlShit", () => {
       this.bindVideo();
       //webcam now
     }, false, this.iframe.frame);
   }
-  
+
   bindVideo() {
 if (this._videoBound) return;
 this._videoBound = true;
@@ -382,7 +382,7 @@ this._videoBound = true;
             this.videoCanv = this.find("TFcanvas", true);
         }
         if (this.videoElem === null) {
-            thid.videoElem = this.find("TsunamiFlowVideoStuff", true);
+            this.videoElem = this.find("TsunamiFlowVideoStuff", true);
 }
         if (!this.TfWebcam.stream) {
             try {
@@ -438,7 +438,6 @@ this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
     // START / STOP RECORDING if recorder exists
         this.on("TfStartRecPlz", () => {
 //this.recorder.UserCanvas = this.videoCanv.captureStream(30);
-
 this.recorder.streamKey = "anything";
 
 this.recorder.useExternalAudioStream(
@@ -455,15 +454,16 @@ this.webrtc.stopStreaming();
         }, false, iframe);
 
         this.on("GoLive", () => {
-        this.socket.on("", () => {
+          if (!this.websocket.isOpen()) { 
+              this.websocket.connect();
+          }
+        }, false, iframe);
 
-console.log("WS connected");
-
-  this.socket.send(JSON.stringify({ type: "start_stream" }));
-  this.socket.connect();
-        });
-}, false, iframe);
+        this.on("StopLive", () => {
+          this.websocket.close();
+        }, false, iframe);
     }
+    
   getControllerType(gamepad) {
         // Detect controller type based on button layout
         if (gamepad.buttons[0].value === 1) {
@@ -490,11 +490,11 @@ console.log("WS connected");
             console.log(`Gamepad disconnected: ${gamepad.id}`);
         }
     }
-    
+
   bindGame() {
     //game butfons.
   }
-  
+
   bindSignUp() {
   this.on("TFCompleteForm", () => {
     this.user.signup(this.userFields, this.extraFields);
@@ -558,14 +558,14 @@ console.log("WS connected");
   };
   this.bindSignUp();
   }
-  
+
   async bindStore() {
     await this.store.showProducts();
 }
-  
+
   bindPayments() {
       this.payment.mountCard("UniqueOriginal");
-      
+
       document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
   const email = emailInput.value || null;
   try {
@@ -579,7 +579,7 @@ console.log("WS connected");
   }
 });
       this.payment.mountCard("SubscribeUsers");
-      
+
       document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
   const email = emailInput.value || null;
   const priceId = "price_123456789"; // Stripe Price ID for subscription
@@ -594,9 +594,9 @@ console.log("WS connected");
     alert("Subscription failed: " + err.message);
   }
 });
-    
+
     this.payment.mountCard("TfDonation"); //div
-    
+
     document.getElementById("TfDonateBtn").addEventListener("click", async () => {
         try {
           const result = await this.payment.donate(10, 'usd', true, email); // $10 donation
@@ -609,9 +609,9 @@ console.log("WS connected");
       }
     );
   }
-  
+
   bindWorker() {
     this.worker.init(this.audioElem);
   }
-  
+
 }
