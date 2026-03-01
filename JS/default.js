@@ -55,6 +55,11 @@ async addVideoToBin(file) {
 
   return id;
 }
+async playFromBin(id) {
+  const item = this.mediaBin.videos[id];
+  if (!item) return;
+  await this.startMediaSource("video", item.url);
+}
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
     if (iframe === null) {
