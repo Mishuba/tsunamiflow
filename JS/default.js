@@ -60,6 +60,13 @@ async playFromBin(id) {
   if (!item) return;
   await this.startMediaSource("video", item.url);
 }
+removeFromBin(id) {
+  const item = this.mediaBin.videos[id];
+  if (!item) return;
+
+  URL.revokeObjectURL(item.url);
+  delete this.mediaBin.videos[id];
+}
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
     if (iframe === null) {
