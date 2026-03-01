@@ -103,6 +103,30 @@ async playFromBin(id) {
         if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
     });
 }
+
+async startMediaSource(type, src = null) {
+  const video = this.ensureHiddenVideo();
+
+  if (type === "webcam") {
+    await this.TfWebcam.start();
+    this.TfWebcam.attach(video);
+  }
+
+  if (type === "video") {
+    video.src = src;
+    await video.play();
+  }
+
+  this.effects.isPlaying = true;
+
+  const drawLoop = async () => {
+    if (!this.effects.isPlaying) return;
+    await this.effects.drawingFrame(this.videoCanv, video);
+    requestAnimationFrame(drawLoop);
+  };
+
+  drawLoop();
+}
   bindNavBar() {
     // navigation menu
     this.on("tfRoster", () => {
