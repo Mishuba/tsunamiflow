@@ -236,6 +236,7 @@ let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup
 
 let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
 
+Radio.webcamAudioStream = new MediaStream();
   let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, TsunamiPrintful, TsunamiPay, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
   
   Controller.iframe.frame.title = "Main Website Content";
