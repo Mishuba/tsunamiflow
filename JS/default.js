@@ -28,6 +28,12 @@ this.audioSkip = AudioSkip;
     this.payment = pay;
     this.extraElem = null;
     this.MyScreen = screenshare;
+    this.mediaBin = {
+       webcams: {},
+       videos: {},
+       images: {},
+       screens: {}
+    };
   }
   find(elem, frame = null) {
 if (frame === true) {
