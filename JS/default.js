@@ -395,7 +395,7 @@ this.audio.webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
 this.audio.webcamSourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(this.audio.webcamAudioStream);
 
 this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
-//sourceNode.connect(this.audio.StreamDestination);
+this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
                 // FRAME DRAW LOOP
                 const drawLoop = async () => {
                     if (!this.effects.isPlaying) return;
@@ -444,17 +444,25 @@ this.recorder.streamKey = "anything";
 this.recorder.useExternalAudioStream(
     this.audio.StreamDestination.stream
 );
-       let tStream = this.recorder.start(this.videoCanv);
+ this.recorder.start(this.videoCanv);
 
-//this.webrtc.localStream = tStream.stream; // or tStream.recorder;
-//this.webrtc.websocket = this.websocket;
-//this.webrtc.startStreaming({ streamKey: "anything" });
+//this.webrtc.localStream = this.recorder.UserCanvas;
 }, false, iframe);
 
         this.on("TfStopRecPlz", () => {
             this.recorder.stop();
 this.webrtc.stopStreaming();
         }, false, iframe);
+
+        this.on("GoLive", () => {
+        this.socket.on("", () => {
+
+console.log("WS connected");
+
+  this.socket.send(JSON.stringify({ type: "start_stream" }));
+  this.socket.connect();
+        });
+}, false, iframe);
     }
   getControllerType(gamepad) {
         // Detect controller type based on button layout
