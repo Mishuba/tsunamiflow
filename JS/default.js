@@ -437,6 +437,8 @@ this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
 
     // START / STOP RECORDING if recorder exists
         this.on("TfStartRecPlz", () => {
+this.recorder.UserCanvas = this.videoCanv.captureStream(30);
+
 this.recorder.streamKey = "anything";
 
 this.recorder.useExternalAudioStream(
