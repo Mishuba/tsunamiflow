@@ -35,6 +35,10 @@ this.audioSkip = AudioSkip;
        screens: {}
     };
   }
+log(msg, logBox) {
+    logBox.innerText += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
+}
   find(elem, frame = null) {
 if (frame === true) {
 return this.iframe.frame.contentDocument.getElementById(elem);
