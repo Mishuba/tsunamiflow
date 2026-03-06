@@ -35,7 +35,8 @@ this.audioSkip = AudioSkip;
        screens: {}
     };
   }
-log(msg, logBox) {
+log(msg) {
+    let logBox = this.find("TfLogBox", false);
     logBox.innerText += msg + "\n";
     logBox.scrollTop = logBox.scrollHeight;
 }
