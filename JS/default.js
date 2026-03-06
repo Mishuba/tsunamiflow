@@ -35,17 +35,17 @@ this.audioSkip = AudioSkip;
        screens: {}
     };
   }
-log(msg) {
-    let logBox = this.find("TfLogBox", false);
-    logBox.innerText += msg + "\n";
-    logBox.scrollTop = logBox.scrollHeight;
-}
   find(elem, frame = null) {
 if (frame === true) {
 return this.iframe.frame.contentDocument.getElementById(elem);
 } else {
       return document.getElementById(elem);
    } 
+}
+log(msg) {
+    let logBox = this.find("TfLogBox", false);
+    logBox.innerText += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
 }
 async addVideoToBin(file) {
   const id = crypto.randomUUID();
