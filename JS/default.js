@@ -576,10 +576,10 @@ this.webrtc.stopStreaming();
 
   bindUsers() {
   this.userFields = {
-    tfFN: document.getElementById("TfFirstName"),
-    tfLN: document.getElementById("TfLastName"),
-    tfNN: document.getElementById("TfNickName"),
-    tfGen: document.getElementById("TfGender"),
+    tfFN: this.find("TfFirstName", false),
+    tfLN: this.find("TfLastName", false),
+    tfNN: this.find("TfNickName",false),
+    tfGen: this.find("TfGender", false),
     tfEM: document.getElementById("TfEmail"),
     tfBirth: document.getElementById("TfBirthday"),
     tfUN: document.getElementById("TFuserName"),
