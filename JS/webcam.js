@@ -8,11 +8,28 @@ export class TfWebcam {
         this.stream = null;
         this.videoTrack = null;
         this.audioTrack = null;
-
+        this.wcBlob = null;
         this.constraints = {
-            video,
-            audio,
-            ...constraints
+            audio: {
+    echoCancellation: true,
+    noiseSuppression: true,
+    autoGainControl: true
+  },
+  video: { 
+     frameRate: {
+       min: 15,
+       ideal: 30, 
+       max: 60 
+     },
+     width: 600,
+     height: 480,
+     resizeMode: "crop-and-scale"
+     //aspectRatio:
+     //facingMode: 
+     //zoom:
+     //torch:
+     //focusMode:
+  }
         };
 
         this.onReady = onReady;

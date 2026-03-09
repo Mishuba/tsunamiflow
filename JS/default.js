@@ -1,84 +1,21 @@
 export class MishubaController {
-  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
+  constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, pay = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
-    if (this.user !== null) {
-      this.userFields = {
-        tfFN: document.getElementById("TfFirstName"),
-        tfLN: document.getElementById("TfLastName"),
-        tfNN: document.getElementById("TfNickName"),
-        tfGen: document.getElementById("TfGender"),
-        tfEM: document.getElementById("TfEmail"),
-        tfBirth: document.getElementById("TfBirthday"),
-        tfUN: document.getElementById("TFuserName"),
-        tfPsw: document.getElementById("TFpassword"),
-        tfMembershipLevel: document.getElementById("TFMembershipLevel"),
-      };
-      this.extraFields = {
-        ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
-        WesternZodiacSign: document.getElementById("WesternZodiacSign"),
-        SpiritAnimal: document.getElementById("SpiritAnimal"),
-        CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
-        NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
-        VedicAstrologySign: document.getElementById("VedicAstrologySign"),
-        GuardianAngel: document.getElementById("GuardianAngel"),
-        ChineseElement: document.getElementById("ChineseElement"),
-        EyeColorMeaning: document.getElementById("EyeColorMeaning"),
-        GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
-        NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
-        EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
-        MayanZodiacSign: document.getElementById("MayanZodiacSign"),
-        LoveLanguage: document.getElementById("LoveLanguage"),
-        Birthstone: document.getElementById("Birthstone"),
-        BirthFlower: document.getElementById("BirthFlower"),
-        BloodType: document.getElementById("BloodType"),
-        AttachmentStyle: document.getElementById("AttachmentStyle"),
-        CharismaType: document.getElementById("CharismaType"),
-        BusinessPersonality: document.getElementById("BusinessPersonality"),
-        DISC: document.getElementById("DISC"),
-        SocionicsType: document.getElementById("SocionicsType"),
-        LearningStyle: document.getElementById("LearningStyle"),
-        FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
-        PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
-        CreativeStyle: document.getElementById("CreativeStyle"),
-        ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
-        TeamRolePreference: document.getElementById("TeamRolePreference")
-      };
-    }
     this.iframe = iframe;
-    if (document.getElementById("TFMembershipLevel")) {
-      this.membershipSelect = document.getElementById("TFMembershipLevel");
-      this.membershipCostEl = document.getElementById("membershipCost");
-      this.paymentTypeEl = document.getElementById("paymentType");
-      this.hiddenMC = document.getElementById("hiddenMC");
-      this.hiddenPT = document.getElementById("hiddenPT");
-      this.sections = {
-        free: document.getElementById("freeLevelInputs"),
-        regular: document.getElementById("regularLevelInputs"),
-        vip: document.getElementById("vipLevelInputs"),
-        team: document.getElementById("teamLevelInputs"),
-        address: document.getElementById("AddressDetailsSubscribers"), // if present
-        costInfo: document.getElementById("membershipCostInfo"),
-      };
-      this.bindSignUp();
-    }
     this.effects = effects;
     this.websocket = websocket;
     this.audio = audio;
+    this.audioElem = AudioElement;
+this.audioCanv = AudioCanvas;
+this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
+this.audioTitle = AudioTitle;
+this.audioSystem = AudioButtonSpot;
+this.audioLast = AudioPrevious;
+this.audioRestart = AudioOver;
+this.audioStart = AudioStart;
+this.audioSkip = AudioSkip;
     this.mixer = mixer;
     this.worker = worker;
-    if (audio !== null) {
-      this.audioElem = AudioElement;
-      this.audioCanv = AudioCanvas;
-      this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
-      this.audioTitle = AudioTitle;
-      this.audioSystem = AudioButtonSpot;
-      this.audioLast = AudioPrevious;
-      this.audioRestart = AudioOver;
-      this.audioStart = AudioStart;
-      this.audioSkip = AudioSkip;
-this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
-this.TfRadioEventListeners();
-    }
     this.video = video;
     this.videoElem = VideoElement;
     this.videoCanv = VideoCanvas;
@@ -87,16 +24,16 @@ this.TfRadioEventListeners();
     this.recorder = recorder;
     this.streamer = streamer;
     this.game = game;
-    if (this.game !== null) {
-      this.bindGame();
-    }
     this.store = store;
-    if (this.store !== null) {
-      this.bindStore();
-      //this.bindCart();
-    }
+    this.payment = pay;
     this.extraElem = null;
     this.MyScreen = screenshare;
+    this.mediaBin = {
+       webcams: {},
+       videos: {},
+       images: {},
+       screens: {}
+    };
   }
   find(elem, frame = null) {
 if (frame === true) {
@@ -104,6 +41,40 @@ return this.iframe.frame.contentDocument.getElementById(elem);
 } else {
       return document.getElementById(elem);
    } 
+}
+log(msg) {
+    let logBox = this.find("TfLogBox", false);
+    logBox.innerText += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
+}
+async addVideoToBin(file) {
+  const id = crypto.randomUUID();
+  const url = URL.createObjectURL(file);
+
+  this.mediaBin.videos[id] = {
+    id,
+    type: "video",
+    url,
+    created: Date.now()
+  };
+
+  return id;
+}
+async playFromBin(id) {
+  const item = this.mediaBin.videos[id];
+  if (!item) return;
+  await this.startMediaSource("video", item.url);
+}
+removeFromBin(id) {
+  const item = this.mediaBin.videos[id];
+  if (!item) return;
+
+  URL.revokeObjectURL(item.url);
+  delete this.mediaBin.videos[id];
+}
+listVideos() {
+  return Object.values(this.mediaBin.videos)
+    .sort((a, b) => b.created - a.created);
 }
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
@@ -147,6 +118,30 @@ return this.iframe.frame.contentDocument.getElementById(elem);
         runHandler(e);
         if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
     });
+}
+
+async startMediaSource(type, src = null) {
+  const video = this.ensureHiddenVideo();
+
+  if (type === "webcam") {
+    await this.TfWebcam.start();
+    this.TfWebcam.attach(video);
+  }
+
+  if (type === "video") {
+    video.src = src;
+    await video.play();
+  }
+
+  this.effects.isPlaying = true;
+
+  const drawLoop = async () => {
+    if (!this.effects.isPlaying) return;
+    await this.effects.drawingFrame(this.videoCanv, video);
+    requestAnimationFrame(drawLoop);
+  };
+
+  drawLoop();
 }
   bindNavBar() {
     // navigation menu
@@ -195,17 +190,7 @@ return this.iframe.frame.contentDocument.getElementById(elem);
       this.user.login();
     }, true);
   }
-  bindSignUp() {
-    this.on("TFCompleteForm", () => {
-      this.user.signup(this.userFields, this.extraFields);
-    }, true);
-  }
-  bindEffects() {
 
-  }
-  bindSocket() {
-
-  }
   TsunamiRadioReady(RadioWorker, element, title, buttonSpot, last, restart, start, skip) {
     title.innerHTML = "Welcome to TFN Radio";
 
@@ -260,7 +245,6 @@ element.src = "";
     );
   }
   TfRadioEventListeners() {
-
 if (this._radioBound) return;
 this._radioBound = true;
    this.audioElem.addEventListener("emptied", async (emptied) => {
@@ -338,10 +322,15 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
       this.audio.volumechangeAudio();
     });
   }
+  bindAudio() {
+this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+this.TfRadioEventListeners();
+  }
   usePickedColor(useChroma) {
     this.effects.useChromaKey = true;
     useChroma.style.display = "inline";
   }
+
   VideoEventListeners(engine, element, canvas) {
     if (element === null) {
       element = document.createElement("video");
@@ -434,12 +423,14 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
       engine.VideoVolumeChange();
     });
   }
+
   bindVidSystem() {
     this.on("TfControlShit", () => {
       this.bindVideo();
       //webcam now
     }, false, this.iframe.frame);
   }
+
   bindVideo() {
 if (this._videoBound) return;
 this._videoBound = true;
@@ -451,21 +442,31 @@ this._videoBound = true;
 
     // START WEBCAM + DRAW LOOP
     this.on("TfStartShit", async () => {
+        if (this.videoCanv === null) {
+            this.videoCanv = this.find("TFcanvas", true);
+        }
+        if (this.videoElem === null) {
+            this.videoElem = this.find("TsunamiFlowVideoStuff", true);
+}
         if (!this.TfWebcam.stream) {
             try {
                 await this.TfWebcam.start();            // get MediaStream
+this.TfWebcam.attach(this.videoElem);
+
                 this.effects.isPlaying = true;
 
-let webcamAudioStream = new MediaStream();
-webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
-let sourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(webcamAudioStream);
+if (!this.audio._webcamWired) {
+this.audio.webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
+this.audio.webcamSourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(this.audio.webcamAudioStream);
 
-sourceNode.connect(this.audio.TsunamiAnalyser);
-sourceNode.connect(this.audio.StreamDestination);
+this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
+this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
+this.audio._webcamWired = true;
+}
                 // FRAME DRAW LOOP
-                const drawLoop = () => {
+                const drawLoop = async () => {
                     if (!this.effects.isPlaying) return;
-                    this.effects.drawingFrame(this.videoCanv, this.TfWebcam.videoTrack);
+                    await this.effects.drawingFrame(this.videoCanv, this.videoElem);
                     requestAnimationFrame(drawLoop);
                 };
                 drawLoop();
@@ -480,6 +481,12 @@ sourceNode.connect(this.audio.StreamDestination);
         this.TfWebcam.stop();
         this.effects.isPlaying = false;
     }, false, iframe);
+
+// START Video From Bin
+this.on("TFplayFromBin", async () => {
+  const id = this.find("TFmediaSelect", true).value;
+  await this.playFromBin(id);
+}, false, iframe);
 
     // ENABLE CHROMA KEY
     this.on("TuseFthisKeycolor", () => {
@@ -503,23 +510,33 @@ sourceNode.connect(this.audio.StreamDestination);
 
     // START / STOP RECORDING if recorder exists
         this.on("TfStartRecPlz", () => {
+//this.recorder.UserCanvas = this.videoCanv.captureStream(30);
 this.recorder.streamKey = "anything";
 
 this.recorder.useExternalAudioStream(
     this.audio.StreamDestination.stream
 );
-       let tStream = this.recorder.start(this.videoCanv);
+ this.recorder.start(this.videoCanv, this.websocket);
 
-//this.webrtc.localStream = tStream.stream; // or tStream.recorder;
-//this.webrtc.websocket = this.websocket;
-//this.webrtc.startStreaming({ streamKey: "anything" });
+//this.webrtc.localStream = this.recorder.UserCanvas;
 }, false, iframe);
 
         this.on("TfStopRecPlz", () => {
             this.recorder.stop();
 this.webrtc.stopStreaming();
         }, false, iframe);
+
+        this.on("GoLive", () => {
+          if (!this.websocket.isOpen()) { 
+              this.websocket.connect();
+          }
+        }, false, iframe);
+
+        this.on("StopLive", () => {
+          this.websocket.close();
+        }, false, iframe);
     }
+    
   getControllerType(gamepad) {
         // Detect controller type based on button layout
         if (gamepad.buttons[0].value === 1) {
@@ -534,7 +551,7 @@ this.webrtc.stopStreaming();
         const gamepad = event.gamepad;
         if (connected) {
             this.game.controllerIndex = gamepad.index;
-            console.log("Controller connected at index:", controllerIndex);
+            console.log("Controller connected at index:", this.controllerIndex);
             this.game.controllerType = this.getControllerType(gamepad);
             console.log("Controller type detected:", this.game.controllerType);
             gamepads[gamepad.index] = gamepad;
@@ -546,98 +563,128 @@ this.webrtc.stopStreaming();
             console.log(`Gamepad disconnected: ${gamepad.id}`);
         }
     }
+
   bindGame() {
-    //game butftfons.
+    //game butfons.
   }
-  bindDonation() {
 
+  bindSignUp() {
+  this.on("TFCompleteForm", () => {
+    this.user.signup(this.userFields, this.extraFields);
+  }, true);
+}
+
+  bindUsers() {
+  this.userFields = {
+    tfFN: this.find("TfFirstName", false),
+    tfLN: this.find("TfLastName", false),
+    tfNN: this.find("TfNickName",false),
+    tfGen: this.find("TfGender", false),
+    tfEM: document.getElementById("TfEmail"),
+    tfBirth: document.getElementById("TfBirthday"),
+    tfUN: document.getElementById("TFuserName"),
+    tfPsw: document.getElementById("TFpassword"),
+    tfMembershipLevel: document.getElementById("TFMembershipLevel"),
+  };
+  this.extraFields = {
+    ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
+    WesternZodiacSign: document.getElementById("WesternZodiacSign"),
+    SpiritAnimal: document.getElementById("SpiritAnimal"),
+    CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
+    NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
+    VedicAstrologySign: document.getElementById("VedicAstrologySign"),
+    GuardianAngel: document.getElementById("GuardianAngel"),
+    ChineseElement: document.getElementById("ChineseElement"),
+    EyeColorMeaning: document.getElementById("EyeColorMeaning"),
+    GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
+    NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
+    EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
+    MayanZodiacSign: document.getElementById("MayanZodiacSign"),
+    LoveLanguage: document.getElementById("LoveLanguage"),
+    Birthstone: document.getElementById("Birthstone"),
+    BirthFlower: document.getElementById("BirthFlower"),
+    BloodType: document.getElementById("BloodType"),
+    AttachmentStyle: document.getElementById("AttachmentStyle"),
+    CharismaType: document.getElementById("CharismaType"),
+    BusinessPersonality: document.getElementById("BusinessPersonality"),
+    DISC: document.getElementById("DISC"),
+    SocionicsType: document.getElementById("SocionicsType"),
+    LearningStyle: document.getElementById("LearningStyle"),
+    FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
+    PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
+    CreativeStyle: document.getElementById("CreativeStyle"),
+    ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
+    TeamRolePreference: document.getElementById("TeamRolePreference")
+  };
+  this.membershipSelect = document.getElementById("TFMembershipLevel");
+  this.membershipCostEl = document.getElementById("membershipCost");
+  this.paymentTypeEl = document.getElementById("paymentType");
+  this.hiddenMC = document.getElementById("hiddenMC");
+  this.hiddenPT = document.getElementById("hiddenPT");
+  this.sections = {
+    free: document.getElementById("freeLevelInputs"),
+    regular: document.getElementById("regularLevelInputs"),
+    vip: document.getElementById("vipLevelInputs"),
+    team: document.getElementById("teamLevelInputs"),
+    address: document.getElementById("AddressDetailsSubscribers"), // if present
+    costInfo: document.getElementById("membershipCostInfo"),
+  };
+  this.bindSignUp();
   }
-  fetchCart() {
-    try {
-      const res = fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
-      });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = res.json();
-      return data.items || [];
-    } catch (err) {
-      console.error('Error fetching cart:', err);
-      return [];
+
+  async bindStore() {
+    await this.store.showProducts();
+}
+
+  bindPayments() {
+      this.payment.mountCard("UniqueOriginal");
+
+      document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
+  const email = emailInput.value || null;
+  try {
+    const result = await this.payment.donate(20, 'usd', true, email); // $20 item
+    if (result.payment && result.payment.status === 'succeeded') {
+      alert("Purchase successful! Thank you.");
+      // Optionally, you can trigger your order fulfillment logic here
     }
+  } catch (err) {
+    alert("Purchase failed: " + err.message);
   }
-  updateTotals() {
-    let grandTotal = 0;
-    document.querySelectorAll('.cartForm').forEach(form => {
-      const variantSelect = form.querySelector('.variantSelect');
-      const quantityInput = form.querySelector('.quantityInput');
-      const itemSubtotalEl = form.querySelector('.itemSubtotal');
+});
+      this.payment.mountCard("SubscribeUsers");
 
-      const variant = variantSelect?.selectedOptions[0];
-      const price = parseFloat(variant?.dataset.price || 0);
-      const quantity = parseInt(quantityInput?.value || 1);
-
-      const subtotal = price * quantity;
-
-      if (itemSubtotalEl) itemSubtotalEl.textContent = subtotal.toFixed(2);
-      form.dataset.price = subtotal.toFixed(2);
-
-      grandTotal += subtotal;
-    });
-
-    const totalEl = document.getElementById('cartTotal');
-    if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
+      document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
+  const email = emailInput.value || null;
+  const priceId = "price_123456789"; // Stripe Price ID for subscription
+  try {
+    const result = await this.payment.subscribe(email, priceId, true);
+    if (result.status === 'success') {
+      alert("Subscription successful!");
+    } else if (result.payment && result.payment.status === 'succeeded') {
+      alert("Subscription payment successful!");
+    }
+  } catch (err) {
+    alert("Subscription failed: " + err.message);
   }
-  bindCart() {
-    document.querySelectorAll('.cartForm').forEach(form => {
-      const quantityInput = form.querySelector('.quantityInput');
-      const variantSelect = form.querySelector('.variantSelect');
+});
 
-      quantityInput?.addEventListener('input', updateTotals);
-      variantSelect?.addEventListener('change', updateTotals);
+    this.payment.mountCard("TfDonation"); //div
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        if (!form.action) return console.warn('Form action is empty!');
-
+    document.getElementById("TfDonateBtn").addEventListener("click", async () => {
         try {
-          const formData = new FormData(form);
-          const res = fetch(form.action, { method: 'POST', body: formData, headers: { 'X-Requested-With': 'XMLHttpRequest' } });
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-          const result = res.json();
-          if (result.success) {
-            // Refresh cart totals
-            const cartItems = this.fetchCart();
-            let total = 0;
-            cartItems.forEach(item => {
-              total += (parseFloat(item.price) || 0) * (parseInt(item.quantity) || 1);
-            });
-
-            const totalEl = document.getElementById('cartTotal');
-            if (totalEl) totalEl.textContent = total.toFixed(2);
-
-            // Refresh item subtotals in DOM
-            this.updateTotals();
-          } else {
-            console.warn('Cart error:', result.error);
+          const result = await this.payment.donate(10, 'usd', true, email); // $10 donation
+          if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+              alert("Donation successful! Thank you.");
           }
         } catch (err) {
-          console.error('Form submission error:', err);
+          alert("Donation failed: " + err.message);
         }
-      });
-    });
-    // Initialize totals on page load
-    this.updateTotals();
+      }
+    );
   }
-  bindStore() {
 
-  }
   bindWorker() {
     this.worker.init(this.audioElem);
-
-    //this.TfRadioEventListeners();
-//this.audio.MusicNetworkState(this.worker.radioWorker, this.audioElem);
-//this.audio.MusicState(this.audioElem);
   }
+
 }

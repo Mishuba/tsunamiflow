@@ -107,6 +107,7 @@
         </form>
     </nav>
     <main id="MainSection">
+        <div id="TfLogBox"> </div>
         <aside>
             <span>
                 <h6> Tsunami Radio (completely random)</h6>
@@ -119,9 +120,8 @@
                     <p itemprop="c">Planet: Earth<br />Galaxy: Milky Way<br /></p>
                 </address>
             </span>
-<div id="card-element"></div>
-<button id="donateBtn">Donate $5</button>
-<button id="subscribeBtn">Subscribe</button>
+<div id="TfDonation"></div>
+<button id="TfDonateBtn">Donate $5</button>
 
             <!--p1 id="TFdonation"></p1>
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -322,9 +322,11 @@
                             <br>
                             <label for="TeamRolePreference">Team Role Preference<input id="TeamRolePreference" class="TFFormInput" name="TeamRolePreference" type="text" placeholder="Team Role Prefernce" /></label>
                         </div>
-                        <label for="SubmitButton"><button id="FreeLevelSubmit" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit"> Subscribe </button></label>
+<div id="SubscribeUsers"></div>
+                        <label for="SubmitButton"><button id="FreeLevelSubmit" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit" disable> Subscribe </button></label>
                     </fieldset>
                 </form>
+
             </span>
         </aside>
     </main>
@@ -377,6 +379,8 @@
             <p>No products available.</p>
         <p>Cart Total: $<span id="cartTotal">0.00</span></p>
     </div>
+<div id="UniqueOriginal"></div>
+                        <label for="SubmitButton"><button id="UniqueOriginalBtn" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit" disabled> Subscribe </button></label>
 </footer>
 <script type="module">
 import "./JS/tfMain.js";

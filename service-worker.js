@@ -1,5 +1,5 @@
 const CACHE_NAME = "tf-cache-v3";
-const OFFLINE_URL = "/offline.php";
+const OFFLINE_URL = "/offline.html";
 
 const PRECACHE = [
     "/",

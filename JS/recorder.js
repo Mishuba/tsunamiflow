@@ -48,6 +48,10 @@ export class TfRecorder {
 
             // Optional local copy
             this.chunks.push(e.data);
+
+if (ws?.isOpen()) {
+    ws.sendBinary(e.data);
+  }
                 const arrayBuffer = await e.data.arrayBuffer();
                 
 }
