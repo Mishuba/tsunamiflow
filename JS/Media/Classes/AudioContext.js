@@ -3,6 +3,7 @@ export class TsunamiSounds {
             this.context = null;
             this.processing = null;
             this.id = null;
+            this.source;
       }
       create() {
             if(this.context === null) {
@@ -12,6 +13,9 @@ export class TsunamiSounds {
             } else {
                   return this.context;
             }
+      }
+      ElementSource(element){
+            this.source = this.context.createMediaElementSource(element);
       }
       finish() {
             this.context.close();
