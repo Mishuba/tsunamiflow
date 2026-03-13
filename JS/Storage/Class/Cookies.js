@@ -44,30 +44,156 @@ use this as part of the guest cookie settings.
 */
 
 export class NamiCookies {
-    constructor() {
-        if (navigator.cookieEnabled) {
-            this.cookies = true;
-            console.log("Cookies are enabled");
-            this.TFcookie = document.cookie;
-            this.guest = this.TFcookie.split(';').map(cookie => cookie.split('=')).reduce((accumulator, [key, value]) => ({ ...accumulator, [key.trim()]: decodeURIComponent(value) }), {});
-        } else {
-            this.cookies = false;
-            console.log("Cookies are not enabled");
-            this.TFcookie = null;
-            this.guest = null;
-        }
+
+    constructor({
+        namespace = "tf"
+    } = {}) {
+
+        this.namespace = namespace;
+        this.enabled = navigator.cookieEnabled;
+
+        this.cookies = this.enabled ? this.parse() : {};
+
     }
-    //cookies should be used for
-    // Session Management
-    // logins, shopping carts, game scores, or anthing the server should remember.
 
-    // Personalization
-    // User Preference, themes, and other settings.
+    key(name) {
+        return `${this.namespace}:${name}`;
+    }
 
-    //Tracking
-    //Recording and analyzing user behavior
+    parse() {
+
+        const jar = {};
+
+        if (!document.cookie) return jar;
+
+        document.cookie.split(";").forEach(cookie => {
+
+            const parts = cookie.split("=");
+
+            const key = parts.shift().trim();
+            const value = parts.join("=");
+
+            jar[key] = decodeURIComponent(value);
+
+        });
+
+        return jar;
+
+    }
+
+    set(name, value, {
+        days = 7,
+        path = "/",
+        secure = false,
+        sameSite = "Lax"
+    } = {}) {
+
+        if (!this.enabled) return false;
+
+        const key = this.key(name);
+
+        const expires = new Date(
+            Date.now() + days * 86400000
+        ).toUTCString();
+
+        const data = encodeURIComponent(
+            JSON.stringify(value)
+        );
+
+        let cookie = `${key}=${data}; expires=${expires}; path=${path}; SameSite=${sameSite}`;
+
+        if (secure) cookie += "; Secure";
+
+        document.cookie = cookie;
+
+        this.cookies[key] = data;
+
+        return true;
+
+    }
+
+    get(name) {
+
+        if (!this.enabled) return null;
+
+        const key = this.key(name);
+
+        const value = this.parse()[key];
+
+        if (!value) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    has(name) {
+
+        const key = this.key(name);
+
+        return key in this.parse();
+
+    }
+
+    remove(name, path = "/") {
+
+        const key = this.key(name);
+
+        document.cookie =
+            `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+
+        delete this.cookies[key];
+
+    }
+
+    keys() {
+
+        const parsed = this.parse();
+
+        return Object.keys(parsed)
+            .filter(k => k.startsWith(this.namespace + ":"))
+            .map(k => k.replace(this.namespace + ":", ""));
+
+    }
+
+    clear() {
+
+        this.keys().forEach(k => {
+            this.remove(k);
+        });
+
+    }
+
+    toJson() {
+
+        const parsed = this.parse();
+
+        const obj = {};
+
+        Object.keys(parsed).forEach(key => {
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const clean = key.replace(this.namespace + ":", "");
+
+                try {
+                    obj[clean] = JSON.parse(parsed[key]);
+                } catch {
+                    obj[clean] = parsed[key];
+                }
+
+            }
+
+        });
+
+        return obj;
+
+    }
+
 }
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /*
 After we figure out how to do it with the guest then we should create a (the list below) cookie for the users at the community level or subscriber level
