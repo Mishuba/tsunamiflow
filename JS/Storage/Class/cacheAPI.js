@@ -1,3 +1,14 @@
+/* Caching network respones / Http Cache
+1.) Images 
+2.) game assets
+3.) audio files (mp3 wav)
+4.) video files
+5.) plugins 
+6.) models 
+7.) textures
+8.) links
+9.) files
+*/
 export class TfCacheAPI {
     constructor({
         cacheName = "tsunami-cache",

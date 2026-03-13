@@ -1,5 +1,15 @@
+/*
+5 mb per origin /short term memory
+1.) Game progress
+2.) audio timestamp
+3.) video timestamp
+4.) Ui State
+5.) unsaved form data
+6.) webrtc call State
+7.) live stream controls
+8.) basically it i would send through json.
+*/
 export class TfSessionStorage {
-
     constructor({
         namespace = "tf"
     } = {}) {

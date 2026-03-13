@@ -1,3 +1,35 @@
+/*Local database internal
+1.) supports indexes
+2.) supports transactions
+3.) stores objects
+4.) stfores blobs / array buffers
+5.) sound clips 
+6.) short videos
+7.) gifs 
+8.) waveform data
+9.) Midi recordings
+10.) game saves
+11.) track metadata
+12.) audio recordings 
+13.) wvetform cache 
+14.) midi 
+15.) video segments
+16.) ai analysis data 
+17.)
+18.)
+19.)
+20.)
+21.)
+22.)
+23.)
+24.)
+25.)
+26.)
+27.)
+28.)
+29.)
+30.)
+*/
 export class TfIndexedDB {
     constructor({
         dbName = "tf-db",

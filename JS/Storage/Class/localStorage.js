@@ -1,3 +1,17 @@
+/*
+Last Forever
+1.) user Preference
+2.) UI settings
+3.) theme
+4.) hardware preference
+5.) featfure tflags
+6.) bluetooth device
+7.) usb midi device
+8.) webcam enabled
+9.) geolocation permission perference
+10.) audio buffer settings
+
+*/
 export class TfLocalStorage {
 
     constructor({
