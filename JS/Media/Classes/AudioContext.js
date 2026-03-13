@@ -4,6 +4,7 @@ export class TsunamiSounds {
             this.processing = null;
             this.id = null;
             this.source;
+            this.gain;
       }
       create() {
             if(this.context === null) {
