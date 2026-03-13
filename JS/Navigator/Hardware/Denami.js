@@ -16,7 +16,6 @@ export class Denami {
     indexedDB = null,
     cacheAPI = null,
     cookies = null,
-    webSocket = null,
     eventSource = null,
     fetch = null,
     sendBeacon = null,
