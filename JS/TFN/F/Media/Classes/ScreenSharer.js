@@ -1,36 +1,34 @@
 export class TfScreenShare {
     constructor({ videoElement = null, includeAudio = false } = {}) {
-        this.videoElement = videoElement; // <video> element for preview
-        this.stream = null;
-        this.listeners = {};
+        this.videoElement = videoElement; // <video> element preview
+        this.stream = null;                // MediaStream of screen share
         this.includeAudio = includeAudio;
+        this.listeners = {};
+        this.id = `screenshare-${Date.now()}`;
     }
 
     /* ----------------------------
-       Start Screen Share
+       Start Screen Sharing
     -----------------------------*/
-    async start() {
+    async start(constraints = { video: { cursor: "always" }, audio: this.includeAudio }) {
         if (this.stream) return this.stream;
 
         if (!navigator.mediaDevices?.getDisplayMedia) {
-            const err = new Error("Screen sharing is not supported in this browser.");
+            const err = new Error("Screen sharing not supported in this browser.");
             console.error(err);
             this.emit("error", err);
             throw err;
         }
 
         try {
-            this.stream = await navigator.mediaDevices.getDisplayMedia({
-                video: { cursor: "always" },
-                audio: this.includeAudio
-            });
+            this.stream = await navigator.mediaDevices.getDisplayMedia(constraints);
 
             if (this.videoElement) {
                 this.videoElement.srcObject = this.stream;
                 this.videoElement.play().catch(() => {});
             }
 
-            // Detect when user stops sharing via browser UI
+            // Handle user stopping screen share from browser UI
             this.stream.getVideoTracks()[0]?.addEventListener("ended", () => this.stop());
 
             this.emit("started", this.stream);
@@ -43,7 +41,7 @@ export class TfScreenShare {
     }
 
     /* ----------------------------
-       Stop Screen Share
+       Stop Screen Sharing
     -----------------------------*/
     stop() {
         if (!this.stream) return;
@@ -57,18 +55,18 @@ export class TfScreenShare {
     }
 
     /* ----------------------------
-       Get Stream
+       Get Current Stream
     -----------------------------*/
     getStream() {
         return this.stream;
     }
 
     /* ----------------------------
-       Events
+       Event System
     -----------------------------*/
-    on(event, fn) {
+    on(event, callback) {
         if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(fn);
+        this.listeners[event].push(callback);
     }
 
     emit(event, data) {
@@ -81,7 +79,8 @@ export class TfScreenShare {
     toJson() {
         return {
             active: !!this.stream,
-            tracks: this.stream?.getTracks().length || 0
+            tracks: this.stream?.getTracks().length || 0,
+            id: this.id
         };
     }
 }
