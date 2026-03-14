@@ -1,124 +1,116 @@
 export class TfWebRTC {
-
     constructor({
-        websocket = null,
-        localVideo = null,
-        remoteVideo = null,
-        iceServers = [{ urls: "stun:stun.l.google.com:19302" }]
+        videoElement = null,
+        remoteElement = null,
+        constraints = { video: true, audio: true }
     } = {}) {
-
+        this.localStream = null;
+        this.remoteStream = new MediaStream();
         this.pc = null;
-        this.stream = null;
-        this.remoteStream = null;
 
-        this.websocket = websocket;
-        this.localVideo = localVideo;
-        this.remoteVideo = remoteVideo;
+        this.videoElement = videoElement;
+        this.remoteElement = remoteElement;
 
-        this.iceServers = iceServers;
+        this.constraints = constraints;
         this.listeners = {};
     }
 
-    async init(stream) {
+    /* ----------------------------
+       Local Media
+    -----------------------------*/
 
-        if (this.pc) return this.pc;
+    async startLocal() {
+        if (this.localStream) return this.localStream;
 
-        if (!stream) throw new Error("TfWebRTC requires a MediaStream");
+        try {
+            this.localStream = await navigator.mediaDevices.getUserMedia(this.constraints);
 
-        this.stream = stream;
+            if (this.videoElement) {
+                this.videoElement.srcObject = this.localStream;
+                this.videoElement.play().catch(() => {});
+            }
 
-        this.pc = new RTCPeerConnection({
-            iceServers: this.iceServers
-        });
+            this.emit("localReady", this.localStream);
+            return this.localStream;
+        } catch (err) {
+            console.error("TfWebRTC startLocal failed:", err);
+            this.emit("error", err);
+        }
+    }
 
-        /* attach local tracks */
+    stopLocal() {
+        if (!this.localStream) return;
 
-        stream.getTracks().forEach(track => {
-            this.pc.addTrack(track, stream);
-        });
+        this.localStream.getTracks().forEach(track => track.stop());
+        this.localStream = null;
 
-        /* show local video */
+        if (this.videoElement) this.videoElement.srcObject = null;
+        this.emit("localStopped");
+    }
 
-        if (this.localVideo) {
-            this.localVideo.srcObject = stream;
+    replaceTrack(newTrack) {
+        if (!this.localStream || !this.pc || !newTrack) return;
+
+        const kind = newTrack.kind;
+        const oldTrack = this.localStream.getTracks().find(t => t.kind === kind);
+
+        if (oldTrack) {
+            this.localStream.removeTrack(oldTrack);
+            this.pc.getSenders().find(s => s.track === oldTrack)?.replaceTrack(newTrack);
+            oldTrack.stop();
         }
 
-        /* remote stream */
+        this.localStream.addTrack(newTrack);
+    }
 
-        this.remoteStream = new MediaStream();
+    /* ----------------------------
+       Peer Connection
+    -----------------------------*/
 
-        if (this.remoteVideo) {
-            this.remoteVideo.srcObject = this.remoteStream;
+    async initPeer(iceServers = [{ urls: "stun:stun.l.google.com:19302" }]) {
+        if (this.pc) return this.pc;
+
+        this.pc = new RTCPeerConnection({ iceServers });
+
+        if (this.localStream) {
+            this.localStream.getTracks().forEach(track => this.pc.addTrack(track, this.localStream));
         }
 
         this.pc.ontrack = (event) => {
-
-            event.streams[0].getTracks().forEach(track => {
-                this.remoteStream.addTrack(track);
-            });
-
-            this.emit("remoteStream", this.remoteStream);
+            event.streams[0].getTracks().forEach(track => this.remoteStream.addTrack(track));
+            if (this.remoteElement) this.remoteElement.srcObject = this.remoteStream;
+            this.emit("remoteUpdated", this.remoteStream);
         };
 
-        /* ICE */
-
         this.pc.onicecandidate = (event) => {
-
-            if (!event.candidate) return;
-
-            this.websocket?.send(JSON.stringify({
-                type: "ice",
-                candidate: event.candidate
-            }));
+            if (event.candidate) this.emit("iceCandidate", event.candidate);
         };
 
         return this.pc;
     }
 
-    async createOffer(target = null) {
-
+    async createOffer() {
+        if (!this.pc) throw new Error("PeerConnection not initialized");
         const offer = await this.pc.createOffer();
-
         await this.pc.setLocalDescription(offer);
-
-        this.websocket?.send(JSON.stringify({
-            type: "offer",
-            offer,
-            target
-        }));
-
         return offer;
     }
 
-    async createAnswer(offer, source = null) {
-
-        await this.pc.setRemoteDescription(offer);
-
+    async createAnswer() {
+        if (!this.pc) throw new Error("PeerConnection not initialized");
         const answer = await this.pc.createAnswer();
-
         await this.pc.setLocalDescription(answer);
-
-        this.websocket?.send(JSON.stringify({
-            type: "answer",
-            answer,
-            target: source
-        }));
-
         return answer;
     }
 
-    async handleSignal(message) {
-
-        const data = typeof message === "string"
-            ? JSON.parse(message)
-            : message;
-
-        if (!this.pc) return;
+    async handleSignal(data) {
+        if (!this.pc) await this.initPeer();
 
         switch (data.type) {
-
             case "offer":
-                await this.createAnswer(data.offer, data.source);
+                await this.pc.setRemoteDescription(data.offer);
+                const answer = await this.createAnswer();
+                this.emit("answerCreated", answer);
                 break;
 
             case "answer":
@@ -126,49 +118,38 @@ export class TfWebRTC {
                 break;
 
             case "ice":
-                if (data.candidate) {
-                    await this.pc.addIceCandidate(data.candidate)
-                        .catch(console.warn);
-                }
+                if (data.candidate) await this.pc.addIceCandidate(data.candidate).catch(console.warn);
                 break;
         }
     }
 
-    close() {
-
-        if (this.pc) {
-            this.pc.close();
-            this.pc = null;
-        }
-
-        if (this.remoteStream) {
-            this.remoteStream.getTracks().forEach(t => t.stop());
-            this.remoteStream = null;
-        }
+    closePeer() {
+        if (this.pc) this.pc.close();
+        this.pc = null;
+        this.remoteStream.getTracks().forEach(track => track.stop());
+        this.remoteStream = new MediaStream();
+        if (this.remoteElement) this.remoteElement.srcObject = null;
     }
 
+    /* ----------------------------
+       Events
+    -----------------------------*/
+
     on(event, fn) {
-
-        if (!this.listeners[event]) {
-            this.listeners[event] = [];
-        }
-
+        if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(fn);
     }
 
     emit(event, data) {
-
-        if (!this.listeners[event]) return;
-
-        this.listeners[event].forEach(fn => fn(data));
+        (this.listeners[event] || []).forEach(fn => fn(data));
     }
 
     toJson() {
-
         return {
-            connected: !!this.pc,
-            localTracks: this.stream?.getTracks().length || 0,
-            remoteTracks: this.remoteStream?.getTracks().length || 0
+            hasLocal: !!this.localStream,
+            localTracks: this.localStream?.getTracks().length || 0,
+            remoteTracks: this.remoteStream?.getTracks().length || 0,
+            connected: !!this.pc
         };
     }
 }
