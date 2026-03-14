@@ -19,5 +19,5 @@ NewsArray.push("Mishuba went to Harker Heights High School in Texas and Blythewo
 NewsArray.push("Mishuba received his Professional TEFL Certification in 2017. His Certificate NO. is <a href='teacherlink.teachingnomad.com/certificates'> TN1700-043  </a>");
 NewsArray.push("Mishuba received his MS in Entertainment Business from Full Sail University in 2020.");
 
-NewsTimer();
+NewsTimer(NewsArray);
 /* News Ticker/Updater End */
