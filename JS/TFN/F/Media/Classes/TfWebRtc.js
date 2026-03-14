@@ -1,137 +1,174 @@
-export class TfWebRTCRecorder {
-  constructor({ remoteVideo = null, websocket = null, localVideo = null } = {}) {
-    this.peerConnection = null;
-    this.localStream = null;
-    this.remoteStream = null;
-    this.websocket = websocket;
-    this.localVideo = localVideo;
-    this.remoteVideo = remoteVideo;
-    this.listeners = {};
-  }
+export class TfWebRTC {
 
-  async initLocalStream({ video = true, audio = true } = {}) {
-    if (this.localStream) return this.localStream;
+    constructor({
+        websocket = null,
+        localVideo = null,
+        remoteVideo = null,
+        iceServers = [{ urls: "stun:stun.l.google.com:19302" }]
+    } = {}) {
 
-    try {
-      this.localStream = await navigator.mediaDevices.getUserMedia({ video, audio });
-      if (this.localVideo) this.localVideo.srcObject = this.localStream;
-      this.emit("localStreamReady", this.localStream);
-      return this.localStream;
-    } catch (err) {
-      console.error("Error accessing local media:", err);
-      this.emit("error", err);
-    }
-  }
+        this.pc = null;
+        this.stream = null;
+        this.remoteStream = null;
 
-  async createPeerConnection(iceServers = null) {
-    if (this.peerConnection) return this.peerConnection;
+        this.websocket = websocket;
+        this.localVideo = localVideo;
+        this.remoteVideo = remoteVideo;
 
-    this.peerConnection = new RTCPeerConnection({
-      iceServers: iceServers || [{ urls: "stun:stun.l.google.com:19302" }]
-    });
-
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => {
-        this.peerConnection.addTrack(track, this.localStream);
-      });
+        this.iceServers = iceServers;
+        this.listeners = {};
     }
 
-    this.remoteStream = new MediaStream();
-    if (this.remoteVideo) this.remoteVideo.srcObject = this.remoteStream;
+    async init(stream) {
 
-    this.peerConnection.ontrack = event => {
-      event.streams[0].getTracks().forEach(track => this.remoteStream.addTrack(track));
-      this.emit("remoteStreamUpdated", this.remoteStream);
-    };
+        if (this.pc) return this.pc;
 
-    this.peerConnection.onicecandidate = event => {
-      if (event.candidate) {
-        this.websocket?.send(JSON.stringify({ type: "ice", candidate: event.candidate }));
-      }
-    };
+        if (!stream) throw new Error("TfWebRTC requires a MediaStream");
 
-    return this.peerConnection;
-  }
+        this.stream = stream;
 
-  async call(remoteId = null) {
-    await this.createPeerConnection();
-
-    const offer = await this.peerConnection.createOffer();
-    await this.peerConnection.setLocalDescription(offer);
-
-    this.websocket?.send(JSON.stringify({
-      type: "offer",
-      offer,
-      target: remoteId
-    }));
-  }
-
-  async handleSignalingMessage(message) {
-    const data = JSON.parse(message);
-    if (!this.peerConnection) await this.createPeerConnection();
-
-    switch (data.type) {
-      case "offer":
-        await this.peerConnection.setRemoteDescription(data.offer);
-        const answer = await this.peerConnection.createAnswer();
-        await this.peerConnection.setLocalDescription(answer);
-        this.websocket?.send(JSON.stringify({ type: "answer", answer, target: data.source }));
-        break;
-      case "answer":
-        await this.peerConnection.setRemoteDescription(data.answer);
-        break;
-      case "ice":
-        if (data.candidate) await this.peerConnection.addIceCandidate(data.candidate).catch(console.warn);
-        break;
-    }
-  }
-
-  async startStreaming({ streamKey = null } = {}) {
-    await this.initLocalStream();
-
-    // Trigger backend to start FFmpeg restream
-    if (streamKey) {
-      try {
-        await fetch(`https://world.tsunamiflow.club/TfRtmp.php?key=${encodeURIComponent(streamKey)}`, {
-          method: "GET",
-          mode: "cors"
+        this.pc = new RTCPeerConnection({
+            iceServers: this.iceServers
         });
-        console.log("Backend FFmpeg restream triggered for:", streamKey);
-      } catch (err) {
-        console.warn("Failed to trigger backend restream:", err);
-      }
+
+        /* attach local tracks */
+
+        stream.getTracks().forEach(track => {
+            this.pc.addTrack(track, stream);
+        });
+
+        /* show local video */
+
+        if (this.localVideo) {
+            this.localVideo.srcObject = stream;
+        }
+
+        /* remote stream */
+
+        this.remoteStream = new MediaStream();
+
+        if (this.remoteVideo) {
+            this.remoteVideo.srcObject = this.remoteStream;
+        }
+
+        this.pc.ontrack = (event) => {
+
+            event.streams[0].getTracks().forEach(track => {
+                this.remoteStream.addTrack(track);
+            });
+
+            this.emit("remoteStream", this.remoteStream);
+        };
+
+        /* ICE */
+
+        this.pc.onicecandidate = (event) => {
+
+            if (!event.candidate) return;
+
+            this.websocket?.send(JSON.stringify({
+                type: "ice",
+                candidate: event.candidate
+            }));
+        };
+
+        return this.pc;
     }
 
-    await this.call();
-  }
+    async createOffer(target = null) {
 
-  stopStreaming() {
-    this.close();
-  }
+        const offer = await this.pc.createOffer();
 
-  close() {
-    if (this.peerConnection) {
-      this.peerConnection.close();
-      this.peerConnection = null;
+        await this.pc.setLocalDescription(offer);
+
+        this.websocket?.send(JSON.stringify({
+            type: "offer",
+            offer,
+            target
+        }));
+
+        return offer;
     }
 
-    if (this.localStream) {
-      this.localStream.getTracks().forEach(track => track.stop());
-      this.localStream = null;
+    async createAnswer(offer, source = null) {
+
+        await this.pc.setRemoteDescription(offer);
+
+        const answer = await this.pc.createAnswer();
+
+        await this.pc.setLocalDescription(answer);
+
+        this.websocket?.send(JSON.stringify({
+            type: "answer",
+            answer,
+            target: source
+        }));
+
+        return answer;
     }
 
-    if (this.remoteStream) {
-      this.remoteStream.getTracks().forEach(track => track.stop());
-      this.remoteStream = null;
+    async handleSignal(message) {
+
+        const data = typeof message === "string"
+            ? JSON.parse(message)
+            : message;
+
+        if (!this.pc) return;
+
+        switch (data.type) {
+
+            case "offer":
+                await this.createAnswer(data.offer, data.source);
+                break;
+
+            case "answer":
+                await this.pc.setRemoteDescription(data.answer);
+                break;
+
+            case "ice":
+                if (data.candidate) {
+                    await this.pc.addIceCandidate(data.candidate)
+                        .catch(console.warn);
+                }
+                break;
+        }
     }
-  }
 
-  on(event, fn) {
-    if (!this.listeners[event]) this.listeners[event] = [];
-    this.listeners[event].push(fn);
-  }
+    close() {
 
-  emit(event, data) {
-    (this.listeners[event] || []).forEach(fn => fn(data));
-  }
+        if (this.pc) {
+            this.pc.close();
+            this.pc = null;
+        }
+
+        if (this.remoteStream) {
+            this.remoteStream.getTracks().forEach(t => t.stop());
+            this.remoteStream = null;
+        }
+    }
+
+    on(event, fn) {
+
+        if (!this.listeners[event]) {
+            this.listeners[event] = [];
+        }
+
+        this.listeners[event].push(fn);
+    }
+
+    emit(event, data) {
+
+        if (!this.listeners[event]) return;
+
+        this.listeners[event].forEach(fn => fn(data));
+    }
+
+    toJson() {
+
+        return {
+            connected: !!this.pc,
+            localTracks: this.stream?.getTracks().length || 0,
+            remoteTracks: this.remoteStream?.getTracks().length || 0
+        };
+    }
 }
