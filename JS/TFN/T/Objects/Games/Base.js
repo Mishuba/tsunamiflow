@@ -25,3 +25,35 @@ export let controllerMappings = {
                 leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
             }
         };
+
+export let spriteStates = [
+            { name: "stand", frames: 2 },
+            { name: "walk", frames: 2 },
+            { name: "run", frames: 2 },
+            { name: "jump", frames: 2 },
+            { name: "double jump", frames: 2 },
+            { name: "crouch", frames: 2 },
+            { name: "crawl", frames: 2 },
+            { name: "climb", frames: 2 },
+            { name: "swim", frames: 2 },
+            { name: "dive", frames: 2 },
+            { name: "fly", frames: 2 },
+            { name: "Cycle Through Items", frames: 2 },
+            { name: "Pick Up", frames: 2 },
+            { name: "World Interaction", frames: 2 },
+            { name: "Use Item", frames: 2 },
+            { name: "weak attack", frames: 2 },
+            { name: "strong attack", frames: 2 },
+            { name: "special attack", frames: 2 },
+            { name: "main skill", frames: 2 },
+            { name: "aoe skill", frames: 2 },
+            { name: "range skill", frames: 2 },
+            { name: "knockback skill", frames: 2 },
+            { name: "evade skill", frames: 2 },
+            { name: "defense skill", frames: 2 },
+            { name: "buff skill", frames: 2 },
+            { name: "debuff skill", frames: 2 },
+            { name: "ultimate skill", frames: 2 },
+            { name: "block", frames: 2 },
+            { name: "parry", frames: 2 }
+        ];
