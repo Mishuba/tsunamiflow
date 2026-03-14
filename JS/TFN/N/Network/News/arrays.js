@@ -1,0 +1,1 @@
+var NewsArray = new Array();
