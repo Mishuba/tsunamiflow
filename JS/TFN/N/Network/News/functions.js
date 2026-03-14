@@ -1,4 +1,4 @@
 export async function NewsTimer() {
-    ReallyDude = Math.floor(Math.random() * NewsArray.length);
+    let ReallyDude = Math.floor(Math.random() * NewsArray.length);
     document.getElementById("NTS").innerHTML = NewsArray[ReallyDude];
 }
