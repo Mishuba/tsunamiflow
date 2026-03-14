@@ -1,95 +1,75 @@
-// Unified TsunamiFlowNetwork class
-import { TfWebcam } from './TfWebcam.js';
-import { TfScreenShare } from './TfScreenShare.js';
-import { TfWebRTC } from './TfWebRTC.js';
-import { TfMediaSource } from './TfMediaSource.js';
-import { TfMediaRecorder } from './TfMediaRecorder.js';
-import { TsunamiFlowMediaStream } from './TsunamiFlowMediaStream.js';
+import { TsunamiFlowVideo } from "./TsunamiFlowVideo.js";
+import { TfWebcam } from "./TfWebcam.js";
+import { TfScreenShare } from "./TfScreenShare.js";
+import { TsunamiFlowMediaStream } from "./TsunamiFlowMediaStream.js";
+import { TfWebRTC } from "./TfWebRTC.js";
+import { TfMediaRecorder } from "./TfMediaRecorder.js";
 
 export class TsunamiFlowNetwork {
     constructor() {
-        // Core media modules
+        // Core Media
         this.webcam = new TfWebcam();
-        this.screenShare = new TfScreenShare();
-        this.webrtc = new TfWebRTC();
-        this.mediaSource = new TfMediaSource();
-        this.recorder = new TfMediaRecorder();
+        this.screenshare = new TfScreenShare();
         this.canvasStream = new TsunamiFlowMediaStream();
+        this.webrtc = new TfWebRTC();
+        this.recorder = new TfMediaRecorder();
 
-        // Internal event system
+        // Video Elements
+        this.videoWebcam = new TsunamiFlowVideo({ autoplay: true, muted: true });
+        this.videoScreen = new TsunamiFlowVideo({ autoplay: true, muted: true });
+        this.videoCanvas = new TsunamiFlowVideo({ autoplay: true, muted: true });
+        this.videoRemote = new TsunamiFlowVideo({ autoplay: true, muted: false });
+
+        // Event System
         this.listeners = {};
     }
 
     /* ----------------------------
-       Event System
-    ----------------------------*/
-    on(event, callback) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(callback);
-    }
-
-    emit(event, data) {
-        (this.listeners[event] || []).forEach(cb => cb(data));
-    }
-
-    /* ----------------------------
-       Start webcam
+       Webcam
     ----------------------------*/
     async startWebcam() {
         const stream = await this.webcam.start();
-        this.emit('webcamStarted', stream);
+        this.videoWebcam.attachStream(stream);
+        this.emit("webcamStarted", stream);
         return stream;
     }
 
     stopWebcam() {
         this.webcam.stop();
-        this.emit('webcamStopped');
-    }
-
-    attachWebcam(videoElement) {
-        this.webcam.attach(videoElement);
+        this.videoWebcam.detachStream();
+        this.emit("webcamStopped");
     }
 
     /* ----------------------------
-       Start screen share
+       Screen Share
     ----------------------------*/
-    async startScreenShare(constraints) {
-        const stream = await this.screenShare.start(constraints);
-        this.emit('screenShareStarted', stream);
+    async startScreenShare() {
+        const stream = await this.screenshare.start();
+        this.videoScreen.attachStream(stream);
+        this.emit("screenShareStarted", stream);
         return stream;
     }
 
     stopScreenShare() {
-        this.screenShare.stop();
-        this.emit('screenShareStopped');
-    }
-
-    attachScreenShare(videoElement) {
-        if (this.screenShare.getStream()) videoElement.srcObject = this.screenShare.getStream();
+        this.screenshare.stop();
+        this.videoScreen.detachStream();
+        this.emit("screenShareStopped");
     }
 
     /* ----------------------------
-       Canvas + Audio MediaStream
+       Canvas Stream
     ----------------------------*/
-    startCanvasStream(options) {
-        const stream = this.canvasStream.start(options);
-        this.emit('canvasStreamStarted', stream);
+    startCanvas(canvas, audioContext = null, sourceNode = null, fps = 30) {
+        const stream = this.canvasStream.start({ canvas, audioContext, sourceNode, fps });
+        this.videoCanvas.attachStream(stream);
+        this.emit("canvasStarted", stream);
         return stream;
     }
 
-    stopCanvasStream() {
+    stopCanvas() {
         this.canvasStream.stop();
-        this.emit('canvasStreamStopped');
-    }
-
-    replaceCanvas(newCanvas, fps = 30) {
-        const stream = this.canvasStream.replaceCanvas(newCanvas, fps);
-        this.emit('canvasStreamReplaced', stream);
-        return stream;
-    }
-
-    getCanvasStream() {
-        return this.canvasStream.getStream();
+        this.videoCanvas.detachStream();
+        this.emit("canvasStopped");
     }
 
     /* ----------------------------
@@ -97,101 +77,66 @@ export class TsunamiFlowNetwork {
     ----------------------------*/
     async startLocalWebRTC() {
         const stream = await this.webrtc.startLocal();
-        this.emit('webrtcLocalReady', stream);
+        this.videoWebcam.attachStream(stream); // optional: preview local
+        this.emit("webrtcLocalStarted", stream);
         return stream;
     }
 
-    async initPeerWebRTC(iceServers) {
+    async initPeer(iceServers) {
         const pc = await this.webrtc.initPeer(iceServers);
-        this.emit('webrtcPeerReady', pc);
         return pc;
     }
 
-    async handleSignalWebRTC(data) {
+    async handleSignal(data) {
         await this.webrtc.handleSignal(data);
+        this.videoRemote.attachStream(this.webrtc.remoteStream);
     }
 
-    closePeerWebRTC() {
+    closePeer() {
         this.webrtc.closePeer();
-        this.emit('webrtcPeerClosed');
-    }
-
-    /* ----------------------------
-       MediaSource
-    ----------------------------*/
-    attachMediaSource(videoElement) {
-        this.mediaSource.attach(videoElement);
-    }
-
-    createSourceBuffer(mimeType) {
-        return this.mediaSource.createSourceBuffer(mimeType);
-    }
-
-    appendMediaSourceBuffer(data) {
-        this.mediaSource.appendBuffer(data);
-    }
-
-    endMediaSource() {
-        this.mediaSource.endStream();
-    }
-
-    destroyMediaSource() {
-        this.mediaSource.destroy();
+        this.videoRemote.detachStream();
+        this.emit("webrtcClosed");
     }
 
     /* ----------------------------
        MediaRecorder
     ----------------------------*/
-    startRecording(stream, options = {}) {
-        if (options.mimeType) this.recorder.mimeType = options.mimeType;
-        if (options.videoBitsPerSecond) this.recorder.videoBitsPerSecond = options.videoBitsPerSecond;
-        if (options.audioBitsPerSecond) this.recorder.audioBitsPerSecond = options.audioBitsPerSecond;
-        if (options.chunkMs) this.recorder.chunkMs = options.chunkMs;
-
-        this.recorder.onData = options.onData || null;
-        this.recorder.onStart = options.onStart || null;
-        this.recorder.onStop = options.onStop || null;
-
+    startRecording(stream) {
         this.recorder.start(stream);
-        this.emit('recordingStarted', stream);
+        this.emit("recordingStarted", stream);
     }
 
     stopRecording() {
         this.recorder.stop();
-        this.emit('recordingStopped');
+        this.emit("recordingStopped");
     }
 
-    pauseRecording() {
-        this.recorder.pause();
-    }
-
-    resumeRecording() {
-        this.recorder.resume();
-    }
-
-    resetRecording() {
-        this.recorder.reset();
-    }
-
-    getRecordingBlob() {
-        return this.recorder.getBlob();
-    }
-
-    downloadRecording(filename) {
+    downloadRecording(filename = "recording.webm") {
         this.recorder.download(filename);
     }
 
     /* ----------------------------
-       Quick status for all modules
+       Event System
+    ----------------------------*/
+    on(event, fn) {
+        if (!this.listeners[event]) this.listeners[event] = [];
+        this.listeners[event].push(fn);
+    }
+
+    emit(event, data) {
+        (this.listeners[event] || []).forEach(fn => fn(data));
+    }
+
+    /* ----------------------------
+       Status Summary
     ----------------------------*/
     toJson() {
         return {
-            webcam: this.webcam.toJson(),
-            screenShare: this.screenShare.toJson(),
-            webrtc: this.webrtc.toJson(),
-            mediaSource: this.mediaSource.toJson(),
-            recorder: this.recorder.toJson(),
-            canvasStream: this.canvasStream ? this.canvasStream.getStream() ? { active: true } : { active: false } : null
+            webcam: this.videoWebcam.toJson(),
+            screenShare: this.videoScreen.toJson(),
+            canvas: this.videoCanvas.toJson(),
+            remote: this.videoRemote.toJson(),
+            recorder: this.recorder.toJson()
         };
     }
 }
