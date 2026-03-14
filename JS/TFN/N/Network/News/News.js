@@ -1,5 +1,6 @@
 import { NewsArray } from "arrays.js";
-var ReallyDude;
+import { NewsTimer } from "functions.js";
+
 NewsArray.push("Mishuba was born at 6 pounds 5 ounces with a length of 20 inches. His head was 12 1/2 inches, chest was 11 1/2 inches on July 11, 1990 at Tallahassee Memorial Regional Medical Center INC. in Tallahassee, FLorida of the United States of America on Planet Earth.");
 NewsArray.push("Mishuba played on the school basketball team from 7th grade to 10 grade. ");
 NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
@@ -18,8 +19,5 @@ NewsArray.push("Mishuba went to Harker Heights High School in Texas and Blythewo
 NewsArray.push("Mishuba received his Professional TEFL Certification in 2017. His Certificate NO. is <a href='teacherlink.teachingnomad.com/certificates'> TN1700-043  </a>");
 NewsArray.push("Mishuba received his MS in Entertainment Business from Full Sail University in 2020.");
 
-export async function NewsTimer() {
-    ReallyDude = Math.floor(Math.random() * NewsArray.length);
-    document.getElementById("NTS").innerHTML = NewsArray[ReallyDude];
-}
+NewsTimer();
 /* News Ticker/Updater End */
