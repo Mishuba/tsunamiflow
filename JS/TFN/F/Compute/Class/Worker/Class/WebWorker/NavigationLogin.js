@@ -1,8 +1,5 @@
+import { SignIn } from "../../../../../../T/Functions/Site/Navigation/Function";
+
 //Nav Login Form
-document.getElementById("tfNavLoginForm").addEventListener("submit", function (tryToSignIn) {
-    tryToSignIn.preventDefault();
-    let NavUN = document.getElementById("nun");
-    let NavPSW = document.getElementById("npsw");
-    NavXML(NavUN, NavPSW);
-});
+document.getElementById("tfNavLoginForm").addEventListener("submit", SignIn(tryToSignIn));
 //Nav Login Form Ended
