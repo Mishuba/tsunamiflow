@@ -1,12 +1,12 @@
-import { TsunamiFlowVideo } from "./TsunamiFlowVideo.js";
+import { DefaultVideoEffects } from "./VideoEffects.js"; // optional effects module
 import { TfWebcam } from "./TfWebcam.js";
 import { TfScreenShare } from "./TfScreenShare.js";
 import { TsunamiFlowMediaStream } from "./TsunamiFlowMediaStream.js";
 import { TfWebRTC } from "./TfWebRTC.js";
 import { TfMediaRecorder } from "./TfMediaRecorder.js";
 
-export class TsunamiFlowNetwork {
-    constructor() {
+export class TsunamiFlowVideoNetwork {
+    constructor(videoContext = null) {
         // Core Media
         this.webcam = new TfWebcam();
         this.screenshare = new TfScreenShare();
@@ -15,100 +15,146 @@ export class TsunamiFlowNetwork {
         this.recorder = new TfMediaRecorder();
 
         // Video Elements
-        this.videoWebcam = new TsunamiFlowVideo({ autoplay: true, muted: true });
-        this.videoScreen = new TsunamiFlowVideo({ autoplay: true, muted: true });
-        this.videoCanvas = new TsunamiFlowVideo({ autoplay: true, muted: true });
-        this.videoRemote = new TsunamiFlowVideo({ autoplay: true, muted: false });
+        this.videos = {}; // keyed by ID
+        this.effects = {}; // keyed by ID
 
         // Event System
         this.listeners = {};
+
+        // Optional shared canvas context for effects
+        this.videoContext = videoContext || document.createElement("canvas").getContext("2d");
+
+        // Playback / state
+        this.currentVideoId = null;
+    }
+
+    /* ----------------------------
+       Video Element Management
+    ----------------------------*/
+    addVideoElement(element, id = null, effect = null) {
+        const vidId = id || `video-${Object.keys(this.videos).length + 1}`;
+        this.videos[vidId] = element;
+        this.effects[vidId] = effect || new DefaultVideoEffects();
+        element.autoplay = true;
+        element.muted = true;
+
+        element.addEventListener("ended", () => this.emit("ended", vidId));
+        element.addEventListener("play", () => this.emit("play", vidId));
+        element.addEventListener("pause", () => this.emit("pause", vidId));
+
+        return vidId;
+    }
+
+    attachStreamToVideo(id, stream) {
+        const element = this.videos[id];
+        if (!element) return;
+        element.srcObject = stream;
+        element.play().catch(() => console.warn("Video autoplay blocked"));
+    }
+
+    detachVideo(id) {
+        const element = this.videos[id];
+        if (!element) return;
+        if (element.srcObject) {
+            element.srcObject.getTracks().forEach(track => track.stop());
+        }
+        element.srcObject = null;
+    }
+
+    playVideo(id) {
+        const element = this.videos[id];
+        if (!element) return element.play().catch(() => {});
+    }
+
+    pauseVideo(id) {
+        const element = this.videos[id];
+        if (!element) return element.pause();
     }
 
     /* ----------------------------
        Webcam
     ----------------------------*/
-    async startWebcam() {
+    async startWebcam(id) {
         const stream = await this.webcam.start();
-        this.videoWebcam.attachStream(stream);
-        this.emit("webcamStarted", stream);
+        this.attachStreamToVideo(id, stream);
+        this.emit("webcamStarted", id);
         return stream;
     }
 
-    stopWebcam() {
+    stopWebcam(id) {
         this.webcam.stop();
-        this.videoWebcam.detachStream();
-        this.emit("webcamStopped");
+        this.detachVideo(id);
+        this.emit("webcamStopped", id);
     }
 
     /* ----------------------------
        Screen Share
     ----------------------------*/
-    async startScreenShare() {
+    async startScreenShare(id) {
         const stream = await this.screenshare.start();
-        this.videoScreen.attachStream(stream);
-        this.emit("screenShareStarted", stream);
+        this.attachStreamToVideo(id, stream);
+        this.emit("screenShareStarted", id);
         return stream;
     }
 
-    stopScreenShare() {
+    stopScreenShare(id) {
         this.screenshare.stop();
-        this.videoScreen.detachStream();
-        this.emit("screenShareStopped");
+        this.detachVideo(id);
+        this.emit("screenShareStopped", id);
     }
 
     /* ----------------------------
        Canvas Stream
     ----------------------------*/
-    startCanvas(canvas, audioContext = null, sourceNode = null, fps = 30) {
+    startCanvas(id, canvas, audioContext = null, sourceNode = null, fps = 30) {
         const stream = this.canvasStream.start({ canvas, audioContext, sourceNode, fps });
-        this.videoCanvas.attachStream(stream);
-        this.emit("canvasStarted", stream);
+        this.attachStreamToVideo(id, stream);
+        this.emit("canvasStarted", id);
         return stream;
     }
 
-    stopCanvas() {
+    stopCanvas(id) {
         this.canvasStream.stop();
-        this.videoCanvas.detachStream();
-        this.emit("canvasStopped");
+        this.detachVideo(id);
+        this.emit("canvasStopped", id);
     }
 
     /* ----------------------------
        WebRTC
     ----------------------------*/
-    async startLocalWebRTC() {
+    async startLocalWebRTC(id) {
         const stream = await this.webrtc.startLocal();
-        this.videoWebcam.attachStream(stream); // optional: preview local
-        this.emit("webrtcLocalStarted", stream);
+        this.attachStreamToVideo(id, stream);
+        this.emit("webrtcLocalStarted", id);
         return stream;
     }
 
     async initPeer(iceServers) {
-        const pc = await this.webrtc.initPeer(iceServers);
-        return pc;
+        return await this.webrtc.initPeer(iceServers);
     }
 
-    async handleSignal(data) {
+    async handleSignal(data, remoteId) {
         await this.webrtc.handleSignal(data);
-        this.videoRemote.attachStream(this.webrtc.remoteStream);
+        this.attachStreamToVideo(remoteId, this.webrtc.remoteStream);
     }
 
-    closePeer() {
+    closePeer(remoteId) {
         this.webrtc.closePeer();
-        this.videoRemote.detachStream();
-        this.emit("webrtcClosed");
+        this.detachVideo(remoteId);
+        this.emit("webrtcClosed", remoteId);
     }
 
     /* ----------------------------
-       MediaRecorder
+       Media Recorder
     ----------------------------*/
-    startRecording(stream) {
+    startRecording(stream, id = "recorder") {
         this.recorder.start(stream);
-        this.emit("recordingStarted", stream);
+        this.emit("recordingStarted", id);
     }
 
-    stopRecording() {
+    stopRecording(id = "recorder") {
         this.recorder.stop();
-        this.emit("recordingStopped");
+        this.emit("recordingStopped", id);
     }
 
     downloadRecording(filename = "recording.webm") {
@@ -116,27 +162,49 @@ export class TsunamiFlowNetwork {
     }
 
     /* ----------------------------
-       Event System
+       Video Effects / Drawing
     ----------------------------*/
-    on(event, fn) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(fn);
-    }
+    drawFrame(id) {
+        const element = this.videos[id];
+        const effect = this.effects[id];
+        if (!element || !effect) return;
 
-    emit(event, data) {
-        (this.listeners[event] || []).forEach(fn => fn(data));
+        effect.drawingFrame(this.videoContext, element);
+        requestAnimationFrame(() => this.drawFrame(id));
     }
 
     /* ----------------------------
-       Status Summary
+       Event System
+    ----------------------------*/
+    on(event, callback) {
+        if (!this.listeners[event]) this.listeners[event] = [];
+        this.listeners[event].push(callback);
+    }
+
+    emit(event, data) {
+        (this.listeners[event] || []).forEach(cb => cb(data));
+    }
+
+    /* ----------------------------
+       Status / JSON
     ----------------------------*/
     toJson() {
+        const status = {};
+        for (const id in this.videos) {
+            const element = this.videos[id];
+            status[id] = {
+                paused: element.paused,
+                ended: element.ended,
+                muted: element.muted,
+                srcObject: !!element.srcObject,
+                effectAttached: !!this.effects[id]
+            };
+        }
         return {
-            webcam: this.videoWebcam.toJson(),
-            screenShare: this.videoScreen.toJson(),
-            canvas: this.videoCanvas.toJson(),
-            remote: this.videoRemote.toJson(),
-            recorder: this.recorder.toJson()
+            videos: status,
+            videoIds: Object.keys(this.videos),
+            recorderActive: !!this.recorder,
+            class: "TsunamiFlowVideoNetwork"
         };
     }
 }
