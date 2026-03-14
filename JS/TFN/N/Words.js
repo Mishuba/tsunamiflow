@@ -1,4 +1,4 @@
-import { WordTimes } from "./Arrays.js";
+import { WordTimes } from "../T/Arrays/Arrays.js";
 
 let QuoteStuff = 0;
 let TheOtherWords = 1;

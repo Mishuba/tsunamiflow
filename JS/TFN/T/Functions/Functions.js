@@ -1,4 +1,4 @@
-import { HomepageUpdates, FirstGame } from "./sprite.js";
+import { HomepageUpdates, FirstGame } from "../../N/Games/sprite.js";
 
 //Get browser info
 async function getBrowserType() {
