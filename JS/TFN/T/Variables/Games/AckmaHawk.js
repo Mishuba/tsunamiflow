@@ -1,3 +1,4 @@
+export const AckmaHawkBattleBackground = "Pictures/Logo/Tsunami Flow Logo.png";
 let AckmaHawkHeadArmor = 1;
 let AckmaHawkBodyArmor = 1;
 let AckmaHawkLegArmor = 1;
