@@ -1,139 +1,258 @@
-export class TsunamiFlowAudio {
-    constructor() {
-        // Core Audio
-        this.audioContext = new TfAudioContext();
-        this.mixer = new TfAudioMixer(this.audioContext.create());
+import { TfAudioContext } from "./TfAudioContext.js";
+import { TfAudioWorkletNode } from "./TfAudioWorkletNode.js";
+import { TfAudioElement } from "./TfAudioElement.js";
+import { TfAudioMixer } from "./TfAudioMixer.js";
+import { TfSpeechRecognition } from "./TfSpeechRecognition.js";
+import { TfSpeechSynthesis } from "./TfSpeechSynthesis.js";
+import { TfMicrophone } from "./TfMicrophone.js";
 
-        // Worklets
+export class TfAudio {
+
+    constructor() {
+
+        /* Core Engine */
+        this.contextEngine = new TfAudioContext();
+        this.context = null;
+
+        /* Sources */
+        this.elements = {};
+        this.microphones = {};
+
+        /* Processing */
         this.worklets = {};
 
-        // Media Elements
-        this.elements = {};
+        /* Mixer */
+        this.mixer = null;
 
-        // Speech
-        this.speechRecognition = new TfSpeechRecognition();
-        this.speechSynthesis = new TfSpeechSynthesis();
+        /* Voice Systems */
+        this.recognition = new TfSpeechRecognition();
+        this.synthesis = new TfSpeechSynthesis();
 
+        /* Event System */
         this.listeners = {};
+
+        this.idCounter = 0;
     }
 
-    /* ----------------------------
-       AudioContext / Mixer
-    -----------------------------*/
-    createAudioContext() {
-        return this.audioContext.create();
+    /* -------------------------
+       Initialize Audio Engine
+    --------------------------*/
+
+    create() {
+
+        this.context = this.contextEngine.create();
+
+        if (!this.mixer)
+            this.mixer = new TfAudioMixer(this.context);
+
+        this.emit("ready", this.context);
+
+        return this.context;
     }
 
-    addElementSource(element, id = null, monitor = false) {
-        const sourceId = this.mixer.addMediaElement(element, id, monitor);
-        this.elements[sourceId] = element;
-        return sourceId;
+    /* -------------------------
+       Add Audio Element
+    --------------------------*/
+
+    addElement(src, id = null) {
+
+        if (!this.context) this.create();
+
+        const elementId = id || `element-${++this.idCounter}`;
+
+        const element = new TfAudioElement(src, this.context);
+
+        this.elements[elementId] = element;
+
+        element.connect(this.context);
+
+        this.emit("elementAdded", elementId);
+
+        return element;
     }
 
-    async addMic(id = null) {
-        const result = await this.mixer.addMic(id);
-        return result;
+    /* -------------------------
+       Add Microphone
+    --------------------------*/
+
+    async addMicrophone(id = null) {
+
+        if (!this.context) this.create();
+
+        const micId = id || `mic-${++this.idCounter}`;
+
+        const mic = new TfMicrophone();
+
+        const stream = await mic.start();
+
+        const sourceId = this.contextEngine.addStreamSource(stream);
+
+        this.microphones[micId] = {
+            mic,
+            sourceId
+        };
+
+        this.emit("microphoneAdded", micId);
+
+        return mic;
     }
 
-    setVolume(id, value = 1) {
-        this.mixer.setVolume(id, value);
-    }
+    /* -------------------------
+       Add Audio Worklet
+    --------------------------*/
 
-    removeSource(id) {
-        this.mixer.removeSource(id);
-        delete this.elements[id];
-    }
+    async addWorklet(processorUrl, options = {}, id = null) {
 
-    resetMixer() {
-        this.mixer.reset();
-        this.elements = {};
-    }
+        if (!this.context) this.create();
 
-    getMixedStream() {
-        return this.mixer.getStream();
-    }
+        const workletId = id || `worklet-${++this.idCounter}`;
 
-    /* ----------------------------
-       AudioWorklets
-    -----------------------------*/
-    async addWorklet(name, processorUrl, options = {}) {
-        const worklet = new TfAudioWorkletNode({ context: this.audioContext.context, processorUrl, options: { name, ...options } });
+        const worklet = new TfAudioWorkletNode({
+            context: this.context,
+            processorUrl,
+            options
+        });
+
         await worklet.init();
-        this.worklets[name] = worklet;
+
+        worklet.connect(this.context.destination);
+
+        this.worklets[workletId] = worklet;
+
+        this.emit("workletAdded", workletId);
+
         return worklet;
     }
 
-    getWorklet(name) {
-        return this.worklets[name] || null;
+    /* -------------------------
+       Mixer helpers
+    --------------------------*/
+
+    async mixerMic(id = null) {
+
+        if (!this.mixer) this.create();
+
+        return await this.mixer.addMic(id);
     }
 
-    /* ----------------------------
-       Media Elements
-    -----------------------------*/
-    createElement(src, id = null) {
-        const el = new TfAudioElement(src, this.audioContext.context);
-        const elementId = id || `element-${Object.keys(this.elements).length + 1}`;
-        this.elements[elementId] = el;
-        return el;
+    mixerElement(element, id = null) {
+
+        if (!this.mixer) this.create();
+
+        return this.mixer.addMediaElement(element.audio, id);
     }
 
-    getElement(id) {
-        return this.elements[id] || null;
+    getMixedStream() {
+
+        if (!this.mixer) return null;
+
+        return this.mixer.getStream();
     }
 
-    /* ----------------------------
+    /* -------------------------
        Speech Recognition
-    -----------------------------*/
+    --------------------------*/
+
     startRecognition() {
-        this.speechRecognition.start();
+        this.recognition.start();
     }
 
     stopRecognition() {
-        this.speechRecognition.stop();
+        this.recognition.stop();
     }
 
-    /* ----------------------------
+    /* -------------------------
        Speech Synthesis
-    -----------------------------*/
+    --------------------------*/
+
     speak(text, options = {}) {
-        this.speechSynthesis.speak(text, options);
+        this.synthesis.speak(text, options);
     }
 
-    pauseSpeech() {
-        this.speechSynthesis.pause();
+    stopSpeaking() {
+        this.synthesis.cancel();
     }
 
-    resumeSpeech() {
-        this.speechSynthesis.resume();
+    /* -------------------------
+       Remove Sources
+    --------------------------*/
+
+    removeElement(id) {
+
+        const element = this.elements[id];
+
+        if (!element) return;
+
+        element.destroy();
+
+        delete this.elements[id];
+
+        this.emit("elementRemoved", id);
     }
 
-    cancelSpeech() {
-        this.speechSynthesis.cancel();
+    removeMicrophone(id) {
+
+        const data = this.microphones[id];
+
+        if (!data) return;
+
+        data.mic.stop();
+
+        this.contextEngine.removeSource(data.sourceId);
+
+        delete this.microphones[id];
+
+        this.emit("microphoneRemoved", id);
     }
 
-    /* ----------------------------
-       Unified Event System
-    -----------------------------*/
-    on(event, callback) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(callback);
+    /* -------------------------
+       Shutdown
+    --------------------------*/
+
+    finish() {
+
+        Object.values(this.elements).forEach(e => e.destroy());
+
+        Object.values(this.microphones).forEach(m => m.mic.stop());
+
+        this.contextEngine.finish();
+
+        this.context = null;
+
+        this.emit("closed");
+    }
+
+    /* -------------------------
+       Event System
+    --------------------------*/
+
+    on(event, fn) {
+
+        if (!this.listeners[event])
+            this.listeners[event] = [];
+
+        this.listeners[event].push(fn);
     }
 
     emit(event, data) {
-        (this.listeners[event] || []).forEach(cb => cb(data));
+
+        (this.listeners[event] || [])
+            .forEach(fn => fn(data));
     }
 
-    /* ----------------------------
-       Status Snapshot
-    -----------------------------*/
+    /* -------------------------
+       Status
+    --------------------------*/
+
     toJson() {
+
         return {
-            audioContext: this.audioContext.toJson(),
-            mixer: this.mixer.toJson(),
-            worklets: Object.fromEntries(Object.entries(this.worklets).map(([k, w]) => [k, w.toJson()])),
+            contextState: this.context?.state || null,
             elements: Object.keys(this.elements),
-            speechRecognition: this.speechRecognition.toJson(),
-            speechSynthesis: this.speechSynthesis.toJson()
+            microphones: Object.keys(this.microphones),
+            worklets: Object.keys(this.worklets),
+            speechRecognition: this.recognition.toJson(),
+            speechSynthesis: this.synthesis.toJson()
         };
     }
 }
