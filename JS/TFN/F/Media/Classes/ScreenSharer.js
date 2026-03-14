@@ -1,86 +1,41 @@
-export class ScreenShare {
-    constructor({ videoElement = null, includeAudio = false } = {}) {
-        this.videoElement = videoElement; // <video> element preview
-        this.stream = null;                // MediaStream of screen share
-        this.includeAudio = includeAudio;
-        this.listeners = {};
-        this.id = `screenshare-${Date.now()}`;
+export class TfScreenShare {
+
+    constructor({ audio = true, onReady = null } = {}) {
+
+        this.stream = null;
+        this.videoTrack = null;
+        this.audioTrack = null;
+
+        this.audio = audio;
+        this.onReady = onReady;
     }
 
-    /* ----------------------------
-       Start Screen Sharing
-    -----------------------------*/
-    async start(constraints = { video: { cursor: "always" }, audio: this.includeAudio }) {
+    async start() {
+
         if (this.stream) return this.stream;
 
-        if (!navigator.mediaDevices?.getDisplayMedia) {
-            const err = new Error("Screen sharing not supported in this browser.");
-            console.error(err);
-            this.emit("error", err);
-            throw err;
-        }
+        this.stream = await navigator.mediaDevices.getDisplayMedia({
+            video: true,
+            audio: this.audio
+        });
 
-        try {
-            this.stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+        this.videoTrack = this.stream.getVideoTracks()[0] || null;
+        this.audioTrack = this.stream.getAudioTracks()[0] || null;
 
-            if (this.videoElement) {
-                this.videoElement.srcObject = this.stream;
-                this.videoElement.play().catch(() => { });
-            }
+        if (this.onReady) this.onReady(this.stream);
 
-            // Handle user stopping screen share from browser UI
-            this.stream.getVideoTracks()[0]?.addEventListener("ended", () => this.stop());
-
-            this.emit("started", this.stream);
-            return this.stream;
-        } catch (err) {
-            console.error("TfScreenShare start failed:", err);
-            this.emit("error", err);
-            throw err;
-        }
-    }
-
-    /* ----------------------------
-       Stop Screen Sharing
-    -----------------------------*/
-    stop() {
-        if (!this.stream) return;
-
-        this.stream.getTracks().forEach(track => track.stop());
-        this.stream = null;
-
-        if (this.videoElement) this.videoElement.srcObject = null;
-
-        this.emit("stopped");
-    }
-
-    /* ----------------------------
-       Get Current Stream
-    -----------------------------*/
-    getStream() {
         return this.stream;
     }
 
-    /* ----------------------------
-       Event System
-    -----------------------------*/
-    on(event, callback) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(callback);
+    stop() {
+
+        if (!this.stream) return;
+
+        this.stream.getTracks().forEach(t => t.stop());
+
+        this.stream = null;
+        this.videoTrack = null;
+        this.audioTrack = null;
     }
 
-    emit(event, data) {
-        (this.listeners[event] || []).forEach(fn => fn(data));
-    }
-
-    /* ----------------------------
-       Quick JSON Status
-    -----------------------------*/
-    toJson() {
-        return {
-            active: !!this.stream,
-            tracks: this.stream?.getTracks().length || 0,
-            id: this.id
-        };
-    }
 }
