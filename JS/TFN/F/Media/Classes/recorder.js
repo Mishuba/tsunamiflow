@@ -1,80 +1,92 @@
-export class TfRecorder {
+export class TfMediaRecorder {
     constructor({
-        fps = 30,
-        mimeType = 'video/webm; codecs=vp8,opus',
-        videoBitrate = 4_000_000,
+        mimeType = "video/webm;codecs=vp8,opus",
+        videoBitsPerSecond = 4000000,
+        audioBitsPerSecond = 128000,
         chunkMs = 1000,
-        wsUrl = 'wss://world.tsunamiflow.club/ws',
-        streamKey = null
+        onData = null,
+        onStart = null,
+        onStop = null
     } = {}) {
-        this.fps = fps;
-        this.mimeType = mimeType;
-        this.videoBitrate = videoBitrate;
-        this.chunkMs = chunkMs;
+
         this.stream = null;
         this.recorder = null;
-        this.externalAudioStream = null;
+
+        this.mimeType = mimeType;
+        this.videoBitsPerSecond = videoBitsPerSecond;
+        this.audioBitsPerSecond = audioBitsPerSecond;
+        this.chunkMs = chunkMs;
+
+        this.chunks = [];
+
+        this.onData = onData;
+        this.onStart = onStart;
+        this.onStop = onStop;
+
         this.recording = false;
-        this.chunks = []; // optional local storage
     }
 
-    useExternalAudioStream(audioStream) {
-        this.externalAudioStream = audioStream;
-    }
-
-    buildStream({ canvas }) {
-        const stream = canvas.captureStream(this.fps);
-
-        if (this.externalAudioStream) {
-            this.externalAudioStream.getAudioTracks()
-                .forEach(track => stream.addTrack(track));
-        }
-
-        this.stream = stream;
-        return stream;
-    }
-    start( canvas, ws ) {
+    start(stream) {
+        if (!stream) throw new Error("TfMediaRecorder requires a MediaStream");
         if (this.recording) return;
 
-        if (!this.stream) this.buildStream({ canvas });
+        this.stream = stream;
 
-        this.recorder = new MediaRecorder(this.stream, {
+        this.recorder = new MediaRecorder(stream, {
             mimeType: this.mimeType,
-            videoBitsPerSecond: this.videoBitrate
+            videoBitsPerSecond: this.videoBitsPerSecond,
+            audioBitsPerSecond: this.audioBitsPerSecond
         });
 
-        this.recorder.ondataavailable = async (e) => {
+        this.recorder.onstart = () => {
+            this.recording = true;
+            if (this.onStart) this.onStart();
+        };
+
+        this.recorder.ondataavailable = (e) => {
             if (!e.data || e.data.size === 0) return;
 
-            // Optional local copy
             this.chunks.push(e.data);
 
-if (ws?.isOpen()) {
-    ws.sendBinary(e.data);
-  }
-                const arrayBuffer = await e.data.arrayBuffer();
-                
-}
-        this.recorder.start(this.chunkMs); // chunkMs controls chunk frequency
-        this.recording = true;
-return this.stream;
+            if (this.onData) {
+                this.onData(e.data);
+            }
+        };
+
+        this.recorder.onstop = () => {
+            this.recording = false;
+            if (this.onStop) this.onStop();
+        };
+
+        this.recorder.start(this.chunkMs);
     }
 
     stop() {
-        if (!this.recording) return;
+        if (!this.recorder) return;
 
-        if (this.recorder && this.recorder.state !== 'inactive') {
+        if (this.recorder.state !== "inactive") {
             this.recorder.stop();
         }
-        this.recorder = null;
-        this.recording = false;
+    }
+
+    pause() {
+        if (this.recorder?.state === "recording") {
+            this.recorder.pause();
+        }
+    }
+
+    resume() {
+        if (this.recorder?.state === "paused") {
+            this.recorder.resume();
+        }
     }
 
     reset() {
         this.stop();
-        this.stream = null;
-        this.externalAudioStream = null;
         this.chunks = [];
+        this.stream = null;
+        this.recorder = null;
+        this.recording = false;
     }
 
     getBlob() {
@@ -82,15 +94,27 @@ return this.stream;
         return new Blob(this.chunks, { type: this.mimeType });
     }
 
-    download(filename = 'recording.webm') {
+    download(filename = "recording.webm") {
         const blob = this.getBlob();
         if (!blob) return;
 
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
+
+        const a = document.createElement("a");
         a.href = url;
         a.download = filename;
         a.click();
+
         URL.revokeObjectURL(url);
+    }
+
+    toJson() {
+        return {
+            recording: this.recording,
+            mimeType: this.mimeType,
+            videoBitsPerSecond: this.videoBitsPerSecond,
+            audioBitsPerSecond: this.audioBitsPerSecond,
+            chunkMs: this.chunkMs
+        };
     }
 }
