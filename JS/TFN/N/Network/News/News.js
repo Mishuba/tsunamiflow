@@ -1,4 +1,4 @@
-/* News Ticker/Updater */
+import { NewsArray } from "arrays.js";
 var ReallyDude;
 var NewsArray = new Array();
 NewsArray.push("Mishuba was born at 6 pounds 5 ounces with a length of 20 inches. His head was 12 1/2 inches, chest was 11 1/2 inches on July 11, 1990 at Tallahassee Memorial Regional Medical Center INC. in Tallahassee, FLorida of the United States of America on Planet Earth.");
