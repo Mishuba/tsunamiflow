@@ -1,4 +1,3 @@
-v
 export class TfGeolocation {
     constructor() {
         this.supported = !!navigator.geolocation;
