@@ -1,4 +1,4 @@
-export class TsunamiFlowMediaStream {
+export class TfMediaStream {
     constructor() {
         this.canvas = null;
         this.audioContext = null;

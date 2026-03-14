@@ -1,4 +1,4 @@
-export class TfMediaRecorder {
+export class TfRecorder {
     constructor({
         mimeType = "video/webm;codecs=vp8,opus",
         videoBitsPerSecond = 4000000,

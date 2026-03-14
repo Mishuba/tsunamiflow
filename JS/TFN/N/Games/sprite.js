@@ -1,7 +1,7 @@
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
-const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
+const AckmaHawkBattleBackground = "Pictures/Logo/Tsunami Flow Logo.png";
 const StickMan = new Image();
-StickMan.src = linkToSpriteSheet;
+//StickMan.src = linkToSpriteSheet;
 
 let AckmaHawkSpriteSheet = "";
 

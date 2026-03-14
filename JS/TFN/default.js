@@ -6,14 +6,14 @@ export class MishubaController {
     this.websocket = websocket;
     this.audio = audio;
     this.audioElem = AudioElement;
-this.audioCanv = AudioCanvas;
-this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
-this.audioTitle = AudioTitle;
-this.audioSystem = AudioButtonSpot;
-this.audioLast = AudioPrevious;
-this.audioRestart = AudioOver;
-this.audioStart = AudioStart;
-this.audioSkip = AudioSkip;
+    this.audioCanv = AudioCanvas;
+    this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
+    this.audioTitle = AudioTitle;
+    this.audioSystem = AudioButtonSpot;
+    this.audioLast = AudioPrevious;
+    this.audioRestart = AudioOver;
+    this.audioStart = AudioStart;
+    this.audioSkip = AudioSkip;
     this.mixer = mixer;
     this.worker = worker;
     this.video = video;
@@ -29,74 +29,74 @@ this.audioSkip = AudioSkip;
     this.extraElem = null;
     this.MyScreen = screenshare;
     this.mediaBin = {
-       webcams: {},
-       videos: {},
-       images: {},
-       screens: {}
+      webcams: {},
+      videos: {},
+      images: {},
+      screens: {}
     };
   }
   find(elem, frame = null) {
-if (frame === true) {
-return this.iframe.frame.contentDocument.getElementById(elem);
-} else {
+    if (frame === true) {
+      return this.iframe.frame.contentDocument.getElementById(elem);
+    } else {
       return document.getElementById(elem);
-   } 
-}
-log(msg) {
+    }
+  }
+  log(msg) {
     let logBox = this.find("TfLogBox", false);
     logBox.innerText += msg + "\n";
     logBox.scrollTop = logBox.scrollHeight;
-}
-async addVideoToBin(file) {
-  const id = crypto.randomUUID();
-  const url = URL.createObjectURL(file);
+  }
+  async addVideoToBin(file) {
+    const id = crypto.randomUUID();
+    const url = URL.createObjectURL(file);
 
-  this.mediaBin.videos[id] = {
-    id,
-    type: "video",
-    url,
-    created: Date.now()
-  };
+    this.mediaBin.videos[id] = {
+      id,
+      type: "video",
+      url,
+      created: Date.now()
+    };
 
-  return id;
-}
-async playFromBin(id) {
-  const item = this.mediaBin.videos[id];
-  if (!item) return;
-  await this.startMediaSource("video", item.url);
-}
-removeFromBin(id) {
-  const item = this.mediaBin.videos[id];
-  if (!item) return;
+    return id;
+  }
+  async playFromBin(id) {
+    const item = this.mediaBin.videos[id];
+    if (!item) return;
+    await this.startMediaSource("video", item.url);
+  }
+  removeFromBin(id) {
+    const item = this.mediaBin.videos[id];
+    if (!item) return;
 
-  URL.revokeObjectURL(item.url);
-  delete this.mediaBin.videos[id];
-}
-listVideos() {
-  return Object.values(this.mediaBin.videos)
-    .sort((a, b) => b.created - a.created);
-}
+    URL.revokeObjectURL(item.url);
+    delete this.mediaBin.videos[id];
+  }
+  listVideos() {
+    return Object.values(this.mediaBin.videos)
+      .sort((a, b) => b.created - a.created);
+  }
   on(id, handler, preventDefault = false, iframe = null) {
     let el;
     if (iframe === null) {
-        el = document.getElementById(id);
+      el = document.getElementById(id);
     } else {
-        el = iframe?.contentDocument?.getElementById(id);
+      el = iframe?.contentDocument?.getElementById(id);
     }
     if (!el) return;
 
     const isForm = el instanceof HTMLFormElement;
     const isSubmitButton =
-        (el instanceof HTMLButtonElement && el.type === "submit") ||
-        (el instanceof HTMLInputElement &&
-            ["submit", "image"].includes(el.type));
+      (el instanceof HTMLButtonElement && el.type === "submit") ||
+      (el instanceof HTMLInputElement &&
+        ["submit", "image"].includes(el.type));
 
     const runHandler = (event) => {
-        if (isForm || isSubmitButton || preventDefault) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        handler(event);
+      if (isForm || isSubmitButton || preventDefault) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      handler(event);
     };
 
     // Desktop click / form submit
@@ -105,66 +105,66 @@ listVideos() {
 
     // Mobile touch: prevent scrolling / double-tap zoom
     el.addEventListener(
-        "touchend",
-        (e) => {
-            runHandler(e);
-            if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
-        },
-        { passive: false }
+      "touchend",
+      (e) => {
+        runHandler(e);
+        if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
+      },
+      { passive: false }
     );
 
     // Pointer events for stylus / hybrid devices
     el.addEventListener("pointerdown", (e) => {
-        runHandler(e);
-        if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
+      runHandler(e);
+      if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
     });
-}
-
-async startMediaSource(type, src = null) {
-  const video = this.ensureHiddenVideo();
-
-  if (type === "webcam") {
-    await this.TfWebcam.start();
-    this.TfWebcam.attach(video);
   }
 
-  if (type === "video") {
-    video.src = src;
-    await video.play();
+  async startMediaSource(type, src = null) {
+    const video = this.ensureHiddenVideo();
+
+    if (type === "webcam") {
+      await this.TfWebcam.start();
+      this.TfWebcam.attach(video);
+    }
+
+    if (type === "video") {
+      video.src = src;
+      await video.play();
+    }
+
+    this.effects.isPlaying = true;
+
+    const drawLoop = async () => {
+      if (!this.effects.isPlaying) return;
+      await this.effects.drawingFrame(this.videoCanv, video);
+      requestAnimationFrame(drawLoop);
+    };
+
+    drawLoop();
   }
-
-  this.effects.isPlaying = true;
-
-  const drawLoop = async () => {
-    if (!this.effects.isPlaying) return;
-    await this.effects.drawingFrame(this.videoCanv, video);
-    requestAnimationFrame(drawLoop);
-  };
-
-  drawLoop();
-}
   bindNavBar() {
     // navigation menu
     this.on("tfRoster", () => {
       //i have a function for this already.
-      this.iframe.frame.src = "roster.html";
+      this.iframe.frame.src = "Iframe/Pages/roster.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
     this.on("tfNews", () => {
-      this.iframe.frame.src = "news.html";
+      this.iframe.frame.src = "Iframe/Pages/news.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
 
     this.on("tfCompetitions", () => {
-      this.iframe.frame.src = "Competitions.html";
+      this.iframe.frame.src = "Iframe/Pages/Competitions.html";
       this.iframe.MenuSwitch(this.iframe.frame);
     }
     );
 
     this.on("tfNetwork", () => {
-      this.iframe.frame.src = "TFnetwork.html";
+      this.iframe.frame.src = "Iframe/Pages/TFnetwork.html";
       this.iframe.MenuSwitch(this.iframe.frame);
       /*
          <video
@@ -181,10 +181,10 @@ async startMediaSource(type, src = null) {
     );
 
     this.on("tfCommunity", () => {
-      this.iframe.frame.src = "Community.html";
+      this.iframe.frame.src = "Iframe/Pages/Community.html";
       this.iframe.MenuSwitch(this.iframe.frame)
 
-});
+    });
 
     this.on("NavLoginButton", () => {
       this.user.login();
@@ -217,7 +217,7 @@ async startMediaSource(type, src = null) {
     );
 
     this.on("TFRadioRestartButton", () => {
-element.currentTime = 0;
+      element.currentTime = 0;
       this.audio.startMusic(element);
       start.innerHTML = "Pause Tsunami Radio";
     }
@@ -230,13 +230,14 @@ element.currentTime = 0;
       } else {
         this.audio.stopMusic(element);
         start.innerHTML = "Play Tsunami Radio";
-      //this.audio.startMusic();
-      //this.audio.stopMusic();
-    }}
+        //this.audio.startMusic();
+        //this.audio.stopMusic();
+      }
+    }
     );
 
     this.on("TFradioSkipButton", () => {
-element.src = "";
+      element.src = "";
       RadioWorker.postMessage({
         type: "radio",
         system: "file",
@@ -245,10 +246,10 @@ element.src = "";
     );
   }
   TfRadioEventListeners() {
-if (this._radioBound) return;
-this._radioBound = true;
-   this.audioElem.addEventListener("emptied", async (emptied) => {
-      this.audio.emptiedAudio(emptied);  cancelAnimationFrame(this.effects.visualizatorController);
+    if (this._radioBound) return;
+    this._radioBound = true;
+    this.audioElem.addEventListener("emptied", async (emptied) => {
+      this.audio.emptiedAudio(emptied); cancelAnimationFrame(this.effects.visualizatorController);
     }); //this event is sent if the media has already been loaded( or partially loaded), and the HTMLMediaElement.load method is called to reload it.
 
     this.audioElem.addEventListener("loadstart", async () => {
@@ -270,12 +271,12 @@ this._radioBound = true;
 
     this.audioElem.addEventListener("canplaythrough", async () => {
       if (!this.audio._wired) {
-  this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
-  this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination);
-  this.audio.TsunamiAnalyser.connect(this.audio.StreamDestination);
-  this.audio._wired = true;
-}
-this.audio.canplaythroughAudio(this.audioElem);
+        this.audio.TsunamiRadioMedia.connect(this.audio.TsunamiAnalyser);
+        this.audio.TsunamiAnalyser.connect(this.audio.TsunamiRadioAudio.destination);
+        this.audio.TsunamiAnalyser.connect(this.audio.StreamDestination);
+        this.audio._wired = true;
+      }
+      this.audio.canplaythroughAudio(this.audioElem);
     });
 
     this.audioElem.addEventListener("play", () => {
@@ -296,8 +297,8 @@ this.audio.canplaythroughAudio(this.audioElem);
     }); //Playback has stopped because of a temporary lack of data.
 
     this.audioElem.addEventListener("playing", () => {
-      this.audio.playingAudio(this.audioElem, this.audioCanv); 
-this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
+      this.audio.playingAudio(this.audioElem, this.audioCanv);
+      this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
     }); // Playback is ready to start after having been paused or delayed due to lack of data.
 
     this.audioElem.addEventListener("stalled", (stalled) => {
@@ -323,8 +324,8 @@ this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser,
     });
   }
   bindAudio() {
-this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
-this.TfRadioEventListeners();
+    this.TsunamiRadioReady(this.worker.radioWorker, this.audioElem, this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+    this.TfRadioEventListeners();
   }
   usePickedColor(useChroma) {
     this.effects.useChromaKey = true;
@@ -432,72 +433,72 @@ this.TfRadioEventListeners();
   }
 
   bindVideo() {
-if (this._videoBound) return;
-this._videoBound = true;
+    if (this._videoBound) return;
+    this._videoBound = true;
     const iframe = this.iframe.frame;
 
     const post = (type, payload = {}) => {
-        iframe.contentWindow.postMessage({ type, ...payload }, "*");
+      iframe.contentWindow.postMessage({ type, ...payload }, "*");
     };
 
     // START WEBCAM + DRAW LOOP
     this.on("TfStartShit", async () => {
-        if (this.videoCanv === null) {
-            this.videoCanv = this.find("TFcanvas", true);
+      if (this.videoCanv === null) {
+        this.videoCanv = this.find("TFcanvas", true);
+      }
+      if (this.videoElem === null) {
+        this.videoElem = this.find("TsunamiFlowVideoStuff", true);
+      }
+      if (!this.TfWebcam.stream) {
+        try {
+          await this.TfWebcam.start();            // get MediaStream
+          this.TfWebcam.attach(this.videoElem);
+
+          this.effects.isPlaying = true;
+
+          if (!this.audio._webcamWired) {
+            this.audio.webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
+            this.audio.webcamSourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(this.audio.webcamAudioStream);
+
+            this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
+            this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
+            this.audio._webcamWired = true;
+          }
+          // FRAME DRAW LOOP
+          const drawLoop = async () => {
+            if (!this.effects.isPlaying) return;
+            await this.effects.drawingFrame(this.videoCanv, this.videoElem);
+            requestAnimationFrame(drawLoop);
+          };
+          drawLoop();
+        } catch (err) {
+          console.error("Webcam start failed:", err);
         }
-        if (this.videoElem === null) {
-            this.videoElem = this.find("TsunamiFlowVideoStuff", true);
-}
-        if (!this.TfWebcam.stream) {
-            try {
-                await this.TfWebcam.start();            // get MediaStream
-this.TfWebcam.attach(this.videoElem);
-
-                this.effects.isPlaying = true;
-
-if (!this.audio._webcamWired) {
-this.audio.webcamAudioStream.addTrack(this.TfWebcam.audioTrack);
-this.audio.webcamSourceNode = this.audio.TsunamiRadioAudio.createMediaStreamSource(this.audio.webcamAudioStream);
-
-this.audio.webcamSourceNode.connect(this.audio.TsunamiAnalyser);
-this.audio.webcamSourceNode.connect(this.audio.StreamDestination);
-this.audio._webcamWired = true;
-}
-                // FRAME DRAW LOOP
-                const drawLoop = async () => {
-                    if (!this.effects.isPlaying) return;
-                    await this.effects.drawingFrame(this.videoCanv, this.videoElem);
-                    requestAnimationFrame(drawLoop);
-                };
-                drawLoop();
-            } catch (err) {
-                console.error("Webcam start failed:", err);
-            }
-        }
+      }
     }, false, iframe);
 
     // STOP WEBCAM
     this.on("TfStopShit", () => {
-        this.TfWebcam.stop();
-        this.effects.isPlaying = false;
+      this.TfWebcam.stop();
+      this.effects.isPlaying = false;
     }, false, iframe);
 
-// START Video From Bin
-this.on("TFplayFromBin", async () => {
-  const id = this.find("TFmediaSelect", true).value;
-  await this.playFromBin(id);
-}, false, iframe);
+    // START Video From Bin
+    this.on("TFplayFromBin", async () => {
+      const id = this.find("TFmediaSelect", true).value;
+      await this.playFromBin(id);
+    }, false, iframe);
 
     // ENABLE CHROMA KEY
     this.on("TuseFthisKeycolor", () => {
-        const keyInput = this.find("TFchromaKey", true); // color input inside iframe
-        this.effects.ColorPickerChromaKey(keyInput);
-        this.effects.useChromaKey = true;
+      const keyInput = this.find("TFchromaKey", true); // color input inside iframe
+      this.effects.ColorPickerChromaKey(keyInput);
+      this.effects.useChromaKey = true;
     }, false, iframe);
 
     // DISABLE CHROMA KEY
     this.on("rmvTFchromakey", () => {
-        this.effects.disableChromaKey();
+      this.effects.disableChromaKey();
     }, false, iframe);
 
     // UPLOAD / REMOVE BACKGROUND IMAGE
@@ -509,177 +510,177 @@ this.on("TFplayFromBin", async () => {
     this.on("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
 
     // START / STOP RECORDING if recorder exists
-        this.on("TfStartRecPlz", () => {
-//this.recorder.UserCanvas = this.videoCanv.captureStream(30);
-this.recorder.streamKey = "anything";
+    this.on("TfStartRecPlz", () => {
+      //this.recorder.UserCanvas = this.videoCanv.captureStream(30);
+      this.recorder.streamKey = "anything";
 
-this.recorder.useExternalAudioStream(
-    this.audio.StreamDestination.stream
-);
- this.recorder.start(this.videoCanv, this.websocket);
+      this.recorder.useExternalAudioStream(
+        this.audio.StreamDestination.stream
+      );
+      this.recorder.start(this.videoCanv, this.websocket);
 
-//this.webrtc.localStream = this.recorder.UserCanvas;
-}, false, iframe);
+      //this.webrtc.localStream = this.recorder.UserCanvas;
+    }, false, iframe);
 
-        this.on("TfStopRecPlz", () => {
-            this.recorder.stop();
-this.webrtc.stopStreaming();
-        }, false, iframe);
+    this.on("TfStopRecPlz", () => {
+      this.recorder.stop();
+      this.webrtc.stopStreaming();
+    }, false, iframe);
 
-        this.on("GoLive", () => {
-          if (!this.websocket.isOpen()) { 
-              this.websocket.connect();
-          }
-        }, false, iframe);
+    this.on("GoLive", () => {
+      if (!this.websocket.isOpen()) {
+        this.websocket.connect();
+      }
+    }, false, iframe);
 
-        this.on("StopLive", () => {
-          this.websocket.close();
-        }, false, iframe);
-    }
-    
+    this.on("StopLive", () => {
+      this.websocket.close();
+    }, false, iframe);
+  }
+
   getControllerType(gamepad) {
-        // Detect controller type based on button layout
-        if (gamepad.buttons[0].value === 1) {
-            return 'playstation';
-        } else if (gamepad.buttons[1].value === 1) {
-            return 'xbox';
-        } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
-            return 'switch';
-        } //else {return pcControls();}; 
-    };
-    gamepadHandler(event, connected) {
-        const gamepad = event.gamepad;
-        if (connected) {
-            this.game.controllerIndex = gamepad.index;
-            console.log("Controller connected at index:", this.controllerIndex);
-            this.game.controllerType = this.getControllerType(gamepad);
-            console.log("Controller type detected:", this.game.controllerType);
-            gamepads[gamepad.index] = gamepad;
-            console.log(`Gamepad connected: ${gamepad.id}`);
-        } else {
-            this.game.controllerIndex = null;
-            this.game.controllerType = null;
-            delete gamepads[gamepad.index];
-            console.log(`Gamepad disconnected: ${gamepad.id}`);
-        }
+    // Detect controller type based on button layout
+    if (gamepad.buttons[0].value === 1) {
+      return 'playstation';
+    } else if (gamepad.buttons[1].value === 1) {
+      return 'xbox';
+    } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
+      return 'switch';
+    } //else {return pcControls();}; 
+  };
+  gamepadHandler(event, connected) {
+    const gamepad = event.gamepad;
+    if (connected) {
+      this.game.controllerIndex = gamepad.index;
+      console.log("Controller connected at index:", this.controllerIndex);
+      this.game.controllerType = this.getControllerType(gamepad);
+      console.log("Controller type detected:", this.game.controllerType);
+      gamepads[gamepad.index] = gamepad;
+      console.log(`Gamepad connected: ${gamepad.id}`);
+    } else {
+      this.game.controllerIndex = null;
+      this.game.controllerType = null;
+      delete gamepads[gamepad.index];
+      console.log(`Gamepad disconnected: ${gamepad.id}`);
     }
+  }
 
   bindGame() {
     //game butfons.
   }
 
   bindSignUp() {
-  this.on("TFCompleteForm", () => {
-    this.user.signup(this.userFields, this.extraFields);
-  }, true);
-}
+    this.on("TFCompleteForm", () => {
+      this.user.signup(this.userFields, this.extraFields);
+    }, true);
+  }
 
   bindUsers() {
-  this.userFields = {
-    tfFN: this.find("TfFirstName", false),
-    tfLN: this.find("TfLastName", false),
-    tfNN: this.find("TfNickName",false),
-    tfGen: this.find("TfGender", false),
-    tfEM: document.getElementById("TfEmail"),
-    tfBirth: document.getElementById("TfBirthday"),
-    tfUN: document.getElementById("TFuserName"),
-    tfPsw: document.getElementById("TFpassword"),
-    tfMembershipLevel: document.getElementById("TFMembershipLevel"),
-  };
-  this.extraFields = {
-    ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
-    WesternZodiacSign: document.getElementById("WesternZodiacSign"),
-    SpiritAnimal: document.getElementById("SpiritAnimal"),
-    CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
-    NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
-    VedicAstrologySign: document.getElementById("VedicAstrologySign"),
-    GuardianAngel: document.getElementById("GuardianAngel"),
-    ChineseElement: document.getElementById("ChineseElement"),
-    EyeColorMeaning: document.getElementById("EyeColorMeaning"),
-    GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
-    NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
-    EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
-    MayanZodiacSign: document.getElementById("MayanZodiacSign"),
-    LoveLanguage: document.getElementById("LoveLanguage"),
-    Birthstone: document.getElementById("Birthstone"),
-    BirthFlower: document.getElementById("BirthFlower"),
-    BloodType: document.getElementById("BloodType"),
-    AttachmentStyle: document.getElementById("AttachmentStyle"),
-    CharismaType: document.getElementById("CharismaType"),
-    BusinessPersonality: document.getElementById("BusinessPersonality"),
-    DISC: document.getElementById("DISC"),
-    SocionicsType: document.getElementById("SocionicsType"),
-    LearningStyle: document.getElementById("LearningStyle"),
-    FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
-    PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
-    CreativeStyle: document.getElementById("CreativeStyle"),
-    ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
-    TeamRolePreference: document.getElementById("TeamRolePreference")
-  };
-  this.membershipSelect = document.getElementById("TFMembershipLevel");
-  this.membershipCostEl = document.getElementById("membershipCost");
-  this.paymentTypeEl = document.getElementById("paymentType");
-  this.hiddenMC = document.getElementById("hiddenMC");
-  this.hiddenPT = document.getElementById("hiddenPT");
-  this.sections = {
-    free: document.getElementById("freeLevelInputs"),
-    regular: document.getElementById("regularLevelInputs"),
-    vip: document.getElementById("vipLevelInputs"),
-    team: document.getElementById("teamLevelInputs"),
-    address: document.getElementById("AddressDetailsSubscribers"), // if present
-    costInfo: document.getElementById("membershipCostInfo"),
-  };
-  this.bindSignUp();
+    this.userFields = {
+      tfFN: this.find("TfFirstName", false),
+      tfLN: this.find("TfLastName", false),
+      tfNN: this.find("TfNickName", false),
+      tfGen: this.find("TfGender", false),
+      tfEM: document.getElementById("TfEmail"),
+      tfBirth: document.getElementById("TfBirthday"),
+      tfUN: document.getElementById("TFuserName"),
+      tfPsw: document.getElementById("TFpassword"),
+      tfMembershipLevel: document.getElementById("TFMembershipLevel"),
+    };
+    this.extraFields = {
+      ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
+      WesternZodiacSign: document.getElementById("WesternZodiacSign"),
+      SpiritAnimal: document.getElementById("SpiritAnimal"),
+      CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
+      NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
+      VedicAstrologySign: document.getElementById("VedicAstrologySign"),
+      GuardianAngel: document.getElementById("GuardianAngel"),
+      ChineseElement: document.getElementById("ChineseElement"),
+      EyeColorMeaning: document.getElementById("EyeColorMeaning"),
+      GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
+      NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
+      EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
+      MayanZodiacSign: document.getElementById("MayanZodiacSign"),
+      LoveLanguage: document.getElementById("LoveLanguage"),
+      Birthstone: document.getElementById("Birthstone"),
+      BirthFlower: document.getElementById("BirthFlower"),
+      BloodType: document.getElementById("BloodType"),
+      AttachmentStyle: document.getElementById("AttachmentStyle"),
+      CharismaType: document.getElementById("CharismaType"),
+      BusinessPersonality: document.getElementById("BusinessPersonality"),
+      DISC: document.getElementById("DISC"),
+      SocionicsType: document.getElementById("SocionicsType"),
+      LearningStyle: document.getElementById("LearningStyle"),
+      FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
+      PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
+      CreativeStyle: document.getElementById("CreativeStyle"),
+      ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
+      TeamRolePreference: document.getElementById("TeamRolePreference")
+    };
+    this.membershipSelect = document.getElementById("TFMembershipLevel");
+    this.membershipCostEl = document.getElementById("membershipCost");
+    this.paymentTypeEl = document.getElementById("paymentType");
+    this.hiddenMC = document.getElementById("hiddenMC");
+    this.hiddenPT = document.getElementById("hiddenPT");
+    this.sections = {
+      free: document.getElementById("freeLevelInputs"),
+      regular: document.getElementById("regularLevelInputs"),
+      vip: document.getElementById("vipLevelInputs"),
+      team: document.getElementById("teamLevelInputs"),
+      address: document.getElementById("AddressDetailsSubscribers"), // if present
+      costInfo: document.getElementById("membershipCostInfo"),
+    };
+    this.bindSignUp();
   }
 
   async bindStore() {
     await this.store.showProducts();
-}
+  }
 
   bindPayments() {
-      this.payment.mountCard("UniqueOriginal");
+    this.payment.mountCard("UniqueOriginal");
 
-      document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
-  const email = emailInput.value || null;
-  try {
-    const result = await this.payment.donate(20, 'usd', true, email); // $20 item
-    if (result.payment && result.payment.status === 'succeeded') {
-      alert("Purchase successful! Thank you.");
-      // Optionally, you can trigger your order fulfillment logic here
-    }
-  } catch (err) {
-    alert("Purchase failed: " + err.message);
-  }
-});
-      this.payment.mountCard("SubscribeUsers");
+    document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
+      const email = emailInput.value || null;
+      try {
+        const result = await this.payment.donate(20, 'usd', true, email); // $20 item
+        if (result.payment && result.payment.status === 'succeeded') {
+          alert("Purchase successful! Thank you.");
+          // Optionally, you can trigger your order fulfillment logic here
+        }
+      } catch (err) {
+        alert("Purchase failed: " + err.message);
+      }
+    });
+    this.payment.mountCard("SubscribeUsers");
 
-      document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
-  const email = emailInput.value || null;
-  const priceId = "price_123456789"; // Stripe Price ID for subscription
-  try {
-    const result = await this.payment.subscribe(email, priceId, true);
-    if (result.status === 'success') {
-      alert("Subscription successful!");
-    } else if (result.payment && result.payment.status === 'succeeded') {
-      alert("Subscription payment successful!");
-    }
-  } catch (err) {
-    alert("Subscription failed: " + err.message);
-  }
-});
+    document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
+      const email = emailInput.value || null;
+      const priceId = "price_123456789"; // Stripe Price ID for subscription
+      try {
+        const result = await this.payment.subscribe(email, priceId, true);
+        if (result.status === 'success') {
+          alert("Subscription successful!");
+        } else if (result.payment && result.payment.status === 'succeeded') {
+          alert("Subscription payment successful!");
+        }
+      } catch (err) {
+        alert("Subscription failed: " + err.message);
+      }
+    });
 
     this.payment.mountCard("TfDonation"); //div
 
     document.getElementById("TfDonateBtn").addEventListener("click", async () => {
-        try {
-          const result = await this.payment.donate(10, 'usd', true, email); // $10 donation
-          if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
-              alert("Donation successful! Thank you.");
-          }
-        } catch (err) {
-          alert("Donation failed: " + err.message);
+      try {
+        const result = await this.payment.donate(10, 'usd', true, email); // $10 donation
+        if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
+          alert("Donation successful! Thank you.");
         }
+      } catch (err) {
+        alert("Donation failed: " + err.message);
       }
+    }
     );
   }
 

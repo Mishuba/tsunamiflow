@@ -1,4 +1,4 @@
-export class TfScreenShare {
+export class ScreenShare {
     constructor({ videoElement = null, includeAudio = false } = {}) {
         this.videoElement = videoElement; // <video> element preview
         this.stream = null;                // MediaStream of screen share
@@ -25,7 +25,7 @@ export class TfScreenShare {
 
             if (this.videoElement) {
                 this.videoElement.srcObject = this.stream;
-                this.videoElement.play().catch(() => {});
+                this.videoElement.play().catch(() => { });
             }
 
             // Handle user stopping screen share from browser UI

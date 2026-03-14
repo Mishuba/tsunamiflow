@@ -5,23 +5,21 @@ import { letsDoIt } from "./TFN/N/Games/Class/gamemechanics.js";
 import { ScreenShare } from "./TFN/F/Media/Classes/ScreenSharer.js";  
 import { TfMediaStream } from "./TFN/F/Video/Class/Streamer.js";  
 import { TfWebRTCRecorder } from "./TFN/F/Media/Classes/TfWebRtc.js";  
-//import { navButtons } from "./Objects.js";  
 import { RadioTimes, WordTimes } from "./TFN/T/Arrays/Arrays.js";  
-//import { } from "./Classes.js";  
 import { WordOfTheDay } from "./TFN/N/Words.js";  
 import { NewsTimer } from "./TFN/N/News.js";  
 import { Weather } from "./TFN/N/Weather.js";  
 import { TfWebsocket } from "./TFN/F/Network/Class/TfWebSocket.js";  
-import { TfEffects } from "./TFN/F/Compute/Class/Worker/WebWorker/Effects.js";  
+import { TfEffects } from "./TFN/F/Compute/Class/Worker/Class/WebWorker/Effects.js";  
 import { User } from "./TFN/N/Users.js";  
-import { TfMusic } from "./Audio.js";  
+import { TfMusic } from "./TFN/F/Media/Audio.js";  
 import { TfVideo } from "./TFN/F/Video/Class/Video.js";  
-import { tfIframe } from "./TfIframe.js";  
+import { tfIframe } from "./../Iframe/Js/TfIframe.js";  
 import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";  
-import { WorkerManager } from "./TFN/F/Compute/Class/Worker/WebWorker/worker.js";  
+import { WorkerManager } from "./TFN/F/Compute/Class/Worker/Class/WebWorker/worker.js";  
 import { TfWebcam } from "./TFN/F/Media/Classes/webcam.js";  
 import { TfRecorder } from "./TFN/F/Media/Classes/recorder.js";  
-import { TfAudioMixer } from "./Mixer.js";  
+import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";  
 import { MishubaController } from "./TFN/default.js";  
   
 /// create an xmlhttprequest for the client key and then put it below
@@ -248,7 +246,7 @@ if (twoMore) {
     console.error("Element with id 'mainTsectionFdiv' not found.");    
   }    
     
-  Controller.iframe.frame.src = "homepage.html";    
+  Controller.iframe.frame.src = "Iframe/Pages/homepage.html";    
     
   Controller.iframe.MenuSwitch(Controller.iframe.frame);    
   Controller.bindNavBar();    

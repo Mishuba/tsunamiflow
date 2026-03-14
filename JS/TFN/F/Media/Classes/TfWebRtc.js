@@ -1,4 +1,4 @@
-export class TfWebRTC {
+export class TfWebRTCRecorder {
     constructor({
         videoElement = null,
         remoteElement = null,
@@ -27,7 +27,7 @@ export class TfWebRTC {
 
             if (this.videoElement) {
                 this.videoElement.srcObject = this.localStream;
-                this.videoElement.play().catch(() => {});
+                this.videoElement.play().catch(() => { });
             }
 
             this.emit("localReady", this.localStream);

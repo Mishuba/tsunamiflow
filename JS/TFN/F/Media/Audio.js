@@ -1,6 +1,6 @@
-import { DefaultPlaylist } from "./../JS/Arrays.js";
+import { DefaultPlaylist } from "./../../T/Arrays/Arrays.js";
 
-export class TsunamiFlowMusic {
+export class TfMusic {
     constructor(audioContext = null) {
         // Core Audio
         this.audioContext = audioContext || new (window.AudioContext || window.webkitAudioContext)();
