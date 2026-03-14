@@ -1,22 +1,20 @@
 export class TfSpeechRecognition {
     constructor(lang = "en-US") {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            console.warn("Speech Recognition not supported");
-            this.recognition = null;
+
+        this.supported = !!SpeechRecognition;
+        this.recognition = this.supported ? new SpeechRecognition() : null;
+        this.listeners = {};
+        this.active = false;
+
+        if (!this.supported) {
+            console.warn("Speech Recognition not supported in this browser.");
             return;
         }
 
-        this.recognition = new SpeechRecognition();
         this.recognition.lang = lang;
         this.recognition.continuous = true;
         this.recognition.interimResults = true;
-        this.listeners = {};
-    }
-
-    start() {
-        if (!this.recognition) return;
-        this.recognition.start();
 
         this.recognition.onresult = (event) => {
             const transcript = Array.from(event.results)
@@ -26,23 +24,57 @@ export class TfSpeechRecognition {
         };
 
         this.recognition.onerror = (err) => this.emit("error", err);
-        this.recognition.onend = () => this.emit("end");
-        console.log("Speech Recognition started");
+        this.recognition.onend = () => {
+            this.active = false;
+            this.emit("end");
+        };
     }
 
+    /* ----------------------------
+       Start Recognition
+    -----------------------------*/
+    start() {
+        if (!this.supported || this.active) return;
+        try {
+            this.recognition.start();
+            this.active = true;
+            this.emit("start");
+            console.log("Speech Recognition started");
+        } catch (err) {
+            console.error("Failed to start Speech Recognition:", err);
+            this.emit("error", err);
+        }
+    }
+
+    /* ----------------------------
+       Stop Recognition
+    -----------------------------*/
     stop() {
-        if (!this.recognition) return;
+        if (!this.supported || !this.active) return;
         this.recognition.stop();
+        this.active = false;
         console.log("Speech Recognition stopped");
     }
 
+    /* ----------------------------
+       Event System
+    -----------------------------*/
     on(event, callback) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(callback);
     }
 
     emit(event, data) {
-        if (!this.listeners[event]) return;
-        this.listeners[event].forEach(cb => cb(data));
+        (this.listeners[event] || []).forEach(cb => cb(data));
+    }
+
+    /* ----------------------------
+       Quick JSON Status
+    -----------------------------*/
+    toJson() {
+        return {
+            supported: this.supported,
+            active: this.active
+        };
     }
 }
