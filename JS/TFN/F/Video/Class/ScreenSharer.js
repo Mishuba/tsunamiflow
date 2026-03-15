@@ -1,4 +1,4 @@
-export class TfScreenShare {
+export class ScreenShare {
 
     constructor({ audio = true, onReady = null } = {}) {
 
