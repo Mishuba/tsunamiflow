@@ -1,4 +1,4 @@
-import { DefaultPlaylist } from "./../JS/Arrays.js";
+import { DefaultPlaylist } from "./../../../../../JS/TFN/T/Radio/Playlist.js";
 export class TfMusic {
     constructor(AudioContext = null, AudioAnalyser = null, AudioMedia = null, AudioStream = null) {
         this.webcamSourceNode = null;
