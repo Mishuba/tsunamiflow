@@ -1,1 +1,1 @@
-var NewsArray = new Array();
+export var NewsArray = new Array();
