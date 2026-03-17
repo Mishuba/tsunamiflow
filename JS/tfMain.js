@@ -7,7 +7,8 @@ import { TfMediaStream } from "./TFN/F/Video/Class/Streamer.js";
 import { TfWebRTCRecorder } from "./TFN/F/Video/Class/TfWebRtc.js";  
 import { RadioTimes, WordTimes } from "./TFN/T/Arrays/Arrays.js";  
 import { WordOfTheDay } from "./TFN/T/Functions/WordOfTheDay.js";  
-import { NewsTimer } from "./TFN/N/Network/News/functions.js";  
+import { UpdatedArray } from "./TFN/N/Network/News/News.js";  
+import { NewsTimer } from "./TFN/N/Network/News/functions.js";
 import { Weather } from "./TFN/N/Site/Weather.js";  
 import { TfWebsocket } from "./TFN/F/Network/Class/TfWebSocket.js";  
 import { TfEffects } from "./TFN/F/Compute/Class/Worker/Class/WebWorker/Class/Effects.js";  
@@ -223,7 +224,7 @@ let Mishuba = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, Ack
 
 let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
-let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd });
+  let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd }, UpdatedArray);
 
 Radio.webcamAudioStream = new MediaStream();
   let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, TsunamiPrintful, TsunamiPay, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);

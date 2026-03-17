@@ -1,5 +1,5 @@
 export class WorkerManager {
-  constructor(deps) {
+  constructor(deps, news) {
     this.timeWorker = null;
     this.radioWorker = null;
 
@@ -14,6 +14,7 @@ export class WorkerManager {
 
     this.MyNewTFTime = deps.MyNewTFTime;
     this.TfWotd = deps.TfWotd;
+    this.news = news;
   }
 
   init(audioElem) {
@@ -67,7 +68,7 @@ export class WorkerManager {
       if (TimerTime === word) break;
     }
 
-    this.NewsTimer();
+    this.NewsTimer(this.news);
 
     for (const tfRT of this.RadioTimes) {
       if (TimerTime === tfRT) {
@@ -80,14 +81,14 @@ export class WorkerManager {
   }
 
   handleGenericTime(audioElem) {
-    this.NewsTimer();
+    this.NewsTimer(this.news);
     document.getElementById("TFweather").innerHTML =
       this.TfWeather.requestLocation();
     this.Radio.MusicNetworkState(this.radioWorker, audioElem);
   }
 
   handleFallback(el) {
-    this.NewsTimer();
+    this.NewsTimer(this.news);
     this.TfWeather.requestLocation();
     this.Radio.MusicNetworkState(this.radioWorker, el);
   }
