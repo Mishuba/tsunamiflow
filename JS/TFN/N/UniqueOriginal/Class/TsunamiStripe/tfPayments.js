@@ -1,8 +1,8 @@
 export class StripeDonation {
     #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"; #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
-  constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
+  constructor(stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ", backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
     this.#stripePublicKey = stripePublicKey;
-    this.stripe = Stripe(stripePublicKey);
+    this.stripe = null;
     this.backendUrl = backendUrl;
     this.cardElement = null;
     this.customerId = localStorage.getItem('stripeCustomerId') || null; // saved customer
@@ -19,6 +19,10 @@ export class StripeDonation {
                 document.head.appendChild(pscr);
             });
         }
+    }
+async init() {
+        await StripeDonation.load(); // make sure Stripe.js is loaded
+        this.stripe = Stripe(this.#stripePublicKey);
     }
   request(data) {
     return new Promise((resolve, reject) => {
