@@ -23,8 +23,9 @@ import { TfRecorder } from "./TFN/F/Video/Class/recorder.js";
 import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";  
 import { MishubaController } from "./TFN/default.js";  
 
+let cool = Stripe("pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ");
 /// create an xmlhttprequest for the client key and then put it below
-let TsunamiPay = new StripeDonation(Stripe("pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"));
+let TsunamiPay = cool;
 
 let TsunamiPrintful = new UniqueOriginal();
 
