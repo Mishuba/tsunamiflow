@@ -1,6 +1,6 @@
 export class StripeDonation {
     constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
-        this.stripe = Stripe(stripePublicKey);
+        this.stripe = stripePublicKey;
         this.backendUrl = backendUrl;
         this.cardElement = null;
         this.customerId = localStorage.getItem('stripeCustomerId') || null; // saved customer
