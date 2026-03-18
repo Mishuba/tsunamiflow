@@ -23,10 +23,8 @@ import { TfRecorder } from "./TFN/F/Video/Class/recorder.js";
 import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";  
 import { MishubaController } from "./TFN/default.js";  
 
-/// create an xmlhttprequest for the client key and then put it below
-let cool = new StripeDonation;
-cool.load();
-let TsunamiPay = cool();
+await StripeDonation.load();
+let TsunamiPay = new StripeDonation();
 
 let TsunamiPrintful = new UniqueOriginal();
 
