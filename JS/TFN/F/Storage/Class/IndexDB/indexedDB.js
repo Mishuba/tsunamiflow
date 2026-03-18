@@ -2,7 +2,7 @@
 1.) supports indexes
 2.) supports transactions
 3.) stores objects
-4.) stfores blobs / array buffers
+4.) stores blobs / array buffers
 5.) sound clips 
 6.) short videos
 7.) gifs 
