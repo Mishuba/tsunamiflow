@@ -1,14 +1,29 @@
 export class StripeDonation {
-    constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
-        this.stripe = stripePublicKey;
-        this.backendUrl = backendUrl;
+    #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"; #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+    constructor(stripePublicKey, backendUrl) {
+        this.#stripePublicKey = stripePublicKey
+        this.stripe = Stripe(this.#stripePublicKey);
+        this.#backendUrl = backendUrl;
         this.cardElement = null;
         this.customerId = localStorage.getItem('stripeCustomerId') || null; // saved customer
+    }
+    static async load() {
+        if (window.Stripe) {
+            return window.Stripe;
+        } else {
+            return new Promise((resolve, reject) => {
+                let pscr = document.createElement("script");
+                pscr.src = "";
+                pscr.onload = () => resolve(window.Stripe);
+                pscr.onerror = reject;
+                document.head.appendChild(pscr);
+            });
+        }
     }
     request(data) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", this.backendUrl, true);
+            xhr.open("POST", this.#backendUrl, true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.withCredentials = true;
             xhr.onreadystatechange = () => {
@@ -84,7 +99,7 @@ export class StripeDonation {
     getClientSecret(action, data) {
         return new Promise((resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open("POST", this.backendUrl, true);
+            xhr.open("POST", this.#backendUrl, true);
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.withCredentials = true;
             xhr.onreadystatechange = () => {
