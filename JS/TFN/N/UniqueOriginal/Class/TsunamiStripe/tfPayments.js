@@ -1,5 +1,6 @@
 export class StripeDonation {
     #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"; #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+static #stripePromise = null;
   constructor(stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ", backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
     this.#stripePublicKey = stripePublicKey;
     this.stripe = null;
@@ -11,13 +12,16 @@ export class StripeDonation {
         if (window.Stripe) {
             return window.Stripe;
         } else {
-            return new Promise((resolve, reject) => {
+if (!this.#stripePromise) {
+        this.#stripePromise = new Promise((resolve, reject) => {
                 let pscr = document.createElement("script");
                 pscr.src = "";
                 pscr.onload = () => resolve(window.Stripe);
                 pscr.onerror = reject;
                 document.head.appendChild(pscr);
             });
+}
+return this.#stripePromise;
         }
     }
 async init() {
