@@ -24,7 +24,8 @@ import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";
 import { MishubaController } from "./TFN/default.js";  
 
 /// create an xmlhttprequest for the client key and then put it below
-let cool = await StripeDonation.load();
+let cool = new StripeDonation;
+cool.load();
 let TsunamiPay = cool();
 
 let TsunamiPrintful = new UniqueOriginal();
