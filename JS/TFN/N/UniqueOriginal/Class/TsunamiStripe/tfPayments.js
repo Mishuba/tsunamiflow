@@ -15,7 +15,7 @@ static #stripePromise = null;
 if (!this.#stripePromise) {
         this.#stripePromise = new Promise((resolve, reject) => {
                 let pscr = document.createElement("script");
-                pscr.src = "";
+                pscr.src = "https://js.stripe.com/v3"; // ✅
                 pscr.onload = () => resolve(window.Stripe);
                 pscr.onerror = reject;
                 document.head.appendChild(pscr);
