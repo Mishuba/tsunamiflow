@@ -5,7 +5,19 @@ export class StripeDonation {
     this.cardElement = null;
     this.customerId = localStorage.getItem('stripeCustomerId') || null; // saved customer
   }
-  
+      static async load() {
+        if (window.Stripe) {
+            return window.Stripe;
+        } else {
+            return new Promise((resolve, reject) => {
+                let pscr = document.createElement("script");
+                pscr.src = "";
+                pscr.onload = () => resolve(window.Stripe);
+                pscr.onerror = reject;
+                document.head.appendChild(pscr);
+            });
+        }
+    }
   request(data) {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
