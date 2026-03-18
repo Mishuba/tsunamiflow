@@ -1,4 +1,5 @@
 export class StripeDonation {
+    #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"; #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
   constructor(stripePublicKey, backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
     this.stripe = Stripe(stripePublicKey);
     this.backendUrl = backendUrl;
