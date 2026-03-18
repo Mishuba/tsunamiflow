@@ -23,8 +23,8 @@ import { TfRecorder } from "./TFN/F/Video/Class/recorder.js";
 import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";  
 import { MishubaController } from "./TFN/default.js";  
 
-await StripeDonation.load();
 let TsunamiPay = new StripeDonation();
+await TsunamiPay.init();
 
 let TsunamiPrintful = new UniqueOriginal();
 
