@@ -1,30 +1,46 @@
 export class TfSounds extends Tsu {
-    lang = options.lang || "en-US";
+    // ===== DEFAULTS (Pattern B) =====
+    lang = "en-US";
+    listeners = {};
+
     TfAudio = new Audio();
-    TfAudio.crossOrigin = "anonymous";
     AudioElement = null;
-    SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    TfSpeech = 'speechSynthesis' in window;
+
+    SpeechRecognitionAPI =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    TfSpeechSupported = "speechSynthesis" in window;
+
     NamiSpeechOptions = {
-        lang: this.lang,
+        lang: "en-US",
         pitch: 1,
         rate: 1,
         volume: 1
     };
-    TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    TfSoundsContext =
+        new (window.AudioContext || window.webkitAudioContext)();
+
+    TfSoundsOutput = this.TfSoundsContext.destination;
+
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
-        autoGainControl: true,
+        autoGainControl: true
     };
+
+    TfSoundsWorkletReady = false;
+
     constructor(options = {}) {
-      super(options);
-      if (options.language) {
+        super(options);
+
+        // ===== OVERRIDES =====
+        if (options.lang) {
             this.lang = options.lang;
             this.NamiSpeechOptions.lang = options.lang;
-      }
+        }
 
-      if (options.constraints) {
+        if (options.constraints) {
             this.audioConstraints = {
                 ...this.audioConstraints,
                 ...options.constraints
@@ -35,100 +51,98 @@ export class TfSounds extends Tsu {
             this.AudioElement = options.audioElement;
         }
 
-        this.listeners = {};
-        this.TfAudio = TfAudio;
         this.TfAudio.crossOrigin = "anonymous";
-        this.AudioElement = AudioElement;
 
-
-
-        if (!(!!SpeechRecognition)) {
-            console.warn("Speech Recognition not supported in this browser.");
+        // ===== SPEECH RECOGNITION =====
+        if (!this.SpeechRecognitionAPI) {
+            console.warn("Speech Recognition not supported.");
             this.SpeechRecognition = null;
         } else {
-            this.SpeechRecognition = new SpeechRecognition();
+            this.SpeechRecognition = new this.SpeechRecognitionAPI();
+
             this.SpeechRecognition.lang = this.lang;
             this.SpeechRecognition.continuous = true;
             this.SpeechRecognition.interimResults = true;
+
             this.SpeechRecognition.onresult = (event) => {
                 const transcript = Array.from(event.results)
                     .map(r => r[0].transcript)
                     .join("");
+
                 this.emit("result", transcript);
             };
 
-            this.SpeechRecognition.onerror = (err) => this.emit("error", err);
+            this.SpeechRecognition.onerror = (err) =>
+                this.emit("error", err);
+
             this.SpeechRecognition.onend = () => {
                 this.active = false;
                 this.emit("end");
             };
-this.SpeechRecognition.onend = () => {
-                this.active = false;
-                this.emit("end");
-            };
         }
-        if (!(TfSpeech)) {
-            console.warn("Speech Synthesis not supported in this browser.");
+
+        // ===== SPEECH SYNTHESIS =====
+        if (!this.TfSpeechSupported) {
+            console.warn("Speech Synthesis not supported.");
             this.TfSpeech = null;
             this.NamiSpeech = null;
-            this.NamiSpeechOptions = null;
         } else {
-            this.NamiSpeechOptions = NamiSpeechOptions;
             this.TfSpeech = window.speechSynthesis;
 
             this.NamiSpeech = new SpeechSynthesisUtterance();
-Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
-
-            this.NamiSpeech.lang = this.lang;
-            this.NamiSpeech.pitch = this.NamiSpeechOptions.pitch;
-            this.NamiSpeech.rate = this.NamiSpeechOptions.rate;
-            this.NamiSpeech.volume = this.NamiSpeechOptions.volume;
-        }
-        this.TfSoundsContext = TfSoundsContext;
-        this.TfSoundsOutput = this.TfSoundsContext.destination;
-        this.emit("ready", this.TfSoundsContex);
-
-        try {
-            if (!this.TfSoundsContext.audioWorklet) {
-                const err = new Error("AudioWorklet not supported in this browser.");
-                console.error(err);
-                this.emit("error", err);
-                throw err;
-            } else {
-                if (!this.TfSoundsWorkletProcessorUrl) {
-                    const err = new Error("Processor URL not provided.");
-                    console.error(err);
-                    this.emit("error", err);
-                    throw err;
-                } else {
-                    this.TfSoundsWorklet = this.TfSoundsContext.audioWorklet;
-                    this.TfSoundsWorklet.addModule(this.TfSoundsWorkletProcessorUrl);
-                    this.TfSoundsWorkletNode = new AudioWorkletNode(this.TfSoundsContext, "TfSoundsProcessor", this.TfSoundsWorkletOptions);
-                    this.TfSoundsWorkletNode.port.onmessage = (e) => this.emit("message", e.data);
-                    this.TfSoundsWorkletReady = true;
-                    this.emit("ready", this.TfSoundsWorkletNode);
-                }
-            }
-        } catch (err) {
-            console.error("Failed to load AudioWorkletNode:", err);
-            this.emit("error", err);
-            throw err;
+            Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
         }
 
-        this.TfSoundsContextDestination = this.TfSoundsContext.createMediaStreamDestination();
+        // ===== STREAM OUTPUT =====
+        this.TfSoundsContextDestination =
+            this.TfSoundsContext.createMediaStreamDestination();
+
+        this.emit("ready", this.TfSoundsContext);
     }
+
+    // ===== AUDIO WORKLET =====
+    async initWorklet(url, options = {}) {
+        if (!this.TfSoundsContext.audioWorklet) {
+            throw new Error("AudioWorklet not supported.");
+        }
+
+        if (!url) {
+            throw new Error("Processor URL not provided.");
+        }
+
+        await this.TfSoundsContext.audioWorklet.addModule(url);
+
+        this.TfSoundsWorkletNode = new AudioWorkletNode(
+            this.TfSoundsContext,
+            "TfSoundsProcessor",
+            options
+        );
+
+        this.TfSoundsWorkletNode.port.onmessage = (e) =>
+            this.emit("message", e.data);
+
+        this.TfSoundsWorkletReady = true;
+
+        this.emit("worklet-ready", this.TfSoundsWorkletNode);
+    }
+
+    // ===== BASE PASSTHROUGH =====
     log(msg) {
         return super.log(msg);
     }
+
     find(elem, frame = null) {
         return super.find(elem, frame);
     }
+
     check(event, fn) {
         return super.check(event, fn);
     }
+
     emit(event, data) {
         return super.emit(event, data);
     }
+
     on(id, handler, preventDefault = false, iframe = null) {
         return super.on(id, handler, preventDefault, iframe);
     }
