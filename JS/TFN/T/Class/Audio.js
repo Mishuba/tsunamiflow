@@ -1,5 +1,6 @@
 export class TfSounds extends Tsu {
-      constructor(options = {}){
+      constructor(options = {}) {
+      super(options);
 this.lang = options.lang || "en-US";
     TfAudio = new Audio();
     AudioElement = null;
