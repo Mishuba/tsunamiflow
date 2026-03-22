@@ -18,10 +18,9 @@ export class TfSounds extends Tsu {
         ...constraints
     };
 
-    constructor() {
+    constructor(options = {}) {
         this.listeners = {};
-        this.lang = lang;
-
+        this.lang = options.lang || "en-US";
         this.TfAudio = TfAudio;
         this.TfAudio.crossOrigin = "anonymous";
         this.AudioElement = AudioElement;
