@@ -1,24 +1,21 @@
 export class TfSounds extends Tsu {
-lang = options.lang || "en-US";
-    TfAudio = new Audio();
-    AudioElement = null;
-    SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    TfSpeech = 'speechSynthesis' in window;
-    NamiSpeechOptions = {
+    let lang = options.lang || "en-US";
+    let TfAudio = new Audio();
+    let AudioElement = null;
+    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let TfSpeech = 'speechSynthesis' in window;
+    let NamiSpeechOptions = {
         lang: this.lang,
         pitch: 1,
         rate: 1,
         volume: 1
     };
-    TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-    audioConstraints = {
+    let TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+    let audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
         autoGainControl: true,
-        ...(options.constraints || {})
-
     };
-
     constructor(options = {}) {
       super(options);
         this.listeners = {};
