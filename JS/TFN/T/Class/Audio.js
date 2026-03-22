@@ -1,7 +1,5 @@
 export class TfSounds extends Tsu {
-      constructor(options = {}) {
-      super(options);
-this.lang = options.lang || "en-US";
+lang = options.lang || "en-US";
     TfAudio = new Audio();
     AudioElement = null;
     SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -22,6 +20,7 @@ this.lang = options.lang || "en-US";
     };
 
     constructor(options = {}) {
+      super(options);
         this.listeners = {};
         this.lang = options.lang || "en-US";
         this.TfAudio = TfAudio;
