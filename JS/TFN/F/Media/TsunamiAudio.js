@@ -6,7 +6,7 @@ import { TfSpeechRecognition } from "./TfSpeechRecognition.js";
 import { TfSpeechSynthesis } from "./TfSpeechSynthesis.js";
 import { TfMicrophone } from "./TfMicrophone.js";
 
-export class TfAudio {
+export class TfAudio extends TfSounds {
 
     constructor() {
 

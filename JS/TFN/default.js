@@ -1,4 +1,5 @@
-export class MishubaController {
+import { Tsu } from "./T/Class/Base/Base.js";
+export class MishubaController extends Tsu {
   constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, pay = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
     this.iframe = iframe;
@@ -7,7 +8,12 @@ export class MishubaController {
     this.audio = audio;
     this.audioElem = AudioElement;
     this.audioCanv = AudioCanvas;
-    this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
+    if (this.audioCanv && this.audioCanv.getContext) {
+      this.audioCtx = this.audioCanv.getContext("2d", { colorSpace: "srgb", willReadFrequently: true });
+    } else {
+      console.warn("audioCanv is not ready, falling back to AudioContext without canvas");
+      this.audioCtx = null;
+    }
     this.audioTitle = AudioTitle;
     this.audioSystem = AudioButtonSpot;
     this.audioLast = AudioPrevious;
@@ -36,16 +42,13 @@ export class MishubaController {
     };
   }
   find(elem, frame = null) {
-    if (frame === true) {
-      return this.iframe.frame.contentDocument.getElementById(elem);
-    } else {
-      return document.getElementById(elem);
-    }
+    return super.find(elem, frame);
   }
   log(msg) {
-    let logBox = this.find("TfLogBox", false);
-    logBox.innerText += msg + "\n";
-    logBox.scrollTop = logBox.scrollHeight;
+    return super.log(msg);
+  }
+  on(id, handler, preventDefault = false, iframe = null) {
+    return super.on(id, handler, preventDefault, iframe);
   }
   async addVideoToBin(file) {
     const id = crypto.randomUUID();
@@ -76,49 +79,7 @@ export class MishubaController {
     return Object.values(this.mediaBin.videos)
       .sort((a, b) => b.created - a.created);
   }
-  on(id, handler, preventDefault = false, iframe = null) {
-    let el;
-    if (iframe === null) {
-      el = document.getElementById(id);
-    } else {
-      el = iframe?.contentDocument?.getElementById(id);
-    }
-    if (!el) return;
 
-    const isForm = el instanceof HTMLFormElement;
-    const isSubmitButton =
-      (el instanceof HTMLButtonElement && el.type === "submit") ||
-      (el instanceof HTMLInputElement &&
-        ["submit", "image"].includes(el.type));
-
-    const runHandler = (event) => {
-      if (isForm || isSubmitButton || preventDefault) {
-        event.preventDefault();
-        event.stopPropagation();
-      }
-      handler(event);
-    };
-
-    // Desktop click / form submit
-    const eventType = isForm ? "submit" : "click";
-    el.addEventListener(eventType, runHandler);
-
-    // Mobile touch: prevent scrolling / double-tap zoom
-    el.addEventListener(
-      "touchend",
-      (e) => {
-        runHandler(e);
-        if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
-      },
-      { passive: false }
-    );
-
-    // Pointer events for stylus / hybrid devices
-    el.addEventListener("pointerdown", (e) => {
-      runHandler(e);
-      if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
-    });
-  }
 
   async startMediaSource(type, src = null) {
     const video = this.ensureHiddenVideo();
@@ -640,8 +601,10 @@ export class MishubaController {
   bindPayments() {
     this.payment.mountCard("UniqueOriginal");
 
+    const emailInput = this.userFields?.tfEM || document.getElementById("TfEmail");
+
     document.getElementById("UniqueOriginalBtn").addEventListener("click", async () => {
-      const email = emailInput.value || null;
+      const email = emailInput?.value || null;
       try {
         const result = await this.payment.donate(20, 'usd', true, email); // $20 item
         if (result.payment && result.payment.status === 'succeeded') {
@@ -655,7 +618,7 @@ export class MishubaController {
     this.payment.mountCard("SubscribeUsers");
 
     document.getElementById("FreeLevelSubmit").addEventListener("click", async () => {
-      const email = emailInput.value || null;
+      const email = emailInput?.value || null;
       const priceId = "price_123456789"; // Stripe Price ID for subscription
       try {
         const result = await this.payment.subscribe(email, priceId, true);

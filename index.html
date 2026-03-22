@@ -11,14 +11,14 @@
     <meta name="description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
 
-
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta property="og:title" content="Tsunami Flow Club">
     <meta property="og:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
     <meta property="og:image" content="/icons/192Logo.png">
-    <meta property="og:url" content="https://www.tsunamiflow.club">
+    <meta property="og:url" content="https://tsunamiflow.club">
     <meta property="og:type" content="website">
+    <meta name="theme-color" content="#000000">
     <meta property="fb:app_id" content="Your_App_ID">
 
     <meta name="twitter:card" content="summary_large_image">
@@ -26,12 +26,16 @@
     <meta name="twitter:description"
         content="Tsunami Flow is the homebase for turning your dreams to reality, achieving your goals and mastering your life">
     <meta name="twitter:image" content="/icons/192Logo.png">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icons/192Logo.png">
 
     <meta name="google-site-verification" content="Yae7Q7bC5eK9FjTbjARZOisTwVTVknEe0tLWT4EiVqU">
     <meta name="google-adsense-account" content="ca-pub-1650194129657038">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1650194129657038"
         crossorigin="anonymous"></script>
+
+ 
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
@@ -42,16 +46,11 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="./MyStyle/tfMain.css">
-
     <!-- Misc >
         <link rel="manifest" href="/manifest.json">
-        <meta name="theme-color" content="#000000">
-        <meta name="mobile-web-app-capable" content="yes"-->
+-->
 
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="/icons/192Logo.png">
-
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 </head>
 
 <body id="theBody">
@@ -436,12 +435,13 @@
         <label for="SubmitButton"><button id="UniqueOriginalBtn" class="SubFormButton" name="TFRegisterFreeLevelButton"
                 type="submit" disabled> Subscribe </button></label>
     </footer>
-    <script type="module" src="./JS/tfMain.js">
+    <script type="module" src="./JS/tfMain.js"></script>
+    <script>
         if ('serviceWorker' in navigator) {
             navigator.serviceWorker.register('/service-worker.js')
                 .then(reg => console.log('Service Worker registered:', reg))
                 .catch(err => console.error('Service Worker registration failed:', err));
-        };
+        }
     </script>
 </body>
 
