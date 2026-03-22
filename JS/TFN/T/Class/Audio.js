@@ -17,7 +17,8 @@ this.lang = options.lang || "en-US";
         echoCancellation: true,
         noiseSuppression: true,
         autoGainControl: true,
-        ...constraints
+        ...(options.constraints || {})
+
     };
 
     constructor(options = {}) {
