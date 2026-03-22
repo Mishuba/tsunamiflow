@@ -1,25 +1,41 @@
 export class TfSounds extends Tsu {
-    let lang = options.lang || "en-US";
-    let TfAudio = new Audio();
-    let AudioElement = null;
-    let SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let TfSpeech = 'speechSynthesis' in window;
-    let NamiSpeechOptions = {
+    lang = options.lang || "en-US";
+    TfAudio = new Audio();
+    TfAudio.crossOrigin = "anonymous";
+    AudioElement = null;
+    SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    TfSpeech = 'speechSynthesis' in window;
+    NamiSpeechOptions = {
         lang: this.lang,
         pitch: 1,
         rate: 1,
         volume: 1
     };
-    let TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-    let audioConstraints = {
+    TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+    audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
         autoGainControl: true,
     };
     constructor(options = {}) {
       super(options);
+      if (options.language) {
+            this.lang = options.lang;
+            this.NamiSpeechOptions.lang = options.lang;
+      }
+
+      if (options.constraints) {
+            this.audioConstraints = {
+                ...this.audioConstraints,
+                ...options.constraints
+            };
+        }
+
+        if (options.audioElement) {
+            this.AudioElement = options.audioElement;
+        }
+
         this.listeners = {};
-        this.lang = options.lang || "en-US";
         this.TfAudio = TfAudio;
         this.TfAudio.crossOrigin = "anonymous";
         this.AudioElement = AudioElement;
