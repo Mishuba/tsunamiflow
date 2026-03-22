@@ -39,14 +39,18 @@ this.lang = options.lang || "en-US";
             this.SpeechRecognition.continuous = true;
             this.SpeechRecognition.interimResults = true;
             this.SpeechRecognition.onresult = (event) => {
-                const SpeechRecognitiontranscript = Array.from(event.results)
-                    .map(r => r[0].SpeechRecognitiontranscript)
+                const transcript = Array.from(event.results)
+                    .map(r => r[0].transcript)
                     .join("");
-                this.emit("result", SpeechRecognitiontranscript);
+                this.emit("result", transcript);
             };
 
             this.SpeechRecognition.onerror = (err) => this.emit("error", err);
             this.SpeechRecognition.onend = () => {
+                this.active = false;
+                this.emit("end");
+            };
+this.SpeechRecognition.onend = () => {
                 this.active = false;
                 this.emit("end");
             };
@@ -61,6 +65,7 @@ this.lang = options.lang || "en-US";
             this.TfSpeech = window.speechSynthesis;
 
             this.NamiSpeech = new SpeechSynthesisUtterance();
+Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
 
             this.NamiSpeech.lang = this.lang;
             this.NamiSpeech.pitch = this.NamiSpeechOptions.pitch;
@@ -70,6 +75,7 @@ this.lang = options.lang || "en-US";
         this.TfSoundsContext = TfSoundsContext;
         this.TfSoundsOutput = this.TfSoundsContext.destination;
         this.emit("ready", this.TfSoundsContex);
+
         try {
             if (!this.TfSoundsContext.audioWorklet) {
                 const err = new Error("AudioWorklet not supported in this browser.");
@@ -96,6 +102,7 @@ this.lang = options.lang || "en-US";
             this.emit("error", err);
             throw err;
         }
+
         this.TfSoundsContextDestination = this.TfSoundsContext.createMediaStreamDestination();
     }
     log(msg) {
