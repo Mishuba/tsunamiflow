@@ -51,6 +51,7 @@ export class TfSounds extends Tsu {
             this.AudioElement = options.audioElement;
         }
 
+        // FIX: apply after instantiation
         this.TfAudio.crossOrigin = "anonymous";
 
         // ===== SPEECH RECOGNITION =====
@@ -100,7 +101,7 @@ export class TfSounds extends Tsu {
         this.emit("ready", this.TfSoundsContext);
     }
 
-    // ===== AUDIO WORKLET =====
+    // ===== WORKLET (ASYNC — REQUIRED) =====
     async initWorklet(url, options = {}) {
         if (!this.TfSoundsContext.audioWorklet) {
             throw new Error("AudioWorklet not supported.");
@@ -126,7 +127,6 @@ export class TfSounds extends Tsu {
         this.emit("worklet-ready", this.TfSoundsWorkletNode);
     }
 
-    // ===== BASE PASSTHROUGH =====
     log(msg) {
         return super.log(msg);
     }
