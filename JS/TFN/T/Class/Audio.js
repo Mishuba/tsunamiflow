@@ -5,6 +5,7 @@ export class TsunamiFlowNation extends Flow {
     TfAudio = new Audio();
     AudioSource = null;
     AudioElement = null;
+    AudioReady = null;
 
     SpeechRecognitionAPI =
         window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -20,6 +21,8 @@ export class TsunamiFlowNation extends Flow {
 
     TfSoundsContext =
         new (window.AudioContext || window.webkitAudioContext)();
+    TfSoundsGain = null;
+    
 
     TfSoundsOutput = this.TfSoundsContext.destination;
 
