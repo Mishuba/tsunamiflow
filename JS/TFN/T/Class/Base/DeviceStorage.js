@@ -2,9 +2,121 @@ export class Mi extends Na {
     namespace = "tf";
     cookieenabled = navigator.cookieEnabled;
     cookies = this.cookieenabled ? this.parsecookie() : {};
-
+this.SessionStorage = window.sessionStorage;
     constructor(options = {}) {
         super(options);
+    }
+
+    Sessionkey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setSession(name, value) {
+
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.SessionStorage.setItem(
+                this.Sessionkey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfSessionStorage set failed:", err);
+            return false;
+
+        }
+
+    }
+
+    getSession(name) {
+
+        const value = this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeSession(name) {
+
+        this.SessionStorage.removeItem(
+            this.Sessionkey(name)
+        );
+
+    }
+
+    Sessionhas(name) {
+
+        return this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        ) !== null;
+
+    }
+
+    Sessionkeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.Sessionkey(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                list.push(
+                    key.replace(this.namespace + ":", "")
+                );
+
+            }
+
+        }
+
+        return list;
+
+    }
+
+    clearSession() {
+
+        const keys = this.Sessionkeys();
+
+        keys.forEach(k => {
+            this.removeSession(k);
+        });
+
+    }
+
+    Sessionsize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.SessionStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
+
     }
     cookiekey(name) {
         return `${this.namespace}:${name}`;
