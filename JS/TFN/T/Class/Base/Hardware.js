@@ -1,13 +1,13 @@
-export class Na extends Tsu {
-        uaData = navigator.userAgentData || null;
-        LegacyUaData = navigator.userAgent || null;
-        BatterySupported = !!navigator.getBattery;
-        battery = null;
-        TsunamiLocation = !!navigator.geolocation;
-        VibrateSupported = !!navigator.vibrate;
-constructor(options = {}) {
-      super(options);
-      if (this.BatterySupported) {
+export class Na extends TsuNa {
+    uaData = navigator.userAgentData || null;
+    LegacyUaData = navigator.userAgent || null;
+    BatterySupported = !!navigator.getBattery;
+    battery = null;
+    TsunamiLocation = !!navigator.geolocation;
+    VibrateSupported = !!navigator.vibrate;
+    constructor(options = {}) {
+        super(options);
+        if (this.BatterySupported) {
             navigator.getBattery().then(bat => this.battery = bat);
         } else {
             console.warn("Battery API not supported");
@@ -17,25 +17,25 @@ constructor(options = {}) {
 
     getBrands() {
         if (!(!!this.uaData)) {
-             return [];
+            return [];
         } else {
-        return this.uaData.brands || [];
+            return this.uaData.brands || [];
         }
     }
 
     getMobile() {
         if (!(!!this.uaData)) {
-             return null;
+            return null;
         } else {
-              return this.uaData.mobile;
+            return this.uaData.mobile;
         }
     }
 
     getPlatform() {
         if (!(!!this.uaData)) {
-             return null;
+            return null;
         } else {
-              return this.uaData.platform;
+            return this.uaData.platform;
         }
     }
 
@@ -47,14 +47,14 @@ constructor(options = {}) {
         "uaFullVersion"
     ]) {
         if (!(!!this.uaData)) {
-             return null;
+            return null;
         } else {
-              try {
-                  return await this.uaData.getHighEntropyValues(hints);
-              } catch (err) {
-                  console.error("Failed to retrieve high entropy UA values:", err);
-                  return null;
-              }
+            try {
+                return await this.uaData.getHighEntropyValues(hints);
+            } catch (err) {
+                console.error("Failed to retrieve high entropy UA values:", err);
+                return null;
+            }
         }
     }
 
@@ -70,14 +70,14 @@ constructor(options = {}) {
 
     getCurrentPosition(success, error, options = {}) {
         if (!this.TsunamiLocation) {
-             return null;
+            return null;
         } else {
-return navigator.geolocation.getCurrentPosition(success, error, options);
-       }
+            return navigator.geolocation.getCurrentPosition(success, error, options);
+        }
     }
 
     watchPosition(success, error, options = {}) {
-        if (!this.TsunamiLocation) { 
+        if (!this.TsunamiLocation) {
             return null;
         } else {
             return navigator.geolocation.watchPosition(success, error, options);
@@ -88,23 +88,23 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
         if (!this.TsunamiLocation) {
             return;
         } else {
-           navigator.geolocation.clearWatch(id);
+            navigator.geolocation.clearWatch(id);
         }
     }
 
     vibrate(pattern = 200) {
         if (!this.VibrateSupported) {
-             return;
+            return;
         } else {
-             return navigator.vibrate(pattern);
+            return navigator.vibrate(pattern);
         }
     }
 
     cancel() {
         if (!this.VibrateSupported) {
-     return;
-         } else {
-        navigator.vibrate(0);
-         }
+            return;
+        } else {
+            navigator.vibrate(0);
+        }
     }
 }

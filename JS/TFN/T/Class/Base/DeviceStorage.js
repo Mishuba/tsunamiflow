@@ -1,11 +1,264 @@
-export class Mi extends Na {
+export class Mi extends NaMi {
     namespace = "tf";
     cookieenabled = navigator.cookieEnabled;
     cookies = this.cookieenabled ? this.parsecookie() : {};
-SessionStorage = window.sessionStorage;
-LocalStorage = window.localStorage;
+    SessionStorage = window.sessionStorage;
+    LocalStorage = window.localStorage;
+    dbName = dbName;
+    dbversion = 1;
+    dbstores = [];
+    db = null;
+    cacheName = cacheName;
+    cache = null;
+    CacheonReady = null;
+    CacheautoOpen = true;
     constructor(options = {}) {
         super(options);
+        /*
+        if (CacheautoOpen) {
+            this.Cacheopen();
+        }
+        */
+    }
+
+    async opendb() {
+        if (this.db) return this.db;
+
+        return new Promise((resolve, reject) => {
+
+            const request = indexedDB.open(this.dbName, this.dbversion);
+
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+
+                this.dbstores.forEach(store => {
+
+                    if (!db.objectStoreNames.contains(store.name)) {
+
+                        const objStore = db.createObjectStore(
+                            store.name,
+                            {
+                                keyPath: store.keyPath || "id",
+                                autoIncrement: store.autoIncrement ?? true
+                            }
+                        );
+
+                        if (store.indexes) {
+                            store.indexes.forEach(idx => {
+                                objStore.createIndex(
+                                    idx.name,
+                                    idx.keyPath,
+                                    { unique: idx.unique || false }
+                                );
+                            });
+                        }
+                    }
+
+                });
+            };
+
+            request.onsuccess = (e) => {
+                this.db = e.target.result;
+                resolve(this.db);
+            };
+
+            request.onerror = (e) => reject(e);
+        });
+    }
+
+    storedb(name, mode = "readonly") {
+        if (!this.db) throw new Error("Database not opened");
+
+        return this.db
+            .transaction(name, mode)
+            .objectStore(name);
+    }
+
+    async putdb(storeName, data) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .store(storeName, "readwrite")
+                .put(data);
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async getdb(storeName, key) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName)
+                .get(key);
+
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async getAlldb(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName)
+                .getAll();
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async deletedb(storeName, key) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName, "readwrite")
+                .delete(key);
+
+            req.onsuccess = () => resolve(true);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async cleardb(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName, "readwrite")
+                .clear();
+
+            req.onsuccess = () => resolve(true);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async dbkeys(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .dbstore(storeName)
+                .getAllKeys();
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    closedb() {
+        if (!this.db) return;
+
+        this.db.close();
+        this.db = null;
+    }
+
+    destroydb() {
+        this.closedb();
+        return indexedDB.deleteDatabase(this.dbName);
+    }
+
+    async Cacheopen() {
+        if (this.cache) return this.cache;
+
+        try {
+            this.cache = await caches.open(this.cacheName);
+
+            if (this.CacheonReady) {
+                this.CacheonReady(this.cache);
+            }
+
+            return this.cache;
+
+        } catch (err) {
+            console.error("TfCacheAPI open failed:", err);
+            throw err;
+        }
+    }
+
+    async putCache(request, response) {
+        if (!this.cache) await this.Cacheopen();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        const res = response instanceof Response
+            ? response
+            : new Response(response);
+
+        await this.cache.put(req, res.clone());
+
+        return true;
+    }
+
+    async matchCache(request) {
+        if (!this.cache) await this.Cacheopen();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        const res = await this.cache.match(req);
+
+        return res || null;
+    }
+
+    async deleteCache(request) {
+        if (!this.cache) await this.open();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        return await this.cache.delete(req);
+    }
+
+    async addCache(url) {
+        if (!this.cache) await this.open();
+
+        return await this.cache.add(url);
+    }
+
+    async addAllCache(urls = []) {
+        if (!this.cache) await this.open();
+
+        return await this.cache.addAll(urls);
+    }
+
+    async Cachekeys() {
+        if (!this.cache) await this.open();
+
+        return await this.cache.keys();
+    }
+
+    async clearCache() {
+        if (!this.cache) return false;
+
+        const keys = await this.cache.keys();
+
+        await Promise.all(
+            keys.map(req => this.cache.delete(req))
+        );
+
+        return true;
+    }
+
+    async destroyCache() {
+        await caches.delete(this.cacheName);
+        this.cache = null;
     }
 
     LocalStoragekey(name) {
