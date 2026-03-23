@@ -15,10 +15,12 @@ export class Tsu {
         }
     }
     log(msg) {
-        let logBox = this.find("TfLogBox", false);
-        logBox.innerText += msg + "\n";
-        logBox.scrollTop = logBox.scrollHeight;
-    }
+    let logBox = this.find("TfLogBox");
+    if (!logBox) return;
+
+    logBox.innerText += msg + "\n";
+    logBox.scrollTop = logBox.scrollHeight;
+}
     addEventListener(event, fn) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(fn);
