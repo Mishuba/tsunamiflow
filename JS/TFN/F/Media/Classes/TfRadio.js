@@ -3,6 +3,89 @@ export TsunamiFlowRadio extends TsunamiFlowNation {
       constructor(options = {}) {
 
       }
+
+//element
+    connect(context) {
+
+        if (!context) return;
+
+        this.context = context;
+
+        if (!this.source) {
+
+            this.source = context.createMediaElementSource(this.audio);
+            this.gain = context.createGain();
+
+            this.source.connect(this.gain);
+            this.gain.connect(context.destination);
+
+        }
+    }
+
+    setVolume(value = 1) {
+        if (this.gain) {
+            this.gain.gain.value = value;
+        } else {
+            this.audio.volume = value;
+        }
+    }
+
+    /* -----------------------------
+       Playback Controls
+    ------------------------------*/
+
+    load(src) {
+        this.audio.src = src;
+        this.audio.load();
+    }
+
+    play() {
+        return this.audio.play();
+    }
+
+    pause() {
+        this.audio.pause();
+    }
+
+    stop() {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+    }
+
+    seek(time) {
+        this.audio.currentTime = time;
+    }
+
+    setLoop(loop = true) {
+        this.audio.loop = loop;
+    }
+
+    setPlaybackRate(rate = 1) {
+        this.audio.playbackRate = rate;
+    }
+
+    mute(state = true) {
+        this.audio.muted = state;
+    }
+
+    /* -----------------------------
+       State
+    ------------------------------*/
+
+    getCurrentTime() {
+        return this.audio.currentTime;
+    }
+
+    getDuration() {
+        return this.audio.duration;
+    }
+
+    isPlaying() {
+        return !this.audio.paused;
+    }
+//element ends
+
+/// context
     addElementSource(element, id = null) {
         if (!this.context) this.create();
         const sourceId = id || `source-${++this.idCounter}`;
@@ -67,6 +150,7 @@ export TsunamiFlowRadio extends TsunamiFlowNation {
             this.emit("closed");
         }
     }
+//content ends
 
 ///worklet
     connect(destination) {
