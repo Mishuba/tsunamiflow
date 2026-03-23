@@ -64,3 +64,16 @@ removeEventListener(event, callback) {
 }
 this.domListeners.set(id, { el, runHandler });
 }
+off(id) {
+    const entry = this.domListeners.get(id);
+    if (!entry) return;
+
+    const { el, runHandler } = entry;
+
+    el.removeEventListener("pointerdown", runHandler);
+    el.removeEventListener("click", runHandler);
+    el.removeEventListener("submit", runHandler);
+
+    this.domListeners.delete(id);
+}
+}
