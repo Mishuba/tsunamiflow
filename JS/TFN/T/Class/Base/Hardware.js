@@ -69,7 +69,7 @@ constructor(options = {}) {
     }
 
     getCurrentPosition(success, error, options = {}) {
-        if (!TsunamiLocation) {
+        if (!this.TsunamiLocation) {
              return null;
         } else {
 return navigator.geolocation.getCurrentPosition(success, error, options);
@@ -77,7 +77,7 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     watchPosition(success, error, options = {}) {
-        if (!TsunamiLocation) { 
+        if (!this.TsunamiLocation) { 
             return null;
         } else {
             return navigator.geolocation.watchPosition(success, error, options);
@@ -85,7 +85,7 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     clearWatch(id) {
-        if (!TsunamiLocation) {
+        if (!this.TsunamiLocation) {
             return;
         } else {
            navigator.geolocation.clearWatch(id);
