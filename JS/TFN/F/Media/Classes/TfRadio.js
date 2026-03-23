@@ -67,4 +67,24 @@ export TsunamiFlowRadio extends TsunamiFlowNation {
             this.emit("closed");
         }
     }
+
+///worklet
+    connect(destination) {
+        if (!this.node) return;
+        this.node.connect(destination);
+    }
+
+    disconnect() {
+        if (!this.node) return;
+        this.node.disconnect();
+    }
+
+    /* ----------------------------
+       Send message to processor
+    -----------------------------*/
+    postMessage(message) {
+        if (!this.node) return;
+        this.node.port.postMessage(message);
+    }
+///worklet ends
 }
