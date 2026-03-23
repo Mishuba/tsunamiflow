@@ -54,23 +54,9 @@ removeEventListener(event, callback) {
         };
 
         // Desktop click / form submit
-        const eventType = isForm ? "submit" : "click";
-        el.addEventListener(eventType, runHandler);
-
-        // Mobile touch: prevent scrolling / double-tap zoom
-        el.addEventListener(
-            "touchend",
-            (e) => {
-                runHandler(e);
-                if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
-            },
-            { passive: false }
-        );
-
-        // Pointer events for stylus / hybrid devices
-        el.addEventListener("pointerdown", (e) => {
-            runHandler(e);
-            if (!isForm && !isSubmitButton && preventDefault) e.preventDefault();
-        });
-    }
+ if (window.PointerEvent) {
+    el.addEventListener(isForm ? "submit" : "pointerdown", runHandler);
+} else {
+    el.addEventListener(isForm ? "submit" : "click", runHandler);
+}
 }
