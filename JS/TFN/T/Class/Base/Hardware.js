@@ -4,7 +4,8 @@ this.LegacyUaData = navigator.userAgent || null;
         this.BatterySupported = !!navigator.getBattery;
         this.battery = null;
     TsunamiLocation = !!navigator.geolocation;
-
+VibrateSupported = !!navigator.vibrate;
+this
 constructor(options = {}) {
       super(options);
       if (this.BatterySupported) {
@@ -12,7 +13,7 @@ constructor(options = {}) {
         } else {
             console.warn("Battery API not supported");
         }
-this.VibrateSupported = !!navigator.vibrate;
+
     }
 
     getBrands() {
