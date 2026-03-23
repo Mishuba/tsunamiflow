@@ -62,4 +62,5 @@ removeEventListener(event, callback) {
 } else {
     el.addEventListener(isForm ? "submit" : "click", runHandler);
 }
+this.domListeners.set(id, { el, runHandler });
 }
