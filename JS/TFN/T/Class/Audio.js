@@ -146,4 +146,24 @@ export class TfSounds extends Tsu {
     on(id, handler, preventDefault = false, iframe = null) {
         return super.on(id, handler, preventDefault, iframe);
     }
+    speak(text) {
+        if (!this.TfSpeech) return;
+
+        this.NamiSpeech.text = text;
+        this.TfSpeech.speak(this.NamiSpeech);
+    }
+
+    listen() {
+        if (!this.SpeechRecognition) return;
+
+        this.SpeechRecognition.start();
+        this.active = true;
+    }
+
+    stopListening() {
+        if (!this.SpeechRecognition) return;
+
+        this.SpeechRecognition.stop();
+        this.active = false;
+    }
 }
