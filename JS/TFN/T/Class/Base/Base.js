@@ -47,7 +47,10 @@ removeEventListener(event, callback) {
                 event.preventDefault();
                 event.stopPropagation();
             }
-            handler(event);
+            this.emit(eventName, {
+                event,
+                element: el
+            });
         };
 
         // Desktop click / form submit
