@@ -39,7 +39,7 @@ export class Tsu {
             }
         });
     }
-    request(method, url, data = null, headers = {}) {
+    requestXml(method, url, data = null, headers = {}) {
         const xhr = new XMLHttpRequest();
         xhr.open(method, url, true);
 
