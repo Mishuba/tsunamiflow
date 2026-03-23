@@ -60,7 +60,7 @@ constructor(options = {}) {
 
     getFullInfo() {
         return {
-            supported: this.supported,
+            supported: !!this.uaData,
             brands: this.getBrands(),
             mobile: this.getMobile(),
             platform: this.getPlatform(),
