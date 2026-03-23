@@ -5,8 +5,8 @@ export class Tsu {
     
    }
     find(elem, frame = null) {
-        if (frame === true) {
-            return this.iframe.frame.contentDocument.getElementById(elem);
+        if (frame !== null) {
+            return frame.contentDocument.getElementById(elem);
         } else {
             return document.getElementById(elem);
         }
