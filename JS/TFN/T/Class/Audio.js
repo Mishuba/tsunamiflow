@@ -3,6 +3,7 @@ export class TsunamiFlowNation extends Flow {
 
 
     TfAudio = new Audio();
+    AudioSource = null;
     AudioElement = null;
 
     SpeechRecognitionAPI =
