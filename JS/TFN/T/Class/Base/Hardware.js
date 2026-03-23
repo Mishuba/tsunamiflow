@@ -85,7 +85,7 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
     }
 
     clearWatch(id) {
-        if (!TsunamiLocation) else {
+        if (!TsunamiLocation) {
             return;
         } else {
            navigator.geolocation.clearWatch(id);
@@ -103,6 +103,8 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
     cancel() {
         if (!this.VibrateSupported) {
      return;
+         } else {
         navigator.vibrate(0);
+         }
     }
 }
