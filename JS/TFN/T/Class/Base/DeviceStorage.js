@@ -2,9 +2,114 @@ export class Mi extends Na {
     namespace = "tf";
     cookieenabled = navigator.cookieEnabled;
     cookies = this.cookieenabled ? this.parsecookie() : {};
-this.SessionStorage = window.sessionStorage;
+SessionStorage = window.sessionStorage;
+LocalStorage = window.localStorage;
     constructor(options = {}) {
         super(options);
+    }
+
+    LocalStoragekey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setLocalStorage(name, value) {
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.LocalStorage.setItem(
+                this.LocalStoragekey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfLocalStorage set failed:", err);
+            return false;
+
+        }
+    }
+
+    getLocalStorage(name) {
+
+        const value = this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeLocalStorage(name) {
+
+        this.LocalStorage.removeItem(
+            this.LocalStoragekey(name)
+        );
+
+    }
+
+    LocalStoragehas(name) {
+
+        return this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        ) !== null;
+
+    }
+
+    LocalStoragekeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const k = this.LocalStorage.key(i);
+
+            if (k.startsWith(this.namespace + ":")) {
+                list.push(k.replace(this.namespace + ":", ""));
+            }
+
+        }
+
+        return list;
+    }
+
+    clearLocalStorage() {
+
+        const keys = this.LocalStoragekeys();
+
+        keys.forEach(k => {
+            this.removeLocalStorage(k);
+        });
+
+    }
+
+    LocalStoragesize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const key = this.LocalStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.LocalStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
     }
 
     Sessionkey(name) {
