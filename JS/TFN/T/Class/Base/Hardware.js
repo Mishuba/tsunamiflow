@@ -1,13 +1,17 @@
 export class na extend Tsu {
 this.uaData = navigator.userAgentData || null;
 this.LegacyUaData = navigator.userAgent || null;
-
+        this.BatterySupported = !!navigator.getBattery;
+        this.battery = null;
     TsunamiLocation = !!navigator.geolocation;
 
 constructor(options = {}) {
       super(options);
-      
-        
+      if (this.BatterySupported) {
+            navigator.getBattery().then(bat => this.battery = bat);
+        } else {
+            console.warn("Battery API not supported");
+        }
     }
 
     getBrands() {
