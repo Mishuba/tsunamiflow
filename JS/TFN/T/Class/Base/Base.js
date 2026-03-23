@@ -1,6 +1,7 @@
 export class Tsu {
     lang = "en-US";
     listeners = {};
+domListeners = new Map();
     constructor(options = {}) {
         if (options.lang) {
             this.lang = options.lang;
