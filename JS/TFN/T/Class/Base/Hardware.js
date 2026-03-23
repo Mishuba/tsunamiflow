@@ -1,11 +1,10 @@
-export class na extend Tsu {
-this.uaData = navigator.userAgentData || null;
-this.LegacyUaData = navigator.userAgent || null;
-        this.BatterySupported = !!navigator.getBattery;
-        this.battery = null;
-    TsunamiLocation = !!navigator.geolocation;
-VibrateSupported = !!navigator.vibrate;
-this
+export class Na extend Tsu {
+        uaData = navigator.userAgentData || null;
+        LegacyUaData = navigator.userAgent || null;
+        BatterySupported = !!navigator.getBattery;
+        battery = null;
+        TsunamiLocation = !!navigator.geolocation;
+        VibrateSupported = !!navigator.vibrate;
 constructor(options = {}) {
       super(options);
       if (this.BatterySupported) {
