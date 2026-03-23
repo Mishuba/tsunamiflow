@@ -1,10 +1,9 @@
 export class Tsu {
     lang = "en-US";
     listeners = {};
-    constructor() {
-        this.lang = lang;
-        this.listeners = {};
-    }
+    constructor(options = {}) {
+    
+   }
     find(elem, frame = null) {
         if (frame === true) {
             return this.iframe.frame.contentDocument.getElementById(elem);
