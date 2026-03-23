@@ -31,7 +31,7 @@ removeEventListener(event, callback) {
     emit(event, data) {
         (this.listeners[event] || []).forEach(fn => fn(data));
     }
-    on(id, handler, preventDefault = false, iframe = null) {
+    on(id, eventName, preventDefault = false, iframe = null) {
         let el = this.find(id, iframe);
 
         if (!el) return;
