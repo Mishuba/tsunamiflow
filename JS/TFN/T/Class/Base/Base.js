@@ -2,8 +2,11 @@ export class Tsu {
     lang = "en-US";
     listeners = {};
     constructor(options = {}) {
-    
-   }
+        if (options.lang) {
+            this.lang = options.lang;
+
+        }
+    }
     find(elem, frame = null) {
         if (frame !== null) {
             return frame.contentDocument.getElementById(elem);

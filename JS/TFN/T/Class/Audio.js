@@ -1,7 +1,6 @@
-export class TfSounds extends Tsu {
+export class TfSounds extends Na {
     // ===== DEFAULTS (Pattern B) =====
-    lang = "en-US";
-    listeners = {};
+
 
     TfAudio = new Audio();
     AudioElement = null;
@@ -36,7 +35,7 @@ export class TfSounds extends Tsu {
 
         // ===== OVERRIDES =====
         if (options.lang) {
-            this.lang = options.lang;
+
             this.NamiSpeechOptions.lang = options.lang;
         }
 
@@ -127,25 +126,7 @@ export class TfSounds extends Tsu {
         this.emit("worklet-ready", this.TfSoundsWorkletNode);
     }
 
-    log(msg) {
-        return super.log(msg);
-    }
 
-    find(elem, frame = null) {
-        return super.find(elem, frame);
-    }
-
-    check(event, fn) {
-        return super.check(event, fn);
-    }
-
-    emit(event, data) {
-        return super.emit(event, data);
-    }
-
-    on(id, handler, preventDefault = false, iframe = null) {
-        return super.on(id, handler, preventDefault, iframe);
-    }
     speak(text) {
         if (!this.TfSpeech) return;
 
