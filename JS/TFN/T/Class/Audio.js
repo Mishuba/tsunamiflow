@@ -1,4 +1,4 @@
-export class TfSounds extends Na {
+export class TsunamiFlowNation extends Flow {
     // ===== DEFAULTS (Pattern B) =====
 
 
