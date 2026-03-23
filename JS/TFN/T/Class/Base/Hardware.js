@@ -1,4 +1,4 @@
-export class Na extend Tsu {
+export class Na extends Tsu {
         uaData = navigator.userAgentData || null;
         LegacyUaData = navigator.userAgent || null;
         BatterySupported = !!navigator.getBattery;
@@ -16,7 +16,7 @@ constructor(options = {}) {
     }
 
     getBrands() {
-        if (!(!!this.uaData) {
+        if (!(!!this.uaData)) {
              return [];
         } else {
         return this.uaData.brands || [];
@@ -24,7 +24,7 @@ constructor(options = {}) {
     }
 
     getMobile() {
-        if (!(!!this.uaData) {
+        if (!(!!this.uaData)) {
              return null;
         } else {
               return this.uaData.mobile;
@@ -32,7 +32,7 @@ constructor(options = {}) {
     }
 
     getPlatform() {
-        if (!(!!this.uaData) {
+        if (!(!!this.uaData)) {
              return null;
         } else {
               return this.uaData.platform;
@@ -46,7 +46,7 @@ constructor(options = {}) {
         "platformVersion",
         "uaFullVersion"
     ]) {
-        if (!(!!this.uaData) {
+        if (!(!!this.uaData)) {
              return null;
         } else {
               try {
