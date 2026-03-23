@@ -19,9 +19,24 @@ export class Tsu {
         logBox.innerText += msg + "\n";
         logBox.scrollTop = logBox.scrollHeight;
     }
-    check(event, fn) {
+    AddEventListener(event, fn) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(fn);
+    }
+removeEventListener(event, callback) {
+        if (!this.listeners[event]) return;
+        this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
+    }
+
+    dispatchEvent(event, data = null) {
+        if (!this.listeners[event]) return;
+        this.listeners[event].forEach(fn => {
+            try {
+                fn(data);
+            } catch (err) {
+                console.error(`Error in ${event} listener:`, err);
+            }
+        });
     }
     emit(event, data) {
         (this.listeners[event] || []).forEach(fn => fn(data));
