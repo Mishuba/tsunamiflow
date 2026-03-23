@@ -33,6 +33,7 @@ export class TsunamiFlowNation extends Flow {
     };
 
     TfSoundsWorkletReady = false;
+    TfSoundsWorkletNode = null;
 
     constructor(options = {}) {
         super(options);
