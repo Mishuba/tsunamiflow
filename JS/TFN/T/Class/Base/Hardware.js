@@ -12,6 +12,7 @@ constructor(options = {}) {
         } else {
             console.warn("Battery API not supported");
         }
+this.VibrateSupported = !!navigator.vibrate;
     }
 
     getBrands() {
@@ -89,5 +90,19 @@ return navigator.geolocation.getCurrentPosition(success, error, options);
         } else {
            navigator.geolocation.clearWatch(id);
         }
+    }
+
+    vibrate(pattern = 200) {
+        if (!this.VibrateSupported) {
+             return;
+        } else {
+             return navigator.vibrate(pattern);
+        }
+    }
+
+    cancel() {
+        if (!this.VibrateSupported) {
+     return;
+        navigator.vibrate(0);
     }
 }
