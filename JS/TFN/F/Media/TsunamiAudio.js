@@ -1,6 +1,6 @@
-export TsunamiFlowRadio extends TsunamiFlowNation {
+export class TsunamiFlowRadio extends TsunamiFlowNation {
 
-      constructor(options = {}) {
+    constructor(options = {}) {
 
-      }
+    }
 }
