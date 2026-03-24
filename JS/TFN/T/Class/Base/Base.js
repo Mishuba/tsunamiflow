@@ -154,6 +154,10 @@ stopHeartbeat() {
         this.connectedws = true;
         this.emit("ws_open");
         this.startHeartbeat();
+
+        if (this.wsRole === "streamer") {
+        this.startwsStream();
+    }
         console.log("🟢 WebSocket connected");
     };
 
