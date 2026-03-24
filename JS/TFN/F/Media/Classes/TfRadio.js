@@ -1,7 +1,13 @@
 export class TsunamiFlowRadio extends TsunamiFlowNation {
 
   constructor(options = {}) {
-
+    super(options);
+    this.TfAudio.crossOrigin = "anonymous";
+    this.TfAudio.preload = "auto";
+    this.TfAudio.controls = false;
+    this.TfAudio.loop = false;
+    this.TfAudio.muted = false;
+    //this.TfAudio.volume = 1;
   }
 
   //element
@@ -32,41 +38,17 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     this.TfAudio.load();
   }
 
-  playaudio() {
-    if (this.TfAudio.paused) {
-      this.TfAudio.play().catch(async (error) => {
-        if (error.name === "NotAllowedError") {
-          console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-        } else {
-          console.error("Error playing audio:", error);
-        }
-      });
-    } else if (this.TfAudio.ended) {
-      if (this.TfAudio.currentTime === 0) {
-        this.TfAudio.play().catch(async (error) => {
-          if (error.name === "NotAllowedError") {
-            console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-          } else {
-            console.error("Error playing audio:", error);
-          }
-        });
-      } else {
-        this.TfAudio.play().catch(async (error) => {
-          if (error.name === "NotAllowedError") {
-            console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-          } else {
-            console.error("Error playing audio:", error);
-          }
-        });
+  async playaudio() {
+    try {
+      if (this.TfAudio.paused || this.TfAudio.ended || this.TfAudio.currentTime === 0) {
+        await this.TfAudio.play()
       }
-    } else {
-      this.TfAudio.play().catch(async (error) => {
-        if (error.name === "NotAllowedError") {
-          console.log("Autoplay is blocked. Please interact with the page to start the radio.");
-        } else {
-          console.error("Error playing audio:", error);
-        }
-      });
+    } catch (error) {
+      if (error.name === "NotAllowedError") {
+        console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+      } else {
+        console.error("Error playing audio:", error);
+      }
     }
   }
 
@@ -75,7 +57,7 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
 
   stopaudio() {
-    if (!this.TfAudio) {
+    if (this.TfAudio) {
       this.TfAudio.pause();
       this.TfAudio.currentTime = 0;
     }
@@ -148,14 +130,15 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   endedAudio() {
     console.log("The audio should have ended");
     this.TfAudio.src = "";
-    this.worker.postMessage({ type: "radio", system: "file" });
+    this.postworkerMessage({ type: "radio", system: "file" });
   }
   waitingAudio() {
     this.MusicState();
   }
   playingAudio() {
     this.MusicState();
-    this.TfSoundsContextBufferLength = this.TfSoundsAnalyser.frequencyBinCount;
+    this.TfSoundAnalyser = this.TfSoundsContext.createAnalyser();
+    this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
     this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
   }
   stalledAudio(stalled) {
@@ -224,18 +207,24 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
       this.handleSocketMessage(data);
     };
   }
-  HandleArrayBuffer(buffer) {
+  async HandleArrayBuffer(buffer) {
+    //this.initAudioContext();
+
     if (this.TfSoundsContext.state === "suspended") {
       this.TfSoundsContext.resume();
       try {
-        this.TfSoundsContextBuffer = this.TfSoundsContext.decodeAudioData(buffer);
+        //this.TfSoundsContextBuffer =
+        const audioBuffer = await this.TfSoundsContext.decodeAudioData(buffer);
 
-        this.TfSoundsContextRadioChannel = this.TfSoundsContextBuffer.getChannelData(0);
-        this.TfSoundsContextFloat32Array = new Float32Array(this.TfSoundsContextRadioChannel);
+        //this.TfSoundsContextRadioChannel = this.TfSoundsContextBuffer
+        const RadioChannel = audioBuffer.getChannelData(0);
+        //this.TfSoundsContextFloat32Array
+        const RadioChannel2 = new Float32Array(RadioChannel);
 
-        this.TfSoundsContextRadioChannel2 = this.TfSoundsContextBuffer.getChannelData(1);
+        return RadioChannel2;
       } catch (error) {
         console.error("Error decoding audio data: ", error);
+        return null;
       } finally {
         return this.TfRcCopy1;
       }
@@ -246,17 +235,19 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
       return;
     } else {
       this.WeLive = true;
-      this.TfAudio.src = "https://world.tsunamiflow.club/hls/anything.m3u8";
+      this.connectaudio();
+      this.loadaudio("https://world.tsunamiflow.club/hls/anything.m3u8");
+      this.playaudio();
       //start audio with method
     }
   }
   StopLiveAudio() {
-    if (!this.WeLive) {
+    if (this.WeLive) {
       this.WeLive = false;
       this.TfAudio.pause();
       this.TfAudio.src = "";
     } else {
-
+      return;
     }
   }
 }
