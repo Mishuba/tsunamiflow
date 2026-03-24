@@ -1,5 +1,5 @@
 export class Flow extends Tsunami {
-  canvas = canvas;
+  canvas = null;
   contextTypecanvas = "2d";
   canvasctx = null;
   iscanvasReady = false;
