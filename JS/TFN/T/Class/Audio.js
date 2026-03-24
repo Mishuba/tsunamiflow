@@ -247,7 +247,7 @@ export class TsunamiFlowNation extends Flow {
             }
         } else {
             console.log("The Audio context state must be closed");
-            if (element.pause) {
+            if (element.paused) {
                 //this.StopVisualizator();
             }
         }
@@ -261,7 +261,7 @@ this.TfSoundsContextDestination =
             this.TfSoundsContext.createMediaStreamDestination();
 
         this.emit("ready", this.TfSoundsContext);
-    TfSoundsOutput = this.TfSoundsContext.destination;
+    this.TfSoundsOutput = this.TfSoundsContext.destination;
     }
 
     if (this.TfSoundsContext.state === "suspended") {
@@ -269,6 +269,7 @@ this.TfSoundsContextDestination =
     }
 }
     addAudioContextSource(element, id = null) {
+this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
         const source = this.TfSoundsContext.createMediaElementSource(element);
         const gain = this.TfSoundsContext.createGain();
@@ -285,6 +286,7 @@ this.TfSoundsContextDestination =
        Add MediaStreamSource
     -----------------------------*/
     addAudioStreamSource(stream, id = null) {
+this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
         const source = this.TfSoundsContext.createMediaStreamSource(stream);
         const gain = this.TfSoundsContext.createGain();
@@ -349,6 +351,7 @@ this.TfSoundsContextDestination =
 
     // ===== WORKLET (ASYNC — REQUIRED) =====
     async initWorklet(url, options = {}) {
+this.initAudioContext();
         if (!this.TfSoundsContext.audioWorklet) {
             throw new Error("AudioWorklet not supported.");
         }
