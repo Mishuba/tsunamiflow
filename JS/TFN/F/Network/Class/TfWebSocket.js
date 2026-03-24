@@ -1,92 +1,109 @@
 export class TfWebsocket {
-  constructor(url = null) {
-    this.socketLink = url;
-    this.tfSocket = null;
-    this.listeners = {};
-  }
-  emit(event, data) {
-    const eventListeners = this.listeners[event];
-    
-    if (eventListeners === undefined) {
-      return;
-    }
-    
-    for (let i = 0; i < eventListeners.length; i++) {
-      const listener = eventListeners[i];
-      listener(data);
-    }
-  }
-  
-  connect() {
-    if (this.tfSocket) {
-      console.warn("WebSocket already exists");
-      return;
-    } else {
-      this.tfSocket = new WebSocket(this.socketLink);
-      this.tfSocket.binaryType = "arraybuffer";
-      this.tfSocket.onopen = () => {
-        console.log("web socket is now connected");
-        this.emit("open");
-      };
-    
-      this.tfSocket.onmessage = (event) => {
-        console.log("just received a message from websocket.");
-        this.emit("message", event.data);
-      };
-    
-      this.tfSocket.onclose = (event) => {
-        console.log("websocket has closed");
-        this.emit("close", event);
-      };
-    
-      this.tfSocket.onerror = (error) => {
-         console.error("websocket has an error that needs to be fixed");
-        this.emit("error", error);
-      };
-    }
-  }
-  
-  send(data) {
-    if (this.tfSocket !== null) {
-      
-      if (this.tfSocket.readyState === WebSocket.OPEN) {
-        
-        this.tfSocket.send(data);
-      } else {
-        console.warn("WebSocket exists but is not open");
-      }
-    } else {
-      console.warn("WebSocket has not been created yet");
-    }
-  }
-  
-  on(event, fn) {
-    if (this.listeners[event] === undefined) {
-      this.listeners[event] = [];
-    }
-    this.listeners[event].push(fn);
-  }
+    constructor(url, options = {}) {
+        this.baseUrl = url;
+        this.role = options.role || "viewer";
+        this.key = options.key || null;
 
-isOpen() {
-    return (
-        this.tfSocket &&
-        this.tfSocket.readyState === WebSocket.OPEN
-    );
-}
+        this.ws = null;
+        this.connected = false;
 
-sendBinary(data) {
-    if (!this.isOpen()) return;
-    if (data instanceof Blob) {
-        data.arrayBuffer().then(buf => this.tfSocket.send(buf));
-    } else {
-        this.tfSocket.send(data);
+        this.listeners = {};
+        this.reconnect = options.reconnect ?? true;
+        this.reconnectDelay = options.reconnectDelay || 2000;
     }
-}
-  
-  close() {
-    if (this.tfSocket !== null) {
-      this.tfSocket.close();
-      this.tfSocket = null;
+
+    /* ========================= */
+    /* ===== CONNECTION ======== */
+    /* ========================= */
+
+    connect() {
+        if (!this.key) {
+            console.warn("WebSocket requires a stream key");
+        }
+
+        const url = `${this.baseUrl}?role=${this.role}&key=${this.key}`;
+
+        this.ws = new WebSocket(url);
+        this.ws.binaryType = "arraybuffer";
+
+        this.ws.onopen = () => {
+            this.connected = true;
+            this.emit("open");
+            console.log("🟢 WebSocket connected");
+        };
+
+        this.ws.onmessage = (event) => {
+            // Server mostly doesn't send messages yet, but handle anyway
+            if (typeof event.data === "string") {
+                try {
+                    const data = JSON.parse(event.data);
+                    this.emit("message", data);
+                } catch {
+                    this.emit("message_raw", event.data);
+                }
+            } else {
+                this.emit("binary", event.data);
+            }
+        };
+
+        this.ws.onclose = () => {
+            this.connected = false;
+            this.emit("close");
+            console.log("🔴 WebSocket disconnected");
+
+            if (this.reconnect) {
+                setTimeout(() => this.connect(), this.reconnectDelay);
+            }
+        };
+
+        this.ws.onerror = (err) => {
+            this.emit("error", err);
+            console.error("💥 WebSocket error:", err);
+        };
     }
-  }
+
+    disconnect() {
+        this.reconnect = false;
+        if (this.ws) this.ws.close();
+    }
+
+    /* ========================= */
+    /* ===== CONTROL ========= */
+    /* ========================= */
+
+    startStream() {
+        this.sendJSON({ type: "start_stream" });
+    }
+
+    stopStream() {
+        this.sendJSON({ type: "stop_stream" });
+    }
+
+    /* ========================= */
+    /* ===== DATA SEND ======== */
+    /* ========================= */
+
+    sendJSON(obj) {
+        if (!this.connected) return;
+        this.ws.send(JSON.stringify(obj));
+    }
+
+    sendBinary(data) {
+        if (!this.connected) return;
+        this.ws.send(data); // ArrayBuffer / Blob
+    }
+
+    /* ========================= */
+    /* ===== EVENTS =========== */
+    /* ========================= */
+
+    on(event, callback) {
+        if (!this.listeners[event]) this.listeners[event] = [];
+        this.listeners[event].push(callback);
+    }
+
+    emit(event, data = null) {
+        if (!this.listeners[event]) return;
+        this.listeners[event].forEach(fn => fn(data));
+    }
 }
