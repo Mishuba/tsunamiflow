@@ -3,7 +3,7 @@ export class TsunamiFlowNation extends Flow {
     SongList = null;
     randomMusicDefault = null;
     TfAudio = new Audio();
-    AudioSource = null;
+    AudioSource = {};
     AudioElement = null;
     AudioReady = null;
 
@@ -17,10 +17,10 @@ export class TsunamiFlowNation extends Flow {
         volume: 1
     };
     //context
-    TfSoundsContext =
-        new (window.AudioContext || window.webkitAudioContext)();
+    TfSoundsContext = null;
+       // new (window.AudioContext || window.webkitAudioContext)();
     TfSoundsidCounter = 0;
-    TfSoundsGain = null;
+    TfSoundsGain = {};
     TfSoundAnalyzer = null;
     TfSoundAnalyzerOptions = {
         fftSize: 2048,
@@ -47,7 +47,7 @@ export class TsunamiFlowNation extends Flow {
     TfSoundsOscillator = null;
     TfSoundsWaveShaperNodeOptions = {};
     TfSoundsWaveShaper = null;
-    TfSoundsOutput = this.TfSoundsContext.destination;
+        
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
@@ -117,12 +117,6 @@ export class TsunamiFlowNation extends Flow {
             this.NamiSpeech = new SpeechSynthesisUtterance();
             Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
         }
-
-        // ===== STREAM OUTPUT =====
-        this.TfSoundsContextDestination =
-            this.TfSoundsContext.createMediaStreamDestination();
-
-        this.emit("ready", this.TfSoundsContext);
     }
     AudioNetworkState(element) {
         if (element.readyState === 0) {
@@ -230,28 +224,19 @@ export class TsunamiFlowNation extends Flow {
         }
     }
     AudioFile(event) {
-        this.randomMusicDefault = Math.floor(Math.random() * (DefaultPlaylist.length - 1));
-        if (event.data.file == "undefined") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br />: ${this.SongList}`);
-        } else if (event.data.file == undefined) {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
-        } else if (event.data.file == "") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
-        } else if (event.data.file == "null") {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
-        } else if (event.data.file == null) {
-            this.SongList = DefaultPlaylist[this.randomMusicDefault];
-            console.log(`This should be a song from the default playlist in javascript <br /> ${this.SongList}`);
-        } else {
-            this.SongList = event.data.file;
-            console.log(`This should be a song from php ${this.SongList} <br /> typeof: ${typeof this.SongList}`);
-        }
-        return this.SongList;
+    const playlist = this.TfSoundsDefaultPlaylist || [];
+
+    if (!event?.data?.file) {
+        const i = Math.floor(Math.random() * playlist.length);
+        this.SongList = playlist[i];
+        console.log("Default playlist:", this.SongList);
+    } else {
+        this.SongList = event.data.file;
+        console.log("From backend:", this.SongList);
     }
+
+    return this.SongList;
+}
     AudioState(element) {
         if (this.TfSoundsContext.state === "suspended") {
             this.TfSoundsContext.resume();
@@ -262,15 +247,38 @@ export class TsunamiFlowNation extends Flow {
             }
         } else {
             console.log("The Audio context state must be closed");
-            if (element.pause) {
+            if (element.paused) {
                 //this.StopVisualizator();
             }
         }
     }
     /// context
+
+initAudioContext() {
+    if (!this.TfSoundsContext) {
+        this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+this.TfSoundsContextDestination =
+            this.TfSoundsContext.createMediaStreamDestination();
+
+        this.emit("ready", this.TfSoundsContext);
+    this.TfSoundsOutput = this.TfSoundsContext.destination;
+    }
+
+    if (this.TfSoundsContext.state === "suspended") {
+        return this.TfSoundsContext.resume();
+    }
+}
     addAudioContextSource(element, id = null) {
+this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
-        const source = this.TfSoundsContext.createMediaElementSource(element);
+        let source;
+
+if (this.elementSourceMap.has(element)) {
+    source = this.elementSourceMap.get(element);
+} else {
+    source = this.TfSoundsContext.createMediaElementSource(element);
+    this.elementSourceMap.set(element, source);
+}
         const gain = this.TfSoundsContext.createGain();
         source.connect(gain).connect(this.TfSoundsOutput);
 
@@ -285,8 +293,16 @@ export class TsunamiFlowNation extends Flow {
        Add MediaStreamSource
     -----------------------------*/
     addAudioStreamSource(stream, id = null) {
+this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
-        const source = this.TfSoundsContext.createMediaStreamSource(stream);
+        let source;
+
+if (this.elementSourceMap.has(element)) {
+    source = this.elementSourceMap.get(stream);
+} else {
+    source = this.TfSoundsContext.createMediaElementSource(stream);
+    this.elementSourceMap.set(stream, source);
+}
         const gain = this.TfSoundsContext.createGain();
         source.connect(gain).connect(this.TfSoundsOutput);
 
@@ -349,6 +365,7 @@ export class TsunamiFlowNation extends Flow {
 
     // ===== WORKLET (ASYNC — REQUIRED) =====
     async initWorklet(url, options = {}) {
+this.initAudioContext();
         if (!this.TfSoundsContext.audioWorklet) {
             throw new Error("AudioWorklet not supported.");
         }
