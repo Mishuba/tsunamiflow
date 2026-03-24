@@ -271,7 +271,14 @@ this.TfSoundsContextDestination =
     addAudioContextSource(element, id = null) {
 this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
-        const source = this.TfSoundsContext.createMediaElementSource(element);
+        let source;
+
+if (this.elementSourceMap.has(element)) {
+    source = this.elementSourceMap.get(element);
+} else {
+    source = this.TfSoundsContext.createMediaElementSource(element);
+    this.elementSourceMap.set(element, source);
+}
         const gain = this.TfSoundsContext.createGain();
         source.connect(gain).connect(this.TfSoundsOutput);
 
@@ -288,7 +295,14 @@ this.initAudioContext();
     addAudioStreamSource(stream, id = null) {
 this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
-        const source = this.TfSoundsContext.createMediaStreamSource(stream);
+        let source;
+
+if (this.elementSourceMap.has(element)) {
+    source = this.elementSourceMap.get(stream);
+} else {
+    source = this.TfSoundsContext.createMediaElementSource(stream);
+    this.elementSourceMap.set(stream, source);
+}
         const gain = this.TfSoundsContext.createGain();
         source.connect(gain).connect(this.TfSoundsOutput);
 
