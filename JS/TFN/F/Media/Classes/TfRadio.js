@@ -222,24 +222,14 @@ connectaudio() {
   async HandleArrayBuffer(buffer) {
     this.initAudioContext();
 
-    if (this.TfSoundsContext.state === "suspended") {
-      this.TfSoundsContext.resume();
-      try {
-        //this.TfSoundsContextBuffer =
+    try {
         const audioBuffer = await this.TfSoundsContext.decodeAudioData(buffer);
-
-        //this.TfSoundsContextRadioChannel = this.TfSoundsContextBuffer
-        const RadioChannel = audioBuffer.getChannelData(0);
-        //this.TfSoundsContextFloat32Array
-        const RadioChannel2 = new Float32Array(RadioChannel);
-
-        return RadioChannel2;
-      } catch (error) {
-        console.error("Error decoding audio data: ", error);
+        return new Float32Array(audioBuffer.getChannelData(0));
+    } catch (error) {
+        console.error("Error decoding audio data:", error);
         return null;
-      } 
     }
-  }
+}
   StartLiveAudio() {
     if (this.WeLive) {
       return;
