@@ -214,6 +214,13 @@ stopHeartbeat() {
 
 sendBinaryws(data) {
     if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+
+    // Prevent buffer overload (1MB threshold)
+    if (this.ws.bufferedAmount > 1_000_000) {
+        console.warn("Dropping frame (buffer overflow)");
+        return;
+    }
+
     this.ws.send(data);
 }
 }
