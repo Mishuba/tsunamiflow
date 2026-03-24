@@ -40,9 +40,18 @@ export class Tsu {
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
 startHeartbeat() {
+    if (this.heartbeat) return; // prevent duplicates
+
     this.heartbeat = setInterval(() => {
         this.sendwsJSON({ type: "ping" });
     }, 5000);
+}
+
+stopHeartbeat() {
+    if (this.heartbeat) {
+        clearInterval(this.heartbeat);
+        this.heartbeat = null;
+    }
 }
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
@@ -163,7 +172,7 @@ startHeartbeat() {
     this.ws.onclose = () => {
         this.connectedws = false;
         this.emit("ws_close");
-
+        this.stopHeartbeat()
         console.log("🔴 WebSocket disconnected");
 
         if (this.reconnectws) {
@@ -182,6 +191,7 @@ startHeartbeat() {
     if (this.ws) {
         this.ws.close();
         this.ws = null;
+        this.stopHeartbeat()
     }
 }
 
