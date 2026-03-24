@@ -27,12 +27,14 @@ elementSourceMap = new WeakMap();
 }
 
   setaudioVolume(value = 1) {
-    if (this.TfSoundsGain) {
-      this.TfSoundsGain.gain.value = value;
+    const gainNode = this.TfSoundsGain["radio"];
+
+    if (gainNode) {
+        gainNode.gain.value = value;
     } else {
-      this.TfAudio.volume = value;
+        this.TfAudio.volume = value;
     }
-  }
+}
 
   /* -----------------------------
      Playback Controls
