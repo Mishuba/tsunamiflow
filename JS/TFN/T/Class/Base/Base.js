@@ -3,6 +3,7 @@ export class Tsu {
     listeners = {};
     domListeners = new Map();
     WorldSocket = new TfWebsocket("wss://world.tsunamiflow.club/ws"); 
+    ws = null;
     wsRole = viewer;
     baseUrl = wss://world.tsunamiflow.club/ws;
     wsKey = options.key || null;
@@ -117,5 +118,10 @@ export class Tsu {
         el.removeEventListener("submit", runHandler);
 
         this.domListeners.delete(id);
+    }
+
+    sendBinaryws(data) {
+        if (!this.connectedws) return;
+        this.ws.send(data); // ArrayBuffer / Blob
     }
 }
