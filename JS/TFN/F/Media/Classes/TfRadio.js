@@ -232,9 +232,7 @@ elementSourceMap = new WeakMap();
       } catch (error) {
         console.error("Error decoding audio data: ", error);
         return null;
-      } finally {
-        return this.TfRcCopy1;
-      }
+      } 
     }
   }
   StartLiveAudio() {
