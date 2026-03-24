@@ -17,19 +17,12 @@ connectaudio() {
     if (!this.elementSourceMap.has(this.TfAudio)) {
         const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
         const gain = this.TfSoundsContext.createGain();
-        const analyser = this.TfSoundsContext.createAnalyser();
 
-        Object.assign(analyser, this.TfSoundAnalyzerOptions);
-
-        source
-            .connect(gain)
-            .connect(analyser)
-            .connect(this.TfSoundsOutput);
+        source.connect(gain).connect(this.masterGain);
 
         this.elementSourceMap.set(this.TfAudio, source);
         this.AudioSource["radio"] = source;
         this.TfSoundsGain["radio"] = gain;
-        this.TfSoundAnalyser = analyser; // 🔥 store once
     }
 }
   setaudioVolume(value = 1) {
