@@ -258,10 +258,11 @@ initAudioContext() {
     if (!this.TfSoundsContext) {
         this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        this.TfSoundsOutput = this.TfSoundsContext.destination;
+        // 🔥 MASTER BUS (THIS WAS MISSING)
+        this.masterGain = this.TfSoundsContext.createGain();
+        this.masterGain.gain.value = 1;
 
-        this.TfSoundsContextDestination =
-            this.TfSoundsContext.createMediaStreamDestination();
+        this.masterGain.connect(this.TfSoundsContext.destination);
 
         this.emit("ready", this.TfSoundsContext);
     }
