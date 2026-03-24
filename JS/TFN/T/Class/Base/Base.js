@@ -2,6 +2,7 @@ export class Tsu {
     lang = "en-US";
     listeners = {};
     domListeners = new Map();
+  let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");  
     constructor(options = {}) {
         if (options.lang) {
             this.lang = options.lang;
