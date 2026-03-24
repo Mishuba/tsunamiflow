@@ -33,7 +33,41 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
 
   playaudio() {
-    return this.TfAudio.play();
+    if (this.TfAudio.paused) {
+      this.TfAudio.play().catch(async (error) => {
+        if (error.name === "NotAllowedError") {
+          console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+        } else {
+          console.error("Error playing audio:", error);
+        }
+      });
+    } else if (this.TfAudio.ended) {
+      if (this.TfAudio.currentTime === 0) {
+        this.TfAudio.play().catch(async (error) => {
+          if (error.name === "NotAllowedError") {
+            console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+          } else {
+            console.error("Error playing audio:", error);
+          }
+        });
+      } else {
+        this.TfAudio.play().catch(async (error) => {
+          if (error.name === "NotAllowedError") {
+            console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+          } else {
+            console.error("Error playing audio:", error);
+          }
+        });
+      }
+    } else {
+      this.TfAudio.play().catch(async (error) => {
+        if (error.name === "NotAllowedError") {
+          console.log("Autoplay is blocked. Please interact with the page to start the radio.");
+        } else {
+          console.error("Error playing audio:", error);
+        }
+      });
+    }
   }
 
   pauseaudio() {
@@ -41,10 +75,20 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
 
   stopaudio() {
-    this.TfAudio.pause();
+    if (!this.TfAudio) {
+      this.TfAudio.pause();
+      this.TfAudio.currentTime = 0;
+    }
     this.TfAudio.currentTime = 0;
   }
-
+  previousaudio(music) {
+    this.TfAudio.src = music;
+    this.TfAudio.play();
+  }
+  restartSong() {
+    this.TfAudio.currentTime = 0;
+    this.TfAudio.play();
+  }
   seekaudio(time) {
     this.TfAudio.currentTime = time;
   }
