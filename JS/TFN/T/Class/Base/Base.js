@@ -120,6 +120,69 @@ export class Tsu {
         this.domListeners.delete(id);
     }
 
+    connectws() {
+        if (!this.wsKey) {
+            console.warn("WebSocket requires a stream key");
+        }
+
+        const url = `${this.baseUrl}?role=${this.wsRole}&key=${this.wsKey}`;
+
+        this.ws = new WebSocket(url);
+        this.ws.binaryType = "arraybuffer";
+
+        this.ws.onopen = () => {
+            this.connectedws = true;
+            this.emit("open");
+            console.log("🟢 WebSocket connected");
+        };
+
+        this.ws.onmessage = (event) => {
+            // Server mostly doesn't send messages yet, but handle anyway
+            if (typeof event.data === "string") {
+                try {
+                    const data = JSON.parse(event.data);
+                    this.emit("message", data);
+                } catch {
+                    this.emit("message_raw", event.data);
+                }
+            } else {
+                this.emit("binary", event.data);
+            }
+        };
+
+        this.ws.onclose = () => {
+            this.connectedws = false;
+            this.emit("close");
+            console.log("🔴 WebSocket disconnected");
+
+            if (this.reconnectws) {
+                setTimeout(() => this.connectws(), this.wsreconnectDelay);
+            }
+        };
+
+        this.ws.onerror = (err) => {
+            this.emit("error", err);
+            console.error("💥 WebSocket error:", err);
+        };
+    }
+
+    disconnectws() {
+        this.reconnectws = false;
+        if (this.ws) this.ws.close();
+    }
+
+    /* ========================= */
+    /* ===== CONTROL ========= */
+    /* ========================= */
+
+    startwsStream() {
+        this.sendwsJSON({ type: "start_stream" });
+    }
+
+    stopwsStream() {
+        this.sendwsJSON({ type: "stop_stream" });
+    }
+
     sendBinaryws(data) {
         if (!this.connectedws) return;
         this.ws.send(data); // ArrayBuffer / Blob
