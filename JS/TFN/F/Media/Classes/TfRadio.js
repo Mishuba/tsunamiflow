@@ -231,14 +231,32 @@ connectaudio() {
     const url = "https://world.tsunamiflow.club/hls/anything.m3u8";
 
     if (window.Hls && Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(url);
-        hls.attachMedia(this.TfAudio);
+        if (this.hls) {
+            this.hls.destroy();
+        }
+
+        this.hls = new Hls();
+        this.hls.loadSource(url);
+        this.hls.attachMedia(this.TfAudio);
     } else {
         this.TfAudio.src = url;
     }
 
     this.playaudio();
+}
+
+stopLiveAudio() {
+    if (!this.WeLive) return;
+
+    this.WeLive = false;
+
+    if (this.hls) {
+        this.hls.destroy();
+        this.hls = null;
+    }
+
+    this.TfAudio.pause();
+    this.TfAudio.src = "";
 }
   stopLiveAudio() {
     if (this.WeLive) {
