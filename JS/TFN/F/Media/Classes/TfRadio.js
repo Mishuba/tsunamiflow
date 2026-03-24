@@ -106,8 +106,20 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
 
   loadstartAudio() {
-    let RadioLoadStartTime = Date.now();
-    console.log("Load start time recorded:", RadioLoadStartTime);
+    this.tfRadioLoadStartTime = Date.now();
+    console.log("Load start time recorded:", this.tfRadioLoadStartTime);
+    if (this.canvas !== null) {
+      if (!this.canvasctx) {
+        this.canvasctx = this.canvas.getContext("2d");
+      } else {
+
+      }
+      return this.canvasctx;
+    } else {
+      this.canvas = document.createElement("canvas");
+      this.canvasctx = this.canvas.getContext("2d");
+      return this.canvasctx;
+    }
   }
   loadedmetadataAudio() {
     //create html data
@@ -122,6 +134,7 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
   canplaythroughAudio() {
     this.MusicState();
+
     //this.startMusic();
   }
   playAudio() {
@@ -142,15 +155,8 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   }
   playingAudio() {
     this.MusicState();
-    this.TsunamiRadioBufferLength = this.TsunamiAnalyser.frequencyBinCount;
-    this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);
-    if (this.canvas !== null) {
-      this.canvasctx = this.canvas.getContext("2d");
-      return this.canvasctx;
-    } else {
-      this.canvasctx = this.canvas.getContext("2d");
-      return this.canvasctx;
-    }
+    this.TfSoundsContextBufferLength = this.TfSoundsAnalyser.frequencyBinCount;
+    this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
@@ -159,22 +165,18 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     console.log("The audio is suspended" + suspend);
   }
   FormatAudioTime(second) {
-    let minutes = Math.floor(second / 60);
-    let seconds = second % 60;
-    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    this.AudioMinutes = Math.floor(second / 60);
+    this.AudioSeconds = second % 60;
+    return `${this.AudioMinutes}:${this.AudioSeconds.toString().padStart(2, "0")}`;
   }
   timeupdateAudio() {
-    this.Timing = Math.floor(this.TfAudio.currentTime);
-    this.RadioProcessBar = (this.TfAudio.currentTime / this.TfAudio.duration) * 100;
-    this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
+    this.AudioTiming = Math.floor(this.TfAudio.currentTime);
+    this.AudioProcessBar = (this.TfAudio.currentTime / this.TfAudio.duration) * 100;
+    this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.TfAudio.duration))}`;
   }
   volumechangeAudio() {
     console.log("The volume has changed");
   }
-
-  /* -----------------------------
-     State
-  ------------------------------*/
 
   getCurrentaudioTime() {
     return this.TfAudio.currentTime;
@@ -188,4 +190,73 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     return !this.TfAudio.paused;
   }
   //element ends
+  handleSocketMessage(data) {
+    if (data.type === "live_stream") {
+      /*
+      if (data.live) {
+        this.StartLiveStream("wss://world.tsunamiflow.club/websocket");
+      } else {
+        this.stopLiveStream();
+      }
+      */
+    } else if (data.type === "audio_stream") {
+      // Handle audio stream data
+      if (data.live) {
+        this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+      } else {
+        this.stopLiveAudio();
+      }
+    } else if (data.type === "metadata") {
+      // Handle metadata data
+    } else if (data.type === "audio_buffer") {
+      // Handle audio buffer data
+    } else if (data.type === "visualization_data") {
+      // Handle visualization data
+    } else if (data.type === "error") {
+      // Handle error data
+    } else {
+      console.warn("Unknown message type:", data.type);
+    }
+  }
+  attachSocketListeners() {
+    this.socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      this.handleSocketMessage(data);
+    };
+  }
+  HandleArrayBuffer(buffer) {
+    if (this.TfSoundsContext.state === "suspended") {
+      this.TfSoundsContext.resume();
+      try {
+        this.TfSoundsContextBuffer = this.TfSoundsContext.decodeAudioData(buffer);
+
+        this.TfSoundsContextRadioChannel = this.TfSoundsContextBuffer.getChannelData(0);
+        this.TfSoundsContextFloat32Array = new Float32Array(this.TfSoundsContextRadioChannel);
+
+        this.TfSoundsContextRadioChannel2 = this.TfSoundsContextBuffer.getChannelData(1);
+      } catch (error) {
+        console.error("Error decoding audio data: ", error);
+      } finally {
+        return this.TfRcCopy1;
+      }
+    }
+  }
+  StartLiveAudio() {
+    if (this.WeLive) {
+      return;
+    } else {
+      this.WeLive = true;
+      this.TfAudio.src = "https://world.tsunamiflow.club/hls/anything.m3u8";
+      //start audio with method
+    }
+  }
+  StopLiveAudio() {
+    if (!this.WeLive) {
+      this.WeLive = false;
+      this.TfAudio.pause();
+      this.TfAudio.src = "";
+    } else {
+
+    }
+  }
 }
