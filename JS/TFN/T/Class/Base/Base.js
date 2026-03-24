@@ -12,12 +12,10 @@ export class Tsu {
     reconnectws = true;
     wsreconnectDelay = 2000; 
     constructor(options = {}) {
-        if (options.lang) {
-            this.lang = options.lang;
-            if (options.role) this.wsRole = options.role;
+        if (options.lang) this.lang = options.lang;
+        if (options.role) this.wsRole = options.role;
         if (options.key) this.wsKey = options.key;
         if (options.baseUrl) this.baseUrl = options.baseUrl;
-        }
     }
     find(elem, frame = null) {
         if (frame !== null) {
