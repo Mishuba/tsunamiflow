@@ -336,15 +336,23 @@ if (this.elementSourceMap.has(stream)) {
         }
     }
     finishAudioContext() {
-        if (this.TfSoundsContext) {
-            this.TfSoundsContext.close();
-            this.TfSoundsContext = null;
-            this.AudioSource = {};
-            this.TfSoundsGain = {};
-            this.TfSoundsOutput = null;
-            this.emit("closed");
-        }
-    }
+    if (!this.TfSoundsContext) return;
+
+    Object.values(this.AudioSource).forEach(src => src.disconnect());
+    Object.values(this.TfSoundsGain).forEach(g => g.disconnect());
+
+    if (this.masterGain) this.masterGain.disconnect();
+
+    this.TfSoundsContext.close();
+
+    this.TfSoundsContext = null;
+    this.AudioSource = {};
+    this.TfSoundsGain = {};
+    this.elementSourceMap = new WeakMap();
+    this.masterGain = null;
+
+    this.emit("closed");
+}
     speak(text) {
         if (!this.TfSpeech) return;
 
