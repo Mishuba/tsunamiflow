@@ -242,9 +242,30 @@ connectaudio() {
             this.hls.destroy();
         }
 
-        this.hls = new Hls();
-        this.hls.loadSource(url);
-        this.hls.attachMedia(this.TfAudio);
+  this.hls = new Hls();
+
+this.hls.on(Hls.Events.ERROR, (event, data) => {
+    console.error("HLS error:", data);
+
+    if (data.fatal) {
+        switch (data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+                this.hls.startLoad();
+                break;
+
+            case Hls.ErrorTypes.MEDIA_ERROR:
+                this.hls.recoverMediaError();
+                break;
+
+            default:
+                this.stopLiveAudio();
+                break;
+        }
+    }
+});
+
+this.hls.loadSource(url);
+this.hls.attachMedia(this.TfAudio);
     } else {
         this.TfAudio.src = url;
     }
@@ -258,9 +279,10 @@ stopLiveAudio() {
     this.WeLive = false;
 
     if (this.hls) {
-        this.hls.destroy();
-        this.hls = null;
-    }
+    this.hls.detachMedia();
+    this.hls.destroy();
+    this.hls = null;
+}
 
     this.TfAudio.pause();
     this.TfAudio.src = "";
