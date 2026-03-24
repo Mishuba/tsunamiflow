@@ -11,6 +11,7 @@ export class Tsu {
     connectedws = false;
     reconnectws = true;
     wsreconnectDelay = 2000; 
+    wsReconnectAttempts = 0;
     constructor(options = {}) {
         if (options.lang) this.lang = options.lang;
         if (options.role) this.wsRole = options.role;
