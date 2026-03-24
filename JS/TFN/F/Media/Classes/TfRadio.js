@@ -11,21 +11,27 @@ elementSourceMap = new WeakMap();
   }
 
   //element
-  connectaudio() {
+connectaudio() {
     this.initAudioContext();
 
     if (!this.elementSourceMap.has(this.TfAudio)) {
         const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
         const gain = this.TfSoundsContext.createGain();
+        const analyser = this.TfSoundsContext.createAnalyser();
 
-        source.connect(gain).connect(this.TfSoundsOutput);
+        Object.assign(analyser, this.TfSoundAnalyzerOptions);
+
+        source
+            .connect(gain)
+            .connect(analyser)
+            .connect(this.TfSoundsOutput);
 
         this.elementSourceMap.set(this.TfAudio, source);
         this.AudioSource["radio"] = source;
         this.TfSoundsGain["radio"] = gain;
+        this.TfSoundAnalyzer = analyser; // 🔥 store once
     }
 }
-
   setaudioVolume(value = 1) {
     const gainNode = this.TfSoundsGain["radio"];
 
@@ -144,7 +150,6 @@ elementSourceMap = new WeakMap();
   }
   playingAudio() {
     this.MusicState();
-    this.TfSoundAnalyser = this.TfSoundsContext.createAnalyser();
     this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
     this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
   }
@@ -215,7 +220,7 @@ elementSourceMap = new WeakMap();
     };
   }
   async HandleArrayBuffer(buffer) {
-    //this.initAudioContext();
+    this.initAudioContext();
 
     if (this.TfSoundsContext.state === "suspended") {
       this.TfSoundsContext.resume();
@@ -246,7 +251,7 @@ elementSourceMap = new WeakMap();
       //start audio with method
     }
   }
-  StopLiveAudio() {
+  stopLiveAudio() {
     if (this.WeLive) {
       this.WeLive = false;
       this.TfAudio.pause();
