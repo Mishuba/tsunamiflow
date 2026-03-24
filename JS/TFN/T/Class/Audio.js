@@ -257,11 +257,13 @@ export class TsunamiFlowNation extends Flow {
 initAudioContext() {
     if (!this.TfSoundsContext) {
         this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-this.TfSoundsContextDestination =
+
+        this.TfSoundsOutput = this.TfSoundsContext.destination;
+
+        this.TfSoundsContextDestination =
             this.TfSoundsContext.createMediaStreamDestination();
 
         this.emit("ready", this.TfSoundsContext);
-    this.TfSoundsOutput = this.TfSoundsContext.destination;
     }
 
     if (this.TfSoundsContext.state === "suspended") {
