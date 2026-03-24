@@ -105,6 +105,73 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     this.TfAudio.muted = state;
   }
 
+  loadstartAudio() {
+    let RadioLoadStartTime = Date.now();
+    console.log("Load start time recorded:", RadioLoadStartTime);
+  }
+  loadedmetadataAudio() {
+    //create html data
+    this.MusicState();
+  }
+  loadeddataAudio() {
+    console.log("The audio data is loaded");
+    this.MusicState();
+  }
+  canplayAudio() {
+    this.MusicState();
+  }
+  canplaythroughAudio() {
+    this.MusicState();
+    //this.startMusic();
+  }
+  playAudio() {
+    this.MusicState();
+    this.startMusic();
+  }
+  pauseAudio() {
+    this.MusicState();
+    this.stopMusic();
+  }
+  endedAudio() {
+    console.log("The audio should have ended");
+    this.TfAudio.src = "";
+    this.worker.postMessage({ type: "radio", system: "file" });
+  }
+  waitingAudio() {
+    this.MusicState();
+  }
+  playingAudio() {
+    this.MusicState();
+    this.TsunamiRadioBufferLength = this.TsunamiAnalyser.frequencyBinCount;
+    this.TsunamiRadioDataArray = new Uint8Array(this.TsunamiRadioBufferLength);
+    if (this.canvas !== null) {
+      this.canvasctx = this.canvas.getContext("2d");
+      return this.canvasctx;
+    } else {
+      this.canvasctx = this.canvas.getContext("2d");
+      return this.canvasctx;
+    }
+  }
+  stalledAudio(stalled) {
+    console.log("The Tsunami Audio has stalled for some reason" + stalled);
+  }
+  suspendedAudio(suspend) {
+    console.log("The audio is suspended" + suspend);
+  }
+  FormatAudioTime(second) {
+    let minutes = Math.floor(second / 60);
+    let seconds = second % 60;
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+  timeupdateAudio() {
+    this.Timing = Math.floor(this.TfAudio.currentTime);
+    this.RadioProcessBar = (this.TfAudio.currentTime / this.TfAudio.duration) * 100;
+    this.TaudioFtime = `Time: ${this.FormatAudioTime(this.Timing)}`
+  }
+  volumechangeAudio() {
+    console.log("The volume has changed");
+  }
+
   /* -----------------------------
      State
   ------------------------------*/

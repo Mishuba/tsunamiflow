@@ -373,12 +373,12 @@ export class TsunamiFlowNation extends Flow {
         this.emit("worklet-ready", this.TfSoundsWorkletNode);
     }
     ///worklet
-    connect(destination) {
+    connectworklet(destination) {
         if (!this.TfSoundsWorkletNode) return;
         this.TfSoundsWorkletNode.connect(destination);
     }
 
-    disconnect() {
+    disconnectworklet() {
         if (!this.TfSoundsWorkletNode) return;
         this.TfSoundsWorkletNode.disconnect();
     }
