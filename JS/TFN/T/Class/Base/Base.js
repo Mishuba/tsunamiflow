@@ -172,7 +172,7 @@ stopHeartbeat() {
     this.ws.onclose = () => {
         this.connectedws = false;
         this.emit("ws_close");
-        this.stopHeartbeat()
+        this.stopHeartbeat();
         console.log("🔴 WebSocket disconnected");
 
         if (this.reconnectws) {
@@ -191,7 +191,7 @@ stopHeartbeat() {
     if (this.ws) {
         this.ws.close();
         this.ws = null;
-        this.stopHeartbeat()
+        this.stopHeartbeat();
     }
 }
 
