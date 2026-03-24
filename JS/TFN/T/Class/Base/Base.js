@@ -144,6 +144,7 @@ startHeartbeat() {
     this.ws.onopen = () => {
         this.connectedws = true;
         this.emit("ws_open");
+        this.startHeartbeat();
         console.log("🟢 WebSocket connected");
     };
 
