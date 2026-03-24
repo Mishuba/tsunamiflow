@@ -21,8 +21,11 @@ export class TsunamiFlowNation extends Flow {
 
     TfSoundsContext =
         new (window.AudioContext || window.webkitAudioContext)();
+    TfSoundsidCounter = 0;
     TfSoundsGain = null;
-    
+
+    TfSoundsWorkletReady = false;
+    TfSoundsWorkletNode = null;
 
     TfSoundsOutput = this.TfSoundsContext.destination;
 
@@ -31,9 +34,6 @@ export class TsunamiFlowNation extends Flow {
         noiseSuppression: true,
         autoGainControl: true
     };
-
-    TfSoundsWorkletReady = false;
-    TfSoundsWorkletNode = null;
 
     constructor(options = {}) {
         super(options);
