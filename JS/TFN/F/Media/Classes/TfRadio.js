@@ -1,5 +1,5 @@
 export class TsunamiFlowRadio extends TsunamiFlowNation {
-
+elementSourceMap = new WeakMap();
   constructor(options = {}) {
     super(options);
     this.TfAudio.crossOrigin = "anonymous";
