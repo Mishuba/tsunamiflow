@@ -23,9 +23,32 @@ export class TsunamiFlowNation extends Flow {
         new (window.AudioContext || window.webkitAudioContext)();
     TfSoundsidCounter = 0;
     TfSoundsGain = null;
+    TfSoundAnalyzer = null;
+    TfSoundAnalyzerOptions = {
+      fftSize: 2048,
+      maxDecibels: 0,
+      minDecibels: -100,
+      smoothingTimeConstant: 0.5,
+      channelCountMode: "max"
+    };
+    TfSoundsFloat32FromIterable = null;
+    TfSoundsPeriodicWaveOptions = {};
+    TfSoundsPeridocWave = null;
+    TfSoundsPannerOptions = {};
+    TfSoundsPanner = null;
+    TfSoundsDelayOptions = {};
+    TfSoundsDelay = null;
+    TfSoundsCompressorOptions = {};
+    TfSoundsCompressor = null;
+    TfSoundsDefaultPlaylist = null;
+    
 
     TfSoundsWorkletReady = false;
     TfSoundsWorkletNode = null;
+    TfSoundsOscillatorNodeOptions = {};
+    TfSoundsOscillator = null;
+    TfSoundsWaveShaperNodeOptions = {};
+    TfSoundsWaveShaper = null;
 
     TfSoundsOutput = this.TfSoundsContext.destination;
 
