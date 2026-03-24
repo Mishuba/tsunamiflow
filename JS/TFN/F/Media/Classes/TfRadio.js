@@ -12,14 +12,19 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
 
   //element
   connectaudio() {
-    if (!this.AudioSource) {
-      this.AudioSource = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
-      this.TfSoundsGain = this.TfSoundsContext.createGain();
+    this.initAudioContext();
 
-      this.TfAudio.connect(this.TfSoundsGain);
-      this.TfSoundsGain.connect(this.TfSoundsContext.destination);
+    if (!this.elementSourceMap.has(this.TfAudio)) {
+        const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
+        const gain = this.TfSoundsContext.createGain();
+
+        source.connect(gain).connect(this.TfSoundsOutput);
+
+        this.elementSourceMap.set(this.TfAudio, source);
+        this.AudioSource["radio"] = source;
+        this.TfSoundsGain["radio"] = gain;
     }
-  }
+}
 
   setaudioVolume(value = 1) {
     if (this.TfSoundsGain) {
