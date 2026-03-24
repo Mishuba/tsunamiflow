@@ -17,6 +17,10 @@ connectaudio() {
         const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
         const gain = this.TfSoundsContext.createGain();
         const analyser = this.TfSoundsContext.createAnalyser();
+Object.assign(analyser, this.TfSoundAnalyzerOptions);
+
+this.TfSoundsContextBufferLength = analyser.frequencyBinCount;
+this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
 
         Object.assign(analyser, this.TfSoundAnalyzerOptions);
 
