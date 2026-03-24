@@ -223,16 +223,23 @@ connectaudio() {
     }
 }
   StartLiveAudio() {
-    if (this.WeLive) {
-      return;
+    if (this.WeLive) return;
+
+    this.WeLive = true;
+    this.connectaudio();
+
+    const url = "https://world.tsunamiflow.club/hls/anything.m3u8";
+
+    if (window.Hls && Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(url);
+        hls.attachMedia(this.TfAudio);
     } else {
-      this.WeLive = true;
-      this.connectaudio();
-      this.loadaudio("https://world.tsunamiflow.club/hls/anything.m3u8");
-      this.playaudio();
-      //start audio with method
+        this.TfAudio.src = url;
     }
-  }
+
+    this.playaudio();
+}
   stopLiveAudio() {
     if (this.WeLive) {
       this.WeLive = false;
