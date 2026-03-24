@@ -1,33 +1,25 @@
 export class TfSounds extends Na {
     // ===== DEFAULTS (Pattern B) =====
-
-
     TfAudio = new Audio();
     AudioElement = null;
-
     SpeechRecognitionAPI =
         window.SpeechRecognition || window.webkitSpeechRecognition;
-
     TfSpeechSupported = "speechSynthesis" in window;
-
     NamiSpeechOptions = {
         lang: "en-US",
         pitch: 1,
         rate: 1,
         volume: 1
     };
-
     TfSoundsContext =
         new (window.AudioContext || window.webkitAudioContext)();
 
     TfSoundsOutput = this.TfSoundsContext.destination;
-
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
         autoGainControl: true
     };
-
     TfSoundsWorkletReady = false;
 
     constructor(options = {}) {

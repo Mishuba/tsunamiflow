@@ -1,6 +1,6 @@
 export class Tsunami extends NaMi {
     worker = null;
-    constructor (){
+   constructor (){
 
     }
         start() {
