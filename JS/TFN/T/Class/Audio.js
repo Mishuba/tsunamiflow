@@ -1,7 +1,13 @@
-export class TfSounds extends Na {
+export class TsunamiFlowNation extends Flow {
     // ===== DEFAULTS (Pattern B) =====
     TfAudio = new Audio();
+    AudioSource = null;
     AudioElement = null;
+<<<<<<< HEAD
+=======
+    AudioReady = null;
+
+>>>>>>> fbeeb153ede79dd43b05a0382942a7b5849c54fd
     SpeechRecognitionAPI =
         window.SpeechRecognition || window.webkitSpeechRecognition;
     TfSpeechSupported = "speechSynthesis" in window;
@@ -13,6 +19,34 @@ export class TfSounds extends Na {
     };
     TfSoundsContext =
         new (window.AudioContext || window.webkitAudioContext)();
+    TfSoundsidCounter = 0;
+    TfSoundsGain = null;
+    TfSoundAnalyzer = null;
+    TfSoundAnalyzerOptions = {
+      fftSize: 2048,
+      maxDecibels: 0,
+      minDecibels: -100,
+      smoothingTimeConstant: 0.5,
+      channelCountMode: "max"
+    };
+    TfSoundsFloat32FromIterable = null;
+    TfSoundsPeriodicWaveOptions = {};
+    TfSoundsPeridocWave = null;
+    TfSoundsPannerOptions = {};
+    TfSoundsPanner = null;
+    TfSoundsDelayOptions = {};
+    TfSoundsDelay = null;
+    TfSoundsCompressorOptions = {};
+    TfSoundsCompressor = null;
+    TfSoundsDefaultPlaylist = null;
+    
+
+    TfSoundsWorkletReady = false;
+    TfSoundsWorkletNode = null;
+    TfSoundsOscillatorNodeOptions = {};
+    TfSoundsOscillator = null;
+    TfSoundsWaveShaperNodeOptions = {};
+    TfSoundsWaveShaper = null;
 
     TfSoundsOutput = this.TfSoundsContext.destination;
     audioConstraints = {
@@ -20,7 +54,10 @@ export class TfSounds extends Na {
         noiseSuppression: true,
         autoGainControl: true
     };
+<<<<<<< HEAD
     TfSoundsWorkletReady = false;
+=======
+>>>>>>> fbeeb153ede79dd43b05a0382942a7b5849c54fd
 
     constructor(options = {}) {
         super(options);
