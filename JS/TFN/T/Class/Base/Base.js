@@ -4,9 +4,9 @@ export class Tsu {
     domListeners = new Map();
     WorldSocket = new TfWebsocket("wss://world.tsunamiflow.club/ws"); 
     ws = null;
-    wsRole = viewer;
-    baseUrl = wss://world.tsunamiflow.club/ws;
-    wsKey = options.key || null;
+    wsRole = "viewer";
+    baseUrl = "wss://world.tsunamiflow.club/ws";
+    wsKey = null || "anything";
     TfWebSocket = null;
     connectedws = false;
     reconnectws = true;
