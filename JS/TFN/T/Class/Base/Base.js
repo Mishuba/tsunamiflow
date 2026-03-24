@@ -187,4 +187,8 @@ export class Tsu {
         if (!this.connectedws) return;
         this.ws.send(data); // ArrayBuffer / Blob
     }
+    sendwsJSON(obj) {
+        if (!this.connected) return;
+        this.ws.send(JSON.stringify(obj));
+    }
 }
