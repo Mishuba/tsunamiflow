@@ -265,13 +265,4 @@ stopLiveAudio() {
     this.TfAudio.pause();
     this.TfAudio.src = "";
 }
-  stopLiveAudio() {
-    if (this.WeLive) {
-      this.WeLive = false;
-      this.TfAudio.pause();
-      this.TfAudio.src = "";
-    } else {
-      return;
-    }
-  }
 }
