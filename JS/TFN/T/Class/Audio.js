@@ -54,7 +54,7 @@ export class TsunamiFlowNation extends Flow {
         autoGainControl: true
     };
     TfSoundsWorkletReady = false;
-
+    elementSourceMap = new WeakMap();
     constructor(options = {}) {
         super(options);
 
@@ -300,10 +300,10 @@ this.initAudioContext();
         const sourceId = id || `source-${++this.TfSoundsidCounter}`;
         let source;
 
-if (this.elementSourceMap.has(element)) {
+if (this.elementSourceMap.has(stream)) {
     source = this.elementSourceMap.get(stream);
 } else {
-    source = this.TfSoundsContext.createMediaElementSource(stream);
+    source = this.TfSoundsContext.createMediaStreamSource(stream);
     this.elementSourceMap.set(stream, source);
 }
         const gain = this.TfSoundsContext.createGain();
