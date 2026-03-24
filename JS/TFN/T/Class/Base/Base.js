@@ -2,7 +2,14 @@ export class Tsu {
     lang = "en-US";
     listeners = {};
     domListeners = new Map();
-    WorldSocket = new TfWebsocket("wss://world.tsunamiflow.club/ws");  
+    WorldSocket = new TfWebsocket("wss://world.tsunamiflow.club/ws"); 
+    wsRole = viewer;
+    baseUrl = wss://world.tsunamiflow.club/ws;
+    wsKey = options.key || null;
+    TfWebSocket = null;
+    connectedws = false;
+    reconnectws = true;
+    wsreconnectDelay = 2000; 
     constructor(options = {}) {
         if (options.lang) {
             this.lang = options.lang;
