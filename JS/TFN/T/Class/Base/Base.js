@@ -39,7 +39,11 @@ export class Tsu {
         if (!this.listeners[event]) return;
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
-
+startHeartbeat() {
+    this.heartbeat = setInterval(() => {
+        this.sendwsJSON({ type: "ping" });
+    }, 5000);
+}
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
@@ -117,56 +121,68 @@ export class Tsu {
         this.domListeners.delete(id);
     }
 
-    connectws() {
-        if (!this.wsKey) {
-            console.warn("WebSocket requires a stream key");
+ connectws() {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+        console.warn("WS already connected");
+        return;
+    }
+
+    if (this.ws && this.ws.readyState === WebSocket.CONNECTING) {
+        console.warn("WS already connecting");
+        return;
+    }
+
+    if (!this.wsKey) {
+        console.warn("WebSocket requires a stream key");
+    }
+
+    const url = `${this.baseUrl}?role=${this.wsRole}&key=${this.wsKey}`;
+
+    this.ws = new WebSocket(url);
+    this.ws.binaryType = "arraybuffer";
+
+    this.ws.onopen = () => {
+        this.connectedws = true;
+        this.emit("ws_open");
+        console.log("🟢 WebSocket connected");
+    };
+
+    this.ws.onmessage = (event) => {
+        if (typeof event.data === "string") {
+            try {
+                this.emit("ws_message", JSON.parse(event.data));
+            } catch {
+                this.emit("ws_raw", event.data);
+            }
+        } else {
+            this.emit("ws_binary", event.data);
         }
+    };
 
-        const url = `${this.baseUrl}?role=${this.wsRole}&key=${this.wsKey}`;
+    this.ws.onclose = () => {
+        this.connectedws = false;
+        this.emit("ws_close");
 
-        this.ws = new WebSocket(url);
-        this.ws.binaryType = "arraybuffer";
+        console.log("🔴 WebSocket disconnected");
 
-        this.ws.onopen = () => {
-            this.connectedws = true;
-            this.emit("open");
-            console.log("🟢 WebSocket connected");
-        };
+        if (this.reconnectws) {
+            setTimeout(() => this.connectws(), this.wsreconnectDelay);
+        }
+    };
 
-        this.ws.onmessage = (event) => {
-            // Server mostly doesn't send messages yet, but handle anyway
-            if (typeof event.data === "string") {
-                try {
-                    const data = JSON.parse(event.data);
-                    this.emit("message", data);
-                } catch {
-                    this.emit("message_raw", event.data);
-                }
-            } else {
-                this.emit("binary", event.data);
-            }
-        };
-
-        this.ws.onclose = () => {
-            this.connectedws = false;
-            this.emit("close");
-            console.log("🔴 WebSocket disconnected");
-
-            if (this.reconnectws) {
-                setTimeout(() => this.connectws(), this.wsreconnectDelay);
-            }
-        };
-
-        this.ws.onerror = (err) => {
-            this.emit("error", err);
-            console.error("💥 WebSocket error:", err);
-        };
-    }
-
+    this.ws.onerror = (err) => {
+        this.emit("ws_error", err);
+        console.error("💥 WebSocket error:", err);
+    };
+}
     disconnectws() {
-        this.reconnectws = false;
-        if (this.ws) this.ws.close();
+    this.reconnectws = false;
+
+    if (this.ws) {
+        this.ws.close();
+        this.ws = null;
     }
+}
 
     /* ========================= */
     /* ===== CONTROL ========= */
@@ -180,12 +196,13 @@ export class Tsu {
         this.sendwsJSON({ type: "stop_stream" });
     }
 
-    sendBinaryws(data) {
-        if (!this.connectedws) return;
-        this.ws.send(data); // ArrayBuffer / Blob
-    }
     sendwsJSON(obj) {
-        if (!this.connectedws) return;
-        this.ws.send(JSON.stringify(obj));
-    }
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+    this.ws.send(JSON.stringify(obj));
+}
+
+sendBinaryws(data) {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+    this.ws.send(data);
+}
 }
