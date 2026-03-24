@@ -151,10 +151,14 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
   waitingAudio() {
     this.MusicState();
   }
+updateAnalyser() {
+    if (!this.TfSoundAnalyser) return;
+
+    this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
+}
   playingAudio() {
     this.MusicState();
-    this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
-    this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
+    this.updateAnalyser();
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
