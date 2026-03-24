@@ -74,7 +74,6 @@ connectaudio() {
       this.TfAudio.pause();
       this.TfAudio.currentTime = 0;
     }
-    this.TfAudio.currentTime = 0;
   }
   previousaudio(music) {
     this.TfAudio.src = music;
