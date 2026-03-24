@@ -108,14 +108,10 @@ export class Tsu {
     off(id) {
         const entries = this.domListeners.get(id);
         if (!entries) return;
+
         entries.forEach(({ el, runHandler, eventType }) => {
             el.removeEventListener(eventType, runHandler);
         });
-        //const { el, runHandler } = entry;
-
-        el.removeEventListener("pointerup", runHandler);
-        el.removeEventListener("click", runHandler);
-        el.removeEventListener("submit", runHandler);
 
         this.domListeners.delete(id);
     }
