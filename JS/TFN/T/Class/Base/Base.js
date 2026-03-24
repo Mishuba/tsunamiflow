@@ -6,7 +6,7 @@ export class Tsu {
     ws = null;
     wsRole = "viewer";
     baseUrl = "wss://world.tsunamiflow.club/ws";
-    wsKey = null || "anything";
+    wsKey = null;
     TfWebSocket = null;
     connectedws = false;
     reconnectws = true;
