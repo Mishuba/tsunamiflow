@@ -117,12 +117,6 @@ export class TsunamiFlowNation extends Flow {
             this.NamiSpeech = new SpeechSynthesisUtterance();
             Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
         }
-
-        // ===== STREAM OUTPUT =====
-        this.TfSoundsContextDestination =
-            this.TfSoundsContext.createMediaStreamDestination();
-
-        this.emit("ready", this.TfSoundsContext);
     }
     AudioNetworkState(element) {
         if (element.readyState === 0) {
