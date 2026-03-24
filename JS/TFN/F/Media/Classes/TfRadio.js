@@ -29,7 +29,7 @@ connectaudio() {
         this.elementSourceMap.set(this.TfAudio, source);
         this.AudioSource["radio"] = source;
         this.TfSoundsGain["radio"] = gain;
-        this.TfSoundAnalyzer = analyser; // 🔥 store once
+        this.TfSoundAnalyser = analyser; // 🔥 store once
     }
 }
   setaudioVolume(value = 1) {
