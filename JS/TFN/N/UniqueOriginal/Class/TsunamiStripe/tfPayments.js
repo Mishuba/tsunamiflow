@@ -25,7 +25,7 @@ return this.#stripePromise;
         }
     }
 async init() {
-        await StripeDonation.load(); // make sure Stripe.js is loaded
+        await this.constructor.load(); // make sure Stripe.js is loaded
         this.stripe = Stripe(this.#stripePublicKey);
     }
   request(data) {
