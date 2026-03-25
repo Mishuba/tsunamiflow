@@ -8,53 +8,56 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     this.TfAudio.muted = false;
     //this.TfAudio.volume = 1;
   }
-
+  
   //element
-connectaudio() {
+  connectaudio() {
     this.initAudioContext();
-
+    
     if (!this.elementSourceMap.has(this.TfAudio)) {
-        const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
-        const gain = this.TfSoundsContext.createGain();
-        const analyser = this.TfSoundsContext.createAnalyser();
-Object.assign(analyser, this.TfSoundAnalyzerOptions);
+      const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
+      const gain = this.TfSoundsContext.createGain();
+      this.analyserBus = this.TfSoundsContext.createAnalyser();
+Object.assign(this.analyserBus, this.TfSoundAnalyzerOptions);
 
-this.TfSoundsContextBufferLength = analyser.frequencyBinCount;
-this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
-
-        Object.assign(analyser, this.TfSoundAnalyzerOptions);
-
-        source
-            .connect(gain)
-            .connect(analyser)
-            .connect(this.masterGain);
-
-        this.elementSourceMap.set(this.TfAudio, source);
-
-        this.AudioSource["radio"] = source;
-        this.TfSoundsGain["radio"] = gain;
-        this.TfSoundAnalyzer = analyser;
+source
+  .connect(gain)
+  .connect(this.analyserBus)
+  .connect(this.masterGain);
+      
+      this.TfSoundsContextBufferLength = analyser.frequencyBinCount;
+      this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
+      
+      source
+        .connect(gain)
+        .connect(analyser)
+        .connect(this.masterGain);
+      
+      this.elementSourceMap.set(this.TfAudio, source);
+      
+      this.AudioSource["radio"] = source;
+      this.TfSoundsGain["radio"] = gain;
+      this.TfSoundAnalyzer = analyser;
     }
-}
+  }
   setaudioVolume(value = 1) {
     const gainNode = this.TfSoundsGain["radio"];
-
+    
     if (gainNode) {
-        gainNode.gain.value = value;
+      gainNode.gain.value = value;
     } else {
-        this.TfAudio.volume = value;
+      this.TfAudio.volume = value;
     }
-}
-
+  }
+  
   /* -----------------------------
      Playback Controls
   ------------------------------*/
-
+  
   loadaudio(src) {
     this.TfAudio.src = src;
     this.TfAudio.load();
   }
-
+  
   async playaudio() {
     try {
       if (this.TfAudio.paused || this.TfAudio.ended || this.TfAudio.currentTime === 0) {
@@ -68,11 +71,11 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
       }
     }
   }
-
+  
   pauseaudio() {
     this.TfAudio.pause();
   }
-
+  
   stopaudio() {
     if (this.TfAudio) {
       this.TfAudio.pause();
@@ -90,19 +93,19 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
   seekaudio(time) {
     this.TfAudio.currentTime = time;
   }
-
+  
   setaudioLoop(loop = true) {
     this.TfAudio.loop = loop;
   }
-
+  
   setaudioPlaybackRate(rate = 1) {
     this.TfAudio.playbackRate = rate;
   }
-
+  
   muteaudio(state = true) {
     this.TfAudio.muted = state;
   }
-
+  
   loadstartAudio() {
     this.tfRadioLoadStartTime = Date.now();
     console.log("Load start time recorded:", this.tfRadioLoadStartTime);
@@ -110,7 +113,7 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
       if (!this.canvasctx) {
         this.canvasctx = this.canvas.getContext("2d");
       } else {
-
+        
       }
       return this.canvasctx;
     } else {
@@ -132,7 +135,7 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
   }
   canplaythroughAudio() {
     this.MusicState();
-
+    
     //this.startMusic();
   }
   playAudio() {
@@ -151,11 +154,11 @@ this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength)
   waitingAudio() {
     this.MusicState();
   }
-updateAnalyser() {
+  updateAnalyser() {
     if (!this.TfSoundAnalyser) return;
-
+    
     this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
-}
+  }
   playingAudio() {
     this.MusicState();
     this.updateAnalyser();
@@ -179,15 +182,15 @@ updateAnalyser() {
   volumechangeAudio() {
     console.log("The volume has changed");
   }
-
+  
   getCurrentaudioTime() {
     return this.TfAudio.currentTime;
   }
-
+  
   getaudioDuration() {
     return this.TfAudio.duration;
   }
-
+  
   isaudioPlaying() {
     return !this.TfAudio.paused;
   }
@@ -228,71 +231,71 @@ updateAnalyser() {
   }
   async HandleArrayBuffer(buffer) {
     this.initAudioContext();
-
+    
     try {
-        const audioBuffer = await this.TfSoundsContext.decodeAudioData(buffer);
-        return new Float32Array(audioBuffer.getChannelData(0));
+      const audioBuffer = await this.TfSoundsContext.decodeAudioData(buffer);
+      return new Float32Array(audioBuffer.getChannelData(0));
     } catch (error) {
-        console.error("Error decoding audio data:", error);
-        return null;
+      console.error("Error decoding audio data:", error);
+      return null;
     }
-}
+  }
   StartLiveAudio() {
     if (this.WeLive) return;
-
+    
     this.WeLive = true;
     this.connectaudio();
-
+    
     const url = "https://world.tsunamiflow.club/hls/anything.m3u8";
-
+    
     if (window.Hls && Hls.isSupported()) {
-        if (this.hls) {
-            this.hls.destroy();
-        }
-
-  this.hls = new Hls();
-
-this.hls.on(Hls.Events.ERROR, (event, data) => {
-    console.error("HLS error:", data);
-
-    if (data.fatal) {
-        switch (data.type) {
+      if (this.hls) {
+        this.hls.destroy();
+      }
+      
+      this.hls = new Hls();
+      
+      this.hls.on(Hls.Events.ERROR, (event, data) => {
+        console.error("HLS error:", data);
+        
+        if (data.fatal) {
+          switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-                this.hls.startLoad();
-                break;
-
+              this.hls.startLoad();
+              break;
+              
             case Hls.ErrorTypes.MEDIA_ERROR:
-                this.hls.recoverMediaError();
-                break;
-
+              this.hls.recoverMediaError();
+              break;
+              
             default:
-                this.stopLiveAudio();
-                break;
+              this.stopLiveAudio();
+              break;
+          }
         }
-    }
-});
-
-this.hls.loadSource(url);
-this.hls.attachMedia(this.TfAudio);
+      });
+      
+      this.hls.loadSource(url);
+      this.hls.attachMedia(this.TfAudio);
     } else {
-        this.TfAudio.src = url;
+      this.TfAudio.src = url;
     }
-
+    
     this.playaudio();
-}
-
-stopLiveAudio() {
+  }
+  
+  stopLiveAudio() {
     if (!this.WeLive) return;
-
+    
     this.WeLive = false;
-
+    
     if (this.hls) {
-    this.hls.detachMedia();
-    this.hls.destroy();
-    this.hls = null;
-}
-
+      this.hls.detachMedia();
+      this.hls.destroy();
+      this.hls = null;
+    }
+    
     this.TfAudio.pause();
     this.TfAudio.src = "";
-}
+  }
 }
