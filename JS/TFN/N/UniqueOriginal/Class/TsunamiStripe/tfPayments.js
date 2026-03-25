@@ -85,6 +85,7 @@ async init() {
   
   // Donate (one-time) with optional saved customer
   async donate(amount, currency = 'usd', saveCustomer = true, email = null) {
+if (!this.stripe) throw new Error("Stripe not initialized");
   if (!this.cardElement) throw new Error("Card element not mounted");
   
   try {
@@ -120,6 +121,7 @@ async init() {
   
   // Subscribe (recurring) with optional saved customer
   async subscribe(email, priceId, saveCustomer = true) {
+if (!this.stripe) throw new Error("Stripe not initialized");
     if (!this.cardElement) throw new Error("Card element not mounted");
     
     const payload = {
