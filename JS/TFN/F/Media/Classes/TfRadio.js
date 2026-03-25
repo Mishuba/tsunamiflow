@@ -11,34 +11,21 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
   
   //element
   connectaudio() {
-    this.initAudioContext();
-    
-    if (!this.elementSourceMap.has(this.TfAudio)) {
-      const source = this.TfSoundsContext.createMediaElementSource(this.TfAudio);
-      const gain = this.TfSoundsContext.createGain();
-      this.analyserBus = this.TfSoundsContext.createAnalyser();
-Object.assign(this.analyserBus, this.TfSoundAnalyzerOptions);
-
-source
-  .connect(gain)
-  .connect(this.analyserBus)
-  .connect(this.masterGain);
-      
-      this.TfSoundsContextBufferLength = analyser.frequencyBinCount;
-      this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
-      
-      source
-        .connect(gain)
-        .connect(analyser)
-        .connect(this.masterGain);
-      
-      this.elementSourceMap.set(this.TfAudio, source);
-      
-      this.AudioSource["radio"] = source;
-      this.TfSoundsGain["radio"] = gain;
-      this.TfSoundAnalyzer = analyser;
-    }
-  }
+    if (this.AudioSource["radio"]) return;
+  this.addAudioContextSource(this.TfAudio, "radio");
+}
+destroyRadioSource() {
+  const source = this.AudioSource["radio"];
+  const gain = this.TfSoundsGain["radio"];
+  
+  if (source) source.disconnect();
+  if (gain) gain.disconnect();
+  
+  delete this.AudioSource["radio"];
+  delete this.TfSoundsGain["radio"];
+  
+  this.elementSourceMap.delete(this.TfAudio);
+}
   setaudioVolume(value = 1) {
     const gainNode = this.TfSoundsGain["radio"];
     
@@ -154,9 +141,41 @@ source
   waitingAudio() {
     this.MusicState();
   }
+  startAnalyserLoop() {
+    if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
+  if (this._analyserLoopRunning) return;
+  
+  this._analyserLoopRunning = true;
+  
+  const loop = () => {
+    if (!this._analyserLoopRunning) return;
+    
+    if (this.TfSoundAnalyser) {
+      //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
+      this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
+      this.emit("visualizer", this.TfSoundsContextDataArray);
+    }
+    
+    requestAnimationFrame(loop);
+  };
+  
+  loop();
+}
+getTrackAnalyserData(id) {
+  const analyser = this.TfTrackAnalyser[id];
+  if (!analyser) return null;
+  
+  const buffer = new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(buffer);
+  return buffer;
+}
+stopAnalyserLoop() {
+  this._analyserLoopRunning = false;
+}
   updateAnalyser() {
     if (!this.TfSoundAnalyser) return;
     
+    //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
     this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
   }
   playingAudio() {
@@ -176,7 +195,8 @@ source
   }
   timeupdateAudio() {
     this.AudioTiming = Math.floor(this.TfAudio.currentTime);
-    this.AudioProcessBar = (this.TfAudio.currentTime / this.TfAudio.duration) * 100;
+    const duration = this.TfAudio.duration || 1;
+this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
     this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.TfAudio.duration))}`;
   }
   volumechangeAudio() {
@@ -240,13 +260,40 @@ source
       return null;
     }
   }
-  StartLiveAudio() {
+  playDecodedBuffer(float32Array) {
+    this.initAudioContext()
+  const buffer = this.TfSoundsContext.createBuffer(
+    1,
+    float32Array.length,
+    this.TfSoundsContext.sampleRate
+  );
+  
+  buffer.copyToChannel(float32Array, 0);
+  
+  const source = this.TfSoundsContext.createBufferSource();
+  source.buffer = buffer;
+  
+  const chain = this.createTrackChain();
+  
+  source
+    .connect(chain.gain)
+    .connect(chain.compressor)
+    .connect(chain.analyser)
+    .connect(this.masterGain);
+  
+  source.start();
+  source.onended = () => {
+  source.disconnect();
+  chain.gain.disconnect();
+  chain.analyser.disconnect();
+  chain.compressor.disconnect();
+};
+}
+  StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8") {
     if (this.WeLive) return;
     
     this.WeLive = true;
     this.connectaudio();
-    
-    const url = "https://world.tsunamiflow.club/hls/anything.m3u8";
     
     if (window.Hls && Hls.isSupported()) {
       if (this.hls) {
