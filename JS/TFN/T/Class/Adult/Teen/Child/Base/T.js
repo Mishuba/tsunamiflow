@@ -74,7 +74,7 @@ export class T {
     const supportsPointer = "PointerEvent" in window;
     const supportsTouch = "ontouchstart" in window;
 
-    const runHandler = (event) => {
+    const handler = (event) => {
         if (isForm || isSubmitButton || preventDefault) {
             event.preventDefault();
             event.stopPropagation();
@@ -91,9 +91,9 @@ export class T {
     if (supportsPointer) {
         const eventType = isForm ? "submit" : "pointerup";
 
-        el.addEventListener(eventType, runHandler);
+        el.addEventListener(eventType, handler);
 
-        this._storeDomListener(id, el, runHandler, eventType);
+        this._storeDomListener(id, el, handler, eventType);
         return;
     }
 
@@ -104,7 +104,7 @@ export class T {
         };
 
         const end = (e) => {
-            runHandler(e);
+            handler(e);
         };
 
         el.addEventListener("touchstart", start, { passive: false });
@@ -117,9 +117,9 @@ export class T {
 
     // ===== CLICK (Legacy fallback) =====
     const clickType = isForm ? "submit" : "click";
-    el.addEventListener(clickType, runHandler);
+    el.addEventListener(clickType, handler);
 
-    this._storeDomListener(id, el, runHandler, clickType);
+    this._storeDomListener(id, el, handler, clickType);
 }
     off(id) {
     const entries = this.domListeners.get(id);
