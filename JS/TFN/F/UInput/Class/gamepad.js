@@ -10,8 +10,30 @@ export class TfGamepad {
         this.deadzone = deadzone;
 
         this.gamepads = {};
-        this.running = false;
+        this.controllerMappings = {
+            playstation: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "touchpad", start: "Options Button", share: "Share Button",
+                action1: "Cross", action2: "Circle", action3: "Square", action4: "Triangle",
+                action5: "L1", action6: "R1", action7: "L2", action8: "R2",
+                action9: "Left Analog Stick Button", action10: "Right Analog Stick Button",
+                leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            },
+            xbox: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "Menu Button", start: "View Button",
+                action1: "A", action2: "B", action3: "X", action4: "Y",
+                leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            },
+            switch: {
+                up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
+                select: "- Button", start: "+ Button",
+                action1: "B", action2: "A", action3: "Y", action4: "X",
+                leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+            }
+        };
 
+        this.running = false;
         this.listeners = {};
 
         this._loop = this._loop.bind(this);
@@ -22,18 +44,54 @@ export class TfGamepad {
         }
 
         window.addEventListener("gamepadconnected", e => {
-            this._connect(e.gamepad);
+            try {
+                this._connect(e.gamepad);
+            } catch (err) {
+                console.error("Gamepad connect error:", err);
+            }
         });
 
         window.addEventListener("gamepaddisconnected", e => {
-            this._disconnect(e.gamepad);
+            try {
+                this._disconnect(e.gamepad);
+            } catch (err) {
+                console.error("Gamepad disconnect error:", err);
+            }
         });
 
         if (autoStart) this.start();
     }
 
     /* ----------------------------
-       Start Polling
+       Controller Detection
+    ---------------------------- */
+
+    getControllerType(gamepad) {
+
+        try {
+            const id = (gamepad.id || "").toLowerCase();
+
+            if (id.includes("playstation") || id.includes("dualshock") || id.includes("dualsense")) {
+                return "playstation";
+            }
+
+            if (id.includes("xbox")) {
+                return "xbox";
+            }
+
+            if (id.includes("switch") || id.includes("pro controller")) {
+                return "switch";
+            }
+
+        } catch (err) {
+            console.warn("Controller detection failed:", err);
+        }
+
+        return "xbox"; // safe fallback
+    }
+
+    /* ----------------------------
+       Start / Stop
     ---------------------------- */
 
     start() {
@@ -55,49 +113,67 @@ export class TfGamepad {
     }
 
     /* ----------------------------
-       Main Poll Loop
+       Main Loop
     ---------------------------- */
 
     _loop() {
 
         if (!this.running) return;
 
-        const pads = navigator.getGamepads();
+        let pads;
 
-        for (let i = 0; i < pads.length; i++) {
+        try {
+            pads = navigator.getGamepads();
+        } catch (err) {
+            console.error("Failed to read gamepads:", err);
+            return;
+        }
 
-            const pad = pads[i];
+        if (pads) {
 
-            if (!pad) continue;
+            for (let i = 0; i < pads.length; i++) {
 
-            if (!this.gamepads[pad.index]) {
-                this._connect(pad);
+                const pad = pads[i];
+
+                if (!pad) continue;
+
+                if (!this.gamepads[pad.index]) {
+                    this._connect(pad);
+                }
+
+                this._update(pad);
             }
-
-            this._update(pad);
         }
 
         requestAnimationFrame(this._loop);
     }
 
     /* ----------------------------
-       Connect
+       Connect / Disconnect
     ---------------------------- */
 
     _connect(pad) {
 
+        const type = this.getControllerType(pad);
+
         this.gamepads[pad.index] = {
             id: pad.id,
-            buttons: pad.buttons.map(b => b.value),
-            axes: [...pad.axes]
+            type,
+            buttons: pad.buttons.map(b => ({
+                value: b.value,
+                pressed: b.pressed,
+                touched: b.touched
+            })),
+            axes: [...pad.axes],
+
+            prevButtons: pad.buttons.map(() => false),
+            prevAxes: [...pad.axes],
+
+            mapping: this.controllerMappings[type] || null
         };
 
         this.emit("connected", pad);
     }
-
-    /* ----------------------------
-       Disconnect
-    ---------------------------- */
 
     _disconnect(pad) {
 
@@ -112,43 +188,54 @@ export class TfGamepad {
 
     _update(pad) {
 
-        const prev = this.gamepads[pad.index];
+        const state = this.gamepads[pad.index];
+        if (!state) return;
 
-        if (!prev) return;
+        let prevButtons = state.prevButtons;
+        let prevAxes = state.prevAxes;
 
-        /* Buttons */
+        const mapping = state.mapping;
+
+        /* ---------------- Buttons ---------------- */
 
         pad.buttons.forEach((btn, i) => {
 
             const value = btn.value;
+            const isPressed = value > 0;
 
-            if (value !== prev.buttons[i]) {
+            if (isPressed !== prevButtons[i]) {
 
-                if (value > 0) {
+                const mapped = this._mapButton(i, mapping);
+
+                if (isPressed) {
+
                     this.emit("buttondown", {
                         index: pad.index,
-                        button: i,
+                        button: mapped,
+                        raw: i,
                         value
                     });
+
                 } else {
+
                     this.emit("buttonup", {
                         index: pad.index,
-                        button: i
+                        button: mapped,
+                        raw: i
                     });
                 }
 
-                prev.buttons[i] = value;
+                prevButtons[i] = isPressed;
             }
         });
 
-        /* Axes */
+        /* ---------------- Axes ---------------- */
 
         pad.axes.forEach((axis, i) => {
 
-            const filtered =
-                Math.abs(axis) < this.deadzone ? 0 : axis;
+            let filtered = Math.abs(axis) < this.deadzone ? 0 : axis;
 
-            if (filtered !== prev.axes[i]) {
+            if (filtered !== prevAxes[i]) {
 
                 this.emit("axis", {
                     index: pad.index,
@@ -156,9 +243,41 @@ export class TfGamepad {
                     value: filtered
                 });
 
-                prev.axes[i] = filtered;
+                prevAxes[i] = filtered;
             }
         });
+
+        /* ---------------- Held State ---------------- */
+
+        this.emit("hold", {
+            index: pad.index,
+            buttons: pad.buttons.map(b => b.pressed),
+            axes: pad.axes
+        });
+    }
+
+    /* ----------------------------
+       Mapping Helper
+    ---------------------------- */
+
+    _mapButton(index, mapping) {
+
+        if (!mapping) return index;
+
+        const commonMap = {
+            0: "action1",
+            1: "action2",
+            2: "action3",
+            3: "action4",
+            4: "action5",
+            5: "action6",
+            8: "select",
+            9: "start"
+        };
+
+        const key = commonMap[index];
+
+        return key ? (mapping[key] || key) : index;
     }
 
     /* ----------------------------
@@ -179,20 +298,29 @@ export class TfGamepad {
 
     on(event, fn) {
 
-        if (!this.listeners[event])
+        if (!this.listeners[event]) {
             this.listeners[event] = [];
+        }
 
         this.listeners[event].push(fn);
     }
 
     emit(event, data) {
 
-        (this.listeners[event] || [])
-            .forEach(fn => fn(data));
+        const list = this.listeners[event];
+        if (!list) return;
+
+        for (let i = 0; i < list.length; i++) {
+            try {
+                list[i](data);
+            } catch (err) {
+                console.error(`Listener error (${event}):`, err);
+            }
+        }
     }
 
     /* ----------------------------
-       Debug
+       Debug / State
     ---------------------------- */
 
     toJson() {
@@ -203,5 +331,4 @@ export class TfGamepad {
             connected: Object.keys(this.gamepads).length
         };
     }
-
 }
