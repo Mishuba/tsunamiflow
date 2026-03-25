@@ -17,13 +17,19 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
 destroyRadioSource() {
   const source = this.AudioSource["radio"];
   const gain = this.TfSoundsGain["radio"];
-  
+  const analyser = this.TfTrackAnalyser["radio"];
+  const compressor = this.TfTrackCompressor["radio"];
+
   if (source) source.disconnect();
   if (gain) gain.disconnect();
-  
+  if (analyser) analyser.disconnect();
+  if (compressor) compressor.disconnect();
+
   delete this.AudioSource["radio"];
   delete this.TfSoundsGain["radio"];
-  
+  delete this.TfTrackAnalyser["radio"];
+  delete this.TfTrackCompressor["radio"];
+
   this.elementSourceMap.delete(this.TfAudio);
 }
   setaudioVolume(value = 1) {
