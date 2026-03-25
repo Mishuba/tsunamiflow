@@ -1,6 +1,9 @@
 export class StripeDonation {
     #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ"; #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
 static #stripePromise = null;
+onLoading = null;
+onSuccess = null;
+onError = null;
   constructor(stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ", backendUrl = "https://world.tsunamiflow.club/StripeStuff.php") {
     this.#stripePublicKey = stripePublicKey;
     this.stripe = null;
@@ -89,6 +92,7 @@ if (!this.stripe) throw new Error("Stripe not initialized");
   if (!this.cardElement) throw new Error("Card element not mounted");
   
   try {
+this.onLoading?.(true)
     const payload = {
       action: 'createPaymentIntent',
       amount: Math.round(amount * 100),
@@ -111,9 +115,10 @@ if (!this.stripe) throw new Error("Stripe not initialized");
     });
     
     if (result.error) throw result.error;
-    
+    this.onSuccess?.(result);
     return result;
   } catch (err) {
+this.onError?.(err);
     console.error("Donation error:", err);
     throw err;
   }
