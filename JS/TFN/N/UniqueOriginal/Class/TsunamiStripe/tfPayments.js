@@ -8,7 +8,7 @@ export class StripeDonation extends T {
     cardElement = null;
     customerId = localStorage.getItem("stripeCustomerId") || null;
     queue = []; // Offline/retry queue
-transport = "fetch"; // default
+transport = "xml"; // default
     constructor(stripePublicKey, backendUrl) {
         super();
         this.#stripePublicKey = stripePublicKey || this.#stripePublicKey;
