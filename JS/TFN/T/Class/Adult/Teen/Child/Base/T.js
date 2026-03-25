@@ -160,6 +160,7 @@ onClipboard(id, eventName, type = "copy", preventDefault = false, iframe = null)
         this.emit(eventName, {
             event,
             element: el,
+            type,
             clipboardData: event.clipboardData
         });
     };
