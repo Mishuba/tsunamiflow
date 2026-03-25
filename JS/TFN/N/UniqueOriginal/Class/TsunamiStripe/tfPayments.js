@@ -128,7 +128,7 @@ this.onError?.(err);
   async subscribe(email, priceId, saveCustomer = true) {
 if (!this.stripe) throw new Error("Stripe not initialized");
     if (!this.cardElement) throw new Error("Card element not mounted");
-    
+    try {
     const payload = {
       action: 'createSubscription',
       email,
@@ -147,10 +147,15 @@ if (!this.stripe) throw new Error("Stripe not initialized");
     if (!clientSecret) {
       return { status: 'success', message: 'No payment required', subscriptionId };
     }
-    
+    this.onSuccess?.(this.stripe.confirmCardPayment(clientSecret, {
+      payment_method: { card: this.cardElement }
+    }));
     return this.stripe.confirmCardPayment(clientSecret, {
       payment_method: { card: this.cardElement }
     });
+} catch (err) {
+     this.onError?.(err);
+}
   }
 destroyCard() {
     if (this.cardElement) {
