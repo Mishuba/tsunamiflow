@@ -117,26 +117,5 @@ async init() {
       payment_method: { card: this.cardElement }
     });
   }
-  
-  getClientSecret(action, data) {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-      xhr.open("POST", this.backendUrl, true);
-      xhr.setRequestHeader("Content-Type", "application/json");
-      xhr.withCredentials = true;
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          try {
-            const response = JSON.parse(xhr.responseText);
-            if (xhr.status === 200 && !response.error) resolve(response.clientSecret);
-            else reject(response.error || 'Unknown error');
-          } catch (err) {
-            reject(err.message || 'JSON parse error');
-          }
-        }
-      };
-      xhr.send(JSON.stringify({ action, ...data }));
-    });
-  }
 }
 
