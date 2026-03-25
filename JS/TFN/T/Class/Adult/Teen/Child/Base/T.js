@@ -61,49 +61,100 @@ export class T {
         console.log("Web Worker terminated");
     }
     on(id, eventName, preventDefault = false, iframe = null) {
-        let el = this.find(id, iframe);
+    let el = this.find(id, iframe);
+    if (!el) return;
 
-        if (!el) return;
+    const isForm = el instanceof HTMLFormElement;
+    const isSubmitButton =
+        (el instanceof HTMLButtonElement && el.type === "submit") ||
+        (el instanceof HTMLInputElement &&
+            ["submit", "image"].includes(el.type));
 
-        const isForm = el instanceof HTMLFormElement;
-        const isSubmitButton =
-            (el instanceof HTMLButtonElement && el.type === "submit") ||
-            (el instanceof HTMLInputElement &&
-                ["submit", "image"].includes(el.type));
+    // Detect best interaction type
+    const supportsPointer = "PointerEvent" in window;
+    const supportsTouch = "ontouchstart" in window;
 
-        let eventType = isForm ? "submit" : (window.PointerEvent ? "pointerup" : "click")
-        const runHandler = (event) => {
-            if (isForm || isSubmitButton || preventDefault) {
-                event.preventDefault();
-                event.stopPropagation();
-            }
-            this.emit(eventName, {
-                event,
-                element: el
-            });
+    const runHandler = (event) => {
+        if (isForm || isSubmitButton || preventDefault) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        this.emit(eventName, {
+            event,
+            element: el,
+            type: event.type
+        });
+    };
+
+    // ===== POINTER (Primary) =====
+    if (supportsPointer) {
+        const eventType = isForm ? "submit" : "pointerup";
+
+        el.addEventListener(eventType, runHandler);
+
+        this._storeDomListener(id, el, runHandler, eventType);
+        return;
+    }
+
+    // ===== TOUCH (Fallback) =====
+    if (supportsTouch) {
+        const start = (e) => {
+            this._touchStart = e;
         };
 
-        // Desktop click / form submit
-        if (window.PointerEvent) {
-            el.addEventListener(isForm ? "submit" : "pointerup", runHandler);
-        } else {
-            el.addEventListener(isForm ? "submit" : "click", runHandler);
-        }
-        if (!this.domListeners.has(id)) {
-            this.domListeners.set(id, []);
-        } else {
-            console.warn(`Listener with id "${id}" already exists. `);
-        }
-        this.domListeners.get(id).push({ el, runHandler, eventType });
+        const end = (e) => {
+            runHandler(e);
+        };
+
+        el.addEventListener("touchstart", start, { passive: false });
+        el.addEventListener("touchend", end, { passive: false });
+
+        this._storeDomListener(id, el, start, "touchstart");
+        this._storeDomListener(id, el, end, "touchend");
+        return;
     }
+
+    // ===== CLICK (Legacy fallback) =====
+    const clickType = isForm ? "submit" : "click";
+    el.addEventListener(clickType, runHandler);
+
+    this._storeDomListener(id, el, runHandler, clickType);
+}
     off(id) {
-        const entries = this.domListeners.get(id);
-        if (!entries) return;
+    const entries = this.domListeners.get(id);
+    if (!entries) return;
 
-        entries.forEach(({ el, runHandler, eventType }) => {
-            el.removeEventListener(eventType, runHandler);
-        });
+    entries.forEach(({ el, handler, eventType }) => {
+        el.removeEventListener(eventType, handler);
+    });
 
-        this.domListeners.delete(id);
+    this.domListeners.delete(id);
+}
+onClipboard(id, eventName, type = "copy", preventDefault = false, iframe = null) {
+    let el = this.find(id, iframe);
+    if (!el) return;
+
+    const validEvents = ["copy", "cut", "paste"];
+    if (!validEvents.includes(type)) {
+        console.warn(`Invalid clipboard event: ${type}`);
+        return;
     }
+
+    const handler = (event) => {
+        if (preventDefault) {
+            event.preventDefault();
+        }
+
+        this.emit(eventName, {
+            event,
+            element: el,
+            clipboardData: event.clipboardData
+        });
+    };
+
+    el.addEventListener(type, handler);
+
+    this._storeDomListener(id, el, handler, type);
+}
 }
