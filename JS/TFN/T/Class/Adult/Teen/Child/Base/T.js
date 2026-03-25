@@ -81,11 +81,10 @@ _storeDomListener(id, el, handler, eventType) {
         (el instanceof HTMLInputElement &&
             ["submit", "image"].includes(el.type));
 
-    // Detect best interaction type
     const supportsPointer = "PointerEvent" in window;
     const supportsTouch = "ontouchstart" in window;
 
-    const handler = (event) => {
+    const runHandler = (event) => {
         if (isForm || isSubmitButton || preventDefault) {
             event.preventDefault();
             event.stopPropagation();
@@ -102,9 +101,9 @@ _storeDomListener(id, el, handler, eventType) {
     if (supportsPointer) {
         const eventType = isForm ? "submit" : "pointerup";
 
-        el.addEventListener(eventType, handler);
+        el.addEventListener(eventType, runHandler);
 
-        this._storeDomListener(id, el, handler, eventType);
+        this._storeDomListener(id, el, runHandler, eventType);
         return;
     }
 
@@ -115,7 +114,7 @@ _storeDomListener(id, el, handler, eventType) {
         };
 
         const end = (e) => {
-            handler(e);
+            runHandler(e);
         };
 
         el.addEventListener("touchstart", start, { passive: false });
@@ -126,11 +125,12 @@ _storeDomListener(id, el, handler, eventType) {
         return;
     }
 
-    // ===== CLICK (Legacy fallback) =====
+    // ===== CLICK (Fallback) =====
     const clickType = isForm ? "submit" : "click";
-    el.addEventListener(clickType, handler);
 
-    this._storeDomListener(id, el, handler, clickType);
+    el.addEventListener(clickType, runHandler);
+
+    this._storeDomListener(id, el, runHandler, clickType);
 }
     off(id) {
     const entries = this.domListeners.get(id);
