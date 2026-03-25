@@ -117,5 +117,11 @@ async init() {
       payment_method: { card: this.cardElement }
     });
   }
+destroyCard() {
+    if (this.cardElement) {
+        this.cardElement.unmount();
+        this.cardElement = null;
+    }
+}
 }
 
