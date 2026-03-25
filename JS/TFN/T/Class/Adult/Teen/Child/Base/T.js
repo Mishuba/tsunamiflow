@@ -30,6 +30,17 @@ export class T {
         logBox.innerText += msg + "\n";
         logBox.scrollTop = logBox.scrollHeight;
     }
+_storeDomListener(id, el, handler, eventType) {
+    if (!this.domListeners.has(id)) {
+        this.domListeners.set(id, []);
+    }
+
+    this.domListeners.get(id).push({
+        el,
+        handler,
+        eventType
+    });
+}
     addEventListener(event, fn) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(fn);
