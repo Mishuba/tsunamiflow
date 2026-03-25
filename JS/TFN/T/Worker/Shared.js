@@ -1,17 +1,17 @@
-export class TfSharedWorker {
-    constructor(scriptURL) {
+export class SharedWorker extends F {
+    scriptURL = "";
+    sharedWorker = null;
+    port = null;
+    listeners = {};
+    constructor(options = {}) {
         if (!window.SharedWorker) {
             console.warn("Shared Workers are not supported in this browser");
             this.sharedWorker = null;
             return;
+        } else {
+            if (options.scriptURL) this.scriptURL = options.scriptURL;
         }
-
-        this.scriptURL = scriptURL;
-        this.sharedWorker = null;
-        this.port = null;
-        this.listeners = {};
     }
-
     start() {
         if (!this.scriptURL) return;
         this.sharedWorker = new SharedWorker(this.scriptURL);
@@ -25,16 +25,6 @@ export class TfSharedWorker {
     postMessage(data) {
         if (!this.port) return;
         this.port.postMessage(data);
-    }
-
-    on(event, callback) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(callback);
-    }
-
-    emit(event, data) {
-        if (!this.listeners[event]) return;
-        this.listeners[event].forEach(cb => cb(data));
     }
 
     close() {

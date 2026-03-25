@@ -1,4 +1,4 @@
-export class Flow extends Tsunami {
+export class Tsunami extends Mi {
   canvas = null;
   contextTypecanvas = "2d";
   canvasctx = null;
@@ -6,8 +6,12 @@ export class Flow extends Tsunami {
   offscreencanvas = new OffscreenCanvas(width, height);
   offscreenctx = null;
   isoffscreenReady = false;
+  worker = null;
   constructor(options = {}) {
     super(options);
+    if (options.worker) {
+      this.worker = options.worker;
+    }
   }
   initCanvas() {
     try {
@@ -20,13 +24,13 @@ export class Flow extends Tsunami {
       this.canvasctx = null;
     }
   }
-  
+
   resizeCanvas(width, height) {
     if (!this.iscanvasReady) return;
     this.canvas.width = width;
     this.canvas.height = height;
   }
-  
+
   clearCanvas(color = "#000000") {
     if (!this.iscanvasReady) return;
     if (this.contextTypecanvas === "2d") {
@@ -36,14 +40,14 @@ export class Flow extends Tsunami {
       console.warn("Clear method not implemented for non-2d context");
     }
   }
-  
+
   getCanvasContext() {
     return this.canvasctx;
   }
-  
+
   initOffscreen() {
     if (!this.offscreencanvas) return;
-    
+
     try {
       this.offscreenctx = this.offscreencanvas.getContext(this.contextType);
       if (!this.offscreenctx) throw new Error(`${this.contextType} context not supported`);
@@ -54,13 +58,13 @@ export class Flow extends Tsunami {
       this.offscreenctx = null;
     }
   }
-  
+
   resizeoffscreen(width, height) {
     if (!this.isoffscreenReady) return;
     this.offscreencanvas.width = width;
     this.offscreencanvas.height = height;
   }
-  
+
   clearoffscreen(color = "#000000") {
     if (!this.isoffscreenReady) return;
     if (this.contextType === "2d") {
@@ -70,11 +74,11 @@ export class Flow extends Tsunami {
       console.warn("Clear method not implemented for non-2d context");
     }
   }
-  
+
   getoffscreenContext() {
     return this.offscreenctx;
   }
-  
+
   transferoffscreenToImageBitmap() {
     if (!this.isoffscreenReady) return null;
     return this.offscreencanvas.transferToImageBitmap();
