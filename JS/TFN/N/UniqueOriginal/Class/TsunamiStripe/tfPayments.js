@@ -103,45 +103,92 @@ export class StripeDonation {
     }
 
     // Subscribe (recurring)
-    async subscribe(email, priceId, saveCustomer = true) {
-        if (!this.stripe) throw new Error("Stripe not initialized");
-        if (!this.cardElement) throw new Error("Card element not mounted");
+    async subscribe(email, priceId, saveCustomer = true, metadata = {}, options = {}) {
+    if (!this.stripe) throw new Error("Stripe not initialized");
+    if (!this.cardElement) throw new Error("Card element not mounted");
+    if (!email) throw new Error("Email is required for subscriptions");
 
-        this.onLoading?.(true);
-        try {
-            const payload = { action: 'createSubscription', email, priceId, saveCustomer };
-            if (this.customerId) payload.customerId = this.customerId;
+    this.onLoading?.(true);
+    try {
+        const payload = {
+            action: 'createSubscription',
+            email,
+            priceId,
+            saveCustomer,
+            metadata,
+            ...options // e.g., trial_period_days, coupon, billing_cycle_anchor
+        };
+        if (this.customerId) payload.customerId = this.customerId;
 
-            const data = await this.request(payload);
-            const { clientSecret, subscriptionId, customerId } = data;
+        const data = await this.request(payload);
+        const { clientSecret, subscriptionId, customerId, status } = data;
 
-            if (saveCustomer && customerId) {
-                this.customerId = customerId;
-                localStorage.setItem('stripeCustomerId', customerId);
-            }
+        if (saveCustomer && customerId) {
+            this.customerId = customerId;
+            localStorage.setItem('stripeCustomerId', customerId);
+        }
 
-            if (!clientSecret) {
-                const result = { status: 'success', message: 'No payment required', subscriptionId };
-                this.onSuccess?.(result);
-                return result;
-            }
-
-            const result = await this.stripe.confirmCardPayment(clientSecret, {
-                payment_method: { card: this.cardElement }
-            });
-
-            if (result.error) throw result.error;
+        // Handle subscriptions with no immediate payment
+        if (!clientSecret) {
+            const result = { status: status || 'active', message: 'No payment required', subscriptionId };
             this.onSuccess?.(result);
             return result;
-
-        } catch (err) {
-            this.onError?.(err);
-            throw err;
-
-        } finally {
-            this.onLoading?.(false);
         }
+
+        // Confirm payment for subscription
+        const result = await this.stripe.confirmCardPayment(clientSecret, {
+            payment_method: { card: this.cardElement }
+        });
+
+        if (result.error) {
+            // Automatic invoice retry logic
+            if (options.autoRetry !== false) {
+                console.warn('Payment failed, queued for retry:', result.error);
+                this.queue.push(payload);
+            }
+            throw result.error;
+        }
+
+        this.onSuccess?.(result);
+        return result;
+
+    } catch (err) {
+        this.onError?.(err);
+        throw err;
+
+    } finally {
+        this.onLoading?.(false);
     }
+}
+
+// Cancel subscription helper
+async cancelSubscription(subscriptionId, atPeriodEnd = true) {
+    if (!subscriptionId) throw new Error("Subscription ID is required");
+
+    const payload = { action: 'cancelSubscription', subscriptionId, atPeriodEnd };
+    try {
+        const result = await this.request(payload);
+        this.onSuccess?.(result);
+        return result;
+    } catch (err) {
+        this.onError?.(err);
+        throw err;
+    }
+}
+
+// Update subscription helper (switch plans, quantity, metadata)
+async updateSubscription(subscriptionId, updates = {}) {
+    if (!subscriptionId) throw new Error("Subscription ID is required");
+    const payload = { action: 'updateSubscription', subscriptionId, updates };
+    try {
+        const result = await this.request(payload);
+        this.onSuccess?.(result);
+        return result;
+    } catch (err) {
+        this.onError?.(err);
+        throw err;
+    }
+}
 
     destroyCard() {
         if (this.cardElement) {
