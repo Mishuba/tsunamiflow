@@ -21,14 +21,17 @@ export class TsunamiFlowNation extends Flow {
        // new (window.AudioContext || window.webkitAudioContext)();
     TfSoundsidCounter = 0;
     TfSoundsGain = {};
-    TfSoundAnalyzer = null;
-    TfSoundAnalyzerOptions = {
+    masterGain = null;
+    TfSoundAnalyser = null;
+    TfSoundAnalyserOptions = {
         fftSize: 2048,
         maxDecibels: 0,
         minDecibels: -100,
         smoothingTimeConstant: 0.5,
         channelCountMode: "max"
     };
+    TfTrackAnalyser = {};
+    TfTrackCompressor = {};
     TfSoundsFloat32FromIterable = null;
     TfSoundsPeriodicWaveOptions = {};
     TfSoundsPeridocWave = null;
@@ -47,13 +50,12 @@ export class TsunamiFlowNation extends Flow {
     TfSoundsOscillator = null;
     TfSoundsWaveShaperNodeOptions = {};
     TfSoundsWaveShaper = null;
-        
+
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
         autoGainControl: true
     };
-    TfSoundsWorkletReady = false;
     elementSourceMap = new WeakMap();
     constructor(options = {}) {
         super(options);
@@ -253,44 +255,78 @@ export class TsunamiFlowNation extends Flow {
         }
     }
     /// context
-
+createTrackChain() {
+    return {
+        gain: this.TfSoundsContext.createGain(),
+        analyser: this.TfSoundsContext.createAnalyser(),
+        compressor: this.TfSoundsContext.createDynamicsCompressor()
+    };
+}
 initAudioContext() {
     if (!this.TfSoundsContext) {
-        this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-
-        // 🔥 MASTER BUS (THIS WAS MISSING)
+        this.TfSoundsContext = new(window.AudioContext || window.webkitAudioContext)();
+        
+        // MASTER
         this.masterGain = this.TfSoundsContext.createGain();
         this.masterGain.gain.value = 1;
-
-        this.masterGain.connect(this.TfSoundsContext.destination);
-
+        
+        // GLOBAL ANALYSER BUS
+        this.TfSoundAnalyser = this.TfSoundsContext.createAnalyser();
+        Object.assign(this.TfSoundAnalyser, this.TfSoundAnalyserOptions);
+        
+        // DATA BUFFER
+        this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
+        this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
+        
+        // ROUTING
+        
+        this.masterGain
+            .connect(this.TfSoundAnalyser)
+            .connect(this.TfSoundsContext.destination);
+        
         this.emit("ready", this.TfSoundsContext);
     }
-
+    
     if (this.TfSoundsContext.state === "suspended") {
         return this.TfSoundsContext.resume();
     }
 }
     addAudioContextSource(element, id = null) {
-this.initAudioContext();
-        const sourceId = id || `source-${++this.TfSoundsidCounter}`;
-        let source;
-
-if (this.elementSourceMap.has(element)) {
-    source = this.elementSourceMap.get(element);
-} else {
-    source = this.TfSoundsContext.createMediaElementSource(element);
-    this.elementSourceMap.set(element, source);
-}
-        const gain = this.TfSoundsContext.createGain();
-        source.connect(gain).connect(this.TfSoundsOutput);
-
-        this.AudioSource[sourceId] = source;
-        this.TfSoundsGain[sourceId] = gain;
-
-        this.emit("sourceAdded", { id: sourceId, source, gain });
-        return sourceId;
+    this.initAudioContext();
+    
+    const sourceId = id || `source-${++this.TfSoundsidCounter}`;
+    let source;
+    
+    if (this.elementSourceMap.has(element)) {
+        source = this.elementSourceMap.get(element);
+    } else {
+        source = this.TfSoundsContext.createMediaElementSource(element);
+        this.elementSourceMap.set(element, source);
     }
+    
+    const chain = this.createTrackChain();
+    
+    // ✅ CLEAN SIGNAL FLOW
+    source
+        .connect(chain.gain)
+        .connect(chain.analyser)
+        .connect(chain.compressor)
+        .connect(this.masterGain);
+    
+    // ✅ STORE EVERYTHING (IMPORTANT)
+    this.AudioSource[sourceId] = source;
+    this.TfSoundsGain[sourceId] = chain.gain;
+    
+    if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
+    if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
+    
+    this.TfTrackAnalyser[sourceId] = chain.analyser;
+    this.TfTrackCompressor[sourceId] = chain.compressor;
+    
+    this.emit("sourceAdded", { id: sourceId });
+    
+    return sourceId;
+}
 
     /* ----------------------------
        Add MediaStreamSource
@@ -306,13 +342,27 @@ if (this.elementSourceMap.has(stream)) {
     source = this.TfSoundsContext.createMediaStreamSource(stream);
     this.elementSourceMap.set(stream, source);
 }
-        const gain = this.TfSoundsContext.createGain();
-        source.connect(gain).connect(this.TfSoundsOutput);
+        
+        const chain = this.createTrackChain();
 
-        this.AudioSource[sourceId] = source;
-        this.TfSoundsGain[sourceId] = gain;
+// ✅ CLEAN SIGNAL FLOW
+source
+    .connect(chain.gain)
+    .connect(chain.analyser)
+    .connect(chain.compressor)
+    .connect(this.masterGain);
 
-        this.emit("sourceAdded", { id: sourceId, source, gain });
+// ✅ STORE EVERYTHING (IMPORTANT)
+this.AudioSource[sourceId] = source;
+this.TfSoundsGain[sourceId] = chain.gain;
+
+if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
+if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
+
+this.TfTrackAnalyser[sourceId] = chain.analyser;
+this.TfTrackCompressor[sourceId] = chain.compressor;
+
+        this.emit("sourceAdded", { id: sourceId, gain: chain.gain });
         return sourceId;
     }
 
@@ -327,14 +377,23 @@ if (this.elementSourceMap.has(stream)) {
        Remove Source
     -----------------------------*/
     removeAudioContextSource(id) {
-        if (this.AudioSource[id]) {
-            this.AudioSource[id].disconnect();
-            this.TfSoundsGain[id].disconnect();
-            delete this.AudioSource[id];
-            delete this.TfSoundsGain[id];
-            this.emit("sourceRemoved", id);
-        }
-    }
+    const source = this.AudioSource[id];
+    const gain = this.TfSoundsGain[id];
+    const analyser = this.TfTrackAnalyser[id];
+    const compressor = this.TfTrackCompressor[id];
+    
+    if (source) source.disconnect();
+    if (gain) gain.disconnect();
+    if (analyser) analyser.disconnect();
+    if (compressor) compressor.disconnect();
+    
+    delete this.AudioSource[id];
+    delete this.TfSoundsGain[id];
+    delete this.TfTrackAnalyser[id];
+    delete this.TfTrackCompressor[id];
+    
+    this.emit("sourceRemoved", id);
+}
     finishAudioContext() {
     if (!this.TfSoundsContext) return;
 
