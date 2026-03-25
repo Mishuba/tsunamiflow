@@ -48,7 +48,29 @@ async init() {
       xhr.send(JSON.stringify(data));
     });
   }
-  
+  async fetchrequest(data) {
+    const res = await fetch(this.backendUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify(data)
+    });
+
+    let json;
+    try {
+        json = await res.json();
+    } catch {
+        throw new Error("Invalid JSON response");
+    }
+
+    if (!res.ok || json.error) {
+        throw json.error || "Unknown error";
+    }
+
+    return json;
+}
   mountCard(elementId) {
     if (!this.stripe) throw new Error("Stripe not initialized");
 
