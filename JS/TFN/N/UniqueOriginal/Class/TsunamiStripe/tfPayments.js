@@ -50,10 +50,16 @@ async init() {
   }
   
   mountCard(elementId) {
+    if (!this.stripe) throw new Error("Stripe not initialized");
+
+    if (this.cardElement) {
+        this.cardElement.unmount();
+    }
+
     const elements = this.stripe.elements();
     this.cardElement = elements.create('card');
     this.cardElement.mount(`#${elementId}`);
-  }
+}
   
   // Donate (one-time) with optional saved customer
   async donate(amount, currency = 'usd', saveCustomer = true, email = null) {
