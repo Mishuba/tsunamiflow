@@ -1,21 +1,21 @@
+// stripe-donation.js
 export class StripeDonation extends T {
     #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
     #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
     static #stripePromise = null;
 
-    // Event hooks
-    onLoading = null;
-    onSuccess = null;
-    onError = null;
+    stripe = null;
+    cardElement = null;
+    customerId = localStorage.getItem("stripeCustomerId") || null;
+    queue = []; // Offline/retry queue
 
     constructor(stripePublicKey, backendUrl) {
+        super();
         this.#stripePublicKey = stripePublicKey || this.#stripePublicKey;
         this.#backendUrl = backendUrl || this.#backendUrl;
-        this.stripe = null;
-        this.cardElement = null;
-        this.customerId = localStorage.getItem('stripeCustomerId') || null;
     }
 
+    // Load Stripe JS once
     static async load() {
         if (window.Stripe) return window.Stripe;
         if (!this.#stripePromise) {
@@ -35,12 +35,12 @@ export class StripeDonation extends T {
         this.stripe = Stripe(this.#stripePublicKey);
     }
 
-    async request(data) {
+    async _fetchRequest(data) {
         const res = await fetch(this.#backendUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify(data)
+            body: JSON.stringify(data),
         });
 
         let json;
@@ -51,149 +51,168 @@ export class StripeDonation extends T {
         return json;
     }
 
+    // ===== XHR VERSION =====
+    _xhrRequest(data) {
+        return new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+
+            xhr.open("POST", this.#backendUrl, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.withCredentials = true;
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState !== 4) return;
+
+                try {
+                    const json = JSON.parse(xhr.responseText);
+
+                    if (xhr.status === 200 && !json.error) {
+                        resolve(json);
+                    } else {
+                        reject(json.error || "Unknown error");
+                    }
+                } catch {
+                    reject("Invalid JSON response");
+                }
+            };
+
+            xhr.onerror = () => reject("Network error");
+
+            xhr.send(JSON.stringify(data));
+        });
+    }
+
+    // ===== UNIFIED REQUEST =====
+    async request(data, retries = 2) {
+        try {
+            if (this.transport === "xhr") {
+                return await this._xhrRequest(data);
+            } else {
+                return await this._fetchRequest(data);
+            }
+        } catch (err) {
+            if (retries > 0) {
+                this.emit("retry", { data, retries });
+                return this.request(data, retries - 1);
+            }
+
+            this.queue.push(data);
+            throw err;
+        }
+    }
+
+
     mountCard(elementId) {
         if (!this.stripe) throw new Error("Stripe not initialized");
         if (this.cardElement) this.cardElement.unmount();
-
         const elements = this.stripe.elements();
-        this.cardElement = elements.create('card');
+        this.cardElement = elements.create("card");
         this.cardElement.mount(`#${elementId}`);
     }
 
-    // Donate (one-time)
-    async donate(amount, currency = 'usd', saveCustomer = true, email = null) {
-        if (!this.stripe) throw new Error("Stripe not initialized");
-        if (!this.cardElement) throw new Error("Card element not mounted");
+    async donate(amount, currency = "usd", saveCustomer = true, email = null, metadata = {}) {
+        if (!this.stripe || !this.cardElement) throw new Error("Stripe not ready");
 
-        this.onLoading?.(true);
+        this.emit("loading", true);
         try {
-            const payload = {
-                action: 'createPaymentIntent',
-                amount: Math.round(amount * 100),
-                currency,
-                saveCustomer,
-                email,
-                customerId: this.customerId
-            };
-
+            const payload = { action: "createPaymentIntent", amount: Math.round(amount * 100), currency, saveCustomer, email, metadata, customerId: this.customerId };
             const data = await this.request(payload);
             const { clientSecret, customerId } = data;
 
             if (saveCustomer && customerId) {
                 this.customerId = customerId;
-                localStorage.setItem('stripeCustomerId', customerId);
+                localStorage.setItem("stripeCustomerId", customerId);
             }
 
-            const result = await this.stripe.confirmCardPayment(clientSecret, {
-                payment_method: { card: this.cardElement }
-            });
-
+            const result = await this.stripe.confirmCardPayment(clientSecret, { payment_method: { card: this.cardElement } });
             if (result.error) throw result.error;
 
-            this.onSuccess?.(result);
+            this.emit("success", result);
             return result;
-
         } catch (err) {
-            this.onError?.(err);
+            this.emit("error", err);
             throw err;
-
         } finally {
-            this.onLoading?.(false);
+            this.emit("loading", false);
         }
     }
 
-    // Subscribe (recurring)
     async subscribe(email, priceId, saveCustomer = true, metadata = {}, options = {}) {
-    if (!this.stripe) throw new Error("Stripe not initialized");
-    if (!this.cardElement) throw new Error("Card element not mounted");
-    if (!email) throw new Error("Email is required for subscriptions");
+        if (!this.stripe || !this.cardElement) throw new Error("Stripe not ready");
+        if (!email) throw new Error("Email required");
 
-    this.onLoading?.(true);
-    try {
-        const payload = {
-            action: 'createSubscription',
-            email,
-            priceId,
-            saveCustomer,
-            metadata,
-            ...options // e.g., trial_period_days, coupon, billing_cycle_anchor
-        };
-        if (this.customerId) payload.customerId = this.customerId;
+        this.emit("loading", true);
+        try {
+            const payload = { action: "createSubscription", email, priceId, saveCustomer, metadata, ...options };
+            if (this.customerId) payload.customerId = this.customerId;
 
-        const data = await this.request(payload);
-        const { clientSecret, subscriptionId, customerId, status } = data;
+            const data = await this.request(payload);
+            const { clientSecret, subscriptionId, customerId, status } = data;
 
-        if (saveCustomer && customerId) {
-            this.customerId = customerId;
-            localStorage.setItem('stripeCustomerId', customerId);
-        }
-
-        // Handle subscriptions with no immediate payment
-        if (!clientSecret) {
-            const result = { status: status || 'active', message: 'No payment required', subscriptionId };
-            this.onSuccess?.(result);
-            return result;
-        }
-
-        // Confirm payment for subscription
-        const result = await this.stripe.confirmCardPayment(clientSecret, {
-            payment_method: { card: this.cardElement }
-        });
-
-        if (result.error) {
-            // Automatic invoice retry logic
-            if (options.autoRetry !== false) {
-                console.warn('Payment failed, queued for retry:', result.error);
-                this.queue.push(payload);
+            if (saveCustomer && customerId) {
+                this.customerId = customerId;
+                localStorage.setItem("stripeCustomerId", customerId);
             }
-            throw result.error;
+
+            if (!clientSecret) {
+                const result = { status: status || "active", message: "No payment required", subscriptionId };
+                this.emit("success", result);
+                return result;
+            }
+
+            const result = await this.stripe.confirmCardPayment(clientSecret, { payment_method: { card: this.cardElement } });
+            if (result.error) {
+                if (options.autoRetry !== false) this.queue.push(payload);
+                throw result.error;
+            }
+
+            this.emit("success", result);
+            return result;
+        } catch (err) {
+            this.emit("error", err);
+            throw err;
+        } finally {
+            this.emit("loading", false);
         }
-
-        this.onSuccess?.(result);
-        return result;
-
-    } catch (err) {
-        this.onError?.(err);
-        throw err;
-
-    } finally {
-        this.onLoading?.(false);
     }
-}
 
-// Cancel subscription helper
-async cancelSubscription(subscriptionId, atPeriodEnd = true) {
-    if (!subscriptionId) throw new Error("Subscription ID is required");
-
-    const payload = { action: 'cancelSubscription', subscriptionId, atPeriodEnd };
-    try {
-        const result = await this.request(payload);
-        this.onSuccess?.(result);
-        return result;
-    } catch (err) {
-        this.onError?.(err);
-        throw err;
+    async cancelSubscription(subscriptionId, atPeriodEnd = true) {
+        if (!subscriptionId) throw new Error("Subscription ID required");
+        const payload = { action: "cancelSubscription", subscriptionId, atPeriodEnd };
+        try {
+            const result = await this.request(payload);
+            this.emit("success", result);
+            return result;
+        } catch (err) {
+            this.emit("error", err);
+            throw err;
+        }
     }
-}
 
-// Update subscription helper (switch plans, quantity, metadata)
-async updateSubscription(subscriptionId, updates = {}) {
-    if (!subscriptionId) throw new Error("Subscription ID is required");
-    const payload = { action: 'updateSubscription', subscriptionId, updates };
-    try {
-        const result = await this.request(payload);
-        this.onSuccess?.(result);
-        return result;
-    } catch (err) {
-        this.onError?.(err);
-        throw err;
+    async updateSubscription(subscriptionId, updates = {}) {
+        if (!subscriptionId) throw new Error("Subscription ID required");
+        const payload = { action: "updateSubscription", subscriptionId, updates };
+        try {
+            const result = await this.request(payload);
+            this.emit("success", result);
+            return result;
+        } catch (err) {
+            this.emit("error", err);
+            throw err;
+        }
     }
-}
 
     destroyCard() {
         if (this.cardElement) {
             this.cardElement.unmount();
             this.cardElement = null;
+        }
+    }
+
+    async flushQueue() {
+        while (this.queue.length) {
+            const data = this.queue.shift();
+            try { await this.request(data); } catch { this.queue.push(data); break; }
         }
     }
 }
