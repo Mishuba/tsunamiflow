@@ -3,7 +3,8 @@ export class T {
     lang = "en-US";          
     domListeners = new Map();          
     worker = null;          
-    workerscriptURL = scriptURL;          
+    workerscriptURL = scriptURL;    
+    maxSize = {64 * 1024 } = {}      
     constructor(options = {}) {          
         if (options.lang) this.lang = options.lang;          
     }          
