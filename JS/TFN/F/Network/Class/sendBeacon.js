@@ -3,7 +3,7 @@ export class TfSendBeacon {
         this.listeners = {};
     }
 
-    sendBeacon(url, data) {
+    SendBeacon(url, data) {
         const blob = data instanceof Blob ? data : new Blob([JSON.stringify(data)], { type: "application/json" });
         const success = navigator.sendBeacon(url, blob);
         this.emit(success ? "success" : "error", { url, data });
