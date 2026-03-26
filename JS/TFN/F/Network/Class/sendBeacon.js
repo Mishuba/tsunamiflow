@@ -1,7 +1,7 @@
 export class TfSendBeacon {
     constructor({ maxSize = 64 * 1024 } = {}) {
         this.listeners = {};
-        this.maxSize = maxSize;
+        this.maxBeaconSize = maxSize;
     }
 
     SendBeacon(url, data) {
@@ -19,7 +19,7 @@ export class TfSendBeacon {
 
         // Size check
         const size = this.#getSize(payload);
-        if (size > this.maxSize) {
+        if (size > this.maxBeaconSize) {
             this.emit("error", { url, data, reason: "Payload too large" });
             return false;
         }
