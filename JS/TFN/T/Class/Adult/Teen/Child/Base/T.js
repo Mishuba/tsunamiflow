@@ -48,7 +48,47 @@ _storeDomListener(id, el, handler, eventType) {
     removeEventListener(event, callback) {          
         if (!this.listeners[event]) return;          
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);          
-    }          
+    }  
+    SendBeacon(url, data) {
+        let payload = data;
+
+        // Normalize payload
+        if (
+            !(data instanceof Blob) &&
+            !(data instanceof FormData) &&
+            !(data instanceof URLSearchParams) &&
+            typeof data !== "string"
+        ) {
+            payload = JSON.stringify(data);
+        }
+
+        // Size check
+        const size = this.#getSize(payload);
+        if (size > this.maxBeaconSize) {
+            this.emit("error", { url, data, reason: "Payload too large" });
+            return false;
+        }
+
+        const accepted = navigator.sendBeacon(url, payload);
+
+        this.emit(accepted ? "queued" : "rejected", {
+            url,
+            data,
+            size
+        });
+
+        return accepted;
+    }
+
+    #getSize(payload) {
+        if (typeof payload === "string") {
+            return new TextEncoder().encode(payload).length;
+        }
+        if (payload instanceof Blob) {
+            return payload.size;
+        }
+        return 0; // fallback (FormData/URLSearchParams not easily measurable)
+    }        
     startworkers() {          
         if (!this.workerscriptURL) return;          
         this.worker = new Worker(this.workerscriptURL);          
