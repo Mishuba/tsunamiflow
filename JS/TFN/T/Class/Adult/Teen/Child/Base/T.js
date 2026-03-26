@@ -51,6 +51,9 @@ _storeDomListener(id, el, handler, eventType) {
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);          
     }  
     SendBeacon(url, data) {
+if (!("sendBeacon" in navigator)) {
+    // skip straight to fetch
+}
         let payload = data;
 
         // Normalize payload
