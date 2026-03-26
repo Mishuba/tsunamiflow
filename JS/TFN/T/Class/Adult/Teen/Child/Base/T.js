@@ -53,7 +53,7 @@ _storeDomListener(id, el, handler, eventType) {
     SendBeacon(url, data) {
 if (!("sendBeacon" in navigator)) {
     // skip straight to fetch
-}
+} else {
         let payload = data;
 
         // Normalize payload
@@ -82,6 +82,7 @@ if (!("sendBeacon" in navigator)) {
         });
 
         return accepted;
+}
     }
 
     #getSize(payload) {
