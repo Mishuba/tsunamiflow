@@ -3,8 +3,8 @@ export class T {
     lang = "en-US";          
     domListeners = new Map();          
     worker = null;          
-    workerscriptURL = scriptURL;    
-    maxSize = {64 * 1024 } = {}      
+    workerscriptURL = null;    
+    maxBeaconSize = 64 * 1024;     
     constructor(options = {}) {          
         if (options.lang) this.lang = options.lang;          
     }          
