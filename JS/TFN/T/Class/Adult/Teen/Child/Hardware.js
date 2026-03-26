@@ -1,210 +1,144 @@
-export class Na extends T {
-    uaData = navigator.userAgentData || null;
-    LegacyUaData = navigator.userAgent || null;
-    BatterySupported = !!navigator.getBattery;
-    battery = null;
-    TsunamiLocation = !!navigator.geolocation;
-    VibrateSupported = !!navigator.vibrate;
-    tfserial = !!navigator.serial;
-    serialport = null;
-    supportedhid = !!navigator.hid;
-    hiddevices = [];
-    supportedusb = !!navigator.usb;
-    usb = null;
-    supportedbluetooth = !!navigator.bluetooth;
-    bluetoothdevice = null;
+export class Fl extends F {
+    blob = null;
+    blobtype = "application/octet-stream"; // default MIME type
+    blobonReady = null;
+    blobobjectURL = null;
+    Arraybuffer = buffer;       // The actual ArrayBuffer
+    ArraybyteLength = byteLength; // Length of the buffer in bytes
+    Arrayview = null;           // Optional DataView for manipulation
+    ArrayonReady = onReady;
     constructor(options = {}) {
         super(options);
-        if (this.BatterySupported) {
-            navigator.getBattery().then(bat => this.battery = bat);
-        } else {
-            console.warn("Battery API not supported");
-        }
-
+        // Callback when buffer is loaded
     }
 
-    getBrands() {
-        if (!(!!this.uaData)) {
-            return [];
-        } else {
-            return this.uaData.brands || [];
-        }
-    }
-
-    getMobile() {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            return this.uaData.mobile;
-        }
-    }
-
-    getPlatform() {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            return this.uaData.platform;
-        }
-    }
-
-    async getHighEntropyValues(hints = [
-        "architecture",
-        "bitness",
-        "model",
-        "platformVersion",
-        "uaFullVersion"
-    ]) {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            try {
-                return await this.uaData.getHighEntropyValues(hints);
-            } catch (err) {
-                console.error("Failed to retrieve high entropy UA values:", err);
-                return null;
+    // Load an existing ArrayBuffer or TypedArray
+    async load(input) {
+        try {
+            if (input instanceof ArrayBuffer) {
+                this.Arraybuffer = input;
+            } else if (ArrayBuffer.isView(input)) { // TypedArray or DataView
+                this.Arraybuffer = input.buffer;
+            } else {
+                throw new Error("Input must be an ArrayBuffer or TypedArray");
             }
+
+            this.ArraybyteLength = this.Arraybuffer.byteLength;
+            this.Arrayview = new DataView(this.Arraybuffer);
+
+            if (this.ArrayonReady) this.ArrayonReady(this.Arraybuffer);
+            return this.Arraybuffer;
+        } catch (err) {
+            console.error("TfArrayBuffer load failed:", err);
+            throw err;
         }
     }
 
-    getFullInfo() {
+    // Get a slice of the buffer
+    slice(start = 0, end = this.ArraybyteLength) {
+        if (!this.Arraybuffer) throw new Error("Buffer not loaded");
+        return this.Arraybuffer.slice(start, end);
+    }
+
+    // Convert to a Blob
+    toBlob(type = "application/octet-stream") {
+        if (!this.Arraybuffer) throw new Error("Buffer not loaded");
+        return new Blob([this.Arraybuffer], { type });
+    }
+
+    // Replace buffer with a new one
+    replace(newBuffer) {
+        if (!newBuffer) return;
+
+        if (!(newBuffer instanceof ArrayBuffer)) {
+            throw new Error("Replacement must be an ArrayBuffer");
+        }
+
+        this.Arraybuffer = newBuffer;
+        this.ArraybyteLength = newBuffer.byteLength;
+        this.Arrayview = new DataView(this.buffer);
+    }
+
+    // Convert info to JSON
+    toJson() {
         return {
-            supported: !!this.uaData,
-            brands: this.getBrands(),
-            mobile: this.getMobile(),
-            platform: this.getPlatform(),
-            legacyUA: this.LegacyUaData
+            bufferExists: !!this.Arraybuffer,
+            byteLength: this.ArraybyteLength
         };
     }
 
-    getCurrentPosition(success, error, options = {}) {
-        if (!this.TsunamiLocation) {
-            return null;
+    // Clear buffer from memory
+    clear() {
+        this.Arraybuffer = null;
+        this.ArraybyteLength = 0;
+        this.Arrayview = null;
+    }
+    // Load blob from an existing Blob or ArrayBuffer
+    async loadblob(blobOrBuffer) {
+        try {
+            if (blobOrBuffer instanceof Blob) {
+                this.blob = blobOrBuffer;
+            } else if (blobOrBuffer instanceof ArrayBuffer) {
+                this.blob = new Blob([blobOrBuffer], { type: this.blobtype });
+            } else {
+                throw new Error("Input must be a Blob or ArrayBuffer");
+            }
+
+            this.blobobjectURL = URL.createObjectURL(this.blob);
+
+            if (this.blobonReady) this.blobonReady(this.blob);
+            return this.blob;
+        } catch (err) {
+            console.error("TfBlob load failed:", err);
+            throw err;
+        }
+    }
+
+    // Attach blob to an element (audio, video, img)
+    attachblob(element) {
+        if (!this.blob) throw new Error("Blob not loaded");
+
+        if (element.tagName === "AUDIO" || element.tagName === "VIDEO" || element.tagName === "IMG") {
+            if (element.src !== this.blobobjectURL) {
+                element.src = this.blobobjectURL;
+            }
+            if (element.tagName !== "IMG" && element.paused) {
+                element.play().catch(() => { });
+            }
         } else {
-            return navigator.geolocation.getCurrentPosition(success, error, options);
+            console.warn("Element is not audio, video, or img. Cannot attach blob.");
         }
     }
 
-    watchPosition(success, error, options = {}) {
-        if (!this.TsunamiLocation) {
-            return null;
-        } else {
-            return navigator.geolocation.watchPosition(success, error, options);
-        }
+    // Replace existing blob with a new one
+    replaceblob(newBlob, newType = null) {
+        if (!newBlob) return;
+
+        // Revoke previous object URL
+        if (this.blobobjectURL) URL.revokeObjectURL(this.blobobjectURL);
+
+        this.blob = newBlob;
+        if (newType) this.blobtype = newType;
+
+        this.blobobjectURL = URL.createObjectURL(this.blob);
     }
 
-    clearWatch(id) {
-        if (!this.TsunamiLocation) {
-            return;
-        } else {
-            navigator.geolocation.clearWatch(id);
-        }
+    // Convert blob info to JSON
+    blobtoJson() {
+        return {
+            blobExists: !!this.blob,
+            type: this.blobtype,
+            size: this.blob ? this.blob.size : 0,
+            objectURL: this.blobobjectURL
+        };
     }
 
-    vibrate(pattern = 200) {
-        if (!this.VibrateSupported) {
-            return;
-        } else {
-            return navigator.vibrate(pattern);
+    // Release memory
+    revokeblob() {
+        if (this.blobobjectURL) {
+            URL.revokeObjectURL(this.blobobjectURL);
+            this.blobobjectURL = null;
         }
-    }
-
-    cancel() {
-        if (!this.VibrateSupported) {
-            return;
-        } else {
-            navigator.vibrate(0);
-        }
-    }
-    async requestserialPort(filters = []) {
-        if (!this.tfserial) return null;
-        try {
-            this.serialport = await navigator.serial.requestPort({ filters });
-            return this.serialport;
-        } catch (err) {
-            console.error("Serial request failed:", err);
-            return null;
-        }
-    }
-
-    async openserial(options = { baudRate: 9600 }) {
-        if (!this.port) return;
-        try {
-            await this.serialport.open(options);
-        } catch (err) {
-            console.error("Serial open failed:", err);
-        }
-    }
-
-    async closeserial() {
-        if (!this.serialport) return;
-        try {
-            await this.port.close();
-        } catch (err) {
-            console.error("Serial close failed:", err);
-        }
-    }
-    async requesthidDevice(filters = []) {
-        if (!this.supportedhid) return null;
-        try {
-            this.hiddevices = await navigator.hid.requestDevice({ filters });
-            return this.devices;
-        } catch (err) {
-            console.error("HID request failed:", err);
-            return null;
-        }
-    }
-
-    async gethidDevices() {
-        if (!this.supportedhid) return [];
-        try {
-            this.hiddevices = await navigator.hid.getDevices();
-            return this.hiddevices;
-        } catch (err) {
-            console.error("HID getDevices failed:", err);
-            return [];
-        }
-    }
-    async requestusbDevice(filters = []) {
-        if (!this.supportedusb) return null;
-        try {
-            this.usb = await navigator.usb.requestDevice({ filters });
-            return this.usb;
-        } catch (err) {
-            console.error("USB request failed:", err);
-            return null;
-        }
-    }
-
-    async openusb() {
-        if (!this.usb) return;
-        try {
-            await this.usb.open();
-        } catch (err) {
-            console.error("USB open failed:", err);
-        }
-    }
-
-    async closeusb() {
-        if (!this.usb) return;
-        try {
-            await this.usb.close();
-        } catch (err) {
-            console.error("USB close failed:", err);
-        }
-    }
-    async requestbluetoothDevice(options = { acceptAllDevices: true }) {
-        if (!this.supported) return null;
-        try {
-            this.bluetoothdevice = await navigator.bluetooth.requestDevice(options);
-            return this.bluetoothdevice;
-        } catch (err) {
-            console.error("Bluetooth request failed:", err);
-            return null;
-        }
-    }
-
-    connectGATTbluetooth() {
-        if (!this.bluetoothdevice) return null;
-        return this.bluetoothdevice.gatt.connect();
+        this.blob = null;
     }
 }

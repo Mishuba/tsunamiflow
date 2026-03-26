@@ -1,4 +1,4 @@
-export class TsuNa extends Tsu {
+export class Ts extends T {
     blob = null;
     blobtype = "application/octet-stream"; // default MIME type
     blobonReady = null;

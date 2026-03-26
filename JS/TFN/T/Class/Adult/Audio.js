@@ -1,4 +1,4 @@
-export class TsunamiFlow extends Tsunami {
+export class Tsun extends Tsu {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
     randomMusicDefault = null;

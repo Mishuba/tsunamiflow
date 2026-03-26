@@ -1,4 +1,4 @@
-export class Mi extends NaMi {
+export class Ne extends N {
     namespace = "tf";
     cookieenabled = navigator.cookieEnabled;
     cookies = this.cookieenabled ? this.parsecookie() : {};
