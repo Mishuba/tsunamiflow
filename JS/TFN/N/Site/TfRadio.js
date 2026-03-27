@@ -1,4 +1,6 @@
-export class TsunamiFlowRadio extends TsunamiFlowNation {
+export class Tsuna extends Tsun {
+  _radioBound = false;
+  _wired = false;
   constructor(options = {}) {
     super(options);
     this.TfAudio.crossOrigin = "anonymous";
@@ -6,51 +8,55 @@ export class TsunamiFlowRadio extends TsunamiFlowNation {
     this.TfAudio.controls = false;
     this.TfAudio.loop = false;
     this.TfAudio.muted = false;
+    this.TfAudio.id = "TfRadio";
     //this.TfAudio.volume = 1;
   }
-  
+
   //element
+
   connectaudio() {
     if (this.AudioSource["radio"]) return;
-  this.addAudioContextSource(this.TfAudio, "radio");
-}
-destroyRadioSource() {
-  const source = this.AudioSource["radio"];
-  const gain = this.TfSoundsGain["radio"];
-  const analyser = this.TfTrackAnalyser["radio"];
-  const compressor = this.TfTrackCompressor["radio"];
+    this.addAudioContextSource(this.TfAudio, "radio");
+  }
+  destroyRadioSource() {
+    const source = this.AudioSource["radio"];
+    const gain = this.TfSoundsGain["radio"];
+    const analyser = this.TfTrackAnalyser["radio"];
+    const compressor = this.TfTrackCompressor["radio"];
 
-  if (source) source.disconnect();
-  if (gain) gain.disconnect();
-  if (analyser) analyser.disconnect();
-  if (compressor) compressor.disconnect();
+    if (source) source.disconnect();
+    if (gain) gain.disconnect();
+    if (analyser) analyser.disconnect();
+    if (compressor) compressor.disconnect();
 
-  delete this.AudioSource["radio"];
-  delete this.TfSoundsGain["radio"];
-  delete this.TfTrackAnalyser["radio"];
-  delete this.TfTrackCompressor["radio"];
+    delete this.AudioSource["radio"];
+    delete this.TfSoundsGain["radio"];
+    delete this.TfTrackAnalyser["radio"];
+    delete this.TfTrackCompressor["radio"];
 
-  this.elementSourceMap.delete(this.TfAudio);
-}
+    this.elementSourceMap.delete(this.TfAudio);
+  }
+
+
   setaudioVolume(value = 1) {
     const gainNode = this.TfSoundsGain["radio"];
-    
+
     if (gainNode) {
       gainNode.gain.value = value;
     } else {
       this.TfAudio.volume = value;
     }
   }
-  
+
   /* -----------------------------
      Playback Controls
   ------------------------------*/
-  
+
   loadaudio(src) {
     this.TfAudio.src = src;
     this.TfAudio.load();
   }
-  
+
   async playaudio() {
     try {
       if (this.TfAudio.paused || this.TfAudio.ended || this.TfAudio.currentTime === 0) {
@@ -64,11 +70,11 @@ destroyRadioSource() {
       }
     }
   }
-  
+
   pauseaudio() {
     this.TfAudio.pause();
   }
-  
+
   stopaudio() {
     if (this.TfAudio) {
       this.TfAudio.pause();
@@ -86,19 +92,19 @@ destroyRadioSource() {
   seekaudio(time) {
     this.TfAudio.currentTime = time;
   }
-  
+
   setaudioLoop(loop = true) {
     this.TfAudio.loop = loop;
   }
-  
+
   setaudioPlaybackRate(rate = 1) {
     this.TfAudio.playbackRate = rate;
   }
-  
+
   muteaudio(state = true) {
     this.TfAudio.muted = state;
   }
-  
+
   loadstartAudio() {
     this.tfRadioLoadStartTime = Date.now();
     console.log("Load start time recorded:", this.tfRadioLoadStartTime);
@@ -106,7 +112,7 @@ destroyRadioSource() {
       if (!this.canvasctx) {
         this.canvasctx = this.canvas.getContext("2d");
       } else {
-        
+
       }
       return this.canvasctx;
     } else {
@@ -128,7 +134,7 @@ destroyRadioSource() {
   }
   canplaythroughAudio() {
     this.MusicState();
-    
+
     //this.startMusic();
   }
   playAudio() {
@@ -149,38 +155,38 @@ destroyRadioSource() {
   }
   startAnalyserLoop() {
     if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
-  if (this._analyserLoopRunning) return;
-  
-  this._analyserLoopRunning = true;
-  
-  const loop = () => {
-    if (!this._analyserLoopRunning) return;
-    
-    if (this.TfSoundAnalyser) {
-      //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
-      this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
-      this.emit("visualizer", this.TfSoundsContextDataArray);
-    }
-    
-    requestAnimationFrame(loop);
-  };
-  
-  loop();
-}
-getTrackAnalyserData(id) {
-  const analyser = this.TfTrackAnalyser[id];
-  if (!analyser) return null;
-  
-  const buffer = new Uint8Array(analyser.frequencyBinCount);
-  analyser.getByteFrequencyData(buffer);
-  return buffer;
-}
-stopAnalyserLoop() {
-  this._analyserLoopRunning = false;
-}
+    if (this._analyserLoopRunning) return;
+
+    this._analyserLoopRunning = true;
+
+    const loop = () => {
+      if (!this._analyserLoopRunning) return;
+
+      if (this.TfSoundAnalyser) {
+        //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
+        this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
+        this.emit("visualizer", this.TfSoundsContextDataArray);
+      }
+
+      requestAnimationFrame(loop);
+    };
+
+    loop();
+  }
+  getTrackAnalyserData(id) {
+    const analyser = this.TfTrackAnalyser[id];
+    if (!analyser) return null;
+
+    const buffer = new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(buffer);
+    return analyser.getByteFrequencyData(buffer); // or buffer
+  }
+  stopAnalyserLoop() {
+    this._analyserLoopRunning = false;
+  }
   updateAnalyser() {
     if (!this.TfSoundAnalyser) return;
-    
+
     //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
     this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
   }
@@ -194,6 +200,7 @@ stopAnalyserLoop() {
   suspendedAudio(suspend) {
     console.log("The audio is suspended" + suspend);
   }
+
   FormatAudioTime(second) {
     this.AudioMinutes = Math.floor(second / 60);
     this.AudioSeconds = second % 60;
@@ -202,25 +209,123 @@ stopAnalyserLoop() {
   timeupdateAudio() {
     this.AudioTiming = Math.floor(this.TfAudio.currentTime);
     const duration = this.TfAudio.duration || 1;
-this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
+    this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
     this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.TfAudio.duration))}`;
   }
+  /*
   volumechangeAudio() {
     console.log("The volume has changed");
   }
-  
+
   getCurrentaudioTime() {
     return this.TfAudio.currentTime;
   }
-  
+
   getaudioDuration() {
     return this.TfAudio.duration;
   }
-  
+
   isaudioPlaying() {
     return !this.TfAudio.paused;
   }
+  */
   //element ends
+
+  RadioEventListeners() {
+    if (this._radioBound) {
+      return;
+    } else {
+      this._radioBound = true;
+      this.soundengine.TfAudio.AddEventListener("emptied", async (emptied) => {
+        this.emptiedAudio(emptied);
+        //cancelAnimationFrame(this.effects.visualizatorController);
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
+
+      this.soundengine.TfAudio.AddEventListener("waiting", (waiting) => {
+        this.waitingAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "waiting");
+
+      this.soundengine.TfAudio.AddEventListener("stalled", (stalled) => {
+        this.stalledAudio(stalled).then(() => {
+          //cancelAnimationFrame 
+          // (this.effects.visualizatorController);    
+        });
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "stalled");
+
+      this.soundengine.TfAudio.AddEventListener("loadstart", async () => {
+        this.loadstartAudio(this.audioElem);
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadstart");
+
+      this.soundengine.TfAudio.AddEventListener("suspended", (suspend) => {
+        this.suspendAudio(suspend).then(() => {
+          //cancelAnimationFrame(this.effects.visualizatorController);
+        });
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "suspended");
+
+      this.soundengine.TfAudio.AddEventListener("loadedmetadata", async () => {
+        this.loadedmetadataAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadedmetadata");
+
+      this.soundengine.TfAudio.AddEventListener("loadeddata", () => {
+        this.loadeddataAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadeddata");
+
+      this.soundengine.TfAudio.AddEventListener("canplay", () => {
+        this.canplayAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "canplay");
+
+      this.soundengine.TfAudio.AddEventListener("canplaythrough", async () => {
+        if (!this._wired) {
+          this.initAudioContext();
+          this._wired = true;
+        }
+        this.canplaythroughAudio();
+      });
+
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "canplaythrough");
+
+      this.soundengine.TfAudio.AddEventListener("play", () => {
+        this.playAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "play");
+
+      this.soundengine.TfAudio.AddEventListener("playing", () => {
+        this.playingAudio();
+
+        //this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "playing");
+
+      this.soundengine.TfAudio.AddEventListener("pause", {
+        //this.audio.pauseAudio(this.audioElem); cancelAnimationFrame(this.effects.visualizatorController);
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "pause");
+
+      this.soundengine.TfAudio.AddEventListener("timeupdate", () => {
+        this.timeupdateAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "timeupdate");
+
+      this.soundengine.TfAudio.AddEventListener("volumechange", (volumechange) => {
+        //this.audio.volumechangeAudio();
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "volumechange");
+
+      this.soundengine.TfAudio.AddEventListener("ended", async (ended) => {
+        //this.audio.endedAudio(this.audioElem, this.worker.radioWorker); cancelAnimationFrame(this.effects.visualizatorController);
+      });
+      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "ended");
+
+    }
+  }
   handleSocketMessage(data) {
     if (data.type === "live_stream") {
       /*
@@ -257,7 +362,7 @@ this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
   }
   async HandleArrayBuffer(buffer) {
     this.initAudioContext();
-    
+
     try {
       const audioBuffer = await this.TfSoundsContext.decodeAudioData(buffer);
       return new Float32Array(audioBuffer.getChannelData(0));
@@ -268,86 +373,134 @@ this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
   }
   playDecodedBuffer(float32Array) {
     this.initAudioContext()
-  const buffer = this.TfSoundsContext.createBuffer(
-    1,
-    float32Array.length,
-    this.TfSoundsContext.sampleRate
-  );
-  
-  buffer.copyToChannel(float32Array, 0);
-  
-  const source = this.TfSoundsContext.createBufferSource();
-  source.buffer = buffer;
-  
-  const chain = this.createTrackChain();
-  
-  source
-    .connect(chain.gain)
-    .connect(chain.compressor)
-    .connect(chain.analyser)
-    .connect(this.masterGain);
-  
-  source.start();
-  source.onended = () => {
-  source.disconnect();
-  chain.gain.disconnect();
-  chain.analyser.disconnect();
-  chain.compressor.disconnect();
-};
-}
+    const buffer = this.TfSoundsContext.createBuffer(
+      1,
+      float32Array.length,
+      this.TfSoundsContext.sampleRate
+    );
+
+    buffer.copyToChannel(float32Array, 0);
+
+    const source = this.TfSoundsContext.createBufferSource();
+    source.buffer = buffer;
+
+    const chain = this.createTrackChain();
+
+    source
+      .connect(chain.gain)
+      .connect(chain.compressor)
+      .connect(chain.analyser)
+      .connect(this.masterGain);
+
+    source.start();
+    source.onended = () => {
+      source.disconnect();
+      chain.gain.disconnect();
+      chain.analyser.disconnect();
+      chain.compressor.disconnect();
+    };
+  }
+
+  RadioReady(title, buttonSpot, last, restart, start, skip) {
+    title.innerHTML = "Welcome to TFN Radio";
+
+    last.id = "TFradioPreviousButton";
+    last.innerHTML = "Previous";
+    buttonSpot.appendChild(last);
+
+    restart.id = "TFRadioRestartButton";
+    restart.innerHTML = "Restart";
+    buttonSpot.appendChild(restart);
+
+    start.id = "TFradioButton";
+    start.innerHTML = "Start Radio";
+    buttonSpot.appendChild(start);
+
+    skip.id = "TFradioSkipButton";
+    skip.innerHTML = "Next";
+    buttonSpot.appendChild(skip);
+
+    this.on("TFradioPreviousButton", () => {
+      this.TfAudio.previousaudio(link);
+      //this.worker.postMessage({type: "radio",system: "previous"});
+    }
+    );
+
+    this.on("TFRadioRestartButton", () => {
+      this.TfAudio.restartSong();
+      start.innerHTML = "Pause Tsunami Radio";
+    }
+    );
+
+    this.on("TFradioButton", () => {
+      if (this.TfAudio.paused) {
+        this.TfAudio.playaudio();
+        start.innerHTML = "Pause Tsuanmi Radio";
+      } else {
+        this.TfAudio.pauseaudio();
+        start.innerHTML = "Play Tsunami Radio";
+      }
+    }
+    );
+
+    this.on("TFradioSkipButton", () => {
+      //this.worker.postMessage({type: "radio", system: "file"});
+    });
+  }
+
   StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8") {
     if (this.WeLive) return;
-    
+
     this.WeLive = true;
     this.connectaudio();
-    
+
     if (window.Hls && Hls.isSupported()) {
       if (this.hls) {
         this.hls.destroy();
       }
-      
+
       this.hls = new Hls();
-      
+
       this.hls.on(Hls.Events.ERROR, (event, data) => {
         console.error("HLS error:", data);
-        
+
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
               this.hls.startLoad();
               break;
-              
+
             case Hls.ErrorTypes.MEDIA_ERROR:
               this.hls.recoverMediaError();
               break;
-              
+
             default:
               this.stopLiveAudio();
               break;
           }
         }
       });
-      
+
       this.hls.loadSource(url);
       this.hls.attachMedia(this.TfAudio);
     } else {
       this.TfAudio.src = url;
     }
-    
+
     this.playaudio();
   }
-  
+
   stopLiveAudio() {
     if (!this.WeLive) return;
-    
+
     this.WeLive = false;
-    
+
     if (this.hls) {
       this.hls.detachMedia();
       this.hls.destroy();
       this.hls = null;
     }
-    
+
     this.TfAudio.pause();
     this.TfAudio.src = "";
   }

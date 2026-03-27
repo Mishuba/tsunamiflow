@@ -1,4 +1,4 @@
-import { Tsu } from "./T/Class/Base/Base.js";
+//import { T } from "./T/Class/Base/Base.js";
 export class MishubaController {
   constructor(user = null, iframe = null, effects = null, websocket = null, audio = null, mixer = null, AudioElement = null, AudioCanvas = null, AudioTitle = null, AudioButtonSpot = null, AudioPrevious = null, AudioOver = null, AudioStart = null, AudioSkip = null, video = null, VideoElement = null, VideoCanvas = null, game = null, store = null, pay = null, worker = null, webcam = null, webrtc = null, recorder = null, streamer = null, screenshare = null) {
     this.user = user;
@@ -50,35 +50,7 @@ export class MishubaController {
   on(id, handler, preventDefault = false, iframe = null) {
     return super.on(id, handler, preventDefault, iframe);
   }
-  async addVideoToBin(file) {
-    const id = crypto.randomUUID();
-    const url = URL.createObjectURL(file);
 
-    this.mediaBin.videos[id] = {
-      id,
-      type: "video",
-      url,
-      created: Date.now()
-    };
-
-    return id;
-  }
-  async playFromBin(id) {
-    const item = this.mediaBin.videos[id];
-    if (!item) return;
-    await this.startMediaSource("video", item.url);
-  }
-  removeFromBin(id) {
-    const item = this.mediaBin.videos[id];
-    if (!item) return;
-
-    URL.revokeObjectURL(item.url);
-    delete this.mediaBin.videos[id];
-  }
-  listVideos() {
-    return Object.values(this.mediaBin.videos)
-      .sort((a, b) => b.created - a.created);
-  }
 
 
   async startMediaSource(type, src = null) {
@@ -215,7 +187,6 @@ export class MishubaController {
 
     this.audioElem.addEventListener("loadstart", async () => {
       this.audio.loadstartAudio(this.audioElem);
-      //this.MusicNetworkState(this.worker.radioWorker, element);
     }); // Fired when the browser has started to load the resource.
 
     this.audioElem.addEventListener("loadedmetadata", async () => {
@@ -257,10 +228,7 @@ export class MishubaController {
       this.audio.waitingAudio(this.audioElem);
     }); //Playback has stopped because of a temporary lack of data.
 
-    this.audioElem.addEventListener("playing", () => {
-      this.audio.playingAudio(this.audioElem, this.audioCanv);
-      this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
-    }); // Playback is ready to start after having been paused or delayed due to lack of data.
+    this.audioElem.addEventListener("playing",); // Playback is ready to start after having been paused or delayed due to lack of data.
 
     this.audioElem.addEventListener("stalled", (stalled) => {
       console.log("the audio has stalled because: " + stalled);

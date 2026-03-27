@@ -473,7 +473,7 @@ export class Tsun extends Tsu {
     /* ----------------------------
        Send message to processor
     -----------------------------*/
-    postMessage(message) {
+    postworkletMessage(message) {
         if (!this.TfSoundsWorkletNode) return;
         this.TfSoundsWorkletNode.port.postMessage(message);
     }

@@ -1,6 +1,7 @@
 export class Tsu extends Ts {
   canvas = null;
   contextTypecanvas = "2d";
+  contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };
   canvasctx = null;
   iscanvasReady = false;
   constructor(options = {}) {
@@ -11,7 +12,7 @@ export class Tsu extends Ts {
   }
   initCanvas() {
     try {
-      this.canvasctx = this.canvas.getContext(this.contextTypecanvas);
+      this.canvasctx = this.canvas.getContext(this.contextTypecanvas, this.contextTypecanvasoption);
       if (!this.canvasctx) throw new Error(`${this.contextTypecanvas} context not supported`);
       this.iscanvasReady = true;
       console.log(`Canvas initialized with ${this.contextTypecanvas} context`);
