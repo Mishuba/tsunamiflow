@@ -1,4 +1,4 @@
-export class TfVideo {
+export class TsunamiFlowVideo Extends Tsu {
     constructor() {
 
     }
