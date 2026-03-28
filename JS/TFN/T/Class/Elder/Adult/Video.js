@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-export class TfVideo {
+export class TsunamiFlowVideo extends Tsu {
     VideoProcessor = null;
     VideoReader = null;
     autoplay = true;
@@ -11,10 +10,6 @@ export class TfVideo {
     VideomediaSource = new MediaSource();
     VideomediaSourceBuffer = null;
     VideoobjectUrl = null;
-=======
-export class TsunamiFlowVideo extends Tsu {
-    constructor() {
->>>>>>> af2bd2161f8024e1b94f70c7c51f2840a2f0e350
 
     queueVideo = [];
     constructor(option = {}) {
@@ -34,10 +29,6 @@ export class TsunamiFlowVideo extends Tsu {
         this.VideomediaSource.addEventListener("sourceopen", () => this.emit("sourceopen"));
         this.VideomediaSource.addEventListener("sourceended", () => this.emit("sourceended"));
         this.VideomediaSource.addEventListener("sourceclose", () => this.emit("sourceclose"));
-    }
-
-    emptiedVideo() {
-        this.VideoNetworkState();
     }
     attachVideoStream(stream) {
         if (!stream) throw new Error("No MediaStream provided");
@@ -230,55 +221,5 @@ export class TsunamiFlowVideo extends Tsu {
         if (context.state === "running" && element.paused && element.currentTime === 0) {
             console.log("Video idle, AudioContext left running");
         }
-    }
-    loadVideo() {
-        this.VideoNetworkState();
-    }
-    loadedVideoMetadata(element, canvas) {
-        this.VideoNetworkState();
-        canvas = element.videoWidth;
-        canvas = element.videoHeight;
-    }
-    loadedVideoData(context) {
-        this.VideoState(context);
-    }
-    canPlayVideo(context) {
-        this.VideoState(context);
-    }
-    canPlayVideoThrough(context) {
-        this.VideoState(context);
-    }
-    playVideo(context) {
-        this.VideoState(context);
-    }
-    pauseVideo(context) {
-        this.VideoState(context);
-    }
-    FormatVideoTime(seconds) {
-        let m = Math.floor(seconds / 60); let s = seconds % 60; return `${m}:${s.toString().padStart(2, "0")}`;
-    }
-    UpdateVideoTime(element) {
-        //let TimingVideo = Math.floor(element.currentTime);
-        //let UsingTfVidTk = `Time: ${this.FormatVideoTime(TimingVideo)}`;
-        //let VideoProcessBar = (element.currentTime / element.duration) * 100;
-    }
-    VideoPlaying(context) {
-        this.VideoState(context);
-    }
-    VideoVolumeChange() {
-        console.log("The video volume has changed");
-    }
-    VideoEnded(context) {
-        this.VideoState(context);
-        console.log("The video has ended");
-    }
-    VideoWaiting(context) {
-        this.VideoState(context);
-    }
-    VideoStalled() {
-        console.log("The video has stalled");
-    }
-    VideoSuspended() {
-        this.VideoNetworkState();
     }
 }
