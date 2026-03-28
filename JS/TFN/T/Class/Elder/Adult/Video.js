@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export class TfVideo {
     VideoProcessor = null;
     VideoReader = null;
@@ -10,6 +11,10 @@ export class TfVideo {
     VideomediaSource = new MediaSource();
     VideomediaSourceBuffer = null;
     VideoobjectUrl = null;
+=======
+export class TsunamiFlowVideo extends Tsu {
+    constructor() {
+>>>>>>> af2bd2161f8024e1b94f70c7c51f2840a2f0e350
 
     queueVideo = [];
     constructor(option = {}) {
