@@ -1,4 +1,4 @@
-export class Tsun extends Tsu {
+export class TsunamiFlowAudio extends Tsu {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
     randomMusicDefault = null;
