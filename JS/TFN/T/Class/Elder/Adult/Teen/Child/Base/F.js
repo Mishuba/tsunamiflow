@@ -118,7 +118,7 @@ this.emit("ws_message", payload);
     if (this._broadcast) {
         this._broadcast(payload);
         };
-
+}
         this.ws.onclose = () => {
             this.connectedws = false;
             this.emit("ws_close");
