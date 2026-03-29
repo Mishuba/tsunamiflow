@@ -11,9 +11,9 @@ export class T {
         if (options.lang) this.lang = options.lang;
     }
 startSharedWorker () {
-SharedWorker.port.start();
+this.SharedWorker.port.start();
 
-SharedWorker.port.onmessage = (event) => {
+this.SharedWorker.port.onmessage = (event) => {
     const msg = event.data;
 
     switch (msg.type) {
@@ -24,10 +24,10 @@ SharedWorker.port.onmessage = (event) => {
 };
 
 // connect once (first tab effectively controls it)
-SharedWorker.port.postMessage({ type: "connect" });
+this.SharedWorker.port.postMessage({ type: "connect" });
 
 // send data
-SharedWorker.port.postMessage({
+this.SharedWorker.port.postMessage({
     type: "send",
     data: { action: "hello" }
 });
