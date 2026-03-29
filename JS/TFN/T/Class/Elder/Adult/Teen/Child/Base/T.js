@@ -24,9 +24,7 @@ this.sharedWorker.port.onmessage = (event) => {
         case "ws_message":
             console.log("From WS:", msg.data);
             break;
-    }
-};
-
+    };
 // connect once (first tab effectively controls it)
 this.SharedWorker.port.postMessage({ type: "connect" });
 
@@ -36,6 +34,14 @@ this.SharedWorker.port.postMessage({
     data: { action: "hello" }
 });
 }
+sendToWorker(type, data = null) {
+    if (!this.sharedWorker) return;
+
+    this.sharedWorker.port.postMessage({
+        type,
+        data
+    });
+}b
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
