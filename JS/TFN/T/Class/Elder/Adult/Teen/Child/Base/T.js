@@ -24,7 +24,7 @@ this.sharedWorker.port.onmessage = (event) => {
             break;
     };
 // connect once (first tab effectively controls it)
-this.SharedWorker.port.postMessage({ type: "connect" });
+this.haredWorker.port.postMessage({ type: "connect" });
 
 // send data
 this.SharedWorker.port.postMessage({
