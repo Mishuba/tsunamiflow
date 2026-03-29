@@ -127,21 +127,14 @@ sendToSharedWorker(type, data = null) {
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
     startWebworkers() {
-        if (this.worker) return;
-        this.worker = new Worker("./WebWorker.js");
+    if (this.worker) return;
 
-        this.worker.onmessage = (event) => this.emit("message", event.data);
-        this.worker.onerror = (err) => this.emit("error", err);
-        console.log("Web Worker started");
-    }
+    this.worker = new Worker("./WebWorker.js");
 
-    postWebworkerMessage(type, data) {
-        if (!this.worker) return;
-        this.worker.postMessage({
-           type, 
-           data
-        });
-    }
+    this.receiveWebworkerMessage(); // 🔥 central handler
+
+    console.log("Web Worker started");
+}
 receiveWebworkerMessage() {
     if (!this.worker) return;
 
