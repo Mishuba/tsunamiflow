@@ -8,38 +8,6 @@ export class T {
     constructor(options = {}) {
         if (options.lang) this.lang = options.lang;
     }
-startSharedWorker () {
-if (this.sharedWorker) return;
-
-    this.sharedWorker = new SharedWorker("/SharedWorker.js");
-
-this.sharedWorker.port.start();
-
-this.sharedWorker.port.onmessage = (event) => {
-    const msg = event.data;
-
-    switch (msg.type) {
-        case "ws_message":
-            console.log("From WS:", msg.data);
-            break;
-    };
-// connect once (first tab effectively controls it)
-this.haredWorker.port.postMessage({ type: "connect" });
-
-// send data
-this.SharedWorker.port.postMessage({
-    type: "send",
-    data: { action: "hello" }
-});
-}
-sendToSharedWorker(type, data = null) {
-    if (!this.sharedWorker) return;
-
-    this.sharedWorker.port.postMessage({
-        type,
-        data
-    });
-}b
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
@@ -126,58 +94,95 @@ sendToSharedWorker(type, data = null) {
         }
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
+    startSharedWorker() {
+        if (this.sharedWorker) return;
+
+        this.sharedWorker = new SharedWorker("/SharedWorker.js");
+
+        this.sharedWorker.port.start();
+
+        this.receiveSharedWorkerMessage(); // 🔥 central handler
+
+        // connect once (first tab effectively controls it)
+        this.sharedWorker.port.postMessage({ type: "connect" });
+
+        // send data
+        this.sharedWorker.port.postMessage({
+            type: "send",
+            data: { action: "hello" }
+        });
+    }
+    receiveSharedWorkerMessage() {
+        this.sharedWorker.port.onmessage = (event) => {
+            const msg = event.data;
+
+            switch (msg.type) {
+                case "ws_message":
+                    console.log("From WS:", msg.data);
+                    break;
+            };
+        }
+    }
+    sendToSharedWorker(type, data = null) {
+        if (!this.sharedWorker) return;
+
+        this.sharedWorker.port.postMessage({
+            type,
+            data
+        });
+    }
     startWebworkers() {
-    if (this.worker) return;
+        if (this.worker) return;
 
-    this.worker = new Worker("./WebWorker.js");
+        this.worker = new Worker("./WebWorker.js");
 
-    this.receiveWebworkerMessage(); // 🔥 central handler
+        this.receiveWebworkerMessage(); // 🔥 central handler
 
-    console.log("Web Worker started");
-}
-receiveWebworkerMessage() {
-    if (!this.worker) return;
+        console.log("Web Worker started");
+    }
+    receiveWebworkerMessage() {
+        if (!this.worker) return;
 
-    this.worker.onmessage = (event) => {
-        const msg = event.data;
+        this.worker.onmessage = (event) => {
+            const msg = event.data;
 
-        if (!msg || typeof msg !== "object") {
-            this.emit("worker_raw", msg);
-            return;
-        }
+            if (!msg || typeof msg !== "object") {
+                this.emit("worker_raw", msg);
+                return;
+            }
 
-        const { type, data, id, error } = msg;
+            const { type, data, id, error } = msg;
 
-        // 🔥 Handle errors first
-        if (error) {
-            this.emit("worker_error", { id, error });
-            return;
-        }
+            // 🔥 Handle errors first
+            if (error) {
+                this.emit("worker_error", { id, error });
+                return;
+            }
 
-        // 🔥 Route by type
-        switch (type) {
-            case "log":
-                console.log("Worker:", data);
-                break;
+            // 🔥 Route by type
+            switch (type) {
+                case "log":
+                    console.log("Worker:", data);
+                    break;
 
-            case "result":
-                this.emit("worker_result", { id, data });
-                break;
+                case "result":
+                    this.emit("worker_result", { id, data });
+                    break;
 
-            case "ws_message":
-                // Forward from SharedWorker (if worker passes it)
-                this.emit("ws_message", data);
-                break;
+                case "ws_message":
+                    // Forward from SharedWorker (if worker passes it)
+                    this.emit("ws_message", data);
+                    break;
 
-            default:
-                this.emit(type, data);
-        }
-    };
+                default:
+                    this.emit(type, data);
+            }
+        };
 
-    this.worker.onerror = (err) => {
-        this.emit("worker_error", err);
-    };
-}
+        this.worker.onerror = (err) => {
+            this.emit("worker_error", err);
+        };
+    }
     terminateWebworker() {
         if (!this.worker) return;
         this.worker.terminate();
