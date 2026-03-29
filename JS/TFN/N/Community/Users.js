@@ -1,15 +1,68 @@
-export class User {
+export class User extends UniqueOriginal {
+  username = null;
+  password = null;
+  membershipLevels = {
+    none: {
+      cost: 0,
+      payment: "none",
+      show: [],
+      displayText: "Please Select a Level",
+      paymentText: ""
+    },
+    free: {
+      cost: 0,
+      payment: "none",
+      show: [
+        "free",
+        "address",
+        "costInfo"
+      ],
+      displayText: "$0.00",
+      paymentText: "No payment required"
+    },
+    regular: {
+      cost: 4,
+      payment: "monthly",
+      show: [
+        "free",
+        "regular",
+        "address",
+        "costInfo"
+      ],
+      displayText: "$4.00",
+      paymentText: "Monthly payment"
+    },
+    vip: {
+      cost: 7,
+      payment: "monthly",
+      show: [
+        "free",
+        "regular",
+        "vip",
+        "address",
+        "costInfo"
+      ],
+      displayText: "$7.00",
+      paymentText: "Monthly payment"
+    },
+    team: {
+      cost: 10,
+      payment: "monthly",
+      show: [
+        "free",
+        "regular",
+        "vip",
+        "team",
+        "address",
+        "costInfo"],
+      displayText: "$10.00",
+      paymentText: "Monthly payment"
+    },
+  }
   constructor(username = null, password = null) {
     this.username = username;
     this.password = password;
-    this.membershipLevels = {
-      none: { cost: 0, payment: "none", show: [], displayText: "Please Select a Level", paymentText: "" },
-      free: { cost: 0, payment: "none", show: ["free", "address", "costInfo"], displayText: "$0.00", paymentText: "No payment required" },
-      regular: { cost: 4, payment: "monthly", show: ["free", "regular", "address", "costInfo"], displayText: "$4.00", paymentText: "Monthly payment" },
-      vip: { cost: 7, payment: "monthly", show: ["free", "regular", "vip", "address", "costInfo"], displayText: "$7.00", paymentText: "Monthly payment" },
-      team: { cost: 10, payment: "monthly", show: ["free", "regular", "vip", "team", "address", "costInfo"], displayText: "$10.00", paymentText: "Monthly payment" },
-    }
-    
+
     // Restore saved login state if any
     const savedUser = localStorage.getItem("TFuser");
     if (savedUser) {
@@ -29,9 +82,9 @@ export class User {
   updateMembership(membershipSelect, sections, membershipCostEl, paymentTypeEl) {
     const level = membershipSelect.value;
     this.hideAllSections(sections);
-    
+
     const config = this.membershipLevels[level] || this.membershipLevels.none;
-    
+
     // Show the necessary sections
     config.show.forEach(sectionName => {
       const el = sections[sectionName];
@@ -39,7 +92,7 @@ export class User {
         el.style.display = "block";
       }
     });
-    
+
     // Update cost/payment
     if (membershipCostEl) membershipCostEl.innerHTML = config.displayText;
     if (paymentTypeEl) paymentTypeEl.innerHTML = config.paymentText;
@@ -49,15 +102,15 @@ export class User {
   signup(fields, extraFields) {
     try {
       const SubFormData = new FormData();
-      
+
       for (const [tf, yj] of Object.entries(fields)) {
         if (yj) SubFormData.append(tf, yj.value);
       }
-      
+
       for (const [key, elem] of Object.entries(extraFields)) {
         if (elem) SubFormData.append(key, elem.value);
       }
-      
+
       const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
@@ -73,18 +126,18 @@ export class User {
       console.error("Signup error:", err);
     }
   }
-  
+
   login(saveSession = true) {
     if (!this.username || !this.password) {
       console.warn("Username or password is empty.");
       return;
     }
-    
+
     try {
       const formData = new FormData();
       formData.append("username", this.username);
       formData.append("password", this.password);
-      
+
       const xhr = new XMLHttpRequest();
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
@@ -92,14 +145,14 @@ export class User {
             const res = xhr.responseText.trim();
             if (res === "success" || res.includes("Welcome")) {
               console.log("Login successful");
-              
+
               // Save session
               if (saveSession) {
                 const data = JSON.stringify({ username: this.username, password: this.password });
                 localStorage.setItem("TFuser", data);
                 sessionStorage.setItem("TFuser", data);
               }
-              
+
               document.getElementById("TFloginIcon").innerHTML = res;
             } else {
               console.warn("Login failed:", res);
@@ -115,7 +168,7 @@ export class User {
       console.error("Login error:", err);
     }
   }
-  
+
   logout() {
     localStorage.removeItem("TFuser");
     sessionStorage.removeItem("TFuser");
@@ -123,14 +176,14 @@ export class User {
     this.password = "";
     console.log("User logged out.");
   }
-  
+
   PostThoughts() {
     const thoughtInput = document.getElementById("TFthought");
-   if (!thoughtInput.value.trim()) return;
-    
+    if (!thoughtInput.value.trim()) return;
+
     const formData = new FormData();
     formData.append("thought", thoughtInput.value);
-    
+
     const xhr = new XMLHttpRequest();
     xhr.onreadystatechange = () => {
       if (xhr.readyState === 4) {

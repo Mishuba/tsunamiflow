@@ -10,7 +10,6 @@ export class TsunamiFlowVideo extends Tsu {
     VideomediaSource = new MediaSource();
     VideomediaSourceBuffer = null;
     VideoobjectUrl = null;
-
     queueVideo = [];
     constructor(option = {}) {
         if (!this.supportedVideomediaSource) {
@@ -19,6 +18,8 @@ export class TsunamiFlowVideo extends Tsu {
         }
         if (option.videoElement) {
             this.videoElement = option.videoElement;
+        } else if (this.find("TsunamiFlowVideoStuff", true)) {
+            this.videoElement = this.find("TsunamiFlowVideoStuff", true);
         } else {
             this.videoElement = document.createElement("video");
         }
@@ -29,6 +30,13 @@ export class TsunamiFlowVideo extends Tsu {
         this.VideomediaSource.addEventListener("sourceopen", () => this.emit("sourceopen"));
         this.VideomediaSource.addEventListener("sourceended", () => this.emit("sourceended"));
         this.VideomediaSource.addEventListener("sourceclose", () => this.emit("sourceclose"));
+        if (option.canvas) {
+            this.canvas = option.canvas;
+        } else if (this.find("TFcanvas", true)) {
+            this.canvas = this.find("TFcanvas", true);
+        } else {
+            this.canvas = document.createElement("video");
+        }
     }
     attachVideoStream(stream) {
         if (!stream) throw new Error("No MediaStream provided");
