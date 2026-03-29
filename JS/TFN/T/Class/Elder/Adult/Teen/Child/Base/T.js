@@ -3,7 +3,7 @@ export class T {
     lang = "en-US";
     domListeners = new Map();
     worker = null;
-    SharedWorker = new SharedWorker("/SharedWorker.js");
+    sharedWorker = new SharedWorker("/SharedWorker.js");
 
     workerscriptURL = null;
     maxBeaconSize = 64 * 1024;
@@ -11,9 +11,13 @@ export class T {
         if (options.lang) this.lang = options.lang;
     }
 startSharedWorker () {
-this.SharedWorker.port.start();
+if (this.sharedWorker) return;
 
-this.SharedWorker.port.onmessage = (event) => {
+    this.sharedWorker = new SharedWorker("/SharedWorker.js");
+
+this.sharedWorker.port.start();
+
+this.sharedWorker.port.onmessage = (event) => {
     const msg = event.data;
 
     switch (msg.type) {
