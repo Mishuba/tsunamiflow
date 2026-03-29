@@ -3,6 +3,8 @@ export class T {
     lang = "en-US";
     domListeners = new Map();
     worker = null;
+const worker = new SharedWorker("/SharedWorker.js");
+
     workerscriptURL = null;
     maxBeaconSize = 64 * 1024;
     constructor(options = {}) {
