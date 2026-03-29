@@ -137,11 +137,54 @@ sendToSharedWorker(type, data = null) {
 
     postWebworkerMessage(type, data) {
         if (!this.worker) return;
-        this.worker.postMessage(type, data);
+        this.worker.postMessage({
+           type, 
+           data
+        });
     }
-    receiveWebworkerMessage() {
+receiveWebworkerMessage() {
+    if (!this.worker) return;
 
-    }
+    this.worker.onmessage = (event) => {
+        const msg = event.data;
+
+        if (!msg || typeof msg !== "object") {
+            this.emit("worker_raw", msg);
+            return;
+        }
+
+        const { type, data, id, error } = msg;
+
+        // 🔥 Handle errors first
+        if (error) {
+            this.emit("worker_error", { id, error });
+            return;
+        }
+
+        // 🔥 Route by type
+        switch (type) {
+            case "log":
+                console.log("Worker:", data);
+                break;
+
+            case "result":
+                this.emit("worker_result", { id, data });
+                break;
+
+            case "ws_message":
+                // Forward from SharedWorker (if worker passes it)
+                this.emit("ws_message", data);
+                break;
+
+            default:
+                this.emit(type, data);
+        }
+    };
+
+    this.worker.onerror = (err) => {
+        this.emit("worker_error", err);
+    };
+}
     terminateWebworker() {
         if (!this.worker) return;
         this.worker.terminate();
