@@ -13,6 +13,7 @@ export class F {
     wsReconnectAttempts = 0;
     uaData = navigator.userAgentData || null;
     LegacyUaData = navigator.userAgent || null;
+
     constructor(options = {}) {
         if (options.role) this.wsRole = options.role;
         if (options.key) this.wsKey = options.key;
@@ -31,6 +32,9 @@ export class F {
             }
         });
     }
+setMessageHandler(fn) {
+    this._broadcast = fn;
+}
     startHeartbeat() {
         if (this.heartbeat) return; // prevent duplicates
 
@@ -108,8 +112,13 @@ export class F {
             } else {
                 this.emit("ws_binary", event.data);
             }
-        };
+this.emit("ws_message", payload);
 
+    // 🔥 broadcast to all tabs
+    if (this._broadcast) {
+        this._broadcast(payload);
+        };
+}
         this.ws.onclose = () => {
             this.connectedws = false;
             this.emit("ws_close");
