@@ -3,13 +3,35 @@ export class T {
     lang = "en-US";
     domListeners = new Map();
     worker = null;
-const worker = new SharedWorker("/SharedWorker.js");
+    SharedWorker = new SharedWorker("/SharedWorker.js");
 
     workerscriptURL = null;
     maxBeaconSize = 64 * 1024;
     constructor(options = {}) {
         if (options.lang) this.lang = options.lang;
     }
+startSharedWorker () {
+SharedWorker.port.start();
+
+SharedWorker.port.onmessage = (event) => {
+    const msg = event.data;
+
+    switch (msg.type) {
+        case "ws_message":
+            console.log("From WS:", msg.data);
+            break;
+    }
+};
+
+// connect once (first tab effectively controls it)
+SharedWorker.port.postMessage({ type: "connect" });
+
+// send data
+SharedWorker.port.postMessage({
+    type: "send",
+    data: { action: "hello" }
+});
+}
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
