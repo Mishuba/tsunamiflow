@@ -3,9 +3,7 @@ export class T {
     lang = "en-US";
     domListeners = new Map();
     worker = null;
-    sharedWorker = new SharedWorker("/SharedWorker.js");
-
-    workerscriptURL = null;
+    sharedWorker = null;
     maxBeaconSize = 64 * 1024;
     constructor(options = {}) {
         if (options.lang) this.lang = options.lang;
@@ -34,7 +32,7 @@ this.SharedWorker.port.postMessage({
     data: { action: "hello" }
 });
 }
-sendToWorker(type, data = null) {
+sendToSharedWorker(type, data = null) {
     if (!this.sharedWorker) return;
 
     this.sharedWorker.port.postMessage({
@@ -128,23 +126,23 @@ sendToWorker(type, data = null) {
         }
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
-    startworkers() {
-        if (!this.workerscriptURL) return;
-        this.worker = new Worker(this.workerscriptURL);
+    startWebworkers() {
+        if (this.worker) return;
+        this.worker = new Worker("./WebWorker.js");
 
         this.worker.onmessage = (event) => this.emit("message", event.data);
         this.worker.onerror = (err) => this.emit("error", err);
         console.log("Web Worker started");
     }
 
-    postworkerMessage(data) {
+    postWebworkerMessage(type, data) {
         if (!this.worker) return;
-        this.worker.postMessage(data);
+        this.worker.postMessage(type, data);
     }
-    receiveworkerMessage() {
+    receiveWebworkerMessage() {
 
     }
-    terminateworker() {
+    terminateWebworker() {
         if (!this.worker) return;
         this.worker.terminate();
         this.worker = null;
