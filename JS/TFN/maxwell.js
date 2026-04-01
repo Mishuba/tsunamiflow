@@ -129,8 +129,62 @@ export class maxwell {
 
     }
 
+    RadioReady() {
+    title.innerHTML = "Welcome to TFN Radio";
+
+    last.id = "TFradioPreviousButton";
+    last.innerHTML = "Previous";
+    buttonSpot.appendChild(last);
+
+    restart.id = "TFRadioRestartButton";
+    restart.innerHTML = "Restart";
+    buttonSpot.appendChild(restart);
+
+    start.id = "TFradioButton";
+    start.innerHTML = "Start Radio";
+    buttonSpot.appendChild(start);
+
+    skip.id = "TFradioSkipButton";
+    skip.innerHTML = "Next";
+    buttonSpot.appendChild(skip);
+
+    this.on("TFradioPreviousButton", () => {
+      this.soundEngine.previousSong();
+      //RadioWorker.postMessage({type: "radio",system: "previous"});
+    }
+    );
+
+    this.on("TFRadioRestartButton", () => {
+      element.currentTime = 0;
+      this.soundEngine.startMusic(element);
+      start.innerHTML = "Pause Tsunami Radio";
+    }
+    );
+
+    this.on("TFradioButton", () => {
+      if (element.paused) {
+        this.soundEngine.playAudio(element);
+        start.innerHTML = "Pause Tsuanmi Radio";
+      } else {
+        this.soundEngine.stopMusic(element);
+        start.innerHTML = "Play Tsunami Radio";
+        //this.audio.startMusic();
+        //this.audio.stopMusic();
+      }
+    }
+    );
+
+    this.on("TFradioSkipButton", () => {
+      element.src = "";
+      RadioWorker.postMessage({
+        type: "radio",
+        system: "file",
+      });
+    }
+    );
+    }
     bindAudio() {
-        this.RadioReady(this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+        this.RadioReady();
         this.soundEngine.RadioEventListeners();
     }
 }
