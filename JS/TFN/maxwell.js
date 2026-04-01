@@ -1,12 +1,13 @@
 export class maxwell {
-    permissionengine = null;
-    soundengine = null;
+    iframe = null
+    soundEngine = null;
     audioTitle = null;
     audioSystem = null;
     audioLast = null;
     audioRestart = null;
     audioStart = null;
     audioSkip = null;
+    videoEngine
     mediaBin = {
         webcams: {},
         videos: {},
@@ -14,11 +15,11 @@ export class maxwell {
         screens: {}
     };
     constructor(option = {}) {
-        if (option.permission) {
-            this.permissionengine = option.permission;
+        if (option.iframe) {
+            this.iframe = option.iframe;
         }
         if (option.sound) {
-            this.soundengine = option.sound;
+            this.soundEngine = option.sound;
         }
         if (option.AudioTitle) {
             this.audioTitle = option.AudioTitle;
@@ -129,7 +130,7 @@ export class maxwell {
     }
 
     bindAudio() {
-        this.soundengine.RadioReady(this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
-        this.soundengine.RadioEventListeners();
+        this.RadioReady(this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
+        this.soundEngine.RadioEventListeners();
     }
 }
