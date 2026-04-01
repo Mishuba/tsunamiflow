@@ -39,11 +39,10 @@ export class maxwell {
             this.audioSkip = option.AudioSkip;
         }
     }
+    async bindAudio() {
 
-    bindPayments() {
-
+        this.audioEngine.RadioEventListeners();
     }
-
     async addVideoToBin(file) {
         const id = crypto.randomUUID();
         const url = URL.createObjectURL(file);
@@ -84,5 +83,8 @@ export class maxwell {
     bindAudio() {
         this.soundengine.RadioReady(this.audioTitle, this.audioSystem, this.audioLast, this.audioRestart, this.audioStart, this.audioSkip);
         this.soundengine.RadioEventListeners();
+    }
+    bindVidSystem() {
+
     }
 }
