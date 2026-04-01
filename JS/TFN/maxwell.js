@@ -39,6 +39,53 @@ export class maxwell {
             this.audioSkip = option.AudioSkip;
         }
     }
+  bindNavBar() {
+    // navigation menu
+    this.on("tfRoster", () => {
+      //i have a function for this already.
+      this.iframe.frame.src = "Iframe/Pages/roster.html";
+      this.iframe.MenuSwitch(this.iframe.frame);
+    }
+    );
+    this.on("tfNews", () => {
+      this.iframe.frame.src = "Iframe/Pages/news.html";
+      this.iframe.MenuSwitch(this.iframe.frame);
+    }
+    );
+
+    this.on("tfCompetitions", () => {
+      this.iframe.frame.src = "Iframe/Pages/Competitions.html";
+      this.iframe.MenuSwitch(this.iframe.frame);
+    }
+    );
+
+    this.on("tfNetwork", () => {
+      this.iframe.frame.src = "Iframe/Pages/TFnetwork.html";
+      this.iframe.MenuSwitch(this.iframe.frame);
+      /*
+         <video
+             controls
+  autoplay
+  muted
+  playsinline
+  width="925"
+>
+  <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
+</video>
+      */
+    }
+    );
+
+    this.on("tfCommunity", () => {
+      this.iframe.frame.src = "Iframe/Pages/Community.html";
+      this.iframe.MenuSwitch(this.iframe.frame)
+
+    });
+
+    this.on("NavLoginButton", () => {
+      this.user.login();
+    }, true);
+  }
 
     bindPayments() {
 
