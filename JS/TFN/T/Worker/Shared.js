@@ -37,6 +37,8 @@ onconnect = (e) => {
             case "binary":
                 core.sendBinaryws(msg.data);
                 break;
+            case "xml":
+                core.requestXml(msg.method, msg.method, msg.data, msg.headers);
         }
     };
 

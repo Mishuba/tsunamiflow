@@ -1,4 +1,4 @@
-export class User extends UniqueOriginal {
+export class User {
   username = null;
   password = null;
   membershipLevels = {

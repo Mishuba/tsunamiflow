@@ -1,4 +1,6 @@
 export class TsunamiFlowVideo extends Tsu {
+    videoElement = null,
+    remoteVideoElement = null,
     VideoProcessor = null;
     VideoReader = null;
     autoplay = true;

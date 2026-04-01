@@ -1,4 +1,4 @@
-export class N {
+export class N extends T {
     constructor(options = {}) {
         this.supported = !!navigator.permissions;
         this.custom = options.custom || {};

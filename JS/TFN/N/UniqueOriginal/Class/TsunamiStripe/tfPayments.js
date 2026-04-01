@@ -1,5 +1,5 @@
 // stripe-donation.js
-export class StripeDonation extends T {
+export class StripeDonation extends Ne {
     #stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
     #backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
     static #stripePromise = null;
@@ -8,7 +8,7 @@ export class StripeDonation extends T {
     cardElement = null;
     customerId = localStorage.getItem("stripeCustomerId") || null;
     queue = []; // Offline/retry queue
-transport = "xml"; // default
+    transport = "xml"; // default
     constructor(stripePublicKey, backendUrl) {
         super();
         this.#stripePublicKey = stripePublicKey || this.#stripePublicKey;
@@ -44,7 +44,7 @@ transport = "xml"; // default
         });
 
         let json;
-        try { json = await res.json(); } 
+        try { json = await res.json(); }
         catch { throw new Error("Invalid JSON response"); }
 
         if (!res.ok || json.error) throw json.error || "Unknown error";
