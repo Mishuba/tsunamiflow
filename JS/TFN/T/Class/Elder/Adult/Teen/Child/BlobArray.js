@@ -3,10 +3,10 @@ export class Ts extends T {
     blobtype = "application/octet-stream"; // default MIME type
     blobonReady = null;
     blobobjectURL = null;
-    Arraybuffer = buffer;       // The actual ArrayBuffer
-    ArraybyteLength = byteLength; // Length of the buffer in bytes
+    Arraybuffer = null;       // The actual ArrayBuffer
+    ArraybyteLength = null; // Length of the buffer in bytes
     Arrayview = null;           // Optional DataView for manipulation
-    ArrayonReady = onReady;
+    ArrayonReady = null;
     constructor(options = {}) {
         super(options);
         // Callback when buffer is loaded
