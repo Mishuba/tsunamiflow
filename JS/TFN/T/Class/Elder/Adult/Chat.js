@@ -1,4 +1,4 @@
-export class Chat extends User {
+export class Chat extends TfPrintful {
 
     constructor() {
 

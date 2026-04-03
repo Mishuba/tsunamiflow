@@ -3,6 +3,7 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
     remoteVideoStream = new MediaStream();
     remoteVideoElement = null;
     WebRtfcPc = null;
+    isLive = false;
     constructor(option = {}) {
 
     }

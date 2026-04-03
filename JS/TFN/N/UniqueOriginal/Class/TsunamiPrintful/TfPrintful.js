@@ -1,4 +1,4 @@
-export class UniqueOriginal extends StripeDonation {
+export class TfPrintful extends User {
   constructor() {
 
   }
