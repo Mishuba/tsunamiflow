@@ -304,7 +304,7 @@ export class Tsuna extends Tsun {
       });
       this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "playing");
 
-      this.soundengine.TfAudio.AddEventListener("pause", {
+      this.soundengine.TfAudio.AddEventListener("pause", async () => {
         //this.audio.pauseAudio(this.audioElem); cancelAnimationFrame(this.effects.visualizatorController);
       });
       this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "pause");
