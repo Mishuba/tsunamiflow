@@ -236,16 +236,18 @@ export class Tsuna extends Tsun {
       return;
     } else {
       this._radioBound = true;
-      this.TfAudio.AddEventListener("emptied", async (emptied) => {
+
+/*     this.TfAudio.AddEventListener("emptied", async (emptied) => {
         this.emptiedAudio(emptied);
         //cancelAnimationFrame(this.effects.visualizatorController);
       });
       this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
+*/
 
-      this.TfAudio.AddEventListener("waiting", (waiting) => {
+   this.TfAudio.AddEventListener("waiting", (waiting) => {
         this.waitingAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "waiting");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.waitingAudio, "waiting");
 
       this.TfAudio.AddEventListener("stalled", (stalled) => {
         this.stalledAudio(stalled).then(() => {
@@ -253,34 +255,34 @@ export class Tsuna extends Tsun {
           // (this.effects.visualizatorController);    
         });
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "stalled");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.stalledAudio, "stalled");
 
       this.TfAudio.AddEventListener("loadstart", async () => {
-        this.loadstartAudio(this.audioElem);
+        this.loadstartAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadstart");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadstartAudio, "loadstart");
 
       this.TfAudio.AddEventListener("suspended", (suspend) => {
-        this.suspendAudio(suspend).then(() => {
+        this.suspendAudio().then(() => {
           //cancelAnimationFrame(this.effects.visualizatorController);
         });
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "suspended");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.suspendAudio, "suspended");
 
       this.TfAudio.AddEventListener("loadedmetadata", async () => {
         this.loadedmetadataAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadedmetadata");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadedmetadataAudio, "loadedmetadata");
 
       this.TfAudio.AddEventListener("loadeddata", () => {
         this.loadeddataAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "loadeddata");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadeddataAudio, "loadeddata");
 
       this.TfAudio.AddEventListener("canplay", () => {
         this.canplayAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "canplay");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplayAudio, "canplay");
 
       this.TfAudio.AddEventListener("canplaythrough", async () => {
         if (!this._wired) {
@@ -290,39 +292,39 @@ export class Tsuna extends Tsun {
         this.canplaythroughAudio();
       });
 
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "canplaythrough");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplaythroughAudio, "canplaythrough");
 
       this.TfAudio.AddEventListener("play", () => {
         this.playAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "play");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playAudio, "play");
 
       this.TfAudio.AddEventListener("playing", () => {
         this.playingAudio();
 
         //this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "playing");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playingAudio, "playing");
 
       this.TfAudio.AddEventListener("pause", async () => {
-        //this.audio.pauseAudio(this.audioElem); cancelAnimationFrame(this.effects.visualizatorController);
+        //this.TfAudio.pauseAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "pause");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.pauseAudio, "pause");
 
       this.TfAudio.AddEventListener("timeupdate", () => {
         this.timeupdateAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "timeupdate");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.timeupdateAudio, "timeupdate");
 
       this.TfAudio.AddEventListener("volumechange", (volumechange) => {
-        //this.audio.volumechangeAudio();
+        //this.volumechangeAudio();
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "volumechange");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.volumechangeAudio, "volumechange");
 
       this.TfAudio.AddEventListener("ended", async (ended) => {
-        //this.audio.endedAudio(this.audioElem, this.worker.radioWorker); cancelAnimationFrame(this.effects.visualizatorController);
+        //this.endedAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "ended");
+      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.endedAudio, "ended");
 
     }
   }
