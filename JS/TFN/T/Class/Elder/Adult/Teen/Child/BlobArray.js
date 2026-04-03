@@ -4,7 +4,7 @@ export class Ts extends T {
     blobonReady = null;
     blobobjectURL = null;
     Arraybuffer = null;       // The actual ArrayBuffer
-    ArraybyteLength = null; // Length of the buffer in bytes
+    ArraybyteLength = 0; // Length of the buffer in bytes
     Arrayview = null;           // Optional DataView for manipulation
     ArrayonReady = null;
     constructor(options = {}) {
