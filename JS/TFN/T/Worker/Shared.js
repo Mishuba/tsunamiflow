@@ -1,7 +1,7 @@
-importScripts("F.js"); // or bundle it
+import { Flo } from "./../Class/Elder/Adult/Teen/OffscreenCanvas.js"; // or bundle it
 
 const ports = [];
-const core = new F({
+const core = new Flo({
     role: "viewer"
 });
 

@@ -1,3 +1,6 @@
+import { Flo } from "./../../Class/Elder/Adult/Teen/OffscreenCanvas.js"; // or bundle it
+
+
 const queue = [];
 
 onmessage = (e) => {

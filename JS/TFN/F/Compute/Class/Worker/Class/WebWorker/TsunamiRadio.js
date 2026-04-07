@@ -1,4 +1,4 @@
-import { NoSubFolder, ThreeFolderSub, FourFolderSub, SixFolderSub, fetchRadioSongs, fetchRadioArrayBuffer } from "../../../../../../T/Functions/Audio/Radio";
+import { NoSubFolder, ThreeFolderSub, FourFolderSub, SixFolderSub, fetchRadioSongs, fetchRadioArrayBuffer } from "../../../../../../T/Functions/Audio/Radio.js";
 
 let hour;
 let minute;
