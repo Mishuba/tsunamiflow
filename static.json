@@ -10,5 +10,13 @@
     { "source": "/Music/*", "destination": "https://radio.tsunamiflow.club/Music/:splat"}
   ],
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+    "routes": [
+    {
+      "src": "/manifest.json",
+      "headers": {
+        "Content-Type": "application/manifest+json"
+      }
+    }
+  ]
 }

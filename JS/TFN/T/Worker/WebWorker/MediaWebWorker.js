@@ -3,14 +3,37 @@ import { Flo } from "./../../Class/Elder/Adult/Teen/OffscreenCanvas.js";
 import { NoSubFolder, ThreeFolderSub, FourFolderSub, SixFolderSub, fetchRadioSongs, fetchRadioArrayBuffer } from "./../../Functions/Audio/Radio.js"; // or bundle it
 
 export class mediaWorker extends Flo {
+    //time below
     hour;
     minute;
     now;
+    //image below
+    backgroundImg
+    //audio below
     TheLastSongUsed;
     CurrentSong;
     visualizatorController;
+    //vid below
+    backgroundVideo;
+    //canvas below
+    Tfhex;
+    rgb;
+    chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
+    frameSkipCount = 2;
+    frameCounter = 0;
     constructor(options = {}) {
         super(options);
+    }
+    UseImage(canvas, corner = false) {
+        this.initOffscreen();
+        this.resizeoffscreen(canvas.width, canvas.height);
+        if (corner) {
+            const logoW = canvas.width / 4;
+            const logoH = canvas.height / 4;
+            this.offscreenctx.drawImage(this.backgroundImg, canvas.width - logoW - 10, 10, logoW, logoH);
+        } else {
+            this.offscreenctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
+        }
     }
     RadioTime(PSL, response = null) {
         this.now = new Date();
@@ -104,8 +127,82 @@ export class mediaWorker extends Flo {
         }
     }
     //////////////////End of Video ////////////////////////////
+    UseVideo(w, h) {
+        this.initOffscreen();
+        if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
+    }
+    webcam(frameData) {
+        this.frameCounter++;
+        if (this.frameCounter % this.frameSkipCount !== 0) {
+            return frameData;
+        }
 
-    async MessageRecieved(event) {
+        const chromaData = frameData.data;
+        const key = this.chromaKeyColorWebcam;
+
+        for (let i = 0; i < chromaData.length; i += 4) {
+            const r = chromaData[i];
+            const g = chromaData[i + 1];
+            const b = chromaData[i + 2];
+
+            const diff =
+                Math.abs(r - key.r) +
+                Math.abs(g - key.g) +
+                Math.abs(b - key.b);
+
+            if (diff < 120) {
+                chromaData[i + 3] = 0; // true transparency
+            }
+        }
+
+        return frameData;
+    }
+    async drawingFrame(vidCanv, TfWebcam) {
+        this.initOffscreen();
+        resizeoffscreen(vidCanv.width, vidCanv.height)
+
+        this.offscreenctx.clearRect(0, 0, w, h);
+
+        // Draw background
+        if (this.backgroundVideo) {
+            this.UseVideo(w, h);
+            if (this.backgroundImg) this.UseImage(ctx, w, h, true); // corner logo
+        } else if (this.backgroundImg) {
+            this.UseImage(ctx, w, h);
+        }
+
+        // Draw to offscreen for chroma key
+        this.offscreenctx.drawImage(TfWebcam, 0, 0, vidCanv.width, vidCanv.height);
+
+        if (this.useChromaKey) {
+            const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
+            const processed = this.webcam(frame);
+            this.offscreenctx.putImageData(processed, 0, 0);
+        }
+
+        // Composite webcam over background
+        return getoffscreenContext();
+    }
+
+    setChromaHex(hex) {
+        this.rgb = parseInt(hex.slice(1), 16);
+        this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
+        this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
+        this.chromaKeyColorWebcam.b = this.rgb & 255;
+    }
+
+    ColorPickerChromaKey(chroma) {
+        this.Tfhex = chroma.value;
+        this.setChromaHex(this.Tfhex);
+        this.useChromaKey = true;
+    }
+
+    disableChromaKey() {
+        this.frameCounter = 0;
+        this.useChromaKey = false;
+    }
+    /////////////////////////////////////////////
+    MessageRecieved(event) {
         if (event.data.type === "radio") {
             if (event.data.system === "file") {
                 fetchRadioSongs();

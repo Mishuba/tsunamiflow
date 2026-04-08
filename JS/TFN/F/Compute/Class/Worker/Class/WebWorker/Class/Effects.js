@@ -1,6 +1,6 @@
 export class TfEffects {
     constructor() {
-this.imageCapture = null;
+        this.imageCapture = null;
         this.Tfhex;
         this.rgb;
         this.chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
@@ -47,7 +47,7 @@ this.imageCapture = null;
             this.backgroundVideo.playsInline = true;
 
             this.backgroundVideo.oncanplay = () => {
-                this.backgroundVideo.play().catch(() => {});
+                this.backgroundVideo.play().catch(() => { });
             };
 
             this.backgroundVideo.load();
@@ -189,29 +189,29 @@ this.imageCapture = null;
     }
 
     webcam(frameData) {
-    this.frameCounter++;
-    if (this.frameCounter % this.frameSkipCount !== 0) {
+        this.frameCounter++;
+        if (this.frameCounter % this.frameSkipCount !== 0) {
+            return frameData;
+        }
+
+        const chromaData = frameData.data;
+        const key = this.chromaKeyColorWebcam;
+
+        for (let i = 0; i < chromaData.length; i += 4) {
+            const r = chromaData[i];
+            const g = chromaData[i + 1];
+            const b = chromaData[i + 2];
+
+            const diff =
+                Math.abs(r - key.r) +
+                Math.abs(g - key.g) +
+                Math.abs(b - key.b);
+
+            if (diff < 120) {
+                chromaData[i + 3] = 0; // true transparency
+            }
+        }
+
         return frameData;
     }
-
-    const chromaData = frameData.data;
-    const key = this.chromaKeyColorWebcam;
-
-    for (let i = 0; i < chromaData.length; i += 4) {
-        const r = chromaData[i];
-        const g = chromaData[i + 1];
-        const b = chromaData[i + 2];
-
-        const diff =
-            Math.abs(r - key.r) +
-            Math.abs(g - key.g) +
-            Math.abs(b - key.b);
-
-        if (diff < 120) {
-            chromaData[i + 3] = 0; // true transparency
-        }
-    }
-
-    return frameData;
-}
 }

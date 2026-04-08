@@ -25,6 +25,8 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
     };
     webcamstream = null;
     webcamonReady = null;
+    backgroundVideo = null;
+    backgroundImg = null;
     videoBitsPerSecond = 4000000;
     audioBitsPerSecond = 128000;
     ScreenSharestream = null;
@@ -127,6 +129,31 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
         this.webcamstream = null;
         this.webcamvideoTrack = null;
         this.webcamaudioTrack = null;
+    }
+    UploadVideo(e) {
+        const file = e.target.files[0];
+        if (file) {
+            this.backgroundVideo = document.createElement("video");
+            this.backgroundVideo.src = URL.createObjectURL(file);
+            this.backgroundVideo.muted = true;
+            this.backgroundVideo.loop = true;
+            this.backgroundVideo.playsInline = true;
+
+            this.backgroundVideo.oncanplay = () => {
+                this.backgroundVideo.play().catch(() => { });
+            };
+
+            this.backgroundVideo.load();
+        }
+    }
+
+    RemoveVideo(ctx, canvas_width, canvas_height) {
+        if (this.backgroundVideo) {
+            this.backgroundVideo.pause();
+            this.backgroundVideo.currentTime = 0;
+            this.backgroundVideo = null;
+            ctx.clearRect(0, 0, canvas_width, canvas_height);
+        }
     }
     startRecorder(stream) {
         if (!stream) throw new Error("TfMediaRecorder requires a MediaStream");
