@@ -2,6 +2,11 @@ export class gameComponent {
     static AmountOfComponents = 0;
     constructor(SpriteNewWidth, SpriteNewHeight, color, SpritePlacementX, SpritePlacementY, type, SpriteStartClippinX, SpriteStartClippinY, SpriteClippedWidth, SpriteClippedHeight, SpriteTextSize, SpriteTextStyle, SpriteTextWidth, SpriteTextHeight, SpriteTextAlign, SpriteTextBaseline, SpriteTextDirection, SpriteLetterSpacing, SpriteFontKerning, SpriteFontStretch, SpriteFontVariantCaps, SpriteTextRendering, SpriteWordSpacing, SpriteTextSettings, SpriteDialog, SpriteState, battleBackground, firstname, lastname, nickname, PhysicalAbility, IntellectualAbility, SocialAbility, EmotionalAbility, ExistentialAbility, EnergeticAbility, MetaCognitiveAbility, headArmor, bodyArmor, armArmor, legArmor, weakAttack, strongAttack, specialAttack, mainSkill, evadeSkill, defenseSkill, knockbackSkill, rangeSkill, aoeSkill, buffSkill, debuffSkill, ultimateSkill) {
         gameComponent.AmountofComponents += 1;
+this.isLocalPlayer = false;
+this.isRemotePlayer = false;
+
+this.targetX = this.x;
+this.targetY = this.y;
         this.exist = true;
         this.width = SpriteNewWidth;
         this.height = SpriteNewHeight;
