@@ -107,6 +107,12 @@ updateMovement(input, deltaTime) {
     if (input.up) this.y -= this.spriteSpeed * deltaTime;
     if (input.down) this.y += this.spriteSpeed * deltaTime;
 }
+updateRemote(deltaTime) {
+    if (!this.isRemotePlayer) return;
+
+    this.x += (this.targetX - this.x) * 0.2;
+    this.y += (this.targetY - this.y) * 0.2;
+}
     static from(data) {
         return new gameComponent(data.width, data.height, data.speedX, data.speedY, data.spriteSpeed, data.color, data.x, data.y, data.type, data.sx, data.sy, data.dx, data.dh, data.textSize, data.textStyle, data.textWidth, data.textHeight, data.textAlign, data.textBaseline, data.textDirection, data.letterSpacing, data.fontKerning, data.fontStretch, data.fontVariantCaps, data.textRendering, data.wordSpacing, data.textSettings, data.spriteDialog, data.spriteState, data.spriteAnimationArray, data.spriteStates, data.spriteStatesFrames, data.spriteFrameInterval, data.battleBackground, data.firstname, data.lastname, data.nickname, data.PhysicalAbility, data.IntellectualAbility, data.SocialAbility, data.EmotionalAbility, data.ExistentialAbility, data.EnergeticAbility, data.MetaCognitiveAbility, data.headArmor, data.bodyArmor, data.armArmor, data.legArmor, data.weakAttack, data.strongAttack, data.specialAttack, data.mainSkill, data.evadeSkill, data.defenseSkill, data.knockbackSkill, data.rangeSkill, data.aoeSkill, data.buffSkill, data.debuffSkill, data.ultimateSkill);
     }
