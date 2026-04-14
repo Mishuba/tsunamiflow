@@ -50,6 +50,23 @@ export class T {
         if (!this.listeners[event]) return;
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
+async tycadome(id, type, action, source, target, timestamp, status, priority, mode, payload) {
+ return {
+    "id": id, //options.id
+    "type": type, //command
+    "action": action, // video.start
+    "source": source, // web
+    "target": target, //"device:web-001"
+    "timestamp": 1710000000, //timestamp
+    "status": status, //"pending"
+    "priority": priority, //high
+    "mode": mode, //"async"
+    "payload": {
+        "resolution": "1080p",
+        "fps": 30
+    } // payload
+ };
+}
     SendBeacon(url, data) {
         if (!("sendBeacon" in navigator)) {
             // skip straight to fetch
