@@ -51,7 +51,7 @@ export class T {
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
 async tycadome(id, type, action, source, target, timestamp, status, priority, mode, payload) {
-   let tycadome = JSON..stringify({
+   let tycadome = {
     "id": id, //options.id
     "type": type, //command
     "action": action, // video.start
@@ -62,8 +62,8 @@ async tycadome(id, type, action, source, target, timestamp, status, priority, mo
     "priority": priority, //high
     "mode": mode, //"async"
     "payload": payload // {}
- });
-   return tyacdome;
+ };
+   return JSON.stringify(tyacdome);
 }
     SendBeacon(url, data) {
         if (!("sendBeacon" in navigator)) {
