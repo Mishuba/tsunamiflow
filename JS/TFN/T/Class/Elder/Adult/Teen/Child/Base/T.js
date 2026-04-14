@@ -57,14 +57,11 @@ async tycadome(id, type, action, source, target, timestamp, status, priority, mo
     "action": action, // video.start
     "source": source, // web
     "target": target, //"device:web-001"
-    "timestamp": 1710000000, //timestamp
+    "timestamp": timestamp, //1710000000
     "status": status, //"pending"
     "priority": priority, //high
     "mode": mode, //"async"
-    "payload": {
-        "resolution": "1080p",
-        "fps": 30
-    } // payload
+    "payload": payload // {}
  });
    return tyacdome;
 }
