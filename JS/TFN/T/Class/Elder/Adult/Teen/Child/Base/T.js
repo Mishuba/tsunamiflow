@@ -65,41 +65,49 @@ async tycadome(id, type, action, source, target, timestamp, status, priority, mo
  };
    return JSON.stringify(tyacdome);
 }
-    SendBeacon(url, data) {
-        if (!("sendBeacon" in navigator)) {
-            // skip straight to fetch
-        } else {
-            let payload = data;
+ async SendBeacon(url, data) {
+    let payload = data;
 
-            // Normalize payload
-            if (
-                !(data instanceof Blob) &&
-                !(data instanceof FormData) &&
-                !(data instanceof URLSearchParams) &&
-                typeof data !== "string"
-            ) {
-                payload = JSON.stringify(data);
-            }
-
-            // Size check
-            const size = this.#getSize(payload);
-            if (size > this.maxBeaconSize) {
-                this.emit("error", { url, data, reason: "Payload too large" });
-                return false;
-            }
-
-            const accepted = navigator.sendBeacon(url, payload);
-
-            this.emit(accepted ? "queued" : "rejected", {
-                url,
-                data,
-                size
-            });
-
-            return accepted;
-        }
+    if (
+        !(data instanceof Blob) &&
+        !(data instanceof FormData) &&
+        !(data instanceof URLSearchParams) &&
+        typeof data !== "string"
+    ) {
+        payload = JSON.stringify(data);
     }
 
+    const size = this.#getSize(payload);
+
+    if (size > this.maxBeaconSize) {
+        this.emit("error", { url, data, reason: "Payload too large" });
+        return false;
+    }
+
+    if ("sendBeacon" in navigator) {
+        const accepted = navigator.sendBeacon(url, payload);
+
+        this.emit(accepted ? "queued" : "rejected", { url, data, size });
+
+        return accepted;
+    }
+
+    // 🔥 REAL fallback
+    try {
+        await fetch(url, {
+            method: "POST",
+            body: payload,
+            keepalive: true,
+            headers: { "Content-Type": "application/json" }
+        });
+
+        this.emit("queued", { url, data, size, fallback: true });
+        return true;
+    } catch (err) {
+        this.emit("error", err);
+        return false;
+    }
+}
     #getSize(payload) {
         if (typeof payload === "string") {
             return new TextEncoder().encode(payload).length;
