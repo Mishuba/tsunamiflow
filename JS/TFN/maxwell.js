@@ -17,6 +17,7 @@ export class maxwell {
         images: {},
         screens: {}
     };
+    game = null;
     constructor(option = {}) {
         if (option.iframe) {
             this.iframe = option.iframe;
@@ -44,6 +45,9 @@ export class maxwell {
         }
         if (option.video) {
             this.videoEngine = option.video;
+        }
+        if (option.game) {
+            this.game = option.game
         }
     }
     bindNavBar() {
@@ -203,6 +207,7 @@ export class maxwell {
         };
         this.bindSignUp();
     }
+
     async addVideoToBin(file) {
         const id = crypto.randomUUID();
         const url = URL.createObjectURL(file);
@@ -379,7 +384,7 @@ export class maxwell {
         }, false, iframe);
 
         this.on("GoLive", () => {
-            if () {
+            if ("start live") {
                 this.videoEngine.isLive = true;
                 this.videoEngine.startSharedWorker();
                 this.videoEngine.sendToSharedWorker(type, data = null);
@@ -394,5 +399,34 @@ export class maxwell {
     }
     async bindStore() {
         await this.user.showProducts();
+    }
+
+    getControllerType(gamepad) {
+        // Detect controller type based on button layout
+        if (gamepad.buttons[0].value === 1) {
+            return 'playstation';
+        } else if (gamepad.buttons[1].value === 1) {
+            return 'xbox';
+        } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
+            return 'switch';
+        } else {
+            //return pcControls();
+        };
+    };
+    gamepadHandler(event, connected) {
+        const gamepad = event.gamepad;
+        if (connected) {
+            this.game.controllerIndex = gamepad.index;
+            console.log("Controller connected at index:", this.controllerIndex);
+            this.game.controllerType = this.getControllerType(gamepad);
+            console.log("Controller type detected:", this.game.controllerType);
+            gamepads[gamepad.index] = gamepad;
+            console.log(`Gamepad connected: ${gamepad.id}`);
+        } else {
+            this.game.controllerIndex = null;
+            this.game.controllerType = null;
+            delete gamepads[gamepad.index];
+            console.log(`Gamepad disconnected: ${gamepad.id}`);
+        }
     }
 }

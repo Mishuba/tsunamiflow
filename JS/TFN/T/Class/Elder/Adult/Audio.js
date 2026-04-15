@@ -1,4 +1,4 @@
-export class TsunamiFlowAudio extends Tsu {
+export class TsunamiFlowAudio extends Tsun {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
     randomMusicDefault = null;
@@ -460,29 +460,29 @@ export class TsunamiFlowAudio extends Tsu {
         this.emit("worklet-ready", this.TfSoundsWorkletNode);
     }
     ///worklet
-async initWorklet(url, wasmUrl, options = {}) {
-    this.initAudioContext();
+    async initWorklet(url, wasmUrl, options = {}) {
+        this.initAudioContext();
 
-    await this.TfSoundsContext.audioWorklet.addModule(url);
+        await this.TfSoundsContext.audioWorklet.addModule(url);
 
-    this.TfSoundsWorkletNode = new AudioWorkletNode(
-        this.TfSoundsContext,
-        "TfSoundsProcessor",
-        options
-    );
+        this.TfSoundsWorkletNode = new AudioWorkletNode(
+            this.TfSoundsContext,
+            "TfSoundsProcessor",
+            options
+        );
 
-    // 🔥 LOAD WASM
-    const wasmBinary = await fetch(wasmUrl).then(r => r.arrayBuffer());
+        // 🔥 LOAD WASM
+        const wasmBinary = await fetch(wasmUrl).then(r => r.arrayBuffer());
 
-    this.TfSoundsWorkletNode.port.postMessage({
-        type: "init_wasm",
-        wasmBinary
-    });
+        this.TfSoundsWorkletNode.port.postMessage({
+            type: "init_wasm",
+            wasmBinary
+        });
 
-    this.TfSoundsWorkletReady = true;
+        this.TfSoundsWorkletReady = true;
 
-    this.emit("worklet-ready", this.TfSoundsWorkletNode);
-}
+        this.emit("worklet-ready", this.TfSoundsWorkletNode);
+    }
     connectworklet(destination) {
         if (!this.TfSoundsWorkletNode) return;
         this.TfSoundsWorkletNode.connect(destination);

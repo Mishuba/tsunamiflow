@@ -1,7 +1,5 @@
 import { Flo } from "./../../Class/Elder/Adult/Teen/OffscreenCanvas.js";
 
-import { NoSubFolder, ThreeFolderSub, FourFolderSub, SixFolderSub, fetchRadioSongs, fetchRadioArrayBuffer } from "./../../Functions/Audio/Radio.js"; // or bundle it
-
 export class mediaWorker extends Flo {
     //time below
     hour;
@@ -12,7 +10,10 @@ export class mediaWorker extends Flo {
     //audio below
     TheLastSongUsed;
     CurrentSong;
+    songList;
     visualizatorController;
+    radioRandom;
+    rangeIndex;
     //vid below
     backgroundVideo;
     //canvas below
@@ -35,6 +36,122 @@ export class mediaWorker extends Flo {
             this.offscreenctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
         }
     }
+    fetchRadioSongs() {
+        this.ok = this.requestXml("GET", "https://world.tsunamiflow.club/RadioPlaylist.php", null, { "X-Request-Type": "fetchRadioSongs" });
+        try {
+            songList = JSON.parse(this.ok.responseText);
+            console.log("Parsed Songs:", songList);
+            this.RadioTime(songList);
+            nextRadioItem = songList;
+        } catch (e) {
+            const text = phpRadio.responseText?.trim();
+            songList = null;
+            console.error("JSON parse error:", e + "xml info: " + text);
+            this.RadioTime(songList);
+        }
+    }
+    NoSubFolder(PSL, tsu, response = null) {
+        if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
+            if (PSL[tsu].length >= 20) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+                this.CurrentSong = PSL[tsu][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+
+            } else {
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                this.CurrentSong = PSL[11][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            }
+        } else {
+            postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        }
+    }
+
+    ThreeFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 19) {
+            this.rangeIndex = 0;
+        } else if (nami >= 20 && nami <= 39) {
+            this.rangeIndex = 1;
+        } else {
+            this.rangeIndex = 2;
+        }
+
+        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 7) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                this.CurrentSong = PSL[11][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            }
+        } else {
+            postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        }
+    }
+
+    FourFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 14) {
+            this.rangeIndex = 0;
+        } else if (nami >= 15 && nami <= 29) {
+            this.rangeIndex = 1;
+        } else if (nami >= 30 && nami <= 44) {
+            this.rangeIndex = 2;
+        } else {
+            this.rangeIndex = 3;
+        }
+
+        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                this.CurrentSong = PSL[11][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            }
+        } else {
+            postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        }
+    }
+
+    SixFolderSub(PSL, tsu, nami, response = null) {
+        this.rangeIndex = Math.floor(nami / 10);
+
+        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 3) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                this.CurrentSong = PSL[11][this.radioRandom];
+                console.log(this.CurrentSong);
+                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+            }
+        } else {
+            postMessage({ type: "radio", file: undefined, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+        }
+    }
+
     RadioTime(PSL, response = null) {
         this.now = new Date();
         this.hour = this.now.getHours();
@@ -42,84 +159,84 @@ export class mediaWorker extends Flo {
 
         switch (this.hour) {
             case 0:
-                FourFolderSub(PSL, 0, this.minute, response);
+                this.FourFolderSub(PSL, 0, this.minute, response);
                 break;
             case 1:
                 if (this.minute <= 4) {
-                    NoSubFolder(PSL, 1, response);
+                    this.NoSubFolder(PSL, 1, response);
                 } else if (this.minute <= 14) {
-                    ThreeFolderSub(PSL, 1, this.minute, response);
+                    this.ThreeFolderSub(PSL, 1, this.minute, response);
                 } else if (this.minute <= 29) {
-                    ThreeFolderSub(PSL, 1, this.minute, response);
+                    this.ThreeFolderSub(PSL, 1, this.minute, response);
                 } else {
-                    ThreeFolderSub(PSL, 1, this.minute, response);
+                    this.ThreeFolderSub(PSL, 1, this.minute, response);
                 }
                 break;
             case 2:
-                NoSubFolder(PSL, 2, response);
+                this.NoSubFolder(PSL, 2, response);
                 break;
             case 3:
-                ThreeFolderSub(PSL, 3, this.minute, response);
+                this.ThreeFolderSub(PSL, 3, this.minute, response);
                 break;
             case 4:
-                ThreeFolderSub(PSL, 4, this.minute, response);
+                this.ThreeFolderSub(PSL, 4, this.minute, response);
                 break;
             case 5:
-                ThreeFolderSub(PSL, 5, this.minute, response);
+                this.ThreeFolderSub(PSL, 5, this.minute, response);
                 break;
             case 6:
-                ThreeFolderSub(PSL, 6, this.minute, response);
+                this.ThreeFolderSub(PSL, 6, this.minute, response);
                 break;
             case 7:
-                ThreeFolderSub(PSL, 7, this.minute, response);
+                this.ThreeFolderSub(PSL, 7, this.minute, response);
                 break;
             case 8:
-                SixFolderSub(PSL, 8, this.minute, response);
+                this.SixFolderSub(PSL, 8, this.minute, response);
                 break;
             case 9:
-                ThreeFolderSub(PSL, 9, this.minute, response);
+                this.ThreeFolderSub(PSL, 9, this.minute, response);
                 break;
             case 10:
-                NoSubFolder(PSL, 10, response);
+                this.NoSubFolder(PSL, 10, response);
                 break;
             case 11:
                 postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
                 break;
             case 12:
-                FourFolderSub(PSL, 12, this.minute, response);
+                this.FourFolderSub(PSL, 12, this.minute, response);
                 break;
             case 13:
-                FourFolderSub(PSL, 13, this.minute, response);
+                this.FourFolderSub(PSL, 13, this.minute, response);
                 break;
             case 14:
-                FourFolderSub(PSL, 14, this.minute, response);
+                this.FourFolderSub(PSL, 14, this.minute, response);
                 break;
             case 15:
-                FourFolderSub(PSL, 15, this.minute, response);
+                this.FourFolderSub(PSL, 15, this.minute, response);
                 break;
             case 16:
-                FourFolderSub(PSL, 16, this.minute, response);
+                this.FourFolderSub(PSL, 16, this.minute, response);
                 break;
             case 17:
-                NoSubFolder(PSL, 17, response);
+                this.NoSubFolder(PSL, 17, response);
                 break;
             case 18:
-                SixFolderSub(PSL, 18, this.minute, response);
+                this.SixFolderSub(PSL, 18, this.minute, response);
                 break;
             case 19:
-                FourFolderSub(PSL, 19, this.minute, response);
+                this.FourFolderSub(PSL, 19, this.minute, response);
                 break;
             case 20:
-                FourFolderSub(PSL, 20, this.minute, response);
+                this.FourFolderSub(PSL, 20, this.minute, response);
                 break;
             case 21:
-                NoSubFolder(PSL, 21, response);
+                this.NoSubFolder(PSL, 21, response);
                 break;
             case 22:
-                NoSubFolder(PSL, 22, response);
+                this.NoSubFolder(PSL, 22, response);
                 break;
             case 23:
-                NoSubFolder(PSL, 23, response);
+                this.NoSubFolder(PSL, 23, response);
                 break;
             default:
                 postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
@@ -205,26 +322,26 @@ export class mediaWorker extends Flo {
     MessageRecieved(event) {
         if (event.data.type === "radio") {
             if (event.data.system === "file") {
-                fetchRadioSongs();
-                this.TheLastSongUsed = this.CurrentSong;
+                this.fetchRadioSongs();
+                this.TheLastSongUsed = this.this.CurrentSong;
             } else if (event.data.system === "start") {
-                fetchRadioArrayBuffer();
-                this.TheLastSongUsed = this.CurrentSong;
+                this.fetchRadioSongs();
+                this.TheLastSongUsed = this.this.CurrentSong;
             } else if (event.data.system === "skip") {
-                this.TheLastSongUsed = this.CurrentSong;
-                fetchRadioSongs();
+                this.TheLastSongUsed = this.this.CurrentSong;
+                this.fetchRadioSongs();
             } else if (event.data.system === "previous") {
                 if (this.TheLastSongUsed === null) {
-                    this.TheLastSongUsed = this.CurrentSong;
-                    postMessage({ type: "radio", system: "Previous", file: this.CurrentSong })
-                } else if (this.TheLastSongUsed !== this.CurrentSong) {
+                    this.TheLastSongUsed = this.this.CurrentSong;
+                    postMessage({ type: "radio", system: "Previous", file: this.this.CurrentSong })
+                } else if (this.TheLastSongUsed !== this.this.CurrentSong) {
                     postMessage({ type: "radio", system: "Previous", file: this.TheLastSongUsed });
                 } else {
-                    postMessage({ type: "radio", system: "Previous", file: this.CurrentSong });
+                    postMessage({ type: "radio", system: "Previous", file: this.this.CurrentSong });
                 }
             } else if (event.data.system === "ended") {
-                this.TheLastSongUsed = this.CurrentSong;
-                fetchRadioSongs();
+                this.TheLastSongUsed = this.this.CurrentSong;
+                this.fetchRadioSongs();
             } else if (event.data.system === "pcm") {
 
             }
