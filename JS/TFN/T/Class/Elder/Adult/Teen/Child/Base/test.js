@@ -1,3 +1,8 @@
+export class test {
+
+constructor(options ={}) {
+
+}
 startSharedWorker() {
     if (this.sharedWorker) return;
 
@@ -9,12 +14,10 @@ startSharedWorker() {
 
     this.receiveSharedWorkerMessage();
 
-    // optional: identify this worker
     this.sendToSharedWorker("register", {
         name: this.workerName || "media"
     });
 }
-
 
 receiveSharedWorkerMessage() {
     this.port.onmessage = (event) => {
@@ -22,20 +25,15 @@ receiveSharedWorkerMessage() {
 
         switch (msg.type) {
             case "ws_message":
-                console.log("From WS:", msg.data);
+                console.log("WS:", msg.data);
                 break;
 
             case "radio.play":
                 this.handleRadio(msg.data);
                 break;
-
-            case "game.state":
-                this.handleGameState(msg.data);
-                break;
         }
     };
 }
-
 
 sendToSharedWorker(type, data = null, meta = {}) {
     if (!this.port) return;
@@ -43,10 +41,7 @@ sendToSharedWorker(type, data = null, meta = {}) {
     this.port.postMessage({
         type,
         data,
-        meta: {
-            worker: this.workerName || "unknown",
-            timestamp: Date.now(),
-            ...meta
-        }
+        meta
     });
+}
 }
