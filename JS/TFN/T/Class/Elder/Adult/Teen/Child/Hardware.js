@@ -1,11 +1,12 @@
 export class Fl extends F {
+    Arraybuffer = null;
+    ArraybyteLength = 0;
+    Arrayview = null;
+    ArrayonReady = null;
     blob = null;
     blobtype = "application/octet-stream"; // default MIME type
     blobonReady = null;
     blobobjectURL = null;
-    Arraybuffer = buffer;       // The actual ArrayBuffer
-    ArraybyteLength = byteLength; // Length of the buffer in bytes
-    Arrayview = null;           // Optional DataView for manipulation
     ArrayonReady = onReady;
     constructor(options = {}) {
         super(options);
