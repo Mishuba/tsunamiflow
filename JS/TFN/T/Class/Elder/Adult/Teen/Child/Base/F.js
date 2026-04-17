@@ -19,10 +19,23 @@ export class F {
         if (options.key) this.wsKey = options.key;
         if (options.baseUrl) this.baseUrl = options.baseUrl;
     }
+    async tycadome(id, type, action, meta, state, mode, payload) {
+        return {
+            "id": id, //options.id
+            "type": type, //command
+            "action": action, // video.start
+            "meta": meta,
+            "timestamp": Math.floor(Date.now() / 1000),
+            "state": state,
+            "mode": mode, //"async"
+            "payload": payload // {}
+        };;
+    }
     on(event, callback) {
         if (!this.listeners[event]) this.listeners[event] = [];
         this.listeners[event].push(callback);
     }
+
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
