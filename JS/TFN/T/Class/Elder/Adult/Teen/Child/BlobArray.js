@@ -57,7 +57,7 @@ export class Ts extends T {
 
         this.Arraybuffer = newBuffer;
         this.ArraybyteLength = newBuffer.byteLength;
-        this.Arrayview = new DataView(this.buffer);
+                    this.Arrayview = new DataView(this.Arraybuffer);
     }
 
     // Convert info to JSON
