@@ -1,4 +1,4 @@
-import { Ts } from "./Child/T.js";
+import { Ts } from "./Child/Canvas.js";
 export class Tsu extends Ts {
   canvas = null;
   contextTypecanvas = "2d";
