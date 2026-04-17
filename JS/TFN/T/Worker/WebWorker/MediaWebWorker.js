@@ -550,12 +550,12 @@ postMessage(tf);
     setTimeout(loop, 16);
   };
   
-  this.visualizatorController = loop;
+  this.visualizatorController = true;
   loop();
 }
 
 stopVisualizerLoop() {
-  this.visualizatorController = null;
+  this.visualizatorController = false;
 }
     //////////////////End of Audio ////////////////////////////
     UseVideo(w, h) {
@@ -590,14 +590,14 @@ stopVisualizerLoop() {
     }
     async drawingFrame(vidCanv, TfWebcam) {
         this.initOffscreen();
-        resizeoffscreen(vidCanv.width, vidCanv.height)
+        this.resizeoffscreen(vidCanv.width, vidCanv.height)
 
-        this.offscreenctx.clearRect(0, 0, w, h);
+        this.offscreenctx.clearRect(0, 0, vidCanv.width, vidCanv.height);
 
         // Draw background
         if (this.backgroundVideo) {
             this.UseVideo(w, h);
-            if (this.backgroundImg) this.UseImage(ctx, w, h, true); // corner logo
+            if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
         } else if (this.backgroundImg) {
             this.UseImage(ctx, w, h);
         }
@@ -612,7 +612,7 @@ stopVisualizerLoop() {
         }
 
         // Composite webcam over background
-        return getoffscreenContext();
+        return this.offscreenctx;
     }
 
     setChromaHex(hex) {
