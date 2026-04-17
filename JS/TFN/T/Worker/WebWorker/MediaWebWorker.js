@@ -424,7 +424,32 @@ postMessage(tf);
                 this.NoSubFolder(PSL, 10, response);
                 break;
             case 11:
-                postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
+                this.CurrentSong = PSL[11][
+    Math.floor(Math.random() * (PSL[11].length - 1))
+];
+let tf = this.tycadome(
+    "tycadome-guest" + Date.now(),
+    "radio",
+    "radio.song",
+    {
+        source: "web",
+        target: "device:web-001"
+    },
+    {
+        status: "pending",
+        priority: "low"
+    },
+    "async",
+    {
+        system: "file",
+        file: this.CurrentSong,
+        //        analyser: this.updateAnalyser(),
+        message: "",
+        buffer: ""
+    }
+);
+
+postMessage(tf);
                 break;
             case 12:
                 this.FourFolderSub(PSL, 12, this.minute, response);
@@ -536,8 +561,11 @@ postMessage(tf);
   if (this.visualizatorController) return;
   
   this.initOffscreen();
+  this.visualizatorController = true;
   
   const loop = () => {
+      if (!this.visualizatorController) return;
+      
         const liveData = this.latestVisualizerData || dataArray;
         const liveLength = liveData.length || bufferLength;
 
@@ -549,8 +577,7 @@ postMessage(tf);
     );
     setTimeout(loop, 16);
   };
-  
-  this.visualizatorController = true;
+ 
   loop();
 }
 
@@ -596,10 +623,10 @@ stopVisualizerLoop() {
 
         // Draw background
         if (this.backgroundVideo) {
-            this.UseVideo(w, h);
+            this.UseVideo(vidCanv.width, vidCanv.height);
             if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
         } else if (this.backgroundImg) {
-            this.UseImage(ctx, w, h);
+            this.UseImage(vidCanv, true;
         }
 
         // Draw to offscreen for chroma key
