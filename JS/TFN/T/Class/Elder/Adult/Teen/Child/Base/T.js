@@ -114,43 +114,6 @@ export class T {
         }
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
-    startSharedWorker() {
-        if (this.sharedWorker) return;
-
-        this.sharedWorker = new SharedWorker("/SharedWorker.js");
-
-        this.sharedWorker.port.start();
-
-        this.receiveSharedWorkerMessage(); // 🔥 central handler
-
-        // connect once (first tab effectively controls it)
-        this.sharedWorker.port.postMessage({ type: "connect" });
-
-        // send data
-        this.sharedWorker.port.postMessage({
-            type: "send",
-            data: { action: "hello" }
-        });
-    }
-    receiveSharedWorkerMessage() {
-        this.sharedWorker.port.onmessage = (event) => {
-            const msg = event.data;
-
-            switch (msg.type) {
-                case "ws_message":
-                    console.log("From WS:", msg.data);
-                    break;
-            };
-        }
-    }
-    sendToSharedWorker(type, data = null) {
-        if (!this.sharedWorker) return;
-
-        this.sharedWorker.port.postMessage({
-            type,
-            data
-        });
-    }
     startWebworkers() {
         if (this.worker) return;
 
