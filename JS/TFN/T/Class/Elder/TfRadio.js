@@ -1,3 +1,4 @@
+import { Tsu } from "./Adult/Audio.js";
 export class Tsuna extends Tsun {
   _radioBound = false;
   _wired = false;
