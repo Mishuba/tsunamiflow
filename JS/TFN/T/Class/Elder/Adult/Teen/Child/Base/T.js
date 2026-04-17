@@ -173,18 +173,18 @@ export class T {
 
             // 🔥 Handle errors first
             if (event.data.error) {
-                this.emit("worker_error", { id, error });
+                this.emit("worker_error", { event.data.error });
                 return;
             }
 
             // 🔥 Route by type
             switch (event.data.type) {
                 case "log":
-                    console.log("Worker:", data);
+                    console.log("Worker:", event.data.type);
                     break;
 
                 case "result":
-                    this.emit("worker_result", { id, data });
+                    this.emit("worker_result", { event.data.id, event.data.payload });
                     break;
 
                 case "ws_message":
