@@ -49,30 +49,167 @@ export class F {
             this.heartbeat = null;
         }
     }
-    requestXml(method, url, data = null, headers = {}) {
-        const xhr = new XMLHttpRequest();
-        xhr.open(method, url, true);
+    async request(method, url, data = null, headers = {}, transport = "fetch") {
+    switch (transport.toLowerCase()) {
 
-        for (const [key, value] of Object.entries(headers)) {
-            xhr.setRequestHeader(key, value);
-        }
+        /* =========================================
+           FETCH (Recommended Default)
+        ========================================= */
+        case "fetch":
+            try {
+                const options = {
+                    method,
+                    headers: { ...headers }
+                };
 
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState === 4) {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    this.emit("success", xhr.responseText);
-                } else {
-                    this.emit("error", xhr.statusText);
+                // Only attach body if needed
+                if (
+                    data !== null &&
+                    method.toUpperCase() !== "GET" &&
+                    method.toUpperCase() !== "HEAD"
+                ) {
+                    if (
+                        typeof data === "object" &&
+                        !(data instanceof FormData) &&
+                        !(data instanceof Blob) &&
+                        !(data instanceof URLSearchParams)
+                    ) {
+                        options.body = JSON.stringify(data);
+
+                        if (!options.headers["Content-Type"]) {
+                            options.headers["Content-Type"] = "application/json";
+                        }
+                    } else {
+                        options.body = data;
+                    }
                 }
-            }
-        };
 
-        xhr.onerror = function () {
-            console.error("Network Error");
-        };
-        xhr.send(data);
-        return xhr;
+                const response = await fetch(url, options);
+
+                if (!response.ok) {
+                    this.emit("error", {
+                        type: "fetch",
+                        status: response.status,
+                        statusText: response.statusText,
+                        url
+                    });
+
+                    throw new Error(response.statusText);
+                }
+
+                const contentType = response.headers.get("content-type") || "";
+
+                let result;
+
+                if (contentType.includes("application/json")) {
+                    result = await response.json();
+                } else if (
+                    contentType.includes("audio") ||
+                    contentType.includes("video") ||
+                    contentType.includes("application/octet-stream")
+                ) {
+                    result = await response.arrayBuffer();
+                } else {
+                    result = await response.text();
+                }
+
+                this.emit("success", {
+                    type: "fetch",
+                    url,
+                    data: result
+                });
+
+                return result;
+
+            } catch (error) {
+                this.emit("error", {
+                    type: "fetch",
+                    url,
+                    error: error.message
+                });
+
+                console.error("Fetch Error:", error);
+                return null;
+            }
+
+        /* =========================================
+           XMLHTTPREQUEST
+        ========================================= */
+        case "xml":
+        case "xhr":
+            return new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+
+                xhr.open(method, url, true);
+
+                for (const [key, value] of Object.entries(headers)) {
+                    xhr.setRequestHeader(key, value);
+                }
+
+                xhr.onreadystatechange = () => {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            this.emit("success", {
+                                type: "xhr",
+                                url,
+                                data: xhr.responseText
+                            });
+
+                            resolve(xhr.responseText);
+                        } else {
+                            this.emit("error", {
+                                type: "xhr",
+                                status: xhr.status,
+                                statusText: xhr.statusText,
+                                url
+                            });
+
+                            reject(xhr.statusText);
+                        }
+                    }
+                };
+
+                xhr.onerror = () => {
+                    this.emit("error", {
+                        type: "xhr",
+                        url,
+                        error: "Network Error"
+                    });
+
+                    console.error("XHR Network Error");
+                    reject("Network Error");
+                };
+
+                if (
+                    data &&
+                    typeof data === "object" &&
+                    !(data instanceof FormData)
+                ) {
+                    xhr.send(JSON.stringify(data));
+                } else {
+                    xhr.send(data);
+                }
+            });
+
+        /* =========================================
+           SEND BEACON
+        ========================================= */
+        case "beacon":
+            return await this.SendBeacon(url, data);
+
+        /* =========================================
+           DEFAULT
+        ========================================= */
+        default:
+            this.emit("error", {
+                type: "transport",
+                error: `Unknown transport: ${transport}`
+            });
+
+            console.error(`Unknown transport type: ${transport}`);
+            return null;
     }
+}
 
     connectws() {
         if (this.ws && this.ws.readyState === WebSocket.OPEN) {
