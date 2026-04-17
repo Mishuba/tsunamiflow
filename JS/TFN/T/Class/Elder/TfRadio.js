@@ -216,7 +216,36 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     if (!this.TfSoundAnalyser) return;
 
     //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
+    const loopAnalyzer = () => {
     this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
+
+let tf = this.tycadome(
+      "tycadome-guest" + Date.now(),
+      "visualizator",
+      "radio.playing",
+      {
+        source: "web",
+        target: "device:web-001"
+      },
+      {
+        status: "pending",
+        priority: "low"
+      },
+      "async",
+      {
+        system: "visual_data",
+        //canvas: this.visualizatorController,
+        //        analyser: this.updateAnalyser(),
+        dataArray: this.TfSoundsContextDataArray,
+        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+        //particles: this.particles
+      });
+
+    this.worker.postMessage(tf);
+
+    requestAnimationFrame(loopAnalyzer);
+};
+loopAnalyzer();
   }
 
   playingAudio() {
