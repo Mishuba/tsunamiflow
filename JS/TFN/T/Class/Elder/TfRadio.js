@@ -142,8 +142,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   playAudio() {
     this.MusicState();
     this.startMusic();
-    this.startAnalyserLoop()
+    this.startAnalyserLoop();
+
     this.visualizatorController = this.canvas.transferControlToOffscreen();
+    this.updateAnalyser();
     let tf = this.tycadome(
       "tycadome-guest" + Date.now(),
       "visualizator",
@@ -160,12 +162,12 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       {
         system: "playing",
         canvas: this.visualizatorController,
-        analyser: this.updateAnalyser(),
+        //        analyser: this.updateAnalyser(),
         dataArray: this.TfSoundsContextDataArray,
         bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
         particles: this.particles
       });
-    this.worker.postMessage(tf, [this.visualizatorController]);
+    this.worker.postMessage(tf, [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
   }
   pauseAudio() {
     this.MusicState();

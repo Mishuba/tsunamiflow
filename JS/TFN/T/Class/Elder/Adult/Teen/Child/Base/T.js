@@ -50,20 +50,14 @@ export class T {
         if (!this.listeners[event]) return;
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
-    async tycadome(id, type, action, source, target, status, priority, mode, payload) {
+    async tycadome(id, type, action, meta, state, mode, payload) {
         return {
             "id": id, //options.id
             "type": type, //command
             "action": action, // video.start
-            "meta": {
-                "source": source, // web
-                "target": target //"device:web-001"
-            },
+            "meta": meta,
             "timestamp": Math.floor(Date.now() / 1000),
-            "state": {
-                "status": status, //"pending"
-                "priority": priority //high
-            },
+            "state": state,
             "mode": mode, //"async"
             "payload": payload // {}
         };;
