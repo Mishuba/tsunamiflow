@@ -51,19 +51,22 @@ export class T {
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
     async tycadome(id, type, action, source, target, status, priority, mode, payload) {
-        let tycadome = {
+        return {
             "id": id, //options.id
             "type": type, //command
             "action": action, // video.start
-            "source": source, // web
-            "target": target, //"device:web-001"
+            "meta": {
+                "source": source, // web
+                "target": target //"device:web-001"
+            },
             "timestamp": Math.floor(Date.now() / 1000),
-            "status": status, //"pending"
-            "priority": priority, //high
+            "state": {
+                "status": status, //"pending"
+                "priority": priority //high
+            },
             "mode": mode, //"async"
             "payload": payload // {}
-        };
-        return JSON.stringify(tycadome);
+        };;
     }
     async SendBeacon(url, data) {
         let payload = data;

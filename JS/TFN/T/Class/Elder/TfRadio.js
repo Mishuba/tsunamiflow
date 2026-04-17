@@ -144,14 +144,27 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.startMusic();
     this.startAnalyserLoop()
     this.visualizatorController = this.canvas.transferControlToOffscreen();
-    let tf = this.tycadome("tycadome-guest" + Date.now(), "visualizator", "radio.playing", "web", "device:web-001", "pending", "low", "async", {
-      system: "playing",
-      canvas: this.visualizatorController,
-      analyser: this.TfSoundAnalyser,
-      dataArray: this.TfSoundsContextDataArray,
-      bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-      particles: this.particles
-    });
+    let tf = this.tycadome(
+      "tycadome-guest" + Date.now(),
+      "visualizator",
+      "radio.playing",
+      {
+        source: "web",
+        target: "device:web-001"
+      },
+      {
+        status: "pending",
+        priority: "low"
+      },
+      "async",
+      {
+        system: "playing",
+        canvas: this.visualizatorController,
+        analyser: this.updateAnalyser(),
+        dataArray: this.TfSoundsContextDataArray,
+        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+        particles: this.particles
+      });
     this.worker.postMessage(tf, [this.visualizatorController]);
   }
   pauseAudio() {
