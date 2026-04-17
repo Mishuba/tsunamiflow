@@ -8,6 +8,10 @@ export class base {
     blobonReady = null;
     blobobjectURL = null;
     ArrayonReady = onReady;
+    dbName = dbName;
+    dbversion = 1;
+    dbstores = [];
+    db = null;
 constructor(options = {}) {
 
 }
