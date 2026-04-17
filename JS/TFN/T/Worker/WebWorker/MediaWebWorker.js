@@ -310,9 +310,11 @@ export class mediaWorker extends Flo {
             CtxX += barWidth + 1;
         }
 
-        this.visualizatorController = requestAnimationFrame(() => {
-            this.RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles);
-        });
+        this.visualizatorController = async () => {
+this.RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles);
+    setTimeout(loop, 16); // ~60fps
+};
+this.visualizatorController();
     }
     //////////////////End of Audio ////////////////////////////
     UseVideo(w, h) {
