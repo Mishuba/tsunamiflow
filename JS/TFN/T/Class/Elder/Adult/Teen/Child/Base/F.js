@@ -200,6 +200,43 @@ export class F {
         /* =========================================
            DEFAULT
         ========================================= */
+case "arraybuffer":
+case "binary":
+case "audio":
+    try {
+        const response = await fetch(url, {
+            method,
+            headers
+        });
+
+        if (!response.ok) {
+            this.emit("error", {
+                type: "binary",
+                status: response.status,
+                url
+            });
+            return null;
+        }
+
+        const buffer = await response.arrayBuffer();
+
+        this.emit("success", {
+            type: "binary",
+            url,
+            data: buffer
+        });
+
+        return buffer;
+
+    } catch (err) {
+        this.emit("error", {
+            type: "binary",
+            url,
+            error: err.message
+        });
+
+        return null;
+    }
         default:
             this.emit("error", {
                 type: "transport",
