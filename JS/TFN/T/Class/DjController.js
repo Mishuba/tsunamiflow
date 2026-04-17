@@ -1,4 +1,5 @@
-export class M {
+import { TsunamiFlowRadio } from "./Elder/TfRadio.js";
+export class M extends TsunamiFlowRadio {
     audio = null;
     MixerDestination = this.TfSoundsContext.createMediaStreamDestination();
     constructor(option = {}) {
