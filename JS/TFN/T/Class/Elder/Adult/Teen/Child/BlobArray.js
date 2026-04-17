@@ -1,3 +1,4 @@
+import { T } from "./T.js";
 export class Ts extends T {
     blob = null;
     blobtype = "application/octet-stream"; // default MIME type
