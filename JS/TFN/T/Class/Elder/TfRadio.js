@@ -1,5 +1,5 @@
-import { Tsu } from "./Adult/Audio.js";
-export class Tsuna extends Tsun {
+import { TsunamiFlowAudio } from "./Adult/Audio.js";
+export class TsunamiFlowRadio extends TsunamiFlowAudio {
   _radioBound = false;
   _wired = false;
   particles = [];
