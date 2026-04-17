@@ -36,7 +36,7 @@ export class mediaWorker extends Flo {
             this.offscreenctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
         }
     }
-    fetchRadioSongs() {
+    async fetchRadioSongs() {
         try {
             this.songList = await this.request(
     "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
@@ -44,12 +44,12 @@ export class mediaWorker extends Flo {
     { "X-Request-Type": "fetchRadioSongs" },
     "fetch"
 );
-            this.RadioTime(songList);
-            this.nextRadioItem = songList;
+            this.RadioTime(this.songList);
+            this.nextRadioItem = this.songList;
         } catch (e) {
         this.songList = null;
             console.error("JSON parse error:", e);
-            this.RadioTime(songList);
+            this.RadioTime(this.songList);
         }
     }
     NoSubFolder(PSL, tsu, response = null) {
