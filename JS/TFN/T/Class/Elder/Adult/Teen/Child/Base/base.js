@@ -1,5 +1,13 @@
 export class base {
-
+    Arraybuffer = null;
+    ArraybyteLength = 0;
+    Arrayview = null;
+    ArrayonReady = null;
+    blob = null;
+    blobtype = "application/octet-stream"; // default MIME type
+    blobonReady = null;
+    blobobjectURL = null;
+    ArrayonReady = onReady;
 constructor(options = {}) {
 
 }
