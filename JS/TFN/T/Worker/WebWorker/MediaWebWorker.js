@@ -392,56 +392,56 @@ export class mediaWorker extends Flo {
     /////////////////////////////////////////////
     MessageRecieved(event) {
         if (event.data.type === "radio") {
-            if (event.data.system === "file") {
+            if (event.data.payload.system === "file") {
                 this.fetchRadioSongs();
-                this.TheLastSongUsed = this.this.CurrentSong;
-            } else if (event.data.system === "start") {
+                this.TheLastSongUsed = this.CurrentSong;
+            } else if (event.data.payload.system === "start") {
                 this.fetchRadioSongs();
-                this.TheLastSongUsed = this.this.CurrentSong;
-            } else if (event.data.system === "skip") {
-                this.TheLastSongUsed = this.this.CurrentSong;
+                this.TheLastSongUsed = this.CurrentSong;
+            } else if (event.data.payload.system === "skip") {
+                this.TheLastSongUsed = this.CurrentSong;
                 this.fetchRadioSongs();
-            } else if (event.data.system === "previous") {
+            } else if (event.data.payload.system === "previous") {
                 if (this.TheLastSongUsed === null) {
-                    this.TheLastSongUsed = this.this.CurrentSong;
-                    postMessage({ type: "radio", system: "Previous", file: this.this.CurrentSong })
-                } else if (this.TheLastSongUsed !== this.this.CurrentSong) {
+                    this.TheLastSongUsed = this.CurrentSong;
+                    postMessage({ type: "radio", system: "Previous", file: this.CurrentSong })
+                } else if (this.TheLastSongUsed !== this.CurrentSong) {
                     postMessage({ type: "radio", system: "Previous", file: this.TheLastSongUsed });
                 } else {
-                    postMessage({ type: "radio", system: "Previous", file: this.this.CurrentSong });
+                    postMessage({ type: "radio", system: "Previous", file: this.CurrentSong });
                 }
-            } else if (event.data.system === "ended") {
-                this.TheLastSongUsed = this.this.CurrentSong;
+            } else if (event.data.payload.system === "ended") {
+                this.TheLastSongUsed = this.CurrentSong;
                 this.fetchRadioSongs();
-            } else if (event.data.system === "pcm") {
+            } else if (event.data.payload.system === "pcm") {
 
             }
         } else if (event.data.type === "stream") {
             //Streaming Chuncks
-            if (event.data.system === "audio array") {
+            if (event.data.payload.system === "audio array") {
 
 
-                console.log("Processing audio array:", event.data.audioArray);
+               // console.log("Processing audio array:", event.data.audioArray);
 
             } else {
 
             }
         } else if (event.data.type === "downloads") {
             // Handle Downloads  
-            if (event.data.system === "") {
+            if (event.data.payload.system === "") {
 
             } else {
 
             }
         } else if (event.data.type === "calculations") {
             //Audio Processing
-            if (event.data.system === "fft") {
+            if (event.data.payload.system === "fft") {
 
-            } else if (event.data.system === "Peak Detection") {
+            } else if (event.data.payload.system === "Peak Detection") {
 
-            } else if (event.data.system === "signaling") {
+            } else if (event.data.payload.system === "signaling") {
 
-            } else if (event.data.system === "RMS") {
+            } else if (event.data.payload.system === "RMS") {
 
             } else {
 
@@ -457,28 +457,28 @@ export class mediaWorker extends Flo {
             }
         } else if (event.data.type === "processor") {
             //
-            if (event.data.system === "stereo") {
+            if (event.data.payload.system === "stereo") {
                 // Stereo 
 
                 //Mono
-            } else if (event.data.system === "amplitude") {
+            } else if (event.data.payload.system === "amplitude") {
 
-            } else if (event.data.system === "volume peak Detection") {
+            } else if (event.data.payload.system === "volume peak Detection") {
 
-            } else if (event.data.system === "filtering") {
+            } else if (event.data.payload.system === "filtering") {
 
-            } else if (event.data.system === "Zero Crossing") {
+            } else if (event.data.payload.system === "Zero Crossing") {
 
-            } else if (event.data.system === "Pitch Detection") {
+            } else if (event.data.payload.system === "Pitch Detection") {
 
-            } else if (event.data.system === "decode") {
+            } else if (event.data.payload.system === "decode") {
 
             } else {
 
             }
         } else if (event.data.type === "game") {
             //
-            if (event.data.system === "") {
+            if (event.data.payload.system === "") {
 
             } else {
 
