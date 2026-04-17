@@ -1,4 +1,4 @@
-export class T {
+export class T extends base {
     listeners = {};
     lang = "en-US";
     domListeners = new Map();
