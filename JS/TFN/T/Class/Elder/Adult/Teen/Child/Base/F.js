@@ -32,9 +32,9 @@ export class F {
             }
         });
     }
-setMessageHandler(fn) {
-    this._broadcast = fn;
-}
+    setMessageHandler(fn) {
+        this._broadcast = fn;
+    }
     startHeartbeat() {
         if (this.heartbeat) return; // prevent duplicates
 
@@ -67,6 +67,9 @@ setMessageHandler(fn) {
             }
         };
 
+        xhr.onerror = function () {
+            console.error("Network Error");
+        };
         xhr.send(data);
         return xhr;
     }
@@ -112,13 +115,13 @@ setMessageHandler(fn) {
             } else {
                 this.emit("ws_binary", event.data);
             }
-this.emit("ws_message", payload);
+            this.emit("ws_message", payload);
 
-    // 🔥 broadcast to all tabs
-    if (this._broadcast) {
-        this._broadcast(payload);
-        };
-}
+            // 🔥 broadcast to all tabs
+            if (this._broadcast) {
+                this._broadcast(payload);
+            };
+        }
         this.ws.onclose = () => {
             this.connectedws = false;
             this.emit("ws_close");

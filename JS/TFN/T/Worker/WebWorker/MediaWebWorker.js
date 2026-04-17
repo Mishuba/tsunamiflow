@@ -1,4 +1,4 @@
-import { Flo } from "./../../Class/Elder/Adult/Teen/OffscreenCanvas.js";
+import { Flo } from "../OffscreenCanvas.js";
 
 export class mediaWorker extends Flo {
     //time below
@@ -243,7 +243,78 @@ export class mediaWorker extends Flo {
                 break;
         }
     }
-    //////////////////End of Video ////////////////////////////
+
+    update(p, volume, baseRadius, canvas) {
+        p.radius = baseRadius + volume / 80;
+        p.x += p.dx;
+        p.y += p.dy;
+
+        if (p.x + p.radius > canvas.width || p.x - p.radius < 0) p.dx = -p.dx;
+        if (p.y + p.radius > canvas.height || p.y - p.radius < 0) p.dy = -p.dy;
+    }
+
+    draw(p) {
+        this.offscreenctx.save();
+        this.offscreenctx.beginPath();
+        this.offscreenctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+        this.offscreenctx.fillStyle = p.color;
+        this.offscreenctx.shadowColor = p.color;
+        this.offscreenctx.shadowBlur = 20;
+        this.offscreenctx.fill();
+        this.offscreenctx.restore();
+    }
+
+    tfParticles(x, y, dx, dy, radius, color) {
+        return { x, y, dx, dy, radius, color };
+    }
+
+    particle(particles) {
+        for (let i = 0; i < 100; i++) {
+            const x = Math.random() * this.offscreencanvas.width;
+            const y = Math.random() * this.offscreencanvas.height;
+            const dx = (Math.random() - 0.5) * 0.5;
+            const dy = (Math.random() - 0.5) * 0.5;
+            const radius = Math.random() * 0.5 + 0.2;
+            const color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
+            particles.push(this.tfParticles(x, y, dx, dy, radius, color));
+        }
+    }
+
+    async RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles) {
+        analyser.getByteFrequencyData(dataArray);
+
+        this.offscreenctx.fillStyle = "rgb(10, 10, 30)";
+        this.offscreenctx.fillRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
+
+        let CtxTotal = 0;
+        for (let i = 0; i < dataArray.length; i++) {
+            CtxTotal += dataArray[i];
+        }
+        const averageVolume = CtxTotal / dataArray.length;
+
+        for (let i = 0; i < particles.length; i++) {
+            this.update(particles[i], averageVolume, baseRadius, this.offscreencanvas);
+            this.draw(particles[i]);
+        }
+
+        const barWidth = this.offscreencanvas.width / bufferLength;
+        let CtxX = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = dataArray[i];
+            const CtxR = barHeight + 25 * (i / bufferLength);
+            const CtxG = 250 * (i / bufferLength);
+            const CtxB = 50;
+            this.offscreenctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
+            this.offscreenctx.fillRect(CtxX, this.offscreencanvas.height - barHeight, barWidth, barHeight);
+            CtxX += barWidth + 1;
+        }
+
+        this.visualizatorController = requestAnimationFrame(() => {
+            this.RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles);
+        });
+    }
+    //////////////////End of Audio ////////////////////////////
     UseVideo(w, h) {
         this.initOffscreen();
         if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
@@ -377,8 +448,10 @@ export class mediaWorker extends Flo {
             }
         } else if (event.data.type === "visualizator") {
             //
-            if (event.data.system === "") {
+            if (event.data.payload.system === "playing") {
+                this.offscreencanvas = event.data.payload.canvas;
 
+                this.RadioVisualizer(event.data.payload.analyser, event.data.payload.dataArray, event.data.payload.bufferLength, event.data.payload.baseRadius, event.data.payload.particles);
             } else {
 
             }

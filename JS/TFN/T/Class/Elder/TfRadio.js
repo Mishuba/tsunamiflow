@@ -1,6 +1,7 @@
 export class Tsuna extends Tsun {
   _radioBound = false;
   _wired = false;
+  particles = [];
   constructor(options = {}) {
     super(options);
     this.TfAudio.crossOrigin = "anonymous";
@@ -140,6 +141,17 @@ export class Tsuna extends Tsun {
   playAudio() {
     this.MusicState();
     this.startMusic();
+    this.startAnalyserLoop()
+    this.visualizatorController = this.canvas.transferControlToOffscreen();
+    let tf = this.tycadome("tycadome-guest" + Date.now(), "visualizator", "radio.playing", "web", "device:web-001", Math.floor(Date.now() / 1000), "pending", "low", "async", {
+      system: "playing",
+      canvas: this.visualizatorController,
+      analyser: this.TfSoundAnalyser,
+      dataArray: this.TfSoundsContextDataArray,
+      bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+      particles: this.particles
+    });
+    this.worker.postMessage(tf, [this.visualizatorController]);
   }
   pauseAudio() {
     this.MusicState();
@@ -190,9 +202,11 @@ export class Tsuna extends Tsun {
     //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
     this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
   }
+
   playingAudio() {
     this.MusicState();
     this.updateAnalyser();
+
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
@@ -237,14 +251,14 @@ export class Tsuna extends Tsun {
     } else {
       this._radioBound = true;
 
-/*     this.TfAudio.AddEventListener("emptied", async (emptied) => {
-        this.emptiedAudio(emptied);
-        //cancelAnimationFrame(this.effects.visualizatorController);
-      });
-      this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
-*/
+      /*     this.TfAudio.AddEventListener("emptied", async (emptied) => {
+              this.emptiedAudio(emptied);
+              //cancelAnimationFrame(this.effects.visualizatorController);
+            });
+            this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
+      */
 
-   this.TfAudio.AddEventListener("waiting", (waiting) => {
+      this.TfAudio.AddEventListener("waiting", (waiting) => {
         this.waitingAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.waitingAudio, "waiting");
