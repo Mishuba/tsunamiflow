@@ -280,9 +280,7 @@ export class mediaWorker extends Flo {
         }
     }
 
-    async RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles) {
-        analyser.getByteFrequencyData(dataArray);
-
+    async RadioVisualizer(dataArray, bufferLength, baseRadius, particles) {
         this.offscreenctx.fillStyle = "rgb(10, 10, 30)";
         this.offscreenctx.fillRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 
@@ -311,7 +309,7 @@ export class mediaWorker extends Flo {
         }
 
         this.visualizatorController = async () => {
-this.RadioVisualizer(analyser, dataArray, bufferLength, baseRadius, particles);
+this.RadioVisualizer(dataArray, bufferLength, baseRadius, particles);
     setTimeout(loop, 16); // ~60fps
 };
 this.visualizatorController();
