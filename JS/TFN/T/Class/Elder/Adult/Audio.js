@@ -1,4 +1,5 @@
-export class TsunamiFlowAudio extends Tsun {
+import { Tsu } from "./Teen/Canvas.js";
+export class TsunamiFlowAudio extends Tsu {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
     randomMusicDefault = null;

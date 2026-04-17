@@ -1,3 +1,4 @@
+import { Tsu } from "./Teen/Canvas.js";
 export class TsunamiFlowVideo extends Tsu {
     videoElement = null;
     remoteVideoElement = null;

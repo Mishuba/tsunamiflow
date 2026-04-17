@@ -1,3 +1,4 @@
+import { Tsu } from "./Teen/Canvas.js";
 export class TsunamiFlowImage extends Tsu {
   imageElement = null;
   bitmap = null; // ImageBitmap (fast decode)
