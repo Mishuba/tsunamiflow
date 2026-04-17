@@ -1,3 +1,4 @@
+import { Ts } from "./Base/T.js";
 export class Tsu extends Ts {
   canvas = null;
   contextTypecanvas = "2d";
