@@ -143,7 +143,7 @@ export class Tsuna extends Tsun {
     this.startMusic();
     this.startAnalyserLoop()
     this.visualizatorController = this.canvas.transferControlToOffscreen();
-    let tf = this.tycadome("tycadome-guest" + Date.now(), "visualizator", "radio.playing", "web", "device:web-001", Math.floor(Date.now() / 1000), "pending", "low", "async", {
+    let tf = this.tycadome("tycadome-guest" + Date.now(), "visualizator", "radio.playing", "web", "device:web-001", "pending", "low", "async", {
       system: "playing",
       canvas: this.visualizatorController,
       analyser: this.TfSoundAnalyser,

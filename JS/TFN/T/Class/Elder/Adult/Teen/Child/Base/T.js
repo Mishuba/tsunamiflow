@@ -50,64 +50,64 @@ export class T {
         if (!this.listeners[event]) return;
         this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
-async tycadome(id, type, action, source, target, timestamp, status, priority, mode, payload) {
-   let tycadome = {
-    "id": id, //options.id
-    "type": type, //command
-    "action": action, // video.start
-    "source": source, // web
-    "target": target, //"device:web-001"
-    "timestamp": timestamp, //1710000000
-    "status": status, //"pending"
-    "priority": priority, //high
-    "mode": mode, //"async"
-    "payload": payload // {}
- };
-   return JSON.stringify(tyacdome);
-}
- async SendBeacon(url, data) {
-    let payload = data;
-
-    if (
-        !(data instanceof Blob) &&
-        !(data instanceof FormData) &&
-        !(data instanceof URLSearchParams) &&
-        typeof data !== "string"
-    ) {
-        payload = JSON.stringify(data);
+    async tycadome(id, type, action, source, target, status, priority, mode, payload) {
+        let tycadome = {
+            "id": id, //options.id
+            "type": type, //command
+            "action": action, // video.start
+            "source": source, // web
+            "target": target, //"device:web-001"
+            "timestamp": Math.floor(Date.now() / 1000),
+            "status": status, //"pending"
+            "priority": priority, //high
+            "mode": mode, //"async"
+            "payload": payload // {}
+        };
+        return JSON.stringify(tycadome);
     }
+    async SendBeacon(url, data) {
+        let payload = data;
 
-    const size = this.#getSize(payload);
+        if (
+            !(data instanceof Blob) &&
+            !(data instanceof FormData) &&
+            !(data instanceof URLSearchParams) &&
+            typeof data !== "string"
+        ) {
+            payload = JSON.stringify(data);
+        }
 
-    if (size > this.maxBeaconSize) {
-        this.emit("error", { url, data, reason: "Payload too large" });
-        return false;
+        const size = this.#getSize(payload);
+
+        if (size > this.maxBeaconSize) {
+            this.emit("error", { url, data, reason: "Payload too large" });
+            return false;
+        }
+
+        if ("sendBeacon" in navigator) {
+            const accepted = navigator.sendBeacon(url, payload);
+
+            this.emit(accepted ? "queued" : "rejected", { url, data, size });
+
+            return accepted;
+        }
+
+        // 🔥 REAL fallback
+        try {
+            await fetch(url, {
+                method: "POST",
+                body: payload,
+                keepalive: true,
+                headers: { "Content-Type": "application/json" }
+            });
+
+            this.emit("queued", { url, data, size, fallback: true });
+            return true;
+        } catch (err) {
+            this.emit("error", err);
+            return false;
+        }
     }
-
-    if ("sendBeacon" in navigator) {
-        const accepted = navigator.sendBeacon(url, payload);
-
-        this.emit(accepted ? "queued" : "rejected", { url, data, size });
-
-        return accepted;
-    }
-
-    // 🔥 REAL fallback
-    try {
-        await fetch(url, {
-            method: "POST",
-            body: payload,
-            keepalive: true,
-            headers: { "Content-Type": "application/json" }
-        });
-
-        this.emit("queued", { url, data, size, fallback: true });
-        return true;
-    } catch (err) {
-        this.emit("error", err);
-        return false;
-    }
-}
     #getSize(payload) {
         if (typeof payload === "string") {
             return new TextEncoder().encode(payload).length;
@@ -174,16 +174,14 @@ async tycadome(id, type, action, source, target, timestamp, status, priority, mo
                 return;
             }
 
-            const { type, data, id, error } = msg;
-
             // 🔥 Handle errors first
-            if (error) {
+            if (event.data.error) {
                 this.emit("worker_error", { id, error });
                 return;
             }
 
             // 🔥 Route by type
-            switch (type) {
+            switch (event.data.type) {
                 case "log":
                     console.log("Worker:", data);
                     break;
