@@ -1,5 +1,6 @@
 export class test {
-
+sharedWorker = null;
+sharedWorkerPort = null;
 constructor(options ={}) {
 
 }
@@ -8,9 +9,9 @@ startSharedWorker() {
 
     this.sharedWorker = new SharedWorker("/SharedWorker.js");
 
-    this.port = this.sharedWorker.port;
+    this.sharedWorkerPort = this.sharedWorker.port;
 
-    this.port.start();
+    this.sharedWorkerPort.start();
 
     this.receiveSharedWorkerMessage();
 
@@ -20,7 +21,7 @@ startSharedWorker() {
 }
 
 receiveSharedWorkerMessage() {
-    this.port.onmessage = (event) => {
+    this.sharedWorkerPort.onmessage = (event) => {
         const msg = event.data;
 
         switch (msg.type) {
@@ -36,9 +37,9 @@ receiveSharedWorkerMessage() {
 }
 
 sendToSharedWorker(type, data = null, meta = {}) {
-    if (!this.port) return;
+    if (!this.sharedWorkerPort) return;
 
-    this.port.postMessage({
+    this.sharedWorkerPort.postMessage({
         type,
         data,
         meta
