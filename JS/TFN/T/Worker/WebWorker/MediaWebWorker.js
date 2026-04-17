@@ -37,16 +37,18 @@ export class mediaWorker extends Flo {
         }
     }
     fetchRadioSongs() {
-        this.ok = this.requestXml("GET", "https://world.tsunamiflow.club/RadioPlaylist.php", null, { "X-Request-Type": "fetchRadioSongs" });
         try {
-            songList = JSON.parse(this.ok.responseText);
-            console.log("Parsed Songs:", songList);
+            this.songList = await this.request(
+    "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
+    null,
+    { "X-Request-Type": "fetchRadioSongs" },
+    "fetch"
+);
             this.RadioTime(songList);
-            nextRadioItem = songList;
+            this.nextRadioItem = songList;
         } catch (e) {
-            const text = phpRadio.responseText?.trim();
-            songList = null;
-            console.error("JSON parse error:", e + "xml info: " + text);
+        this.songList = null;
+            console.error("JSON parse error:", e);
             this.RadioTime(songList);
         }
     }
