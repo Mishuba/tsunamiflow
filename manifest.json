@@ -1,53 +1,60 @@
 {
+  "id": "/",
   "name": "Tsunami Flow Club",
   "short_name": "TF",
-  "description": "Tycadome - The village of Hidden Dreams homebase.",
+  "description": "Tycadome — The Village of Hidden Dreams homebase.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "display_override": [
+    "window-controls-overlay",
+    "standalone"
+  ],
   "orientation": "portrait",
   "background_color": "#000000",
   "theme_color": "#000000",
+  "lang": "en-US",
+  "dir": "ltr",
   "categories": [
     "information",
     "streaming",
     "music",
-    "fashion",
-    "luxury items",
+    "shopping",
     "games",
     "videos",
-    "literature"
+    "literature",
+    "entertainment"
   ],
   "icons": [
     {
       "src": "/icons/72Logo.png",
       "sizes": "72x72",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/icons/96Logo.png",
       "sizes": "96x96",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/icons/128Logo.png",
       "sizes": "128x128",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/icons/192Logo.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "/icons/512Logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable any"
     }
   ]
 }
