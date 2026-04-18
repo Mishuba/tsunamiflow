@@ -59,7 +59,7 @@ export class maxwell {
         if (option.site) {
             this.site = option.site;
         }
-        if (option.iframe)
+        if (option.iframe) {
         this.iframe = option.iframe;
         }
     }
