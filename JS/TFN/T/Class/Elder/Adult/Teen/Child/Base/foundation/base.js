@@ -7,6 +7,10 @@ export class T {
     ArraybyteLength = 0;
     Arrayview = null;
     ArrayonReady = null;
+blob = null;
+blobtype = "application/octet-stream";
+blobobjectURL = null;
+blobonReady = null;
     dbName = "default";
     dbversion = 1;
     dbstores = [];
