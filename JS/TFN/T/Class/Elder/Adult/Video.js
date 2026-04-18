@@ -23,8 +23,6 @@ export class TsunamiFlowVideo extends TsDomCanvas {
         }
         if (option.videoElement) {
             this.videoElement = option.videoElement;
-        } else if (this.find("TsunamiFlowVideoStuff", true)) {
-            this.videoElement = this.find("TsunamiFlowVideoStuff", true);
         } else {
             this.videoElement = document.createElement("video");
         }
