@@ -1,8 +1,10 @@
 export class maxwell {
     //worker = null;
     //sharedWorker = null;
+    site = null;
     iframe = null;
     user = null;
+    imageEngine = null;
     soundEngine = null;
     audioTitle = null;
     audioSystem = null;
@@ -21,11 +23,26 @@ export class maxwell {
     //listeners = {};
 
     constructor(option = {}) {
-        if (option.iframe) {
-            this.iframe = option.iframe;
+        if (option.site) {
+            this.site = option.site;
+        }
+        if (option.iframe)
+        this.iframe = option.iframe;
+        }
+        if (option.user) {
+            this.user = option.user;
+        }
+        if (option.image) {
+            this.imageEngine = option.image;
         }
         if (option.sound) {
             this.soundEngine = option.sound;
+        }
+        if (option.video) {
+            this.videoEngine = option.video;
+        }
+        if (option.game) {
+            this.game = option.game;
         }
         if (option.AudioTitle) {
             this.audioTitle = option.AudioTitle;
@@ -44,12 +61,6 @@ export class maxwell {
         }
         if (option.AudioSkip) {
             this.audioSkip = option.AudioSkip;
-        }
-        if (option.video) {
-            this.videoEngine = option.video;
-        }
-        if (option.game) {
-            this.game = option.game;
         }
     }
     on(event, callback, once = false) {

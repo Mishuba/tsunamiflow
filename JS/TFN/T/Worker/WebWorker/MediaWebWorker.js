@@ -86,7 +86,29 @@ export class mediaWorker extends TsWorker {
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+                let tf = this.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
+
+                postMessage(tf);
             }
         } else {
             let tf = this.tycadome(
@@ -256,7 +278,29 @@ export class mediaWorker extends TsWorker {
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
-                postMessage({ type: "radio", file: this.CurrentSong, system: "file", message: "Obtained the audio file", buffer: "nothing" });
+                let tf = this.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
+
+                postMessage(tf);
             }
         } else {
             let tf = this.tycadome(

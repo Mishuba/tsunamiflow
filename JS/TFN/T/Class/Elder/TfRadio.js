@@ -235,7 +235,6 @@ let tf = this.tycadome(
       {
         system: "visual_data",
         //canvas: this.visualizatorController,
-        //        analyser: this.updateAnalyser(),
         dataArray: this.TfSoundsContextDataArray,
         bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
         //particles: this.particles
@@ -251,7 +250,6 @@ loopAnalyzer();
   playingAudio() {
     this.MusicState();
     this.updateAnalyser();
-
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);

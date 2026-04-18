@@ -1,38 +1,18 @@
-import { StripeDonation } from "./TFN/N/UniqueOriginal/Class/TsunamiStripe/tfPayments.js";
-import { UniqueOriginal } from "./TFN/N/UniqueOriginal/Class/TsunamiPrintful/TfPrintful.js";
 import { gameComponent } from "./TFN/N/Games/Class/planetuniverse.js";  
 import { letsDoIt } from "./TFN/N/Games/Class/gamemechanics.js";  
-import { ScreenShare } from "./TFN/F/Video/Class/ScreenSharer.js";  
-import { TfMediaStream } from "./TFN/F/Video/Class/Streamer.js";  
-import { TfWebRTCRecorder } from "./TFN/F/Video/Class/TfWebRtc.js";  
 import { RadioTimes, WordTimes } from "./TFN/T/Arrays/Arrays.js";  
 import { WordOfTheDay } from "./TFN/T/Functions/WordOfTheDay.js";  
 import { UpdatedArray } from "./TFN/N/Network/News/News.js";  
 import { NewsTimer } from "./TFN/N/Network/News/functions.js";
 import { Weather } from "./TFN/N/Site/Weather.js";  
-import { TfWebsocket } from "./TFN/F/Network/Class/TfWebSocket.js";  
-import { TfEffects } from "./TFN/F/Compute/Class/Worker/Class/WebWorker/Class/Effects.js";  
-import { User } from "./TFN/N/Community/Users.js";  
-import { TfMusic } from "./TFN/F/Media/Audio.js";  
-import { TfVideo } from "./TFN/F/Video/Class/Video.js";  
 import { tfIframe } from "./../Iframe/Js/TfIframe.js";  
-import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";  
-import { WorkerManager } from "./TFN/F/Compute/Class/Worker/Class/WebWorker/worker.js";  
-import { TfWebcam } from "./TFN/F/Video/Class/webcam.js";  
-import { TfRecorder } from "./TFN/F/Video/Class/recorder.js";  
-import { TfAudioMixer } from "./TFN/F/Media/Classes/Mixer.js";  
-import { MishubaController } from "./TFN/default.js";  
+import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";
+import { TfPrintful } from "./TFN/T/Class/Tycadome.js";
+import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
+import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
+import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
+import { maxwell } from "./TFN/maxwell.js";  
 
-let TsunamiPay = new StripeDonation();
-await TsunamiPay.init();
-
-let TsunamiPrintful = new UniqueOriginal();
-
-/*
-  const data = JSON.parse(xhr.responseText);
-  console.log("Printful items:", data.items);
-renderPrintfulItems(data.items);
-*/
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";  
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";  
 const StickMan = new Image();  
@@ -172,14 +152,7 @@ var armourSet6;
 var armourSet7;
 var armourSet8;
 
-let MishubaScreen = new ScreenShare();  
-let TsunamiStream = new TfMediaStream();  
-let TfRTC = new TfWebRTCRecorder();  
-let Nifage = new User();  
-let Effects = new TfEffects();  
-let TfWeather = new Weather();  
-let cam = new TfWebcam();  
-let recorder = new TfRecorder();  
+let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
 
 document.addEventListener("DOMContentLoaded", () => {  
   let MyNewTFTime = document.getElementById("TFtime");  
@@ -196,38 +169,38 @@ document.addEventListener("DOMContentLoaded", () => {
   TFiframe.allowFullscreen = true;  
   TFiframe.sandbox = "allow-scripts allow-same-origin";  
 
- let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame)
-  
-
   let RadioLastButton = document.createElement("button");  
   let RadioRestartButton = document.createElement("button");  
   let RadioStartButton = document.createElement("button");  
   let RadioSkipButton = document.createElement("button");  
 
-  let Socket = new TfWebsocket("wss://world.tsunamiflow.club/ws");  
+  let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
-  let Live = new TfVideo(Socket, Effects);
-  
-  let TsunamiAudioCtx = new(window.AudioContext || window.webkitAudioContext)();  
-  let RadioAnalyser = TsunamiAudioCtx.createAnalyser();  
-  RadioAnalyser.fftSize = 2048;  
-  let RadioMedia = TsunamiAudioCtx.createMediaElementSource(TsunamiRadio);  
-  let StreamDestination = TsunamiAudioCtx.createMediaStreamDestination();  
-  let Radio = new TfMusic(TsunamiAudioCtx, RadioAnalyser, RadioMedia, StreamDestination);  
-  let mixSounds = new TfAudioMixer(TsunamiAudioCtx);  
+let TfWeather = new Weather(); 
+let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
+let nifage = new TfPrintful();
+let style = new TsunamiFlowImageEngine();
+let nation = new TsunamiFlowDj({
+  audioElement: TsunamiRadio;
+});
+let network = new TsunamiLiveVideoController();
 
-  let player1 = new gameComponent(tfSNW, tfSNH, "blue", tfSPX, tfSPY, "player", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, homePageArray, PlayerState, AckmaHawkBattleBackground, "Tsunami", "Flow", "TF", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);  
-
-let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);    
-    
-let Mishuba = new gameComponent(AckmaHawkCanvasWidth, AckmaHawkCanvasHeight, AckmaHawkSpriteSheet, AckmaHawkCanvasX, AckmaHawkCanvasY, AckmaHawkType, AckmaHawkSpriteSheetState, AckmaHawkSpriteSheetFrame, AckmaHawkSpritSheetWidth, AckmaHawkSpriteSheetHeight, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, AckmaHawkDialog, PlayerState, AckmaHawkBattleBackground, "Mishuba", "Feilong", "2Fly", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);    
-
-let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
-
-  let workers = new WorkerManager({ Radio, TfWeather, WordTimes, RadioTimes, WordOfTheDay, NewsTimer, TsunamiAudioCtx, MyNewTFTime, TfWotd }, UpdatedArray);
-
-Radio.webcamAudioStream = new MediaStream();
-  let Controller = new MishubaController(Nifage, frameTF, Effects, Socket, Radio, mixSounds, TsunamiRadio, RadioCanvas, RadioTitle, RadioButtons, RadioLastButton, RadioRestartButton, RadioStartButton, RadioSkipButton, Live, null, null, FirstGame, TsunamiPrintful, TsunamiPay, workers, cam, TfRTC, recorder, TsunamiStream, MishubaScreen);
+let max = {
+  site: TfWeather;
+  iframe: frameTF;
+  user: nifage;
+  image: style;
+  sound: nation;
+  video: network;
+  game: Stickman; 
+  AudioTitle: RadioTitle;
+  AudioButtonSpot: RadioButtons;
+  AudioPrevious: RadioLastButton;
+  AudioOver: RadioRestartButton;
+  AudioStart: RadioStartButton; 
+  AudioSkip: RadioSkipButton;
+  };
+let Controller = new maxwell(max);
   
   Controller.iframe.frame.title = "Main Website Content";
   Controller.iframe.frame.id = "TsunamiContent";
@@ -250,11 +223,12 @@ if (twoMore) {
   Controller.iframe.frame.src = "Iframe/Pages/homepage.html";    
     
   Controller.iframe.MenuSwitch(Controller.iframe.frame);    
+  /*
   Controller.bindNavBar();    
   Controller.bindAudio();
   Controller.bindUsers();
   Controller.bindStore().then(() => Controller.bindPayments());
-    
+    */
   Controller.iframe.frame.addEventListener("load", () => {    
     console.log("Iframe loaded:", Controller.iframe.frame.src);    
     
@@ -282,12 +256,7 @@ if ("serviceWorker" in navigator) {
     });
 }
   });    
-  document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {    
-    TsunamiThoughts.preventDefault();    
-    //let tfUserThot = document.getElementById("TFthought");    
-    //TfPostThot(tfUserThot);    
-  });    
-    
+
   document.body.addEventListener("click", () => {    
     if (TsunamiAudioCtx.state === "suspended") {    
       TsunamiAudioCtx.resume();    

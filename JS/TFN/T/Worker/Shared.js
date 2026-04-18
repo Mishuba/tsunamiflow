@@ -1,8 +1,8 @@
-
+import { TsharedWorker } from "./../Class/Elder/Adult/Teen/Child/Base/F.js";
 //TsharedWorker
 
 const ports = [];
-const core = new Flo({
+const core = new TsharedWorker({
     role: "viewer"
 });
 
