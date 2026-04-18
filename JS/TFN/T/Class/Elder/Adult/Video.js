@@ -35,8 +35,6 @@ export class TsunamiFlowVideo extends TsDomCanvas {
         this.VideomediaSource.addEventListener("sourceclose", () => this.emit("sourceclose"));
         if (option.canvas) {
             this.canvas = option.canvas;
-        } else if (this.find("TFcanvas", true)) {
-            this.canvas = this.find("TFcanvas", true);
         } else {
             this.canvas = document.createElement("video");
         }
