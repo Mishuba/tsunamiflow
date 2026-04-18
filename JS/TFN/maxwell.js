@@ -23,12 +23,6 @@ export class maxwell {
     //listeners = {};
 
     constructor(option = {}) {
-        if (option.site) {
-            this.site = option.site;
-        }
-        if (option.iframe)
-        this.iframe = option.iframe;
-        }
         if (option.user) {
             this.user = option.user;
         }
@@ -61,6 +55,12 @@ export class maxwell {
         }
         if (option.AudioSkip) {
             this.audioSkip = option.AudioSkip;
+        }
+        if (option.site) {
+            this.site = option.site;
+        }
+        if (option.iframe)
+        this.iframe = option.iframe;
         }
     }
     on(event, callback, once = false) {
