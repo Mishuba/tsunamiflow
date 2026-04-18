@@ -1,3 +1,4 @@
+import { TsDom } from "./test.js";
 export class TsDomCanvas extends TsDom { //dom n window
     lang = "en-US";
     worker = null;
