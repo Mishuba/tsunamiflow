@@ -1,6 +1,6 @@
 export class maxwell {
-    worker = null;
-    sharedWorker = null;
+    //worker = null;
+    //sharedWorker = null;
     iframe = null;
     user = null;
     soundEngine = null;
@@ -18,7 +18,7 @@ export class maxwell {
         screens: {}
     };
     game = null;
-    listeners = {};
+    //listeners = {};
 
     constructor(option = {}) {
         if (option.iframe) {
