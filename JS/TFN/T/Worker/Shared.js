@@ -6,10 +6,9 @@ const core = new TsharedWorker({
     role: "viewer"
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| Standard packet builder
+| Packet Builder
 |--------------------------------------------------------------------------
 */
 
@@ -34,10 +33,19 @@ function tycadome(
     };
 }
 
+/*
+|--------------------------------------------------------------------------
+| Broadcast helper
+|--------------------------------------------------------------------------
+*/
+
+function broadcast(data) {
+    ports.forEach((port) => port.postMessage(data));
+}
 
 /*
 |--------------------------------------------------------------------------
-| Broadcast incoming websocket events to all tabs
+| WebSocket → broadcast to all tabs
 |--------------------------------------------------------------------------
 */
 
@@ -47,9 +55,7 @@ core.setMessageHandler((data) => {
             crypto.randomUUID(),
             "backend",
             "ws.message",
-            {
-                source: "shared.worker"
-            },
+            { source: "shared.worker" },
             "completed",
             "async",
             data
@@ -57,10 +63,9 @@ core.setMessageHandler((data) => {
     );
 });
 
-
 /*
 |--------------------------------------------------------------------------
-| Shared Worker Connection
+| Shared Worker connection
 |--------------------------------------------------------------------------
 */
 
@@ -70,10 +75,16 @@ onconnect = (e) => {
     ports.push(port);
     port.start();
 
+    /*
+    ----------------------------------------------------------
+    ONLY accepts already-routed backend tasks
+    ----------------------------------------------------------
+    */
+
     port.onmessage = (event) => {
         const task = event.data;
 
-        routeTask(task, port);
+        handleBackendTask(task, port);
     };
 
     port.postMessage(
@@ -89,32 +100,21 @@ onconnect = (e) => {
     );
 };
 
-
 /*
 |--------------------------------------------------------------------------
-| Broadcast helper
+| Backend execution layer ONLY
 |--------------------------------------------------------------------------
 */
 
-function broadcast(data) {
-    ports.forEach((port) => {
-        port.postMessage(data);
-    });
-}
+function handleBackendTask(task, port) {
+    if (!task?.action) return;
 
-
-/*
-|--------------------------------------------------------------------------
-| Central task router
-|--------------------------------------------------------------------------
-*/
-
-function routeTask(task, port) {
     switch (task.action) {
+
         /*
-        --------------------------------------------------------------
-        WebSocket connection control
-        --------------------------------------------------------------
+        ------------------------------------------------------
+        WebSocket Control (already decided by Task Worker)
+        ------------------------------------------------------
         */
 
         case "ws.connect":
@@ -134,24 +134,24 @@ function routeTask(task, port) {
             break;
 
         /*
-        --------------------------------------------------------------
-        API / XML requests
-        --------------------------------------------------------------
+        ------------------------------------------------------
+        API / XML Requests
+        ------------------------------------------------------
         */
 
         case "api.xml.request":
             core.requestXml(
-                task.meta.method || "GET",
-                task.meta.url,
+                task.meta?.method || "GET",
+                task.meta?.url,
                 task.payload,
-                task.meta.headers || {}
+                task.meta?.headers || {}
             );
             break;
 
         /*
-        --------------------------------------------------------------
-        Unknown action
-        --------------------------------------------------------------
+        ------------------------------------------------------
+        Backend unknown task
+        ------------------------------------------------------
         */
 
         default:
@@ -159,9 +159,9 @@ function routeTask(task, port) {
                 tycadome(
                     task.id || crypto.randomUUID(),
                     "system",
-                    "routing.error",
+                    "backend.error",
                     {
-                        reason: "Unknown action"
+                        reason: "Unsupported backend action"
                     },
                     "failed",
                     "async",
