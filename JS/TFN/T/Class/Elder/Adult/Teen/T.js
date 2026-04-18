@@ -1,4 +1,4 @@
-import { TsDom } from "./test.js";
+import { TsDom } from "./Child/N.js";
 export class TsDomCanvas extends TsDom { //dom n window
     lang = "en-US";
     worker = null;
