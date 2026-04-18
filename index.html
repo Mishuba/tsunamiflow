@@ -433,13 +433,6 @@ referrerpolicy="no-referrer"></script>
             disabled>Subscribe</button>
     </footer>
     <script type="module" src="./JS/tfMain.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(reg => console.log('Service Worker registered:', reg))
-                .catch(err => console.error('Service Worker registration failed:', err));
-        }
-    </script>
 </body>
 
 </html>
