@@ -17,8 +17,6 @@ export class TsunamiFlowImage extends TsDomCanvas {
     // ===== IMAGE ELEMENT =====
     if (options.imageElement) {
       this.imageElement = options.imageElement;
-    } else if (this.find("TsunamiFlowImage", true)) {
-      this.imageElement = this.find("TsunamiFlowImage", true);
     } else {
       this.imageElement = document.createElement("img");
     }
