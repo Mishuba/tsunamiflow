@@ -1,6 +1,30 @@
+/*
+|--------------------------------------------------------------------------
+| shared.worker.js
+|--------------------------------------------------------------------------
+| Backend System Bus (Execution Layer Only)
+|
+| Responsibilities:
+| - WebSocket connection (single global instance)
+| - Backend API / XML requests
+| - Broadcasting to all connected tabs
+| - Receiving pre-routed tasks from task.worker.js
+|
+| IMPORTANT:
+| This worker does NOT decide logic.
+| It ONLY executes instructions from Task Worker.
+|--------------------------------------------------------------------------
+*/
+
 import { TsharedWorker } from "./../Class/Elder/Adult/Teen/Child/Base/F.js";
 
 const ports = [];
+
+/*
+|--------------------------------------------------------------------------
+| Core Backend Controller
+|--------------------------------------------------------------------------
+*/
 
 const core = new TsharedWorker({
     role: "viewer"
@@ -8,7 +32,7 @@ const core = new TsharedWorker({
 
 /*
 |--------------------------------------------------------------------------
-| Packet Builder
+| Packet Standard (Tycadome)
 |--------------------------------------------------------------------------
 */
 
@@ -35,17 +59,23 @@ function tycadome(
 
 /*
 |--------------------------------------------------------------------------
-| Broadcast helper
+| Broadcast to all connected tabs
 |--------------------------------------------------------------------------
 */
 
 function broadcast(data) {
-    ports.forEach((port) => port.postMessage(data));
+    ports.forEach((port) => {
+        try {
+            port.postMessage(data);
+        } catch (err) {
+            console.warn("Broadcast failed:", err);
+        }
+    });
 }
 
 /*
 |--------------------------------------------------------------------------
-| WebSocket → broadcast to all tabs
+| WebSocket → Global event fan-out
 |--------------------------------------------------------------------------
 */
 
@@ -55,7 +85,9 @@ core.setMessageHandler((data) => {
             crypto.randomUUID(),
             "backend",
             "ws.message",
-            { source: "shared.worker" },
+            {
+                source: "shared.worker"
+            },
             "completed",
             "async",
             data
@@ -65,7 +97,7 @@ core.setMessageHandler((data) => {
 
 /*
 |--------------------------------------------------------------------------
-| Shared Worker connection
+| SharedWorker Connection Handler
 |--------------------------------------------------------------------------
 */
 
@@ -76,9 +108,9 @@ onconnect = (e) => {
     port.start();
 
     /*
-    ----------------------------------------------------------
-    ONLY accepts already-routed backend tasks
-    ----------------------------------------------------------
+    --------------------------------------------------------------
+    RECEIVE ONLY PRE-ROUTED TASKS FROM task.worker.js
+    --------------------------------------------------------------
     */
 
     port.onmessage = (event) => {
@@ -86,6 +118,12 @@ onconnect = (e) => {
 
         handleBackendTask(task, port);
     };
+
+    /*
+    --------------------------------------------------------------
+    READY SIGNAL
+    --------------------------------------------------------------
+    */
 
     port.postMessage(
         tycadome(
@@ -102,18 +140,35 @@ onconnect = (e) => {
 
 /*
 |--------------------------------------------------------------------------
-| Backend execution layer ONLY
+| Backend Execution Router
+|--------------------------------------------------------------------------
+| ONLY executes actions, no decision-making
 |--------------------------------------------------------------------------
 */
 
 function handleBackendTask(task, port) {
-    if (!task?.action) return;
+    if (!task?.action) {
+        port.postMessage(
+            tycadome(
+                crypto.randomUUID(),
+                "system",
+                "backend.error",
+                {
+                    reason: "Missing action"
+                },
+                "failed",
+                "async",
+                task
+            )
+        );
+        return;
+    }
 
     switch (task.action) {
 
         /*
         ------------------------------------------------------
-        WebSocket Control (already decided by Task Worker)
+        WebSocket Control
         ------------------------------------------------------
         */
 
@@ -150,7 +205,7 @@ function handleBackendTask(task, port) {
 
         /*
         ------------------------------------------------------
-        Backend unknown task
+        Unknown backend action
         ------------------------------------------------------
         */
 
@@ -161,7 +216,8 @@ function handleBackendTask(task, port) {
                     "system",
                     "backend.error",
                     {
-                        reason: "Unsupported backend action"
+                        reason: "Unsupported backend action",
+                        action: task.action
                     },
                     "failed",
                     "async",
