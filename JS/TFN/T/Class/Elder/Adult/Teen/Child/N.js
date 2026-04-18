@@ -60,14 +60,6 @@ export class Ts extends T {
             legacyUA: this.LegacyUaData
         };
     }
-}
-return res.state;
-                } catch {
-    return "unsupported";
-}
-            }
-        };
-    }
 
     async query(name) {
     if (this.permissions[name]) {
