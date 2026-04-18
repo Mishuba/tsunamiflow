@@ -1,73 +1,74 @@
-const CACHE_NAME = "tf-cache-v3";
+const CACHE_NAME = "tf-cache-v4";
 const OFFLINE_URL = "/offline.html";
 
 const PRECACHE = [
     "/",
     "/index.html",
     "/manifest.json",
-    "/icons/72Logo.png",
-    "/icons/96Logo.png",
-    "/icons/128Logo.png",
-    "/icons/192Logo.png",
-    "/icons/512Logo.png",
-    "/JS/tfMain.js",
-    "/JS/Arrays.js",
-    "/JS/Classes.js",
-    "/JS/Functions.js",
-    "/JS/News.js",
-    "/JS/NewsTransformWorker.js",
-    "/JS/Objects.js",
-    "/JS/Variables.js",
-    "/JS/Words.js",
-    "/MyStyle/tfMain.css",
     OFFLINE_URL
 ];
 
 self.addEventListener("install", event => {
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(PRECACHE))
-            .then(() => self.skipWaiting())
+        caches.open(CACHE_NAME).then(async cache => {
+            for (const asset of PRECACHE) {
+                try {
+                    await cache.add(asset);
+                } catch (err) {
+                    console.warn("Cache failed:", asset);
+                }
+            }
+            await self.skipWaiting();
+        })
     );
 });
 
 self.addEventListener("activate", event => {
     event.waitUntil(
         caches.keys().then(keys =>
-            Promise.all(keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null))
+            Promise.all(
+                keys.map(key =>
+                    key !== CACHE_NAME
+                        ? caches.delete(key)
+                        : null
+                )
+            )
         )
     );
+
     self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
-    const url = new URL(event.request.url);
+    const req = event.request;
+    const url = new URL(req.url);
 
-    // 🚫 Never touch backend
-    if (url.hostname === "world.tsunamiflow.club") {
-        return event.respondWith(fetch(event.request));
+    if (
+        req.method !== "GET" ||
+        url.hostname.includes("world.tsunamiflow.club") ||
+        url.pathname.startsWith("/api/")
+    ) {
+        return event.respondWith(fetch(req));
     }
 
-    // 🚫 Never cache non-GET (POST, PUT, etc.)
-    if (event.request.method !== "GET") {
-        return event.respondWith(fetch(event.request));
-    }
-
-    // Page navigation
-    if (event.request.mode === "navigate") {
+    if (req.mode === "navigate") {
         return event.respondWith(
-            fetch(event.request).catch(() => caches.match(OFFLINE_URL))
+            fetch(req).catch(() => caches.match(OFFLINE_URL))
         );
     }
 
-    // Static assets
     event.respondWith(
-        caches.match(event.request).then(cached => {
-            if (cached) return cached;
+        caches.match(req).then(async cached => {
+            const fetchPromise = fetch(req)
+                .then(networkRes => {
+                    caches.open(CACHE_NAME).then(cache => {
+                        cache.put(req, networkRes.clone());
+                    });
+                    return networkRes;
+                })
+                .catch(() => cached || caches.match(OFFLINE_URL));
 
-            return fetch(event.request).catch(() =>
-                caches.match(OFFLINE_URL)
-            );
+            return cached || fetchPromise;
         })
     );
 });
