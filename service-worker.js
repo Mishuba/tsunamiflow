@@ -1,74 +1,189 @@
-const CACHE_NAME = "tf-cache-v4";
+/* service-worker.js
+   Offline-first PWA cache strategy
+   Frontend stays usable offline.
+   Backend / realtime services always stay network-only.
+*/
+
+const VERSION = "v5";
+const CACHE_NAME = `tf-cache-${VERSION}`;
 const OFFLINE_URL = "/offline.html";
 
-const PRECACHE = [
+/*
+    Only cache frontend assets here.
+    Do NOT include dynamic API endpoints, websocket routes,
+    RTMP routes, webhook endpoints, etc.
+*/
+const PRECACHE_URLS = [
     "/",
     "/index.html",
     "/manifest.json",
-    OFFLINE_URL
+    "/favicon.ico",
+    "/offline.html",
+
+    // Core CSS / JS
+    "/CSS/style.css",
+    "/JS/tfMain.js",
+
+    // Add more stable assets here if needed
+    // "/images/logo.png",
 ];
 
-self.addEventListener("install", event => {
+/*
+|--------------------------------------------------------------------------
+| INSTALL
+|--------------------------------------------------------------------------
+| Pre-cache critical frontend files
+*/
+self.addEventListener("install", (event) => {
     event.waitUntil(
-        caches.open(CACHE_NAME).then(async cache => {
-            for (const asset of PRECACHE) {
+        (async () => {
+            const cache = await caches.open(CACHE_NAME);
+
+            for (const url of PRECACHE_URLS) {
                 try {
-                    await cache.add(asset);
-                } catch (err) {
-                    console.warn("Cache failed:", asset);
+                    await cache.add(new Request(url, { cache: "reload" }));
+                } catch (error) {
+                    console.warn("[SW] Failed to precache:", url, error);
                 }
             }
+
             await self.skipWaiting();
-        })
+        })()
     );
 });
 
-self.addEventListener("activate", event => {
+/*
+|--------------------------------------------------------------------------
+| ACTIVATE
+|--------------------------------------------------------------------------
+| Remove old cache versions
+*/
+self.addEventListener("activate", (event) => {
     event.waitUntil(
-        caches.keys().then(keys =>
-            Promise.all(
-                keys.map(key =>
-                    key !== CACHE_NAME
-                        ? caches.delete(key)
-                        : null
-                )
-            )
-        )
-    );
+        (async () => {
+            const keys = await caches.keys();
 
-    self.clients.claim();
+            await Promise.all(
+                keys.map((key) => {
+                    if (key !== CACHE_NAME) {
+                        return caches.delete(key);
+                    }
+                })
+            );
+
+            await self.clients.claim();
+        })()
+    );
 });
 
-self.addEventListener("fetch", event => {
-    const req = event.request;
-    const url = new URL(req.url);
+/*
+|--------------------------------------------------------------------------
+| FETCH
+|--------------------------------------------------------------------------
+|
+| Strategy:
+|
+| 1. Backend / API / WebSocket / external stream servers:
+|    NETWORK ONLY
+|
+| 2. Page navigation:
+|    NETWORK FIRST → offline fallback
+|
+| 3. Static assets (css/js/images/fonts):
+|    CACHE FIRST → update in background
+|
+*/
+self.addEventListener("fetch", (event) => {
+    const request = event.request;
 
-    if (
-        req.method !== "GET" ||
-        url.hostname.includes("world.tsunamiflow.club") ||
-        url.pathname.startsWith("/api/")
-    ) {
-        return event.respondWith(fetch(req));
+    // Ignore non-GET requests
+    if (request.method !== "GET") return;
+
+    const url = new URL(request.url);
+
+    /*
+    ----------------------------------------------------------------------
+    NEVER CACHE THESE
+    ----------------------------------------------------------------------
+    */
+    const networkOnly =
+        url.hostname.includes("world.tsunamiflow.club") || // backend server
+        url.pathname.startsWith("/api/") ||
+        url.pathname.startsWith("/webhook/") ||
+        url.pathname.startsWith("/ws/") ||
+        url.protocol === "ws:" ||
+        url.protocol === "wss:";
+
+    if (networkOnly) {
+        event.respondWith(fetch(request));
+        return;
     }
 
-    if (req.mode === "navigate") {
-        return event.respondWith(
-            fetch(req).catch(() => caches.match(OFFLINE_URL))
+    /*
+    ----------------------------------------------------------------------
+    PAGE NAVIGATION
+    NETWORK FIRST
+    ----------------------------------------------------------------------
+    */
+    if (request.mode === "navigate") {
+        event.respondWith(
+            (async () => {
+                try {
+                    const fresh = await fetch(request);
+
+                    const cache = await caches.open(CACHE_NAME);
+                    cache.put(request, fresh.clone());
+
+                    return fresh;
+                } catch (error) {
+                    const cached = await caches.match(request);
+                    return cached || caches.match(OFFLINE_URL);
+                }
+            })()
         );
+
+        return;
     }
 
+    /*
+    ----------------------------------------------------------------------
+    STATIC ASSETS
+    CACHE FIRST + BACKGROUND UPDATE
+    ----------------------------------------------------------------------
+    */
     event.respondWith(
-        caches.match(req).then(async cached => {
-            const fetchPromise = fetch(req)
-                .then(networkRes => {
-                    caches.open(CACHE_NAME).then(cache => {
-                        cache.put(req, networkRes.clone());
-                    });
-                    return networkRes;
-                })
-                .catch(() => cached || caches.match(OFFLINE_URL));
+        (async () => {
+            const cached = await caches.match(request);
 
-            return cached || fetchPromise;
-        })
+            const networkFetch = fetch(request)
+                .then(async (response) => {
+                    /*
+                        Only cache valid same-origin responses
+                    */
+                    if (
+                        response &&
+                        response.status === 200 &&
+                        response.type === "basic"
+                    ) {
+                        const cache = await caches.open(CACHE_NAME);
+                        cache.put(request, response.clone());
+                    }
+
+                    return response;
+                })
+                .catch(() => null);
+
+            // Serve cache immediately if available
+            if (cached) {
+                event.waitUntil(networkFetch);
+                return cached;
+            }
+
+            // Otherwise try network
+            const fresh = await networkFetch;
+
+            // Final fallback
+            return fresh || caches.match(OFFLINE_URL);
+        })()
     );
 });
