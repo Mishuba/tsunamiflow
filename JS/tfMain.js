@@ -236,11 +236,11 @@ if (twoMore) {
       console.log("contentWindow:", Controller.iframe.frame.contentWindow);    
       if (Controller.iframe.frame.src.endsWith("Community.html")) {    
         Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);    
-        Controller.videoCanv = Controller.find("TFcanvas", true);    
+        Controller.videoCanv = Controller.find("TFcanvas", true);  
+              Controller.bindVidSystem();    
       }    
       Controller.iframe.frame.contentWindow.controller = Controller;    
       console.log("Controller injected into iframe");    
-      Controller.bindVidSystem();    
     } catch (e) {    
       console.error("Cross-origin block:", e);    
     }    
@@ -265,8 +265,7 @@ if ("serviceWorker" in navigator) {
     
   TfWeather.requestLocation();    
   //Controller.bindSignUp();    
-  //Controller.bindCart();    
-  Controller.bindWorker();    
+  //Controller.bindCart();
 });
 
 //default character
