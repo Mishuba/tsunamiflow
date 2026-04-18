@@ -181,24 +181,24 @@ let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
 let nifage = new TfPrintful();
 let style = new TsunamiFlowImageEngine();
 let nation = new TsunamiFlowDj({
-  audioElement: TsunamiRadio;
+  audioElement: TsunamiRadio
 });
 let network = new TsunamiLiveVideoController();
 
 let max = {
-  site: TfWeather;
-  iframe: frameTF;
-  user: nifage;
-  image: style;
-  sound: nation;
-  video: network;
-  game: Stickman; 
-  AudioTitle: RadioTitle;
-  AudioButtonSpot: RadioButtons;
-  AudioPrevious: RadioLastButton;
-  AudioOver: RadioRestartButton;
-  AudioStart: RadioStartButton; 
-  AudioSkip: RadioSkipButton;
+  site: TfWeather,
+  iframe: frameTF,
+  user: nifage,
+  image: style,
+  sound: nation,
+  video: network,
+  game: Stickman,
+  AudioTitle: RadioTitle,
+  AudioButtonSpot: RadioButtons,
+  AudioPrevious: RadioLastButton,
+  AudioOver: RadioRestartButton,
+  AudioStart: RadioStartButton, 
+  AudioSkip: RadioSkipButton,
   };
 let Controller = new maxwell(max);
   
