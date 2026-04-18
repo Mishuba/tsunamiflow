@@ -1,4 +1,4 @@
-import { TsDomCanvas } from "../Teen/T.js";
+import { TsDomCanvas } from "./Teen/T.js";
 
 export class TsunamiFlowVideo extends TsDomCanvas {
     videoElement = null;

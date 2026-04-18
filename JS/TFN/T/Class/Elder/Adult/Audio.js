@@ -1,4 +1,4 @@
-import { TsDomCanvas } from "../Teen/T.js";
+import { TsDomCanvas } from "./Teen/T.js";
 export class TsunamiFlowAudio extends TsDomCanvas {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
