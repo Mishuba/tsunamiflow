@@ -1,4 +1,5 @@
-import { Flo } from "./../Class/Elder/Adult/Teen/OffscreenCanvas.js"; // or bundle it
+
+//TsharedWorker
 
 const ports = [];
 const core = new Flo({

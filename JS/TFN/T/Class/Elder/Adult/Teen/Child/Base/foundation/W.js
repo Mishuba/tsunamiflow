@@ -1,4 +1,6 @@
-export class W {
+import { T } from "./base.js";
+
+export class W extends T {
     cacheName = null;
     cache = null;
     CacheonReady = null;
@@ -7,7 +9,7 @@ export class W {
     listeners = {};
     domListeners = new Map();
     constructor(options = {}) {
-
+        super();
     }
     async Cacheopen() {
         if (this.cache) return this.cache;

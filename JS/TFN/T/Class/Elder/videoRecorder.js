@@ -1,3 +1,5 @@
+import { TsunamiFlowVideo } from "./Adult/Video.js";
+
 export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
     webcamvideoTrack = null;
     webcamaudioTrack = null;
@@ -43,6 +45,7 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
     Recorderchunks = [];
     Videorecording = false;
     constructor(option = {}) {
+        super(option);
         this.blobtype = option.blobtype || "video/webm;codecs=vp8,opus";
     }
     async startScreenShare() {

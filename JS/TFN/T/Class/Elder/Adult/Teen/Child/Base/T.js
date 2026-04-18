@@ -1,22 +1,17 @@
-export class T extends base {
-    listeners = {};
+import { TsDom } from "../N.js";
+
+export class TsDomCanvas extends TsDom { //dom n window
     lang = "en-US";
-    domListeners = new Map();
     worker = null;
     sharedWorker = null;
+    SessionStorage = window.sessionStorage;
+    LocalStorage = window.localStorage;
     maxBeaconSize = 64 * 1024;
     constructor(options = {}) {
+        super(options);
         if (options.lang) this.lang = options.lang;
     }
-    emit(event, data) {
-        (this.listeners[event] || []).forEach((fn) => {
-            try {
-                fn(data);
-            } catch (error) {
-                console.error(`Error occurred while emitting event "${event}":`, error);
-            }
-        });
-    }
+
     find(elem, frame = null) {
         if (frame !== null) {
             return frame.contentDocument.getElementById(elem);
@@ -41,14 +36,6 @@ export class T extends base {
             handler,
             eventType
         });
-    }
-    AddEventListener(event, fn) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(fn);
-    }
-    removeEventListener(event, callback) {
-        if (!this.listeners[event]) return;
-        this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
     async tycadome(id, type, action, meta, state, mode, payload) {
         return {
@@ -136,27 +123,27 @@ export class T extends base {
 
             // 🔥 Handle errors first
             if (event.data.error) {
-                this.emit("worker_error", { event.data.error });
+                this.emit("worker_error", event.data.error);
                 return;
             }
 
             // 🔥 Route by type
             switch (event.data.type) {
                 case "log":
-                    console.log("Worker:", event.data.type);
+                    console.log("Worker:", event.data.message);
                     break;
 
                 case "result":
-                    this.emit("worker_result", { event.data.id, event.data.payload });
+                    this.emit("worker_result", { id: event.data.id, payload: event.data.payload });
                     break;
 
                 case "ws_message":
                     // Forward from SharedWorker (if worker passes it)
-                    this.emit("ws_message", data);
+                    this.emit("ws_message", event.data);
                     break;
 
                 default:
-                    this.emit(type, data);
+                    this.emit(event.data.type, event.data);
             }
         };
 
@@ -169,6 +156,221 @@ export class T extends base {
         this.worker.terminate();
         this.worker = null;
         console.log("Web Worker terminated");
+    }
+    LocalStoragekey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setLocalStorage(name, value) {
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.LocalStorage.setItem(
+                this.LocalStoragekey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfLocalStorage set failed:", err);
+            return false;
+
+        }
+    }
+
+    getLocalStorage(name) {
+
+        const value = this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeLocalStorage(name) {
+
+        this.LocalStorage.removeItem(
+            this.LocalStoragekey(name)
+        );
+
+    }
+
+    LocalStoragehas(name) {
+
+        return this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        ) !== null;
+
+    }
+
+    LocalStoragekeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const k = this.LocalStorage.key(i);
+
+            if (k.startsWith(this.namespace + ":")) {
+                list.push(k.replace(this.namespace + ":", ""));
+            }
+
+        }
+
+        return list;
+    }
+
+    clearLocalStorage() {
+
+        const keys = this.LocalStoragekeys();
+
+        keys.forEach(k => {
+            this.removeLocalStorage(k);
+        });
+
+    }
+
+    LocalStoragesize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const key = this.LocalStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.LocalStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
+    }
+
+    Sessionkey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setSession(name, value) {
+
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.SessionStorage.setItem(
+                this.Sessionkey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfSessionStorage set failed:", err);
+            return false;
+
+        }
+
+    }
+
+    getSession(name) {
+
+        const value = this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeSession(name) {
+
+        this.SessionStorage.removeItem(
+            this.Sessionkey(name)
+        );
+
+    }
+
+    Sessionhas(name) {
+
+        return this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        ) !== null;
+
+    }
+
+    Sessionkeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.Sessionkey(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                list.push(
+                    key.replace(this.namespace + ":", "")
+                );
+
+            }
+
+        }
+
+        return list;
+
+    }
+
+    clearSession() {
+
+        const keys = this.Sessionkeys();
+
+        keys.forEach(k => {
+            this.removeSession(k);
+        });
+
+    }
+
+    Sessionsize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.SessionStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
+
     }
     on(id, eventName, preventDefault = false, iframe = null) {
         let el = this.find(id, iframe);

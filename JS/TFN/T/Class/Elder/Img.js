@@ -1,3 +1,5 @@
+import { TsunamiFlowImage } from "./Adult/Image.js";
+
 export class TsunamiFlowImageEngine extends TsunamiFlowImage {
   _imageBound = false;
   _processing = false;

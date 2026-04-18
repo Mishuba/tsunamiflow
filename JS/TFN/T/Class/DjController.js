@@ -1,9 +1,15 @@
 import { TsunamiFlowRadio } from "./Elder/TfRadio.js";
 export class TsunamiFlowDj extends TsunamiFlowRadio {
     audio = null;
-    MixerDestination = this.TfSoundsContext.createMediaStreamDestination();
+    MixerDestination = null;
     constructor(option = {}) {
-
+        super(option);
+        this.initMixerDestination();
+    }
+    initMixerDestination() {
+        if (this.TfSoundsContext) {
+            this.MixerDestination = this.TfSoundsContext.createMediaStreamDestination();
+        }
     }
     addMixerMediaElement(element, id = null, monitor = false) {
         this.initAudioContext();

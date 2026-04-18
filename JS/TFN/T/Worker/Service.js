@@ -1,3 +1,5 @@
+import { W } from "../Class/Elder/Adult/Teen/Child/Base/foundation/W.js";
+
 export class ServiceWorker extends W {
     cacheName = null;
     cache = null;
@@ -8,6 +10,7 @@ export class ServiceWorker extends W {
     registration = null;
     listeners = {};
     constructor(options = {}) {
+        super();
         if (!("serviceWorker" in navigator)) {
             console.warn("Service Workers are not supported in this browser");
             this.sw = null;

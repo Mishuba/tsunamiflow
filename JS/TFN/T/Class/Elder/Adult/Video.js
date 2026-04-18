@@ -1,5 +1,6 @@
-import { Tsu } from "./Teen/Canvas.js";
-export class TsunamiFlowVideo extends Tsu {
+import { TsDomCanvas } from "../Teen/Child/Base/T.js";
+
+export class TsunamiFlowVideo extends TsDomCanvas {
     videoElement = null;
     remoteVideoElement = null;
     VideoProcessor = null;
@@ -15,6 +16,7 @@ export class TsunamiFlowVideo extends Tsu {
     VideoobjectUrl = null;
     queueVideo = [];
     constructor(option = {}) {
+        super(option);
         if (!this.supportedVideomediaSource) {
             console.warn("MediaSource API not supported");
             this.VideomediaSource = null;
@@ -26,9 +28,9 @@ export class TsunamiFlowVideo extends Tsu {
         } else {
             this.videoElement = document.createElement("video");
         }
-        this.videoElement.autoplay = autoplay;
-        this.videoElement.muted = muted;
-        this.videoElement.controls = controls;
+        this.videoElement.autoplay = this.autoplay;
+        this.videoElement.muted = this.muted;
+        this.videoElement.controls = this.controls;
         this.VideomediaSource = new MediaSource();
         this.VideomediaSource.addEventListener("sourceopen", () => this.emit("sourceopen"));
         this.VideomediaSource.addEventListener("sourceended", () => this.emit("sourceended"));

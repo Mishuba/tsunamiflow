@@ -1,8 +1,10 @@
-export class TfComputePressure {
+import { T } from "../../../../T/Class/Elder/Adult/Teen/Child/Base/foundation/base.js";
+
+export class TfComputePressure extends T {
     constructor() {
+        super();
         this.supported = 'computePressure' in navigator;
         this.status = null;
-        this.listeners = {};
         if (!this.supported) console.warn("Compute Pressure API not supported");
     }
 

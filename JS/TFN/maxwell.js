@@ -18,6 +18,8 @@ export class maxwell {
         screens: {}
     };
     game = null;
+    listeners = {};
+
     constructor(option = {}) {
         if (option.iframe) {
             this.iframe = option.iframe;
@@ -47,7 +49,18 @@ export class maxwell {
             this.videoEngine = option.video;
         }
         if (option.game) {
-            this.game = option.game
+            this.game = option.game;
+        }
+    }
+    on(event, callback, once = false) {
+        if (!this.listeners[event]) this.listeners[event] = [];
+        this.listeners[event].push({ callback, once });
+    }
+    find(elem, frame = null) {
+        if (frame !== null) {
+            return frame.contentDocument.getElementById(elem);
+        } else {
+            return document.getElementById(elem);
         }
     }
     bindNavBar() {
@@ -225,7 +238,7 @@ export class maxwell {
     async playFromBin(id) {
         const item = this.mediaBin.videos[id];
         if (!item) return;
-        await this.startMediaSource("video", item.url);
+        await this.videoEngine.startMediaSource("video", item.url);
     }
 
     removeFromBin(id) {
@@ -242,6 +255,15 @@ export class maxwell {
     }
 
     RadioReady() {
+        const title = this.audioTitle || document.createElement('div');
+        const last = this.audioLast || document.createElement('button');
+        const buttonSpot = this.audioSystem || document.createElement('div');
+        const restart = this.audioRestart || document.createElement('button');
+        const start = this.audioStart || document.createElement('button');
+        const skip = this.audioSkip || document.createElement('button');
+        const element = document.querySelector('audio') || new Audio();
+        const RadioWorker = this.worker || {};
+
         title.innerHTML = "Welcome to TFN Radio";
 
         last.id = "TFradioPreviousButton";
@@ -263,28 +285,25 @@ export class maxwell {
         this.on("TFradioPreviousButton", () => {
             this.soundEngine.previousSong();
             //RadioWorker.postMessage({type: "radio",system: "previous"});
-        }
-        );
+        });
 
         this.on("TFRadioRestartButton", () => {
             element.currentTime = 0;
             this.soundEngine.startMusic(element);
             start.innerHTML = "Pause Tsunami Radio";
-        }
-        );
+        });
 
         this.on("TFradioButton", () => {
             if (element.paused) {
                 this.soundEngine.playAudio(element);
-                start.innerHTML = "Pause Tsuanmi Radio";
+                start.innerHTML = "Pause Tsunami Radio";
             } else {
                 this.soundEngine.stopMusic(element);
                 start.innerHTML = "Play Tsunami Radio";
                 //this.audio.startMusic();
                 //this.audio.stopMusic();
             }
-        }
-        );
+        });
 
         this.on("TFradioSkipButton", () => {
             element.src = "";
@@ -292,8 +311,7 @@ export class maxwell {
                 type: "radio",
                 system: "file",
             });
-        }
-        );
+        });
     }
     bindAudio() {
         this.RadioReady();
@@ -384,13 +402,9 @@ export class maxwell {
         }, false, iframe);
 
         this.on("GoLive", () => {
-            if ("start live") {
-                this.videoEngine.isLive = true;
-                this.videoEngine.startSharedWorker();
-                this.videoEngine.sendToSharedWorker(type, data = null);
-            } else {
-                return;
-            }
+            this.videoEngine.isLive = true;
+            this.videoEngine.startSharedWorker();
+            this.videoEngine.sendToSharedWorker("stream", null);
         }, false, iframe);
 
         this.on("StopLive", () => {
@@ -409,23 +423,23 @@ export class maxwell {
             return 'xbox';
         } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
             return 'switch';
-        } else {
-            //return pcControls();
-        };
-    };
+        }
+        return 'generic';
+    }
     gamepadHandler(event, connected) {
         const gamepad = event.gamepad;
+        if (!this.game) this.game = {};
+        const gamepads = navigator.getGamepads ? navigator.getGamepads() : [];
+
         if (connected) {
             this.game.controllerIndex = gamepad.index;
-            console.log("Controller connected at index:", this.controllerIndex);
+            console.log("Controller connected at index:", this.game.controllerIndex);
             this.game.controllerType = this.getControllerType(gamepad);
             console.log("Controller type detected:", this.game.controllerType);
-            gamepads[gamepad.index] = gamepad;
             console.log(`Gamepad connected: ${gamepad.id}`);
         } else {
             this.game.controllerIndex = null;
             this.game.controllerType = null;
-            delete gamepads[gamepad.index];
             console.log(`Gamepad disconnected: ${gamepad.id}`);
         }
     }

@@ -1,19 +1,21 @@
+import { TsunamiFlowVideoRecorder } from "./Elder/videoRecorder.js";
+
 export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
     localVideoStream = null;
     remoteVideoStream = new MediaStream();
     remoteVideoElement = null;
     WebRtfcPc = null;
     isLive = false;
+    stream = null;
+    videoStreamerStream = null;
     constructor(option = {}) {
-
+        super(option);
     }
     startStream({ audioStream = null, fps = 30 }) {
         if (!this.canvas) {
-            //use video not canv
+            //use video not canvas
+            return null;
         } else {
-            this.audioContext = audioContext;
-            this.sourceNode = sourceNode;
-
             // Capture video from canvas
             this.videoStreamerStream = this.canvas.captureStream(fps);
             const tracks = [...this.videoStreamerStream.getVideoTracks()];

@@ -35,7 +35,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1650194129657038"
         crossorigin="anonymous"></script>
 
- 
+
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="https://js.stripe.com/v3/"></script>
 
@@ -117,22 +117,22 @@
                 <p id="CheckRadio"></p>
             </span>
             <span>
-                <address id="authorStuffTF" itemscope itemref="a b c" itemtype="">
-                    <p itemprop="b">Homebase: Tyacdome <br>Location: The Land of Dreams <br></p>
-                    <p itemprop="c">Planet: Earth<br>Galaxy: Milky Way<br></p>
+                <address id="authorStuffTF">
+                    <p>Homebase: Tyacdome <br>Location: The Land of Dreams <br></p>
+                    <p>Planet: Earth<br>Galaxy: Milky Way<br></p>
                 </address>
             </span>
             <div id="TfDonation"></div>
             <button id="TfDonateBtn">Donate $5</button>
 
-            <!--p id="TFdonation"></p>
+            <!--
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick" />
                     <input type="hidden" name="hosted_button_id" value="3LQGL334FUKLW" />
                     <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
-                    <img="Please donate." border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                    <img alt="Please donate." border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
                 </form>
-            </p-->
+            -->
         </aside>
         <section>
             <div id="mainTsectionFdiv" style="height:800px; width:800px;"></div>
@@ -161,7 +161,7 @@
                 <form name="TfCompleteForm" id="TFCompleteForm" class="TfMemberForm" autocomplete="on" target="_self"
                     method="POST" action="server.php">
                     <h1>Subscriber Form</h1>
-                    <fieldset name="FreeLevelSection" formid="FreeLevel">
+                    <fieldset name="FreeLevelSection">
                         <legend>You will have to input your card information to help with verification.</legend>
 
                         <!-- Membership Level Selection -->
@@ -371,8 +371,8 @@
                                     placeholder="Team Role Prefernce"></label>
                         </div>
                         <div id="SubscribeUsers"></div>
-                        <label for="SubmitButton"><button id="FreeLevelSubmit" class="SubFormButton"
-                                name="TFRegisterFreeLevelButton" type="submit" disable> Subscribe </button></label>
+                        <button id="FreeLevelSubmit" class="SubFormButton" name="TFRegisterFreeLevelButton"
+                            type="submit" disabled>Subscribe</button>
                     </fieldset>
                 </form>
 
@@ -432,8 +432,8 @@
             <p>Cart Total: $<span id="cartTotal">0.00</span></p>
         </div>
         <div id="UniqueOriginal"></div>
-        <label for="SubmitButton"><button id="UniqueOriginalBtn" class="SubFormButton" name="TFRegisterFreeLevelButton"
-                type="submit" disabled> Subscribe </button></label>
+        <button id="UniqueOriginalBtn" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit"
+            disabled>Subscribe</button>
     </footer>
     <script type="module" src="./JS/tfMain.js"></script>
     <script>

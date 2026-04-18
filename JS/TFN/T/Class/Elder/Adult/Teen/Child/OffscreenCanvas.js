@@ -1,12 +1,18 @@
-export class Flo extends Fl {
-    offscreencanvas = new OffscreenCanvas(width, height);
+import { TsDomCanvas } from "./Base/T.js";
+
+export class TsWorker extends TsDomCanvas {
+    offscreencanvas = null;
     offscreenctx = null;
     isoffscreenReady = false;
+    contextType = "2d";
     constructor(options = {}) {
         super(options);
         if (options.worker) {
             this.worker = options.worker;
         }
+        // Initialize OffscreenCanvas first
+        this.offscreencanvas = new OffscreenCanvas(800, 600);
+        this.initOffscreen();
     }
     initOffscreen() {
         if (!this.offscreencanvas) return;

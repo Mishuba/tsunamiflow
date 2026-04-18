@@ -1,3 +1,5 @@
+import { StripeDonation } from "./Adult/Money.js";
+
 export class User extends StripeDonation {
   username = null;
   password = null;
@@ -60,7 +62,8 @@ export class User extends StripeDonation {
       paymentText: "Monthly payment"
     },
   }
-  constructor() {
+  constructor(options = {}) {
+    super(options);
 
     // Restore saved login state if any
     this.savedUser = this.getLocalStorage("username");

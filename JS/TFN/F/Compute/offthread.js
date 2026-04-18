@@ -1,4 +1,6 @@
-export class TfOffThreadCompute {
+import { T } from "../../T/Class/Elder/Adult/Teen/Child/Base/foundation/base.js";
+
+export class TfOffThreadCompute extends T {
     constructor({
         atomicsSize = 1024,
         sharedBufferSize = 1024,
@@ -6,11 +8,10 @@ export class TfOffThreadCompute {
         serviceWorkerScript = null,
         sharedWorkerScript = null
     } = {}) {
+        super();
         // Import your existing classes
         this.compute = window.TfComputeEngine ? new TfComputeEngine({ atomicsSize, sharedBufferSize }) : null;
         this.workers = window.TfWorkerManager ? new TfWorkerManager({ webWorkerScript, serviceWorkerScript, sharedWorkerScript }) : null;
-
-        this.listeners = {};
 
         // Automatically forward worker messages to this class
         if (this.workers) {

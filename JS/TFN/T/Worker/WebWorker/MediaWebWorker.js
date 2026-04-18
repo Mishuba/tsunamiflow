@@ -1,6 +1,4 @@
-import { Flo } from "../OffscreenCanvas.js";
-
-export class mediaWorker extends Flo {
+export class mediaWorker extends TsWorker {
     //time below
     hour;
     minute;
@@ -40,15 +38,15 @@ export class mediaWorker extends Flo {
     async fetchRadioSongs() {
         try {
             this.songList = await this.request(
-    "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
-    null,
-    { "X-Request-Type": "fetchRadioSongs" },
-    "fetch"
-);
+                "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
+                null,
+                { "X-Request-Type": "fetchRadioSongs" },
+                "fetch"
+            );
             this.RadioTime(this.songList);
             this.nextRadioItem = this.songList;
         } catch (e) {
-        this.songList = null;
+            this.songList = null;
             console.error("JSON parse error:", e);
             this.RadioTime(this.songList);
         }
@@ -59,29 +57,29 @@ export class mediaWorker extends Flo {
                 this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
                 this.CurrentSong = PSL[tsu][this.radioRandom];
                 console.log(this.CurrentSong);
-                
+
                 let tf = this.tycadome(
-                  "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.song",
-      {
-        source: "web",
-        target: "device:web-001"
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: this.CurrentSong,
-        //        analyser: this.updateAnalyser(),
-        message: "",
-        buffer: ""
-      }
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
                 );
-                
+
                 postMessage(tf);
 
             } else {
@@ -92,28 +90,28 @@ export class mediaWorker extends Flo {
             }
         } else {
             let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: undefined,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: undefined,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
 
-postMessage(tf);
+            postMessage(tf);
         }
     }
 
@@ -134,81 +132,81 @@ postMessage(tf);
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
                 let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: this.CurrentSong,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
                 let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: this.CurrentSong,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
             }
         } else {
             let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: undefined,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: undefined,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
 
-postMessage(tf);
+            postMessage(tf);
         }
     }
 
@@ -231,28 +229,28 @@ postMessage(tf);
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
                 let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: this.CurrentSong,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
@@ -262,28 +260,28 @@ postMessage(tf);
             }
         } else {
             let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: undefined,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: undefined,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
 
-postMessage(tf);
+            postMessage(tf);
         }
     }
 
@@ -298,81 +296,81 @@ postMessage(tf);
                 this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
                 console.log(this.CurrentSong);
                 let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: this.CurrentSong,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
             } else {
                 console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][this.radioRandom];
                 console.log(this.CurrentSong);
                 let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: this.CurrentSong,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
             }
         } else {
             let tf = this.tycadome(
-  "tycadome-guest" + Date.now(),
-  "radio",
-  "radio.song",
-  {
-    source: "web",
-    target: "device:web-001"
-  },
-  {
-    status: "pending",
-    priority: "low"
-  },
-  "async",
-  {
-    system: "file",
-    file: undefined,
-    //        analyser: this.updateAnalyser(),
-    message: "",
-    buffer: ""
-  }
-);
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: undefined,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
 
-postMessage(tf);
+            postMessage(tf);
         }
     }
 
@@ -425,31 +423,31 @@ postMessage(tf);
                 break;
             case 11:
                 this.CurrentSong = PSL[11][
-    Math.floor(Math.random() * (PSL[11].length - 1))
-];
-let tf = this.tycadome(
-    "tycadome-guest" + Date.now(),
-    "radio",
-    "radio.song",
-    {
-        source: "web",
-        target: "device:web-001"
-    },
-    {
-        status: "pending",
-        priority: "low"
-    },
-    "async",
-    {
-        system: "file",
-        file: this.CurrentSong,
-        //        analyser: this.updateAnalyser(),
-        message: "",
-        buffer: ""
-    }
-);
+                    Math.floor(Math.random() * (PSL[11].length - 1))
+                ];
+                let tf = this.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.song",
+                    {
+                        source: "web",
+                        target: "device:web-001"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: this.CurrentSong,
+                        //        analyser: this.updateAnalyser(),
+                        message: "",
+                        buffer: ""
+                    }
+                );
 
-postMessage(tf);
+                postMessage(tf);
                 break;
             case 12:
                 this.FourFolderSub(PSL, 12, this.minute, response);
@@ -558,32 +556,32 @@ postMessage(tf);
         }
     }
     startVisualizerLoop(dataArray, bufferLength, baseRadius, particles) {
-  if (this.visualizatorController) return;
-  
-  this.initOffscreen();
-  this.visualizatorController = true;
-  
-  const loop = () => {
-      if (!this.visualizatorController) return;
-      
-        const liveData = this.latestVisualizerData || dataArray;
-        const liveLength = liveData.length || bufferLength;
+        if (this.visualizatorController) return;
 
-    this.RadioVisualizer(
-      liveData,
-      liveLength,
-      baseRadius,
-      particles
-    );
-    setTimeout(loop, 16);
-  };
- 
-  loop();
-}
+        this.initOffscreen();
+        this.visualizatorController = true;
 
-stopVisualizerLoop() {
-  this.visualizatorController = false;
-}
+        const loop = () => {
+            if (!this.visualizatorController) return;
+
+            const liveData = this.latestVisualizerData || dataArray;
+            const liveLength = liveData.length || bufferLength;
+
+            this.RadioVisualizer(
+                liveData,
+                liveLength,
+                baseRadius,
+                particles
+            );
+            setTimeout(loop, 16);
+        };
+
+        loop();
+    }
+
+    stopVisualizerLoop() {
+        this.visualizatorController = false;
+    }
     //////////////////End of Audio ////////////////////////////
     UseVideo(w, h) {
         this.initOffscreen();
@@ -617,7 +615,7 @@ stopVisualizerLoop() {
     }
     async drawingFrame(vidCanv, TfWebcam) {
         this.initOffscreen();
-        this.resizeoffscreen(vidCanv.width, vidCanv.height)
+        this.resizeoffscreen(vidCanv.width, vidCanv.height);
 
         this.offscreenctx.clearRect(0, 0, vidCanv.width, vidCanv.height);
 
@@ -626,7 +624,7 @@ stopVisualizerLoop() {
             this.UseVideo(vidCanv.width, vidCanv.height);
             if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
         } else if (this.backgroundImg) {
-            this.UseImage(vidCanv, true;
+            this.UseImage(vidCanv, true);
         }
 
         // Draw to offscreen for chroma key
@@ -662,9 +660,9 @@ stopVisualizerLoop() {
     /////////////////////////////////////////////
     async MessageRecieved(event) {
         if (event.data.type === "radio") {
-          if (event.data.payload.system === "init_canvas") {
-            this.offscreencanvas = event.data.payload.canvas;
-          } else if (event.data.payload.system === "file") {
+            if (event.data.payload.system === "init_canvas") {
+                this.offscreencanvas = event.data.payload.canvas;
+            } else if (event.data.payload.system === "file") {
                 await this.fetchRadioSongs();
                 this.TheLastSongUsed = this.CurrentSong;
             } else if (event.data.payload.system === "start") {
@@ -693,7 +691,7 @@ stopVisualizerLoop() {
             if (event.data.payload.system === "audio array") {
 
 
-               // console.log("Processing audio array:", event.data.audioArray);
+                // console.log("Processing audio array:", event.data.audioArray);
 
             } else {
 
@@ -723,7 +721,7 @@ stopVisualizerLoop() {
             if (event.data.payload.system === "playing") {
                 this.startVisualizerLoop(event.data.payload.dataArray, event.data.payload.bufferLength, event.data.payload.baseRadius, event.data.payload.particles);
             } else if (event.data.payload.system === "visual_data") {
-this.latestVisualizerData = event.data.payload.dataArray;
+                this.latestVisualizerData = event.data.payload.dataArray;
             }
         } else if (event.data.type === "processor") {
             //
