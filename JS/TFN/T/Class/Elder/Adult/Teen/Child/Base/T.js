@@ -1,4 +1,4 @@
-import { TsDom } from "../N.js";
+import { TsDom } from "./test.js";
 
 export class TsDomCanvas extends TsDom { //dom n window
     lang = "en-US";
