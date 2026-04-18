@@ -8,6 +8,7 @@ export class TsDomCanvas extends TsDom { //dom n window
     canvasctx = null;
     iscanvasReady = false;
     constructor(options = {}) {
+        super(options);
         if (options.lang) this.lang = options.lang;
     }
     find(elem, frame = null) {
