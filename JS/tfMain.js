@@ -271,6 +271,16 @@ if (twoMore) {
       console.error("Cross-origin block:", e);    
     }    
 
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+        try {
+            const reg = await navigator.serviceWorker.register("/service-worker.js");
+            console.log("SW registered:", reg);
+        } catch (err) {
+            console.error("SW registration failed:", err);
+        }
+    });
+}
   });    
   document.getElementById("TFthoughtsNow").addEventListener("submit", TsunamiThoughts => {    
     TsunamiThoughts.preventDefault();    
