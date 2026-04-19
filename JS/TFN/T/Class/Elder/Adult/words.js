@@ -57,7 +57,7 @@ SomeOfEverythingThree = null;
 
 SomeOfEverythingFour = null;
       constructor(options = {}) {
-            
+            super(options);
       }
       EnHword(value) {
         let word = {
