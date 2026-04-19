@@ -1,6 +1,6 @@
 import { TsDomCanvas } from "./Teen/T.js";
 
-export class HeaderWords extends TsDom {
+export class HeaderWords extends TsDomCanvas {
 TheOtherWords = 1;
 QuoteStuff = 0;
 WordOfTheDayArray = new Array();
