@@ -1,4 +1,4 @@
-import { T } from "./foundation/T.js";
+import { T } from "./foundation/base.js";
 export class Ts extends T {
     uaData = navigator.userAgentData || null;
     LegacyUaData = navigator.userAgent || null;
