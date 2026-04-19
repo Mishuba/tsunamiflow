@@ -67,7 +67,7 @@ const PRECACHE_URLS = [
     "/Pictures/Social_Media/Patreon.jpg",
     "/Pictures/Social_Media/Twitch.jpg",
     "/Pictures/Social_Media/Twitter.jpg",
-    "/Pictures/Social_Media/YouTube.jpg",
+    "/Pictures/Social_Media/Youtube.jpg",
     "/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking2400.png",
 
     //iframe
