@@ -21,7 +21,7 @@ const PRECACHE_URLS = [
     "/Offline/offline.html",
 
     // Core CSS / JS
-    "/MyStyle/style.css",
+    "/MyStyle/tfMain.css",
     "/JS/tfMain.js",
     "/JS/TFN/maxwell.js",
     "/JS/TFN/T/Worker/Shared.js",
