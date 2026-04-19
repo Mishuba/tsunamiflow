@@ -1,3 +1,4 @@
+import { T } from "./foundation/T.js";
 export class TsharedWorker extends T {
     // WorldSocket = new TfWebsocket("wss://world.tsunamiflow.club/ws"); 
     ws = null;
