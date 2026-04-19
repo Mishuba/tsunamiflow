@@ -5,7 +5,7 @@ export class Ts extends T {
     sharedWorker = null;
     sharedWorkerPort = null;
     constructor(options = {}) {
-
+super(options);
     }
     getBrands() {
         if (!(!!this.uaData)) {

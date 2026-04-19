@@ -11,6 +11,7 @@ export class TsharedWorker extends T {
     wsreconnectDelay = 2000;
     wsReconnectAttempts = 0;
     constructor(options = {}) {
+        super(options);
         if (options.role) this.wsRole = options.role;
         if (options.key) this.wsKey = options.key;
         if (options.baseUrl) this.baseUrl = options.baseUrl;
