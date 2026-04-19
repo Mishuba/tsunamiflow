@@ -4,7 +4,7 @@
    Backend / realtime services always stay network-only.
 */
 
-const VERSION = "v5";
+const VERSION = "v1.1";
 const CACHE_NAME = `tf-cache-${VERSION}`;
 const OFFLINE_URL = "/Offline/offline.html";
 
@@ -18,7 +18,7 @@ const PRECACHE_URLS = [
     "/index.html",
     "/manifest.json",
     "/favicon.ico",
-    "/offline.html",
+    "/Offline/offline.html",
 
     // Core CSS / JS
     "/MyStyle/style.css",
