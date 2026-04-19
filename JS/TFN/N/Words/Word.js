@@ -1,11 +1,3 @@
-import { WordTimes } from "../../T/Arrays/Timers/WordTimes.js";
-import { TFwordOftheDay } from "./Class/Words.js";
-import { WordOfTheDayArray } from "../../T/Arrays/Words/Day.js";
-import { WordOfTheDay } from "../../T/Functions/WordOfTheDay.js";
-
-let QuoteStuff = 0;
-let TheOtherWords = 1;
-
 export let TFwordTemplate = new TFwordOftheDay({
     word: "",
     definition: "",
@@ -29,7 +21,7 @@ export let TFwordTemplate = new TFwordOftheDay({
     ]
 });
 
-let TFwordMishuba = new TFwordOftheDay({
+let TFwordMishuba = {
     word: "Mishuba",
     definition: "A heterosexual North American entertainer.",
     quotes: [
@@ -50,7 +42,7 @@ let TFwordMishuba = new TFwordOftheDay({
             }
         }
     ]
-});
+};
 WordOfTheDayArray.push(TFwordMishuba);
 
 let TFtsunami = new TFwordOftheDay();
@@ -381,58 +373,5 @@ WordOfTheDayArray.push(TFspiritual);
 let TFplane = new TFwordOftheDay();
 WordOfTheDayArray.push(TFplane);
 */
-let theWords = Math.floor(Math.random() * (WordOfTheDayArray.length - 1));
-
-let FirstWord = WordOfTheDayArray[theWords].word.word;
-let FirstDefinition = WordOfTheDayArray[theWords].word.definition;
-let FirstQuoteText = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].text;
-let FirstQuoteHistoryFact = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.fact.one;
-let FirstQuoteHistoryFact2 = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.fact.two;
-let FirstQuoteHistoryMyth = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.myth.one;
-let FirstQuoteHistoryMyth2 = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.myth.two;
-let FirstQuoteHistoryLegend = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.legend.one;
-let FirstQuoteHistoryLegend2 = WordOfTheDayArray[theWords].word.quotes[QuoteStuff].history.legend.two;
-let SecondQuoteText = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].text;
-let SecondQuoteHistoryFact = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.fact.one;
-let SecondQuoteHistoryFact2 = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.fact.two;
-let SecondQuoteHistoryMyth = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.myth.one;
-let SecondQuoteHistoryMyth2 = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.myth.two;
-let SecondQuoteHistoryLegend = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.legend.one;
-let SecondQuoteHistoryLegend2 = WordOfTheDayArray[theWords].word.quotes[TheOtherWords].history.legend.two;
-
-
-let SomeQuote = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Quote: ${FirstQuoteText}`;
-let SomeQuote2 = `${FirstWord} <br/> Definition: ${FirstDefinition} <br /> Quote: ${SecondQuoteText}`;
-let SomeFact = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Fact: ${FirstQuoteHistoryFact}`;
-
-let SomeFact2 = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Fact: ${FirstQuoteHistoryFact2}`;
-
-let SomeFact3 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Fact: ${SecondQuoteHistoryFact}`;
-
-let SomeFact4 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Fact: ${SecondQuoteHistoryFact2}`;
-
-let SomeMyth = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Myth: ${FirstQuoteHistoryMyth}`;
-
-let SomeMyth2 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Myth: ${FirstQuoteHistoryMyth2}`;
-
-let SomeMyth3 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Myth: ${SecondQuoteHistoryMyth}`;
-
-let SomeMyth4 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Myth: ${SecondQuoteHistoryMyth2}`;
-
-let SomeLegend = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Legend: ${FirstQuoteHistoryLegend}`;
-
-let SomeLegend2 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Legend: ${FirstQuoteHistoryLegend2}`;
-
-let SomeLegend3 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Legend: ${SecondQuoteHistoryLegend}`;
-
-let SomeLegend4 = `${FirstWord} <br /> Definition: ${FirstDefinition} <br /> Legend: ${SecondQuoteHistoryLegend2}`;
-
-let SomeOfEverythingOne = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Quote: ${FirstQuoteText} <br /> Fact: ${FirstQuoteHistoryFact} <br /> Myth: ${FirstQuoteHistoryMyth} <br /> Legend: ${FirstQuoteHistoryLegend} <br />`;
-
-let SomeOfEverythingTwo = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Quote: ${FirstQuoteText} <br /> Fact: ${FirstQuoteHistoryFact2} <br /> Myth: ${FirstQuoteHistoryMyth2} <br /> Legend: ${FirstQuoteHistoryLegend2} <br />`;
-
-let SomeOfEverythingThree = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Quote: ${SecondQuoteText} <br /> Fact: ${SecondQuoteHistoryFact} <br /> Myth: ${SecondQuoteHistoryMyth} <br /> Legend: ${SecondQuoteHistoryLegend} <br />`;
-
-let SomeOfEverythingFour = `${FirstWord} <br /> Defintion: ${FirstDefinition} <br /> Quote: ${SecondQuoteText} <br /> Fact: ${SecondQuoteHistoryFact2} <br /> Myth: ${SecondQuoteHistoryMyth2} <br /> Legend: ${SecondQuoteHistoryLegend2} <br />`;
 
 WordOfTheDay(time, WordTimes, SomeQuote, SomeFact, SomeMyth, SomeLegend, SomeOfEverythingTwo, SomeFact2, SomeMyth2, SomeLegend2, SomeOfEverythingThree, SomeQuote2, SomeFact3, SomeMyth3, SomeLegend3, SomeOfEverythingFour, SomeFact4, SomeMyth4, SomeLegend4, SomeOfEverythingOne)

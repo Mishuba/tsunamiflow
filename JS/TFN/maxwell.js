@@ -1,6 +1,7 @@
 export class maxwell {
-    //worker = null;
-    //sharedWorker = null;
+    worker = null;
+    sharedWorker = null;
+    sharedWorkerPort = null;
     site = null;
     iframe = null;
     user = null;
@@ -318,10 +319,7 @@ export class maxwell {
 
         this.on("TFradioSkipButton", () => {
             element.src = "";
-            RadioWorker.postMessage({
-                type: "radio",
-                system: "file",
-            });
+            //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
     }
     bindAudio() {
@@ -454,4 +452,105 @@ export class maxwell {
             console.log(`Gamepad disconnected: ${gamepad.id}`);
         }
     }
+
+    async handleSchedule(time) {
+    for (const word of this.site.WordTimes) {
+        let TfWotd = this.find("tfWordOfTheDay");
+      TfWotd.innerHTML = await this.site.WordOfTheDay(time);
+      if (time === word) break;
+    }
+
+    this.site.UpdateNews();
+
+    for (const tfRT of this.soundEngine.RadioTimes) {
+      if (time === tfRT) {
+        this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+        return;
+      }
+    }
+    this.ensureRadioPlaying(audio);
+    }
+
+    async handleWorkerMessage(event) {
+  if (event.data.type === "Timer") {
+    let MyNewTFTime = this.find("TFtime");
+        MyNewTFTime.innerHTML = event.data.payload.time;
+    if (event.data.payload.system === "Tf Schedule") {
+    await this.handleSchedule(event.data.payload.time);
+    } else if (event.data.payload.system === "Tf Time") {
+          this.site.UpdateNews();
+    let weather = this.find("TFweather");
+    weather.innerHTML = this.site.requestLocation();
+this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+    } else {
+    this.site.UpdateNews();
+    this.site.requestLocation();
+    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+    }
+  } else if (event.data.type === "radio") {
+    if (event.data.payload.system === "file") {
+        if (event.data.payload.file === "") {
+            
+        } else {
+this.soundEngine.TfAudio.src = event.data.payload.file;
+        }
+    }
+    if (event.data.payload.system === "Previous") {
+        
+    } else if (event.data.payload.system === "metadata") {
+      // Handle metadata data
+    } else if (event.data.payload.system === "visual_data") {
+      // Handle visualization data
+    } else if (event.data.payload.system === "audio_buffer") {
+      // Handle audio buffer data
+    } else if (event.data.payload.system === "arraybuffer") {
+      // Handle audio buffer data
+      //this.soundEngine.arrayBuffer();
+            //this.radioWorker.postMessage({type: "radio",system: "pcm",buffer: "",sampleRate: "" //buffer.sampleRate}, [pcm]);
+    } else if (event.data.payload.system === "audio_stream") {
+      // Handle audio stream data
+      if (event.data.payload.system === "live") {
+        //this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+      } else {
+        //this.stopLiveAudio();
+      }
+    }
+  } else if (event.data.payload.system === "error") {
+      // Handle error data
+    } else {
+      console.warn("Unknown message type:", data.type);
+    } 
+  }
+
+    handleError(source, error) {
+    console.error(
+      `[${source}] ${error.message}`,
+      error.filename,
+      error.lineno
+    );
+  }
+  initTsunamiWorkers() {
+    if (typeof Worker === "undefined") {
+      console.warn("No Web Worker support");
+      return;
+    }
+
+    if (typeof EventSource === "undefined") {
+      console.warn("Server Sent Events not supported");
+      return;
+    }
+
+    this.worker = new Worker("JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
+
+    this.site.worker = this.worker;
+    this.iframe.worker = this.worker;
+    this.user.worker = this.worker;
+    this.imageEngine.worker = this.worker;
+    this.soundEngine.worker = this.worker;
+    this.videoEngine.worker = this.worker;
+    this.game.worker = this.worker;
+
+    this.worker.onmessage = (e) => this.handleWorkerMessage(e);
+      this.worker.onerror = (e) => this.handleError("Worker", e);
+  }
 }

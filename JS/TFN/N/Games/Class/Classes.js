@@ -1,11 +1,3 @@
-/*
-export class TfImages {
-    constructor() {
-
-    }
-}
-*/
-
 export class tfVGbaby {
 
     cry() {

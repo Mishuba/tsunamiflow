@@ -1,3 +1,4 @@
+
 export class Ts extends T {
     uaData = navigator.userAgentData || null;
     LegacyUaData = navigator.userAgent || null;
@@ -58,6 +59,7 @@ export class Ts extends T {
             legacyUA: this.LegacyUaData
         };
     }
+    
     startSharedWorker() {
         if (this.sharedWorker) return;
 

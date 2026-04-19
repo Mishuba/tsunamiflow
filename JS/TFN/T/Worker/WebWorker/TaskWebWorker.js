@@ -18,10 +18,10 @@
 */
 
 const workers = {
-    game: new Worker("./game.worker.js", { type: "module" }),
-    audio: new Worker("./audio.worker.js", { type: "module" }),
-    physics: new Worker("./physics.worker.js", { type: "module" }),
-    ai: new Worker("./ai.worker.js", { type: "module" })
+    input: new Worker("./kid/GameInputWebWorker.js", { type: "module" }),
+    media: new Worker("./kid/MediaWebWorker.js", { type: "module" }),
+    world: new Worker("./kid/GameWorldWebWorker.js", { type: "module" }),
+    ai: new Worker("./kid/AiWebWorker.js", { type: "module" })
 };
 
 /*
@@ -32,7 +32,7 @@ const workers = {
 |--------------------------------------------------------------------------
 */
 
-const sharedWorker = new SharedWorker("./shared.worker.js", {
+const sharedWorker = new SharedWorker("./../Shared.js", {
     type: "module"
 });
 
@@ -49,7 +49,7 @@ function tycadome(
     type,
     action,
     meta = {},
-    state = "pending",
+    state = {},
     mode = "async",
     payload = {}
 ) {
@@ -81,8 +81,13 @@ Object.entries(workers).forEach(([name, worker]) => {
                 {
                     source: name,
                     layer: "compute"
+                    worker: ""
                 },
-                "completed",
+                {
+                    status: "completed",
+                    priority: "low"
+
+                }    
                 "async",
                 e.data.payload || e.data
             )
@@ -98,7 +103,10 @@ Object.entries(workers).forEach(([name, worker]) => {
                 {
                     message: err.message
                 },
-                "failed",
+                {
+                    status: "failed",
+                    priority: "low",
+                },
                 "async",
                 {}
             )
@@ -120,9 +128,13 @@ sharedWorker.port.onmessage = (e) => {
             e.data.action || "completed",
             {
                 source: "shared.worker",
-                layer: "backend"
+                layer: "backend",
+                worker: "shared"
             },
-            e.data.state || "completed",
+            {
+status: e.data.state || "completed",
+priority: "low"
+            }
             "async",
             e.data.payload || e.data
         )
@@ -153,7 +165,10 @@ onmessage = (e) => {
                 task.type,
                 task.action,
                 task.meta,
-                "processing",
+                {
+                    status: "processing",
+                    priority: "low"
+                }
                 task.mode || "async",
                 task.payload || {}
             )
@@ -177,7 +192,10 @@ onmessage = (e) => {
                     reason: "Invalid or missing meta.worker",
                     received: target
                 },
-                "failed",
+                {
+                    status: "failed",
+                    priority: "low"
+                }
                 "async",
                 task
             )
@@ -191,7 +209,10 @@ onmessage = (e) => {
             task.type,
             task.action,
             task.meta,
-            "processing",
+            {
+                status: "processing",
+                priority: "low"
+            }
             task.mode || "async",
             task.payload || {}
         )

@@ -1,72 +1,70 @@
-import { T } from "./Base/foundation/base.js";
+import { Ts } from "./Base/test.js";
 
-export class Ts extends T {
-    uaData = navigator.userAgentData || null;
-    LegacyUaData = navigator.userAgent || null;
-    sharedWorker = null;
-    sharedWorkerPort = null;
+export class TsDom extends Ts {
+    namespace = "tf";
+    cookieenabled = navigator.cookieEnabled;
+    cookies = this.cookieenabled ? this.parsecookie() : {};
+    SessionStorage = window.sessionStorage;
+    LocalStorage = window.localStorage;
     constructor(options = {}) {
         super(options);
-    }
-    getBrands() {
-        if (!(!!this.uaData)) {
-            return [];
-        } else {
-            return this.uaData.brands || [];
+        this.supported = !!navigator.permissions;
+        this.custom = options.custom || {};
+
+        /* ========================= */
+        /* ===== PERMISSIONS ======= */
+        /* ========================= */
+
+        this.permissions = {
+            geolocation: this._wrapPermission("geolocation"),
+            notifications: this._wrapPermission("notifications"),
+            clipboard: this._wrapPermission("clipboard-read"),
+            camera: this._wrapPermission("camera"),
+            microphone: this._wrapPermission("microphone")
+        };
+
+        /* ========================= */
+        /* ===== CAPABILITIES ====== */
+        /* ========================= */
+
+        this.capabilities = {
+            battery: this._battery(),
+            vibration: this._vibration(),
+            serial: this._serial(),
+            hid: this._hid(),
+            usb: this._usb(),
+            bluetooth: this._bluetooth()
+        };
+
+        if (!this.supported) {
+            console.warn("Permissions API not fully supported.");
         }
     }
 
-    getMobile() {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            return this.uaData.mobile;
-        }
-    }
+    /* ========================= */
+    /* ===== PERMISSION WRAP === */
+    /* ========================= */
 
-    getPlatform() {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            return this.uaData.platform;
-        }
-    }
-
-    async getHighEntropyValues(hints = [
-        "architecture",
-        "bitness",
-        "model",
-        "platformVersion",
-        "uaFullVersion"
-    ]) {
-        if (!(!!this.uaData)) {
-            return null;
-        } else {
-            try {
-                return await this.uaData.getHighEntropyValues(hints);
-            } catch (err) {
-                console.error("Failed to retrieve high entropy UA values:", err);
-                return null;
-            }
-        }
-    }
-
-    getFullInfo() {
+    _wrapPermission(name) {
         return {
-            supported: !!this.uaData,
-            brands: this.getBrands(),
-            mobile: this.getMobile(),
-            platform: this.getPlatform(),
-            legacyUA: this.LegacyUaData
+            async query() {
+                if (!navigator.permissions) return "unsupported";
+                try {
+                    const res = await navigator.permissions.query({ name });
+                    return res.state;
+                } catch {
+                    return "unsupported";
+                }
+            }
         };
     }
 
     async query(name) {
-    if (this.permissions[name]) {
-        return await this.permissions[name].query();
+        if (this.permissions[name]) {
+            return await this.permissions[name].query();
+        }
+        return "unsupported";
     }
-    return "unsupported";
-}
 
     /* ========================= */
     /* ===== CAMERA / MIC ====== */
@@ -533,92 +531,4 @@ clearcookie() {
         this.remove(k);
     });
 }
-}
-
-export class TsDom extends Ts {
-    namespace = "tf";
-    cookieenabled = navigator.cookieEnabled;
-    cookies = this.cookieenabled ? this.parsecookie() : {};
-    SessionStorage = window.sessionStorage;
-    LocalStorage = window.localStorage;
-    constructor(options = {}) {
-        super(options);
-        this.supported = !!navigator.permissions;
-        this.custom = options.custom || {};
-
-        /* ========================= */
-        /* ===== PERMISSIONS ======= */
-        /* ========================= */
-
-        this.permissions = {
-            geolocation: this._wrapPermission("geolocation"),
-            notifications: this._wrapPermission("notifications"),
-            clipboard: this._wrapPermission("clipboard-read"),
-            camera: this._wrapPermission("camera"),
-            microphone: this._wrapPermission("microphone")
-        };
-
-        /* ========================= */
-        /* ===== CAPABILITIES ====== */
-        /* ========================= */
-
-        this.capabilities = {
-            battery: this._battery(),
-            vibration: this._vibration(),
-            serial: this._serial(),
-            hid: this._hid(),
-            usb: this._usb(),
-            bluetooth: this._bluetooth()
-        };
-
-        if (!this.supported) {
-            console.warn("Permissions API not fully supported.");
-        }
-    }
-
-    /* ========================= */
-    /* ===== PERMISSION WRAP === */
-    /* ========================= */
-
-    _wrapPermission(name) {
-        return {
-            async query() {
-                if (!navigator.permissions) return "unsupported";
-                try {
-                    const res = await navigator.permissions.query({ name });
-                    return res.state;
-                } catch {
-                    return "unsupported";
-                }
-            }
-        };
-    }
-
-    async query(name) {
-        if (this.permissions[name]) {
-            return await this.permissions[name].query();
-        }
-        return "unsupported";
-    }
-
-    /* ========================= */
-    /* ===== CAMERA / MIC ====== */
-    /* ========================= */
-
-    async requestMedia(constraints = {}) {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            return { status: "granted", stream };
-        } catch (err) {
-            return { status: "denied", error: err };
-        }
-    }
-
-    async requestCamera() {
-        return this.requestMedia({ video: true });
-    }
-
-    async requestMicrophone() {
-        return this.requestMedia({ audio: true });
-    }
 }

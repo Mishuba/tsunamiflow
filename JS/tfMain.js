@@ -1,10 +1,6 @@
 import { gameComponent } from "./TFN/N/Games/Class/planetuniverse.js";  
 import { letsDoIt } from "./TFN/N/Games/Class/gamemechanics.js";  
-import { RadioTimes, WordTimes } from "./TFN/T/Arrays/Arrays.js";  
-import { WordOfTheDay } from "./TFN/T/Functions/WordOfTheDay.js";  
-import { UpdatedArray } from "./TFN/N/Network/News/News.js";  
-import { NewsTimer } from "./TFN/N/Network/News/functions.js";
-import { Weather } from "./TFN/N/Site/Weather.js";  
+import { HeaderWeather } from "./TFN/T/Class/weather.js";
 import { tfIframe } from "./../Iframe/Js/TfIframe.js";  
 import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";
 import { TfPrintful } from "./TFN/T/Class/Tycadome.js";
@@ -155,8 +151,6 @@ var armourSet8;
 let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
 
 document.addEventListener("DOMContentLoaded", () => {  
-  let MyNewTFTime = document.getElementById("TFtime");  
-  let TfWotd = document.getElementById("tfWordOfTheDay");  
   let TsunamiRadio = document.getElementById("TFradioPlayer");  
   TsunamiRadio.crossOrigin = "anonymous";  
   let RadioTitle = document.getElementById("TfRadioStuff");  
@@ -176,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
-let TfWeather = new Weather(); 
+let TfSite = new HeaderWeather(); 
 let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
 let nifage = new TfPrintful();
 let style = new TsunamiFlowImageEngine();
@@ -186,7 +180,7 @@ let nation = new TsunamiFlowDj({
 let network = new TsunamiLiveVideoController();
 
 let max = {
-  site: TfWeather,
+  site: TfSite,
   iframe: frameTF,
   user: nifage,
   image: style,
