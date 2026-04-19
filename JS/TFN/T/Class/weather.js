@@ -1,6 +1,7 @@
 import { HeaderNews } from "./Elder/news.js";
 export class HeaderWeather extends HeaderNews {
-constructor() {
+constructor(options = {}) {
+    super(options)
         this.DSLO = {
             enabledHighAccuracy: true,
             timeout: 5000,
