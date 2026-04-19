@@ -254,8 +254,9 @@ if (twoMore) {
   Controller.iframe.frame.src = "Iframe/Pages/homepage.html";    
     
   Controller.iframe.MenuSwitch(Controller.iframe.frame);    
-  /*
+  
   Controller.bindNavBar();    
+/*
   Controller.bindAudio();
   Controller.bindUsers();
   Controller.bindStore().then(() => Controller.bindPayments());
