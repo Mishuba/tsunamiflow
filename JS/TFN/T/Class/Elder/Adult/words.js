@@ -84,7 +84,7 @@ SomeOfEverythingFour = null;
     async WordOfTheDay(time) {
 if (this.theWords === null) {
       if (this.WordOfTheDayArray.length === 0) {
-console.error("no words"):
+console.error("no words");
 return;
             } else {
                   this.theWords = Math.floor(Math.random() * (this.WordOfTheDayArray.length - 1));
