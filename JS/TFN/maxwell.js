@@ -626,7 +626,7 @@ export class maxwell {
             return;
         }
 
-        this.worker = new Worker("JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
+        this.worker = new Worker("./T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
 
         this.site.worker = this.worker;
         this.iframe.worker = this.worker;
