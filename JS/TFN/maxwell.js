@@ -558,55 +558,39 @@ export class maxwell {
     }
 
     async handleWorkerMessage(event) {
-        if (event.data.type === "Timer") {
-            let MyNewTFTime = this.find("TFtime");
-            MyNewTFTime.innerHTML = event.data.payload.time;
-            if (event.data.payload.system === "Tf Schedule") {
-                await this.handleSchedule(event.data.payload.time);
-            } else if (event.data.payload.system === "Tf Time") {
-                this.site.UpdateNews();
-                let weather = this.find("TFweather");
-                weather.innerHTML = this.site.requestLocation();
-                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-            } else {
-                this.site.UpdateNews();
-                this.site.requestLocation();
-                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-            }
-        } else if (event.data.type === "radio") {
-            if (event.data.payload.system === "file") {
-                if (event.data.payload.file === "") {
+        const data = event.data || {};
+        const payload = data.payload || {};
 
-                } else {
-                    this.soundEngine.TfAudio.src = event.data.payload.file;
-                }
-            }
-            if (event.data.payload.system === "Previous") {
+        switch (data.type) {
+            case "Timer":
+                this.find("TFtime").innerHTML = payload.time;
 
-            } else if (event.data.payload.system === "metadata") {
-                // Handle metadata data
-            } else if (event.data.payload.system === "visual_data") {
-                // Handle visualization data
-            } else if (event.data.payload.system === "audio_buffer") {
-                // Handle audio buffer data
-            } else if (event.data.payload.system === "arraybuffer") {
-                // Handle audio buffer data
-                //this.soundEngine.arrayBuffer();
-                //this.radioWorker.postMessage({type: "radio",system: "pcm",buffer: "",sampleRate: "" //buffer.sampleRate}, [pcm]);
-            } else if (event.data.payload.system === "audio_stream") {
-                // Handle audio stream data
-                if (event.data.payload.system === "live") {
-                    //this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+                if (payload.system === "Tf Schedule") {
+                    await this.handleSchedule(payload.time);
+                } else if (payload.system === "Tf Time") {
+                    this.site.UpdateNews();
+                    this.find("TFweather").innerHTML = this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
                 } else {
-                    //this.stopLiveAudio();
+                    this.site.UpdateNews();
+                    this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
                 }
-            }
-        } else if (event.data.payload.system === "error") {
-            // Handle error data
-        } else {
-            console.warn("Unknown message type:", data.type);
+                break;
+
+            case "radio":
+                this.handleRadio(payload);
+                break;
+
+            default:
+                if (payload.system === "error") {
+                    console.error("Worker error:", payload);
+                } else {
+                    console.warn("Unknown message type:", data.type);
+                }
         }
     }
+
 
     handleError(source, error) {
         console.error(
