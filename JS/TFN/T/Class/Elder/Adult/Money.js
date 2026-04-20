@@ -10,10 +10,15 @@ export class StripeDonation extends TsDomCanvas {
     customerId = localStorage.getItem("stripeCustomerId") || null;
     queue = []; // Offline/retry queue
     transport = "xml"; // default
-    constructor(stripePublicKey, backendUrl) {
-        super();
-        this.#stripePublicKey = stripePublicKey || this.#stripePublicKey;
-        this.#backendUrl = backendUrl || this.#backendUrl;
+    constructor(options = {}) {
+        super(options);
+        if (options.stripePublicKey) {
+            this.stripePublicKey = options.stripePublicKey;
+        }
+        if (options.backendUrl) {
+            this.backendUrl = options.backendUrl;
+        }
+        this.stripePromise = null;
     }
 
     // Load Stripe JS once
@@ -33,11 +38,11 @@ export class StripeDonation extends TsDomCanvas {
 
     async initMoney() {
         await this.loadTFMoney();
-        this.stripe = Stripe(this.#stripePublicKey);
+        this.stripe = Stripe(this.stripePublicKey);
     }
 
     async _fetchRequest(data) {
-        const res = await fetch(this.#backendUrl, {
+        const res = await fetch(this.backendUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
