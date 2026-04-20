@@ -192,10 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
-  let TfSite = new HeaderWeather({
-    stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
-    backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
-  });
+  let TfSite = new HeaderWeather();
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
   let nifage = new TfPrintful();
   let style = new TsunamiFlowImageEngine();
@@ -219,7 +216,21 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
   };
-  let Controller = new maxwell(max);
+  let Controller = new maxwell({
+    site: TfSite,
+    iframe: frameTF,
+    user: nifage,
+    image: style,
+    sound: nation,
+    video: network,
+    game: Stickman,
+    AudioTitle: RadioTitle,
+    AudioButtonSpot: RadioButtons,
+    AudioPrevious: RadioLastButton,
+    AudioOver: RadioRestartButton,
+    AudioStart: RadioStartButton,
+    AudioSkip: RadioSkipButton,
+  });
   Controller.site.EnHword(TFwordMishuba);
 
   Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces with a length of 20 inches. His head was 12 1/2 inches, chest was 11 1/2 inches on July 11, 1990 at Tallahassee Memorial Regional Medical Center INC. in Tallahassee, FLorida of the United States of America on Planet Earth.");
@@ -285,6 +296,9 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   });
+  Controller.user.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
+  Controller.user.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+
   Controller.bindUsers();
   Controller.bindNavBar();
   Controller.bindAudio();
