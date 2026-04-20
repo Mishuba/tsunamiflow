@@ -21,7 +21,7 @@ const PRECACHE_URLS = [
     "/Offline/offline.html",
 
     // Core CSS / JS
-    "/MyStyle/style.css",
+    "/MyStyle/tfMain.css",
     "/JS/tfMain.js",
     "/JS/TFN/maxwell.js",
     "/JS/TFN/T/Worker/Shared.js",
@@ -67,7 +67,7 @@ const PRECACHE_URLS = [
     "/Pictures/Social_Media/Patreon.jpg",
     "/Pictures/Social_Media/Twitch.jpg",
     "/Pictures/Social_Media/Twitter.jpg",
-    "/Pictures/Social_Media/YouTube.jpg",
+    "/Pictures/Social_Media/Youtube.jpg",
     "/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking2400.png",
 
     //iframe
