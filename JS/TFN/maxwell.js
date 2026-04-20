@@ -209,8 +209,8 @@ export class maxwell {
         }, true);
     }
     bindPayments() {
-        this.user.load();
-        this.user.init();
+        this.user.loadMoney();
+        this.user.initMoney();
         this.user.mountCard("UniqueOriginal");
 
         const emailInput = this.userFields?.tfEM || this.find("TfEmail");
