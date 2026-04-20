@@ -2,11 +2,11 @@ import { TsunamiFlowAudio } from "./Adult/Audio.js";
 export class TsunamiFlowRadio extends TsunamiFlowAudio {
   _radioBound = false;
   _wired = false;
-radioTypes = ["video/webm","audio/webm","video/webm;codecs=vp8","video/webm;codecs=daala","video/webm;codecs=h264","audio/webm;codecs=opus","video/mp4","audio/mp3"
-];
-RadioTimes = ["00:00","01:00","01:05","01:15","01:30","02:00","03:00","03:20","03:40","04:00","04:20","04:40","05:00","05:20","05:40","06:00","06:20","06:40","07:00","07:20","07:40","08:00","08:10","08:20","08:30","08:40","08:50","09:00","09:20","09:40","10:00","11:00","12:00","12:15","12:30","12:45","13:00","13:15","13:30","13:45","14:00","14:15","14:30","14:45","15:00","15:15","15:30","15:45","16:00","16:15","16:30","16:45","17:00","18:00","18:10","18:20","18:30","18:40","18:50","19:00","19:20","19:40","20:00","20:15","20:30","20:45","21:00","22:00","23:00"
-];
-DefaultPlaylist = [
+  radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
+  ];
+  RadioTimes = ["00:00", "01:00", "01:05", "01:15", "01:30", "02:00", "03:00", "03:20", "03:40", "04:00", "04:20", "04:40", "05:00", "05:20", "05:40", "06:00", "06:20", "06:40", "07:00", "07:20", "07:40", "08:00", "08:10", "08:20", "08:30", "08:40", "08:50", "09:00", "09:20", "09:40", "10:00", "11:00", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "18:00", "18:10", "18:20", "18:30", "18:40", "18:50", "19:00", "19:20", "19:40", "20:00", "20:15", "20:30", "20:45", "21:00", "22:00", "23:00"
+  ];
+  DefaultPlaylist = [
     "https://radio.tsunamiflow.club/Music/Afterparty/06 - Mishuba - One of them days.mp3",
     "https://radio.tsunamiflow.club/Music/Business/FE/RMM.mp3",
     "https://radio.tsunamiflow.club/Music/Business/TE/I Go In.mp3",
@@ -180,7 +180,7 @@ DefaultPlaylist = [
     "https://radio.tsunamiflow.club/Music/Tech/Instrumentals/Blank (New Black Kid).mp3",
     "https://radio.tsunamiflow.club/Music/Tech/Instrumentals/Lockdown.mp3",
     "https://radio.tsunamiflow.club/Music/Tech/Music/Freestyle 34.mp3"
-];
+  ];
   particles = [];
   constructor(options = {}) {
     super(options);
@@ -396,34 +396,34 @@ DefaultPlaylist = [
 
     //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
     const loopAnalyzer = () => {
-    this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
+      this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
 
-let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "visualizator",
-      "radio.playing",
-      {
-        source: "web",
-        target: "device:web-001"
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "visual_data",
-        //canvas: this.visualizatorController,
-        dataArray: this.TfSoundsContextDataArray,
-        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-        //particles: this.particles
-      });
+      let tf = this.tycadome(
+        "tycadome-guest" + Date.now(),
+        "visualizator",
+        "radio.playing",
+        {
+          source: "web",
+          target: "device:web-001"
+        },
+        {
+          status: "pending",
+          priority: "low"
+        },
+        "async",
+        {
+          system: "visual_data",
+          //canvas: this.visualizatorController,
+          dataArray: this.TfSoundsContextDataArray,
+          bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+          //particles: this.particles
+        });
 
-    this.worker.postMessage(tf);
+      this.worker.postMessage(tf);
 
-    requestAnimationFrame(loopAnalyzer);
-};
-loopAnalyzer();
+      requestAnimationFrame(loopAnalyzer);
+    };
+    loopAnalyzer();
   }
 
   playingAudio() {
@@ -473,19 +473,19 @@ loopAnalyzer();
     } else {
       this._radioBound = true;
 
-      /*     this.TfAudio.AddEventListener("emptied", async (emptied) => {
+      /*     this.TfAudio.addEventListener("emptied", async (emptied) => {
               this.emptiedAudio(emptied);
               //cancelAnimationFrame(this.effects.visualizatorController);
             });
             this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
       */
 
-      this.TfAudio.AddEventListener("waiting", (waiting) => {
+      this.TfAudio.addEventListener("waiting", (waiting) => {
         this.waitingAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.waitingAudio, "waiting");
 
-      this.TfAudio.AddEventListener("stalled", (stalled) => {
+      this.TfAudio.addEventListener("stalled", (stalled) => {
         this.stalledAudio(stalled).then(() => {
           //cancelAnimationFrame 
           // (this.effects.visualizatorController);    
@@ -493,34 +493,34 @@ loopAnalyzer();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.stalledAudio, "stalled");
 
-      this.TfAudio.AddEventListener("loadstart", async () => {
+      this.TfAudio.addEventListener("loadstart", async () => {
         this.loadstartAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadstartAudio, "loadstart");
 
-      this.TfAudio.AddEventListener("suspended", (suspend) => {
+      this.TfAudio.addEventListener("suspended", (suspend) => {
         this.suspendAudio().then(() => {
           //cancelAnimationFrame(this.effects.visualizatorController);
         });
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.suspendAudio, "suspended");
 
-      this.TfAudio.AddEventListener("loadedmetadata", async () => {
+      this.TfAudio.addEventListener("loadedmetadata", async () => {
         this.loadedmetadataAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadedmetadataAudio, "loadedmetadata");
 
-      this.TfAudio.AddEventListener("loadeddata", () => {
+      this.TfAudio.addEventListener("loadeddata", () => {
         this.loadeddataAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadeddataAudio, "loadeddata");
 
-      this.TfAudio.AddEventListener("canplay", () => {
+      this.TfAudio.addEventListener("canplay", () => {
         this.canplayAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplayAudio, "canplay");
 
-      this.TfAudio.AddEventListener("canplaythrough", async () => {
+      this.TfAudio.addEventListener("canplaythrough", async () => {
         if (!this._wired) {
           this.initAudioContext();
           this._wired = true;
@@ -530,34 +530,34 @@ loopAnalyzer();
 
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplaythroughAudio, "canplaythrough");
 
-      this.TfAudio.AddEventListener("play", () => {
+      this.TfAudio.addEventListener("play", () => {
         this.playAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playAudio, "play");
 
-      this.TfAudio.AddEventListener("playing", () => {
+      this.TfAudio.addEventListener("playing", () => {
         this.playingAudio();
 
         //this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playingAudio, "playing");
 
-      this.TfAudio.AddEventListener("pause", async () => {
+      this.TfAudio.addEventListener("pause", async () => {
         //this.TfAudio.pauseAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.pauseAudio, "pause");
 
-      this.TfAudio.AddEventListener("timeupdate", () => {
+      this.TfAudio.addEventListener("timeupdate", () => {
         this.timeupdateAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.timeupdateAudio, "timeupdate");
 
-      this.TfAudio.AddEventListener("volumechange", (volumechange) => {
+      this.TfAudio.addEventListener("volumechange", (volumechange) => {
         //this.volumechangeAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.volumechangeAudio, "volumechange");
 
-      this.TfAudio.AddEventListener("ended", async (ended) => {
+      this.TfAudio.addEventListener("ended", async (ended) => {
         //this.endedAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.endedAudio, "ended");
@@ -605,7 +605,7 @@ loopAnalyzer();
     };
   }
 
-    StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8") {
+  StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8") {
     if (this.WeLive) return;
 
     this.WeLive = true;
