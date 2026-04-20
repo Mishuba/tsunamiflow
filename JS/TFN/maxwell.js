@@ -263,15 +263,15 @@ export class maxwell {
     }
     bindUsers() {
         this.userFields = {
-            tfFN: this.find("TfFirstName", false),
-            tfLN: this.find("TfLastName", false),
-            tfNN: this.find("TfNickName", false),
-            tfGen: this.find("TfGender", false),
-            tfEM: document.getElementById("TfEmail"),
-            tfBirth: document.getElementById("TfBirthday"),
-            tfUN: document.getElementById("TFuserName"),
-            tfPsw: document.getElementById("TFpassword"),
-            tfMembershipLevel: document.getElementById("TFMembershipLevel"),
+            tfFN: this.find("TfFirstName", null),
+            tfLN: this.find("TfLastName", null),
+            tfNN: this.find("TfNickName", null),
+            tfGen: this.find("TfGender", null),
+            tfEM: this.find("TfEmail", null),
+            tfBirth: this.find("TfBirthday", null),
+            tfUN: this.find("TFuserName", null),
+            tfPsw: this.find("TFpassword", null),
+            tfMembershipLevel: this.find("TFMembershipLevel", null),
         };
         this.extraFields = {
             ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
