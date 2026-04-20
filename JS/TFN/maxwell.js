@@ -1,4 +1,6 @@
 export class maxwell {
+    listeners = {};
+    domListeners = new Map();
     worker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
@@ -61,12 +63,8 @@ export class maxwell {
             this.site = option.site;
         }
         if (option.iframe) {
-        this.iframe = option.iframe;
+            this.iframe = option.iframe;
         }
-    }
-    on(event, callback, once = false) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push({ callback, once });
     }
     find(elem, frame = null) {
         if (frame !== null) {
@@ -74,6 +72,97 @@ export class maxwell {
         } else {
             return document.getElementById(elem);
         }
+    }
+    emit(event, data) {
+        (this.listeners[event] || []).forEach((fn) => {
+            try {
+                fn(data);
+            } catch (error) {
+                console.error(`Error occurred while emitting event "${event}":`, error);
+            }
+        });
+    }
+    _storeDomListener(id, el, handler, eventType) {
+        if (!this.domListeners.has(id)) {
+            this.domListeners.set(id, []);
+        }
+
+        this.domListeners.get(id).push({
+            el,
+            handler,
+            eventType
+        });
+    }
+    on(id, eventName, preventDefault = false, iframe = null) {
+        let el = this.find(id, iframe);
+        if (!el) return;
+
+        const isForm = el instanceof HTMLFormElement;
+        const isSubmitButton =
+            (el instanceof HTMLButtonElement && el.type === "submit") ||
+            (el instanceof HTMLInputElement &&
+                ["submit", "image"].includes(el.type));
+
+        const supportsPointer = "PointerEvent" in window;
+        const supportsTouch = "ontouchstart" in window;
+
+        const runHandler = (event) => {
+            if (isForm || isSubmitButton || preventDefault) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            this.emit(eventName, {
+                event,
+                element: el,
+                type: event.type
+            });
+        };
+
+        // ===== POINTER (Primary) =====          
+        if (supportsPointer) {
+            const eventType = isForm ? "submit" : "pointerup";
+
+            el.addEventListener(eventType, runHandler);
+
+            this._storeDomListener(id, el, runHandler, eventType);
+            return;
+        }
+
+        // ===== TOUCH (Fallback) =====          
+        if (supportsTouch) {
+            const start = (e) => {
+                this._touchStart = e;
+            };
+
+            const end = (e) => {
+                runHandler(e);
+            };
+
+            el.addEventListener("touchstart", start, { passive: false });
+            el.addEventListener("touchend", end, { passive: false });
+
+            this._storeDomListener(id, el, start, "touchstart");
+            this._storeDomListener(id, el, end, "touchend");
+            return;
+        }
+
+        // ===== CLICK (Fallback) =====          
+        const clickType = isForm ? "submit" : "click";
+
+        el.addEventListener(clickType, runHandler);
+
+        this._storeDomListener(id, el, runHandler, clickType);
+    }
+    off(id) {
+        const entries = this.domListeners.get(id);
+        if (!entries) return;
+
+        entries.forEach(({ el, handler, eventType }) => {
+            el.removeEventListener(eventType, handler);
+        });
+
+        this.domListeners.delete(id);
     }
     bindNavBar() {
         // navigation menu
@@ -454,103 +543,103 @@ export class maxwell {
     }
 
     async handleSchedule(time) {
-    for (const word of this.site.WordTimes) {
-        let TfWotd = this.find("tfWordOfTheDay");
-      TfWotd.innerHTML = await this.site.WordOfTheDay(time);
-      if (time === word) break;
-    }
+        for (const word of this.site.WordTimes) {
+            let TfWotd = this.find("tfWordOfTheDay");
+            TfWotd.innerHTML = await this.site.WordOfTheDay(time);
+            if (time === word) break;
+        }
 
-    this.site.UpdateNews();
+        this.site.UpdateNews();
 
-    for (const tfRT of this.soundEngine.RadioTimes) {
-      if (time === tfRT) {
-        this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-        return;
-      }
-    }
-    this.ensureRadioPlaying(audio);
+        for (const tfRT of this.soundEngine.RadioTimes) {
+            if (time === tfRT) {
+                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+                return;
+            }
+        }
+        this.ensureRadioPlaying(audio);
     }
 
     async handleWorkerMessage(event) {
-  if (event.data.type === "Timer") {
-    let MyNewTFTime = this.find("TFtime");
-        MyNewTFTime.innerHTML = event.data.payload.time;
-    if (event.data.payload.system === "Tf Schedule") {
-    await this.handleSchedule(event.data.payload.time);
-    } else if (event.data.payload.system === "Tf Time") {
-          this.site.UpdateNews();
-    let weather = this.find("TFweather");
-    weather.innerHTML = this.site.requestLocation();
-this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-    } else {
-    this.site.UpdateNews();
-    this.site.requestLocation();
-    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-    }
-  } else if (event.data.type === "radio") {
-    if (event.data.payload.system === "file") {
-        if (event.data.payload.file === "") {
-            
+        if (event.data.type === "Timer") {
+            let MyNewTFTime = this.find("TFtime");
+            MyNewTFTime.innerHTML = event.data.payload.time;
+            if (event.data.payload.system === "Tf Schedule") {
+                await this.handleSchedule(event.data.payload.time);
+            } else if (event.data.payload.system === "Tf Time") {
+                this.site.UpdateNews();
+                let weather = this.find("TFweather");
+                weather.innerHTML = this.site.requestLocation();
+                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+            } else {
+                this.site.UpdateNews();
+                this.site.requestLocation();
+                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+            }
+        } else if (event.data.type === "radio") {
+            if (event.data.payload.system === "file") {
+                if (event.data.payload.file === "") {
+
+                } else {
+                    this.soundEngine.TfAudio.src = event.data.payload.file;
+                }
+            }
+            if (event.data.payload.system === "Previous") {
+
+            } else if (event.data.payload.system === "metadata") {
+                // Handle metadata data
+            } else if (event.data.payload.system === "visual_data") {
+                // Handle visualization data
+            } else if (event.data.payload.system === "audio_buffer") {
+                // Handle audio buffer data
+            } else if (event.data.payload.system === "arraybuffer") {
+                // Handle audio buffer data
+                //this.soundEngine.arrayBuffer();
+                //this.radioWorker.postMessage({type: "radio",system: "pcm",buffer: "",sampleRate: "" //buffer.sampleRate}, [pcm]);
+            } else if (event.data.payload.system === "audio_stream") {
+                // Handle audio stream data
+                if (event.data.payload.system === "live") {
+                    //this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
+                } else {
+                    //this.stopLiveAudio();
+                }
+            }
+        } else if (event.data.payload.system === "error") {
+            // Handle error data
         } else {
-this.soundEngine.TfAudio.src = event.data.payload.file;
+            console.warn("Unknown message type:", data.type);
         }
     }
-    if (event.data.payload.system === "Previous") {
-        
-    } else if (event.data.payload.system === "metadata") {
-      // Handle metadata data
-    } else if (event.data.payload.system === "visual_data") {
-      // Handle visualization data
-    } else if (event.data.payload.system === "audio_buffer") {
-      // Handle audio buffer data
-    } else if (event.data.payload.system === "arraybuffer") {
-      // Handle audio buffer data
-      //this.soundEngine.arrayBuffer();
-            //this.radioWorker.postMessage({type: "radio",system: "pcm",buffer: "",sampleRate: "" //buffer.sampleRate}, [pcm]);
-    } else if (event.data.payload.system === "audio_stream") {
-      // Handle audio stream data
-      if (event.data.payload.system === "live") {
-        //this.StartLiveAudio("wss://world.tsunamiflow.club/websocket");
-      } else {
-        //this.stopLiveAudio();
-      }
-    }
-  } else if (event.data.payload.system === "error") {
-      // Handle error data
-    } else {
-      console.warn("Unknown message type:", data.type);
-    } 
-  }
 
     handleError(source, error) {
-    console.error(
-      `[${source}] ${error.message}`,
-      error.filename,
-      error.lineno
-    );
-  }
-  initTsunamiWorkers() {
-    if (typeof Worker === "undefined") {
-      console.warn("No Web Worker support");
-      return;
+        console.error(
+            `[${source}] ${error.message}`,
+            error.filename,
+            error.lineno
+        );
     }
+    initTsunamiWorkers() {
+        if (typeof Worker === "undefined") {
+            console.warn("No Web Worker support");
+            return;
+        }
 
-    if (typeof EventSource === "undefined") {
-      console.warn("Server Sent Events not supported");
-      return;
+        if (typeof EventSource === "undefined") {
+            console.warn("Server Sent Events not supported");
+            return;
+        }
+
+        this.worker = new Worker("JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
+
+        this.site.worker = this.worker;
+        this.iframe.worker = this.worker;
+        this.user.worker = this.worker;
+        this.imageEngine.worker = this.worker;
+        this.soundEngine.worker = this.worker;
+        this.videoEngine.worker = this.worker;
+        this.game.worker = this.worker;
+
+        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
+        this.worker.onerror = (e) => this.handleError("Worker", e);
     }
-
-    this.worker = new Worker("JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
-
-    this.site.worker = this.worker;
-    this.iframe.worker = this.worker;
-    this.user.worker = this.worker;
-    this.imageEngine.worker = this.worker;
-    this.soundEngine.worker = this.worker;
-    this.videoEngine.worker = this.worker;
-    this.game.worker = this.worker;
-
-    this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-      this.worker.onerror = (e) => this.handleError("Worker", e);
-  }
 }
