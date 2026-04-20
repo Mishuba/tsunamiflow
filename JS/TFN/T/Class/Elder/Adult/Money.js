@@ -17,7 +17,7 @@ export class StripeDonation extends TsDomCanvas {
     }
 
     // Load Stripe JS once
-    static async loadMoney() {
+    static async loadTFMoney() {
         if (window.Stripe) return window.Stripe;
         if (!this.#stripePromise) {
             this.#stripePromise = new Promise((resolve, reject) => {

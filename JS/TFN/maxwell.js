@@ -209,7 +209,7 @@ export class maxwell {
         }, true);
     }
     bindPayments() {
-        this.user.initMoney();
+        this.user.loadTFMoney().then(() => this.user.initMoney());
         this.user.mountCard("UniqueOriginal");
 
         const emailInput = this.userFields?.tfEM || this.find("TfEmail");
