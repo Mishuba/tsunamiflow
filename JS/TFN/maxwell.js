@@ -274,47 +274,47 @@ export class maxwell {
             tfMembershipLevel: this.find("TFMembershipLevel", null),
         };
         this.extraFields = {
-            ChineseZodiacSign: document.getElementById("ChineseZodiacSign"),
-            WesternZodiacSign: document.getElementById("WesternZodiacSign"),
-            SpiritAnimal: document.getElementById("SpiritAnimal"),
-            CelticTreeZodiacSign: document.getElementById("CelticTreeZodiacSign"),
-            NativeAmericanZodiacSign: document.getElementById("NativeAmericanZodiacSign"),
-            VedicAstrologySign: document.getElementById("VedicAstrologySign"),
-            GuardianAngel: document.getElementById("GuardianAngel"),
-            ChineseElement: document.getElementById("ChineseElement"),
-            EyeColorMeaning: document.getElementById("EyeColorMeaning"),
-            GreekMythologyArchetype: document.getElementById("GreekMythologyArchetype"),
-            NorseMythologyPatronDeity: document.getElementById("NorseMythologyPatronDeity"),
-            EgyptianZodiacSign: document.getElementById("EgyptianZodiacSign"),
-            MayanZodiacSign: document.getElementById("MayanZodiacSign"),
-            LoveLanguage: document.getElementById("LoveLanguage"),
-            Birthstone: document.getElementById("Birthstone"),
-            BirthFlower: document.getElementById("BirthFlower"),
-            BloodType: document.getElementById("BloodType"),
-            AttachmentStyle: document.getElementById("AttachmentStyle"),
-            CharismaType: document.getElementById("CharismaType"),
-            BusinessPersonality: document.getElementById("BusinessPersonality"),
-            DISC: document.getElementById("DISC"),
-            SocionicsType: document.getElementById("SocionicsType"),
-            LearningStyle: document.getElementById("LearningStyle"),
-            FinancialPersonalityType: document.getElementById("FinancialPersonalityType"),
-            PrimaryMotivationStyle: document.getElementById("PrimaryMotivationStyle"),
-            CreativeStyle: document.getElementById("CreativeStyle"),
-            ConflictManagementStyle: document.getElementById("ConflictManagementStyle"),
-            TeamRolePreference: document.getElementById("TeamRolePreference")
+            ChineseZodiacSign: this.find("ChineseZodiacSign"),
+            WesternZodiacSign: this.find("WesternZodiacSign"),
+            SpiritAnimal: this.find("SpiritAnimal"),
+            CelticTreeZodiacSign: this.find("CelticTreeZodiacSign"),
+            NativeAmericanZodiacSign: this.find("NativeAmericanZodiacSign"),
+            VedicAstrologySign: this.find("VedicAstrologySign"),
+            GuardianAngel: this.find("GuardianAngel"),
+            ChineseElement: this.find("ChineseElement"),
+            EyeColorMeaning: this.find("EyeColorMeaning"),
+            GreekMythologyArchetype: this.find("GreekMythologyArchetype"),
+            NorseMythologyPatronDeity: this.find("NorseMythologyPatronDeity"),
+            EgyptianZodiacSign: this.find("EgyptianZodiacSign"),
+            MayanZodiacSign: this.find("MayanZodiacSign"),
+            LoveLanguage: this.find("LoveLanguage"),
+            Birthstone: this.find("Birthstone"),
+            BirthFlower: this.find("BirthFlower"),
+            BloodType: this.find("BloodType"),
+            AttachmentStyle: this.find("AttachmentStyle"),
+            CharismaType: this.find("CharismaType"),
+            BusinessPersonality: this.find("BusinessPersonality"),
+            DISC: this.find("DISC"),
+            SocionicsType: this.find("SocionicsType"),
+            LearningStyle: this.find("LearningStyle"),
+            FinancialPersonalityType: this.find("FinancialPersonalityType"),
+            PrimaryMotivationStyle: this.find("PrimaryMotivationStyle"),
+            CreativeStyle: this.find("CreativeStyle"),
+            ConflictManagementStyle: this.find("ConflictManagementStyle"),
+            TeamRolePreference: this.find("TeamRolePreference")
         };
-        this.membershipSelect = document.getElementById("TFMembershipLevel");
-        this.membershipCostEl = document.getElementById("membershipCost");
-        this.paymentTypeEl = document.getElementById("paymentType");
-        this.hiddenMC = document.getElementById("hiddenMC");
-        this.hiddenPT = document.getElementById("hiddenPT");
+        this.membershipSelect = this.find("TFMembershipLevel");
+        this.membershipCostEl = this.find("membershipCost");
+        this.paymentTypeEl = this.find("paymentType");
+        this.hiddenMC = this.find("hiddenMC");
+        this.hiddenPT = this.find("hiddenPT");
         this.sections = {
-            free: document.getElementById("freeLevelInputs"),
-            regular: document.getElementById("regularLevelInputs"),
-            vip: document.getElementById("vipLevelInputs"),
-            team: document.getElementById("teamLevelInputs"),
-            address: document.getElementById("AddressDetailsSubscribers"), // if present
-            costInfo: document.getElementById("membershipCostInfo"),
+            free: this.find("freeLevelInputs"),
+            regular: this.find("regularLevelInputs"),
+            vip: this.find("vipLevelInputs"),
+            team: this.find("teamLevelInputs"),
+            address: this.find("AddressDetailsSubscribers"), // if present
+            costInfo: this.find("membershipCostInfo"),
         };
         this.bindSignUp();
     }
