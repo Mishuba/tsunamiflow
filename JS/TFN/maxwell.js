@@ -209,7 +209,6 @@ export class maxwell {
         }, true);
     }
     bindPayments() {
-        this.user.loadMoney();
         this.user.initMoney();
         this.user.mountCard("UniqueOriginal");
 
