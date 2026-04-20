@@ -285,8 +285,11 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.bindUsers();
   Controller.bindNavBar();
   Controller.bindAudio();
-  Controller.user.bindStore().then(() => Controller.bindPayments());
-  //Controller.bindCart();
+  Controller.user.showProducts().then(() => {
+    Controller.bindPayments();
+    Controller.user.bindCart();
+  });
+
   Controller.site.requestLocation();
   Controller.initTsunamiWorkers()
 });
@@ -330,20 +333,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
     dirtyHeight Optional
     Height of the rectangle to be painted. Defaults to the height of the image data.
-*/
-
-/*
-FirstGame.context.canvas;
-FirstGame.context.save();
-FirstGame.context.restore();
-FirstGame.context.reset();
-FirstGame.context.scale(x,y);
-FirstGame.context.rotate(angle);
-FirstGame.context.translate(x,y);
-FirstGame.context.transform(a,b,c,d,e,f);
-FirstGame.context.setTransform(a,b,c,d,e,f);
-FirstGame.context.resetTransform();
-FirstGame.context.globalAlpha;
-FirstGame.context.globalCompositeOperation;
-FirstGame.context.imageSmoothingEnabled;
 */

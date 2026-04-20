@@ -6,6 +6,21 @@ export class TsDomCanvas extends TsDom { //dom n window
     contextTypecanvas = "2d";
     contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };
     canvasctx = null;
+    /*
+canvasctx.canvas;
+canvasctx.save();
+canvasctx.restore();
+canvasctx.reset();
+canvasctx.scale(x,y);
+canvasctx.rotate(angle);
+canvasctx.translate(x,y);
+canvasctx.transform(a,b,c,d,e,f);
+canvasctx.setTransform(a,b,c,d,e,f);
+canvasctx.resetTransform();
+canvasctx.globalAlpha;
+canvasctx.globalCompositeOperation;
+canvasctx.imageSmoothingEnabled;
+*/
     iscanvasReady = false;
     constructor(options = {}) {
         super(options);
