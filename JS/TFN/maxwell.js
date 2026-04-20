@@ -170,22 +170,20 @@ export class maxwell {
             //i have a function for this already.
             this.iframe.frame.src = "./../Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }, false, null
-        );
+        }, false, null);
+
         this.on("tfNews", () => {
-            this.iframe.frame.src = "Iframe/Pages/news.html";
+            this.iframe.frame.src = "./../Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }
-        );
+        }, false, null);
 
         this.on("tfCompetitions", () => {
-            this.iframe.frame.src = "Iframe/Pages/Competitions.html";
+            this.iframe.frame.src = "./../Iframe/Pages/Competitions.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }
-        );
+        }, false, null);
 
         this.on("tfNetwork", () => {
-            this.iframe.frame.src = "Iframe/Pages/TFnetwork.html";
+            this.iframe.frame.src = "./../Iframe/Pages/TFnetwork.html";
             this.iframe.MenuSwitch(this.iframe.frame);
             /*
                <video
@@ -198,14 +196,13 @@ export class maxwell {
         <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
       </video>
             */
-        }
-        );
+        }, false, null);
 
         this.on("tfCommunity", () => {
-            this.iframe.frame.src = "Iframe/Pages/Community.html";
+            this.iframe.frame.src = "./../Iframe/Pages/Community.html";
             this.iframe.MenuSwitch(this.iframe.frame)
 
-        });
+        }, false, null);
 
         this.on("NavLoginButton", () => {
             this.user.login();
