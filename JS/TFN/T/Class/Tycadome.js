@@ -80,7 +80,7 @@ export class TfPrintful extends User {
         // Initialize totals on page load
         this.updateTotals();
     }
-    showProducts() {
+    async showProducts() {
         const xhr = new XMLHttpRequest();
         console.log("created printful request");
         xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
