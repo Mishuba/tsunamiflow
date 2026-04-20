@@ -1,116 +1,152 @@
-body {
-    border: 0;
+/* =========================
+   GLOBAL RESET + FOUNDATION
+========================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    /* content is not valid on normal elements */
-    border-collapse: collapse;
+}
+
+html {
+    width: 100%;
+    height: 100%;
+    scroll-behavior: smooth;
+}
+
+body {
+    min-width: 320px;
+    min-height: 100vh;
     background-color: black;
     color: rgb(56, 217, 238);
     text-align: center;
-    text-shadow: 2px 2px 5px white;
-    font-family: "Brush Script MT", "Courier New", "Verdana", "Copperplate", "Papyrus", fantasy, "Times New Roman";
-    text-decoration-style: wavy;
-    text-decoration-thickness: auto;
+    text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.35);
+    font-family:
+        "Brush Script MT",
+        "Courier New",
+        "Verdana",
+        "Copperplate",
+        "Papyrus",
+        fantasy,
+        "Times New Roman",
+        serif;
     font-style: normal;
     font-weight: normal;
-    overflow-x: auto;
+    line-height: 1.5;
+    overflow-x: hidden;
     overflow-y: auto;
 }
+
+/* =========================
+   MEDIA + INTERACTION
+========================= */
 
 iframe {
     pointer-events: auto;
     touch-action: manipulation;
+    border: 0;
 }
+
+canvas {
+    background: white;
+    display: block;
+    max-width: 100%;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* =========================
+   BUTTONS + LINKS
+========================= */
 
 button {
     background-color: rgb(71, 16, 16);
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    cursor: pointer;
     font-style: oblique;
     font-weight: bold;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.9;
+}
+
+a {
+    font-style: italic;
+    font-weight: bold;
+    text-decoration-color: white;
+    text-decoration-thickness: auto;
 }
 
 a:link {
     text-decoration: none;
     text-decoration-line: overline;
-    text-decoration-color: white;
     text-decoration-style: solid;
-    text-decoration-thickness: auto;
-    font-style: italic;
-    font-weight: bold;
 }
 
 a:visited {
     text-decoration-line: underline;
-    text-decoration-color: white;
     text-decoration-style: dotted;
-    text-decoration-thickness: auto;
-    font-style: italic;
-    font-weight: bold;
 }
 
 a:hover {
     text-decoration-line: overline underline;
-    text-decoration-color: white;
     text-decoration-style: dashed;
-    text-decoration-thickness: auto;
-    font-style: italic;
-    font-weight: bold;
 }
 
 a:active {
     text-decoration-line: line-through;
-    text-decoration-color: white;
     text-decoration-style: double;
-    text-decoration-thickness: auto;
-    font-style: italic;
-    font-weight: bold;
 }
 
+/* =========================
+   LISTS
+========================= */
+
 ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+    list-style: none;
 }
 
 ol {
-    /* only one list-style-type allowed */
     list-style-type: upper-roman;
 }
 
-canvas {
-    background: white;
-}
+/* =========================
+   HEADER
+========================= */
 
 header {
-    min-height: 10%;
-    height: 20%;
-    max-height: 100%;
-    min-width: 10%;
     width: 100%;
-    max-width: 100%;
-    float: left;
-    border: 0 none black;
-    margin: 0;
-    padding: 0;
+    min-height: 120px;
+    border: 0;
+    overflow: hidden;
 }
 
 header div {
     float: left;
-    min-height: 10%;
-    max-height: 100%;
-    min-width: 10%;
-    width: 33.3%;
-    max-width: 100%;
-    border: 0 none black;
-    margin: 0;
-    padding: 0;
+    width: 33.333%;
+    min-height: 100px;
+    padding: 10px;
     overflow: auto;
 }
+
+/* =========================
+   NAVIGATION
+========================= */
 
 nav {
     width: 100%;
     overflow: hidden;
-    margin: 0;
-    padding: 0;
+    padding: 5px 0;
 }
 
 nav table {
@@ -121,13 +157,11 @@ nav table {
 
 nav table td {
     padding: 5px;
-    height: auto;
+    vertical-align: middle;
 }
 
 nav table td button {
     width: 100%;
-    padding: 10px;
-    cursor: pointer;
     position: relative;
     z-index: 10;
 }
@@ -136,13 +170,18 @@ nav form {
     width: 50%;
     float: left;
     padding: 5px;
-    box-sizing: border-box;
 }
 
 nav form input {
     padding: 8px;
     margin: 2px;
+    width: auto;
+    max-width: 100%;
 }
+
+/* =========================
+   MENU SYSTEM
+========================= */
 
 .menu-item {
     position: relative;
@@ -156,163 +195,137 @@ nav form input {
     top: 40px;
     left: 0;
     z-index: 1000;
+    min-width: 180px;
+    background: black;
+    border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.menu-item:focus-within .submenu {
+.menu-item:focus-within .submenu,
+.menu-item:hover .submenu {
     display: block;
 }
 
+/* =========================
+   MAIN LAYOUT
+========================= */
+
 #MainSection {
-    margin: 0;
-    padding: 0;
-    border: 0 none black;
-    border-collapse: collapse;
-    min-height: 10%;
-    max-height: 100%;
-    min-width: 10%;
-    max-width: 100%;
+    width: 100%;
+    overflow: hidden;
     text-align: center;
 }
 
-aside {
-    margin: 0;
-    padding: 0;
-    min-width: 10%;
-    width: 15%;
-    max-width: 100%;
-    min-height: 10%;
-    height: 451px;
-    max-height: 100%;
-    float: left;
-    border: 0 none black;
-    overflow: auto;
-}
-
+aside,
 #donation {
-    margin: 0;
-    padding: 0;
-    min-width: 10%;
-    width: 15%;
-    max-width: 100%;
-    min-height: 10%;
-    height: 451px;
-    max-height: 100%;
     float: left;
-    border: 0 none black;
+    width: 15%;
+    min-width: 180px;
+    height: 451px;
+    overflow: auto;
+    border: 0;
+    padding: 5px;
 }
 
 section {
-    margin: 0;
-    padding: 0;
-    min-width: 10%;
+    float: left;
     width: 70%;
-    max-width: 100%;
-    min-height: 10%;
-    max-height: 100%;
-    float: left;
-    border: 0 none black;
-}
-
-#TFcanvas {
-    border: 1px solid black;
-    min-width: 10%;
-    width: 600px;
-    max-width: 100%;
-    min-height: 10%;
-    height: 600px;
-    max-height: 100%;
-}
-
-#TsunamiContent {
-    min-height: 10px;
-    height: 430px;
-    max-height: 100%;
-    min-width: 10%;
-    width: 925px;
-    max-width: 100%;
-}
-
-#ThoughtsCSS {
-    margin: 0;
-    padding: 0;
-    min-width: 10%;
-    width: 50%;
-    max-width: 100%;
-    min-height: 10%;
-    height: 50px; /* fixed missing unit */
-    max-height: 100%;
-    float: left;
-    border: 0 none black;
-}
-
-fieldset {
+    min-height: 451px;
+    padding: 10px;
     border: 0;
 }
 
+/* =========================
+   CORE CONTENT
+========================= */
+
+#TFcanvas {
+    width: 600px;
+    max-width: 100%;
+    height: 600px;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+#TsunamiContent {
+    width: 925px;
+    max-width: 100%;
+    min-height: 430px;
+    height: auto;
+    margin: 0 auto;
+}
+
+#ThoughtsCSS {
+    float: left;
+    width: 50%;
+    min-height: 50px;
+    border: 0;
+}
+
+fieldset,
 #ThoughtsArea {
     border: 0;
 }
 
+/* =========================
+   FORMS
+========================= */
+
 #TFCompleteForm {
-    border: 0;
-    margin: 0;
-    padding: 0;
     float: left;
-    min-width: 10%;
+    width: 100%;
     max-width: 100%;
+    border: 0;
 }
 
 #TFCompleteForm input {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    height: 100%;
     width: 80%;
-    box-sizing: border-box;
+    max-width: 100%;
+    border: 0;
+    padding: 10px;
+    height: auto;
 }
 
+/* =========================
+   ARTICLE + AUDIO
+========================= */
+
 article {
-    border: 0 none black;
-    margin: 0;
-    padding: 0;
-    min-height: 10%;
-    height: 20%;
-    max-height: 100%;
-    min-width: 10%;
-    width: 100%;
-    max-width: 100%;
     clear: both;
     float: left;
+    width: 100%;
+    min-height: 120px;
+    border: 0;
+    padding: 10px 0;
 }
 
 #TFradioCanvas {
-    border: 1px solid rgb(85, 10, 10);
-    min-width: 10%;
     width: 100%;
-    max-width: 100%;
-    min-height: 10%;
     height: 100px;
-    max-height: 100%;
+    border: 1px solid rgb(85, 10, 10);
 }
 
 article audio {
-    border: 0 none black;
-    margin: 0;
-    padding: 0;
     width: 100%;
+    border: 0;
+    display: block;
 }
 
+/* =========================
+   FOOTER
+========================= */
+
 footer {
-    margin: 0;
-    padding: 0;
-    min-height: 10%;
-    max-height: 100%;
-    min-width: 10%;
-    max-width: 100%;
-    border: 0 none black;
     float: left;
+    width: 100%;
+    min-height: 100px;
     overflow: auto;
+    border: 0;
+    padding: 10px 0;
 }
+
+/* =========================
+   STORE SYSTEM
+========================= */
 
 #storeTitle,
 #productTitle {
@@ -321,15 +334,11 @@ footer {
 
 #StoreItemsList li {
     background: white;
+    color: black;
     margin: 10px 0;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-img {
-    max-width: 100px;
-    height: auto;
 }
 
 #storeButton {
@@ -349,5 +358,32 @@ img {
     margin-top: 20px;
     padding: 10px;
     background-color: #d4edda;
+    color: black;
     border: 1px solid #c3e6cb;
+}
+
+/* =========================
+   RESPONSIVE FIXES
+========================= */
+
+@media (max-width: 900px) {
+    header div,
+    nav table,
+    nav form,
+    aside,
+    #donation,
+    section,
+    #ThoughtsCSS {
+        width: 100%;
+        float: none;
+    }
+
+    #TFcanvas {
+        height: auto;
+        min-height: 300px;
+    }
+
+    #TsunamiContent {
+        width: 100%;
+    }
 }
