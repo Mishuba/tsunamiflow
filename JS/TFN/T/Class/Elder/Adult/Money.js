@@ -17,10 +17,10 @@ export class StripeDonation extends TsDomCanvas {
     }
 
     // Load Stripe JS once
-    static async loadTFMoney() {
+    async loadTFMoney() {
         if (window.Stripe) return window.Stripe;
-        if (!this.#stripePromise) {
-            this.#stripePromise = new Promise((resolve, reject) => {
+        if (!this.stripePromise) {
+            this.stripePromise = new Promise((resolve, reject) => {
                 const script = document.createElement("script");
                 script.src = "https://js.stripe.com/v3";
                 script.onload = () => resolve(window.Stripe);
@@ -28,11 +28,11 @@ export class StripeDonation extends TsDomCanvas {
                 document.head.appendChild(script);
             });
         }
-        return this.#stripePromise;
+        return this.stripePromise;
     }
 
     async initMoney() {
-        await this.constructor.loadTFMoney();
+        await this.loadTFMoney();
         this.stripe = Stripe(this.#stripePublicKey);
     }
 

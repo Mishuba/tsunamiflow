@@ -209,9 +209,11 @@ export class maxwell {
         }, true);
     }
     bindPayments() {
-        this.user.initMoney();
-        this.user.mountCard("UniqueOriginal");
-
+        this.user.initMoney().then(() => {
+            this.user.mountCard("UniqueOriginal");
+            this.user.mountCard("SubscribeUsers");
+            this.user.mountCard("TfDonation"); //div
+        });
         const emailInput = this.userFields?.tfEM || this.find("TfEmail");
 
         this.on("UniqueOriginalBtn", async () => {
@@ -226,7 +228,7 @@ export class maxwell {
                 alert("Purchase failed: " + err.message);
             }
         });
-        this.user.mountCard("SubscribeUsers");
+
         this.on("SubscribeUsersBtn", async () => {
             const email = emailInput?.value || null;
             const priceId = "price_123456789"; // Stripe Price ID for subscription
@@ -242,7 +244,6 @@ export class maxwell {
             }
         });
 
-        this.user.mountCard("TfDonation"); //div
         this.on("TfDonateBtn", async () => {
             try {
                 const result = await this.user.donate(10, 'usd', true, email); // $10 donation
