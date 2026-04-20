@@ -168,9 +168,9 @@ export class maxwell {
         // navigation menu
         this.on("tfRoster", () => {
             //i have a function for this already.
-            this.iframe.frame.src = "Iframe/Pages/roster.html";
+            this.iframe.frame.src = "./../Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }
+        }, false, null
         );
         this.on("tfNews", () => {
             this.iframe.frame.src = "Iframe/Pages/news.html";
