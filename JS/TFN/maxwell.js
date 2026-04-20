@@ -587,17 +587,20 @@ export class maxwell {
                     console.error("Worker error:", payload);
                 } else {
                     console.warn("Unknown message type:", data.type);
+
+                    this.handleSchedule(this.find("TFtime").innerHTML);
                 }
         }
     }
 
 
     handleError(source, error) {
-        console.error(
-            `[${source}] ${error.message}`,
-            error.filename,
-            error.lineno
-        );
+        console.error("RAW WORKER ERROR:", error);
+        console.error(`[${source}] message:`, error.message);
+        console.error(`[${source}] filename:`, error.filename);
+        console.error(`[${source}] lineno:`, error.lineno);
+        console.error(`[${source}] colno:`, error.colno);
+        this.emit("error", { source, error });
     }
     initTsunamiWorkers() {
         if (typeof Worker === "undefined") {
