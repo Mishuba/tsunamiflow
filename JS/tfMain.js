@@ -192,7 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
 
-  let TfSite = new HeaderWeather();
+  let TfSite = new HeaderWeather({
+    stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
+    backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
+  });
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
   let nifage = new TfPrintful();
   let style = new TsunamiFlowImageEngine();

@@ -32,7 +32,7 @@ export class StripeDonation extends TsDomCanvas {
     }
 
     async initMoney() {
-        await this.constructor.load();
+        await this.constructor.loadTFMoney();
         this.stripe = Stripe(this.#stripePublicKey);
     }
 
