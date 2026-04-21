@@ -554,7 +554,7 @@ export class maxwell {
                 return;
             }
         }
-        this.ensureRadioPlaying(audio);
+        //this.ensureRadioPlaying(audio);
     }
 
     async handleWorkerMessage(event) {
