@@ -6,7 +6,7 @@ NewsArray = new Array();
         super(options);
     }
     UpdateNews() {
-        let ReallyDude = Math.floor(Math.random() * NewsArray.length);
+        let ReallyDude = Math.floor(Math.random() * this.NewsArray.length);
         let newsItems = this.find("NTS");
         newsItems.innerHTML = this.NewsArray[ReallyDude];
     }
