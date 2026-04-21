@@ -628,6 +628,8 @@ export class maxwell {
             return;
         }
 
+
+
         this.site.worker = this.worker;
         this.iframe.worker = this.worker;
         this.user.worker = this.worker;
@@ -636,7 +638,47 @@ export class maxwell {
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
 
+        this.sharedWorker.port.start();
+
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
+
+        /*
+        sharedWorker.port.onmessage = (e) => {
+            postMessage(
+                tycadome(
+                    e.data.id || crypto.randomUUID(),
+                    e.data.type || "backend",
+                    e.data.action || "completed",
+                    {
+                        source: "shared.worker",
+                        layer: "backend",
+                        worker: "shared"
+                    },
+                    {
+                        status: e.data.state || "completed",
+                        priority: "low"
+                    },
+                    "async",
+                    e.data.payload || e.data
+                )
+            );
+        };
+
+        sharedWorker.port.postMessage(
+            tycadome(
+                task.id,
+                task.type,
+                task.action,
+                task.meta,
+                {
+                    status: "processing",
+                    priority: "low"
+                },
+                task.mode || "async",
+                task.payload || {}
+            )
+        );
+        */
     }
 }

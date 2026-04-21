@@ -309,6 +309,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Controller.site.requestLocation();
   Controller.worker = new Worker("./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
+
+  Controller.sharedWorker = new SharedWorker("./JS/TFN/T/Worker/Shared.js");
+
+
   Controller.initTsunamiWorkers()
 });
 

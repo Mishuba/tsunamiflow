@@ -32,11 +32,7 @@ const workers = {
 |--------------------------------------------------------------------------
 */
 
-const sharedWorker = new SharedWorker("./JS/TFN/T/Worker/Shared.js", {
-    type: "module"
-});
 
-sharedWorker.port.start();
 
 /*
 |--------------------------------------------------------------------------
@@ -120,26 +116,6 @@ Object.entries(workers).forEach(([name, worker]) => {
 |--------------------------------------------------------------------------
 */
 
-sharedWorker.port.onmessage = (e) => {
-    postMessage(
-        tycadome(
-            e.data.id || crypto.randomUUID(),
-            e.data.type || "backend",
-            e.data.action || "completed",
-            {
-                source: "shared.worker",
-                layer: "backend",
-                worker: "shared"
-            },
-            {
-                status: e.data.state || "completed",
-                priority: "low"
-            },
-            "async",
-            e.data.payload || e.data
-        )
-    );
-};
 
 /*
 |--------------------------------------------------------------------------
@@ -157,24 +133,6 @@ onmessage = (e) => {
     1. BACKEND / SYSTEM TASKS → SharedWorker
     ----------------------------------------------------------------------
     */
-
-    if (task.meta?.backend === true || task.type === "backend") {
-        sharedWorker.port.postMessage(
-            tycadome(
-                task.id,
-                task.type,
-                task.action,
-                task.meta,
-                {
-                    status: "processing",
-                    priority: "low"
-                },
-                task.mode || "async",
-                task.payload || {}
-            )
-        );
-        return;
-    }
 
     /*
     ----------------------------------------------------------------------
