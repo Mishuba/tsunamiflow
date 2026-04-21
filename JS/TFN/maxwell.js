@@ -244,7 +244,7 @@ export class maxwell {
             }
         });
 
-        this.on("SubscribeUsersBtn", async () => {
+        this.on("SubscribeUsers", async () => {
             const email = emailInput?.value || null;
             const priceId = "price_123456789"; // Stripe Price ID for subscription
             try {
@@ -604,7 +604,7 @@ export class maxwell {
                     if (data.meta.message) {
                         console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
                     } else {
-                        console.warn("Unknown message type:", data.type, "Message:", data.meta, "payload", data.payload);
+                        console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
                     }
 
 
