@@ -604,7 +604,7 @@ export class maxwell {
                     if (data.meta.message) {
                         console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
                     } else {
-                        console.warn("Unknown message type:", data.type, "Message:", data.payload);
+                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message, "payload", data.payload);
                     }
 
 
