@@ -1,4 +1,5 @@
-import { mediaWorker } from "./../Class/Elder/Adult/Teen/tfnation.js";
+import { mediaWorker } from "JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
+
 const mediawk = new mediaWorker();
 
 self.onmessage = (e) => {
