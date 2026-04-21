@@ -1,6 +1,6 @@
-import { TsDomCanvas } from "./Base/T.js";
+import { Ts } from "./Base/test.js";
 
-export class TsWorker extends TsDomCanvas {
+export class TsWorker extends Ts {
     offscreencanvas = null;
     offscreenctx = null;
     isoffscreenReady = false;
