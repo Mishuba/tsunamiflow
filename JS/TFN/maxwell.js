@@ -601,7 +601,12 @@ export class maxwell {
                 if (payload.system === "error") {
                     console.error("Worker error:", payload);
                 } else {
-                    console.warn("Unknown message type:", data.type);
+                    if (data.meta.message) {
+                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
+                    } else {
+                        console.warn("Unknown message type:", data.type, "Message:", data.payload);
+                    }
+
 
                     this.handleSchedule(this.find("TFtime").innerHTML);
                 }
