@@ -181,23 +181,23 @@ export class maxwell {
     }
     bindNavBar() {
         // navigation menu
-        this.on("tfRoster", () => {
+        this.on("tfRoster", "click", () => {
             //i have a function for this already.
             this.iframe.frame.src = "./../Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         });
 
-        this.on("tfNews", () => {
+        this.on("tfNews", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         });
 
-        this.on("tfCompetitions", () => {
+        this.on("tfCompetitions", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/Competitions.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         });
 
-        this.on("tfNetwork", () => {
+        this.on("tfNetwork", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/TFnetwork.html";
             this.iframe.MenuSwitch(this.iframe.frame);
             /*
@@ -213,13 +213,13 @@ export class maxwell {
             */
         });
 
-        this.on("tfCommunity", () => {
+        this.on("tfCommunity", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/Community.html";
             this.iframe.MenuSwitch(this.iframe.frame)
 
         });
 
-        this.on("NavLoginButton", () => {
+        this.on("NavLoginButton", "submit", () => {
             this.user.login();
         }, true);
     }
@@ -637,6 +637,14 @@ export class maxwell {
         this.soundEngine.worker = this.worker;
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
+
+        this.site.sharedWorker = this.sharedWorker;
+        this.iframe.sharedWorker = this.sharedWorker;
+        this.user.sharedWorker = this.sharedWorker;
+        this.imageEngine.sharedWorker = this.sharedWorker;
+        this.soundEngine.sharedWorker = this.sharedWorker;
+        this.videoEngine.sharedWorker = this.sharedWorker;
+        this.game.sharedWorker = this.sharedWorker;
 
         this.sharedWorker.port.start();
 
