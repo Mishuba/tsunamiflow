@@ -94,81 +94,91 @@ export class maxwell {
         });
     }
     on(id, eventName, callback = null, preventDefault = false, iframe = null) {
-    const el = this.find(id, iframe);
+        const el = this.find(id, iframe);
 
-    if (!el) {
-        console.warn(`Element not found: ${id}`);
-        return;
-    }
-
-    const isForm =
-        el instanceof HTMLFormElement ||
-        el instanceof HTMLButtonElement;
-
-    const isSubmitButton =
-        (el instanceof HTMLButtonElement && el.type === "submit") ||
-        (el instanceof HTMLInputElement &&
-            ["submit", "image"].includes(el.type));
-
-    const supportsPointer = "PointerEvent" in window;
-    const supportsTouch = "ontouchstart" in window;
-
-    const runHandler = (event) => {
-        if (isForm || isSubmitButton || preventDefault) {
-            event.preventDefault();
-            event.stopPropagation();
+        if (!el) {
+            console.warn(`Element not found: ${id}`);
+            return;
         }
 
-        const payload = {
-            event,
-            element: el,
-            type: event.type
+        const isForm =
+            el instanceof HTMLFormElement ||
+            el instanceof HTMLButtonElement;
+
+        const isSubmitButton =
+            (el instanceof HTMLButtonElement && el.type === "submit") ||
+            (el instanceof HTMLInputElement &&
+                ["submit", "image"].includes(el.type));
+
+        const supportsPointer = "PointerEvent" in window;
+        const supportsTouch = "ontouchstart" in window;
+
+        const runHandler = (event) => {
+            if (isForm || isSubmitButton || preventDefault) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const payload = {
+                event,
+                element: el,
+                type: event.type
+            };
+
+            // direct callback if provided
+            if (typeof callback === "function") {
+                callback(payload);
+            }
+
+            // also emit internal event if eventName exists
+            if (eventName) {
+                this.emit(eventName, payload);
+            }
         };
 
-        // direct callback if provided
-        if (typeof callback === "function") {
-            callback(payload);
+        // POINTER
+        if (supportsPointer) {
+            const eventType = isForm ? "submit" : "pointerup";
+
+            el.addEventListener(eventType, runHandler);
+            this._storeDomListener(id, el, runHandler, eventType);
+            return;
         }
 
-        // also emit internal event if eventName exists
-        if (eventName) {
-            this.emit(eventName, payload);
+        // TOUCH fallback
+        if (supportsTouch) {
+            const start = (e) => {
+                this._touchStart = e;
+            };
+
+            const end = (e) => {
+                runHandler(e);
+            };
+
+            el.addEventListener("touchstart", start, { passive: false });
+            el.addEventListener("touchend", end, { passive: false });
+
+            this._storeDomListener(id, el, start, "touchstart");
+            this._storeDomListener(id, el, end, "touchend");
+            return;
         }
-    };
 
-    // POINTER
-    if (supportsPointer) {
-        const eventType = isForm ? "submit" : "pointerup";
+        // CLICK fallback
+        const clickType = isForm ? "submit" : "click";
 
-        el.addEventListener(eventType, runHandler);
-        this._storeDomListener(id, el, runHandler, eventType);
-        return;
+        el.addEventListener(clickType, runHandler);
+        this._storeDomListener(id, el, runHandler, clickType);
     }
+    off(id) {
+        const entries = this.domListeners.get(id);
+        if (!entries) return;
 
-    // TOUCH fallback
-    if (supportsTouch) {
-        const start = (e) => {
-            this._touchStart = e;
-        };
+        entries.forEach(({ el, handler, eventType }) => {
+            el.removeEventListener(eventType, handler);
+        });
 
-        const end = (e) => {
-            runHandler(e);
-        };
-
-        el.addEventListener("touchstart", start, { passive: false });
-        el.addEventListener("touchend", end, { passive: false });
-
-        this._storeDomListener(id, el, start, "touchstart");
-        this._storeDomListener(id, el, end, "touchend");
-        return;
+        this.domListeners.delete(id);
     }
-
-    // CLICK fallback
-    const clickType = isForm ? "submit" : "click";
-
-    el.addEventListener(clickType, runHandler);
-    this._storeDomListener(id, el, runHandler, clickType);
-}
     bindNavBar() {
         // navigation menu
         this.on("tfRoster", () => {
