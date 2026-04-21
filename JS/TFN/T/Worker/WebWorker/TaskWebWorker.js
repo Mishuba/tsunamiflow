@@ -80,14 +80,14 @@ Object.entries(workers).forEach(([name, worker]) => {
                 e.data.action || "completed",
                 {
                     source: name,
-                    layer: "compute"
+                    layer: "compute",
                     worker: ""
                 },
                 {
                     status: "completed",
                     priority: "low"
 
-                }    
+                },
                 "async",
                 e.data.payload || e.data
             )
@@ -132,9 +132,9 @@ sharedWorker.port.onmessage = (e) => {
                 worker: "shared"
             },
             {
-status: e.data.state || "completed",
-priority: "low"
-            }
+                status: e.data.state || "completed",
+                priority: "low"
+            },
             "async",
             e.data.payload || e.data
         )
@@ -168,7 +168,7 @@ onmessage = (e) => {
                 {
                     status: "processing",
                     priority: "low"
-                }
+                },
                 task.mode || "async",
                 task.payload || {}
             )
@@ -195,7 +195,7 @@ onmessage = (e) => {
                 {
                     status: "failed",
                     priority: "low"
-                }
+                },
                 "async",
                 task
             )
@@ -212,7 +212,7 @@ onmessage = (e) => {
             {
                 status: "processing",
                 priority: "low"
-            }
+            },
             task.mode || "async",
             task.payload || {}
         )

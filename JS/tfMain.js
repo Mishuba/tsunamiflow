@@ -308,6 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   Controller.site.requestLocation();
+  Controller.worker = new Worker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
   Controller.initTsunamiWorkers()
 });
 

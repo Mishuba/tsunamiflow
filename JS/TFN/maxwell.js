@@ -613,8 +613,6 @@ export class maxwell {
             return;
         }
 
-        this.worker = new Worker("./T/Worker/WebWorker/TaskWebWorker.js", { type: "module" });
-
         this.site.worker = this.worker;
         this.iframe.worker = this.worker;
         this.user.worker = this.worker;
@@ -624,6 +622,6 @@ export class maxwell {
         this.game.worker = this.worker;
 
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-        this.worker.onerror = (e) => this.handleError("Worker", e);
+        this.worker.onerror = (e) => this.handleError(this.worker, e);
     }
 }
