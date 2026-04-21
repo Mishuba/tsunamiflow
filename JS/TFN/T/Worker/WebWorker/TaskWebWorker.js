@@ -18,10 +18,10 @@
 */
 
 const workers = {
-    input: new Worker("./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", { type: "module" }),
-    media: new Worker("./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", { type: "module" }),
-    world: new Worker("./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", { type: "module" }),
-    ai: new Worker("./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js", { type: "module" })
+    input: new Worker("./kid/GameInputWebWorker.js", { type: "module" }),
+    media: new Worker("./kid/MediaWebWorker.js", { type: "module" }),
+    world: new Worker("./kid/GameWorldWebWorker.js", { type: "module" }),
+    ai: new Worker("./kid/AiWebWorker.js", { type: "module" })
 };
 
 /*

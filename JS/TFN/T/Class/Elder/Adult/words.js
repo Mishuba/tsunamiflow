@@ -6,7 +6,6 @@ export class HeaderWords extends TsDomCanvas {
     WordOfTheDayArray = new Array();
     WordTimes = ["00:00", "01:30", "02:40", "03:30", "04:15", "05:00", "06:15", "07:00", "09:30", "11:15", "12:30", "14:00", "16:15", "19:45", "20:50", "22:05", "23:10"];
     theWords = null;
-
     FirstWord = null;
     FirstDefinition = null;
     FirstQuoteText = null;
@@ -26,23 +25,14 @@ export class HeaderWords extends TsDomCanvas {
     SomeQuote = null;
     SomeQuote2 = null;
     SomeFact = null;
-
     SomeFact2 = null;
-
     SomeFact3 = null;
-
     SomeFact4 = null;
-
     SomeMyth = null;
-
     SomeMyth2 = null;
-
     SomeMyth3 = null;
-
     SomeMyth4 = null;
-
     SomeLegend = null;
-
     SomeLegend2 = null;
 
     SomeLegend3 = null;
