@@ -780,7 +780,7 @@ export class mediaWorker extends TsWorker {
     async MessageReceived(event) {
         if (event.data.type === "timer") {
             if (event.data.payload.system === "Tf Schedule") {
-                setInterval(startTime(this.TimerTrigger, this.something), (1000 * 60));
+                setInterval(this.startTime.bind(this, this.TimerTrigger, this.something), (1000 * 60));
             }
         }
         if (event.data.type === "radio") {
