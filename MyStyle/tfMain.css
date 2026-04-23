@@ -26,6 +26,7 @@ body {
     font-family: "Brush Script MT","Courier New","Verdana","Copperplate","Papyrus",fantasy,"Times New Roman",serif;
     line-height: 1.5;
     overflow-x: hidden;
+padding-bottom: 140px;
 }
 
 /* =========================
@@ -285,18 +286,21 @@ article {
     width: 100%;
     background: black;
     padding: 10px 0;
-    margin-top: auto;
 }
 
 #radioDock {
-    position: relative;
-    bottom: 0;
+    position: fixed;
     left: 0;
+    bottom: 0;
     width: 100%;
     background: black;
     z-index: 9999;
     padding: 10px 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
+
 
 #TFradioCanvas {
     width: 100%;
