@@ -288,17 +288,49 @@ article {
     padding: 10px 0;
 }
 
+/* =========================
+   MINI PLAYER DOCK (FIXED)
+========================= */
+
 #radioDock {
     position: fixed;
     left: 0;
     bottom: 0;
     width: 100%;
-    background: black;
+    background: rgba(0,0,0,0.95);
     z-index: 9999;
-    padding: 10px 0;
-    border-top: 1px solid rgba(255,255,255,0.1);
-backdrop-filter: blur(10px);
+
+    border-top: 1px solid rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
+
+    transition: transform 0.3s ease, height 0.3s ease;
+}
+
+/* COLLAPSED STATE */
+#radioDock.collapsed {
+    transform: translateY(calc(100% - 50px)); /* only mini bar visible */
+}
+
+/* MINI HEADER BAR */
+#radioHeader {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 12px;
+    cursor: pointer;
+    color: rgb(56, 217, 238);
+}
+
+/* FULL PLAYER AREA */
+#radioBody {
+    padding: 10px;
+}
+
+/* keep space so footer never gets hidden */
+body {
+    padding-bottom: 140px;
 }
 
 
