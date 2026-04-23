@@ -19,6 +19,7 @@ const PRECACHE_URLS = [
     "/manifest.json",
     "/favicon.ico",
     "/Offline/offline.html",
+    "/install/index.html",
 
     // Core CSS / JS
     "/MyStyle/tfMain.css",
