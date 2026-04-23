@@ -17,6 +17,8 @@ body {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     min-height: 100vh;
     background-color: black;
     color: rgb(56, 217, 238);
@@ -194,6 +196,7 @@ nav form input {
     align-items: stretch;
     width: 100%;
     min-height: 100vh;
+    flex: 1;
 }
 
 /* LEFT */
@@ -288,6 +291,7 @@ article {
     width: 100%;
     background: black;
     padding: 10px 0;
+    margin-top: auto;
 }
 
 #radioDock {
