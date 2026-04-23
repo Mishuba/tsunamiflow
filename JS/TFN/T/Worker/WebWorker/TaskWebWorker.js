@@ -122,6 +122,12 @@ onmessage = (e) => {
     const task = e.data;
     const target = task.meta?.worker;
 
+    /*
+    ----------------------------------------------------------------------
+    Validate routing target
+    ----------------------------------------------------------------------
+    */
+
     if (!target || !workers[target]) {
         postMessage(
             tycadome(
@@ -142,6 +148,12 @@ onmessage = (e) => {
         );
         return;
     }
+
+    /*
+    ----------------------------------------------------------------------
+    Forward task to compute worker
+    ----------------------------------------------------------------------
+    */
 
     workers[target].postMessage(
         tycadome(
