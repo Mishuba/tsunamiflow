@@ -9,6 +9,12 @@ import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 
+/*
+|--------------------------------------------------------------------------
+| TF Word System
+|--------------------------------------------------------------------------
+*/
+
 let TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
@@ -16,70 +22,70 @@ let TFwordMishuba = {
     {
       text: "'My Inner Self Helps Unifies Beautiful Art' - Mishuba",
       history: {
-        fact: { one: "Mishuba's parents were in the military which cause him to live in multiple places growing up. Mishuba lived in two countries(Germany and the United States of America), went to four elementary schools, four middle schools and two high schools; he also lived in six different states while living with his family.", two: "Outside of music Mishuba loves to play sports and video games, draw and write poetry." },
-        myth: { one: "Mishuba is plotting on taking over the world.", two: "Mishuba has physic power." },
-        legend: { one: "Mishuba was the first division one college athlete with a scholarship to also have a record deal.", two: "Mishuba is the reincarnation of ..." }
+        fact: {
+          one: "Mishuba's parents were in the military which cause him to live in multiple places growing up. Mishuba lived in two countries(Germany and the United States of America), went to four elementary schools, four middle schools and two high schools; he also lived in six different states while living with his family.",
+          two: "Outside of music Mishuba loves to play sports and video games, draw and write poetry."
+        },
+        myth: {
+          one: "Mishuba is plotting on taking over the world.",
+          two: "Mishuba has physic power."
+        },
+        legend: {
+          one: "Mishuba was the first division one college athlete with a scholarship to also have a record deal.",
+          two: "Mishuba is the reincarnation of ..."
+        }
       }
     },
     {
       text: "You cannot stop greatness you can only prolong it. What is meant to be great will be great",
       history: {
-        fact: { one: "His chinese name is 飞龙丁 (fei'long ding）, his first name means flying dragon and his last name is surname ding (the chinese people he was friends with in Xian, China gave him the last name 东风 （dong'feng）; but he wants to his last name to be Ding.", two: "" },
-        myth: { one: "Mishuba has no idea what he is doing.", two: "Mishuba been lame his whole life." },
-        legend: { one: "Mishuba went to china to fall in love with a woman", two: "Mishuba is able to see, feel, smell, and hear the people who have died in is life in his dreams in the spiritual plane." }
+        fact: {
+          one: "His chinese name is 飞龙丁 (fei'long ding）, his first name means flying dragon and his last name is surname ding (the chinese people he was friends with in Xian, China gave him the last name 东风 （dong'feng）; but he wants to his last name to be Ding.",
+          two: ""
+        },
+        myth: {
+          one: "Mishuba has no idea what he is doing.",
+          two: "Mishuba been lame his whole life."
+        },
+        legend: {
+          one: "Mishuba went to china to fall in love with a woman",
+          two: "Mishuba is able to see, feel, smell, and hear the people who have died in is life in his dreams in the spiritual plane."
+        }
       }
     }
   ]
 };
+
+/*
+|--------------------------------------------------------------------------
+| Sprite / Game Setup
+|--------------------------------------------------------------------------
+*/
+
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
+
 const StickMan = new Image();
 StickMan.src = linkToSpriteSheet;
 
-let AckmaHawkSpriteSheet = "";
+let tfSSCX = 0;
+let tfSSCY = 0;
+let tfSCW = 120;
+let tfSCH = 120;
 
-let tfSSCX = 0; //Character State Location Row  
-let AckmaHawkSpriteSheetState = 0;
-let tfSSCY = 0; //Character State Frame Column  
-let AckmaHawkSpriteSheetFrame = 0;
-let tfSCW = 120; // Character Size in image file width  
-let AckmaHawkSpritSheetWidth = 120;
-let tfSCH = 120; // Character Size in image file height  
-let AckmaHawkSpriteSheetHeight = 120;
-let tfSPX = 60; //position of character Left and Right Movement  
-let AckmaHawkCanvasX = 60; //CanvasWidth / 2  
-let tfSPY = 160; // position of character Up and Down Movement  
-let AckmaHawkCanvasY = 160; //CanvasHeight /2   
-let tfSNW = 30; //Size of character The width   
-let AckmaHawkCanvasWidth = 30; //CanvasWidth * 0.25;  
-let tfSNH = 30; //Size of character The Height  
-let AckmaHawkCanvasHeight = 30; //CanvasHeight * 0.25;  
-let AckmaHawkType = "sprite";
+let tfSPX = 60;
+let tfSPY = 160;
 
-let AckmaHawkTextWidth = 280;
-let AckmaHawkTextHeight = 40;
-let AckmaHawkTextSize = "30px";
-let AckmaHawkTextStyle = "Consolas";
-let AckmaHawkTextAlign = "center"; //end, left, right, center  
-let AckmaHawkTextBaseLine = "alphabetic"; //top, hanging, middle, ideographic, bottom  
-let AckmaHawkTextDirection = "inherit"; //ltr, rtl  
-let AckmaHawkLetterSpacing = 0;
-let AckmaHawkFontKerning = "auto";
-let AckmaHawkFontStretch = "normal"; //ultra-condensed, extra-condensed, condensed, semi-condensed, semi-expanded, expanded, extra-expanded, ultra-expanded  
-let AckmaHawkFontVariantCaps = "normal" //small-caps, all-small-caps, petite-caps, all-petite-caps, unicase, titling-caps  
-let AckmaHawkTextRendering = "auto"; //optimizeSpeed, optimizeLegibility, geometricPrecision  
-let AckmaHawkWordSpacing = 0;
-let AckmaHawkTextSettings;
-let AckmaHawkDialog = "testing";
-let StickManDialog = [];
+let tfSNW = 30;
+let tfSNH = 30;
 
-let homePageArray = [
-  "Welcome to tsunamiflow.club",
-  "This is the homebase for Tsunami Flow",
-  "We are currently working on content for the website.",
-  "Come by often and check for updates.",
-  "Please be patient"
-];
+let PlayerState = "stand";
+
+/*
+|--------------------------------------------------------------------------
+| Player Stats / Systems
+|--------------------------------------------------------------------------
+*/
 
 let PhysicalAbility = [
   { name: "health", points: 1 },
@@ -137,85 +143,90 @@ let AckmaHawkMetaCognitiveIntelligence = [
   { name: "personal", level: 0, experience: 0 }
 ];
 
-let AckmaHawkHeadArmor = 1;
-let AckmaHawkBodyArmor = 1;
-let AckmaHawkLegArmor = 1;
-let AckmaHawkarmArmor = 1;
-let AckmaHawkweakAttack = 1;
-let AckmaHawkstrongAttack = 1;
-let AckmaHawkspecialAttack = 1;
-let AckmaHawkknockBackSkill = 1;
-let AckmaHawkaoeSkill = 1;
-let AckmaHawkbuffSkill = 1;
-let AckmaHawkmainSkill = 1;
-let AckmaHawkevadeSkill = 1;
-let AckmaHawkrangeSkill = 1;
-let AckmaHawkdebuffSkill = 1;
-let AckmaHawkdefenseSkill = 1;
-let AckmaHawkultimateSkill = 1;
-let PlayerState = "stand";
+/*
+|--------------------------------------------------------------------------
+| Component Build
+|--------------------------------------------------------------------------
+*/
 
-// items  
-var fullHeal;
-var fullStamina;
-var fullMagic;
+let TfStickMan = new gameComponent(
+  tfSNW,
+  tfSNH,
+  linkToSpriteSheet,
+  tfSPX,
+  tfSPY,
+  "sprite",
+  tfSSCX,
+  tfSSCY,
+  tfSCW,
+  tfSCH,
+  "30px",
+  "Consolas",
+  280,
+  40,
+  "center",
+  "alphabetic",
+  "inherit",
+  0,
+  "auto",
+  "normal",
+  "normal",
+  "auto",
+  0,
+  undefined,
+  [],
+  PlayerState,
+  AckmaHawkBattleBackground,
+  "Hubert",
+  "Maxwell",
+  "StickMan",
+  PhysicalAbility,
+  AckmaHawkIntellectualIntelligence,
+  AckmaHawkSocialIntelligence,
+  AckmaHawkEmotionalIntelligence,
+  AckmaHawkExistentialIntelligence,
+  AckmaHawkEnergeticIntelligence,
+  AckmaHawkMetaCognitiveIntelligence,
+  1,1,1,1,
+  1,1,1,
+  1,1,1,1,1,1,1,1,1
+);
 
-// Armour  
-var armourSet1;
-var armourSet2;
-var armourSet3;
-var armourSet4;
-var armourSet5;
-var armourSet6;
-var armourSet7;
-var armourSet8;
-
-let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, AckmaHawkTextSize, AckmaHawkTextStyle, AckmaHawkTextWidth, AckmaHawkTextHeight, AckmaHawkTextAlign, AckmaHawkTextBaseLine, AckmaHawkTextDirection, AckmaHawkLetterSpacing, AckmaHawkFontKerning, AckmaHawkFontStretch, AckmaHawkFontVariantCaps, AckmaHawkTextRendering, AckmaHawkWordSpacing, AckmaHawkTextSettings, StickManDialog, PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, AckmaHawkHeadArmor, AckmaHawkBodyArmor, AckmaHawkarmArmor, AckmaHawkLegArmor, AckmaHawkweakAttack, AckmaHawkstrongAttack, AckmaHawkspecialAttack, AckmaHawkmainSkill, AckmaHawkevadeSkill, AckmaHawkdefenseSkill, AckmaHawkknockBackSkill, AckmaHawkrangeSkill, AckmaHawkaoeSkill, AckmaHawkbuffSkill, AckmaHawkdebuffSkill, AckmaHawkultimateSkill);
+/*
+|--------------------------------------------------------------------------
+| DOM Boot
+|--------------------------------------------------------------------------
+*/
 
 document.addEventListener("DOMContentLoaded", () => {
-  let TsunamiRadio = document.getElementById("TFradioPlayer");
+
+  const TsunamiRadio = document.getElementById("TFradioPlayer");
   TsunamiRadio.crossOrigin = "anonymous";
-  let RadioTitle = document.getElementById("TfRadioStuff");
-  let RadioButtons = document.getElementById("CheckRadio");
+
+  const RadioTitle = document.getElementById("TfRadioStuff");
+  const RadioButtons = document.getElementById("CheckRadio");
   const twoMore = document.getElementById("mainTsectionFdiv");
-  let RadioCanvas = document.getElementById("TFradioCanvas");
+  const RadioCanvas = document.getElementById("TFradioCanvas");
 
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin";
 
-  let RadioLastButton = document.createElement("button");
-  let RadioRestartButton = document.createElement("button");
-  let RadioStartButton = document.createElement("button");
-  let RadioSkipButton = document.createElement("button");
+  const RadioLastButton = document.createElement("button");
+  const RadioRestartButton = document.createElement("button");
+  const RadioStartButton = document.createElement("button");
+  const RadioSkipButton = document.createElement("button");
 
-  let Stickman = new letsDoIt("Homepage Game", TfStickMan); ////default page setup with sprite
+  let Stickman = new letsDoIt("Homepage Game", TfStickMan);
 
   let TfSite = new HeaderWeather();
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
   let nifage = new TfPrintful();
   let style = new TsunamiFlowImageEngine();
-  let nation = new TsunamiFlowDj({
-    audioElement: TsunamiRadio
-  });
+  let nation = new TsunamiFlowDj({ audioElement: TsunamiRadio });
   let network = new TsunamiLiveVideoController();
 
-  let max = {
-    site: TfSite,
-    iframe: frameTF,
-    user: nifage,
-    image: style,
-    sound: nation,
-    video: network,
-    game: Stickman,
-    AudioTitle: RadioTitle,
-    AudioButtonSpot: RadioButtons,
-    AudioPrevious: RadioLastButton,
-    AudioOver: RadioRestartButton,
-    AudioStart: RadioStartButton,
-    AudioSkip: RadioSkipButton,
-  };
   let Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -231,93 +242,76 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
   });
+
   Controller.site.EnHword(TFwordMishuba);
 
-  Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces with a length of 20 inches. His head was 12 1/2 inches, chest was 11 1/2 inches on July 11, 1990 at Tallahassee Memorial Regional Medical Center INC. in Tallahassee, FLorida of the United States of America on Planet Earth.");
-  Controller.site.NewsArray.push("Mishuba played on the school basketball team from 7th grade to 10 grade. ");
+  Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+  Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
   Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-  Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award when he was 6 signed by Bill Clinton while in elementary school at Holbrook in Fort Bragg, North Carolina.");
-  Controller.site.NewsArray.push("Mishuba was a percussionist in the school band from 7th grade to 10 grade. Mishuba says 'He can play any perucssion instrument'.");
-  Controller.site.NewsArray.push("Mishuba went to Holbrook Elementary in North Carolina, Riley elementary in Florida and Jefferson Elementary in Kansas.");
-  Controller.site.NewsArray.push("Mishuba was the 400m state champion for 3a in 2008 and the 400m state champion for 4a in 2009.");
-  Controller.site.NewsArray.push("Mishuba went to Fort Riley Middle School in Kansas, Liberty HIll MIddle School in Texas and Union Grove Middle School.");
-  Controller.site.NewsArray.push("Mishuba was athlete of the year in 2008 for track & field for South Carolina.");
-  Controller.site.NewsArray.push("Mishuba played on the school football team from 7th grade to 12 grade.");
+  Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+  Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
+  Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
+  Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
   Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
-  Controller.site.NewsArray.push("Mishuba run track for the Univeristy of South Carolina. <a href='https://gamecocksonline.com/sports/track-and-field/roster/chris-maxwell/2677'> Click here to find out more </a>");
-  Controller.site.NewsArray.push("Mishuba received a silver on his WorkKey Career Readiness Certificate in the 11th grade.");
-  Controller.site.NewsArray.push("Mishuba ran track and field from 7th grade up until he graduated from undergraduate school.");
-  Controller.site.NewsArray.push("Mishuba went to Harker Heights High School in Texas and Blythewood High School in South Carolina.");
-  Controller.site.NewsArray.push("Mishuba received his Professional TEFL Certification in 2017. His Certificate NO. is <a href='teacherlink.teachingnomad.com/certificates'> TN1700-043  </a>");
-  Controller.site.NewsArray.push("Mishuba received his MS in Entertainment Business from Full Sail University in 2020.");
+  Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
+  Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
+  Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+
   Controller.iframe.frame.title = "Main Website Content";
   Controller.iframe.frame.id = "TsunamiContent";
   Controller.iframe.frame.name = "TsunamiMainFlowContent";
   Controller.iframe.frame.width = 925;
   Controller.iframe.frame.height = 430;
   Controller.iframe.frame.style.background = "white";
-  Controller.iframe.frame.style.touchAction = "manipulation"; // prevent double-tap zoom and unwanted scrolling
-  Controller.iframe.frame.style.pointerEvents = "auto"; // ensure pointer events fire
+  Controller.iframe.frame.style.touchAction = "manipulation";
+  Controller.iframe.frame.style.pointerEvents = "auto";
 
-  if (twoMore) {
-    twoMore.appendChild(Controller.iframe.frame);
-  } else {
-    console.error("Element with id 'mainTsectionFdiv' not found.");
-  }
+  if (twoMore) twoMore.appendChild(Controller.iframe.frame);
 
   Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-
   Controller.iframe.MenuSwitch(Controller.iframe.frame);
 
   Controller.iframe.frame.addEventListener("load", () => {
-    console.log("Iframe loaded:", Controller.iframe.frame.src);
-
     try {
-      console.log("contentWindow:", Controller.iframe.frame.contentWindow);
-      if (Controller.iframe.frame.src.endsWith("Community.html")) {
-        Controller.videoElem = Controller.find("TsunamiFlowVideoStuff", true);
-        Controller.videoCanv = Controller.find("TFcanvas", true);
-        Controller.bindVidSystem();
-      }
       Controller.iframe.frame.contentWindow.controller = Controller;
-      console.log("Controller injected into iframe");
     } catch (e) {
       console.error("Cross-origin block:", e);
     }
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {
-        try {
-          const reg = await navigator.serviceWorker.register("/service-worker.js");
-          console.log("SW registered:", reg);
-        } catch (err) {
-          console.error("SW registration failed:", err);
-        }
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(reg => console.log("SW registered:", reg))
+          .catch(err => console.error("SW registration failed:", err));
       });
     }
   });
-  Controller.user.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
+
+  Controller.user.stripePublicKey = "pk_live_XXX";
   Controller.user.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
 
   Controller.bindUsers();
   Controller.bindNavBar();
   Controller.bindAudio();
+
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
     Controller.user.bindCart();
   });
 
   Controller.site.requestLocation();
+
   Controller.worker = new Worker(
     new URL("./Workers/TaskWorker.js", import.meta.url),
     { type: "module" }
-);
+  );
 
   Controller.sharedWorker = new SharedWorker(
     new URL("./JS/TFN/T/Worker/Shared.js", import.meta.url),
     { type: "module" }
-);
-  Controller.initTsunamiWorkers()
+  );
+
+  Controller.initTsunamiWorkers();
 });
 
 /*
