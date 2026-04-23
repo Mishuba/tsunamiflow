@@ -34,6 +34,7 @@ body {
     line-height: 1.5;
     overflow-x: hidden;
     overflow-y: auto;
+padding-bottom: 200px;
 }
 
 /* =========================
@@ -290,8 +291,9 @@ article {
 }
 
 #radioDock {
-    position: sticky;
+    position: fixed;
     bottom: 0;
+    left: 0;
     width: 100%;
     background: black;
     z-index: 9999;
