@@ -284,12 +284,18 @@ It does NOT break footer content below it.
 */
 
 article {
+    width: 100%;
+    background: black;
+    padding: 10px 0;
+}
+
+#radioDock {
     position: sticky;
     bottom: 0;
     width: 100%;
     background: black;
     z-index: 9999;
-padding: 10px 0;
+    padding: 10px 0;
 }
 
 #TFradioCanvas {
