@@ -314,6 +314,26 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.initTsunamiWorkers();
 });
 
+
+const dock = document.getElementById("radioDock");
+const toggle = document.getElementById("toggleRadio");
+
+toggle.addEventListener("click", () => {
+    dock.classList.toggle("collapsed");
+
+    toggle.textContent = dock.classList.contains("collapsed")
+        ? "▲"
+        : "▼";
+});
+
+/* optional: click header also toggles */
+document.getElementById("radioHeader")
+    .addEventListener("click", (e) => {
+        if (e.target.id !== "toggleRadio") {
+            dock.classList.toggle("collapsed");
+        }
+    });
+
 /*
     //Make Canvas an image.
     //Context Stuff
