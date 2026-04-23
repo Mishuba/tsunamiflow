@@ -16,12 +16,26 @@
 | Worker Pool (Compute Layer)
 |--------------------------------------------------------------------------
 */
-
 const workers = {
-    input: new Worker("./kid/GameInputWebWorker.js", { type: "module" }),
-    media: new Worker("./kid/MediaWebWorker.js", { type: "module" }),
-    world: new Worker("./kid/GameWorldWebWorker.js", { type: "module" }),
-    ai: new Worker("./kid/AiWebWorker.js", { type: "module" })
+    input: new Worker(
+        new URL("./kid/GameInputWebWorker.js", import.meta.url),
+        { type: "module" }
+    ),
+
+    media: new Worker(
+        new URL("./kid/MediaWebWorker.js", import.meta.url),
+        { type: "module" }
+    ),
+
+    world: new Worker(
+        new URL("./kid/GameWorldWebWorker.js", import.meta.url),
+        { type: "module" }
+    ),
+
+    ai: new Worker(
+        new URL("./kid/AiWebWorker.js", import.meta.url),
+        { type: "module" }
+    )
 };
 
 /*
