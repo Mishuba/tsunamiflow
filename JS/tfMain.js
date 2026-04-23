@@ -302,7 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.site.requestLocation();
 
   Controller.worker = new Worker(
-    new URL("./Workers/TaskWorker.js", import.meta.url),
+    new URL("./JS/TFN/T/Workers/WebWorker/TaskWorker.js", import.meta.url),
     { type: "module" }
   );
 
