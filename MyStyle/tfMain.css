@@ -284,10 +284,12 @@ It does NOT break footer content below it.
 */
 
 article {
+    position: sticky;
+    bottom: 0;
     width: 100%;
-    min-height: 120px;
-    padding: 10px 0;
-    position: relative;
+    background: black;
+    z-index: 9999;
+padding: 10px 0;
 }
 
 #TFradioCanvas {
@@ -298,11 +300,9 @@ article {
 }
 
 #TFradioPlayer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    position: relative;
     width: 100%;
-    z-index: 9999;
+    /*z-index: 9999;*/
     background: black;
 }
 
