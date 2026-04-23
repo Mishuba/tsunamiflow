@@ -306,14 +306,6 @@ article {
     background: black;
 }
 
-article audio {
-    width: 100%;
-    position: sticky;
-    bottom: 0;
-    z-index: 55;
-    background: black;
-}
-
 /* gives space so sticky player does not visually crush content */
 
 #TFradioInfo,
