@@ -10,7 +10,8 @@
     padding: 0;
 }
 
-html, body {
+html,
+body {
     width: 100%;
     height: 100%;
 }
@@ -76,6 +77,113 @@ button:hover {
     opacity: 0.9;
 }
 
+a {
+    font-style: italic;
+    font-weight: bold;
+    text-decoration-color: white;
+}
+
+a:link {
+    text-decoration: overline;
+}
+
+a:visited {
+    text-decoration: underline dotted;
+}
+
+a:hover {
+    text-decoration: overline underline dashed;
+}
+
+a:active {
+    text-decoration: line-through double;
+}
+
+/* =========================
+   LISTS
+========================= */
+
+ul {
+    list-style: none;
+}
+
+ol {
+    list-style-type: upper-roman;
+}
+
+/* =========================
+   HEADER (RESTORED TO YOUR STRUCTURE)
+========================= */
+
+header {
+    width: 100%;
+    min-height: 120px;
+}
+
+header div {
+    float: left;
+    width: 33.333%;
+    min-height: 100px;
+    padding: 10px;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+nav {
+    width: 100%;
+    overflow: hidden;
+    padding: 5px 0;
+}
+
+nav table {
+    width: 50%;
+    float: left;
+    border-collapse: collapse;
+}
+
+nav table td {
+    padding: 5px;
+}
+
+nav form {
+    width: 50%;
+    float: left;
+    padding: 5px;
+}
+
+nav form input {
+    padding: 8px;
+    margin: 2px;
+}
+
+/* =========================
+   MENU SYSTEM
+========================= */
+
+.menu-item {
+    position: relative;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.submenu {
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    z-index: 1000;
+    min-width: 180px;
+    background: black;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.menu-item:focus-within .submenu,
+.menu-item:hover .submenu {
+    display: block;
+}
+
 /* =========================
    MAIN LAYOUT
 ========================= */
@@ -89,44 +197,102 @@ button:hover {
 }
 
 /* LEFT PANEL */
-aside,
-#donation {
+
+aside {
     flex: 0 0 15%;
     min-width: 180px;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    height: auto;
     overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
-
-/* CENTER */
-#mainTsectionDiv {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
     padding: 10px;
 }
 
+/* CENTER */
+
+section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    padding: 10px;
+}
+
+#mainTsectionFdiv {
+    flex: 1;
+    min-height: 100%;
+}
+
 /* RIGHT PANEL */
+
 #tfExtraSection {
     flex: 0 0 20%;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    min-height: 100%;
+    height: auto;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* force internal content to extend fully */
+
+aside > *,
+#tfExtraSection > *,
+section > * {
+    flex-shrink: 0;
+}
+
+/* =========================
+   CORE CONTENT
+========================= */
+
+#TFcanvas {
+    width: 600px;
+    max-width: 100%;
+    height: 600px;
+    border: 1px solid black;
+    margin: 0 auto;
+}
+
+#TsunamiContent {
+    width: 925px;
+    max-width: 100%;
+    min-height: 430px;
+    margin: 0 auto;
+}
+
+/* =========================
+   FORMS
+========================= */
+
+#TFCompleteForm {
+    width: 100%;
+}
+
+#TFCompleteForm input {
+    width: 80%;
     padding: 10px;
 }
 
 /* =========================
-   RADIO SYSTEM (FIXED)
+   PERSISTENT RADIO PLAYER
 ========================= */
 
 /*
-KEY IDEA:
-- stays in layout flow
-- sticks when visible in viewport
-- does NOT overlap footer/content
+This keeps the radio in normal document flow
+while allowing it to "float" when user reaches it.
+
+It does NOT break footer content below it.
 */
+
+article {
+    width: 100%;
+    min-height: 120px;
+    padding: 10px 0;
+    position: relative;
+}
 
 #TFradioCanvas {
     width: 100%;
@@ -140,17 +306,22 @@ KEY IDEA:
     background: black;
 }
 
-/* container ensures spacing so content below is not blocked */
-article {
+article audio {
     width: 100%;
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
+    position: sticky;
+    bottom: 0;
+    z-index: 55;
+    background: black;
 }
 
-/* IMPORTANT: allows content to exist below radio naturally */
-#radioContainer {
-    margin-top: auto;
+/* gives space so sticky player does not visually crush content */
+
+#TFradioInfo,
+#TFradioCurrentTIme,
+#TFradioTimeLeft,
+#RadioTimeFr,
+#TFradioProcessBar {
+    padding: 10px 0;
 }
 
 /* =========================
@@ -166,24 +337,64 @@ footer {
 }
 
 /* =========================
+   STORE SYSTEM
+========================= */
+
+#storeTitle,
+#productTitle {
+    color: #333;
+}
+
+#StoreItemsList li {
+    background: white;
+    color: black;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#storeButton {
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#storeButton:hover {
+    background-color: #218838;
+}
+
+.receipt {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #d4edda;
+    color: black;
+    border: 1px solid #c3e6cb;
+}
+
+/* =========================
    RESPONSIVE
 ========================= */
 
 @media (max-width: 900px) {
     #MainSection {
         flex-direction: column;
+        min-height: auto;
     }
 
     aside,
-    #donation,
-    #mainTsectionDiv,
+    section,
     #tfExtraSection {
         width: 100%;
-        height: auto;
+        flex: 1 1 100%;
+        min-height: auto;
     }
 
-    #TFradioCanvas {
-        position: sticky;
-        bottom: 0;
+    header div,
+    nav table,
+    nav form {
+        width: 100%;
+        float: none;
     }
 }
