@@ -3,11 +3,9 @@
 | Task Worker (Orchestrator Layer)
 |--------------------------------------------------------------------------
 | Responsibilities:
-|
 | 1. Route compute tasks → dedicated workers
-| 2. Route system/backend tasks → SharedWorker
-| 3. Normalize all messages using Tycadome
-| 4. Return unified responses to Main Thread
+| 2. Normalize all messages using Tycadome
+| 3. Return unified responses to Main Thread
 |--------------------------------------------------------------------------
 */
 
@@ -16,6 +14,7 @@
 | Worker Pool (Compute Layer)
 |--------------------------------------------------------------------------
 */
+
 const workers = {
     input: new Worker(
         new URL("./kid/GameInputWebWorker.js", import.meta.url),
@@ -40,17 +39,7 @@ const workers = {
 
 /*
 |--------------------------------------------------------------------------
-| Shared Worker Bridge (Backend Layer)
-|--------------------------------------------------------------------------
-| This is your system bus (WebSocket, API, DB sync, etc)
-|--------------------------------------------------------------------------
-*/
-
-
-
-/*
-|--------------------------------------------------------------------------
-| Packet Standard
+| Packet Standard (Tycadome)
 |--------------------------------------------------------------------------
 */
 
@@ -77,7 +66,7 @@ function tycadome(
 
 /*
 |--------------------------------------------------------------------------
-| Handle Compute Worker Responses
+| Worker Response Handler
 |--------------------------------------------------------------------------
 */
 
@@ -96,7 +85,6 @@ Object.entries(workers).forEach(([name, worker]) => {
                 {
                     status: "completed",
                     priority: "low"
-
                 },
                 "async",
                 e.data.payload || e.data
@@ -115,7 +103,7 @@ Object.entries(workers).forEach(([name, worker]) => {
                 },
                 {
                     status: "failed",
-                    priority: "low",
+                    priority: "low"
                 },
                 "async",
                 {}
@@ -126,33 +114,13 @@ Object.entries(workers).forEach(([name, worker]) => {
 
 /*
 |--------------------------------------------------------------------------
-| Handle SharedWorker (Backend Responses)
-|--------------------------------------------------------------------------
-*/
-
-
-/*
-|--------------------------------------------------------------------------
 | MAIN ROUTER (Brain of system)
 |--------------------------------------------------------------------------
 */
 
 onmessage = (e) => {
     const task = e.data;
-
     const target = task.meta?.worker;
-
-    /*
-    ----------------------------------------------------------------------
-    1. BACKEND / SYSTEM TASKS → SharedWorker
-    ----------------------------------------------------------------------
-    */
-
-    /*
-    ----------------------------------------------------------------------
-    2. COMPUTE TASKS → Dedicated Workers
-    ----------------------------------------------------------------------
-    */
 
     if (!target || !workers[target]) {
         postMessage(
