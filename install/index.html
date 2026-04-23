@@ -1,4 +1,259 @@
+<!-- /install/index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+    <!--
+    |--------------------------------------------------------------------------
+    | Install Page
+    |--------------------------------------------------------------------------
+    | Purpose:
+    | Dedicated public install/share page for your PWA
+    | Share this URL anywhere:
+    |
+    | https://tsunamiflow.club/install
+    |
+    | Android/Desktop:
+    | Native install prompt appears
+    |
+    | iPhone/iPad:
+    | Manual Add to Home Screen instructions
+    |--------------------------------------------------------------------------
+    -->
 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Install Tsunami Flow</title>
+    <meta name="description" content="Install the Tsunami Flow App">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#000000">
+    <link rel="apple-touch-icon" href="/icons/192Logo.png">
+
+    <!-- Optional -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: rgb(56, 217, 238);
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .logo {
+            width: 160px;
+            max-width: 80%;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 5px #fff;
+        }
+
+        p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .install-btn {
+            background: rgb(56, 217, 238);
+            color: #000;
+            border: none;
+            padding: 16px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            margin-top: 10px;
+            margin-bottom: 25px;
+        }
+
+        .install-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            text-align: left;
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        .instructions h2 {
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        .small {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        a {
+            color: rgb(56, 217, 238);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <img
+        src="/Pictures/Logo/Tsunami Flow Logo.png"
+        alt="Tsunami Flow"
+        class="logo"
+    >
+
+    <h1>Install Tsunami Flow</h1>
+
+    <p>
+        Download and install the Tsunami Flow app on your device for
+        faster access, fullscreen experience, offline support,
+        and a native-app feel.
+    </p>
+
+    <!-- Native install prompt button -->
+    <button
+        id="installApp"
+        class="install-btn hidden"
+    >
+        Install App
+    </button>
+
+    <div class="instructions">
+        <h2>Device Instructions</h2>
+
+        <ul>
+            <li>
+                <strong>Android:</strong>
+                Tap "Install App" when available
+            </li>
+
+            <li>
+                <strong>Desktop Chrome/Edge:</strong>
+                Click the install icon in the browser address bar
+            </li>
+
+            <li>
+                <strong>iPhone / iPad:</strong>
+                Tap Share → Add to Home Screen
+            </li>
+        </ul>
+    </div>
+
+    <p class="small">
+        Main Site:
+        <a href="https://tsunamiflow.club">
+            tsunamiflow.club
+        </a>
+    </p>
+
+</div>
+
+<script>
+/*
+|--------------------------------------------------------------------------
+| Install Prompt Controller
+|--------------------------------------------------------------------------
+|
+| Android/Desktop Chrome:
+| beforeinstallprompt event
+|
+| iOS:
+| Manual install only (Apple limitation)
+|--------------------------------------------------------------------------
+*/
+
+let deferredPrompt = null;
+
+const installBtn = document.getElementById("installApp");
+
+/*
+|--------------------------------------------------------------------------
+| Capture install event
+|--------------------------------------------------------------------------
+*/
+window.addEventListener("beforeinstallprompt", (event) => {
+    console.log("[PWA] Install prompt available");
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+    installBtn.classList.remove("hidden");
+});
+
+/*
+|--------------------------------------------------------------------------
+| Install button click
+|--------------------------------------------------------------------------
+*/
+installBtn.addEventListener("click", async () => {
+    if (!deferredPrompt) {
+        console.log("[PWA] No install prompt available");
+        return;
+    }
+
+    deferredPrompt.prompt();
+
+    const choice = await deferredPrompt.userChoice;
+
+    console.log("[PWA] User choice:", choice.outcome);
+
+    deferredPrompt = null;
+
+    installBtn.classList.add("hidden");
+});
+
+/*
+|--------------------------------------------------------------------------
+| Detect if already installed
+|--------------------------------------------------------------------------
+*/
+window.addEventListener("appinstalled", () => {
+    console.log("[PWA] App installed");
+
+    installBtn.classList.add("hidden");
+});
+</script>
+
+</body>
 </html>
