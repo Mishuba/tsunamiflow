@@ -93,7 +93,7 @@ export class maxwell {
             eventType
         });
     }
-    on(id, eventName, callback = null, preventDefault = false, iframe = null) {
+    onMe(id, eventName, callback = null, preventDefault = false, iframe = null) {
         const el = this.find(id, iframe);
 
         if (!el) {
@@ -181,23 +181,23 @@ export class maxwell {
     }
     bindNavBar() {
         // navigation menu
-        this.on("tfRoster", "click", () => {
+        this.onMe("tfRoster", "click", () => {
             //i have a function for this already.
             this.iframe.frame.src = "./../Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        });
+        }, true);
 
-        this.on("tfNews", "click", () => {
+        this.onMe("tfNews", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        });
+        }, true);
 
-        this.on("tfCompetitions", "click", () => {
+        this.onMe("tfCompetitions", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/Competitions.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        });
+        }, true);
 
-        this.on("tfNetwork", "click", () => {
+        this.onMe("tfNetwork", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/TFnetwork.html";
             this.iframe.MenuSwitch(this.iframe.frame);
             /*
@@ -211,15 +211,15 @@ export class maxwell {
         <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
       </video>
             */
-        });
+        }, true);
 
-        this.on("tfCommunity", "click", () => {
+        this.onMe("tfCommunity", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/Community.html";
             this.iframe.MenuSwitch(this.iframe.frame)
 
-        });
+        }, true);
 
-        this.on("NavLoginButton", "submit", () => {
+        this.onMe("NavLoginButton", "submit", () => {
             this.user.login();
         }, true);
     }
@@ -231,7 +231,7 @@ export class maxwell {
         });
         const emailInput = this.userFields?.tfEM || this.find("TfEmail");
 
-        this.on("UniqueOriginalBtn", async () => {
+        this.onMe("UniqueOriginalBtn", async () => {
             const email = emailInput?.value || null;
             try {
                 const result = await this.user.donate(20, 'usd', true, email); // $20 item
@@ -244,7 +244,7 @@ export class maxwell {
             }
         });
 
-        this.on("SubscribeUsers", async () => {
+        this.onMe("SubscribeUsers", async () => {
             const email = emailInput?.value || null;
             const priceId = "price_123456789"; // Stripe Price ID for subscription
             try {
@@ -259,7 +259,7 @@ export class maxwell {
             }
         });
 
-        this.on("TfDonateBtn", async () => {
+        this.onMe("TfDonateBtn", async () => {
             try {
                 const result = await this.user.donate(10, 'usd', true, email); // $10 donation
                 if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
@@ -272,7 +272,7 @@ export class maxwell {
         );
     }
     bindSignUp() {
-        this.on("TFCompleteForm", () => {
+        this.onMe("TFCompleteForm", () => {
             this.user.signup(this.userFields, this.extraFields);
         }, true);
     }
@@ -395,18 +395,18 @@ export class maxwell {
         skip.innerHTML = "Next";
         buttonSpot.appendChild(skip);
 
-        this.on("TFradioPreviousButton", () => {
+        this.onMe("TFradioPreviousButton", () => {
             this.soundEngine.previousSong();
             //RadioWorker.postMessage({type: "radio",system: "previous"});
         });
 
-        this.on("TFRadioRestartButton", () => {
+        this.onMe("TFRadioRestartButton", () => {
             element.currentTime = 0;
             this.soundEngine.startMusic(element);
             start.innerHTML = "Pause Tsunami Radio";
         });
 
-        this.on("TFradioButton", () => {
+        this.onMe("TFradioButton", () => {
             if (element.paused) {
                 this.soundEngine.playAudio(element);
                 start.innerHTML = "Pause Tsunami Radio";
@@ -418,7 +418,7 @@ export class maxwell {
             }
         });
 
-        this.on("TFradioSkipButton", () => {
+        this.onMe("TFradioSkipButton", () => {
             element.src = "";
             //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
@@ -433,7 +433,7 @@ export class maxwell {
         const iframe = this.iframe.frame;
 
         // START WEBCAM + DRAW LOOP
-        this.on("TfStartShit", async () => {
+        this.onMe("TfStartShit", async () => {
             if (this.videoEngine.canvas === null) {
                 this.videoEngine.canvas = this.find("TFcanvas", true);
             }
@@ -467,39 +467,39 @@ export class maxwell {
         }, false, iframe);
 
         // STOP WEBCAM
-        this.on("TfStopShit", () => {
+        this.onMe("TfStopShit", () => {
             this.videoEngine.stopwebcam();
             //this.effects.isPlaying = false;
         }, false, iframe);
 
         // START Video From Bin
-        this.on("TFplayFromBin", async () => {
+        this.onMe("TFplayFromBin", async () => {
             const id = this.find("TFmediaSelect", true).value;
             await this.playFromBin(id);
         }, false, iframe);
 
         // ENABLE CHROMA KEY
-        this.on("TuseFthisKeycolor", () => {
+        this.onMe("TuseFthisKeycolor", () => {
             const keyInput = this.find("TFchromaKey", true); // color input inside iframe
             //this.effects.ColorPickerChromaKey(keyInput);
             //this.effects.useChromaKey = true;
         }, false, iframe);
 
         // DISABLE CHROMA KEY
-        this.on("rmvTFchromakey", () => {
+        this.onMe("rmvTFchromakey", () => {
             //this.effects.disableChromaKey();
         }, false, iframe);
 
         // UPLOAD / REMOVE BACKGROUND IMAGE
-        //this.on("TFuploadImage", (e) => this.effects.UploadImage(e), false, iframe);
-        //this.on("rmvTFimg", () => this.effects.RemoveImage(this.videoCanv, this.videoCanv.width, this.videoCanv.height), false, iframe);
+        //this.onMe("TFuploadImage", (e) => this.effects.UploadImage(e), false, iframe);
+        //this.onMe("rmvTFimg", () => this.effects.RemoveImage(this.videoCanv, this.videoCanv.width, this.videoCanv.height), false, iframe);
 
         // UPLOAD / REMOVE BACKGROUND VIDEO
-        //this.on("TFuploadVideo", (e) => this.effects.UploadVideo(e), false, iframe);
-        //this.on("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
+        //this.onMe("TFuploadVideo", (e) => this.effects.UploadVideo(e), false, iframe);
+        //this.onMe("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
 
         // START / STOP RECORDING if recorder exists
-        this.on("TfStartRecPlz", () => {
+        this.onMe("TfStartRecPlz", () => {
             this.videoEngine.startStream();
             this.videoEngine.startRecorder({
                 audioStream: this.soundEngine.getMixerStream(),
@@ -507,17 +507,17 @@ export class maxwell {
             });
         }, false, iframe);
 
-        this.on("TfStopRecPlz", () => {
+        this.onMe("TfStopRecPlz", () => {
             this.videoEngine.stopStream();
         }, false, iframe);
 
-        this.on("GoLive", () => {
+        this.onMe("GoLive", () => {
             this.videoEngine.isLive = true;
             this.videoEngine.startSharedWorker();
             this.videoEngine.sendToSharedWorker("stream", null);
         }, false, iframe);
 
-        this.on("StopLive", () => {
+        this.onMe("StopLive", () => {
             this.videoEngine.isLive = false;
         }, false, iframe);
     }
