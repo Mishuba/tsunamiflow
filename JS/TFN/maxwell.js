@@ -594,7 +594,15 @@ export class maxwell {
                 break;
 
             case "radio":
-                this.handleRadio(payload);
+                if (payload.system === "file") {
+                    this.soundEngine.AudioFile(event.data.payload);
+                } else if (payload.system === "previous") {
+                    this.soundEngine.AudioFile(event.data.payload);
+                } else if (payload.system === "skip") {
+                    this.soundEngine.AudioFile(event.data.payload);
+                } else {
+                    this.soundEngine.AudioFile(event.data.payload);
+                }
                 break;
 
             default:

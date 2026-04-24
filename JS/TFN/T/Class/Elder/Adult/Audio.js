@@ -450,12 +450,12 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     AudioFile(event) {
         const playlist = this.TfSoundsDefaultPlaylist || [];
 
-        if (!event?.data?.file) {
+        if (!event?.file) {
             const i = Math.floor(Math.random() * playlist.length);
             this.SongList = playlist[i];
             console.log("Default playlist:", this.SongList);
         } else {
-            this.SongList = event.data.file;
+            this.SongList = event.file;
             console.log("From backend:", this.SongList);
         }
 
