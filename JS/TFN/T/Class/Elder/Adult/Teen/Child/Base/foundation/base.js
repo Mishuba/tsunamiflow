@@ -7,10 +7,10 @@ export class T {
     ArraybyteLength = 0;
     Arrayview = null;
     ArrayonReady = null;
-blob = null;
-blobtype = "application/octet-stream";
-blobobjectURL = null;
-blobonReady = null;
+    blob = null;
+    blobtype = "application/octet-stream";
+    blobobjectURL = null;
+    blobonReady = null;
     dbName = "default";
     dbversion = 1;
     dbstores = [];
@@ -24,7 +24,7 @@ blobonReady = null;
             "id": id, //options.id
             "type": type, //command
             "action": action, // video.start
-            "meta": meta,
+            "meta": meta, // {}
             "timestamp": Math.floor(Date.now() / 1000),
             "state": state,
             "mode": mode, //"async"

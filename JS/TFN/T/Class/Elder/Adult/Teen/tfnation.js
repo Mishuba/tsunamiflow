@@ -730,7 +730,7 @@ export class mediaWorker extends TsWorker {
 
 
             let tf = this.tycadome(
-                "tycadome-guest" + Date.now(),
+                "tycadome-guest" /*+ Date.now()*/,
                 "timer",
                 "scheduled.timer",
                 {
@@ -751,7 +751,7 @@ export class mediaWorker extends TsWorker {
             self.postMessage(tf);
         } else {
             let tf = this.tycadome(
-                "tycadome-guest" + Date.now(),
+                "tycadome-guest" /*+ Date.now()*/,
                 "timer",
                 "scheduled.timer",
                 {
@@ -781,10 +781,10 @@ export class mediaWorker extends TsWorker {
         if (event.data.type === "timer") {
             if (event.data.payload.system === "Tf Schedule") {
                 if (!this.something) {
-  this.something = setInterval(() => {
-    this.startTime();
-  }, 60000);
-}
+                    this.something = setInterval(() => {
+                        this.startTime();
+                    }, 60000);
+                }
             }
         }
         if (event.data.type === "radio") {
