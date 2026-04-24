@@ -22,39 +22,39 @@ import { maxwell } from "./TFN/maxwell.js";
 */
 
 function createSafeWorker(modulePath, classicPath) {
-    try {
-        /*
-        --------------------------------------------------
-        Modern Worker (preferred)
-        --------------------------------------------------
-        Supports:
-        - import/export
-        - import.meta.url
-        - better architecture
-        --------------------------------------------------
-        */
+  try {
+    /*
+    --------------------------------------------------
+    Modern Worker (preferred)
+    --------------------------------------------------
+    Supports:
+    - import/export
+    - import.meta.url
+    - better architecture
+    --------------------------------------------------
+    */
 
-        return new Worker(
-            new URL(modulePath, import.meta.url),
-            { type: "module" }
-        );
+    return new Worker(
+      new URL(modulePath, import.meta.url),
+      { type: "module" }
+    );
 
-    } catch (err) {
-        console.warn("Module worker failed. Falling back:", err);
+  } catch (err) {
+    console.warn("Module worker failed. Falling back:", err);
 
-        /*
-        --------------------------------------------------
-        Classic Worker (fallback)
-        --------------------------------------------------
-        Supports:
-        - older browsers
-        - Safari weirdness
-        - legacy fallback
-        --------------------------------------------------
-        */
+    /*
+    --------------------------------------------------
+    Classic Worker (fallback)
+    --------------------------------------------------
+    Supports:
+    - older browsers
+    - Safari weirdness
+    - legacy fallback
+    --------------------------------------------------
+    */
 
-        return new Worker(classicPath);
-    }
+    return new Worker(classicPath);
+  }
 }
 
 /*
@@ -235,9 +235,9 @@ let TfStickMan = new gameComponent(
   AckmaHawkExistentialIntelligence,
   AckmaHawkEnergeticIntelligence,
   AckmaHawkMetaCognitiveIntelligence,
-  1,1,1,1,
-  1,1,1,
-  1,1,1,1,1,1,1,1,1
+  1, 1, 1, 1,
+  1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1, 1, 1
 );
 
 /*
@@ -338,29 +338,24 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.user.stripePublicKey = "pk_live_XXX";
   Controller.user.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
 
-  Controller.bindUsers();
-  Controller.bindNavBar();
-  Controller.bindAudio();
+
 
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
     Controller.user.bindCart();
   });
 
-  Controller.site.requestLocation();
+  console.log(
+    new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
+  );
 
-
-console.log(
-  new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
-);
-
-console.log(
-  new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
-);
+  console.log(
+    new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
+  );
 
 
   Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
-);
+  );
 
   Controller.sharedWorker = new SharedWorker(
     new URL("./TFN/T/Worker/Shared.js", import.meta.url),
@@ -369,6 +364,11 @@ console.log(
 
   Controller.initTsunamiWorkers();
 
+  Controller.bindUsers();
+  Controller.bindNavBar();
+  Controller.bindAudio();
+
+  Controller.site.requestLocation();
 });
 
 
@@ -376,20 +376,20 @@ const dock = document.getElementById("radioDock");
 const toggle = document.getElementById("toggleRadio");
 
 toggle.addEventListener("click", () => {
-    dock.classList.toggle("collapsed");
+  dock.classList.toggle("collapsed");
 
-    toggle.textContent = dock.classList.contains("collapsed")
-        ? "▲"
-        : "▼";
+  toggle.textContent = dock.classList.contains("collapsed")
+    ? "▲"
+    : "▼";
 });
 
 /* optional: click header also toggles */
 document.getElementById("radioHeader")
-    .addEventListener("click", (e) => {
-        if (e.target.id !== "toggleRadio") {
-            dock.classList.toggle("collapsed");
-        }
-    });
+  .addEventListener("click", (e) => {
+    if (e.target.id !== "toggleRadio") {
+      dock.classList.toggle("collapsed");
+    }
+  });
 
 /*
     //Make Canvas an image.
