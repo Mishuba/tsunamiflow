@@ -595,13 +595,29 @@ export class maxwell {
 
             case "radio":
                 if (payload.system === "file") {
-                    this.soundEngine.AudioFile(event.data.payload);
+                    switch (this.soundEngine.TfAudio.src) {
+                        case "":
+                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            break;
+                        case " ":
+                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            break;
+                        case null:
+                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            break;
+                        case undefined:
+                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            break;
+                        default:
+                            console.log("audio already loaded or playing");
+                            break;
+                    }
                 } else if (payload.system === "previous") {
-                    this.soundEngine.AudioFile(event.data.payload);
+                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
                 } else if (payload.system === "skip") {
-                    this.soundEngine.AudioFile(event.data.payload);
+                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
                 } else {
-                    this.soundEngine.AudioFile(event.data.payload);
+                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
                 }
                 break;
 
