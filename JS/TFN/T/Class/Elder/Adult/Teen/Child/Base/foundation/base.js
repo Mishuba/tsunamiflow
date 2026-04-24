@@ -19,7 +19,7 @@ export class T {
     constructor(options = {}) {
 
     }
-    async tycadome(id, type, action, meta, state, mode, payload) {
+    tycadome(id, type, action, meta, state, mode, payload) {
         return {
             "id": id, //options.id
             "type": type, //command
