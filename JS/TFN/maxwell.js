@@ -577,7 +577,7 @@ export class maxwell {
         const payload = data.payload || {};
 
         switch (data.type) {
-            case "Timer":
+            case "timer":
                 this.find("TFtime").innerHTML = payload.time;
 
                 if (payload.system === "Tf Schedule") {
