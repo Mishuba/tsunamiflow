@@ -41,7 +41,7 @@ export class mediaWorker extends TsWorker {
     }
     async fetchRadioSongs() {
         try {
-            this.songList = await this.request(
+            this.songList = await this.requestWorld(
                 "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
                 null,
                 { "X-Request-Type": "fetchRadioSongs" },
