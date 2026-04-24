@@ -302,12 +302,12 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.site.requestLocation();
 
   Controller.worker = new Worker(
-    new URL("./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url),
+    new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url),
     { type: "module" }
   );
 
   Controller.sharedWorker = new SharedWorker(
-    new URL("./JS/TFN/T/Worker/Shared.js", import.meta.url),
+    new URL("./TFN/T/Worker/Shared.js", import.meta.url),
     { type: "module" }
   );
 
