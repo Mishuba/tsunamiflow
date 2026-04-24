@@ -1,6 +1,6 @@
 //import { mediaWorker } from "JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
 
-import { mediaWorker } from "./../../../Class/Elder/Adult/Teen/tfnation.js";
+import { mediaWorker } from "./../Class/Elder/Adult/Teen/tfnation.js";
 
 let mediawk = null;
 
