@@ -359,7 +359,7 @@ console.log(
 );
 
 
-  Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js"), import.meta.url), { type: "module" }
+  Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
 );
 
   Controller.sharedWorker = new SharedWorker(
