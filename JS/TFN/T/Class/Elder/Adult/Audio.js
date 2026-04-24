@@ -121,335 +121,335 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             Object.assign(this.NamiSpeech, this.NamiSpeechOptions);
         }
     }
-    AudioNetworkState(element) {
-        if (element.readyState === 0) {
+    AudioNetworkState() {
+        if (this.TfAudio.readyState === 0) {
             console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-            if (element.networkState === 0) {
+            if (this.TfAudio.networkState === 0) {
                 console.log("Radio networkState has NETWORK_EMPTY");
-                if (element.src === "") {
+                if (this.TfAudio.src === "") {
                     console.log("The radio source is ''");
-    let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "the radio source is ''",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "the radio source is ''",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
-                } else if (!element.src) {
+                } else if (!this.TfAudio.src) {
                     ("The radio source does not exist");
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "The radio source does not exist",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "The radio source does not exist",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
-                } else if (element.src === " ") {
+                } else if (this.TfAudio.src === " ") {
                     console.log("The radio source is ' '");
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "the radio source is ' '",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "the radio source is ' '",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
-                } else if (element.src === "about:blank") {
+                } else if (this.TfAudio.src === "about:blank") {
                     console.log("The radio source is about:blank");
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "The radio source is about:blank",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "The radio source is about:blank",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
                 }
                 else {
                     console.log("Something else is going on and I dont know what it is.");
                 }
-            } else if (element.networkState === 2) {
+            } else if (this.TfAudio.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState === 3) {
+            } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
-                    let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "Radio networkState has NETWORK_NO_SOURCE",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                let tf = this.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.network.state",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        layer: "tf",
+                        worker: "media",
+                        backend: false
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: "none",
+                        message: "Radio networkState has NETWORK_NO_SOURCE",
+                        buffer: "nothing should be buffering.",
+                        time: TheRealTime,
+                    });
                 this.worker.postMessage(tf);
             }
-        } else if (element.readyState === 1) {
+        } else if (this.TfAudio.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
-            if (element.networkState === 1) {
+            if (this.TfAudio.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState === 2) {
+            } else if (this.TfAudio.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState === 3) {
+            } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
                 //No valid source
             }
-        } else if (element.readyState === 2) {
+        } else if (this.TfAudio.readyState === 2) {
             console.log("Radio readyState is HAVE_CURRENT_DATA");
-            if (element.networkState === 1) {
+            if (this.TfAudio.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState === 2) {
+            } else if (this.TfAudio.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState === 3) {
+            } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
                 //No valid source
             }
-        } else if (element.readyState === 3) {
+        } else if (this.TfAudio.readyState === 3) {
             console.log("Radio readyState is HAVE_FUTURE_DATA");
-            if (element.networkState === 1) {
+            if (this.TfAudio.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState === 3) {
+            } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
                 //No valid source
             }
-        } else if (element.readyState === 4) {
+        } else if (this.TfAudio.readyState === 4) {
             console.log("Radio readyState is HAVE_ENOUGH_DATA");
-            if (element.networkState === 1) {
+            if (this.TfAudio.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (element.networkState === 2) {
+            } else if (this.TfAudio.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (element.networkState === 3) {
+            } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
                 //No valid source
             }
 
-            if (element.ended) {
-                if (element.src === "") {
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "the radio source is ''",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+            if (this.TfAudio.ended) {
+                if (this.TfAudio.src === "") {
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "the radio source is ''",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
-                } else if (element.src === undefined) {
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "the radio source is ''",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                } else if (this.TfAudio.src === undefined) {
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "the radio source is ''",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
-                } else if (!element.src) {
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "the radio source is ''",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                } else if (!this.TfAudio.src) {
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "file",
+                            file: "none",
+                            message: "the radio source is ''",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
                 } else {
-                        let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "skip",
-        file: "none",
-        message: "the radio source is ''",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                    let tf = this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "radio.network.state",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "skip",
+                            file: "none",
+                            message: "the radio source is ''",
+                            buffer: "nothing should be buffering.",
+                            time: TheRealTime,
+                        });
                     this.worker.postMessage(tf);
                 }
             } else {
-                if (element.paused) {
-                    if (element.currentTime === 0) {
+                if (this.TfAudio.paused) {
+                    if (this.TfAudio.currentTime === 0) {
                         console.log("Tsunami Radio has not started yet.");
                     } else {
-                        console.log("Paused at " + element.currentTime);
+                        console.log("Paused at " + this.TfAudio.currentTime);
                     }
                 } else {
                     console.log("A song is still playing. Make the next song play using the functions");
                 }
             }
         } else {
-            if (element.networkState === 3) {
+            if (this.TfAudio.networkState === 3) {
                 console.log("The network could not find the source.");
-                    let tf = this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "radio",
-      "radio.network.state",
-      {
-        source: "web",
-        target: "device:web-001",
-        layer: "tf",
-        worker: "media",
-        backend: false
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "file",
-        file: "none",
-        message: "The network could not find the source.",
-        buffer: "nothing should be buffering.",
-        time: TheRealTime,
-      });
+                let tf = this.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "radio",
+                    "radio.network.state",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        layer: "tf",
+                        worker: "media",
+                        backend: false
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "file",
+                        file: "none",
+                        message: "The network could not find the source.",
+                        buffer: "nothing should be buffering.",
+                        time: TheRealTime,
+                    });
                 this.worker.postMessage(tf);
             } else {
                 console.log("Some unknown error is going on with the Radio");
@@ -470,17 +470,17 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
         return this.SongList;
     }
-    AudioState(element) {
+    AudioState() {
         if (this.TfSoundsContext.state === "suspended") {
             this.TfSoundsContext.resume();
         } else if (this.TfSoundsContext.state === "running") {
             console.log("The audio context state is running");
-            if (element.waiting) {
+            if (this.TfAudio.waiting) {
                 this.TfSoundsContext.suspend();
             }
         } else {
             console.log("The Audio context state must be closed");
-            if (element.paused) {
+            if (this.TfAudio.paused) {
                 //this.StopVisualizator();
             }
         }
