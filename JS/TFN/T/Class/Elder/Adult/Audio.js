@@ -448,14 +448,12 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
     }
     AudioFile(event) {
-        const playlist = this.TfSoundsDefaultPlaylist || [];
-
-        if (!event?.file) {
-            const i = Math.floor(Math.random() * playlist.length);
-            this.SongList = playlist[i];
+        if (!event?.data?.payload?.file) {
+            const i = Math.floor(Math.random() * this.TfSoundsDefaultPlaylist.length);
+            this.SongList = this.TfSoundsDefaultPlaylist[i];
             console.log("Default playlist:", this.SongList);
         } else {
-            this.SongList = event.file;
+            this.SongList = event.data.payload.file;
             console.log("From backend:", this.SongList);
         }
 
