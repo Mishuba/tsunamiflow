@@ -11,6 +11,54 @@ import { maxwell } from "./TFN/maxwell.js";
 
 /*
 |--------------------------------------------------------------------------
+| Worker Loader
+|--------------------------------------------------------------------------
+| Strategy:
+|
+| 1. Try modern module workers first
+| 2. If browser fails → fallback to classic workers
+| 3. Prevent total system failure
+|--------------------------------------------------------------------------
+*/
+
+function createSafeWorker(modulePath, classicPath) {
+    try {
+        /*
+        --------------------------------------------------
+        Modern Worker (preferred)
+        --------------------------------------------------
+        Supports:
+        - import/export
+        - import.meta.url
+        - better architecture
+        --------------------------------------------------
+        */
+
+        return new Worker(
+            new URL(modulePath, import.meta.url),
+            { type: "module" }
+        );
+
+    } catch (err) {
+        console.warn("Module worker failed. Falling back:", err);
+
+        /*
+        --------------------------------------------------
+        Classic Worker (fallback)
+        --------------------------------------------------
+        Supports:
+        - older browsers
+        - Safari weirdness
+        - legacy fallback
+        --------------------------------------------------
+        */
+
+        return new Worker(classicPath);
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
 | TF Word System
 |--------------------------------------------------------------------------
 */
@@ -310,10 +358,10 @@ console.log(
   new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
 );
 
-  Controller.worker = new Worker(
-    new URL("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
-    { type: "module" }
-  );
+  Controller.worker = createSafeWorker(
+    "./TFN/T/Worker/WebWorker/TaskWebWorker.js",
+    "/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js"
+);
 
   //Controller.sharedWorker = new SharedWorker(
     //new URL("./TFN/T/Worker/Shared.js", import.meta.url),
