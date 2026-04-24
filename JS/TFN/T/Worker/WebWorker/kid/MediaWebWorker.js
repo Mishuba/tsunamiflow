@@ -23,6 +23,9 @@ try {
 
     mediawk = new mediaWorker();
 
+    mediawk.startTime();
+    console.log("MediaWebWorker initialized successfully");
+
     self.onmessage = (e) => {
         mediawk.MessageReceived(e);
     }

@@ -304,22 +304,22 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   loadedmetadataAudio() {
     //create html data
-    this.MusicState();
+    this.AudioState();
   }
   loadeddataAudio() {
     console.log("The audio data is loaded");
-    this.MusicState();
+    this.AudioState();
   }
   canplayAudio() {
-    this.MusicState();
+    this.AudioState();
   }
   canplaythroughAudio() {
-    this.MusicState();
+    this.AudioState();
 
     //this.startMusic();
   }
   playAudio() {
-    this.MusicState();
+    this.AudioState();
     this.startMusic();
     this.startAnalyserLoop();
 
@@ -349,7 +349,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.worker.postMessage(tf, [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
   }
   pauseAudio() {
-    this.MusicState();
+    this.AudioState();
     this.stopMusic();
   }
   endedAudio() {
@@ -358,7 +358,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.postworkerMessage({ type: "radio", system: "file" });
   }
   waitingAudio() {
-    this.MusicState();
+    this.AudioState();
   }
   startAnalyserLoop() {
     if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
@@ -427,7 +427,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
 
   playingAudio() {
-    this.MusicState();
+    this.AudioState();
     this.updateAnalyser();
   }
   stalledAudio(stalled) {

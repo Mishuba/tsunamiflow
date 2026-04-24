@@ -426,6 +426,7 @@ export class maxwell {
     bindAudio() {
         this.RadioReady();
         this.soundEngine.RadioEventListeners();
+        this.soundEngine.AudioNetworkState();
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
