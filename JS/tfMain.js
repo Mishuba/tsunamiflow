@@ -359,9 +359,7 @@ console.log(
 );
 
 /*
-  Controller.worker = createSafeWorker(
-    "./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js",
-    "/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js"
+  Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js"), import.meta.url), { type: "module" }
 );
 
   Controller.sharedWorker = new SharedWorker(
