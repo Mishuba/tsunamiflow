@@ -149,7 +149,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else if (!this.TfAudio.src) {
@@ -175,7 +175,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "The radio source does not exist",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else if (this.TfAudio.src === " ") {
@@ -201,7 +201,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ' '",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else if (this.TfAudio.src === "about:blank") {
@@ -227,7 +227,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "The radio source is about:blank",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 }
@@ -262,7 +262,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         file: "none",
                         message: "Radio networkState has NETWORK_NO_SOURCE",
                         buffer: "nothing should be buffering.",
-                        time: TheRealTime,
+                        time: "Timer",
                     });
                 this.worker.postMessage(tf);
             }
@@ -334,7 +334,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else if (this.TfAudio.src === undefined) {
@@ -359,7 +359,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else if (!this.TfAudio.src) {
@@ -384,7 +384,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 } else {
@@ -409,7 +409,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             file: "none",
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
-                            time: TheRealTime,
+                            time: "Timer",
                         });
                     this.worker.postMessage(tf);
                 }
@@ -448,7 +448,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         file: "none",
                         message: "The network could not find the source.",
                         buffer: "nothing should be buffering.",
-                        time: TheRealTime,
+                        time: "Timer",
                     });
                 this.worker.postMessage(tf);
             } else {
