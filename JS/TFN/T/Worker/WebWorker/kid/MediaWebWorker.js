@@ -1,4 +1,4 @@
-import { mediaWorker } from "JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
+//import { mediaWorker } from "JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
 
 import { mediaWorker } from "./../../Class/Elder/Adult/Teen/tfnation.js";
 
@@ -23,112 +23,7 @@ try {
 
     mediawk = new mediaWorker();
 
-    self.postMessage({
-        id: crypto.randomUUID(),
-        type: "worker",
-        action: "media.ready",
-        meta: {
-            source: "media-worker",
-            worker: "media",
-            layer: "compute"
-        },
-        state: {
-            status: "ready",
-            priority: "low"
-        },
-        mode: "async",
-        payload: {
-            message: "Media worker initialized successfully"
-        }
-    });
-
-} catch (error) {
-    console.error("Media Worker Startup Error:", error);
-
-    self.postMessage({
-        id: crypto.randomUUID(),
-        type: "startup.error",
-        action: "media.init.failed",
-        meta: {
-            source: "media-worker",
-            worker: "media",
-            layer: "compute"
-        },
-        state: {
-            status: "failed",
-            priority: "high"
-        },
-        mode: "async",
-        payload: {
-            message: error.message,
-            stack: error.stack
-        }
-    });
+self.onmessage = (e) => {
+    mediawk.MessageReceived(e);
 }
 
-
-/*
-|--------------------------------------------------------------------------
-| Main Message Receiver
-|--------------------------------------------------------------------------
-| Receives normalized Tycadome packets
-|--------------------------------------------------------------------------
-*/
-
-self.onmessage = async (event) => {
-    if (!mediawk) {
-        self.postMessage({
-            id: crypto.randomUUID(),
-            type: "runtime.error",
-            action: "media.instance.missing",
-            meta: {
-                source: "media-worker",
-                worker: "media",
-                layer: "compute"
-            },
-            state: {
-                status: "failed",
-                priority: "high"
-            },
-            mode: "async",
-            payload: {
-                message: "mediaWorker instance was not created"
-            }
-        });
-
-        return;
-    }
-
-    try {
-        const data = event.data;
-
-        if (!data) {
-            throw new Error("Received empty worker message");
-        }
-
-        await mediawk.MessageReceived(data);
-
-    } catch (error) {
-        console.error("Media Worker Runtime Error:", error);
-
-        self.postMessage({
-            id: crypto.randomUUID(),
-            type: "runtime.error",
-            action: "media.execution.failed",
-            meta: {
-                source: "media-worker",
-                worker: "media",
-                layer: "compute"
-            },
-            state: {
-                status: "failed",
-                priority: "medium"
-            },
-            mode: "async",
-            payload: {
-                message: error.message,
-                stack: error.stack
-            }
-        });
-    }
-};
