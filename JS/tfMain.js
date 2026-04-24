@@ -301,6 +301,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   Controller.site.requestLocation();
 
+
+console.log("main js:" + import.meta.url);
+
   Controller.worker = new Worker(
     new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url),
     { type: "module" }
