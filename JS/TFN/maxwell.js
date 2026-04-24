@@ -426,7 +426,6 @@ export class maxwell {
     bindAudio() {
         this.RadioReady();
         this.soundEngine.RadioEventListeners();
-        this.soundEngine.AudioNetworkState(this.soundEngine.TfAudio);
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
@@ -656,6 +655,8 @@ export class maxwell {
 
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
+
+        this.soundEngine.AudioNetworkState(this.soundEngine.TfAudio);
 
         /*
         sharedWorker.port.onmessage = (e) => {
