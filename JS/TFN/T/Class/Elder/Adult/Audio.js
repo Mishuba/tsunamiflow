@@ -128,7 +128,8 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 console.log("Radio networkState has NETWORK_EMPTY");
                 if (this.TfAudio.src === "") {
                     console.log("The radio source is ''");
-                    let tf = this.tycadome(
+
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -150,11 +151,10 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else if (!this.TfAudio.src) {
                     ("The radio source does not exist");
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -176,11 +176,10 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "The radio source does not exist",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else if (this.TfAudio.src === " ") {
                     console.log("The radio source is ' '");
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -202,11 +201,10 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ' '",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else if (this.TfAudio.src === "about:blank") {
                     console.log("The radio source is about:blank");
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -228,8 +226,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "The radio source is about:blank",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 }
                 else {
                     console.log("Something else is going on and I dont know what it is.");
@@ -241,7 +238,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             } else if (this.TfAudio.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
-                let tf = this.tycadome(
+                this.worker.postMessage(this.tycadome(
                     "tycadome-guest" + Date.now(),
                     "radio",
                     "radio.network.state",
@@ -263,8 +260,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         message: "Radio networkState has NETWORK_NO_SOURCE",
                         buffer: "nothing should be buffering.",
                         time: "Timer",
-                    });
-                this.worker.postMessage(tf);
+                    }));
             }
         } else if (this.TfAudio.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
@@ -313,7 +309,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
             if (this.TfAudio.ended) {
                 if (this.TfAudio.src === "") {
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -335,10 +331,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else if (this.TfAudio.src === undefined) {
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -360,10 +355,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else if (!this.TfAudio.src) {
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -385,10 +379,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 } else {
-                    let tf = this.tycadome(
+                    this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -410,8 +403,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             message: "the radio source is ''",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
-                        });
-                    this.worker.postMessage(tf);
+                        }));
                 }
             } else {
                 if (this.TfAudio.paused) {
@@ -427,7 +419,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         } else {
             if (this.TfAudio.networkState === 3) {
                 console.log("The network could not find the source.");
-                let tf = this.tycadome(
+                this.worker.postMessage(this.tycadome(
                     "tycadome-guest" + Date.now(),
                     "radio",
                     "radio.network.state",
@@ -449,8 +441,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         message: "The network could not find the source.",
                         buffer: "nothing should be buffering.",
                         time: "Timer",
-                    });
-                this.worker.postMessage(tf);
+                    }));
             } else {
                 console.log("Some unknown error is going on with the Radio");
             }

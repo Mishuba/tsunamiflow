@@ -29,7 +29,7 @@ export class T {
             "state": state,
             "mode": mode, //"async"
             "payload": payload // {}
-        };;
+        };
     }
     AddEventListener(event, fn) {
         if (!this.listeners[event]) this.listeners[event] = [];
