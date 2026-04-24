@@ -1,3 +1,4 @@
+console.log("Task Worker:" import.meta.url);
 /*
 |--------------------------------------------------------------------------
 | Task Worker (Orchestrator Layer)
