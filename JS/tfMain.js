@@ -302,7 +302,13 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.site.requestLocation();
 
 
-console.log("main js:" + import.meta.url);
+console.log(
+  new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
+);
+
+console.log(
+  new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
+);
 
   Controller.worker = new Worker(
     new URL("TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
