@@ -20,7 +20,7 @@ export class T {
 
     }
     tycadome(id, type, action, meta, state, mode, payload) {
-        return {
+        let tf = {
             "id": id, //options.id
             "type": type, //command
             "action": action, // video.start
@@ -30,6 +30,7 @@ export class T {
             "mode": mode, //"async"
             "payload": payload // {}
         };
+        return tf;
     }
     AddEventListener(event, fn) {
         if (!this.listeners[event]) this.listeners[event] = [];
