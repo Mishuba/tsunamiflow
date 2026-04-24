@@ -311,7 +311,7 @@ console.log(
 );
 
   Controller.worker = new Worker(
-    new URL("TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
+    new URL("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
     { type: "module" }
   );
 
