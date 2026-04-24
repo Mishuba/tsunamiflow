@@ -305,14 +305,14 @@ document.addEventListener("DOMContentLoaded", () => {
 console.log("main js:" + import.meta.url);
 
   Controller.worker = new Worker(
-    new URL("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
+    new URL("./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", import.meta.url),
     { type: "module" }
   );
 
-  Controller.sharedWorker = new SharedWorker(
-    new URL("./TFN/T/Worker/Shared.js", import.meta.url),
-    { type: "module" }
-  );
+  //Controller.sharedWorker = new SharedWorker(
+    //new URL("./TFN/T/Worker/Shared.js", import.meta.url),
+    //{ type: "module" }
+  //);
 
   Controller.initTsunamiWorkers();
 });
