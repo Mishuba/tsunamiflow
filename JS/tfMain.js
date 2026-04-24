@@ -358,7 +358,7 @@ console.log(
   new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
 );
 
-/*
+
   Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js"), import.meta.url), { type: "module" }
 );
 
@@ -368,7 +368,7 @@ console.log(
   );
 
   Controller.initTsunamiWorkers();
-*/
+
 });
 
 
