@@ -358,17 +358,19 @@ console.log(
   new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
 );
 
+/*
   Controller.worker = createSafeWorker(
     "./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js",
     "/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js"
 );
 
-  //Controller.sharedWorker = new SharedWorker(
-    //new URL("./TFN/T/Worker/Shared.js", import.meta.url),
-    //{ type: "module" }
-  //);
+  Controller.sharedWorker = new SharedWorker(
+    new URL("./TFN/T/Worker/Shared.js", import.meta.url),
+    { type: "module" }
+  );
 
   Controller.initTsunamiWorkers();
+*/
 });
 
 
