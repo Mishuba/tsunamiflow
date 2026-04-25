@@ -474,40 +474,31 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 console.log("The audio context state is unknown");
                 break;
             default:
-                switch (this.TfSoundsContext.state) {
-                    case "suspended":
-                        this.TfSoundsContext.resume();
-                        break;
-                    case "running":
-                        console.log("The audio context state is running");
-                        break;
-                    case "closed":
-                        console.log("The Audio context state must be closed");
-                        break;
-                    default:
-                        console.log("The audio context state is unknown");
-                        break;
+                if (this.AudioSource[this.AudioCxtId]) {
+                    switch (this.AudioSource[this.AudioCxtId].state) {
+                        case "suspended":
+                            this.AudioSource[this.AudioCxtId].resume();
+                            break;
+                        case "running":
+                            console.log("The audio context state is running");
+                            if (this.TfAudio.waiting) {
+                                this.AudioSource[this.AudioCxtId].suspend();
+                            }
+                            break;
+                        case "closed":
+                            console.log("The Audio context state must be closed");
+                            if (this.TfAudio.paused) {
+                                //this.StopVisualizator();
+                            }
+                            break;
+                        default:
+                            console.log("The audio context state is unknown");
+                            break;
+                    }
+                } else {
+                    console.log("The audio context state is does not exist");
                 }
-                switch (this.AudioSource[this.AudioCxtId].state) {
-                    case "suspended":
-                        this.AudioSource[this.AudioCxtId].resume();
-                        break;
-                    case "running":
-                        console.log("The audio context state is running");
-                        if (this.TfAudio.waiting) {
-                            this.AudioSource[this.AudioCxtId].suspend();
-                        }
-                        break;
-                    case "closed":
-                        console.log("The Audio context state must be closed");
-                        if (this.TfAudio.paused) {
-                            //this.StopVisualizator();
-                        }
-                        break;
-                    default:
-                        console.log("The audio context state is unknown");
-                        break;
-                }
+
         }
     }
     /// context
