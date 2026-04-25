@@ -585,18 +585,19 @@ export class maxwell {
                 } else if (payload.system === "Tf Time") {
                     this.site.UpdateNews();
                     this.find("TFweather").innerHTML = this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+                    this.soundEngine.AudioNetworkState();
                 } else {
                     this.site.UpdateNews();
                     this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
+                    this.soundEngine.AudioNetworkState();
                 }
                 break;
 
             case "radio":
                 try {
-                    if (!this.soundEngine.TfSoundsContext.state) {
+                    if (!this.soundEngine.TfSoundsContext) {
                         console.log("The audio soundEngine context state does not exist");
+
                     } else if (this.soundEngine.TfSoundsContext.state === undefined) {
                         console.log("The audio soundEngine context state is undefined");
                     } else if (this.soundEngine.TfSoundsContext.state === null) {
@@ -634,6 +635,9 @@ export class maxwell {
                                 this.soundEngine.loadaudio(payload.file);
                                 break;
                             case undefined:
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case "about:blank":
                                 this.soundEngine.loadaudio(payload.file);
                                 break;
                             default:
