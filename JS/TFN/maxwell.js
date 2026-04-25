@@ -598,15 +598,19 @@ export class maxwell {
                     switch (this.soundEngine.TfAudio.src) {
                         case "":
                             this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                             break;
                         case " ":
                             this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                             break;
                         case null:
                             this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                             break;
                         case undefined:
                             this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                             break;
                         default:
                             console.log("audio already loaded or playing");
@@ -614,10 +618,13 @@ export class maxwell {
                     }
                 } else if (payload.system === "previous") {
                     this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                 } else if (payload.system === "skip") {
                     this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                 } else {
                     this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
+                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
                 }
                 break;
 
