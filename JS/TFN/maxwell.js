@@ -620,7 +620,7 @@ export class maxwell {
                     }
                 } catch (err) {
                     console.error("Error handling radio message:", err);
-                    handleError("this.soundEngine.TfSoundsContext", err);
+                    this.handleError("this.soundEngine.TfSoundsContext", err);
                 } finally {
                     if (payload.system === "file") {
                         switch (this.soundEngine.TfAudio.src) {
