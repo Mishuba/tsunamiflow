@@ -594,23 +594,24 @@ export class maxwell {
                 break;
 
             case "radio":
-                switch (this.soundEngine.TfSoundsContext.state) {
-                    case null:
-                        console.log("The audio soundEngine context state is null");
-                        break;
-                    case "suspended":
-                        console.log("The audio soundEngine context state is suspended, resuming...");
-                        this.soundEngine.TfSoundsContext.resume();
-                        break;
-                    case "running":
-                        console.log("The audio soundEngine context state is running");
-                        break;
-                    case "closed":
-                        console.log("The Audio soundEngine context state must be closed");
-                        break;
-                    default:
-                        console.log("The audio soundEngine context state is unknown");
-                        break;
+                if (this.soundEngine.TfSoundsContext.state === null) {
+                    console.log("The audio soundEngine context state is null");
+                } else {
+                    switch (this.soundEngine.TfSoundsContext.state) {
+                        case "suspended":
+                            console.log("The audio soundEngine context state is suspended, resuming...");
+                            this.soundEngine.TfSoundsContext.resume();
+                            break;
+                        case "running":
+                            console.log("The audio soundEngine context state is running");
+                            break;
+                        case "closed":
+                            console.log("The Audio soundEngine context state must be closed");
+                            break;
+                        default:
+                            console.log("The audio soundEngine context state is unknown");
+                            break;
+                    }
                 }
                 if (payload.system === "file") {
                     switch (this.soundEngine.TfAudio.src) {

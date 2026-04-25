@@ -304,13 +304,12 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   loadedmetadataAudio() {
     //create html data
+    this.AudioCxtId = this.addAudioContextSource(this.TfAudio, "radio");
+    console.log("The audio context source id is " + this.AudioCxtId);
     this.AudioState();
   }
   loadeddataAudio() {
     console.log("The audio data is loaded");
-    this.AudioCxtId = this.addAudioContextSource(this.TfAudio, "radio");
-    console.log("The audio context source id is " + this.AudioCxtId);
-    this.AudioState();
   }
   canplayAudio() {
     this.AudioState();
