@@ -474,6 +474,20 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 console.log("The audio context state is unknown");
                 break;
             default:
+                switch (this.TfSoundsContext.state) {
+                    case "suspended":
+                        this.TfSoundsContext.resume();
+                        break;
+                    case "running":
+                        console.log("The audio context state is running");
+                        break;
+                    case "closed":
+                        console.log("The Audio context state must be closed");
+                        break;
+                    default:
+                        console.log("The audio context state is unknown");
+                        break;
+                }
                 switch (this.AudioSource[this.AudioCxtId].state) {
                     case "suspended":
                         this.AudioSource[this.AudioCxtId].resume();
