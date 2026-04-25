@@ -309,6 +309,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   loadeddataAudio() {
     console.log("The audio data is loaded");
     this.AudioCxtId = this.addAudioContextSource(this.TfAudio, "radio");
+    console.log("The audio context source id is " + this.AudioCxtId);
     this.AudioState();
   }
   canplayAudio() {

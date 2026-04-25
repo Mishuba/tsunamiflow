@@ -595,6 +595,9 @@ export class maxwell {
 
             case "radio":
                 switch (this.soundEngine.TfSoundsContext.state) {
+                    case null:
+                        console.log("The audio soundEngine context state is null");
+                        break;
                     case "suspended":
                         console.log("The audio soundEngine context state is suspended, resuming...");
                         this.soundEngine.TfSoundsContext.resume();
