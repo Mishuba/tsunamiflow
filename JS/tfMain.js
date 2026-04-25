@@ -362,13 +362,12 @@ document.addEventListener("DOMContentLoaded", () => {
     { type: "module" }
   );
 
+  Controller.site.requestLocation();
   Controller.initTsunamiWorkers();
 
   Controller.bindUsers();
   Controller.bindNavBar();
   Controller.bindAudio();
-
-  Controller.site.requestLocation();
 });
 
 

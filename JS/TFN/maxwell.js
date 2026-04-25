@@ -594,52 +594,57 @@ export class maxwell {
                 break;
 
             case "radio":
-                if (this.soundEngine.TfSoundsContext.state === null) {
-                    console.log("The audio soundEngine context state is null");
-                } else {
-                    switch (this.soundEngine.TfSoundsContext.state) {
-                        case "suspended":
-                            console.log("The audio soundEngine context state is suspended, resuming...");
-                            this.soundEngine.TfSoundsContext.resume();
-                            break;
-                        case "running":
-                            console.log("The audio soundEngine context state is running");
-                            break;
-                        case "closed":
-                            console.log("The Audio soundEngine context state must be closed");
-                            break;
-                        default:
-                            console.log("The audio soundEngine context state is unknown");
-                            break;
+                try {
+                    if (this.soundEngine.TfSoundsContext.state === null) {
+                        console.log("The audio soundEngine context state is null");
+                    } else {
+                        switch (this.soundEngine.TfSoundsContext.state) {
+                            case "suspended":
+                                console.log("The audio soundEngine context state is suspended, resuming...");
+                                this.soundEngine.TfSoundsContext.resume();
+                                break;
+                            case "running":
+                                console.log("The audio soundEngine context state is running");
+                                break;
+                            case "closed":
+                                console.log("The Audio soundEngine context state must be closed");
+                                break;
+                            default:
+                                console.log("The audio soundEngine context state is unknown");
+                                break;
+                        }
                     }
-                }
-                if (payload.system === "file") {
-                    switch (this.soundEngine.TfAudio.src) {
-                        case "":
-                            this.soundEngine.loadaudio(payload.file);
-                            break;
-                        case " ":
-                            this.soundEngine.loadaudio(payload.file);
-                            break;
-                        case null:
-                            this.soundEngine.loadaudio(payload.file);
-                            break;
-                        case undefined:
-                            this.soundEngine.loadaudio(payload.file);
-                            break;
-                        default:
-                            console.log("audio already loaded or playing");
-                            break;
+                } catch (err) {
+                    console.error("Error handling radio message:", err);
+                    handleError("this.soundEngine.TfSoundsContext", err);
+                } finally {
+                    if (payload.system === "file") {
+                        switch (this.soundEngine.TfAudio.src) {
+                            case "":
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case " ":
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case null:
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case undefined:
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            default:
+                                console.log("audio already loaded or playing");
+                                break;
+                        }
+                    } else if (payload.system === "previous") {
+                        this.soundEngine.loadaudio(payload.file);
+                    } else if (payload.system === "skip") {
+                        this.soundEngine.loadaudio(payload.file);
+                    } else {
+                        this.soundEngine.loadaudio(payload.file);
                     }
-                } else if (payload.system === "previous") {
-                    this.soundEngine.loadaudio(payload.file);
-                } else if (payload.system === "skip") {
-                    this.soundEngine.loadaudio(payload.file);
-                } else {
-                    this.soundEngine.loadaudio(payload.file);
                 }
                 break;
-
             default:
                 if (payload.system === "error") {
                     console.error("Worker error:", payload);
@@ -655,7 +660,6 @@ export class maxwell {
                 }
         }
     }
-
 
     handleError(source, error) {
         console.error("RAW WORKER ERROR:", error);
