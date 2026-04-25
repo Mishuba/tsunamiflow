@@ -597,34 +597,27 @@ export class maxwell {
                 if (payload.system === "file") {
                     switch (this.soundEngine.TfAudio.src) {
                         case "":
-                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                            this.soundEngine.loadaudio(payload.file);
                             break;
                         case " ":
-                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                            this.soundEngine.loadaudio(payload.file);
                             break;
                         case null:
-                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                            this.soundEngine.loadaudio(payload.file);
                             break;
                         case undefined:
-                            this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                            this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                            this.soundEngine.loadaudio(payload.file);
                             break;
                         default:
                             console.log("audio already loaded or playing");
                             break;
                     }
                 } else if (payload.system === "previous") {
-                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                    this.soundEngine.loadaudio(payload.file);
                 } else if (payload.system === "skip") {
-                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                    this.soundEngine.loadaudio(payload.file);
                 } else {
-                    this.soundEngine.TfAudio.src = this.soundEngine.AudioFile(event);
-                    this.soundEngine.addAudioContextSource(this.soundEngine.TfAudio);
+                    this.soundEngine.loadaudio(payload.file);
                 }
                 break;
 

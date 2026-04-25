@@ -7,7 +7,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     AudioSource = {};
     AudioElement = null;
     AudioReady = null;
-
+    AudioCxtId = null;
     SpeechRecognitionAPI =
         window.SpeechRecognition || window.webkitSpeechRecognition;
     TfSpeechSupported = "speechSynthesis" in window;
@@ -460,18 +460,40 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         return this.SongList;
     }
     AudioState() {
-        if (this.TfSoundsContext.state === "suspended") {
-            this.TfSoundsContext.resume();
-        } else if (this.TfSoundsContext.state === "running") {
-            console.log("The audio context state is running");
-            if (this.TfAudio.waiting) {
-                this.TfSoundsContext.suspend();
-            }
-        } else {
-            console.log("The Audio context state must be closed");
-            if (this.TfAudio.paused) {
-                //this.StopVisualizator();
-            }
+        switch (this.AudioCxtId) {
+            case null:
+                console.log("The audio context state is unknown");
+                break;
+            case undefined:
+                console.log("The audio context state is unknown");
+                break;
+            case "":
+                console.log("The audio context state is unknown");
+                break;
+            case " ":
+                console.log("The audio context state is unknown");
+                break;
+            default:
+                switch (this.AudioSource[this.AudioCxtId].state) {
+                    case "suspended":
+                        this.AudioSource[this.AudioCxtId].resume();
+                        break;
+                    case "running":
+                        console.log("The audio context state is running");
+                        if (this.TfAudio.waiting) {
+                            this.AudioSource[this.AudioCxtId].suspend();
+                        }
+                        break;
+                    case "closed":
+                        console.log("The Audio context state must be closed");
+                        if (this.TfAudio.paused) {
+                            //this.StopVisualizator();
+                        }
+                        break;
+                    default:
+                        console.log("The audio context state is unknown");
+                        break;
+                }
         }
     }
     /// context

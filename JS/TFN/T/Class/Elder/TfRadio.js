@@ -308,6 +308,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   loadeddataAudio() {
     console.log("The audio data is loaded");
+    this.AudioCxtId = this.addAudioContextSource(this.TfAudio, "radio");
     this.AudioState();
   }
   canplayAudio() {
@@ -315,7 +316,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   canplaythroughAudio() {
     this.AudioState();
-    this.addAudioContextSource(this.TfAudio, "radio");
     //this.startMusic();
   }
   playAudio() {
@@ -325,7 +325,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
     this.visualizatorController = this.canvas.transferControlToOffscreen();
     this.updateAnalyser();
-    let tf = this.tycadome(
+    this.worker.postMessage(this.tycadome(
       "tycadome-guest" + Date.now(),
       "visualizator",
       "radio.playing",
@@ -345,8 +345,8 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
         dataArray: this.TfSoundsContextDataArray,
         bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
         particles: this.particles
-      });
-    this.worker.postMessage(tf, [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+      }),
+      [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
   }
   pauseAudio() {
     this.AudioState();
@@ -355,7 +355,9 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   endedAudio() {
     console.log("The audio should have ended");
     this.TfAudio.src = "";
-    this.postworkerMessage({ type: "radio", system: "file" });
+    this.removeAudioContext(this.AudioCxtId);
+    this.AudioState();
+    this.AudioNetworkState();
   }
   waitingAudio() {
     this.AudioState();
@@ -397,8 +399,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
     const loopAnalyzer = () => {
       this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
-
-      let tf = this.tycadome(
+      this.worker.postMessage(this.tycadome(
         "tycadome-guest" + Date.now(),
         "visualizator",
         "radio.playing",
@@ -417,9 +418,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
           dataArray: this.TfSoundsContextDataArray,
           bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
           //particles: this.particles
-        });
-
-      this.worker.postMessage(tf);
+        }));
 
       requestAnimationFrame(loopAnalyzer);
     };
@@ -432,9 +431,11 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
+    this.AudioState();
   }
   suspendedAudio(suspend) {
     console.log("The audio is suspended" + suspend);
+    this.AudioState();
   }
 
   FormatAudioTime(second) {
