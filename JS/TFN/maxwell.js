@@ -597,28 +597,27 @@ export class maxwell {
                 try {
                     if (!this.soundEngine.TfSoundsContext.state) {
                         console.log("The audio soundEngine context state does not exist");
-                    } else
-                        if (this.soundEngine.TfSoundsContext.state === undefined) {
-                            console.log("The audio soundEngine context state is undefined");
-                        } else if (this.soundEngine.TfSoundsContext.state === null) {
-                            console.log("The audio soundEngine context state is null");
-                        } else {
-                            switch (this.soundEngine.TfSoundsContext.state) {
-                                case "suspended":
-                                    console.log("The audio soundEngine context state is suspended, resuming...");
-                                    this.soundEngine.TfSoundsContext.resume();
-                                    break;
-                                case "running":
-                                    console.log("The audio soundEngine context state is running");
-                                    break;
-                                case "closed":
-                                    console.log("The Audio soundEngine context state must be closed");
-                                    break;
-                                default:
-                                    console.log("The audio soundEngine context state is unknown");
-                                    break;
-                            }
+                    } else if (this.soundEngine.TfSoundsContext.state === undefined) {
+                        console.log("The audio soundEngine context state is undefined");
+                    } else if (this.soundEngine.TfSoundsContext.state === null) {
+                        console.log("The audio soundEngine context state is null");
+                    } else {
+                        switch (this.soundEngine.TfSoundsContext.state) {
+                            case "suspended":
+                                console.log("The audio soundEngine context state is suspended, resuming...");
+                                this.soundEngine.TfSoundsContext.resume();
+                                break;
+                            case "running":
+                                console.log("The audio soundEngine context state is running");
+                                break;
+                            case "closed":
+                                console.log("The Audio soundEngine context state must be closed");
+                                break;
+                            default:
+                                console.log("The audio soundEngine context state is unknown");
+                                break;
                         }
+                    }
                 } catch (err) {
                     console.error("Error handling radio message:", err);
                     handleError("this.soundEngine.TfSoundsContext", err);
