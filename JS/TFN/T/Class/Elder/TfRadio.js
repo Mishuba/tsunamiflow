@@ -496,9 +496,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadstartAudio, "loadstart");
 
       this.TfAudio.addEventListener("suspended", (suspend) => {
-        this.suspendAudio().then(() => {
-          //cancelAnimationFrame(this.effects.visualizatorController);
-        });
+        this.suspendAudio();
       });
       this._storeDomListener(this.TfAudio.id, this.TfAudio, this.suspendAudio, "suspended");
 
