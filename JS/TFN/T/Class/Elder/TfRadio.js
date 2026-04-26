@@ -184,20 +184,20 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   particles = [];
   constructor(options = {}) {
     super(options);
-    this.TfAudio.crossOrigin = "anonymous";
-    this.TfAudio.preload = "auto";
-    this.TfAudio.controls = false;
-    this.TfAudio.loop = false;
-    this.TfAudio.muted = false;
-    this.TfAudio.id = "TfRadio";
-    //this.TfAudio.volume = 1;
+    this.AudioElement.crossOrigin = "anonymous";
+    this.AudioElement.preload = "auto";
+    this.AudioElement.controls = false;
+    this.AudioElement.loop = false;
+    this.AudioElement.muted = false;
+    this.AudioElement.id = "TfRadio";
+    //this.AudioElement.volume = 1;
   }
 
   //element
 
   connectaudio() {
     if (this.AudioSource["radio"]) return;
-    this.addAudioContextSource(this.TfAudio, "radio");
+    this.addAudioContextSource(this.AudioElement, "radio");
   }
   destroyRadioSource() {
     const source = this.AudioSource["radio"];
@@ -215,7 +215,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     delete this.TfTrackAnalyser["radio"];
     delete this.TfTrackCompressor["radio"];
 
-    this.elementSourceMap.delete(this.TfAudio);
+    this.elementSourceMap.delete(this.AudioElement);
   }
 
 
@@ -225,7 +225,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     if (gainNode) {
       gainNode.gain.value = value;
     } else {
-      this.TfAudio.volume = value;
+      this.AudioElement.volume = value;
     }
   }
 
@@ -234,16 +234,16 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   ------------------------------*/
 
   loadaudio(src) {
-    this.TfAudio.src = src;
-    this.TfAudio.load();
+    this.AudioElement.src = src;
+    this.AudioElement.load();
   }
 
   async playaudio() {
     //  this.connectaudio();
     //  this.AudioState();
     try {
-      if (this.TfAudio.paused || this.TfAudio.ended || this.TfAudio.currentTime === 0) {
-        await this.TfAudio.play()
+      if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
+        await this.AudioElement.play()
       }
     } catch (error) {
       if (error.name === "NotAllowedError") {
@@ -255,37 +255,37 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
 
   pauseaudio() {
-    this.TfAudio.pause();
+    this.AudioElement.pause();
   }
 
   stopaudio() {
-    if (this.TfAudio) {
-      this.TfAudio.pause();
-      this.TfAudio.currentTime = 0;
+    if (this.AudioElement) {
+      this.AudioElement.pause();
+      this.AudioElement.currentTime = 0;
     }
   }
   previousaudio(music) {
-    this.TfAudio.src = music;
-    this.TfAudio.play();
+    this.AudioElement.src = music;
+    this.AudioElement.play();
   }
   restartSong() {
-    this.TfAudio.currentTime = 0;
-    this.TfAudio.play();
+    this.AudioElement.currentTime = 0;
+    this.AudioElement.play();
   }
   seekaudio(time) {
-    this.TfAudio.currentTime = time;
+    this.AudioElement.currentTime = time;
   }
 
   setaudioLoop(loop = true) {
-    this.TfAudio.loop = loop;
+    this.AudioElement.loop = loop;
   }
 
   setaudioPlaybackRate(rate = 1) {
-    this.TfAudio.playbackRate = rate;
+    this.AudioElement.playbackRate = rate;
   }
 
   muteaudio(state = true) {
-    this.TfAudio.muted = state;
+    this.AudioElement.muted = state;
   }
 
   loadstartAudio() {
@@ -356,7 +356,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   endedAudio() {
     console.log("The audio should have ended");
-    this.TfAudio.src = "";
+    this.AudioElement.src = "";
     this.removeAudioContext(this.AudioCxtId);
     //  this.AudioState();
     this.AudioNetworkState();
@@ -433,13 +433,13 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
-    console.log("The Tsunami Audio networkState " + this.TfAudio.networkState);
-    console.log("The Tsunami Audio readyState " + this.TfAudio.readyState);
-    console.log("The Tsunami Audio error " + this.TfAudio.error);
-    console.log("The Tsunami Audio currentsrc " + this.TfAudio.currentsrc);
-    console.log("The Tsunami Audio paused " + this.TfAudio.paused);
-    console.log("The Tsunami Audio buffered " + this.TfAudio.buffered);
-    //  this.AudioState();
+    console.log("The Tsunami Audio networkState " + this.AudioElement.networkState);
+    console.log("The Tsunami Audio readyState " + this.AudioElement.readyState);
+    console.log("The Tsunami Audio error " + this.AudioElement.error);
+    console.log("The Tsunami Audio currentsrc " + this.AudioElement.currentsrc);
+    console.log("The Tsunami Audio paused " + this.AudioElement.paused);
+    console.log("The Tsunami Audio buffered " + this.AudioElement.buffered);
+    this.AudioNetworkState();
   }
   suspendedAudio(suspend) {
     console.log("The audio is suspended" + suspend);
@@ -452,10 +452,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     return `${this.AudioMinutes}:${this.AudioSeconds.toString().padStart(2, "0")}`;
   }
   timeupdateAudio() {
-    this.AudioTiming = Math.floor(this.TfAudio.currentTime);
-    const duration = this.TfAudio.duration || 1;
-    this.AudioProcessBar = (this.TfAudio.currentTime / duration) * 100;
-    this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.TfAudio.duration))}`;
+    this.AudioTiming = Math.floor(this.AudioElement.currentTime);
+    const duration = this.AudioElement.duration || 1;
+    this.AudioProcessBar = (this.AudioElement.currentTime / duration) * 100;
+    this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.AudioElement.duration))}`;
   }
   /*
   volumechangeAudio() {
@@ -463,15 +463,15 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
 
   getCurrentaudioTime() {
-    return this.TfAudio.currentTime;
+    return this.AudioElement.currentTime;
   }
 
   getaudioDuration() {
-    return this.TfAudio.duration;
+    return this.AudioElement.duration;
   }
 
   isaudioPlaying() {
-    return !this.TfAudio.paused;
+    return !this.AudioElement.paused;
   }
   */
   //element ends
@@ -482,49 +482,49 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     } else {
       this._radioBound = true;
 
-      /*     this.TfAudio.addEventListener("emptied", async (emptied) => {
+      /*     this.AudioElement.addEventListener("emptied", async (emptied) => {
               this.emptiedAudio(emptied);
               //cancelAnimationFrame(this.effects.visualizatorController);
             });
-            this._storeDomListener(this.soundengine.TfAudio.id, this.soundengine.TfAudio, runHandler, "emptied");
+            this._storeDomListener(this.soundengine.AudioElement.id, this.soundengine.AudioElement, runHandler, "emptied");
       */
 
-      this.TfAudio.addEventListener("waiting", (waiting) => {
+      this.AudioElement.addEventListener("waiting", (waiting) => {
         this.waitingAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.waitingAudio, "waiting");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.waitingAudio, "waiting");
 
-      this.TfAudio.addEventListener("stalled", (stalled) => {
+      this.AudioElement.addEventListener("stalled", (stalled) => {
         this.stalledAudio(stalled);
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.stalledAudio, "stalled");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.stalledAudio, "stalled");
 
-      this.TfAudio.addEventListener("loadstart", async () => {
+      this.AudioElement.addEventListener("loadstart", async () => {
         this.loadstartAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadstartAudio, "loadstart");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
 
-      this.TfAudio.addEventListener("suspended", (suspend) => {
+      this.AudioElement.addEventListener("suspended", (suspend) => {
         this.suspendAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.suspendAudio, "suspended");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
 
-      this.TfAudio.addEventListener("loadedmetadata", async () => {
+      this.AudioElement.addEventListener("loadedmetadata", async () => {
         this.loadedmetadataAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadedmetadataAudio, "loadedmetadata");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadedmetadataAudio, "loadedmetadata");
 
-      this.TfAudio.addEventListener("loadeddata", () => {
+      this.AudioElement.addEventListener("loadeddata", () => {
         this.loadeddataAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.loadeddataAudio, "loadeddata");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadeddataAudio, "loadeddata");
 
-      this.TfAudio.addEventListener("canplay", () => {
+      this.AudioElement.addEventListener("canplay", () => {
         this.canplayAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplayAudio, "canplay");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
-      this.TfAudio.addEventListener("canplaythrough", async () => {
+      this.AudioElement.addEventListener("canplaythrough", async () => {
         if (!this._wired) {
           this.initAudioContext();
           this._wired = true;
@@ -532,39 +532,39 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
         this.canplaythroughAudio();
       });
 
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.canplaythroughAudio, "canplaythrough");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
 
-      this.TfAudio.addEventListener("play", () => {
+      this.AudioElement.addEventListener("play", () => {
         this.playAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playAudio, "play");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
-      this.TfAudio.addEventListener("playing", () => {
+      this.AudioElement.addEventListener("playing", () => {
         this.playingAudio();
 
         //this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.playingAudio, "playing");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
-      this.TfAudio.addEventListener("pause", async () => {
-        //this.TfAudio.pauseAudio(); cancelAnimationFrame(this.effects.visualizatorController);
+      this.AudioElement.addEventListener("pause", async () => {
+        //this.AudioElement.pauseAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.pauseAudio, "pause");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseAudio, "pause");
 
-      this.TfAudio.addEventListener("timeupdate", () => {
+      this.AudioElement.addEventListener("timeupdate", () => {
         this.timeupdateAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.timeupdateAudio, "timeupdate");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.timeupdateAudio, "timeupdate");
 
-      this.TfAudio.addEventListener("volumechange", (volumechange) => {
+      this.AudioElement.addEventListener("volumechange", (volumechange) => {
         //this.volumechangeAudio();
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.volumechangeAudio, "volumechange");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
-      this.TfAudio.addEventListener("ended", async (ended) => {
+      this.AudioElement.addEventListener("ended", async (ended) => {
         //this.endedAudio(); cancelAnimationFrame(this.effects.visualizatorController);
       });
-      this._storeDomListener(this.TfAudio.id, this.TfAudio, this.endedAudio, "ended");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
 
     }
   }
@@ -643,9 +643,9 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       });
 
       this.hls.loadSource(url);
-      this.hls.attachMedia(this.TfAudio);
+      this.hls.attachMedia(this.AudioElement);
     } else {
-      this.TfAudio.src = url;
+      this.AudioElement.src = url;
     }
 
     this.playaudio();
@@ -662,7 +662,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this.hls = null;
     }
 
-    this.TfAudio.pause();
-    this.TfAudio.src = "";
+    this.AudioElement.pause();
+    this.AudioElement.src = "";
   }
 }

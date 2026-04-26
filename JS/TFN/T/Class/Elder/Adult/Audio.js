@@ -79,7 +79,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
 
         // FIX: apply after instantiation
-        this.TfAudio.crossOrigin = "anonymous";
+        this.AudioElement.crossOrigin = "anonymous";
 
         // ===== SPEECH RECOGNITION =====
         if (!this.SpeechRecognitionAPI) {
@@ -122,11 +122,11 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
     }
     AudioNetworkState() {
-        if (this.TfAudio.readyState === 0) {
+        if (this.AudioElement.readyState === 0) {
             console.log("Radio readyState is HAVE_NOTHING aka no data yet.");
-            if (this.TfAudio.networkState === 0) {
+            if (this.AudioElement.networkState === 0) {
                 console.log("Radio networkState has NETWORK_EMPTY");
-                if (this.TfAudio.src === "") {
+                if (this.AudioElement.src === "") {
                     console.log("The radio source is ''");
 
                     this.worker.postMessage(this.tycadome(
@@ -152,7 +152,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             buffer: "nothing should be buffering.",
                             time: "Timer",
                         }));
-                } else if (!this.TfAudio.src) {
+                } else if (!this.AudioElement.src) {
                     ("The radio source does not exist");
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
@@ -177,7 +177,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             buffer: "nothing should be buffering.",
                             time: "Timer",
                         }));
-                } else if (this.TfAudio.src === " ") {
+                } else if (this.AudioElement.src === " ") {
                     console.log("The radio source is ' '");
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
@@ -202,7 +202,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             buffer: "nothing should be buffering.",
                             time: "Timer",
                         }));
-                } else if (this.TfAudio.src === "about:blank") {
+                } else if (this.AudioElement.src === "about:blank") {
                     console.log("The radio source is about:blank");
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
@@ -231,11 +231,11 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 else {
                     console.log("Something else is going on and I dont know what it is.");
                 }
-            } else if (this.TfAudio.networkState === 2) {
+            } else if (this.AudioElement.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TfAudio.networkState === 3) {
+            } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
                 this.worker.postMessage(this.tycadome(
@@ -262,53 +262,53 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         time: "Timer",
                     }));
             }
-        } else if (this.TfAudio.readyState === 1) {
+        } else if (this.AudioElement.readyState === 1) {
             console.log("Radio readyState is HAVE_METADATA");
-            if (this.TfAudio.networkState === 1) {
+            if (this.AudioElement.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TfAudio.networkState === 2) {
+            } else if (this.AudioElement.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TfAudio.networkState === 3) {
+            } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE (but during the have metadata point.");
                 //No valid source
             }
-        } else if (this.TfAudio.readyState === 2) {
+        } else if (this.AudioElement.readyState === 2) {
             console.log("Radio readyState is HAVE_CURRENT_DATA");
-            if (this.TfAudio.networkState === 1) {
+            if (this.AudioElement.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TfAudio.networkState === 2) {
+            } else if (this.AudioElement.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TfAudio.networkState === 3) {
+            } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE but during the have ;loading point.");
                 //No valid source
             }
-        } else if (this.TfAudio.readyState === 3) {
+        } else if (this.AudioElement.readyState === 3) {
             console.log("Radio readyState is HAVE_FUTURE_DATA");
-            if (this.TfAudio.networkState === 1) {
+            if (this.AudioElement.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TfAudio.networkState === 3) {
+            } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplay point.");
                 //No valid source
             }
-        } else if (this.TfAudio.readyState === 4) {
+        } else if (this.AudioElement.readyState === 4) {
             console.log("Radio readyState is HAVE_ENOUGH_DATA");
-            if (this.TfAudio.networkState === 1) {
+            if (this.AudioElement.networkState === 1) {
                 console.log("Radio networkState is NETWORK_IDLE");
-            } else if (this.TfAudio.networkState === 2) {
+            } else if (this.AudioElement.networkState === 2) {
                 console.log("Radio networkState is NETWORK_LOADING");
                 //Actively fetching the audio from the network.
                 //Show loading or buffering user interface.
-            } else if (this.TfAudio.networkState === 3) {
+            } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE during the canplaythrough point.");
                 //No valid source
             }
 
-            if (this.TfAudio.ended) {
-                if (this.TfAudio.src === "") {
+            if (this.AudioElement.ended) {
+                if (this.AudioElement.src === "") {
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
@@ -332,7 +332,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             buffer: "nothing should be buffering.",
                             time: "Timer",
                         }));
-                } else if (this.TfAudio.src === undefined) {
+                } else if (this.AudioElement.src === undefined) {
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
@@ -352,11 +352,11 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         {
                             system: "file",
                             file: "none",
-                            message: "the radio source is ''",
+                            message: "the radio source is undefined",
                             buffer: "nothing should be buffering.",
                             time: "Timer",
                         }));
-                } else if (!this.TfAudio.src) {
+                } else if (!this.AudioElement.src) {
                     this.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
@@ -406,18 +406,18 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                         }));
                 }
             } else {
-                if (this.TfAudio.paused) {
-                    if (this.TfAudio.currentTime === 0) {
+                if (this.AudioElement.paused) {
+                    if (this.AudioElement.currentTime === 0) {
                         console.log("Tsunami Radio has not started yet.");
                     } else {
-                        console.log("Paused at " + this.TfAudio.currentTime);
+                        console.log("Paused at " + this.AudioElement.currentTime);
                     }
                 } else {
                     console.log("A song is still playing. Make the next song play using the functions");
                 }
             }
         } else {
-            if (this.TfAudio.networkState === 3) {
+            if (this.AudioElement.networkState === 3) {
                 console.log("The network could not find the source.");
                 this.worker.postMessage(this.tycadome(
                     "tycadome-guest" + Date.now(),
@@ -481,13 +481,13 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                             break;
                         case "running":
                             console.log("The audio context state is running");
-                            if (this.TfAudio.waiting) {
+                            if (this.AudioElement.waiting) {
                                 this.AudioSource[this.AudioCxtId].suspend();
                             }
                             break;
                         case "closed":
                             console.log("The Audio context state must be closed");
-                            if (this.TfAudio.paused) {
+                            if (this.AudioElement.paused) {
                                 //this.StopVisualizator();
                             }
                             break;
