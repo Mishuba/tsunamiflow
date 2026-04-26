@@ -281,23 +281,33 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const dock = document.getElementById("radioDock");
-    const toggle = document.getElementById("toggleRadio");
+const toggle = document.getElementById("toggleRadio");
+const header = document.getElementById("radioHeader");
 
-    toggle.addEventListener("click", () => {
-      dock.classList.toggle("collapsed");
+function updateRadioState() {
+    const collapsed = dock.classList.contains("collapsed");
 
-      toggle.textContent = dock.classList.contains("collapsed")
-        ? "▲"
-        : "▼";
-    });
+    toggle.textContent = collapsed ? "▼" : "▲";
+}
 
-    /* optional: click header also toggles */
-    document.getElementById("radioHeader")
-      .addEventListener("click", (e) => {
-        if (e.target.id !== "toggleRadio") {
-          dock.classList.toggle("collapsed");
-        }
-      });
+function toggleRadioDock() {
+    dock.classList.toggle("collapsed");
+    updateRadioState();
+}
+
+/* button click */
+toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleRadioDock();
+});
+
+/* header click */
+header.addEventListener("click", () => {
+    toggleRadioDock();
+});
+
+/* set initial state */
+updateRadioState();
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {
