@@ -201,6 +201,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const twoMore = document.getElementById("mainTsectionFdiv");
   const RadioCanvas = document.getElementById("TFradioCanvas");
 
+const dock = document.getElementById("radioDock");
+const toggle = document.getElementById("toggleRadio");
+const header = document.getElementById("radioHeader");
+
+function updateRadioState() {
+    const collapsed = dock.classList.contains("collapsed");
+
+    toggle.textContent = collapsed ? "▼" : "▲";
+}
+
+function toggleRadioDock() {
+    dock.classList.toggle("collapsed");
+    updateRadioState();
+}
+
+/* button click */
+toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    toggleRadioDock();
+});
+
+/* header click */
+header.addEventListener("click", () => {
+    toggleRadioDock();
+});
+
+/* set initial state */
+updateRadioState();
+
+
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
@@ -259,56 +289,8 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.bindNavBar();
 
   Controller.bindAudio();
-  Controller.iframe.frame.title = "Main Website Content";
-  Controller.iframe.frame.id = "TsunamiContent";
-  Controller.iframe.frame.name = "TsunamiMainFlowContent";
-  Controller.iframe.frame.width = 925;
-  Controller.iframe.frame.height = 430;
-  Controller.iframe.frame.style.background = "white";
-  Controller.iframe.frame.style.touchAction = "manipulation";
-  Controller.iframe.frame.style.pointerEvents = "auto";
 
-  if (twoMore) twoMore.appendChild(Controller.iframe.frame);
-
-  Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-  Controller.iframe.MenuSwitch(Controller.iframe.frame);
-
-  Controller.iframe.frame.addEventListener("load", () => {
-    try {
-      Controller.iframe.frame.contentWindow.controller = Controller;
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-
-    const dock = document.getElementById("radioDock");
-const toggle = document.getElementById("toggleRadio");
-const header = document.getElementById("radioHeader");
-
-function updateRadioState() {
-    const collapsed = dock.classList.contains("collapsed");
-
-    toggle.textContent = collapsed ? "▼" : "▲";
-}
-
-function toggleRadioDock() {
-    dock.classList.toggle("collapsed");
-    updateRadioState();
-}
-
-/* button click */
-toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleRadioDock();
-});
-
-/* header click */
-header.addEventListener("click", () => {
-    toggleRadioDock();
-});
-
-/* set initial state */
-updateRadioState();
-
+    
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {
         navigator.serviceWorker.register("/service-worker.js")
@@ -362,6 +344,28 @@ updateRadioState();
 
   Controller.initTsunamiWorkers();
   Controller.bindUsers();
+  Controller.iframe.frame.title = "Main Website Content";
+  Controller.iframe.frame.id = "TsunamiContent";
+  Controller.iframe.frame.name = "TsunamiMainFlowContent";
+  Controller.iframe.frame.width = 925;
+  Controller.iframe.frame.height = 430;
+  Controller.iframe.frame.style.background = "white";
+  Controller.iframe.frame.style.touchAction = "manipulation";
+  Controller.iframe.frame.style.pointerEvents = "auto";
+
+  if (twoMore) twoMore.appendChild(Controller.iframe.frame);
+
+  Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
+  Controller.iframe.MenuSwitch(Controller.iframe.frame);
+
+  Controller.iframe.frame.addEventListener("load", () => {
+    try {
+      Controller.iframe.frame.contentWindow.controller = Controller;
+    } catch (e) {
+      console.error("Cross-origin block:", e);
+    }
+
+
 });
 /*
     //Make Canvas an image.
