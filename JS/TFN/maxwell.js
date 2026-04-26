@@ -748,6 +748,7 @@ export class maxwell {
         this.user.worker = this.worker;
         this.imageEngine.worker = this.worker;
         this.soundEngine.worker = this.worker;
+        this.soundEngine.AudioElement = this.find("TFradioPlayer");
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
 
@@ -764,6 +765,7 @@ export class maxwell {
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
         console.log("starting radio");
+
         this.soundEngine.AudioNetworkState();
 
         // this.startSharedWorker();
