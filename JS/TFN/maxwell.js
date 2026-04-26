@@ -630,9 +630,10 @@ export class maxwell {
                     this.handleError("this.soundEngine.TfSoundsContext", err);
                 } finally {
                     if (payload.system === "file") {
+                        console.log("payload.file", payload.file);
                         switch (this.soundEngine.AudioElement.src) {
                             case "":
-                                this.soundEngine.loadaudio(payload.file);
+                                this.soundEngine.loadaudio("payload.file");
                                 break;
                             case " ":
                                 this.soundEngine.loadaudio(payload.file);

@@ -256,12 +256,14 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
   pauseaudio() {
     this.AudioElement.pause();
+    console.log("Audio playback is paused");
   }
 
   stopaudio() {
     if (this.AudioElement) {
       this.AudioElement.pause();
       this.AudioElement.currentTime = 0;
+      console.log("Audio playback is stopped");
     }
   }
   previousaudio(music) {
@@ -308,19 +310,23 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     //create html data
 
     //this.AudioState();
+    console.log("Audio playback is metadata loaded");
   }
   loadeddataAudio() {
     console.log("The audio data is loaded");
   }
   canplayAudio() {
     //  this.AudioState();
+    console.log("Audio playback is can play");
   }
   canplaythroughAudio() {
     //  this.AudioState();
     //this.startMusic();
+    console.log("Audio playback is can play through");
   }
   playAudio() {
     this.playaudio();
+    console.log("Audio playback is playing");
     //  this.startAnalyserLoop();
 
     //  this.visualizatorController = this.canvas.transferControlToOffscreen();
@@ -363,6 +369,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   waitingAudio() {
     //  this.AudioState();
+    console.log("Audio playback is waiting");
   }
   startAnalyserLoop() {
     if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
