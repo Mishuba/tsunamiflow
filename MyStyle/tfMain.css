@@ -386,15 +386,6 @@ audio #TFradioPlayer {
     display: flex !important;
 }
 
-#TFradioInfo,
-#TFradioCurrentTIme,
-#TFradioTimeLeft,
-#RadioTimeFr,
-#TFradioProcessBar {
-    padding: 8px 0;
-    width: 100%;
-}
-
 /* =========================
    FOOTER
 ========================= */
@@ -402,10 +393,8 @@ audio #TFradioPlayer {
 footer {
     width: 100%;
     min-height: 100px;
-    padding: 10px 0;
     position: relative;
     z-index: 1;
-    margin-top: auto;
     margin-bottom: 20px;
 }
 
