@@ -433,6 +433,12 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
+    console.log("The Tsunami Audio networkState " + this.TfAudio.networkState);
+    console.log("The Tsunami Audio readyState " + this.TfAudio.readyState);
+    console.log("The Tsunami Audio error " + this.TfAudio.error);
+    console.log("The Tsunami Audio currentsrc " + this.TfAudio.currentsrc);
+    console.log("The Tsunami Audio paused " + this.TfAudio.paused);
+    console.log("The Tsunami Audio buffered " + this.TfAudio.buffered);
     //  this.AudioState();
   }
   suspendedAudio(suspend) {

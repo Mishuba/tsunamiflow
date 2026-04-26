@@ -762,6 +762,7 @@ export class maxwell {
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
+        console.log("starting radio");
         this.soundEngine.AudioNetworkState();
 
         // this.startSharedWorker();
