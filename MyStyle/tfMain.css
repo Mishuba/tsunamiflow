@@ -364,7 +364,7 @@ body {
     background: black;
 }
 
-audio #TFradioPlayer {
+#TFradioPlayer {
     display: block !important;
     position: relative;
     width: 100% !important;
