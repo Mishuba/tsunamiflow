@@ -297,7 +297,7 @@ article {
     position: fixed;
     left: 0;
 right: 0;
-    bottom: 0;
+    bottom: env(safe-area-inset-bottom, 0);
     width: 100%;
 min-height: 60px;
     background: rgba(0, 0, 0, 0.95);
@@ -351,12 +351,6 @@ min-height: 60px;
     position: relative;
     z-index: 1;
 }
-
-/* keep space so footer never gets hidden */
-body {
-    padding-bottom: 140px;
-}
-
 
 #TFradioCanvas {
     width: 100%;
