@@ -79,8 +79,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
 
         // FIX: apply after instantiation
-        this.AudioElement.crossOrigin = "anonymous";
-
         // ===== SPEECH RECOGNITION =====
         if (!this.SpeechRecognitionAPI) {
             console.warn("Speech Recognition not supported.");

@@ -188,8 +188,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.AudioElement.preload = "auto";
     this.AudioElement.controls = false;
     this.AudioElement.loop = false;
-    this.AudioElement.muted = false;
-    this.AudioElement.id = "TfRadio";
+    this.AudioElement.muted = true;
     //this.AudioElement.volume = 1;
   }
 

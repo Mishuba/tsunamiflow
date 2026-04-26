@@ -326,6 +326,25 @@ document.addEventListener("DOMContentLoaded", () => {
       console.error("Cross-origin block:", e);
     }
 
+    const dock = document.getElementById("radioDock");
+    const toggle = document.getElementById("toggleRadio");
+
+    toggle.addEventListener("click", () => {
+      dock.classList.toggle("collapsed");
+
+      toggle.textContent = dock.classList.contains("collapsed")
+        ? "▲"
+        : "▼";
+    });
+
+    /* optional: click header also toggles */
+    document.getElementById("radioHeader")
+      .addEventListener("click", (e) => {
+        if (e.target.id !== "toggleRadio") {
+          dock.classList.toggle("collapsed");
+        }
+      });
+
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {
         navigator.serviceWorker.register("/service-worker.js")
@@ -363,33 +382,15 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   Controller.site.requestLocation();
+  Controller.soundEngine.AudioElement = TsunamiRadio;
+  Controller.soundEngine.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+
   Controller.initTsunamiWorkers();
 
   Controller.bindUsers();
   Controller.bindNavBar();
   Controller.bindAudio();
 });
-
-
-const dock = document.getElementById("radioDock");
-const toggle = document.getElementById("toggleRadio");
-
-toggle.addEventListener("click", () => {
-  dock.classList.toggle("collapsed");
-
-  toggle.textContent = dock.classList.contains("collapsed")
-    ? "▲"
-    : "▼";
-});
-
-/* optional: click header also toggles */
-document.getElementById("radioHeader")
-  .addEventListener("click", (e) => {
-    if (e.target.id !== "toggleRadio") {
-      dock.classList.toggle("collapsed");
-    }
-  });
-
 /*
     //Make Canvas an image.
     //Context Stuff

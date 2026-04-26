@@ -23,10 +23,10 @@ body {
     color: rgb(56, 217, 238);
     text-align: center;
     text-shadow: 2px 2px 5px rgba(255, 255, 255, 0.35);
-    font-family: "Brush Script MT","Courier New","Verdana","Copperplate","Papyrus",fantasy,"Times New Roman",serif;
+    font-family: "Brush Script MT", "Courier New", "Verdana", "Copperplate", "Papyrus", fantasy, "Times New Roman", serif;
     line-height: 1.5;
     overflow-x: hidden;
-padding-bottom: 200px;
+    padding-bottom: 200px;
 }
 
 /* =========================
@@ -123,7 +123,7 @@ header div {
 header,
 nav {
     flex-shrink: 0;
-width: 100%;
+    width: 100%;
 }
 
 /* =========================
@@ -233,9 +233,9 @@ section {
 
 /* force internal content to extend fully */
 
-aside > *,
-#tfExtraSection > *,
-section > * {
+aside>*,
+#tfExtraSection>*,
+section>* {
     flex-shrink: 0;
 }
 
@@ -297,10 +297,10 @@ article {
     left: 0;
     bottom: 0;
     width: 100%;
-    background: rgba(0,0,0,0.95);
+    background: rgba(0, 0, 0, 0.95);
     z-index: 9999;
 
-    border-top: 1px solid rgba(255,255,255,0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
@@ -309,7 +309,8 @@ article {
 
 /* COLLAPSED STATE */
 #radioDock.collapsed {
-    transform: translateY(calc(100% - 50px)); /* only mini bar visible */
+    transform: translateY(calc(100% - 50px));
+    /* only mini bar visible */
 }
 
 /* MINI HEADER BAR */
@@ -336,6 +337,7 @@ body {
 
 #TFradioCanvas {
     width: 100%;
+    display: block;
     height: 100px;
     border: 1px solid rgb(85, 10, 10);
     background: black;
@@ -345,7 +347,7 @@ body {
     position: relative;
     width: 100%;
     /*z-index: 9999;*/
-    background: black;
+    background: transparent;
 }
 
 /* gives space so sticky player does not visually crush content */
@@ -368,7 +370,7 @@ footer {
     padding: 10px 0;
     position: relative;
     z-index: 1;
-margin-top: auto;
+    margin-top: auto;
 }
 
 /* =========================
