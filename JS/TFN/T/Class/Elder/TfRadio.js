@@ -239,6 +239,8 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
 
   async playaudio() {
+    //  this.connectaudio();
+    //  this.AudioState();
     try {
       if (this.TfAudio.paused || this.TfAudio.ended || this.TfAudio.currentTime === 0) {
         await this.TfAudio.play()
@@ -304,63 +306,63 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   loadedmetadataAudio() {
     //create html data
-    this.AudioCxtId = this.addAudioContextSource(this.TfAudio, "radio");
-    console.log("The audio context source id is " + this.AudioCxtId);
-    this.AudioState();
+
+    //this.AudioState();
   }
   loadeddataAudio() {
     console.log("The audio data is loaded");
   }
   canplayAudio() {
-    this.AudioState();
+    //  this.AudioState();
   }
   canplaythroughAudio() {
-    this.AudioState();
+    //  this.AudioState();
     //this.startMusic();
   }
   playAudio() {
-    this.AudioState();
-    this.startMusic();
-    this.startAnalyserLoop();
+    this.playaudio();
+    //  this.startAnalyserLoop();
 
-    this.visualizatorController = this.canvas.transferControlToOffscreen();
-    this.updateAnalyser();
-    this.worker.postMessage(this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "visualizator",
-      "radio.playing",
-      {
-        source: "web",
-        target: "device:web-001"
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "playing",
-        canvas: this.visualizatorController,
-        //        analyser: this.updateAnalyser(),
-        dataArray: this.TfSoundsContextDataArray,
-        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-        particles: this.particles
-      }),
-      [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+    //  this.visualizatorController = this.canvas.transferControlToOffscreen();
+    //  this.updateAnalyser();
+    /*
+      this.worker.postMessage(this.tycadome(
+        "tycadome-guest" + Date.now(),
+        "visualizator",
+        "radio.playing",
+        {
+          source: "web",
+          target: "device:web-001"
+        },
+        {
+          status: "pending",
+          priority: "low"
+        },
+        "async",
+        {
+          system: "playing",
+          canvas: this.visualizatorController,
+          //        analyser: this.updateAnalyser(),
+          dataArray: this.TfSoundsContextDataArray,
+          bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+          particles: this.particles
+        }),
+        [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+      */
   }
   pauseAudio() {
-    this.AudioState();
+    //  this.AudioState();
     this.stopMusic();
   }
   endedAudio() {
     console.log("The audio should have ended");
     this.TfAudio.src = "";
     this.removeAudioContext(this.AudioCxtId);
-    this.AudioState();
+    //  this.AudioState();
     this.AudioNetworkState();
   }
   waitingAudio() {
-    this.AudioState();
+    //  this.AudioState();
   }
   startAnalyserLoop() {
     if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
@@ -426,16 +428,16 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
 
   playingAudio() {
-    this.AudioState();
-    this.updateAnalyser();
+    //this.AudioState();
+    //this.updateAnalyser();
   }
   stalledAudio(stalled) {
     console.log("The Tsunami Audio has stalled for some reason" + stalled);
-    this.AudioState();
+    //  this.AudioState();
   }
   suspendedAudio(suspend) {
     console.log("The audio is suspended" + suspend);
-    this.AudioState();
+    //  this.AudioState();
   }
 
   FormatAudioTime(second) {

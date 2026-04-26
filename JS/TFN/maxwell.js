@@ -168,6 +168,10 @@ export class maxwell {
 
         el.addEventListener(clickType, runHandler);
         this._storeDomListener(id, el, runHandler, clickType);
+        this.on(eventName, callback);
+
+        if (!this.listeners[eventName]) this.listeners[eventName] = [];
+        this.listeners[eventName].push(callback);
     }
     off(id) {
         const entries = this.domListeners.get(id);
@@ -181,12 +185,11 @@ export class maxwell {
     }
     bindNavBar() {
         // navigation menu
-        this.onMe("tfRoster", "click", () => {
+        this.onMe("tfRoster", "tfRoster", () => {
             //i have a function for this already.
             this.iframe.frame.src = "./../Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
-
         this.onMe("tfNews", "click", () => {
             this.iframe.frame.src = "./../Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
@@ -595,6 +598,7 @@ export class maxwell {
 
             case "radio":
                 try {
+                    /*
                     if (!this.soundEngine.TfSoundsContext) {
                         console.log("The audio soundEngine context state does not exist");
 
@@ -619,6 +623,8 @@ export class maxwell {
                                 break;
                         }
                     }
+                    */
+                    console.log("did notf check contfextf");
                 } catch (err) {
                     console.error("Error handling radio message:", err);
                     this.handleError("this.soundEngine.TfSoundsContext", err);
@@ -677,6 +683,54 @@ export class maxwell {
         console.error(`[${source}] colno:`, error.colno);
         this.emit("error", { source, error });
     }
+    startSharedWorker() {
+        if (this.sharedWorker) {
+            this.sharedWorkerPort = this.sharedWorker.port;
+
+            this.sharedWorkerPort.start();
+        } else {
+            //this.sharedWorker = new SharedWorker("/SharedWorker.js");
+            return
+        }
+    }
+
+    receiveSharedWorkerMessage() {
+        this.sharedWorker.port.postMessage.onmessage = (e) => {
+            const msg = e.data;
+
+            const swtf = tycadome(
+                e.data.id || crypto.randomUUID(),
+                e.data.type || "backend",
+                e.data.action || "completed",
+                {
+                    source: "shared.worker",
+                    layer: "backend",
+                    worker: "shared"
+                },
+                {
+                    status: e.data.state || "completed",
+                    priority: "low"
+                },
+                "async",
+                e.data.payload || e.data
+            );
+            switch (e.data.type) {
+                case "ws_message":
+                    console.log("WS:", e.data.payload);
+                    break;
+
+                case "radio.play":
+                    //this.handleRadio(msg.data);
+                    break;
+            }
+        };
+    }
+
+    sendToSharedWorker(data = null) {
+        if (!this.sharedWorkerPort) return;
+
+        this.sharedWorkerPort.postMessage(data);
+    }
     initTsunamiWorkers() {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
@@ -687,8 +741,6 @@ export class maxwell {
             console.warn("Server Sent Events not supported");
             return;
         }
-
-
 
         this.site.worker = this.worker;
         this.iframe.worker = this.worker;
@@ -706,49 +758,15 @@ export class maxwell {
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 
-        this.sharedWorker.port.start();
-
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
-        this.soundEngine.AudioNetworkState(this.soundEngine.TfAudio);
+        //this.soundEngine.AudioNetworkState(this.soundEngine.TfAudio);
 
-        /*
-        sharedWorker.port.onmessage = (e) => {
-            postMessage(
-                tycadome(
-                    e.data.id || crypto.randomUUID(),
-                    e.data.type || "backend",
-                    e.data.action || "completed",
-                    {
-                        source: "shared.worker",
-                        layer: "backend",
-                        worker: "shared"
-                    },
-                    {
-                        status: e.data.state || "completed",
-                        priority: "low"
-                    },
-                    "async",
-                    e.data.payload || e.data
-                )
-            );
-        };
-
-        sharedWorker.port.postMessage(
-            tycadome(
-                task.id,
-                task.type,
-                task.action,
-                task.meta,
-                {
-                    status: "processing",
-                    priority: "low"
-                },
-                task.mode || "async",
-                task.payload || {}
-            )
-        );
-        */
+        // this.startSharedWorker();
+        // this.sendToSharedWorker("register");
+        // this.sharedWorker.port.onmessage = (e) => {
+        //     this.receiveSharedWorkerMessage(e)
+        // };
     }
 }

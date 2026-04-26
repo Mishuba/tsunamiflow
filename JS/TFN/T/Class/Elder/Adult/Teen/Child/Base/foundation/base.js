@@ -32,12 +32,85 @@ export class T {
         };
         return tf;
     }
-    AddEventListener(event, fn) {
-        if (!this.listeners[event]) this.listeners[event] = [];
-        this.listeners[event].push(fn);
-    }
-    on(event, fn) {
-        this.AddEventListener(event, fn);
+    on(id, eventName, callback = null, preventDefault = false, iframe = null) {
+        const el = this.find(id, iframe);
+
+        if (!el) {
+            console.warn(`Element not found: ${id}`);
+            return;
+        }
+
+        const isForm =
+            el instanceof HTMLFormElement ||
+            el instanceof HTMLButtonElement;
+
+        const isSubmitButton =
+            (el instanceof HTMLButtonElement && el.type === "submit") ||
+            (el instanceof HTMLInputElement &&
+                ["submit", "image"].includes(el.type));
+
+        const supportsPointer = "PointerEvent" in window;
+        const supportsTouch = "ontouchstart" in window;
+
+        const runHandler = (event) => {
+            if (isForm || isSubmitButton || preventDefault) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const payload = {
+                event,
+                element: el,
+                type: event.type
+            };
+
+            // direct callback if provided
+            if (typeof callback === "function") {
+                callback(payload);
+            }
+
+            // also emit internal event if eventName exists
+            if (eventName) {
+                this.emit(eventName, payload);
+            }
+        };
+
+        // POINTER
+        if (supportsPointer) {
+            const eventType = isForm ? "submit" : "pointerup";
+
+            el.addEventListener(eventType, runHandler);
+            this._storeDomListener(id, el, runHandler, eventType);
+            return;
+        }
+
+        // TOUCH fallback
+        if (supportsTouch) {
+            const start = (e) => {
+                this._touchStart = e;
+            };
+
+            const end = (e) => {
+                runHandler(e);
+            };
+
+            el.addEventListener("touchstart", start, { passive: false });
+            el.addEventListener("touchend", end, { passive: false });
+
+            this._storeDomListener(id, el, start, "touchstart");
+            this._storeDomListener(id, el, end, "touchend");
+            return;
+        }
+
+        // CLICK fallback
+        const clickType = isForm ? "submit" : "click";
+
+        el.addEventListener(clickType, runHandler);
+        this._storeDomListener(id, el, runHandler, clickType);
+        this.on(eventName, callback);
+
+        if (!this.listeners[eventName]) this.listeners[eventName] = [];
+        this.listeners[eventName].push(callback);
     }
     removeEventListener(event, callback) {
         if (!this.listeners[event]) return;
@@ -250,7 +323,7 @@ export class T {
         return new Promise((resolve, reject) => {
 
             const req = this
-                .store(storeName, "readwrite")
+                .storedb(storeName, "readwrite")
                 .put(data);
 
             req.onsuccess = () => resolve(req.result);
@@ -325,7 +398,7 @@ export class T {
         return new Promise((resolve, reject) => {
 
             const req = this
-                .dbstore(storeName)
+                .storedb(storeName)
                 .getAllKeys();
 
             req.onsuccess = () => resolve(req.result);
