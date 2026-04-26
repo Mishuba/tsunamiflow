@@ -73,6 +73,123 @@ export class maxwell {
             return document.getElementById(elem);
         }
     }
+    async handleSchedule(time) {
+        for (const word of this.site.WordTimes) {
+            if (time === word) {
+                let TfWotd = this.find("tfWordOfTheDay");
+                TfWotd.innerHTML = this.site.WordOfTheDay(time);
+            } break;
+        }
+
+        this.site.UpdateNews();
+
+        for (const tfRT of this.soundEngine.RadioTimes) {
+            if (time === tfRT) {
+                this.soundEngine.AudioNetworkState();
+                return;
+            }
+        }
+        //this.ensureRadioPlaying(audio);
+    }
+    async handleWorkerMessage(event) {
+        const data = event.data || {};
+        const payload = data.payload || {};
+
+        switch (data.type) {
+            case "timer":
+                this.find("TFtime").innerHTML = payload.time;
+
+                if (payload.system === "Tf Schedule") {
+                    await this.handleSchedule(payload.time);
+                } else if (payload.system === "Tf Time") {
+                    this.find("TFweather").innerHTML = this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState();
+                } else {
+                    this.site.UpdateNews();
+                    this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState();
+                }
+                break;
+
+            case "radio":
+                try {
+                    /*
+                    if (!this.soundEngine.TfSoundsContext) {
+                        console.log("The audio soundEngine context state does not exist");
+
+                    } else if (this.soundEngine.TfSoundsContext.state === undefined) {
+                        console.log("The audio soundEngine context state is undefined");
+                    } else if (this.soundEngine.TfSoundsContext.state === null) {
+                        console.log("The audio soundEngine context state is null");
+                    } else {
+                        switch (this.soundEngine.TfSoundsContext.state) {
+                            case "suspended":
+                                console.log("The audio soundEngine context state is suspended, resuming...");
+                                this.soundEngine.TfSoundsContext.resume();
+                                break;
+                            case "running":
+                                console.log("The audio soundEngine context state is running");
+                                break;
+                            case "closed":
+                                console.log("The Audio soundEngine context state must be closed");
+                                break;
+                            default:
+                                console.log("The audio soundEngine context state is unknown");
+                                break;
+                        }
+                    }
+                    */
+                    console.log("did notf check contfextf");
+                } catch (err) {
+                    console.error("Error handling radio message:", err);
+                    this.handleError("this.soundEngine.TfSoundsContext", err);
+                } finally {
+                    if (payload.system === "file") {
+                        console.log("payload.file", payload.file);
+                        switch (this.soundEngine.AudioElement.src) {
+                            case "":
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case " ":
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case null:
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case undefined:
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            case "about:blank":
+                                this.soundEngine.loadaudio(payload.file);
+                                break;
+                            default:
+                                console.log("audio already loaded or playing");
+                                break;
+                        }
+                    } else if (payload.system === "previous") {
+                        this.soundEngine.loadaudio(payload.file);
+                    } else if (payload.system === "skip") {
+                        this.soundEngine.loadaudio(payload.file);
+                    } else {
+                        this.soundEngine.loadaudio(payload.file);
+                    }
+                }
+                break;
+            default:
+                if (payload.system === "error") {
+                    console.error("Worker error:", payload);
+                } else {
+                    if (data.meta.message) {
+                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
+                    } else {
+                        console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
+                    }
+
+
+                    this.handleSchedule(this.find("TFtime").innerHTML);
+                }
+        }
+    }
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
@@ -168,9 +285,10 @@ export class maxwell {
 
         el.addEventListener(clickType, runHandler);
         this._storeDomListener(id, el, runHandler, clickType);
-        this.on(eventName, callback);
 
-        if (!this.listeners[eventName]) this.listeners[eventName] = [];
+        if (!this.listeners[eventName]) {
+            this.listeners[eventName] = [];
+        }
         this.listeners[eventName].push(callback);
     }
     off(id) {
@@ -187,21 +305,21 @@ export class maxwell {
         // navigation menu
         this.onMe("tfRoster", "tfRoster", () => {
             //i have a function for this already.
-            this.iframe.frame.src = "./../Iframe/Pages/roster.html";
+            this.iframe.frame.src = "Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
         this.onMe("tfNews", "click", () => {
-            this.iframe.frame.src = "./../Iframe/Pages/news.html";
+            this.iframe.frame.src = "Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
         this.onMe("tfCompetitions", "click", () => {
-            this.iframe.frame.src = "./../Iframe/Pages/Competitions.html";
+            this.iframe.frame.src = "Iframe/Pages/Competitions.html";
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
         this.onMe("tfNetwork", "click", () => {
-            this.iframe.frame.src = "./../Iframe/Pages/TFnetwork.html";
+            this.iframe.frame.src = "Iframe/Pages/TFnetwork.html";
             this.iframe.MenuSwitch(this.iframe.frame);
             /*
                <video
@@ -217,7 +335,7 @@ export class maxwell {
         }, true);
 
         this.onMe("tfCommunity", "click", () => {
-            this.iframe.frame.src = "./../Iframe/Pages/Community.html";
+            this.iframe.frame.src = "Iframe/Pages/Community.html";
             this.iframe.MenuSwitch(this.iframe.frame)
 
         }, true);
@@ -557,125 +675,6 @@ export class maxwell {
         }
     }
 
-    async handleSchedule(time) {
-        for (const word of this.site.WordTimes) {
-            let TfWotd = this.find("tfWordOfTheDay");
-            TfWotd.innerHTML = await this.site.WordOfTheDay(time);
-            if (time === word) break;
-        }
-
-        this.site.UpdateNews();
-
-        for (const tfRT of this.soundEngine.RadioTimes) {
-            if (time === tfRT) {
-                this.soundEngine.AudioNetworkState(this.soundEngine.AudioElement);
-                return;
-            }
-        }
-        //this.ensureRadioPlaying(audio);
-    }
-
-    async handleWorkerMessage(event) {
-        const data = event.data || {};
-        const payload = data.payload || {};
-
-        switch (data.type) {
-            case "timer":
-                this.find("TFtime").innerHTML = payload.time;
-
-                if (payload.system === "Tf Schedule") {
-                    await this.handleSchedule(payload.time);
-                } else if (payload.system === "Tf Time") {
-                    this.site.UpdateNews();
-                    this.find("TFweather").innerHTML = this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState();
-                } else {
-                    this.site.UpdateNews();
-                    this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState();
-                }
-                break;
-
-            case "radio":
-                try {
-                    /*
-                    if (!this.soundEngine.TfSoundsContext) {
-                        console.log("The audio soundEngine context state does not exist");
-
-                    } else if (this.soundEngine.TfSoundsContext.state === undefined) {
-                        console.log("The audio soundEngine context state is undefined");
-                    } else if (this.soundEngine.TfSoundsContext.state === null) {
-                        console.log("The audio soundEngine context state is null");
-                    } else {
-                        switch (this.soundEngine.TfSoundsContext.state) {
-                            case "suspended":
-                                console.log("The audio soundEngine context state is suspended, resuming...");
-                                this.soundEngine.TfSoundsContext.resume();
-                                break;
-                            case "running":
-                                console.log("The audio soundEngine context state is running");
-                                break;
-                            case "closed":
-                                console.log("The Audio soundEngine context state must be closed");
-                                break;
-                            default:
-                                console.log("The audio soundEngine context state is unknown");
-                                break;
-                        }
-                    }
-                    */
-                    console.log("did notf check contfextf");
-                } catch (err) {
-                    console.error("Error handling radio message:", err);
-                    this.handleError("this.soundEngine.TfSoundsContext", err);
-                } finally {
-                    if (payload.system === "file") {
-                        console.log("payload.file", payload.file);
-                        switch (this.soundEngine.AudioElement.src) {
-                            case "":
-                                this.soundEngine.loadaudio(payload.file);
-                                break;
-                            case " ":
-                                this.soundEngine.loadaudio(payload.file);
-                                break;
-                            case null:
-                                this.soundEngine.loadaudio(payload.file);
-                                break;
-                            case undefined:
-                                this.soundEngine.loadaudio(payload.file);
-                                break;
-                            case "about:blank":
-                                this.soundEngine.loadaudio(payload.file);
-                                break;
-                            default:
-                                console.log("audio already loaded or playing");
-                                break;
-                        }
-                    } else if (payload.system === "previous") {
-                        this.soundEngine.loadaudio(payload.file);
-                    } else if (payload.system === "skip") {
-                        this.soundEngine.loadaudio(payload.file);
-                    } else {
-                        this.soundEngine.loadaudio(payload.file);
-                    }
-                }
-                break;
-            default:
-                if (payload.system === "error") {
-                    console.error("Worker error:", payload);
-                } else {
-                    if (data.meta.message) {
-                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
-                    } else {
-                        console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
-                    }
-
-
-                    this.handleSchedule(this.find("TFtime").innerHTML);
-                }
-        }
-    }
-
     handleError(source, error) {
         console.error("RAW WORKER ERROR:", error);
         console.error(`[${source}] message:`, error.message);
@@ -765,7 +764,7 @@ export class maxwell {
 
         console.log("starting radio");
 
-        // this.soundEngine.AudioNetworkState();
+        this.soundEngine.AudioNetworkState();
 
         // this.startSharedWorker();
         // this.sendToSharedWorker("register");

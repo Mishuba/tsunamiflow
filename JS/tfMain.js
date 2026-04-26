@@ -9,60 +9,6 @@ import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 
-/*
-|--------------------------------------------------------------------------
-| Worker Loader
-|--------------------------------------------------------------------------
-| Strategy:
-|
-| 1. Try modern module workers first
-| 2. If browser fails → fallback to classic workers
-| 3. Prevent total system failure
-|--------------------------------------------------------------------------
-*/
-
-function createSafeWorker(modulePath, classicPath) {
-  try {
-    /*
-    --------------------------------------------------
-    Modern Worker (preferred)
-    --------------------------------------------------
-    Supports:
-    - import/export
-    - import.meta.url
-    - better architecture
-    --------------------------------------------------
-    */
-
-    return new Worker(
-      new URL(modulePath, import.meta.url),
-      { type: "module" }
-    );
-
-  } catch (err) {
-    console.warn("Module worker failed. Falling back:", err);
-
-    /*
-    --------------------------------------------------
-    Classic Worker (fallback)
-    --------------------------------------------------
-    Supports:
-    - older browsers
-    - Safari weirdness
-    - legacy fallback
-    --------------------------------------------------
-    */
-
-    return new Worker(classicPath);
-  }
-}
-
-/*
-|--------------------------------------------------------------------------
-| TF Word System
-|--------------------------------------------------------------------------
-*/
-
 let TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
@@ -247,7 +193,6 @@ let TfStickMan = new gameComponent(
 */
 
 document.addEventListener("DOMContentLoaded", () => {
-
   const TsunamiRadio = document.getElementById("TFradioPlayer");
   TsunamiRadio.crossOrigin = "anonymous";
 
@@ -266,13 +211,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioStartButton = document.createElement("button");
   const RadioSkipButton = document.createElement("button");
 
+  let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
   let Stickman = new letsDoIt("Homepage Game", TfStickMan);
 
   let TfSite = new HeaderWeather();
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
   let nifage = new TfPrintful();
   let style = new TsunamiFlowImageEngine();
-  let nation = new TsunamiFlowDj({ audioElement: TsunamiRadio });
+  let nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio });
+
   let network = new TsunamiLiveVideoController();
 
   let Controller = new maxwell({
@@ -305,6 +252,10 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
   Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
+  Controller.site.requestLocation();
+  Controller.bindNavBar();
+
+  Controller.bindAudio();
   Controller.iframe.frame.title = "Main Website Content";
   Controller.iframe.frame.id = "TsunamiContent";
   Controller.iframe.frame.name = "TsunamiMainFlowContent";
@@ -317,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (twoMore) twoMore.appendChild(Controller.iframe.frame);
 
   Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-  Controller.iframe.MenuSwitch(Controller.iframe.frame);
+  Controller.iframe.MenuSwitch(Controller.iframe.frame.src);
 
   Controller.iframe.frame.addEventListener("load", () => {
     try {
@@ -372,24 +323,32 @@ document.addEventListener("DOMContentLoaded", () => {
     new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
   );
 
+  function createSafeWorker(modulePath, classicPath) {
+    try {
+      return new Worker(
+        new URL(modulePath, import.meta.url),
+        { type: "module" }
+      );
+
+    } catch (err) {
+      console.warn("Module worker failed. Falling back:", err);
+      return new Worker(classicPath);
+    }
+  }
+
+  //Controller.worker.createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
   Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
   );
 
+  //Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
   Controller.sharedWorker = new SharedWorker(
     new URL("./TFN/T/Worker/Shared.js", import.meta.url),
     { type: "module" }
   );
 
-  Controller.site.requestLocation();
-  Controller.soundEngine.AudioElement = TsunamiRadio;
-  Controller.soundEngine.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-
   Controller.initTsunamiWorkers();
-
   Controller.bindUsers();
-  Controller.bindNavBar();
-  Controller.bindAudio();
 });
 /*
     //Make Canvas an image.

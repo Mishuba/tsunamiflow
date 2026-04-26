@@ -49,22 +49,6 @@ export class HeaderWords extends TsDomCanvas {
     constructor(options = {}) {
         super(options);
     }
-    EnHword(value) {
-        let word = {
-            word: {
-                word: value.word,
-                definition: value.definition,
-                quotes: value.quotes.map((quote) => ({
-                    text: quote.text,
-                    history: this.buildHistory(quote.history)
-                }))
-            }
-        };
-
-        this.WordOfTheDayArray.push(word);
-    }
-
-
     buildHistory(historyData) {
         return {
             fact: historyData.fact || {},
@@ -72,11 +56,24 @@ export class HeaderWords extends TsDomCanvas {
             legend: historyData.legend || {}
         };
     }
-    getWord() {
-        //return this.word;
+    EnHword(value) {
+        let word = {
+            word: value.word,
+            definition: value.definition,
+            quotes: value.quotes.map((quote) => ({
+                text: quote.text,
+                history: this.buildHistory(quote.history)
+            }))
+        };
+
+        this.WordOfTheDayArray.push(word);
     }
-    async WordOfTheDay(time) {
-        if (this.theWords === null) {
+
+    getWord() {
+        return this.theWords;
+    }
+    WordOfTheDay(time) {
+        if (this.theWords === null || undefined) {
             if (this.WordOfTheDayArray.length === 0) {
                 console.error("no words");
                 return;

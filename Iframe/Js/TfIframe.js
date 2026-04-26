@@ -1,4 +1,5 @@
 export class tfIframe {
+  pageName = null;
   constructor(element = null, Homepage = null, Game1 = null, video = null) {
     this.frame = element;
     this.HomepageUpdates = Homepage;
@@ -9,7 +10,10 @@ export class tfIframe {
     try {
       const url = new URL(source.src, window.location.href);
       const name = url.pathname.split("/").pop();
-      return (name || "").toLowerCase();
+      let page = (name || "").toLowerCase();
+      console.log(`the iframe page: ${page}`);
+      return page;
+
     } catch (err) {
       return "";
     }
@@ -21,9 +25,10 @@ export class tfIframe {
   }
 
   doIframeThing(event, source) {
-    const pageName = this.getPageName(source);
-    const origin = this.getPostMessageOrigin(pageName);
-    switch (pageName) {
+    this.pageName = this.getPageName(source);
+    const origin = this.getPostMessageOrigin(this.pageName);
+    console.log(`Determined postMessage origin: ${origin}`);
+    switch (this.pageName) {
       case "homepage.html":
         console.log("iframe message received from the homepage");
         console.log("The event type is " + event.data.type);
@@ -41,7 +46,7 @@ export class tfIframe {
         }
         console.log("the end of that");
         break;
-      case "roster.html":
+      case "Iframe/Pages/roster.html":
         console.log("The iframe is from the roster page");
         let RosterJson = {
           type: "roster",
@@ -52,7 +57,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(RosterJson, origin);
         break;
-      case "news.html":
+      case "Iframe/Pages/news.html":
         console.log("The iframe is from the news page");
         let NewsJson = {
           type: "live",
@@ -63,7 +68,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(NewsJson, origin);
         break;
-      case "competitions.html":
+      case "Iframe/Pages/competitions.html":
         console.log("iframe competition message received");
         let CompetitionJson;
         console.log("checking the data type of the competitions iframe which is " + event.data.type);
@@ -88,7 +93,7 @@ export class tfIframe {
           source.contentWindow.postMessage(CompetitionJson, origin);
         }
         break;
-      case "tfnetwork.html":
+      case "Iframe/Pages/tfnetwork.html":
         console.log("The iframe is from the TFnetwork page");
         let TfNetworkJson = {
           type: "network",
@@ -99,7 +104,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(TfNetworkJson, origin);
         break;
-      case "community.html":
+      case "Iframe/Pages/community.html":
         console.log("iframe community message received");
         let CommunityJson = {
           type: "community",
@@ -118,6 +123,7 @@ export class tfIframe {
   }
   checkIframeOrigin(event, source) {
     console.log("the iframe origin is " + event.origin)
+    console.log("the iframe source is " + source)
     switch (event.origin) {
       case "https://www.tsunamiflow.club":
       case "https://tsunamiflow.club":
@@ -139,14 +145,14 @@ export class tfIframe {
     console.log("checking the iframe source");
 
     console.log("creating and using the add event listener");
-    const pageName = this.getPageName(source);
+    this.pageName = this.getPageName(source);
     const allowedPages = [
       "homepage.html",
-      "roster.html",
-      "news.html",
-      "competitions.html",
-      "tfnetwork.html",
-      "community.html"
+      "Iframe/Pages/roster.html",
+      "Iframe/Pages/news.html",
+      "Iframe/Pages/competitions.html",
+      "Iframe/Pages/tfnetwork.html",
+      "Iframe/Pages/community.html"
     ];
 
     if (allowedPages.includes(pageName)) {

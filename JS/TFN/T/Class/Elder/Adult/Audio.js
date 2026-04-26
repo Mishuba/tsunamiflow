@@ -78,6 +78,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             this.AudioElement = options.audioElement;
         }
 
+        if (options.SoundContext) {
+            this.TfSoundsContext = options.SoundContext;
+        }
         // FIX: apply after instantiation
         // ===== SPEECH RECOGNITION =====
         if (!this.SpeechRecognitionAPI) {
