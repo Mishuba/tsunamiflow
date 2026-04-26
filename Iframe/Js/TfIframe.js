@@ -147,7 +147,7 @@ export class tfIframe {
     console.log("creating and using the add event listener");
     this.pageName = this.getPageName(source);
     const allowedPages = [
-      "homepage.html",
+      "Iframe/Pages/homepage.html",
       "Iframe/Pages/roster.html",
       "Iframe/Pages/news.html",
       "Iframe/Pages/competitions.html",
