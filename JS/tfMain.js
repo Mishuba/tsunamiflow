@@ -354,7 +354,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  Controller.user.stripePublicKey = "pk_live_XXX";
+  Controller.user.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
   Controller.user.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
 
 

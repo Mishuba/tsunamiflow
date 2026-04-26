@@ -633,7 +633,7 @@ export class maxwell {
                         console.log("payload.file", payload.file);
                         switch (this.soundEngine.AudioElement.src) {
                             case "":
-                                this.soundEngine.loadaudio("payload.file");
+                                this.soundEngine.loadaudio(payload.file);
                                 break;
                             case " ":
                                 this.soundEngine.loadaudio(payload.file);
@@ -765,7 +765,7 @@ export class maxwell {
 
         console.log("starting radio");
 
-        this.soundEngine.AudioNetworkState();
+        // this.soundEngine.AudioNetworkState();
 
         // this.startSharedWorker();
         // this.sendToSharedWorker("register");

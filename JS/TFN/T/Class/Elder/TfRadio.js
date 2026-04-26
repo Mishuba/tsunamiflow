@@ -234,8 +234,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
   loadaudio(src) {
     this.AudioElement.src = src;
-    this.AudioElement.load();
+    this.AudioElement.currentsrc = src;
+    //this.AudioElement.load();
   }
+
 
   async playaudio() {
     //  this.connectaudio();
