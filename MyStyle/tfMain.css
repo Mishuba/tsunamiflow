@@ -312,13 +312,12 @@ min-height: 60px;
 
 /* COLLAPSED STATE */
 #radioDock.collapsed {
-    max-height: 50px;
-    overflow: hidden;
+    display: none;
     /* only mini bar visible */
 }
 
 #radioDock:not(.collapsed) {
-    max-height: 700px;
+    display: block;
     /* only mini bar visible */
 }
 
