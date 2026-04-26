@@ -750,6 +750,7 @@ export class maxwell {
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
 
+        /*
         this.site.sharedWorker = this.sharedWorker;
         this.iframe.sharedWorker = this.sharedWorker;
         this.user.sharedWorker = this.sharedWorker;
@@ -757,7 +758,7 @@ export class maxwell {
         this.soundEngine.sharedWorker = this.sharedWorker;
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
-
+*/
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
