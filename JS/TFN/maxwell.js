@@ -761,7 +761,7 @@ export class maxwell {
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
-        //this.soundEngine.AudioNetworkState(this.soundEngine.TfAudio);
+        this.soundEngine.AudioNetworkState();
 
         // this.startSharedWorker();
         // this.sendToSharedWorker("register");
