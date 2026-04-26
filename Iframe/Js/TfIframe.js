@@ -156,7 +156,7 @@ export class tfIframe {
     ];
 
     if (allowedPages.includes(this.pageName)) {
-      console.log(`The iframe is from the ${pageName} page`);
+      console.log(`The iframe is from the ${this.pageName} page`);
       window.addEventListener("message", async (event) => {
         this.checkIframeOrigin(event, source);
       });
