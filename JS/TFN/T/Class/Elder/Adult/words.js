@@ -130,6 +130,7 @@ export class HeaderWords extends TsDomCanvas {
 
                 this.SomeOfEverythingFour = `${this.FirstWord} <br /> Defintion: ${this.FirstDefinition} <br /> Quote: ${this.SecondQuoteText} <br /> Fact: ${this.SecondQuoteHistoryFact2} <br /> Myth: ${this.SecondQuoteHistoryMyth2} <br /> Legend: ${this.SecondQuoteHistoryLegend2} <br />`;
             }
+            console.log(this.getWord());
             switch (time) {
                 case this.WordTimes[0]:
                     return this.SomeQuote;

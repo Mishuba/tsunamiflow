@@ -238,7 +238,9 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioSkip: RadioSkipButton,
   });
 
+
   Controller.site.EnHword(TFwordMishuba);
+  console.log(`${Controller.site.WordOfTheDayArray}`);
 
   Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
@@ -253,6 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
   Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
   Controller.site.requestLocation();
+
   Controller.bindNavBar();
 
   Controller.bindAudio();

@@ -534,7 +534,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
       this.AudioElement.addEventListener("canplaythrough", async () => {
         if (!this._wired) {
-          this.initAudioContext();
+          //this.initAudioContext();
           this._wired = true;
         }
         this.canplaythroughAudio();

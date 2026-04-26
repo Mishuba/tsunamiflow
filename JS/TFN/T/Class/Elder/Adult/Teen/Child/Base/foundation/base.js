@@ -1,8 +1,6 @@
 export class T {
     listeners = {};
     domListeners = new Map();
-    sharedListeners = new Map();
-    workerListeners = new Map();
     Arraybuffer = null;
     ArraybyteLength = 0;
     Arrayview = null;

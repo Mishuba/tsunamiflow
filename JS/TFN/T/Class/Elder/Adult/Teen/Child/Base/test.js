@@ -4,6 +4,7 @@ export class Ts extends T {
     LegacyUaData = navigator.userAgent || null;
     sharedWorker = null;
     sharedWorkerPort = null;
+    sharedListeners = new Map();
     constructor(options = {}) {
         super(options);
     }

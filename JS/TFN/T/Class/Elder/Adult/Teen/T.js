@@ -2,6 +2,7 @@ import { TsDom } from "./Child/N.js";
 export class TsDomCanvas extends TsDom { //dom n window
     lang = "en-US";
     worker = null;
+    workerListeners = new Map();
     canvas = null;
     contextTypecanvas = "2d";
     contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };

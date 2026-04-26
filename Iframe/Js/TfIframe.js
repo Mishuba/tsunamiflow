@@ -46,7 +46,7 @@ export class tfIframe {
         }
         console.log("the end of that");
         break;
-      case "Iframe/Pages/roster.html":
+      case "roster.html":
         console.log("The iframe is from the roster page");
         let RosterJson = {
           type: "roster",
@@ -57,7 +57,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(RosterJson, origin);
         break;
-      case "Iframe/Pages/news.html":
+      case "news.html":
         console.log("The iframe is from the news page");
         let NewsJson = {
           type: "live",
@@ -68,7 +68,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(NewsJson, origin);
         break;
-      case "Iframe/Pages/competitions.html":
+      case "competitions.html":
         console.log("iframe competition message received");
         let CompetitionJson;
         console.log("checking the data type of the competitions iframe which is " + event.data.type);
@@ -93,7 +93,7 @@ export class tfIframe {
           source.contentWindow.postMessage(CompetitionJson, origin);
         }
         break;
-      case "Iframe/Pages/tfnetwork.html":
+      case "tfnetwork.html":
         console.log("The iframe is from the TFnetwork page");
         let TfNetworkJson = {
           type: "network",
@@ -104,7 +104,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(TfNetworkJson, origin);
         break;
-      case "Iframe/Pages/community.html":
+      case "community.html":
         console.log("iframe community message received");
         let CommunityJson = {
           type: "community",
@@ -122,21 +122,23 @@ export class tfIframe {
     };
   }
   checkIframeOrigin(event, source) {
-    console.log("the iframe origin is " + event.origin)
-    console.log("the iframe source is " + source)
     switch (event.origin) {
       case "https://www.tsunamiflow.club":
       case "https://tsunamiflow.club":
         this.doIframeThing(event, source);
+        console.log("the iframe origin is " + event.origin);
+        console.log("the iframe source is " + source);
         break;
       case "https://world.tsunamiflow.club":
-
+        console.log("the iframe origin is " + event.origin);
+        console.log("the iframe source is " + source);
         break;
       case "https://m.stripe.com":
-
+        console.log("the iframe origin is " + event.origin);
+        console.log("the iframe source is " + source);
         break;
       default:
-        console.log(event.origin);
+
         break;
     };
   };
@@ -146,13 +148,14 @@ export class tfIframe {
 
     console.log("creating and using the add event listener");
     this.pageName = this.getPageName(source);
+    console.log("pageName " + this.pageName);
     const allowedPages = [
-      "Iframe/Pages/homepage.html",
-      "Iframe/Pages/roster.html",
-      "Iframe/Pages/news.html",
-      "Iframe/Pages/competitions.html",
-      "Iframe/Pages/tfnetwork.html",
-      "Iframe/Pages/community.html"
+      "homepage.html",
+      "roster.html",
+      "news.html",
+      "competitions.html",
+      "tfnetwork.html",
+      "community.html"
     ];
 
     if (allowedPages.includes(this.pageName)) {
@@ -161,7 +164,7 @@ export class tfIframe {
         this.checkIframeOrigin(event, source);
       });
     } else {
-      console.log(`Some outside source is trying to send my homepage a message. the source origin is ${source.origin}`);
+      console.warn(`Some outside source is trying to send my homepage a message. the source origin is ${source.origin}`);
     }
   }
 }

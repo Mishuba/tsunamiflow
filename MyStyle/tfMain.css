@@ -284,8 +284,9 @@ It does NOT break footer content below it.
 
 article {
     width: 100%;
-    background: black;
-    padding: 10px 0;
+    background: transparent;
+    padding: 0;
+    margin: 0;
 }
 
 /* =========================
@@ -304,29 +305,49 @@ article {
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 
-    transition: transform 0.3s ease, height 0.3s ease;
+    transition: max-height 0.3s ease, transform 0.3s ease;
 }
 
 /* COLLAPSED STATE */
 #radioDock.collapsed {
-    transform: translateY(calc(100% - 50px));
+    max-height: 50px;
+    overflow: hidden;
+    /* only mini bar visible */
+}
+
+#radioDock:not(.collapsed) {
+    max-height: 700px;
     /* only mini bar visible */
 }
 
 /* MINI HEADER BAR */
 #radioHeader {
     height: 50px;
+    min-height: 50px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 12px;
     cursor: pointer;
     color: rgb(56, 217, 238);
+    background: rgba(0, 0, 0, 0.98);
+    position: relative;
+    z-index: 2;
+}
+
+#toggleRadio {
+    min-width: 40px;
 }
 
 /* FULL PLAYER AREA */
 #radioBody {
+    display: block;
+    width: 100%;
     padding: 10px;
+    min-height: 180px;
+    overflow: visible;
+    position: relative;
+    z-index: 1;
 }
 
 /* keep space so footer never gets hidden */
@@ -337,27 +358,41 @@ body {
 
 #TFradioCanvas {
     width: 100%;
-    display: block;
     height: 100px;
+    display: block;
     border: 1px solid rgb(85, 10, 10);
     background: black;
 }
 
-#TFradioPlayer {
+audio #TFradioPlayer {
+    display: block !important;
     position: relative;
-    width: 100%;
-    /*z-index: 9999;*/
+    width: 100% !important;
+    min-height: 50px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative;
+    z-index: 10;
     background: transparent;
+    overflow: visible;
 }
 
 /* gives space so sticky player does not visually crush content */
+#TFradioPlayer::-webkit-media-controls {
+    display: flex !important;
+}
+
+#TFradioPlayer::-webkit-media-controls-panel {
+    display: flex !important;
+}
 
 #TFradioInfo,
 #TFradioCurrentTIme,
 #TFradioTimeLeft,
 #RadioTimeFr,
 #TFradioProcessBar {
-    padding: 10px 0;
+    padding: 8px 0;
+    width: 100%;
 }
 
 /* =========================
@@ -371,6 +406,7 @@ footer {
     position: relative;
     z-index: 1;
     margin-top: auto;
+    margin-bottom: 20px;
 }
 
 /* =========================

@@ -764,8 +764,6 @@ export class maxwell {
 
         console.log("starting radio");
 
-        this.soundEngine.AudioNetworkState();
-
         // this.startSharedWorker();
         // this.sendToSharedWorker("register");
         // this.sharedWorker.port.onmessage = (e) => {
