@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (twoMore) twoMore.appendChild(Controller.iframe.frame);
 
   Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-  Controller.iframe.MenuSwitch(Controller.iframe.frame.src);
+  Controller.iframe.MenuSwitch(Controller.iframe.frame);
 
   Controller.iframe.frame.addEventListener("load", () => {
     try {
