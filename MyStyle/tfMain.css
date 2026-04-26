@@ -366,7 +366,6 @@ min-height: 60px;
     min-height: 50px !important;
     visibility: visible !important;
     opacity: 1 !important;
-    position: relative;
     z-index: 10;
     background: black;
     overflow: visible;
