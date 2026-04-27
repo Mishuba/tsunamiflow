@@ -77,9 +77,9 @@ let homePageArray = [
     "Please do not try to use the store buy/checkout button ",
     "Please do not try to use the subscriber section buttons yet",
     "Please do not try to post thoughts",
-    "This is the homebase for Tsunami Flow",
     "We are currently working on content for the website.",
     "Come by often and check for updates.",
+    "This is the homebase for Tsunami Flow",
     
 ];
 let PhysicalAbility = [

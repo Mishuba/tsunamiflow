@@ -101,6 +101,7 @@ export class maxwell {
 
                 if (payload.system === "Tf Schedule") {
                     await this.handleSchedule(payload.time);
+                    this.soundEngine.AudioNetworkState();
                 } else if (payload.system === "Tf Time") {
                     this.find("TFweather").innerHTML = this.site.requestLocation();
                     this.soundEngine.AudioNetworkState();
@@ -528,13 +529,11 @@ export class maxwell {
             } else {
                 this.soundEngine.stopMusic();
                 start.innerHTML = "Play Tsunami Radio";
-                //this.audio.startMusic();
-                //this.audio.stopMusic();
             }
         });
 
         this.onMe("TFradioSkipButton", () => {
-            this.soundEngine.AudioElement.src = "";
+            this.soundEngine.AudioElement.removeAttribute("src");;
             //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
     }
