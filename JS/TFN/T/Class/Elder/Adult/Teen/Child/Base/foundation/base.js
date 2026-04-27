@@ -15,7 +15,14 @@ export class T {
     db = null;
     maxBeaconSize = 64 * 1024;
     constructor(options = {}) {
+        if (options.dbName) {
 
+        }
+        if (options.dbversion) {
+
+        }
+        if (options.dbstores) {
+        }
     }
     tycadome(id, type, action, meta, state, mode, payload) {
         let tf = {
@@ -29,6 +36,13 @@ export class T {
             "payload": payload // {}
         };
         return tf;
+    }
+    find(elem, frame = null) {
+        if (frame !== null) {
+            return frame.contentDocument.getElementById(elem);
+        } else {
+            return document.getElementById(elem);
+        }
     }
     on(id, eventName, callback = null, preventDefault = false, iframe = null) {
         const el = this.find(id, iframe);

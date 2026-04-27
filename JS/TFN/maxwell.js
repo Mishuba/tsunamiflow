@@ -219,8 +219,7 @@ export class maxwell {
         }
 
         const isForm =
-            el instanceof HTMLFormElement ||
-            el instanceof HTMLButtonElement;
+            el instanceof HTMLFormElement;
 
         const isSubmitButton =
             (el instanceof HTMLButtonElement && el.type === "submit") ||
@@ -231,9 +230,9 @@ export class maxwell {
         const supportsTouch = "ontouchstart" in window;
 
         const runHandler = (event) => {
+            console.log("handler readyj");
             if (isForm || isSubmitButton || preventDefault) {
                 event.preventDefault();
-                event.stopPropagation();
             }
 
             const payload = {
@@ -255,8 +254,10 @@ export class maxwell {
 
         // POINTER
         if (supportsPointer) {
-            const eventType = isForm ? "submit" : "pointerup";
+            const eventType = isForm ? "submit" : "click";
 
+            console.log("elementf " + el);
+            console.log("eventf tfyjpe" + eventType);
             el.addEventListener(eventType, runHandler);
             this._storeDomListener(id, el, runHandler, eventType);
             return;
@@ -286,10 +287,6 @@ export class maxwell {
         el.addEventListener(clickType, runHandler);
         this._storeDomListener(id, el, runHandler, clickType);
 
-        if (!this.listeners[eventName]) {
-            this.listeners[eventName] = [];
-        }
-        this.listeners[eventName].push(callback);
     }
     off(id) {
         const entries = this.domListeners.get(id);

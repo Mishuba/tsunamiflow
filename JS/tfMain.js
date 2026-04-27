@@ -301,6 +301,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let Stickman = new letsDoIt("Homepage Game", TfStickMan);
 
+  /*
+  let indexdb = {
+    name: ,
+    keyPath: ,
+
+  }
+*/
   let Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -315,6 +322,7 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
+    //dbstores: indexdb
   });
 
   Controller.site.requestLocation();
