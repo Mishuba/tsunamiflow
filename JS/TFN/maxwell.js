@@ -166,7 +166,7 @@ export class maxwell {
                                 this.soundEngine.loadaudio(tfSong);
                                 break;
                             default:
-                                console.log("audio already loaded or playing");
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                         }
                     } else if (payload.system === "previous") {
