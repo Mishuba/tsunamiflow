@@ -209,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
   TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
   TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
-  const TsunamiAudioOk = new Audio();
   const TsunamiRadio = document.getElementById("TFradioPlayer");
   const RadioTitle = document.getElementById("TfRadioStuff");
   const RadioButtons = document.getElementById("CheckRadio");
@@ -336,25 +335,41 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  Controller.bindAudio();
-
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
     Controller.bindNavBar();
+    Controller.bindAudio();
+    Controller.user.showProducts().then(() => {
+      Controller.bindPayments();
+      Controller.user.bindCart();
+    });
+
+    console.log(
+      new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
+    );
+
+    console.log(
+      new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
+    );
+    Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
+    );
+
+    Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+    //Controller.bindUsers();
+    Controller.initTsunamiWorkers();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", async () => {
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(reg => console.log("SW registered:", reg))
+          .catch(err => console.error("SW registration failed:", err));
+      });
+    }
   }
 
-  Controller.user.showProducts().then(() => {
-    Controller.bindPayments();
-    Controller.user.bindCart();
-  });
 
-  console.log(
-    new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
-  );
 
-  console.log(
-    new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
-  );
+
 
   function createSafeWorker(modulePath, classicPath) {
     try {
@@ -369,18 +384,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
-  );
 
-  Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
-  //Controller.bindUsers();
-  Controller.initTsunamiWorkers();
-
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-      navigator.serviceWorker.register("/service-worker.js")
-        .then(reg => console.log("SW registered:", reg))
-        .catch(err => console.error("SW registration failed:", err));
-    });
-  }
 });

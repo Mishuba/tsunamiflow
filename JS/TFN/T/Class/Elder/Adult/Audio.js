@@ -3,7 +3,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     // ===== DEFAULTS (Pattern B) =====
     SongList = null;
     randomMusicDefault = null;
-    TfAudio = new Audio();
     AudioSource = {};
     AudioElement = null;
     AudioReady = null;

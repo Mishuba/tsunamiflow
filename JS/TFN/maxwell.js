@@ -492,8 +492,6 @@ export class maxwell {
         const restart = this.audioRestart || document.createElement('button');
         const start = this.audioStart || document.createElement('button');
         const skip = this.audioSkip || document.createElement('button');
-        const element = document.querySelector('audio') || new Audio();
-        const RadioWorker = this.worker || {};
 
         title.innerHTML = "Welcome to TFN Radio";
 
@@ -519,17 +517,17 @@ export class maxwell {
         });
 
         this.onMe("TFRadioRestartButton", () => {
-            element.currentTime = 0;
-            this.soundEngine.startMusic(element);
+            this.soundEngine.AudioElement.currentTime = 0;
+            this.soundEngine.startMusic();
             start.innerHTML = "Pause Tsunami Radio";
         });
 
         this.onMe("TFradioButton", () => {
-            if (element.paused) {
-                this.soundEngine.playAudio(element);
+            if (this.soundEngine.AudioElement.paused) {
+                this.soundEngine.playAudio();
                 start.innerHTML = "Pause Tsunami Radio";
             } else {
-                this.soundEngine.stopMusic(element);
+                this.soundEngine.stopMusic();
                 start.innerHTML = "Play Tsunami Radio";
                 //this.audio.startMusic();
                 //this.audio.stopMusic();
@@ -537,7 +535,7 @@ export class maxwell {
         });
 
         this.onMe("TFradioSkipButton", () => {
-            element.src = "";
+            this.soundEngine.AudioElement.src = "";
             //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
     }
