@@ -41,7 +41,7 @@ export class TfPrintful extends User {
         if (totalEl) totalEl.textContent = grandTotal.toFixed(2);
     }
 
-    bindCart() {
+    async bindCart() {
         document.querySelectorAll('.cartForm').forEach(form => {
             const quantityInput = form.querySelector('.quantityInput');
             const variantSelect = form.querySelector('.variantSelect');

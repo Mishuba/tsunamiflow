@@ -321,6 +321,8 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
+    worker: createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js"),
+    sharedWorker: createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js"),
     //dbstores: indexdb
   });
 
@@ -339,24 +341,14 @@ document.addEventListener("DOMContentLoaded", () => {
     twoMore.appendChild(Controller.iframe.frame);
     Controller.bindNavBar();
     Controller.user.showProducts().then(() => {
-      Controller.bindPayments();
-      Controller.user.bindCart();
-    });
-
-    console.log(
-      new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url).href
-    );
-
-    console.log(
-      new URL("./TFN/T/Worker/Shared.js", import.meta.url).href
-    );
-    Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
-    );
-
-    Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
-    //Controller.bindUsers();
-    Controller.initTsunamiWorkers().then(() => {
-      Controller.bindAudio();
+      Controller.bindPayments().then(() => {
+        Controller.bindUsers();
+        Controller.user.bindCart().then(() => {
+          Controller.initTsunamiWorkers().then(() => {
+            Controller.bindAudio();
+          });
+        });
+      });
     });
 
     if ("serviceWorker" in navigator) {

@@ -341,7 +341,7 @@ export class maxwell {
             this.user.login();
         }, true);
     }
-    bindPayments() {
+    async bindPayments() {
         this.user.initMoney().then(() => {
             this.user.mountCard("UniqueOriginal");
             this.user.mountCard("SubscribeUsers");
