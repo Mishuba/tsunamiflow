@@ -348,7 +348,6 @@ this.worker.postMessage(this.tycadome(
           particles: this.particles
         }),
         [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
-      */
   }
   pauseAudio() {
     //  this.AudioState();
