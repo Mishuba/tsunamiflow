@@ -147,32 +147,34 @@ export class maxwell {
                 } finally {
                     if (payload.system === "file") {
                         console.log("payload.file", payload.file);
+                        let tfSong = this.soundEngine.AudioFile(event);
                         switch (this.soundEngine.AudioElement.src) {
                             case "":
-                                this.soundEngine.loadaudio(payload.file);
+
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                             case " ":
-                                this.soundEngine.loadaudio(payload.file);
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                             case null:
-                                this.soundEngine.loadaudio(payload.file);
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                             case undefined:
-                                this.soundEngine.loadaudio(payload.file);
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                             case "about:blank":
-                                this.soundEngine.loadaudio(payload.file);
+                                this.soundEngine.loadaudio(tfSong);
                                 break;
                             default:
                                 console.log("audio already loaded or playing");
                                 break;
                         }
                     } else if (payload.system === "previous") {
-                        this.soundEngine.loadaudio(payload.file);
+                        this.soundEngine.loadaudio(tfSong);
                     } else if (payload.system === "skip") {
-                        this.soundEngine.loadaudio(payload.file);
+                        this.soundEngine.loadaudio(tfSong);
                     } else {
-                        this.soundEngine.loadaudio(payload.file);
+                        this.soundEngine.loadaudio(tfSong);
                     }
                 }
                 break;
