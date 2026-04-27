@@ -320,6 +320,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 */
+
+  let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+  let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
   let Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -334,8 +337,8 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
-    worker: createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js"),
-    sharedWorker: createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js"),
+    worker: safeWorker,
+    sharedWorker: safeSharedWorker,
     //dbstores: indexdb
   });
 
