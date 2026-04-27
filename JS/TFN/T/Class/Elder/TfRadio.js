@@ -234,8 +234,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
   loadaudio(src) {
     this.AudioElement.src = src;
-    this.AudioElement.currentsrc = src;
-    //this.AudioElement.load();
+    this.AudioElement.load();
   }
 
 
@@ -363,7 +362,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   endedAudio() {
     console.log("The audio should have ended");
-    this.AudioElement.src = "";
+    this.AudioElement.removeAttribute("src");;
     this.removeAudioContext(this.AudioCxtId);
     //  this.AudioState();
     this.AudioNetworkState();
@@ -671,6 +670,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     }
 
     this.AudioElement.pause();
-    this.AudioElement.src = "";
+    this.AudioElement.removeAttribute("src");;
   }
 }

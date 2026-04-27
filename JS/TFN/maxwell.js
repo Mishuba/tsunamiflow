@@ -185,7 +185,6 @@ export class maxwell {
                         console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
                     }
 
-
                     this.handleSchedule(this.find("TFtime").innerHTML);
                 }
         }

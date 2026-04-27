@@ -195,7 +195,7 @@ let TfStickMan = new gameComponent(
 document.addEventListener("DOMContentLoaded", () => {
   let TfSite = new HeaderWeather();
   TfSite.EnHword(TFwordMishuba);
-  console.log(`${TfSite.WordOfTheDayArray}`);
+  console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray}`);
 
   TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
