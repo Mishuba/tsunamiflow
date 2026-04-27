@@ -321,12 +321,12 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   playAudio() {
     this.playaudio();
     console.log("Audio playback is playing");
-    //  this.startAnalyserLoop();
+     
 
-    //  this.visualizatorController = this.canvas.transferControlToOffscreen();
-    //  this.updateAnalyser();
-    /*
-      this.worker.postMessage(this.tycadome(
+    this.visualizatorController = this.canvas.transferControlToOffscreen();
+     this.updateAnalyser();
+
+this.worker.postMessage(this.tycadome(
         "tycadome-guest" + Date.now(),
         "visualizator",
         "radio.playing",
