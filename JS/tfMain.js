@@ -321,8 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 */
 
-  let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
-  let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
   let Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -337,8 +335,7 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
-    worker: safeWorker,
-    sharedWorker: safeSharedWorker,
+
     //dbstores: indexdb
   });
 
@@ -360,6 +357,10 @@ document.addEventListener("DOMContentLoaded", () => {
       Controller.bindPayments().then(() => {
         Controller.bindUsers();
         Controller.user.bindCart().then(() => {
+          let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+          let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+          Controller.worker = safeWorker;
+          Controller.sharedWorker = safeSharedWorker;
           Controller.initTsunamiWorkers().then(() => {
             Controller.bindAudio();
           });
