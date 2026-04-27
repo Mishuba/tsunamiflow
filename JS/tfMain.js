@@ -362,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
           Controller.worker = safeWorker;
           Controller.sharedWorker = safeSharedWorker;
           Controller.initTsunamiWorkers().then(() => {
+            console.log("TFN");
             Controller.bindAudio();
           });
         });
