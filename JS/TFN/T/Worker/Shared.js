@@ -101,43 +101,6 @@ core.setMessageHandler((data) => {
 |--------------------------------------------------------------------------
 */
 
-onconnect = (e) => {
-    const port = e.ports[0];
-
-    ports.push(port);
-    port.start();
-
-    /*
-    --------------------------------------------------------------
-    RECEIVE ONLY PRE-ROUTED TASKS FROM task.worker.js
-    --------------------------------------------------------------
-    */
-
-    port.onmessage = (event) => {
-        const task = event.data;
-
-        handleBackendTask(task, port);
-    };
-
-    /*
-    --------------------------------------------------------------
-    READY SIGNAL
-    --------------------------------------------------------------
-    */
-
-    port.postMessage(
-        tycadome(
-            crypto.randomUUID(),
-            "system",
-            "shared.ready",
-            {},
-            "ready",
-            "async",
-            {}
-        )
-    );
-};
-
 /*
 |--------------------------------------------------------------------------
 | Backend Execution Router
