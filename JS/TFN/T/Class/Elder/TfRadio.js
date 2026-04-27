@@ -527,7 +527,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
       this.AudioElement.addEventListener("canplaythrough", async () => {
         if (!this._wired) {
-          //this.initAudioContext();
+          this.initAudioContext();
           this._wired = true;
         }
         this.canplaythroughAudio();
@@ -537,18 +537,18 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
       this.AudioElement.addEventListener("play", () => {
         this.playAudio();
+this.startAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
       this.AudioElement.addEventListener("playing", () => {
         this.playingAudio();
-
-        //this.effects.hereDude(this.audioCanv, this.audioCtx, this.audio.TsunamiAnalyser, this.audio.TsunamiRadioDataArray, this.audio.TsunamiRadioBufferLength, this.audio.baseRadius, this.audio.particles);
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
       this.AudioElement.addEventListener("pause", async () => {
-        //this.AudioElement.pauseAudio(); cancelAnimationFrame(this.effects.visualizatorController);
+        this.AudioElement.pauseAudio();
+this.stopAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseAudio, "pause");
 
@@ -563,7 +563,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
       this.AudioElement.addEventListener("ended", async (ended) => {
-        //this.endedAudio(); cancelAnimationFrame(this.effects.visualizatorController);
+ cancelAnimationFrame(this.effects.visualizatorController);
+this.stopAnalyserLoop();
+this.destroyRadioSource();
+this.endedAudio();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
 
