@@ -237,7 +237,14 @@ document.addEventListener("DOMContentLoaded", () => {
   let flowGain = flowaudio.createGain();
   flowGain.gain.value = 1;
   let flowAnalyser = flowaudio.createAnalyser();
-  Object.assign(flowAnalyser, this.TfSoundAnalyserOptions);
+  let TfSoundAnalyserOptions = {
+    fftSize: 2048,
+    maxDecibels: 0,
+    minDecibels: -100,
+    smoothingTimeConstant: 0.5,
+    channelCountMode: "max"
+  }
+  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
   let flowbufferlength = flowAnalyser.frequencyBinCount;
   let flowDataArray = new Uint8Array(flowbufferlength);
   let MixerTF = flowaudio.createMediaStreamDestination();
