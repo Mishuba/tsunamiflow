@@ -391,7 +391,7 @@ this.worker.postMessage(this.tycadome(
 
     const buffer = new Uint8Array(analyser.frequencyBinCount);
     analyser.getByteFrequencyData(buffer);
-    return analyser.getByteFrequencyData(buffer); // or buffer
+    return buffer;
   }
   stopAnalyserLoop() {
     this._analyserLoopRunning = false;
@@ -407,7 +407,9 @@ this.worker.postMessage(this.tycadome(
     const loopAnalyzer = () => {
         if (!this._workerAnalyserRunning) return;
 
-        this.TfSoundAnalyser.getByteFrequencyData(
+       
+setInterval(() => {
+ this.TfSoundAnalyser.getByteFrequencyData(
             this.TfSoundsContextDataArray
         );
 
@@ -433,7 +435,7 @@ this.worker.postMessage(this.tycadome(
                 }
             )
         );
-
+}, 33);
         requestAnimationFrame(loopAnalyzer);
     };
 
@@ -518,7 +520,7 @@ this.worker.postMessage(this.tycadome(
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
 
       this.AudioElement.addEventListener("suspended", (suspend) => {
-        this.suspendAudio();
+        this.suspendedAudio();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
 
@@ -559,7 +561,7 @@ this.startAnalyserLoop();
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
       this.AudioElement.addEventListener("pause", async () => {
-        this.AudioElement.pauseAudio();
+        this.pauseAudio();
 this.stopAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseAudio, "pause");
@@ -575,7 +577,7 @@ this.stopAnalyserLoop();
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
       this.AudioElement.addEventListener("ended", async (ended) => {
- cancelAnimationFrame(this.effects.visualizatorController);
+ //cancelAnimationFrame(this.visualizatorController);
 this.stopAnalyserLoop();
 this.destroyRadioSource();
 this.endedAudio();
