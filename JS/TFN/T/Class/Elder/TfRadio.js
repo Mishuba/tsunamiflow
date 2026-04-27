@@ -395,38 +395,50 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   stopAnalyserLoop() {
     this._analyserLoopRunning = false;
+ this._workerAnalyserRunning = false;
   }
-  updateAnalyser() {
+
+ updateAnalyser() {
+    if (this._workerAnalyserRunning) return;
     if (!this.TfSoundAnalyser) return;
 
-    //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
-    const loopAnalyzer = () => {
-      this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
-      this.worker.postMessage(this.tycadome(
-        "tycadome-guest" + Date.now(),
-        "visualizator",
-        "radio.playing",
-        {
-          source: "web",
-          target: "device:web-001"
-        },
-        {
-          status: "pending",
-          priority: "low"
-        },
-        "async",
-        {
-          system: "visual_data",
-          //canvas: this.visualizatorController,
-          dataArray: this.TfSoundsContextDataArray,
-          bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-          //particles: this.particles
-        }));
+    this._workerAnalyserRunning = true;
 
-      requestAnimationFrame(loopAnalyzer);
+    const loopAnalyzer = () => {
+        if (!this._workerAnalyserRunning) return;
+
+        this.TfSoundAnalyser.getByteFrequencyData(
+            this.TfSoundsContextDataArray
+        );
+
+        this.worker.postMessage(
+            this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "visualizator",
+                "radio.playing",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "visual_data",
+                    dataArray: this.TfSoundsContextDataArray,
+                    bufferLength: this.TfSoundsContextDataArray.length,
+                    baseRadius: this.baseRadius
+                }
+            )
+        );
+
+        requestAnimationFrame(loopAnalyzer);
     };
+
     loopAnalyzer();
-  }
+}
 
   playingAudio() {
     //this.AudioState();
