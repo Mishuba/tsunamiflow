@@ -726,7 +726,7 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    initTsunamiWorkers() {
+    async initTsunamiWorkers() {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             return;

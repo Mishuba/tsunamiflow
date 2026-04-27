@@ -338,7 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
     Controller.bindNavBar();
-    Controller.bindAudio();
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
       Controller.user.bindCart();
@@ -356,7 +355,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
     //Controller.bindUsers();
-    Controller.initTsunamiWorkers();
+    Controller.initTsunamiWorkers().then(() => {
+      Controller.bindAudio();
+    });
 
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", async () => {
