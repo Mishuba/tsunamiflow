@@ -5,6 +5,46 @@ export class TsDomCanvas extends TsDom { //dom n window
     workerListeners = new Map();
     canvas = null;
     contextTypecanvas = "2d";
+    /*
+    //Make Canvas an image.
+    //Context Stuff
+    FirstGame.context.createImageData(width,height,settings);
+
+    //imageData
+        //An ImageData object containing the array of pixel values.
+    let imageData = FirstGame.context.getImageData(sx, sy, sw, sh, settings);
+
+    //Green Screen 
+        for (let i = 0; i < imageData.data.length; i += 4) {
+        //Modify pixel data
+        imageData.data[i + 0] = 190; //red
+        imageData.data[i + 1] = 0; //Green
+        imageData.data[i + 2] = 210; //Blue
+        imageData.data[i + 3] = 255; //A (what is a);
+    }
+
+    
+    FirstGame.context.putImageData(imageData,dx,dy,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
+    */
+    /*
+        dx
+        Horizontal position (x coordinate) at which to place the image data in the destination canvas.
+    
+        dy
+        Vertical position (y coordinate) at which to place the image data in the destination canvas.
+    
+        dirtyX Optional
+        Horizontal position (x coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
+    
+        dirtyY Optional
+        Vertical position (y coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
+    
+        dirtyWidth Optional
+        Width of the rectangle to be painted. Defaults to the width of the image data.
+    
+        dirtyHeight Optional
+        Height of the rectangle to be painted. Defaults to the height of the image data.
+    */
     contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };
     canvasctx = null;
     /*

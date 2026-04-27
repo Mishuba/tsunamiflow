@@ -4,11 +4,8 @@ export class TsunamiFlowDj extends TsunamiFlowRadio {
     MixerDestination = null;
     constructor(option = {}) {
         super(option);
-        this.initMixerDestination();
-    }
-    initMixerDestination() {
-        if (this.TfSoundsContext) {
-            this.MixerDestination = this.TfSoundsContext.createMediaStreamDestination();
+        if (option.MixerDestination) {
+            this.MixerDestination = option.MixerDestination;
         }
     }
     addMixerMediaElement(element, id = null, monitor = false) {

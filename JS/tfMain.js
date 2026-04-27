@@ -193,64 +193,106 @@ let TfStickMan = new gameComponent(
 */
 
 document.addEventListener("DOMContentLoaded", () => {
-  const TsunamiRadio = document.getElementById("TFradioPlayer");
-  TsunamiRadio.crossOrigin = "anonymous";
+  let TfSite = new HeaderWeather();
+  TfSite.EnHword(TFwordMishuba);
+  console.log(`${Controller.site.WordOfTheDayArray}`);
 
+  TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+  TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+  TfSite.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+  TfSite.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+  TfSite.NewsArray.push("Mishuba was a percussionist in school band.");
+  TfSite.NewsArray.push("Mishuba attended multiple schools across states.");
+  TfSite.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+  TfSite.NewsArray.push("Mishuba graduated from Blythewood High School.");
+  TfSite.NewsArray.push("Mishuba ran track at University of South Carolina.");
+  TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
+  TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+
+  const TsunamiAudioOk = new Audio();
+  const TsunamiRadio = document.getElementById("TFradioPlayer");
   const RadioTitle = document.getElementById("TfRadioStuff");
   const RadioButtons = document.getElementById("CheckRadio");
-  const twoMore = document.getElementById("mainTsectionFdiv");
+  const RadioLastButton = document.createElement("button");
+  const RadioRestartButton = document.createElement("button");
+  const RadioStartButton = document.createElement("button");
+  const RadioSkipButton = document.createElement("button");
   const RadioCanvas = document.getElementById("TFradioCanvas");
+  const dock = document.getElementById("radioDock");
+  const toggle = document.getElementById("toggleRadio");
+  const header = document.getElementById("radioHeader");
 
-const dock = document.getElementById("radioDock");
-const toggle = document.getElementById("toggleRadio");
-const header = document.getElementById("radioHeader");
-
-function updateRadioState() {
+  function updateRadioState() {
     const collapsed = dock.classList.contains("collapsed");
 
     toggle.textContent = collapsed ? "▼" : "▲";
-}
+  }
 
-function toggleRadioDock() {
+  function toggleRadioDock() {
     dock.classList.toggle("collapsed");
     updateRadioState();
-}
+  }
 
-/* button click */
-toggle.addEventListener("click", (e) => {
+  let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
+  let flowGain = flowaudio.createGain();
+  flowGain.gain.value = 1;
+  let flowAnalyser = flowaudio.createAnalyser();
+  Object.assign(flowAnalyser, this.TfSoundAnalyserOptions);
+  let flowbufferlength = flowAnalyser.frequencyBinCount;
+  let flowDataArray = new Uint8Array(flowbufferlength);
+  let MixerTF = flowaudio.createMediaStreamDestination();
+
+  /* button click */
+  toggle.addEventListener("click", (e) => {
     e.stopPropagation();
     toggleRadioDock();
-});
+  });
 
-/* header click */
-header.addEventListener("click", () => {
+  /* header click */
+  header.addEventListener("click", () => {
     toggleRadioDock();
-});
+  });
 
-/* set initial state */
-updateRadioState();
+  /* set initial state */
+  updateRadioState();
 
+  let nation = new TsunamiFlowDj({
+    audioElement: TsunamiRadio,
+    SoundContext: flowaudio,
+    masterGain: flowGain,
+    TfSoundAnalyser: flowAnalyser,
+    TfSoundContextBufferLength: flowbufferlength,
+    TfSoundContextDataArray: flowDataArray,
+    MixerDestination: MixerTF
+  });
+
+  const twoMore = document.getElementById("mainTsectionFdiv");
 
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin";
 
-  const RadioLastButton = document.createElement("button");
-  const RadioRestartButton = document.createElement("button");
-  const RadioStartButton = document.createElement("button");
-  const RadioSkipButton = document.createElement("button");
-
-  let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-  let Stickman = new letsDoIt("Homepage Game", TfStickMan);
-
-  let TfSite = new HeaderWeather();
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
+  frameTF.frame.title = "Main Website Content";
+  frameTF.frame.id = "TsunamiContent";
+  frameTF.frame.name = "TsunamiMainFlowContent";
+  frameTF.frame.width = twoMore.width - 1;
+  frameTF.frame.height = twoMore.height - 1;;
+  frameTF.frame.style.background = "white";
+  frameTF.frame.style.touchAction = "manipulation";
+  frameTF.frame.style.pointerEvents = "auto";
+  frameTF.frame.src = "Iframe/Pages/homepage.html";
+
   let nifage = new TfPrintful();
+  nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
+  nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+
   let style = new TsunamiFlowImageEngine();
-  let nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio });
 
   let network = new TsunamiLiveVideoController();
+
+  let Stickman = new letsDoIt("Homepage Game", TfStickMan);
 
   let Controller = new maxwell({
     site: TfSite,
@@ -268,42 +310,23 @@ updateRadioState();
     AudioSkip: RadioSkipButton,
   });
 
-
-  Controller.site.EnHword(TFwordMishuba);
-  console.log(`${Controller.site.WordOfTheDayArray}`);
-
-  Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-  Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-  Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-  Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-  Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
-  Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
-  Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-  Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
-  Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
-  Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
-  Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
-
   Controller.site.requestLocation();
 
-  Controller.bindNavBar();
-
-  Controller.bindAudio();
-
-    
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
+  Controller.iframe.frame.addEventListener("load", () => {
+    try {
+      Controller.iframe.frame.contentWindow.controller = Controller;
+      Controller.iframe.MenuSwitch(Controller.iframe.frame);
+    } catch (e) {
+      console.error("Cross-origin block:", e);
     }
   });
 
-  Controller.user.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
-  Controller.user.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+  Controller.bindAudio();
 
-
+  if (twoMore) {
+    twoMore.appendChild(Controller.iframe.frame);
+    Controller.bindNavBar();
+  }
 
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
@@ -331,79 +354,18 @@ updateRadioState();
     }
   }
 
-  //Controller.worker.createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
-
   Controller.worker = new Worker(new URL("./TFN/T/Worker/WebWorker/TaskWebWorker.js", import.meta.url), { type: "module" }
   );
 
-  //Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
-  Controller.sharedWorker = new SharedWorker(
-    new URL("./TFN/T/Worker/Shared.js", import.meta.url),
-    { type: "module" }
-  );
-
+  Controller.sharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+  //Controller.bindUsers();
   Controller.initTsunamiWorkers();
-  Controller.bindUsers();
-  Controller.iframe.frame.title = "Main Website Content";
-  Controller.iframe.frame.id = "TsunamiContent";
-  Controller.iframe.frame.name = "TsunamiMainFlowContent";
-  Controller.iframe.frame.width = 925;
-  Controller.iframe.frame.height = 430;
-  Controller.iframe.frame.style.background = "white";
-  Controller.iframe.frame.style.touchAction = "manipulation";
-  Controller.iframe.frame.style.pointerEvents = "auto";
 
-  if (twoMore) twoMore.appendChild(Controller.iframe.frame);
-
-  Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-  Controller.iframe.MenuSwitch(Controller.iframe.frame);
-
-  Controller.iframe.frame.addEventListener("load", () => {
-    try {
-      Controller.iframe.frame.contentWindow.controller = Controller;
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-
-
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("SW registered:", reg))
+        .catch(err => console.error("SW registration failed:", err));
+    });
+  }
 });
-/*
-    //Make Canvas an image.
-    //Context Stuff
-    FirstGame.context.createImageData(width,height,settings);
-
-    //imageData
-        //An ImageData object containing the array of pixel values.
-    let imageData = FirstGame.context.getImageData(sx, sy, sw, sh, settings);
-
-    //Green Screen 
-        for (let i = 0; i < imageData.data.length; i += 4) {
-        //Modify pixel data
-        imageData.data[i + 0] = 190; //red
-        imageData.data[i + 1] = 0; //Green
-        imageData.data[i + 2] = 210; //Blue
-        imageData.data[i + 3] = 255; //A (what is a);
-    }
-
-    
-    FirstGame.context.putImageData(imageData,dx,dy,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
-    */
-/*
-    dx
-    Horizontal position (x coordinate) at which to place the image data in the destination canvas.
-
-    dy
-    Vertical position (y coordinate) at which to place the image data in the destination canvas.
-
-    dirtyX Optional
-    Horizontal position (x coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
-
-    dirtyY Optional
-    Vertical position (y coordinate) of the top-left corner from which the image data will be extracted. Defaults to 0.
-
-    dirtyWidth Optional
-    Width of the rectangle to be painted. Defaults to the width of the image data.
-
-    dirtyHeight Optional
-    Height of the rectangle to be painted. Defaults to the height of the image data.
-*/

@@ -81,6 +81,19 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         if (options.SoundContext) {
             this.TfSoundsContext = options.SoundContext;
         }
+
+        if (options.masterGain) {
+            this.masterGain = options.masterGain;
+        }
+        if (options.TfSoundAnalyser) {
+            this.TfSoundAnalyser = options.TfSoundAnalyser;
+        }
+        if (options.TfSoundContextBufferLength) {
+            this.TfSoundContextBufferLength = options.TfSoundContextBufferLength;
+        }
+        if (options.TfSoundContextDataArray) {
+            this.TfSoundContextDataArray = options.TfSoundContextDataArray;
+        }
         // FIX: apply after instantiation
         // ===== SPEECH RECOGNITION =====
         if (!this.SpeechRecognitionAPI) {
@@ -513,11 +526,15 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     initAudioContext() {
         if (!this.TfSoundsContext) {
             this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
 
+        if (!this.masterGain) {
             // MASTER
             this.masterGain = this.TfSoundsContext.createGain();
             this.masterGain.gain.value = 1;
+        }
 
+        if (!this.TfSoundAnalyser) {
             // GLOBAL ANALYSER BUS
             this.TfSoundAnalyser = this.TfSoundsContext.createAnalyser();
             Object.assign(this.TfSoundAnalyser, this.TfSoundAnalyserOptions);
@@ -525,20 +542,19 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             // DATA BUFFER
             this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
             this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
-
-            // ROUTING
-
-            this.masterGain
-                .connect(this.TfSoundAnalyser)
-                .connect(this.TfSoundsContext.destination);
-
-            this.emit("ready", this.TfSoundsContext);
         }
+        // ROUTING
 
+        this.masterGain
+            .connect(this.TfSoundAnalyser)
+            .connect(this.TfSoundsContext.destination);
+
+        this.emit("ready", this.TfSoundsContext);
         if (this.TfSoundsContext.state === "suspended") {
             return this.TfSoundsContext.resume();
         }
     }
+
     addAudioContextSource(element, id = null) {
         this.initAudioContext();
 
