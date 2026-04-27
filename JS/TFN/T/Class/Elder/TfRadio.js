@@ -184,12 +184,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   particles = [];
   constructor(options = {}) {
     super(options);
-    this.AudioElement.crossOrigin = "anonymous";
-    this.AudioElement.preload = "auto";
-    this.AudioElement.controls = false;
-    this.AudioElement.loop = false;
-    this.AudioElement.muted = true;
-    //this.AudioElement.volume = 1;
   }
 
   //element

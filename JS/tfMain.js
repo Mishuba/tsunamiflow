@@ -9,6 +9,19 @@ import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 
+function createSafeWorker(modulePath, classicPath) {
+  try {
+    return new Worker(
+      new URL(modulePath, import.meta.url),
+      { type: "module" }
+    );
+
+  } catch (err) {
+    console.warn("Module worker failed. Falling back:", err);
+    return new Worker(classicPath);
+  }
+}
+
 let TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
@@ -359,23 +372,5 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     }
   }
-
-
-
-
-
-  function createSafeWorker(modulePath, classicPath) {
-    try {
-      return new Worker(
-        new URL(modulePath, import.meta.url),
-        { type: "module" }
-      );
-
-    } catch (err) {
-      console.warn("Module worker failed. Falling back:", err);
-      return new Worker(classicPath);
-    }
-  }
-
 
 });
