@@ -360,7 +360,7 @@ this.worker.postMessage(this.tycadome(
   endedAudio() {
     console.log("The audio should have ended");
     this.AudioElement.removeAttribute("src");;
-    this.removeAudioContext(this.AudioCxtId);
+    this.removeAudioContextSource(this.AudioCxtId);
     //  this.AudioState();
     this.AudioNetworkState();
   }
