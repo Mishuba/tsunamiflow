@@ -326,7 +326,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.playaudio();
     console.log("Audio playback is playing");
      
-
+/*
     this.visualizatorController = this.canvas.transferControlToOffscreen();
      this.updateAnalyser();
 
@@ -352,6 +352,7 @@ this.worker.postMessage(this.tycadome(
           particles: this.particles
         }),
         [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+*/
   }
   pauseAudio() {
     //  this.AudioState();
@@ -359,7 +360,7 @@ this.worker.postMessage(this.tycadome(
   }
   endedAudio() {
     console.log("The audio should have ended");
-    this.AudioElement.removeAttribute("src");;
+    this.AudioElement.removeAttribute("src");
     this.removeAudioContextSource(this.AudioCxtId);
     //  this.AudioState();
     this.AudioNetworkState();
