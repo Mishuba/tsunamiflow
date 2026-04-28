@@ -282,7 +282,8 @@ document.addEventListener("DOMContentLoaded", () => {
     TfSoundAnalyser: flowAnalyser,
     TfSoundContextBufferLength: flowbufferlength,
     TfSoundContextDataArray: flowDataArray,
-    MixerDestination: MixerTF
+    MixerDestination: MixerTF,
+    canvas: RadioCanvas
   });
 
   const twoMore = document.getElementById("mainTsectionFdiv");
