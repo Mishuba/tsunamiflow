@@ -288,16 +288,20 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.tfRadioLoadStartTime = Date.now();
     console.log("Load start time recorded:", this.tfRadioLoadStartTime);
     if (this.canvas !== null) {
+/*
       if (!this.canvasctx) {
         this.canvasctx = this.canvas.getContext("2d");
       } else {
 
       }
       return this.canvasctx;
+*/
     } else {
+/*
       this.canvas = document.createElement("canvas");
       this.canvasctx = this.canvas.getContext("2d");
       return this.canvasctx;
+*/
     }
   }
   loadedmetadataAudio() {
@@ -351,7 +355,7 @@ this.worker.postMessage(this.tycadome(
   }
   pauseAudio() {
     //  this.AudioState();
-    this.stopMusic();
+    this.stopaudio();
   }
   endedAudio() {
     console.log("The audio should have ended");
