@@ -554,7 +554,7 @@ setInterval(() => {
 
       this.AudioElement.addEventListener("play", () => {
         this.playAudio();
-this.startAnalyserLoop();
+//this.startAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
