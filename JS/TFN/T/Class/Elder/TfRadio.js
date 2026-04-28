@@ -582,8 +582,8 @@ this.stopAnalyserLoop();
 
       this.AudioElement.addEventListener("ended", async (ended) => {
  //cancelAnimationFrame(this.visualizatorController);
-this.stopAnalyserLoop();
-this.destroyRadioSource();
+//this.stopAnalyserLoop();
+//this.destroyRadioSource();
 this.endedAudio();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
