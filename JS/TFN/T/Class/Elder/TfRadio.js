@@ -288,20 +288,20 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.tfRadioLoadStartTime = Date.now();
     console.log("Load start time recorded:", this.tfRadioLoadStartTime);
     if (this.canvas !== null) {
-/*
-      if (!this.canvasctx) {
-        this.canvasctx = this.canvas.getContext("2d");
-      } else {
-
-      }
-      return this.canvasctx;
-*/
+      /*
+            if (!this.canvasctx) {
+              this.canvasctx = this.canvas.getContext("2d");
+            } else {
+      
+            }
+            return this.canvasctx;
+      */
     } else {
-/*
-      this.canvas = document.createElement("canvas");
-      this.canvasctx = this.canvas.getContext("2d");
-      return this.canvasctx;
-*/
+      /*
+            this.canvas = document.createElement("canvas");
+            this.canvasctx = this.canvas.getContext("2d");
+            return this.canvasctx;
+      */
     }
   }
   loadedmetadataAudio() {
@@ -325,34 +325,33 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   playAudio() {
     this.playaudio();
     console.log("Audio playback is playing");
-     
-/*
-    this.visualizatorController = this.canvas.transferControlToOffscreen();
-     this.updateAnalyser();
 
-this.worker.postMessage(this.tycadome(
-        "tycadome-guest" + Date.now(),
-        "visualizator",
-        "radio.playing",
-        {
-          source: "web",
-          target: "device:web-001"
-        },
-        {
-          status: "pending",
-          priority: "low"
-        },
-        "async",
-        {
-          system: "playing",
-          canvas: this.visualizatorController,
-          //        analyser: this.updateAnalyser(),
-          dataArray: this.TfSoundsContextDataArray,
-          bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-          particles: this.particles
-        }),
-        [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
-*/
+
+    //this.updateAnalyser();
+    /*
+    this.worker.postMessage(this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "visualizator",
+            "radio.playing",
+            {
+              source: "web",
+              target: "device:web-001"
+            },
+            {
+              status: "pending",
+              priority: "low"
+            },
+            "async",
+            {
+              system: "playing",
+              canvas: this.visualizatorController,
+              //        analyser: this.updateAnalyser(),
+              dataArray: this.TfSoundsContextDataArray,
+              bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+              particles: this.particles
+            }),
+            [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+    */
   }
   pauseAudio() {
     //  this.AudioState();
@@ -399,52 +398,52 @@ this.worker.postMessage(this.tycadome(
   }
   stopAnalyserLoop() {
     this._analyserLoopRunning = false;
- this._workerAnalyserRunning = false;
+    this._workerAnalyserRunning = false;
   }
 
- updateAnalyser() {
+  updateAnalyser() {
     if (this._workerAnalyserRunning) return;
     if (!this.TfSoundAnalyser) return;
 
     this._workerAnalyserRunning = true;
 
     const loopAnalyzer = () => {
-        if (!this._workerAnalyserRunning) return;
+      if (!this._workerAnalyserRunning) return;
 
-       
-setInterval(() => {
- this.TfSoundAnalyser.getByteFrequencyData(
-            this.TfSoundsContextDataArray
+
+      setInterval(() => {
+        this.TfSoundAnalyser.getByteFrequencyData(
+          this.TfSoundsContextDataArray
         );
 
         this.worker.postMessage(
-            this.tycadome(
-                "tycadome-guest" + Date.now(),
-                "visualizator",
-                "radio.playing",
-                {
-                    source: "web",
-                    target: "device:web-001"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "visual_data",
-                    dataArray: this.TfSoundsContextDataArray,
-                    bufferLength: this.TfSoundsContextDataArray.length,
-                    baseRadius: this.baseRadius
-                }
-            )
+          this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "visualizator",
+            "radio.playing",
+            {
+              source: "web",
+              target: "device:web-001"
+            },
+            {
+              status: "pending",
+              priority: "low"
+            },
+            "async",
+            {
+              system: "visual_data",
+              dataArray: this.TfSoundsContextDataArray,
+              bufferLength: this.TfSoundsContextDataArray.length,
+              baseRadius: this.baseRadius
+            }
+          )
         );
-}, 33);
-        requestAnimationFrame(loopAnalyzer);
+      }, 33);
+      requestAnimationFrame(loopAnalyzer);
     };
 
     loopAnalyzer();
-}
+  }
 
   playingAudio() {
     //this.AudioState();
@@ -555,7 +554,7 @@ setInterval(() => {
 
       this.AudioElement.addEventListener("play", () => {
         this.playAudio();
-//this.startAnalyserLoop();
+        //this.startAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
@@ -566,7 +565,7 @@ setInterval(() => {
 
       this.AudioElement.addEventListener("pause", async () => {
         this.pauseAudio();
-this.stopAnalyserLoop();
+        this.stopAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseAudio, "pause");
 
@@ -581,10 +580,10 @@ this.stopAnalyserLoop();
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
       this.AudioElement.addEventListener("ended", async (ended) => {
- //cancelAnimationFrame(this.visualizatorController);
-//this.stopAnalyserLoop();
-//this.destroyRadioSource();
-this.endedAudio();
+        //cancelAnimationFrame(this.visualizatorController);
+        //this.stopAnalyserLoop();
+        //this.destroyRadioSource();
+        this.endedAudio();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
 

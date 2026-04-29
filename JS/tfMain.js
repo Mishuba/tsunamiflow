@@ -229,7 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioRestartButton = document.createElement("button");
   const RadioStartButton = document.createElement("button");
   const RadioSkipButton = document.createElement("button");
+
   const RadioCanvas = document.getElementById("TFradioCanvas");
+
   const dock = document.getElementById("radioDock");
   const toggle = document.getElementById("toggleRadio");
   const header = document.getElementById("radioHeader");
