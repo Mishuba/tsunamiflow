@@ -252,14 +252,15 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.AudioElement.pause();
     console.log("Audio playback is paused");
   }
-
-  stopaudio() {
-    if (this.AudioElement) {
-      this.AudioElement.pause();
-      this.AudioElement.currentTime = 0;
-      console.log("Audio playback is stopped");
+  /*
+    stopaudio() {
+      if (this.AudioElement) {
+        this.AudioElement.pause();
+        this.AudioElement.currentTime = 0;
+        console.log("Audio playback is stopped");
+      }
     }
-  }
+  */
   previousaudio(music) {
     this.AudioElement.src = music;
     this.AudioElement.play();
