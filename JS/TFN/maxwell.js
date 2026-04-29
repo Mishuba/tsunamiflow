@@ -742,7 +742,7 @@ export class maxwell {
         this.user.worker = this.worker;
         this.imageEngine.worker = this.worker;
         this.soundEngine.worker = this.worker;
-        this.soundEngine.visualizatorController = this.canvas.transferControlToOffscreen();
+        this.soundEngine.visualizatorController = this.soundEngine.canvas.transferControlToOffscreen();
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
 
