@@ -564,10 +564,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
       this.AudioElement.addEventListener("pause", async () => {
-        this.pauseAudio();
+        this.pauseaudio();
         this.stopAnalyserLoop();
       });
-      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseAudio, "pause");
+      this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseaudio, "pause");
 
       this.AudioElement.addEventListener("timeupdate", () => {
         this.timeupdateAudio();
