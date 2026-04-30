@@ -350,7 +350,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
         canvas: this.visualizatorController,
         //        analyser: this.updateAnalyser(),
         dataArray: this.TfSoundsContextDataArray,
-        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+        bufferLength: this.TfSoundsContextDataArray.buffer, baseRadius: this.baseRadius,
         particles: this.particles
       }),
       [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
