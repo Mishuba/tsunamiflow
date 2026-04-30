@@ -324,7 +324,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   canplaythroughAudio() {
     //  this.AudioState();
-    //this.startMusic();
+    this.startMusic();
     console.log("Audio playback is can play through");
   }
   playAudio() {
@@ -350,8 +350,12 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
         canvas: this.visualizatorController,
         //        analyser: this.updateAnalyser(),
         dataArray: this.TfSoundsContextDataArray,
+<<<<<<< HEAD
         bufferLength: this.TfSoundContextBufferLength,
         baseRadius: this.baseRadius,
+=======
+        bufferLength: this.TfSoundsContextDataArray.buffer, baseRadius: this.baseRadius,
+>>>>>>> ab8d75059cabfd472aa40e222c9c113c5e565565
         particles: this.particles
       }),
       [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
