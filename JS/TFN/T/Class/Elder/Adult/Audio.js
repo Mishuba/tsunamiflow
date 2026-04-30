@@ -50,7 +50,8 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     TfSoundsOscillator = null;
     TfSoundsWaveShaperNodeOptions = {};
     TfSoundsWaveShaper = null;
-
+    TfSoundContextBufferLength = null;
+    TfSoundContextDataArray = null;
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
