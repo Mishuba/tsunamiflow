@@ -242,6 +242,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
         if (this.AudioElement.paused) {
+          /*
           this.worker.postMessage(this.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
@@ -265,6 +266,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
               particles: this.particles
             }),
             [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+          */
           await this.AudioElement.play();
         }
       }
