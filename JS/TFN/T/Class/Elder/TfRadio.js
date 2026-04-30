@@ -324,7 +324,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   canplaythroughAudio() {
     //  this.AudioState();
-    //this.startMusic();
+    this.startMusic();
     console.log("Audio playback is can play through");
   }
   playAudio() {
