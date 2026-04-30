@@ -237,11 +237,36 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
 
   async playaudio() {
-    //  this.connectaudio();
-    //  this.AudioState();
     try {
+      //  this.connectaudio();
+      //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
-        await this.AudioElement.play()
+        if (this.AudioElement.paused) {
+          this.worker.postMessage(this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "visualizator",
+            "radio.playing",
+            {
+              source: "web",
+              target: "device:web-001"
+            },
+            {
+              status: "pending",
+              priority: "low"
+            },
+            "async",
+            {
+              system: "playing",
+              canvas: this.visualizatorController,
+              //        analyser: this.updateAnalyser(),
+              dataArray: this.TfSoundsContextDataArray,
+              bufferLength: this.TfSoundContextBufferLength,
+              baseRadius: this.baseRadius,
+              particles: this.particles
+            }),
+            [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+          await this.AudioElement.play();
+        }
       }
     } catch (error) {
       if (error.name === "NotAllowedError") {
@@ -324,43 +349,10 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   }
   canplaythroughAudio() {
     //  this.AudioState();
-    this.startMusic();
+    this.playaudio();
     console.log("Audio playback is can play through");
   }
-  playAudio() {
-    this.playaudio();
-    console.log("Audio playback is playing");
-    //this.updateAnalyser();
 
-    this.worker.postMessage(this.tycadome(
-      "tycadome-guest" + Date.now(),
-      "visualizator",
-      "radio.playing",
-      {
-        source: "web",
-        target: "device:web-001"
-      },
-      {
-        status: "pending",
-        priority: "low"
-      },
-      "async",
-      {
-        system: "playing",
-        canvas: this.visualizatorController,
-        //        analyser: this.updateAnalyser(),
-        dataArray: this.TfSoundsContextDataArray,
-<<<<<<< HEAD
-        bufferLength: this.TfSoundContextBufferLength,
-        baseRadius: this.baseRadius,
-=======
-        bufferLength: this.TfSoundsContextDataArray.buffer, baseRadius: this.baseRadius,
->>>>>>> ab8d75059cabfd472aa40e222c9c113c5e565565
-        particles: this.particles
-      }),
-      [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
-
-  }
   endedAudio() {
     console.log("The audio should have ended");
     this.AudioElement.src = "";
@@ -557,7 +549,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
 
       this.AudioElement.addEventListener("play", () => {
-        this.playAudio();
+        this.playaudio();
         //this.startAnalyserLoop();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
