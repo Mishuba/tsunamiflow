@@ -1,5 +1,6 @@
 import { TsunamiFlowAudio } from "./Adult/Audio.js";
 export class TsunamiFlowRadio extends TsunamiFlowAudio {
+  visualizatorController = null;
   _radioBound = false;
   _wired = false;
   radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
@@ -184,6 +185,9 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   particles = [];
   constructor(options = {}) {
     super(options);
+    if (options.visualizatorController) {
+      this.visualizatorController = options.visualizatorController;
+    }
   }
 
   //element
@@ -326,33 +330,31 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
   playAudio() {
     this.playaudio();
     console.log("Audio playback is playing");
-
-
     //this.updateAnalyser();
-    /*
+
     this.worker.postMessage(this.tycadome(
-            "tycadome-guest" + Date.now(),
-            "visualizator",
-            "radio.playing",
-            {
-              source: "web",
-              target: "device:web-001"
-            },
-            {
-              status: "pending",
-              priority: "low"
-            },
-            "async",
-            {
-              system: "playing",
-              canvas: this.visualizatorController,
-              //        analyser: this.updateAnalyser(),
-              dataArray: this.TfSoundsContextDataArray,
-              bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
-              particles: this.particles
-            }),
-            [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
-    */
+      "tycadome-guest" + Date.now(),
+      "visualizator",
+      "radio.playing",
+      {
+        source: "web",
+        target: "device:web-001"
+      },
+      {
+        status: "pending",
+        priority: "low"
+      },
+      "async",
+      {
+        system: "playing",
+        canvas: this.visualizatorController,
+        //        analyser: this.updateAnalyser(),
+        dataArray: this.TfSoundsContextDataArray,
+        bufferLength: this.TfSoundsContextDataArray.length, baseRadius: this.baseRadius,
+        particles: this.particles
+      }),
+      [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
+
   }
   endedAudio() {
     console.log("The audio should have ended");

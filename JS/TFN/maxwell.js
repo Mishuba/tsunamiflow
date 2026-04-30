@@ -743,7 +743,6 @@ export class maxwell {
         this.imageEngine.worker = this.worker;
         this.soundEngine.worker = this.worker;
         console.log("work dammit");
-        this.soundEngine.visualizatorController = this.soundEngine.canvas.transferControlToOffscreen();
         this.videoEngine.worker = this.worker;
         this.game.worker = this.worker;
 

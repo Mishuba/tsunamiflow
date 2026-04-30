@@ -231,6 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioSkipButton = document.createElement("button");
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
+  const visualizatorController = RadioCanvas.transferControlToOffscreen();
 
   const dock = document.getElementById("radioDock");
   const toggle = document.getElementById("toggleRadio");
@@ -285,7 +286,8 @@ document.addEventListener("DOMContentLoaded", () => {
     TfSoundContextBufferLength: flowbufferlength,
     TfSoundContextDataArray: flowDataArray,
     MixerDestination: MixerTF,
-    canvas: RadioCanvas
+    canvas: RadioCanvas,
+    visualizatorController: visualizatorController
   });
 
   const twoMore = document.getElementById("mainTsectionFdiv");
