@@ -3,7 +3,7 @@
    Backend + realtime always network-only
 */
 
-const VERSION = "v1.4";
+const VERSION = "v1.4.1";
 const CACHE_NAME = `tf-cache-${VERSION}`;
 const OFFLINE_URL = "/Offline/offline.html";
 
@@ -79,26 +79,47 @@ const PRECACHE_URLS = [
     "/Iframe/Pages/TFnetwork.html",
 ];
 
+/* ---------------- UTIL ---------------- */
+const isNetworkOnly = (url) =>
+    url.hostname.includes("world.tsunamiflow.club") ||
+    url.pathname.startsWith("/api/") ||
+    url.pathname.startsWith("/webhook/") ||
+    url.pathname.startsWith("/ws/") ||
+    url.protocol.startsWith("ws");
+
+const isDynamic = (url) =>
+    url.search.length > 0 ||
+    /token|session|auth|signed|nonce/i.test(url.pathname);
+
+/* normalize cache key (critical fix) */
+const cacheKey = (request) => {
+    const url = new URL(request.url);
+    url.search = ""; // prevents cache explosion from query strings
+    return url.toString();
+};
+
 /* ---------------- INSTALL ---------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil((async () => {
         const cache = await caches.open(CACHE_NAME);
 
-        for (const url of PRECACHE_URLS) {
-            try {
-                const res = await fetch(new Request(url, { cache: "reload" }));
+        const results = await Promise.allSettled(
+            PRECACHE_URLS.map(async (path) => {
+                const req = new Request(path, { cache: "reload" });
 
-                if (!res || !res.ok) continue;
-                if (res.redirected) continue;
+                try {
+                    const res = await fetch(req);
 
-                // only same-origin
-                if (new URL(res.url, self.location.origin).origin !== self.location.origin) {
-                    continue;
-                }
+                    if (!res || !res.ok) return;
 
-                await cache.put(url, res.clone());
-            } catch {}
-        }
+                    const url = new URL(res.url);
+
+                    if (url.origin !== self.location.origin) return;
+
+                    await cache.put(path, res.clone());
+                } catch {}
+            })
+        );
 
         await self.skipWaiting();
     })());
@@ -110,46 +131,16 @@ self.addEventListener("activate", (event) => {
         const keys = await caches.keys();
 
         await Promise.all(
-            keys.map((key) => {
-                if (key.startsWith("tf-cache-") && key !== CACHE_NAME) {
-                    return caches.delete(key);
-                }
-            })
+            keys.map((key) =>
+                key.startsWith("tf-cache-") && key !== CACHE_NAME
+                    ? caches.delete(key)
+                    : null
+            )
         );
 
         await self.clients.claim();
     })());
 });
-
-/* ---------------- HELPERS ---------------- */
-function isNetworkOnly(url) {
-    return (
-        url.hostname.includes("world.tsunamiflow.club") ||
-        url.pathname.startsWith("/api/") ||
-        url.pathname.startsWith("/webhook/") ||
-        url.pathname.startsWith("/ws/") ||
-        url.protocol === "ws:" ||
-        url.protocol === "wss:"
-    );
-}
-
-function isDynamic(url) {
-    return (
-        url.search.length > 0 ||
-        url.pathname.includes("token") ||
-        url.pathname.includes("session") ||
-        url.pathname.includes("auth") ||
-        url.pathname.includes("signed") ||
-        url.pathname.includes("nonce")
-    );
-}
-
-function normalizeRequest(request) {
-    // strip query for static assets only
-    const url = new URL(request.url);
-    url.search = "";
-    return url.toString();
-}
 
 /* ---------------- FETCH ---------------- */
 self.addEventListener("fetch", (event) => {
@@ -169,38 +160,49 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
+    /* NAVIGATION: network-first, fallback offline */
     if (request.mode === "navigate") {
         event.respondWith((async () => {
             try {
                 const fresh = await fetch(request);
 
                 const cache = await caches.open(CACHE_NAME);
-                cache.put(request, fresh.clone());
+
+                // avoid poisoning cache with error pages
+                if (fresh.ok && fresh.type === "basic") {
+                    cache.put(request, fresh.clone());
+                }
 
                 return fresh;
             } catch {
-                return (await caches.match(request)) ||
-                       (await caches.match(OFFLINE_URL));
+                return (
+                    (await caches.match(request)) ||
+                    (await caches.match(OFFLINE_URL))
+                );
             }
         })());
 
         return;
     }
 
+    /* STATIC: stale-while-revalidate (optimized core) */
     event.respondWith((async () => {
         const cache = await caches.open(CACHE_NAME);
+        const key = cacheKey(request);
 
-        const key = normalizeRequest(request);
         const cached = await cache.match(key);
 
-        const fetchPromise = fetch(request)
+        const network = fetch(request)
             .then(async (res) => {
-                if (!(res instanceof Response)) return res;
-                if (!res.ok || res.type === "opaque") return res;
+                if (!res || !res.ok) return res;
 
                 const cacheControl = res.headers.get("Cache-Control");
 
-                if (!cacheControl || !cacheControl.includes("no-store")) {
+                const canCache =
+                    !cacheControl?.includes("no-store") &&
+                    res.type !== "opaque";
+
+                if (canCache) {
                     try {
                         await cache.put(key, res.clone());
                     } catch {}
@@ -211,11 +213,11 @@ self.addEventListener("fetch", (event) => {
             .catch(() => null);
 
         if (cached) {
-            event.waitUntil(fetchPromise);
+            event.waitUntil(network);
             return cached;
         }
 
-        const fresh = await fetchPromise;
+        const fresh = await network;
 
         return fresh || (await caches.match(OFFLINE_URL));
     })());
