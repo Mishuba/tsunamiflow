@@ -138,7 +138,28 @@ const keyFromRequest = (req) => {
 async function trimCache(cache) {
     const keys = await cache.keys();
     if (keys.length <= MAX_ASSETS) return;
-    await cache.delete(keys[0]);
+
+    const db = await openDB();
+    const tx = db.transaction(STORE, "readonly");
+    const store = tx.objectStore(STORE);
+
+    const scored = await Promise.all(
+        keys.map(async (req) => {
+            const url = req.url;
+
+            const lastUsed = await new Promise((resolve) => {
+                const r = store.get(url);
+                r.onsuccess = () => resolve(r.result || 0);
+                r.onerror = () => resolve(0);
+            });
+
+            return { req, lastUsed };
+        })
+    );
+
+    scored.sort((a, b) => a.lastUsed - b.lastUsed);
+
+    await cache.delete(scored[0].req);
 }
 
 /* ---------------- INSTALL ---------------- */
