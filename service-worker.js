@@ -96,7 +96,7 @@ self.addEventListener("install", (event) => {
                     await cache.put(req, res.clone());
                 }
             } catch {
-                // ignore individual asset failures
+                // ignore broken assets
             }
         }
 
@@ -191,7 +191,7 @@ self.addEventListener("fetch", (event) => {
 
         const networkFetch = fetch(request)
             .then(async (res) => {
-                if (!res || !res.ok) return res;
+                if (!(res instanceof Response) || !res.ok) return res;
 
                 const cacheControl = res.headers.get("Cache-Control");
 
@@ -203,7 +203,7 @@ self.addEventListener("fetch", (event) => {
                     try {
                         await cache.put(request, res.clone());
                     } catch {
-                        // ignore cache write failures
+                        // silent fail safe
                     }
                 }
 
