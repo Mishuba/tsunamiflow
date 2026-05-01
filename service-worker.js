@@ -91,9 +91,13 @@ self.addEventListener("install", (event) => {
         (async () => {
             const cache = await caches.open(CACHE_NAME);
 
-            await cache.addAll(
-                PRECACHE_URLS.map(url => new Request(url, { cache: "reload" }))
-            );
+            try {
+                await cache.addAll(
+                    PRECACHE_URLS.map(url => new Request(url, { cache: "reload" }))
+                );
+            } catch (err) {
+                console.warn("[SW] precache failed:", err);
+            }
 
             await self.skipWaiting();
         })()
@@ -101,7 +105,7 @@ self.addEventListener("install", (event) => {
 });
 
 /* -------------------------------------------------------
-   ACTIVATE
+   ACTIVATE (SAFE CLEANUP)
 ------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
     event.waitUntil(
@@ -109,7 +113,11 @@ self.addEventListener("activate", (event) => {
             const keys = await caches.keys();
 
             await Promise.all(
-                keys.map(key => key !== CACHE_NAME && caches.delete(key))
+                keys.map(key => {
+                    if (key.startsWith("tf-cache-") && key !== CACHE_NAME) {
+                        return caches.delete(key);
+                    }
+                })
             );
 
             await self.clients.claim();
@@ -118,7 +126,7 @@ self.addEventListener("activate", (event) => {
 });
 
 /* -------------------------------------------------------
-   FETCH (CORE ENGINE)
+   FETCH ENGINE (HARDENED)
 ------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
@@ -128,7 +136,7 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(request.url);
 
     /* ---------------------------------------------------
-       0. RANGE REQUESTS (media safety)
+       RANGE REQUESTS (media streaming safety)
     --------------------------------------------------- */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
@@ -136,13 +144,14 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       0.5 DYNAMIC REQUEST FILTER (IMPORTANT FIX)
+       DYNAMIC REQUEST FILTER (IMPORTANT FIX)
     --------------------------------------------------- */
     const isDynamic =
         url.search.length > 0 ||
         url.pathname.includes("token") ||
         url.pathname.includes("session") ||
-        url.pathname.includes("auth");
+        url.pathname.includes("auth") ||
+        url.pathname.includes("signed");
 
     if (isDynamic) {
         event.respondWith(fetch(request));
@@ -150,7 +159,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       1. NETWORK ONLY (backend / realtime)
+       NETWORK ONLY (backend / realtime)
     --------------------------------------------------- */
     const networkOnly =
         url.hostname.includes("world.tsunamiflow.club") ||
@@ -166,7 +175,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       2. NAVIGATION (pages)
+       NAVIGATION (pages)
     --------------------------------------------------- */
     if (request.mode === "navigate") {
         event.respondWith(
@@ -188,7 +197,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       3. STATIC + MEDIA (SMART CACHE LAYER)
+       STATIC + MEDIA (CACHE LAYER)
     --------------------------------------------------- */
     event.respondWith(
         (async () => {
@@ -208,8 +217,8 @@ self.addEventListener("fetch", (event) => {
                         if (isCacheable) {
                             await cache.put(request, res.clone());
                         }
-                    } catch {
-                        // ignore safe failures (CORS / R2 / opaque)
+                    } catch (err) {
+                        // silent fail for CORS / R2 / opaque
                     }
 
                     return res;
@@ -223,7 +232,9 @@ self.addEventListener("fetch", (event) => {
 
             const fresh = await fetchPromise;
 
-            if (fresh instanceof Response) return fresh;
+            if (fresh instanceof Response) {
+                return fresh;
+            }
 
             return await caches.match(OFFLINE_URL);
         })()
