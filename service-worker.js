@@ -81,17 +81,6 @@ const PRECACHE_URLS = [
 
 ];
 
-const isDynamic =
-    url.search.length > 0 ||
-    url.pathname.includes("?") ||
-    url.pathname.includes("token") ||
-    url.pathname.includes("session");
-/* service-worker.js
-   Offline-first PWA cache strategy
-*/
-
-/* -------------------------------------------------------
-   INSTALL
 ------------------------------------------------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -108,7 +97,7 @@ self.addEventListener("install", (event) => {
 });
 
 /* -------------------------------------------------------
-   ACTIVATE (cleanup old caches)
+   ACTIVATE (clean old caches)
 ------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
     event.waitUntil(
@@ -139,7 +128,7 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(request.url);
 
     /* ---------------------------------------------------
-       0. RANGE REQUESTS (audio/video streaming safety)
+       0. RANGE REQUESTS (audio/video safety)
     --------------------------------------------------- */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
@@ -172,7 +161,7 @@ self.addEventListener("fetch", (event) => {
                     const fresh = await fetch(request);
 
                     const cache = await caches.open(CACHE_NAME);
-                    cache.put(request, fresh.clone());
+                    await cache.put(request, fresh.clone());
 
                     return fresh;
                 } catch {
@@ -185,7 +174,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       3. STATIC ASSETS (CACHE + CLOUDFLARE AWARE)
+       3. STATIC ASSETS (CACHE + CLOUDFLARE SAFE)
     --------------------------------------------------- */
     event.respondWith(
         (async () => {
@@ -197,15 +186,16 @@ self.addEventListener("fetch", (event) => {
                     try {
                         const cacheControl = res.headers.get("Cache-Control");
 
-                        // Respect Cloudflare + origin rules
-                        if (
+                        const isCacheable =
                             res.ok &&
-                            (!cacheControl || !cacheControl.includes("no-store"))
-                        ) {
+                            res.type !== "opaque" &&
+                            (!cacheControl || !cacheControl.includes("no-store"));
+
+                        if (isCacheable) {
                             await cache.put(request, res.clone());
                         }
-                    } catch (err) {
-                        // silently fail cache write (important for CORS/opaque)
+                    } catch {
+                        // safe fail (CORS / opaque responses)
                     }
 
                     return res;
@@ -218,7 +208,10 @@ self.addEventListener("fetch", (event) => {
             }
 
             const fresh = await fetchPromise;
-            return fresh || caches.match(OFFLINE_URL);
+
+            if (fresh) return fresh;
+
+            return await caches.match(OFFLINE_URL);
         })()
     );
 });
