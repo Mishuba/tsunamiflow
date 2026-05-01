@@ -87,18 +87,16 @@ self.addEventListener("install", (event) => {
     event.waitUntil((async () => {
         const cache = await caches.open(CACHE_NAME);
 
-        const safeRequests = PRECACHE_URLS.map(url =>
-            new Request(url, { cache: "reload" })
-        );
-
-        for (const req of safeRequests) {
+        for (const url of PRECACHE_URLS) {
             try {
+                const req = new Request(url, { cache: "reload" });
                 const res = await fetch(req);
+
                 if (res && res.ok) {
                     await cache.put(req, res.clone());
                 }
             } catch {
-                // ignore individual failures
+                // ignore individual asset failures
             }
         }
 
@@ -179,31 +177,26 @@ self.addEventListener("fetch", (event) => {
                 return fresh;
             } catch {
                 const cached = await caches.match(request);
-                return cached || caches.match(OFFLINE_URL);
+                return cached || (await caches.match(OFFLINE_URL));
             }
         })());
 
         return;
     }
 
-    /* ---------------- STATIC + MEDIA ---------------- */
+    /* ---------------- STATIC + MEDIA CACHE ---------------- */
     event.respondWith((async () => {
         const cache = await caches.open(CACHE_NAME);
         const cached = await cache.match(request);
 
         const networkFetch = fetch(request)
             .then(async (res) => {
-                if (!res) return res;
-
-                const isValid =
-                    res.ok &&
-                    res.status !== 0 &&
-                    res.type !== "opaque";
+                if (!res || !res.ok) return res;
 
                 const cacheControl = res.headers.get("Cache-Control");
 
                 const isCacheable =
-                    isValid &&
+                    res.type !== "opaque" &&
                     (!cacheControl || !cacheControl.includes("no-store"));
 
                 if (isCacheable) {
