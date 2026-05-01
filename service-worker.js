@@ -4,7 +4,7 @@
    Backend / realtime services always stay network-only.
 */
 
-const VERSION = "v1.1";
+const VERSION = "v1.2";
 const CACHE_NAME = `tf-cache-${VERSION}`;
 const OFFLINE_URL = "/Offline/offline.html";
 
@@ -81,64 +81,37 @@ const PRECACHE_URLS = [
 
 ];
 
-async function trimCache(cacheName, maxItems = 100) {
-    const cache = await caches.open(cacheName);
-    const keys = await cache.keys();
-
-    if (keys.length > maxItems) {
-        await cache.delete(keys[0]); // oldest
-    }
-}
-
-/*
-|--------------------------------------------------------------------------
-| INSTALL
-|--------------------------------------------------------------------------
-| Pre-cache critical frontend files
+/* service-worker.js
+   Offline-first PWA cache strategy
 */
+
+/* -------------------------------------------------------
+   INSTALL
+------------------------------------------------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil(
         (async () => {
             const cache = await caches.open(CACHE_NAME);
 
-            for (const url of PRECACHE_URLS) {
-                try {
-                    await cache.add(new Request(url, { cache: "reload" }));
-                } catch (error) {
-                    console.warn("[SW] Failed to precache:", url, error);
-                }
-            }
+            await cache.addAll(
+                PRECACHE_URLS.map(url => new Request(url, { cache: "reload" }))
+            );
 
             await self.skipWaiting();
         })()
     );
 });
 
-
-
-self.addEventListener("sync", event => {
-    if (event.tag === "warm-cache") {
-        event.waitUntil(
-            caches.open(CACHE_NAME).then(cache =>
-                cache.addAll(PRECACHE_URLS)
-            )
-        );
-    }
-});
-
-/*
-|--------------------------------------------------------------------------
-| ACTIVATE
-|--------------------------------------------------------------------------
-| Remove old cache versions
-*/
+/* -------------------------------------------------------
+   ACTIVATE (cleanup old caches)
+------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
     event.waitUntil(
         (async () => {
             const keys = await caches.keys();
 
             await Promise.all(
-                keys.map((key) => {
+                keys.map(key => {
                     if (key !== CACHE_NAME) {
                         return caches.delete(key);
                     }
@@ -150,23 +123,9 @@ self.addEventListener("activate", (event) => {
     );
 });
 
-/*
-|--------------------------------------------------------------------------
-| FETCH
-|--------------------------------------------------------------------------
-|
-| Strategy:
-|
-| 1. Backend / API / WebSocket / external stream servers:
-|    NETWORK ONLY
-|
-| 2. Page navigation:
-|    NETWORK FIRST → offline fallback
-|
-| 3. Static assets (css/js/images/fonts):
-|    CACHE FIRST → update in background
-|
-*/
+/* -------------------------------------------------------
+   FETCH
+------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
 
@@ -174,17 +133,17 @@ self.addEventListener("fetch", (event) => {
 
     const url = new URL(request.url);
 
-    // 🚫 0. RANGE REQUEST FIX (put this FIRST)
+    /* ---------------------------------------------------
+       0. RANGE REQUESTS (audio/video streaming safety)
+    --------------------------------------------------- */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
         return;
     }
 
-    /*
-    ----------------------------------------------------------------------
-    1. NETWORK ONLY (backend / realtime)
-    ----------------------------------------------------------------------
-    */
+    /* ---------------------------------------------------
+       1. NETWORK ONLY (backend / realtime)
+    --------------------------------------------------- */
     const networkOnly =
         url.hostname.includes("world.tsunamiflow.club") ||
         url.pathname.startsWith("/api/") ||
@@ -198,11 +157,9 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    /*
-    ----------------------------------------------------------------------
-    2. NAVIGATION (pages)
-    ----------------------------------------------------------------------
-    */
+    /* ---------------------------------------------------
+       2. NAVIGATION (pages)
+    --------------------------------------------------- */
     if (request.mode === "navigate") {
         event.respondWith(
             (async () => {
@@ -210,11 +167,7 @@ self.addEventListener("fetch", (event) => {
                     const fresh = await fetch(request);
 
                     const cache = await caches.open(CACHE_NAME);
-                    const cacheControl = fresh.headers.get("Cache-Control");
-
-if (!cacheControl || !cacheControl.includes("no-store")) {
-    await cache.put(request, fresh.clone());
-}
+                    cache.put(request, fresh.clone());
 
                     return fresh;
                 } catch {
@@ -226,12 +179,9 @@ if (!cacheControl || !cacheControl.includes("no-store")) {
         return;
     }
 
-    /*
-    ----------------------------------------------------------------------
-    3. STATIC ASSETS (THIS IS THE PART YOU REPLACE)
-    CACHE FIRST + CLOUDFLARE-AWARE UPDATE
-    ----------------------------------------------------------------------
-    */
+    /* ---------------------------------------------------
+       3. STATIC ASSETS (CACHE + CLOUDFLARE AWARE)
+    --------------------------------------------------- */
     event.respondWith(
         (async () => {
             const cache = await caches.open(CACHE_NAME);
@@ -239,29 +189,30 @@ if (!cacheControl || !cacheControl.includes("no-store")) {
 
             const fetchPromise = fetch(request)
                 .then(async (res) => {
-                    const cacheControl = res.headers.get("Cache-Control");
+                    try {
+                        const cacheControl = res.headers.get("Cache-Control");
 
-                    // ✅ Respect Cloudflare / origin rules
-                    if (
-                        res.ok &&
-                        (!cacheControl || !cacheControl.includes("no-store"))
-                    ) {
-                        await cache.put(request, res.clone());
+                        // Respect Cloudflare + origin rules
+                        if (
+                            res.ok &&
+                            (!cacheControl || !cacheControl.includes("no-store"))
+                        ) {
+                            await cache.put(request, res.clone());
+                        }
+                    } catch (err) {
+                        // silently fail cache write (important for CORS/opaque)
                     }
 
                     return res;
                 })
                 .catch(() => null);
 
-            // ⚡ Instant response if cached
             if (cached) {
                 event.waitUntil(fetchPromise);
                 return cached;
             }
 
-            // 🌐 Otherwise use network
             const fresh = await fetchPromise;
-
             return fresh || caches.match(OFFLINE_URL);
         })()
     );
