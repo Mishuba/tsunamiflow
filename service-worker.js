@@ -88,8 +88,12 @@ const PRECACHE_URLS = [
 const DB_NAME = "tf-pwa-db";
 const STORE = "manifest";
 
+let dbPromise;
+
 function openDB() {
-    return new Promise((resolve, reject) => {
+    if (dbPromise) return dbPromise;
+
+    dbPromise = new Promise((resolve, reject) => {
         const req = indexedDB.open(DB_NAME, 1);
 
         req.onupgradeneeded = () => {
@@ -102,6 +106,18 @@ function openDB() {
         req.onsuccess = () => resolve(req.result);
         req.onerror = () => reject(req.error);
     });
+
+    return dbPromise;
+}
+
+function normalizeNav(url) {
+    if (url.pathname.endsWith("/")) {
+        return url.pathname + "index.html";
+    }
+    if (!url.pathname.includes(".")) {
+        return url.pathname + "/index.html";
+    }
+    return url.pathname;
 }
 
 function txDone(tx) {
@@ -141,10 +157,14 @@ const isDynamic = (url) =>
     /token|session|auth|signed|nonce/i.test(url.pathname);
 
 const keyFromRequest = (req) => {
-    const url = new URL(req.url);
-    url.search = "";
-    return url.toString();
-};
+const fallbackKey = normalizeNav(new URL(req.url));
+
+return (
+    (await caches.match(req)) ||
+    (await caches.match(fallbackKey)) ||
+    (await caches.match("/index.html")) ||
+    (await caches.match(OFFLINE_URL))
+);
 
 /* ---------------- LRU TRIM ---------------- */
 async function trimCache(cache) {
