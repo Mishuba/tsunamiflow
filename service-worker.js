@@ -86,6 +86,10 @@ const PRECACHE_URLS = [
 /* -------------------------------------------------------
    INSTALL
 ------------------------------------------------------- */
+
+/* -------------------------------------------------------
+   INSTALL
+------------------------------------------------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil(
         (async () => {
@@ -126,7 +130,7 @@ self.addEventListener("activate", (event) => {
 });
 
 /* -------------------------------------------------------
-   FETCH ENGINE (HARDENED)
+   FETCH ENGINE (HARDENED CORE)
 ------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
@@ -136,7 +140,7 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(request.url);
 
     /* ---------------------------------------------------
-       RANGE REQUESTS (media streaming safety)
+       RANGE REQUESTS (VIDEO / AUDIO SAFETY)
     --------------------------------------------------- */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
@@ -144,14 +148,15 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       DYNAMIC REQUEST FILTER (IMPORTANT FIX)
+       DYNAMIC REQUEST FILTER (NO CACHE EVER)
     --------------------------------------------------- */
     const isDynamic =
         url.search.length > 0 ||
         url.pathname.includes("token") ||
         url.pathname.includes("session") ||
         url.pathname.includes("auth") ||
-        url.pathname.includes("signed");
+        url.pathname.includes("signed") ||
+        url.pathname.includes("nonce");
 
     if (isDynamic) {
         event.respondWith(fetch(request));
@@ -159,7 +164,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       NETWORK ONLY (backend / realtime)
+       NETWORK ONLY (BACKEND / REALTIME)
     --------------------------------------------------- */
     const networkOnly =
         url.hostname.includes("world.tsunamiflow.club") ||
@@ -175,7 +180,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       NAVIGATION (pages)
+       NAVIGATION (APP SHELL STRATEGY)
     --------------------------------------------------- */
     if (request.mode === "navigate") {
         event.respondWith(
@@ -197,7 +202,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       STATIC + MEDIA (CACHE LAYER)
+       STATIC + MEDIA CACHE LAYER
     --------------------------------------------------- */
     event.respondWith(
         (async () => {
@@ -206,6 +211,8 @@ self.addEventListener("fetch", (event) => {
 
             const fetchPromise = fetch(request)
                 .then(async (res) => {
+                    if (!res) return res;
+
                     try {
                         const cacheControl = res.headers.get("Cache-Control");
 
@@ -217,8 +224,8 @@ self.addEventListener("fetch", (event) => {
                         if (isCacheable) {
                             await cache.put(request, res.clone());
                         }
-                    } catch (err) {
-                        // silent fail for CORS / R2 / opaque
+                    } catch {
+                        // silent fail (CORS / R2 / opaque)
                     }
 
                     return res;
@@ -232,11 +239,9 @@ self.addEventListener("fetch", (event) => {
 
             const fresh = await fetchPromise;
 
-            if (fresh instanceof Response) {
-                return fresh;
-            }
+            if (fresh instanceof Response) return fresh;
 
-            return await caches.match(OFFLINE_URL);
+            return (await caches.match(OFFLINE_URL));
         })()
     );
 });
