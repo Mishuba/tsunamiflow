@@ -127,6 +127,13 @@ function txDone(tx) {
     });
 }
 
+function assetBucket(url) {
+    if (url.pathname.endsWith(".js")) return "js";
+    if (url.pathname.endsWith(".css")) return "css";
+    if (url.pathname.match(/\.(png|jpg|jpeg|webp|gif)$/)) return "img";
+    return "misc";
+}
+
 async function setManifest(key, value) {
     const db = await openDB();
     const tx = db.transaction(STORE, "readwrite");
