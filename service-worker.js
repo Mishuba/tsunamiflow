@@ -119,6 +119,18 @@ self.addEventListener("install", (event) => {
     );
 });
 
+
+
+self.addEventListener("sync", event => {
+    if (event.tag === "warm-cache") {
+        event.waitUntil(
+            caches.open(CACHE_NAME).then(cache =>
+                cache.addAll(PRECACHE_URLS)
+            )
+        );
+    }
+});
+
 /*
 |--------------------------------------------------------------------------
 | ACTIVATE
