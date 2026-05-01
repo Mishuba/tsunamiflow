@@ -3,11 +3,11 @@
    Backend + realtime always network-only
 */
 
-const VERSION = "v1.3";
+const VERSION = "v1.4";
 const CACHE_NAME = `tf-cache-${VERSION}`;
 const OFFLINE_URL = "/Offline/offline.html";
 
-/* ---------------- PRECACHE ASSETS ---------------- */
+/* ---------------- PRECACHE ---------------- */
 const PRECACHE_URLS = [
     "/",
     "/index.html",
@@ -84,21 +84,21 @@ self.addEventListener("install", (event) => {
     event.waitUntil((async () => {
         const cache = await caches.open(CACHE_NAME);
 
-        const results = await Promise.allSettled(
-            PRECACHE_URLS.map(async (url) => {
-                try {
-                    const res = await fetch(new Request(url, { cache: "reload" }));
+        for (const url of PRECACHE_URLS) {
+            try {
+                const res = await fetch(new Request(url, { cache: "reload" }));
 
-                    if (!res || !res.ok) return;
+                if (!res || !res.ok) continue;
+                if (res.redirected) continue;
 
-                    // only cache basic same-origin GET resources
-                    const isSameOrigin = new URL(res.url).origin === location.origin;
-                    if (!isSameOrigin) return;
+                // only same-origin
+                if (new URL(res.url, self.location.origin).origin !== self.location.origin) {
+                    continue;
+                }
 
-                    await cache.put(url, res.clone());
-                } catch {}
-            })
-        );
+                await cache.put(url, res.clone());
+            } catch {}
+        }
 
         await self.skipWaiting();
     })());
@@ -121,7 +121,7 @@ self.addEventListener("activate", (event) => {
     })());
 });
 
-/* ---------------- FETCH HELPERS ---------------- */
+/* ---------------- HELPERS ---------------- */
 function isNetworkOnly(url) {
     return (
         url.hostname.includes("world.tsunamiflow.club") ||
@@ -144,6 +144,13 @@ function isDynamic(url) {
     );
 }
 
+function normalizeRequest(request) {
+    // strip query for static assets only
+    const url = new URL(request.url);
+    url.search = "";
+    return url.toString();
+}
+
 /* ---------------- FETCH ---------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
@@ -152,25 +159,16 @@ self.addEventListener("fetch", (event) => {
 
     const url = new URL(request.url);
 
-    /* RANGE (media streaming) */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
         return;
     }
 
-    /* NETWORK ONLY */
-    if (isNetworkOnly(url)) {
+    if (isNetworkOnly(url) || isDynamic(url)) {
         event.respondWith(fetch(request));
         return;
     }
 
-    /* DYNAMIC (never cache) */
-    if (isDynamic(url)) {
-        event.respondWith(fetch(request));
-        return;
-    }
-
-    /* NAVIGATION */
     if (request.mode === "navigate") {
         event.respondWith((async () => {
             try {
@@ -181,39 +179,30 @@ self.addEventListener("fetch", (event) => {
 
                 return fresh;
             } catch {
-                return (
-                    (await caches.match(request)) ||
-                    (await caches.match(OFFLINE_URL))
-                );
+                return (await caches.match(request)) ||
+                       (await caches.match(OFFLINE_URL));
             }
         })());
 
         return;
     }
 
-    /* STATIC / ASSETS */
     event.respondWith((async () => {
         const cache = await caches.open(CACHE_NAME);
-        const cached = await cache.match(request);
+
+        const key = normalizeRequest(request);
+        const cached = await cache.match(key);
 
         const fetchPromise = fetch(request)
             .then(async (res) => {
                 if (!(res instanceof Response)) return res;
-
-                const isValid =
-                    res.ok &&
-                    res.status === 200 &&
-                    res.type !== "opaque";
+                if (!res.ok || res.type === "opaque") return res;
 
                 const cacheControl = res.headers.get("Cache-Control");
 
-                const canCache =
-                    isValid &&
-                    (!cacheControl || !cacheControl.includes("no-store"));
-
-                if (canCache) {
+                if (!cacheControl || !cacheControl.includes("no-store")) {
                     try {
-                        await cache.put(request, res.clone());
+                        await cache.put(key, res.clone());
                     } catch {}
                 }
 
