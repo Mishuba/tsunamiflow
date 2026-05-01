@@ -90,11 +90,6 @@ async function trimCache(cacheName, maxItems = 100) {
     }
 }
 
-if (request.headers.get("range")) {
-    event.respondWith(fetch(request));
-    return;
-}
-
 /*
 |--------------------------------------------------------------------------
 | INSTALL
@@ -215,7 +210,11 @@ self.addEventListener("fetch", (event) => {
                     const fresh = await fetch(request);
 
                     const cache = await caches.open(CACHE_NAME);
-                    await cache.put(request, fresh.clone());
+                    const cacheControl = fresh.headers.get("Cache-Control");
+
+if (!cacheControl || !cacheControl.includes("no-store")) {
+    await cache.put(request, fresh.clone());
+}
 
                     return fresh;
                 } catch {
