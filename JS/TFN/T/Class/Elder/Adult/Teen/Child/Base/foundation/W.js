@@ -116,6 +116,38 @@ async fetchWithCache(request, strategy = "cache-first") {
     }
 }
 
+async cacheFromR2(url) {
+    const res = await fetch(url);
+
+    if (!res.ok) throw new Error("Fetch failed");
+
+    const buffer = await res.arrayBuffer();
+
+    const response = new Response(buffer, {
+        headers: {
+            "Content-Type": res.headers.get("Content-Type") || "application/octet-stream",
+            "Content-Length": buffer.byteLength
+        }
+    });
+
+    await this.putCache(url, response);
+
+    return buffer;
+}
+
+async getCachedBuffer(url) {
+    const res = await this.matchCache(url);
+    if (!res) return null;
+
+    return await res.arrayBuffer();
+}
+
+async preloadTracks(trackList) {
+    for (const url of trackList) {
+        this.fetchWithCache(url, "stale-while-revalidate");
+    }
+}
+
     async clearCache() {
         if (!this.cache) return false;
 
