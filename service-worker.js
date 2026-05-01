@@ -100,7 +100,14 @@ function openDB() {
         };
 
         req.onsuccess = () => resolve(req.result);
-        req.onerror = reject;
+        req.onerror = () => reject(req.error);
+    });
+}
+
+function txDone(tx) {
+    return new Promise((resolve, reject) => {
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
     });
 }
 
@@ -108,12 +115,17 @@ async function setManifest(key, value) {
     const db = await openDB();
     const tx = db.transaction(STORE, "readwrite");
     tx.objectStore(STORE).put(value, key);
+    return txDone(tx);
 }
 
 async function getManifest(key) {
     const db = await openDB();
-    const tx = db.transaction(STORE, "readonly");
-    return tx.objectStore(STORE).get(key);
+    return new Promise((resolve) => {
+        const tx = db.transaction(STORE, "readonly");
+        const req = tx.objectStore(STORE).get(key);
+        req.onsuccess = () => resolve(req.result || 0);
+        req.onerror = () => resolve(0);
+    });
 }
 
 /* ---------------- UTIL ---------------- */
@@ -137,29 +149,23 @@ const keyFromRequest = (req) => {
 /* ---------------- LRU TRIM ---------------- */
 async function trimCache(cache) {
     const keys = await cache.keys();
-    if (keys.length <= MAX_ASSETS) return;
 
-    const db = await openDB();
-    const tx = db.transaction(STORE, "readonly");
-    const store = tx.objectStore(STORE);
+    if (keys.length <= MAX_ASSETS) return;
 
     const scored = await Promise.all(
         keys.map(async (req) => {
-            const url = req.url;
-
-            const lastUsed = await new Promise((resolve) => {
-                const r = store.get(url);
-                r.onsuccess = () => resolve(r.result || 0);
-                r.onerror = () => resolve(0);
-            });
-
+            const lastUsed = await getManifest(req.url);
             return { req, lastUsed };
         })
     );
 
     scored.sort((a, b) => a.lastUsed - b.lastUsed);
 
-    await cache.delete(scored[0].req);
+    const toDelete = scored.slice(0, keys.length - MAX_ASSETS);
+
+    await Promise.all(
+        toDelete.map((item) => cache.delete(item.req))
+    );
 }
 
 /* ---------------- INSTALL ---------------- */
