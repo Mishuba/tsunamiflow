@@ -167,11 +167,19 @@ self.addEventListener("activate", (event) => {
         const keys = await caches.keys();
 
         await Promise.all(
-            keys.map((key) =>
-                key.includes("tf-") && !key.includes(VERSION)
-                    ? caches.delete(key)
-                    : null
-            )
+            keys.map((key) => {
+                const isOldCache =
+                    key.startsWith("tf-app-shell-") ||
+                    key.startsWith("tf-assets-") ||
+                    key.startsWith("tf-dynamic-");
+
+                const isCurrent =
+                    key.includes(VERSION);
+
+                if (isOldCache && !isCurrent) {
+                    return caches.delete(key);
+                }
+            })
         );
 
         await self.clients.claim();
