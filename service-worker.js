@@ -83,54 +83,50 @@ const PRECACHE_URLS = [
 
 
 
-/* -------------------------------------------------------
-   INSTALL
-------------------------------------------------------- */
-
-/* -------------------------------------------------------
-   INSTALL
-------------------------------------------------------- */
 self.addEventListener("install", (event) => {
-    event.waitUntil(
-        (async () => {
-            const cache = await caches.open(CACHE_NAME);
+    event.waitUntil((async () => {
+        const cache = await caches.open(CACHE_NAME);
 
+        const safeRequests = PRECACHE_URLS.map(url =>
+            new Request(url, { cache: "reload" })
+        );
+
+        for (const req of safeRequests) {
             try {
-                await cache.addAll(
-                    PRECACHE_URLS.map(url => new Request(url, { cache: "reload" }))
-                );
-            } catch (err) {
-                console.warn("[SW] precache failed:", err);
+                const res = await fetch(req);
+                if (res && res.ok) {
+                    await cache.put(req, res.clone());
+                }
+            } catch {
+                // ignore individual failures
             }
+        }
 
-            await self.skipWaiting();
-        })()
-    );
+        await self.skipWaiting();
+    })());
 });
 
 /* -------------------------------------------------------
-   ACTIVATE (SAFE CLEANUP)
+   ACTIVATE
 ------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
-    event.waitUntil(
-        (async () => {
-            const keys = await caches.keys();
+    event.waitUntil((async () => {
+        const keys = await caches.keys();
 
-            await Promise.all(
-                keys.map(key => {
-                    if (key.startsWith("tf-cache-") && key !== CACHE_NAME) {
-                        return caches.delete(key);
-                    }
-                })
-            );
+        await Promise.all(
+            keys.map(key => {
+                if (key.startsWith("tf-cache-") && key !== CACHE_NAME) {
+                    return caches.delete(key);
+                }
+            })
+        );
 
-            await self.clients.claim();
-        })()
-    );
+        await self.clients.claim();
+    })());
 });
 
 /* -------------------------------------------------------
-   FETCH ENGINE (HARDENED CORE)
+   FETCH ENGINE
 ------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
@@ -139,17 +135,13 @@ self.addEventListener("fetch", (event) => {
 
     const url = new URL(request.url);
 
-    /* ---------------------------------------------------
-       RANGE REQUESTS (VIDEO / AUDIO SAFETY)
-    --------------------------------------------------- */
+    /* ---------------- RANGE SAFETY ---------------- */
     if (request.headers.get("range")) {
         event.respondWith(fetch(request));
         return;
     }
 
-    /* ---------------------------------------------------
-       DYNAMIC REQUEST FILTER (NO CACHE EVER)
-    --------------------------------------------------- */
+    /* ---------------- DYNAMIC BLOCK ---------------- */
     const isDynamic =
         url.search.length > 0 ||
         url.pathname.includes("token") ||
@@ -163,9 +155,7 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    /* ---------------------------------------------------
-       NETWORK ONLY (BACKEND / REALTIME)
-    --------------------------------------------------- */
+    /* ---------------- NETWORK ONLY ---------------- */
     const networkOnly =
         url.hostname.includes("world.tsunamiflow.club") ||
         url.pathname.startsWith("/api/") ||
@@ -179,69 +169,62 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    /* ---------------------------------------------------
-       NAVIGATION (APP SHELL STRATEGY)
-    --------------------------------------------------- */
+    /* ---------------- NAVIGATION ---------------- */
     if (request.mode === "navigate") {
-        event.respondWith(
-            (async () => {
-                try {
-                    const fresh = await fetch(request);
+        event.respondWith((async () => {
+            try {
+                const fresh = await fetch(request);
+                const cache = await caches.open(CACHE_NAME);
+                cache.put(request, fresh.clone());
+                return fresh;
+            } catch {
+                const cached = await caches.match(request);
+                return cached || caches.match(OFFLINE_URL);
+            }
+        })());
 
-                    const cache = await caches.open(CACHE_NAME);
-                    cache.put(request, fresh.clone());
-
-                    return fresh;
-                } catch {
-                    const cached = await caches.match(request);
-                    return cached || (await caches.match(OFFLINE_URL));
-                }
-            })()
-        );
         return;
     }
 
-    /* ---------------------------------------------------
-       STATIC + MEDIA CACHE LAYER
-    --------------------------------------------------- */
-    event.respondWith(
-        (async () => {
-            const cache = await caches.open(CACHE_NAME);
-            const cached = await cache.match(request);
+    /* ---------------- STATIC + MEDIA ---------------- */
+    event.respondWith((async () => {
+        const cache = await caches.open(CACHE_NAME);
+        const cached = await cache.match(request);
 
-            const fetchPromise = fetch(request)
-                .then(async (res) => {
-                    if (!res) return res;
+        const networkFetch = fetch(request)
+            .then(async (res) => {
+                if (!res) return res;
 
+                const isValid =
+                    res.ok &&
+                    res.status !== 0 &&
+                    res.type !== "opaque";
+
+                const cacheControl = res.headers.get("Cache-Control");
+
+                const isCacheable =
+                    isValid &&
+                    (!cacheControl || !cacheControl.includes("no-store"));
+
+                if (isCacheable) {
                     try {
-                        const cacheControl = res.headers.get("Cache-Control");
-
-                        const isCacheable =
-                            res.ok &&
-                            res.type !== "opaque" &&
-                            (!cacheControl || !cacheControl.includes("no-store"));
-
-                        if (isCacheable) {
-                            await cache.put(request, res.clone());
-                        }
+                        await cache.put(request, res.clone());
                     } catch {
-                        // silent fail (CORS / R2 / opaque)
+                        // ignore cache write failures
                     }
+                }
 
-                    return res;
-                })
-                .catch(() => null);
+                return res;
+            })
+            .catch(() => null);
 
-            if (cached) {
-                event.waitUntil(fetchPromise);
-                return cached;
-            }
+        if (cached) {
+            event.waitUntil(networkFetch);
+            return cached;
+        }
 
-            const fresh = await fetchPromise;
+        const fresh = await networkFetch;
 
-            if (fresh instanceof Response) return fresh;
-
-            return (await caches.match(OFFLINE_URL));
-        })()
-    );
+        return fresh || (await caches.match(OFFLINE_URL));
+    })());
 });
