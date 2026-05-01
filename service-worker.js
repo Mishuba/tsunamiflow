@@ -81,6 +81,20 @@ const PRECACHE_URLS = [
 
 ];
 
+async function trimCache(cacheName, maxItems = 100) {
+    const cache = await caches.open(cacheName);
+    const keys = await cache.keys();
+
+    if (keys.length > maxItems) {
+        await cache.delete(keys[0]); // oldest
+    }
+}
+
+if (request.headers.get("range")) {
+    event.respondWith(fetch(request));
+    return;
+}
+
 /*
 |--------------------------------------------------------------------------
 | INSTALL
@@ -216,7 +230,7 @@ self.addEventListener("fetch", (event) => {
                     if (
                         response &&
                         response.status === 200 &&
-                        response.type === "basic"
+                        (response.type === "basic" || response.type === "cors"
                     ) {
                         const cache = await caches.open(CACHE_NAME);
                         cache.put(request, response.clone());
