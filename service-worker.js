@@ -81,6 +81,11 @@ const PRECACHE_URLS = [
 
 ];
 
+const isDynamic =
+    url.search.length > 0 ||
+    url.pathname.includes("?") ||
+    url.pathname.includes("token") ||
+    url.pathname.includes("session");
 /* service-worker.js
    Offline-first PWA cache strategy
 */
