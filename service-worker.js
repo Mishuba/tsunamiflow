@@ -175,18 +175,23 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
     const request = event.request;
 
-    // Ignore non-GET requests
     if (request.method !== "GET") return;
 
     const url = new URL(request.url);
 
+    // 🚫 0. RANGE REQUEST FIX (put this FIRST)
+    if (request.headers.get("range")) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
     /*
     ----------------------------------------------------------------------
-    NEVER CACHE THESE
+    1. NETWORK ONLY (backend / realtime)
     ----------------------------------------------------------------------
     */
     const networkOnly =
-        url.hostname.includes("world.tsunamiflow.club") || // backend server
+        url.hostname.includes("world.tsunamiflow.club") ||
         url.pathname.startsWith("/api/") ||
         url.pathname.startsWith("/webhook/") ||
         url.pathname.startsWith("/ws/") ||
@@ -200,8 +205,7 @@ self.addEventListener("fetch", (event) => {
 
     /*
     ----------------------------------------------------------------------
-    PAGE NAVIGATION
-    NETWORK FIRST
+    2. NAVIGATION (pages)
     ----------------------------------------------------------------------
     */
     if (request.mode === "navigate") {
@@ -211,57 +215,54 @@ self.addEventListener("fetch", (event) => {
                     const fresh = await fetch(request);
 
                     const cache = await caches.open(CACHE_NAME);
-                    cache.put(request, fresh.clone());
+                    await cache.put(request, fresh.clone());
 
                     return fresh;
-                } catch (error) {
+                } catch {
                     const cached = await caches.match(request);
                     return cached || caches.match(OFFLINE_URL);
                 }
             })()
         );
-
         return;
     }
 
     /*
     ----------------------------------------------------------------------
-    STATIC ASSETS
-    CACHE FIRST + BACKGROUND UPDATE
+    3. STATIC ASSETS (THIS IS THE PART YOU REPLACE)
+    CACHE FIRST + CLOUDFLARE-AWARE UPDATE
     ----------------------------------------------------------------------
     */
     event.respondWith(
         (async () => {
-            const cached = await caches.match(request);
+            const cache = await caches.open(CACHE_NAME);
+            const cached = await cache.match(request);
 
-            const networkFetch = fetch(request)
-                .then(async (response) => {
-                    /*
-                        Only cache valid same-origin responses
-                    */
+            const fetchPromise = fetch(request)
+                .then(async (res) => {
+                    const cacheControl = res.headers.get("Cache-Control");
+
+                    // ✅ Respect Cloudflare / origin rules
                     if (
-                        response &&
-                        response.status === 200 &&
-                        (response.type === "basic" || response.type === "cors"
+                        res.ok &&
+                        (!cacheControl || !cacheControl.includes("no-store"))
                     ) {
-                        const cache = await caches.open(CACHE_NAME);
-                        cache.put(request, response.clone());
+                        await cache.put(request, res.clone());
                     }
 
-                    return response;
+                    return res;
                 })
                 .catch(() => null);
 
-            // Serve cache immediately if available
+            // ⚡ Instant response if cached
             if (cached) {
-                event.waitUntil(networkFetch);
+                event.waitUntil(fetchPromise);
                 return cached;
             }
 
-            // Otherwise try network
-            const fresh = await networkFetch;
+            // 🌐 Otherwise use network
+            const fresh = await fetchPromise;
 
-            // Final fallback
             return fresh || caches.match(OFFLINE_URL);
         })()
     );
