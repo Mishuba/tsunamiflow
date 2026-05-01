@@ -3,9 +3,14 @@
    Backend + realtime always network-only
 */
 
-const VERSION = "v1.4.1";
-const CACHE_NAME = `tf-cache-${VERSION}`;
+const VERSION = "v1.5";
+const CACHE_APP_SHELL = `tf-app-shell-${VERSION}`;
+const CACHE_ASSETS = `tf-assets-${VERSION}`;
+const CACHE_DYNAMIC = `tf-dynamic-${VERSION}`;
 const OFFLINE_URL = "/Offline/offline.html";
+
+const MAX_ASSETS = 180;
+
 
 /* ---------------- PRECACHE ---------------- */
 const PRECACHE_URLS = [
@@ -79,9 +84,41 @@ const PRECACHE_URLS = [
     "/Iframe/Pages/TFnetwork.html",
 ];
 
+/* ---------------- INDEXEDDB MANIFEST (lightweight registry) ---------------- */
+const DB_NAME = "tf-pwa-db";
+const STORE = "manifest";
+
+function openDB() {
+    return new Promise((resolve, reject) => {
+        const req = indexedDB.open(DB_NAME, 1);
+
+        req.onupgradeneeded = () => {
+            const db = req.result;
+            if (!db.objectStoreNames.contains(STORE)) {
+                db.createObjectStore(STORE);
+            }
+        };
+
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = reject;
+    });
+}
+
+async function setManifest(key, value) {
+    const db = await openDB();
+    const tx = db.transaction(STORE, "readwrite");
+    tx.objectStore(STORE).put(value, key);
+}
+
+async function getManifest(key) {
+    const db = await openDB();
+    const tx = db.transaction(STORE, "readonly");
+    return tx.objectStore(STORE).get(key);
+}
+
 /* ---------------- UTIL ---------------- */
 const isNetworkOnly = (url) =>
-    url.hostname.includes("world.tsunamiflow.club") ||
+    /world\.tsunamiflow\.club/i.test(url.hostname) ||
     url.pathname.startsWith("/api/") ||
     url.pathname.startsWith("/webhook/") ||
     url.pathname.startsWith("/ws/") ||
@@ -91,32 +128,31 @@ const isDynamic = (url) =>
     url.search.length > 0 ||
     /token|session|auth|signed|nonce/i.test(url.pathname);
 
-/* normalize cache key (critical fix) */
-const cacheKey = (request) => {
-    const url = new URL(request.url);
-    url.search = ""; // prevents cache explosion from query strings
+const keyFromRequest = (req) => {
+    const url = new URL(req.url);
+    url.search = "";
     return url.toString();
 };
+
+/* ---------------- LRU TRIM ---------------- */
+async function trimCache(cache) {
+    const keys = await cache.keys();
+    if (keys.length <= MAX_ASSETS) return;
+    await cache.delete(keys[0]);
+}
 
 /* ---------------- INSTALL ---------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil((async () => {
-        const cache = await caches.open(CACHE_NAME);
+        const shellCache = await caches.open(CACHE_APP_SHELL);
 
-        const results = await Promise.allSettled(
-            PRECACHE_URLS.map(async (path) => {
-                const req = new Request(path, { cache: "reload" });
-
+        await Promise.allSettled(
+            PRECACHE_URLS.map(async (url) => {
                 try {
-                    const res = await fetch(req);
-
+                    const res = await fetch(url, { cache: "reload" });
                     if (!res || !res.ok) return;
 
-                    const url = new URL(res.url);
-
-                    if (url.origin !== self.location.origin) return;
-
-                    await cache.put(path, res.clone());
+                    await shellCache.put(url, res.clone());
                 } catch {}
             })
         );
@@ -132,7 +168,7 @@ self.addEventListener("activate", (event) => {
 
         await Promise.all(
             keys.map((key) =>
-                key.startsWith("tf-cache-") && key !== CACHE_NAME
+                key.includes("tf-") && !key.includes(VERSION)
                     ? caches.delete(key)
                     : null
             )
@@ -144,69 +180,61 @@ self.addEventListener("activate", (event) => {
 
 /* ---------------- FETCH ---------------- */
 self.addEventListener("fetch", (event) => {
-    const request = event.request;
+    const req = event.request;
 
-    if (request.method !== "GET") return;
+    if (req.method !== "GET") return;
 
-    const url = new URL(request.url);
+    const url = new URL(req.url);
 
-    if (request.headers.get("range")) {
-        event.respondWith(fetch(request));
+    if (req.headers.get("range")) {
+        event.respondWith(fetch(req));
         return;
     }
 
     if (isNetworkOnly(url) || isDynamic(url)) {
-        event.respondWith(fetch(request));
+        event.respondWith(fetch(req));
         return;
     }
 
-    /* NAVIGATION: network-first, fallback offline */
-    if (request.mode === "navigate") {
+    /* ---------------- NAVIGATION (NETWORK-FIRST) ---------------- */
+    if (req.mode === "navigate") {
         event.respondWith((async () => {
             try {
-                const fresh = await fetch(request);
-
-                const cache = await caches.open(CACHE_NAME);
-
-                // avoid poisoning cache with error pages
-                if (fresh.ok && fresh.type === "basic") {
-                    cache.put(request, fresh.clone());
-                }
-
+                const fresh = await fetch(req);
                 return fresh;
             } catch {
-                return (
-                    (await caches.match(request)) ||
-                    (await caches.match(OFFLINE_URL))
-                );
+                return (await caches.match(req)) ||
+                       (await caches.match(OFFLINE_URL));
             }
         })());
 
         return;
     }
 
-    /* STATIC: stale-while-revalidate (optimized core) */
+    /* ---------------- ASSETS (SWR + LRU + MULTI CACHE) ---------------- */
     event.respondWith((async () => {
-        const cache = await caches.open(CACHE_NAME);
-        const key = cacheKey(request);
+        const key = keyFromRequest(req);
 
-        const cached = await cache.match(key);
+        const assetCache = await caches.open(CACHE_ASSETS);
 
-        const network = fetch(request)
+        const cached = await assetCache.match(key);
+
+        const network = fetch(req)
             .then(async (res) => {
                 if (!res || !res.ok) return res;
 
                 const cacheControl = res.headers.get("Cache-Control");
 
                 const canCache =
-                    !cacheControl?.includes("no-store") &&
-                    res.type !== "opaque";
+                    res.type === "basic" &&
+                    (!cacheControl || !cacheControl.includes("no-store"));
 
                 if (canCache) {
-                    try {
-                        await cache.put(key, res.clone());
-                    } catch {}
+                    await assetCache.put(key, res.clone());
+                    await trimCache(assetCache);
                 }
+
+                await setManifest(key, Date.now());
 
                 return res;
             })
