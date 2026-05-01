@@ -81,6 +81,10 @@ const PRECACHE_URLS = [
 
 ];
 
+
+
+/* -------------------------------------------------------
+   INSTALL
 ------------------------------------------------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil(
@@ -97,7 +101,7 @@ self.addEventListener("install", (event) => {
 });
 
 /* -------------------------------------------------------
-   ACTIVATE (clean old caches)
+   ACTIVATE
 ------------------------------------------------------- */
 self.addEventListener("activate", (event) => {
     event.waitUntil(
@@ -105,11 +109,7 @@ self.addEventListener("activate", (event) => {
             const keys = await caches.keys();
 
             await Promise.all(
-                keys.map(key => {
-                    if (key !== CACHE_NAME) {
-                        return caches.delete(key);
-                    }
-                })
+                keys.map(key => key !== CACHE_NAME && caches.delete(key))
             );
 
             await self.clients.claim();
@@ -118,7 +118,7 @@ self.addEventListener("activate", (event) => {
 });
 
 /* -------------------------------------------------------
-   FETCH
+   FETCH (CORE ENGINE)
 ------------------------------------------------------- */
 self.addEventListener("fetch", (event) => {
     const request = event.request;
@@ -128,9 +128,23 @@ self.addEventListener("fetch", (event) => {
     const url = new URL(request.url);
 
     /* ---------------------------------------------------
-       0. RANGE REQUESTS (audio/video safety)
+       0. RANGE REQUESTS (media safety)
     --------------------------------------------------- */
     if (request.headers.get("range")) {
+        event.respondWith(fetch(request));
+        return;
+    }
+
+    /* ---------------------------------------------------
+       0.5 DYNAMIC REQUEST FILTER (IMPORTANT FIX)
+    --------------------------------------------------- */
+    const isDynamic =
+        url.search.length > 0 ||
+        url.pathname.includes("token") ||
+        url.pathname.includes("session") ||
+        url.pathname.includes("auth");
+
+    if (isDynamic) {
         event.respondWith(fetch(request));
         return;
     }
@@ -161,12 +175,12 @@ self.addEventListener("fetch", (event) => {
                     const fresh = await fetch(request);
 
                     const cache = await caches.open(CACHE_NAME);
-                    await cache.put(request, fresh.clone());
+                    cache.put(request, fresh.clone());
 
                     return fresh;
                 } catch {
                     const cached = await caches.match(request);
-                    return cached || caches.match(OFFLINE_URL);
+                    return cached || (await caches.match(OFFLINE_URL));
                 }
             })()
         );
@@ -174,7 +188,7 @@ self.addEventListener("fetch", (event) => {
     }
 
     /* ---------------------------------------------------
-       3. STATIC ASSETS (CACHE + CLOUDFLARE SAFE)
+       3. STATIC + MEDIA (SMART CACHE LAYER)
     --------------------------------------------------- */
     event.respondWith(
         (async () => {
@@ -195,7 +209,7 @@ self.addEventListener("fetch", (event) => {
                             await cache.put(request, res.clone());
                         }
                     } catch {
-                        // safe fail (CORS / opaque responses)
+                        // ignore safe failures (CORS / R2 / opaque)
                     }
 
                     return res;
@@ -209,7 +223,7 @@ self.addEventListener("fetch", (event) => {
 
             const fresh = await fetchPromise;
 
-            if (fresh) return fresh;
+            if (fresh instanceof Response) return fresh;
 
             return await caches.match(OFFLINE_URL);
         })()
