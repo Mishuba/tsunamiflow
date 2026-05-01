@@ -1,16 +1,18 @@
 /* service-worker.js
-   Offline-first PWA cache strategy
+   Offline-first PWA cache engine
    Backend + realtime always network-only
 */
 
-const VERSION = "v1.5";
+const VERSION = "v1.6";
+
 const CACHE_APP_SHELL = `tf-app-shell-${VERSION}`;
-const CACHE_ASSETS = `tf-assets-${VERSION}`;
-const CACHE_DYNAMIC = `tf-dynamic-${VERSION}`;
+const CACHE_ASSETS_JS = `tf-assets-js-${VERSION}`;
+const CACHE_ASSETS_CSS = `tf-assets-css-${VERSION}`;
+const CACHE_ASSETS_IMG = `tf-assets-img-${VERSION}`;
+const CACHE_ASSETS_MISC = `tf-assets-misc-${VERSION}`;
+
 const OFFLINE_URL = "/Offline/offline.html";
-
 const MAX_ASSETS = 180;
-
 
 /* ---------------- PRECACHE ---------------- */
 const PRECACHE_URLS = [
@@ -84,11 +86,11 @@ const PRECACHE_URLS = [
     "/Iframe/Pages/TFnetwork.html",
 ];
 
-/* ---------------- INDEXEDDB MANIFEST (lightweight registry) ---------------- */
+/* ---------------- INDEXEDDB ---------------- */
 const DB_NAME = "tf-pwa-db";
 const STORE = "manifest";
 
-let dbPromise;
+let dbPromise = null;
 
 function openDB() {
     if (dbPromise) return dbPromise;
@@ -110,28 +112,11 @@ function openDB() {
     return dbPromise;
 }
 
-function normalizeNav(url) {
-    if (url.pathname.endsWith("/")) {
-        return url.pathname + "index.html";
-    }
-    if (!url.pathname.includes(".")) {
-        return url.pathname + "/index.html";
-    }
-    return url.pathname;
-}
-
 function txDone(tx) {
     return new Promise((resolve, reject) => {
         tx.oncomplete = () => resolve();
         tx.onerror = () => reject(tx.error);
     });
-}
-
-function assetBucket(url) {
-    if (url.pathname.endsWith(".js")) return "js";
-    if (url.pathname.endsWith(".css")) return "css";
-    if (url.pathname.match(/\.(png|jpg|jpeg|webp|gif)$/)) return "img";
-    return "misc";
 }
 
 async function setManifest(key, value) {
@@ -143,9 +128,11 @@ async function setManifest(key, value) {
 
 async function getManifest(key) {
     const db = await openDB();
+
     return new Promise((resolve) => {
         const tx = db.transaction(STORE, "readonly");
         const req = tx.objectStore(STORE).get(key);
+
         req.onsuccess = () => resolve(req.result || 0);
         req.onerror = () => resolve(0);
     });
@@ -163,17 +150,30 @@ const isDynamic = (url) =>
     url.search.length > 0 ||
     /token|session|auth|signed|nonce/i.test(url.pathname);
 
-const keyFromRequest = (req) => {
-const fallbackKey = normalizeNav(new URL(req.url));
+function normalizeNav(url) {
+    if (url.pathname.endsWith("/")) {
+        return url.pathname + "index.html";
+    }
+    if (!url.pathname.includes(".")) {
+        return url.pathname + "/index.html";
+    }
+    return url.pathname;
+}
 
-return (
-    (await caches.match(req)) ||
-    (await caches.match(fallbackKey)) ||
-    (await caches.match("/index.html")) ||
-    (await caches.match(OFFLINE_URL))
-);
+function assetBucket(url) {
+    if (url.pathname.endsWith(".js")) return CACHE_ASSETS_JS;
+    if (url.pathname.endsWith(".css")) return CACHE_ASSETS_CSS;
+    if (url.pathname.match(/\.(png|jpg|jpeg|webp|gif|svg)$/)) return CACHE_ASSETS_IMG;
+    return CACHE_ASSETS_MISC;
+}
 
-/* ---------------- LRU TRIM ---------------- */
+function keyFromRequest(req) {
+    const url = new URL(req.url);
+    url.search = "";
+    return url.toString();
+}
+
+/* ---------------- LRU ---------------- */
 async function trimCache(cache) {
     const keys = await cache.keys();
 
@@ -190,15 +190,13 @@ async function trimCache(cache) {
 
     const toDelete = scored.slice(0, keys.length - MAX_ASSETS);
 
-    await Promise.all(
-        toDelete.map((item) => cache.delete(item.req))
-    );
+    await Promise.all(toDelete.map(i => cache.delete(i.req)));
 }
 
 /* ---------------- INSTALL ---------------- */
 self.addEventListener("install", (event) => {
     event.waitUntil((async () => {
-        const shellCache = await caches.open(CACHE_APP_SHELL);
+        const shell = await caches.open(CACHE_APP_SHELL);
 
         await Promise.allSettled(
             PRECACHE_URLS.map(async (url) => {
@@ -206,7 +204,7 @@ self.addEventListener("install", (event) => {
                     const res = await fetch(url, { cache: "reload" });
                     if (!res || !res.ok) return;
 
-                    await shellCache.put(url, res.clone());
+                    await shell.put(url, res.clone());
                 } catch {}
             })
         );
@@ -222,15 +220,7 @@ self.addEventListener("activate", (event) => {
 
         await Promise.all(
             keys.map((key) => {
-                const isOldCache =
-                    key.startsWith("tf-app-shell-") ||
-                    key.startsWith("tf-assets-") ||
-                    key.startsWith("tf-dynamic-");
-
-                const isCurrent =
-                    key.includes(VERSION);
-
-                if (isOldCache && !isCurrent) {
+                if (key.includes("tf-") && !key.includes(VERSION)) {
                     return caches.delete(key);
                 }
             })
@@ -258,28 +248,35 @@ self.addEventListener("fetch", (event) => {
         return;
     }
 
-    /* ---------------- NAVIGATION (NETWORK-FIRST) ---------------- */
+    /* ---------------- NAVIGATION ---------------- */
     if (req.mode === "navigate") {
         event.respondWith((async () => {
             try {
                 const fresh = await fetch(req);
                 return fresh;
             } catch {
-                return (await caches.match(req)) ||
-                       (await caches.match(OFFLINE_URL));
+                const fallbackKey = normalizeNav(url);
+
+                return (
+                    (await caches.match(req)) ||
+                    (await caches.match(fallbackKey)) ||
+                    (await caches.match("/index.html")) ||
+                    (await caches.match(OFFLINE_URL))
+                );
             }
         })());
 
         return;
     }
 
-    /* ---------------- ASSETS (SWR + LRU + MULTI CACHE) ---------------- */
+    /* ---------------- ASSETS ---------------- */
     event.respondWith((async () => {
         const key = keyFromRequest(req);
+        const cacheName = assetBucket(url);
 
-        const assetCache = await caches.open(CACHE_ASSETS);
+        const cache = await caches.open(cacheName);
 
-        const cached = await assetCache.match(key);
+        const cached = await cache.match(key);
 
         const network = fetch(req)
             .then(async (res) => {
@@ -292,8 +289,8 @@ self.addEventListener("fetch", (event) => {
                     (!cacheControl || !cacheControl.includes("no-store"));
 
                 if (canCache) {
-                    await assetCache.put(key, res.clone());
-                    await trimCache(assetCache);
+                    await cache.put(key, res.clone());
+                    await trimCache(cache);
                 }
 
                 await setManifest(key, Date.now());
@@ -303,6 +300,7 @@ self.addEventListener("fetch", (event) => {
             .catch(() => null);
 
         if (cached) {
+            event.waitUntil(setManifest(key, Date.now()));
             event.waitUntil(network);
             return cached;
         }
