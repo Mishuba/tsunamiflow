@@ -79,6 +79,43 @@ export class W extends T {
         return await this.cache.keys();
     }
 
+async fetchWithCache(request, strategy = "cache-first") {
+    const req = new Request(request);
+
+    switch (strategy) {
+
+        case "cache-first": {
+            const cached = await this.matchCache(req);
+            if (cached) return cached;
+
+            const res = await fetch(req);
+            await this.putCache(req, res.clone());
+            return res;
+        }
+
+        case "network-first": {
+            try {
+                const res = await fetch(req);
+                await this.putCache(req, res.clone());
+                return res;
+            } catch {
+                return await this.matchCache(req);
+            }
+        }
+
+        case "stale-while-revalidate": {
+            const cached = await this.matchCache(req);
+
+            const networkPromise = fetch(req).then(res => {
+                this.putCache(req, res.clone());
+                return res;
+            });
+
+            return cached || networkPromise;
+        }
+    }
+}
+
     async clearCache() {
         if (!this.cache) return false;
 
@@ -95,4 +132,5 @@ export class W extends T {
         await caches.delete(this.cacheName);
         this.cache = null;
     }
+
 }
