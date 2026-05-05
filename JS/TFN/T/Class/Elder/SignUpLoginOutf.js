@@ -3,6 +3,7 @@ import { StripeDonation } from "./Adult/Money.js";
 export class User extends StripeDonation {
   username = null;
   password = null;
+  personalai = null;
   savedUser = null;
   membershipLevels = {
     none: {

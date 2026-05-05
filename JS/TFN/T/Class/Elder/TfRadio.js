@@ -238,7 +238,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
   async playaudio() {
     try {
-      //  this.connectaudio();
+      this.connectaudio();
       //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
         if (this.AudioElement.paused) {

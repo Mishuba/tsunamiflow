@@ -105,7 +105,7 @@ let PhysicalAbility = [
 let AckmaHawkIntellectualIntelligence = [
   { name: "Science", level: 0, experience: 0 },
   { name: "Creativity", level: 0, experience: 0 },
-  { name: "Math", level: 0, Engineering: 0 },
+  { name: "Math", level: 0, experience: 0 },
   { name: "Memory", level: 0, experience: 0 },
   { name: "Awareness", level: 0, experience: 0 }
 ];
@@ -231,19 +231,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioSkipButton = document.createElement("button");
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-  const visualizatorController = RadioCanvas.transferControlToOffscreen();
+  let visualizatorController = null;
+  if (RadioCanvas && typeof RadioCanvas.transferControlToOffscreen === "function") {
+    try {
+      visualizatorController = RadioCanvas.transferControlToOffscreen();
+    } catch (err) {
+      console.warn("Offscreen canvas transfer failed:", err);
+    }
+  }
 
   const dock = document.getElementById("radioDock");
   const toggle = document.getElementById("toggleRadio");
   const header = document.getElementById("radioHeader");
 
   function updateRadioState() {
+    if (!dock || !toggle) return;
     const collapsed = dock.classList.contains("collapsed");
-
     toggle.textContent = collapsed ? "▼" : "▲";
   }
 
   function toggleRadioDock() {
+    if (!dock) return;
     dock.classList.toggle("collapsed");
     updateRadioState();
   }
@@ -265,15 +273,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let MixerTF = flowaudio.createMediaStreamDestination();
 
   /* button click */
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    toggleRadioDock();
-  });
+  if (toggle) {
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleRadioDock();
+    });
+  }
 
   /* header click */
-  header.addEventListener("click", () => {
-    toggleRadioDock();
-  });
+  if (header) {
+    header.addEventListener("click", () => {
+      toggleRadioDock();
+    });
+  }
 
   /* set initial state */
   updateRadioState();
@@ -301,8 +313,11 @@ document.addEventListener("DOMContentLoaded", () => {
   frameTF.frame.title = "Main Website Content";
   frameTF.frame.id = "TsunamiContent";
   frameTF.frame.name = "TsunamiMainFlowContent";
-  frameTF.frame.width = twoMore.width - 1;
-  frameTF.frame.height = twoMore.height - 1;;
+  // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
+  const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
+  const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
+  frameTF.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+  frameTF.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
   frameTF.frame.style.background = "white";
   frameTF.frame.style.touchAction = "manipulation";
   frameTF.frame.style.pointerEvents = "auto";
