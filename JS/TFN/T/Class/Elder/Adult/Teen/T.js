@@ -210,14 +210,18 @@ canvasctx.imageSmoothingEnabled;
     }
     initCanvas() {
         if (this.canvas !== null) {
-            try {
-                this.canvasctx = this.canvas.getContext(this.contextTypecanvas, this.contextTypecanvasoption);
-                if (!this.canvasctx) throw new Error(`${this.contextTypecanvas} context not supported`);
-                this.iscanvasReady = true;
-                console.log(`Canvas initialized with ${this.contextTypecanvas} context`);
-            } catch (err) {
-                console.error("Canvas init failed:", err);
-                this.canvasctx = null;
+            if (this.canvas === this.find("TFradioCanvas")) {
+                return;
+            } else {
+                try {
+                    this.canvasctx = this.canvas.getContext(this.contextTypecanvas, this.contextTypecanvasoption);
+                    if (!this.canvasctx) throw new Error(`${this.contextTypecanvas} context not supported`);
+                    this.iscanvasReady = true;
+                    console.log(`Canvas initialized with ${this.contextTypecanvas} context`);
+                } catch (err) {
+                    console.error("Canvas init failed:", err);
+                    this.canvasctx = null;
+                }
             }
         } else {
             console.warn("No canvas element found for initialization");
