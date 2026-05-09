@@ -231,13 +231,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioSkipButton = document.createElement("button");
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-  let visualizatorController = null;
   if (RadioCanvas && typeof RadioCanvas.transferControlToOffscreen === "function") {
     try {
-      visualizatorController = RadioCanvas.transferControlToOffscreen();
+      const visualizatorController = null;
     } catch (err) {
       console.warn("Offscreen canvas transfer failed:", err);
     }
+
   }
 
   const dock = document.getElementById("radioDock");
@@ -268,8 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
     channelCountMode: "max"
   }
   Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-  let flowbufferlength = flowAnalyser.frequencyBinCount;
-  let flowDataArray = new Uint8Array(flowbufferlength);
   let MixerTF = flowaudio.createMediaStreamDestination();
 
   /* button click */
@@ -295,8 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
     SoundContext: flowaudio,
     masterGain: flowGain,
     TfSoundAnalyser: flowAnalyser,
-    TfSoundContextBufferLength: flowbufferlength,
-    TfSoundContextDataArray: flowDataArray,
     MixerDestination: MixerTF,
     canvas: RadioCanvas,
     visualizatorController: visualizatorController

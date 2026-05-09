@@ -366,26 +366,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     //  this.AudioState();
     console.log("Audio playback is waiting");
   }
-  startAnalyserLoop() {
-    if (!this.TfSoundAnalyser || !this.TfSoundsContextDataArray) return;
-    if (this._analyserLoopRunning) return;
-
-    this._analyserLoopRunning = true;
-
-    const loop = () => {
-      if (!this._analyserLoopRunning) return;
-
-      if (this.TfSoundAnalyser) {
-        //this.getTrackAnalyserData(TfSoundAnalyser["radio"]);
-        this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
-        this.emit("visualizer", this.TfSoundsContextDataArray);
-      }
-
-      requestAnimationFrame(loop);
-    };
-
-    loop();
-  }
   getTrackAnalyserData(id) {
     const analyser = this.TfTrackAnalyser[id];
     if (!analyser) return null;
@@ -408,7 +388,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     const loopAnalyzer = () => {
       if (!this._workerAnalyserRunning) return;
 
-
       setInterval(() => {
         this.TfSoundAnalyser.getByteFrequencyData(
           this.TfSoundsContextDataArray
@@ -430,9 +409,9 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
             "async",
             {
               system: "visual_data",
-              dataArray: this.TfSoundsContextDataArray,
-              bufferLength: this.TfSoundsContextDataArray.length,
-              baseRadius: this.baseRadius
+              Analyser: this.TfSoundAnalyser,
+              baseRadius: this.baseRadius,
+              particles: this.particles
             }
           )
         );

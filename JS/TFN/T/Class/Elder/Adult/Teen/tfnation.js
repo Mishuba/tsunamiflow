@@ -78,7 +78,8 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
-                        //        analyser: this.updateAnalyser(),
+                        playlist: this.songList,
+                        //        yjlisstfanalyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
                     }
@@ -106,6 +107,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -131,6 +133,7 @@ export class mediaWorker extends TsWorker {
                 {
                     system: "file",
                     file: undefined,
+                    playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
                     buffer: ""
@@ -173,6 +176,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -201,6 +205,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -226,6 +231,7 @@ export class mediaWorker extends TsWorker {
                 {
                     system: "file",
                     file: undefined,
+                    playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
                     buffer: ""
@@ -270,6 +276,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -298,6 +305,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -323,6 +331,7 @@ export class mediaWorker extends TsWorker {
                 {
                     system: "file",
                     file: undefined,
+                    playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
                     buffer: ""
@@ -359,6 +368,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -387,6 +397,7 @@ export class mediaWorker extends TsWorker {
                     {
                         system: "file",
                         file: this.CurrentSong,
+                        playlist: this.songList,
                         //        analyser: this.updateAnalyser(),
                         message: "",
                         buffer: ""
@@ -412,6 +423,7 @@ export class mediaWorker extends TsWorker {
                 {
                     system: "file",
                     file: undefined,
+                    playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
                     buffer: ""
@@ -575,7 +587,9 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    RadioVisualizer(dataArray, bufferLength, baseRadius, particles) {
+    RadioVisualizer(flowAnalyser, baseRadius, particles) {
+        let bufferlength = flowAnalyser.frequencyBinCount;
+        let DataArray = new Uint8Array(flowbufferlength);
         this.offscreenctx.fillStyle = "rgb(10, 10, 30)";
         this.offscreenctx.fillRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 
@@ -603,17 +617,19 @@ export class mediaWorker extends TsWorker {
             CtxX += barWidth + 1;
         }
     }
-    startVisualizerLoop(dataArray, bufferLength, baseRadius, particles) {
+    startVisualizerLoop(flowAnalyser, baseRadius, particles) {
         if (this.visualizatorController) return;
 
+        let bufferlength = flowAnalyser.frequencyBinCount;
+        let DataArray = new Uint8Array(flowbufferlength);
         this.initOffscreen();
         this.visualizatorController = true;
 
         const loop = () => {
             if (!this.visualizatorController) return;
 
-            const liveData = this.latestVisualizerData || dataArray;
-            const liveLength = liveData.length || bufferLength;
+            const liveData = dataArray;
+            const liveLength = bufferLength;
 
             this.RadioVisualizer(
                 liveData,
@@ -910,9 +926,9 @@ export class mediaWorker extends TsWorker {
         } else if (event.data.type === "visualizator") {
             //
             if (event.data.payload.system === "playing") {
-                this.startVisualizerLoop(event.data.payload.dataArray, event.data.payload.bufferLength, event.data.payload.baseRadius, event.data.payload.particles);
+                this.startVisualizerLoop(event.data.payload.Analyser, event.data.payload.baseRadius, event.data.payload.particles);
             } else if (event.data.payload.system === "visual_data") {
-                this.latestVisualizerData = event.data.payload.dataArray;
+                this.latestVisualizerData = event.data.payload.Analyser;
             }
         } else if (event.data.type === "processor") {
             //
