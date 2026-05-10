@@ -301,7 +301,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
-  TFiframe.sandbox = "allow-scripts allow-same-origin";
+  TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
   let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
   frameTF.frame.title = "Main Website Content";

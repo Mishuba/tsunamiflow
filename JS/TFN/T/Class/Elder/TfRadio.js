@@ -249,7 +249,8 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
             "radio.playing",
             {
               source: "web",
-              target: "device:web-001"
+              target: "device:web-001",
+              worker: "media"
             },
             {
               status: "pending",
