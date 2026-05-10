@@ -2,6 +2,8 @@ import { TsWorker } from "./Child/OffscreenCanvas.js";
 export class mediaWorker extends TsWorker {
     //time below
     radiooffscreencanvas;
+    radiooffscreenctx;
+    isradiooffscreenReady = false;
     hour;
     minute;
     now;
@@ -578,8 +580,8 @@ export class mediaWorker extends TsWorker {
 
     particle(particles) {
         for (let i = 0; i < 100; i++) {
-            const x = Math.random() * this.offscreencanvas.width;
-            const y = Math.random() * this.offscreencanvas.height;
+            const x = Math.random() * this.radiooffscreencanvas.width;
+            const y = Math.random() * this.radiooffscreencanvas.height;
             const dx = (Math.random() - 0.5) * 0.5;
             const dy = (Math.random() - 0.5) * 0.5;
             const radius = Math.random() * 0.5 + 0.2;
@@ -588,11 +590,9 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    RadioVisualizer(flowAnalyser, baseRadius, particles) {
-        let bufferlength = flowAnalyser.frequencyBinCount;
-        let DataArray = new Uint8Array(flowbufferlength);
-        this.offscreenctx.fillStyle = "rgb(10, 10, 30)";
-        this.offscreenctx.fillRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
+    RadioVisualizer(dataArray, bufferLength, baseRadius, particles) {
+        this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
+        this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
 
         let CtxTotal = 0;
         for (let i = 0; i < dataArray.length; i++) {
@@ -601,11 +601,11 @@ export class mediaWorker extends TsWorker {
         const averageVolume = CtxTotal / dataArray.length;
 
         for (let i = 0; i < particles.length; i++) {
-            this.update(particles[i], averageVolume, baseRadius, this.offscreencanvas);
+            this.update(particles[i], averageVolume, baseRadius, this.radiooffscreencanvas);
             this.draw(particles[i]);
         }
 
-        const barWidth = this.offscreencanvas.width / bufferLength;
+        const barWidth = this.radiooffscreencanvas.width / bufferLength;
         let CtxX = 0;
 
         for (let i = 0; i < bufferLength; i++) {
@@ -613,28 +613,22 @@ export class mediaWorker extends TsWorker {
             const CtxR = barHeight + 25 * (i / bufferLength);
             const CtxG = 250 * (i / bufferLength);
             const CtxB = 50;
-            this.offscreenctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-            this.offscreenctx.fillRect(CtxX, this.offscreencanvas.height - barHeight, barWidth, barHeight);
+            this.radiooffscreenctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
+            this.radiooffscreenctx.fillRect(CtxX, this.radiooffscreencanvas.height - barHeight, barWidth, barHeight);
             CtxX += barWidth + 1;
         }
     }
-    startVisualizerLoop(flowAnalyser, baseRadius, particles) {
+    startVisualizerLoop(dataArray, baseRadius, particles) {
         if (this.visualizatorController) return;
 
-        let bufferlength = flowAnalyser.frequencyBinCount;
-        let DataArray = new Uint8Array(flowbufferlength);
-        this.initOffscreen();
         this.visualizatorController = true;
 
         const loop = () => {
             if (!this.visualizatorController) return;
 
-            const liveData = dataArray;
-            const liveLength = bufferLength;
-
             this.RadioVisualizer(
-                liveData,
-                liveLength,
+                dataArray,
+                dataArray.length,
                 baseRadius,
                 particles
             );
@@ -806,7 +800,7 @@ export class mediaWorker extends TsWorker {
         }
         if (event.data.type === "radio") {
             if (event.data.payload.system === "init_canvas") {
-                this.offscreencanvas = event.data.payload.canvas;
+                this.radiooffscreencanvas = event.data.payload.canvas;
             } else if (event.data.payload.system === "file") {
                 await this.fetchRadioSongs();
                 this.TheLastSongUsed = this.CurrentSong;
@@ -927,11 +921,12 @@ export class mediaWorker extends TsWorker {
         } else if (event.data.type === "visualizator") {
             //
             if (event.data.payload.system === "playing") {
-                this.startVisualizerLoop(event.data.payload.Analyser, event.data.payload.baseRadius, event.data.payload.particles);
+                this.startVisualizerLoop(event.data.payload.dataArray, event.data.payload.bufferLength, event.data.payload.baseRadius, event.data.payload.particles);
             } else if (event.data.payload.system === "visual_data") {
-                this.latestVisualizerData = event.data.payload.Analyser;
+                //this.latestVisualizerData = event.data.payload.Analyser;
             } else if (event.data.payload.system === "loading") {
                 this.radiooffscreencanvas = event.data.payload.canvas;
+                this.initRadioOffscreen();
             }
         } else if (event.data.type === "processor") {
             //
@@ -961,6 +956,19 @@ export class mediaWorker extends TsWorker {
             } else {
 
             }
+        }
+    }
+    initRadioOffscreen() {
+        if (!this.radiooffscreencanvas) return;
+
+        try {
+            this.radiooffscreenctx = this.radiooffscreencanvas.getContext(this.contextType);
+            if (!this.radiooffscreenctx) throw new Error(`${this.contextType} context not supported`);
+            this.isradiooffscreenReady = true;
+            console.log(`OffscreenCanvas initialized with ${this.contextType} context`);
+        } catch (err) {
+            console.error("OffscreenCanvas init failed:", err);
+            this.radiooffscreenctx = null;
         }
     }
 }
