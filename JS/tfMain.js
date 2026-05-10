@@ -231,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioSkipButton = document.createElement("button");
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-  if (RadioCanvas && typeof RadioCanvas.transferControlToOffscreen === "function") {
+  if (RadioCanvas /*&& typeof RadioCanvas.transferControlToOffscreen === "function"*/) {
     try {
       const visualizatorController = RadioCanvas.transferControlToOffscreen();
     } catch (err) {
