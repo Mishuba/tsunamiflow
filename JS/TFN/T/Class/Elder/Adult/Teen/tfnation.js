@@ -1,6 +1,7 @@
 import { TsWorker } from "./Child/OffscreenCanvas.js";
 export class mediaWorker extends TsWorker {
     //time below
+    radiooffscreencanvas;
     hour;
     minute;
     now;
@@ -929,6 +930,8 @@ export class mediaWorker extends TsWorker {
                 this.startVisualizerLoop(event.data.payload.Analyser, event.data.payload.baseRadius, event.data.payload.particles);
             } else if (event.data.payload.system === "visual_data") {
                 this.latestVisualizerData = event.data.payload.Analyser;
+            } else if (event.data.payload.system === "loading") {
+                this.radiooffscreencanvas = event.data.payload.canvas;
             }
         } else if (event.data.type === "processor") {
             //
