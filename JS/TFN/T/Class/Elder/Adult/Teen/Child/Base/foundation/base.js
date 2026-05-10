@@ -31,7 +31,7 @@ export class T {
             "action": action, // video.start
             "meta": meta, // {}
             "timestamp": Math.floor(Date.now() / 1000),
-            "state": state,
+            "state": state, // {}
             "mode": mode, //"async"
             "payload": payload // {}
         };

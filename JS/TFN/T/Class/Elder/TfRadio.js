@@ -235,14 +235,14 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.AudioElement.load();
   }
 
-
   async playaudio() {
     try {
       this.connectaudio();
       //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
+        let TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
         if (this.AudioElement.paused) {
-          /*
+
           this.worker.postMessage(this.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
@@ -259,14 +259,11 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
             {
               system: "playing",
               canvas: this.visualizatorController,
-              //        analyser: this.updateAnalyser(),
-              dataArray: this.TfSoundsContextDataArray,
-              bufferLength: this.TfSoundContextBufferLength,
+              dataArray: TfSoundsContextDataArray,
               baseRadius: this.baseRadius,
               particles: this.particles
             }),
-            [this.visualizatorController, this.TfSoundsContextDataArray.buffer]);
-          */
+            [this.visualizatorController, TfSoundsContextDataArray]);
           await this.AudioElement.play();
         }
       }
@@ -385,41 +382,33 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
     this._workerAnalyserRunning = true;
 
-    const loopAnalyzer = () => {
-      if (!this._workerAnalyserRunning) return;
+    const dataArray = this.TfSoundAnalyser.getByteFrequencyData(this.TfSoundsContextDataArray);
 
-      setInterval(() => {
-        this.TfSoundAnalyser.getByteFrequencyData(
-          this.TfSoundsContextDataArray
-        );
-
-        this.worker.postMessage(
-          this.tycadome(
-            "tycadome-guest" + Date.now(),
-            "visualizator",
-            "radio.playing",
-            {
-              source: "web",
-              target: "device:web-001"
-            },
-            {
-              status: "pending",
-              priority: "low"
-            },
-            "async",
-            {
-              system: "visual_data",
-              Analyser: this.TfSoundAnalyser,
-              baseRadius: this.baseRadius,
-              particles: this.particles
-            }
-          )
-        );
-      }, 33);
-      requestAnimationFrame(loopAnalyzer);
-    };
-
-    loopAnalyzer();
+    if (!this._workerAnalyserRunning) return;
+    // setInterval(() => { }, 33);
+    this.worker.postMessage(
+      this.tycadome(
+        "tycadome-guest" + Date.now(),
+        "visualizator",
+        "radio.playing",
+        {
+          source: "web",
+          target: "device:web-001"
+        },
+        {
+          status: "pending",
+          priority: "low"
+        },
+        "async",
+        {
+          system: "visual_data",
+          Analyser: this.TfSoundAnalyser,
+          baseRadius: this.baseRadius,
+          particles: this.particles
+        }
+      )
+    );
+    requestAnimationFrame(loopAnalyzer);
   }
 
   playingAudio() {

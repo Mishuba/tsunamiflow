@@ -30,6 +30,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         smoothingTimeConstant: 0.5,
         channelCountMode: "max"
     };
+    TfSoundsContextBufferLength = null;
     TfTrackAnalyser = {};
     TfTrackCompressor = {};
     TfSoundsFloat32FromIterable = null;
@@ -87,12 +88,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
         if (options.TfSoundAnalyser) {
             this.TfSoundAnalyser = options.TfSoundAnalyser;
-        }
-        if (options.TfSoundContextBufferLength) {
-            this.TfSoundContextBufferLength = options.TfSoundContextBufferLength;
-        }
-        if (options.TfSoundContextDataArray) {
-            this.TfSoundContextDataArray = options.TfSoundContextDataArray;
         }
         // FIX: apply after instantiation
         // ===== SPEECH RECOGNITION =====
@@ -541,7 +536,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
             // DATA BUFFER
             this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
-            this.TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
         }
         // ROUTING
 
@@ -698,7 +692,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     }
 
     // ===== WORKLET (ASYNC — REQUIRED) =====
-    async initWorklet(url, options = {}) {
+    async initWorklet(url, wasm, options = {}) {
         this.initAudioContext();
         if (!this.TfSoundsContext.audioWorklet) {
             throw new Error("AudioWorklet not supported.");
@@ -716,25 +710,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             options
         );
 
-        this.TfSoundsWorkletNode.port.onmessage = (e) =>
-            this.emit("message", e.data);
-
-        this.TfSoundsWorkletReady = true;
-
-        this.emit("worklet-ready", this.TfSoundsWorkletNode);
-    }
-    ///worklet
-    async initWorklet(url, wasmUrl, options = {}) {
-        this.initAudioContext();
-
-        await this.TfSoundsContext.audioWorklet.addModule(url);
-
-        this.TfSoundsWorkletNode = new AudioWorkletNode(
-            this.TfSoundsContext,
-            "TfSoundsProcessor",
-            options
-        );
-
         // 🔥 LOAD WASM
         const wasmBinary = await fetch(wasmUrl).then(r => r.arrayBuffer());
 
@@ -742,6 +717,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             type: "init_wasm",
             wasmBinary
         });
+
+        this.TfSoundsWorkletNode.port.onmessage = (e) =>
+            this.emit("message", e.data);
 
         this.TfSoundsWorkletReady = true;
 
