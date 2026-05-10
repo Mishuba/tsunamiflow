@@ -242,29 +242,30 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
         let TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
         if (this.AudioElement.paused) {
-
-          this.worker.postMessage(this.tycadome(
-            "tycadome-guest" + Date.now(),
-            "visualizator",
-            "radio.playing",
-            {
-              source: "web",
-              target: "device:web-001",
-              worker: "media"
-            },
-            {
-              status: "pending",
-              priority: "low"
-            },
-            "async",
-            {
-              system: "playing",
-              canvas: this.visualizatorController,
-              dataArray: TfSoundsContextDataArray,
-              baseRadius: this.baseRadius,
-              particles: this.particles
-            }),
-            [this.visualizatorController, TfSoundsContextDataArray]);
+          /*
+                    this.worker.postMessage(this.tycadome(
+                      "tycadome-guest" + Date.now(),
+                      "visualizator",
+                      "radio.playing",
+                      {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "media"
+                      },
+                      {
+                        status: "pending",
+                        priority: "low"
+                      },
+                      "async",
+                      {
+                        system: "playing",
+                        canvas: this.visualizatorController,
+                        dataArray: TfSoundsContextDataArray,
+                        baseRadius: this.baseRadius,
+                        particles: this.particles
+                      }),
+                      [this.visualizatorController, TfSoundsContextDataArray]);
+                    */
           await this.AudioElement.play();
         }
       }
