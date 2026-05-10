@@ -742,7 +742,7 @@ export class maxwell {
         this.user.worker = this.worker;
         this.imageEngine.worker = this.worker;
         this.soundEngine.worker = this.worker;
-        this.soundEngine.worker.postMessage(this.tycadome(
+        this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
             "init.canvas",
