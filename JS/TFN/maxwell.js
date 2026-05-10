@@ -746,7 +746,7 @@ export class maxwell {
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
-            "init.canvas",
+            "init_canvas",
             {
                 source: "web",
                 target: "device:web-001",

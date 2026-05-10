@@ -802,89 +802,54 @@ export class mediaWorker extends TsWorker {
             if (event.data.payload.system === "init_canvas") {
                 this.radiooffscreencanvas = event.data.payload.canvas;
             } else if (event.data.payload.system === "file") {
-                await this.fetchRadioSongs();
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
                 this.TheLastSongUsed = this.CurrentSong;
             } else if (event.data.payload.system === "start") {
-                await this.fetchRadioSongs();
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
                 this.TheLastSongUsed = this.CurrentSong;
             } else if (event.data.payload.system === "skip") {
                 this.TheLastSongUsed = this.CurrentSong;
-                await this.fetchRadioSongs();
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
             } else if (event.data.payload.system === "previous") {
                 if (this.TheLastSongUsed === null) {
+                    if (this.songList === null) {
+                        await this.fetchRadioSongs();
+                    } else {
+                        this.RadioTime(this.songList);
+                    }
                     this.TheLastSongUsed = this.CurrentSong;
-                    let tf = this.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "radio",
-                        "scheduled.timer",
-                        {
-                            source: "web",
-                            target: "device:web-001",
-                            layer: "tf",
-                            worker: "media",
-                            backend: false
-                        },
-                        {
-                            status: "pending",
-                            priority: "low"
-                        },
-                        "async",
-                        {
-                            system: "Previous",
-                            file: this.CurrentSong
-                            //time: TheRealTime,
-                        });
-                    self.postMessage(tf)
                 } else if (this.TheLastSongUsed !== this.CurrentSong) {
-                    let tf = this.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "radio",
-                        "scheduled.timer",
-                        {
-                            source: "web",
-                            target: "device:web-001",
-                            layer: "tf",
-                            worker: "media",
-                            backend: false
-                        },
-                        {
-                            status: "pending",
-                            priority: "low"
-                        },
-                        "async",
-                        {
-                            system: "Previous",
-                            file: this.CurrentSong
-                            //time: TheRealTime,
-                        });
-                    self.postMessage(tf);
+                    if (this.songList === null) {
+                        await this.fetchRadioSongs();
+                    } else {
+                        this.RadioTime(this.songList);
+                    }
                 } else {
-                    let tf = this.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "radio",
-                        "scheduled.timer",
-                        {
-                            source: "web",
-                            target: "device:web-001",
-                            layer: "tf",
-                            worker: "media",
-                            backend: false
-                        },
-                        {
-                            status: "pending",
-                            priority: "low"
-                        },
-                        "async",
-                        {
-                            system: "Previous",
-                            file: this.CurrentSong
-                            //time: TheRealTime,
-                        });
-                    self.postMessage(tf);
+                    if (this.songList === null) {
+                        await this.fetchRadioSongs();
+                    } else {
+                        this.RadioTime(this.songList);
+                    }
                 }
             } else if (event.data.payload.system === "ended") {
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
                 this.TheLastSongUsed = this.CurrentSong;
-                await this.fetchRadioSongs();
             } else if (event.data.payload.system === "pcm") {
 
             }
