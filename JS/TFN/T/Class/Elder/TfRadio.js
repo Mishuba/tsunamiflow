@@ -237,7 +237,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
 
   async playaudio() {
     try {
-      this.connectaudio();
+      //this.connectaudio();
       //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
         let TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
@@ -513,7 +513,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this.AudioElement.addEventListener("canplaythrough", async () => {
         if (!this._wired) {
           //this.initAudioContext();
-          this.connectaudio();
+          //this.connectaudio();
           this._wired = true;
         }
         this.canplaythroughAudio();
@@ -549,7 +549,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
       this.AudioElement.addEventListener("ended", async (ended) => {
-        this.destroyRadioSource();
+        //  this.destroyRadioSource();
         this.endedAudio();
       });
       this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
@@ -601,7 +601,7 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     if (this.WeLive) return;
 
     this.WeLive = true;
-    this.connectaudio();
+    //this.connectaudio();
 
     if (window.Hls && Hls.isSupported()) {
       if (this.hls) {
