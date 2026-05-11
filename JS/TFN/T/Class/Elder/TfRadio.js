@@ -240,7 +240,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
       //this.connectaudio();
       //  this.AudioState();
       if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
-        let TfSoundsContextDataArray = new Uint8Array(this.TfSoundsContextBufferLength);
         if (this.AudioElement.paused) {
           /*
                     this.worker.postMessage(this.tycadome(
@@ -282,15 +281,13 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.AudioElement.pause();
     console.log("Audio playback is paused");
   }
-  /*
-    stopaudio() {
-      if (this.AudioElement) {
-        this.AudioElement.pause();
-        this.AudioElement.currentTime = 0;
-        console.log("Audio playback is stopped");
-      }
+  restartAudio() {
+    if (this.AudioElement) {
+      this.AudioElement.pause();
+      this.AudioElement.currentTime = 0;
+      console.log("Audio playback is stopped");
     }
-  */
+  }
   previousaudio(music) {
     this.AudioElement.src = music;
     this.AudioElement.play();
@@ -443,25 +440,6 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
     this.AudioProcessBar = (this.AudioElement.currentTime / duration) * 100;
     this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.AudioElement.duration))}`;
   }
-  /*
-  volumechangeAudio() {
-    console.log("The volume has changed");
-  }
-
-  getCurrentaudioTime() {
-    return this.AudioElement.currentTime;
-  }
-
-  getaudioDuration() {
-    return this.AudioElement.duration;
-  }
-
-  isaudioPlaying() {
-    return !this.AudioElement.paused;
-  }
-  */
-  //element ends
-
   RadioEventListeners() {
     if (this._radioBound) {
       return;

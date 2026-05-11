@@ -7,12 +7,6 @@ export class TsWorker extends Ts {
     contextType = "2d";
     constructor(options = {}) {
         super(options);
-        if (options.worker) {
-            this.worker = options.worker;
-        }
-        // Initialize OffscreenCanvas first
-        this.offscreencanvas = new OffscreenCanvas(800, 600);
-        this.initOffscreen();
     }
     initOffscreen() {
         if (!this.offscreencanvas) return;

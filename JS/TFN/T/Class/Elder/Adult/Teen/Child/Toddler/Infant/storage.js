@@ -1,0 +1,824 @@
+export class T {
+    listeners = {};
+    domListeners = new Map();
+    namespace = "tf";
+    cookieenabled = navigator.cookieEnabled;
+    cookies = this.cookieenabled ? this.parsecookie() : {};
+    SessionStorage = window.sessionStorage;
+    LocalStorage = window.localStorage;
+    dbName = "default";
+    dbversion = 1;
+    dbstores = [];
+    db = null;
+    cacheName = null;
+    cache = null;
+    CacheonReady = null;
+    CacheautoOpen = true;
+    PRECACHE = [];
+    constructor(options = {}) {
+        if (options.dbName) {
+
+        }
+        if (options.dbversion) {
+
+        }
+        if (options.dbstores) {
+        }
+    }
+    /* ========================= */
+    /* ===== PERMISSION WRAP === */
+    /* ========================= */
+
+    _wrapPermission(name) {
+        return {
+            async query() {
+                if (!navigator.permissions) return "unsupported";
+                try {
+                    const res = await navigator.permissions.query({ name });
+                    return res.state;
+                } catch {
+                    return "unsupported";
+                }
+            }
+        };
+    }
+
+    async query(name) {
+        if (this.permissions[name]) {
+            return await this.permissions[name].query();
+        }
+        return "unsupported";
+    }
+
+    /* ========================= */
+    /* ===== CAMERA / MIC ====== */
+    /* ========================= */
+
+    async requestMedia(constraints = {}) {
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia(constraints);
+            return { status: "granted", stream };
+        } catch (err) {
+            return { status: "denied", error: err };
+        }
+    }
+
+    async requestCamera() {
+        return this.requestMedia({ video: true });
+    }
+
+    async requestMicrophone() {
+        return this.requestMedia({ audio: true });
+    }
+
+    /* ========================= */
+    /* ===== CAPABILITIES ====== */
+    /* ========================= */
+
+    _battery() {
+        return {
+            supported: !!navigator.getBattery,
+            async get() {
+                if (!navigator.getBattery) return null;
+                return await navigator.getBattery();
+            }
+        };
+    }
+
+    _vibration() {
+        return {
+            supported: !!navigator.vibrate,
+            vibrate(pattern = 200) {
+                return navigator.vibrate ? navigator.vibrate(pattern) : false;
+            },
+            stop() {
+                return navigator.vibrate ? navigator.vibrate(0) : false;
+            }
+        };
+    }
+
+    _serial() {
+        return {
+            supported: !!navigator.serial,
+            port: null,
+
+            async request(filters = []) {
+                if (!navigator.serial) return null;
+                try {
+                    this.port = await navigator.serial.requestPort({ filters });
+                    return this.port;
+                } catch (err) {
+                    return null;
+                }
+            },
+
+            async open(options = { baudRate: 9600 }) {
+                if (!this.port) return;
+                await this.port.open(options);
+            },
+
+            async close() {
+                if (!this.port) return;
+                await this.port.close();
+            }
+        };
+    }
+
+    _hid() {
+        return {
+            supported: !!navigator.hid,
+            devices: [],
+
+            async request(filters = []) {
+                try {
+                    this.devices = await navigator.hid.requestDevice({ filters });
+                    return this.devices;
+                } catch {
+                    return [];
+                }
+            },
+
+            async get() {
+                this.devices = await navigator.hid.getDevices();
+                return this.devices;
+            }
+        };
+    }
+
+    _usb() {
+        return {
+            supported: !!navigator.usb,
+            device: null,
+
+            async request(filters = []) {
+                try {
+                    this.device = await navigator.usb.requestDevice({ filters });
+                    return this.device;
+                } catch {
+                    return null;
+                }
+            },
+
+            async open() {
+                if (!this.device) return;
+                await this.device.open();
+            },
+
+            async close() {
+                if (!this.device) return;
+                await this.device.close();
+            }
+        };
+    }
+
+    _bluetooth() {
+        return {
+            supported: !!navigator.bluetooth,
+            device: null,
+
+            async request(options = { acceptAllDevices: true }) {
+                try {
+                    this.device = await navigator.bluetooth.requestDevice(options);
+                    return this.device;
+                } catch {
+                    return null;
+                }
+            },
+
+            async connect() {
+                if (!this.device) return null;
+                return await this.device.gatt.connect();
+            }
+        };
+    }
+    LocalStoragekey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setLocalStorage(name, value) {
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.LocalStorage.setItem(
+                this.LocalStoragekey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfLocalStorage set failed:", err);
+            return false;
+
+        }
+    }
+
+    getLocalStorage(name) {
+
+        const value = this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeLocalStorage(name) {
+
+        this.LocalStorage.removeItem(
+            this.LocalStoragekey(name)
+        );
+
+    }
+
+    LocalStoragehas(name) {
+
+        return this.LocalStorage.getItem(
+            this.LocalStoragekey(name)
+        ) !== null;
+
+    }
+
+    LocalStoragekeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const k = this.LocalStorage.key(i);
+
+            if (k.startsWith(this.namespace + ":")) {
+                list.push(k.replace(this.namespace + ":", ""));
+            }
+
+        }
+
+        return list;
+    }
+
+    clearLocalStorage() {
+
+        const keys = this.LocalStoragekeys();
+
+        keys.forEach(k => {
+            this.removeLocalStorage(k);
+        });
+
+    }
+
+    LocalStoragesize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.LocalStorage.length; i++) {
+
+            const key = this.LocalStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.LocalStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
+    }
+
+    Sessionkey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    setSession(name, value) {
+
+        try {
+
+            const data = JSON.stringify(value);
+
+            this.SessionStorage.setItem(
+                this.Sessionkey(name),
+                data
+            );
+
+            return true;
+
+        } catch (err) {
+
+            console.error("TfSessionStorage set failed:", err);
+            return false;
+
+        }
+
+    }
+
+    getSession(name) {
+
+        const value = this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        );
+
+        if (value === null) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    removeSession(name) {
+
+        this.SessionStorage.removeItem(
+            this.Sessionkey(name)
+        );
+
+    }
+
+    Sessionhas(name) {
+
+        return this.SessionStorage.getItem(
+            this.Sessionkey(name)
+        ) !== null;
+
+    }
+
+    Sessionkeys() {
+
+        const list = [];
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.Sessionkey(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                list.push(
+                    key.replace(this.namespace + ":", "")
+                );
+
+            }
+
+        }
+
+        return list;
+
+    }
+
+    clearSession() {
+
+        const keys = this.Sessionkeys();
+
+        keys.forEach(k => {
+            this.removeSession(k);
+        });
+
+    }
+
+    Sessionsize() {
+
+        let bytes = 0;
+
+        for (let i = 0; i < this.SessionStorage.length; i++) {
+
+            const key = this.SessionStorage.key(i);
+
+            if (key.startsWith(this.namespace + ":")) {
+
+                const value = this.SessionStorage.getItem(key);
+
+                bytes += key.length + value.length;
+
+            }
+
+        }
+
+        return bytes;
+
+    }
+    cookiekey(name) {
+        return `${this.namespace}:${name}`;
+    }
+
+    parsecookie() {
+
+        const jar = {};
+
+        if (!document.cookie) return jar;
+
+        document.cookie.split(";").forEach(cookie => {
+
+            const parts = cookie.split("=");
+
+            const key = parts.shift().trim();
+            const value = parts.join("=");
+
+            jar[key] = decodeURIComponent(value);
+
+        });
+
+        return jar;
+
+    }
+
+    setcookie(name, value, {
+        days = 7,
+        path = "/",
+        secure = false,
+        sameSite = "Lax"
+    } = {}) {
+
+        if (!this.cookieenabled) return false;
+
+        const key = this.key(name);
+
+        const expires = new Date(
+            Date.now() + days * 86400000
+        ).toUTCString();
+
+        const data = encodeURIComponent(
+            JSON.stringify(value)
+        );
+
+        let cookie = `${key}=${data}; expires=${expires}; path=${path}; SameSite=${sameSite}`;
+
+        if (secure) cookie += "; Secure";
+
+        document.cookie = cookie;
+
+        this.cookies[key] = data;
+
+        return true;
+
+    }
+
+    getcookie(name) {
+
+        if (!this.cookieenabled) return null;
+
+        const key = this.cookiekey(name);
+
+        const value = this.parse()[key];
+
+        if (!value) return null;
+
+        try {
+            return JSON.parse(value);
+        } catch {
+            return value;
+        }
+
+    }
+
+    cookiehas(name) {
+
+        const key = this.cookiekey(name);
+
+        return key in this.parsecookie();
+
+    }
+
+    removecookie(name, path = "/") {
+
+        const key = this.cookiekey(name);
+
+        document.cookie =
+            `${key}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=${path}`;
+
+        delete this.cookies[key];
+
+    }
+
+    cookiekeys() {
+
+        const parsed = this.parsecookie();
+
+        return Object.keys(parsed)
+            .filter(k => k.startsWith(this.namespace + ":"))
+            .map(k => k.replace(this.namespace + ":", ""));
+
+    }
+
+    clearcookie() {
+
+        this.cookiekeys().forEach(k => {
+            this.remove(k);
+        });
+    }
+    async opendb() {
+        if (this.db) return this.db;
+
+        return new Promise((resolve, reject) => {
+
+            const request = indexedDB.open(this.dbName, this.dbversion);
+
+            request.onupgradeneeded = (e) => {
+                const db = e.target.result;
+
+                this.dbstores.forEach(store => {
+
+                    if (!db.objectStoreNames.contains(store.name)) {
+
+                        const objStore = db.createObjectStore(
+                            store.name,
+                            {
+                                keyPath: store.keyPath || "id",
+                                autoIncrement: store.autoIncrement ?? true
+                            }
+                        );
+
+                        if (store.indexes) {
+                            store.indexes.forEach(idx => {
+                                objStore.createIndex(
+                                    idx.name,
+                                    idx.keyPath,
+                                    { unique: idx.unique || false }
+                                );
+                            });
+                        }
+                    }
+
+                });
+            };
+
+            request.onsuccess = (e) => {
+                this.db = e.target.result;
+                resolve(this.db);
+            };
+
+            request.onerror = (e) => reject(e);
+        });
+    }
+
+    storedb(name, mode = "readonly") {
+        if (!this.db) throw new Error("Database not opened");
+
+        return this.db
+            .transaction(name, mode)
+            .objectStore(name);
+    }
+
+    async putdb(storeName, data) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName, "readwrite")
+                .put(data);
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async getdb(storeName, key) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName)
+                .get(key);
+
+            req.onsuccess = () => resolve(req.result || null);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async getAlldb(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName)
+                .getAll();
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async deletedb(storeName, key) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName, "readwrite")
+                .delete(key);
+
+            req.onsuccess = () => resolve(true);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async cleardb(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName, "readwrite")
+                .clear();
+
+            req.onsuccess = () => resolve(true);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    async dbkeys(storeName) {
+        await this.opendb();
+
+        return new Promise((resolve, reject) => {
+
+            const req = this
+                .storedb(storeName)
+                .getAllKeys();
+
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+
+        });
+    }
+
+    closedb() {
+        if (!this.db) return;
+
+        this.db.close();
+        this.db = null;
+    }
+
+    destroydb() {
+        this.closedb();
+        return indexedDB.deleteDatabase(this.dbName);
+    }
+    async Cacheopen() {
+        if (this.cache) return this.cache;
+
+        try {
+            this.cache = await caches.open(this.cacheName);
+
+            if (this.CacheonReady) {
+                this.CacheonReady(this.cache);
+            }
+
+            return this.cache;
+
+        } catch (err) {
+            console.error("TfCacheAPI open failed:", err);
+            throw err;
+        }
+    }
+
+    async putCache(request, response) {
+        if (!this.cache) await this.Cacheopen();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        const res = response instanceof Response
+            ? response
+            : new Response(response);
+
+        await this.cache.put(req, res.clone());
+
+        return true;
+    }
+
+    async matchCache(request) {
+        if (!this.cache) await this.Cacheopen();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        const res = await this.cache.match(req);
+
+        return res || null;
+    }
+
+    async deleteCache(request) {
+        if (!this.cache) await this.open();
+
+        const req = request instanceof Request ? request : new Request(request);
+
+        return await this.cache.delete(req);
+    }
+
+    async addCache(url) {
+        if (!this.cache) await this.open();
+
+        return await this.cache.add(url);
+    }
+
+    async addAllCache(urls = []) {
+        if (!this.cache) await this.open();
+
+        return await this.cache.addAll(urls);
+    }
+
+    async Cachekeys() {
+        if (!this.cache) await this.open();
+
+        return await this.cache.keys();
+    }
+
+    async fetchWithCache(request, strategy = "cache-first") {
+        const req = new Request(request);
+
+        switch (strategy) {
+
+            case "cache-first": {
+                const cached = await this.matchCache(req);
+                if (cached) return cached;
+
+                const res = await fetch(req);
+                await this.putCache(req, res.clone());
+                return res;
+            }
+
+            case "network-first": {
+                try {
+                    const res = await fetch(req);
+                    await this.putCache(req, res.clone());
+                    return res;
+                } catch {
+                    return await this.matchCache(req);
+                }
+            }
+
+            case "stale-while-revalidate": {
+                const cached = await this.matchCache(req);
+
+                const networkPromise = fetch(req).then(res => {
+                    this.putCache(req, res.clone());
+                    return res;
+                });
+
+                return cached || networkPromise;
+            }
+        }
+    }
+
+    async cacheFromR2(url) {
+        const res = await fetch(url);
+
+        if (!res.ok) throw new Error("Fetch failed");
+
+        const buffer = await res.arrayBuffer();
+
+        const response = new Response(buffer, {
+            headers: {
+                "Content-Type": res.headers.get("Content-Type") || "application/octet-stream",
+                "Content-Length": buffer.byteLength
+            }
+        });
+
+        await this.putCache(url, response);
+
+        return buffer;
+    }
+
+    async getCachedBuffer(url) {
+        const res = await this.matchCache(url);
+        if (!res) return null;
+
+        return await res.arrayBuffer();
+    }
+
+    async preloadTracks(trackList) {
+        for (const url of trackList) {
+            this.fetchWithCache(url, "stale-while-revalidate");
+        }
+    }
+
+    async clearCache() {
+        if (!this.cache) return false;
+
+        const keys = await this.cache.keys();
+
+        await Promise.all(
+            keys.map(req => this.cache.delete(req))
+        );
+
+        return true;
+    }
+    async destroyCache() {
+        await caches.delete(this.cacheName);
+        this.cache = null;
+    }
+}

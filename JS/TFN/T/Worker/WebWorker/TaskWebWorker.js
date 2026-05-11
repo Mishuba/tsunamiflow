@@ -1,48 +1,25 @@
 console.log("Task Worker:" + import.meta.url);
-/*
-|--------------------------------------------------------------------------
-| Task Worker (Orchestrator Layer)
-|--------------------------------------------------------------------------
-| Responsibilities:
-| 1. Route compute tasks → dedicated workers
-| 2. Normalize all messages using Tycadome
-| 3. Return unified responses to Main Thread
-|--------------------------------------------------------------------------
-*/
-
-/*
-|--------------------------------------------------------------------------
-| Worker Pool (Compute Layer)
-|--------------------------------------------------------------------------
-*/
 
 const workers = {
     input: new Worker(
         new URL("./kid/GameInputWebWorker.js", import.meta.url),
         { type: "module" }
     ),
-
     media: new Worker(
         new URL("./kid/MediaWebWorker.js", import.meta.url),
         { type: "module" }
     ),
-
     world: new Worker(
         new URL("./kid/GameWorldWebWorker.js", import.meta.url),
         { type: "module" }
     ),
-
     ai: new Worker(
         new URL("./kid/AiWebWorker.js", import.meta.url),
         { type: "module" }
     )
 };
-
-/*
-|--------------------------------------------------------------------------
-| Packet Standard (Tycadome)
-|--------------------------------------------------------------------------
-*/
+// let tfTaskWorker = new TaskWorker({workers: workers});
+//tfTaskWorker.workers
 
 function tycadome(
     id,
@@ -65,14 +42,9 @@ function tycadome(
     };
 }
 
-/*
-|--------------------------------------------------------------------------
-| Worker Response Handler
-|--------------------------------------------------------------------------
-*/
-
-Object.entries(workers).forEach(([name, worker]) => {
+Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
     worker.onmessage = (e) => {
+        /* tfTaskWorker.OnWorkerMessage(e); */
         postMessage(
             tycadome(
                 e.data.id || crypto.randomUUID(),
@@ -81,10 +53,10 @@ Object.entries(workers).forEach(([name, worker]) => {
                 {
                     source: name,
                     layer: "compute",
-                    worker: ""
+                    worker: worker
                 },
                 {
-                    status: "completed",
+                    status: "pending",
                     priority: "low"
                 },
                 "async",
@@ -113,21 +85,10 @@ Object.entries(workers).forEach(([name, worker]) => {
     };
 });
 
-/*
-|--------------------------------------------------------------------------
-| MAIN ROUTER (Brain of system)
-|--------------------------------------------------------------------------
-*/
-
 onmessage = (e) => {
+    /* tfTaskWorker.OnMessage(e); */
     const task = e.data;
     const target = task.meta?.worker;
-
-    /*
-    ----------------------------------------------------------------------
-    Validate routing target
-    ----------------------------------------------------------------------
-    */
 
     if (!target || !workers[target]) {
         postMessage(
@@ -149,12 +110,6 @@ onmessage = (e) => {
         );
         return;
     }
-
-    /*
-    ----------------------------------------------------------------------
-    Forward task to compute worker
-    ----------------------------------------------------------------------
-    */
 
     workers[target].postMessage(
         tycadome(
