@@ -45,7 +45,7 @@ function tycadome(
 Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
     worker.onmessage = (e) => {
         /* tfTaskWorker.OnWorkerMessage(e); */
-        postMessage(
+        self.postMessage(
             tycadome(
                 e.data.id || crypto.randomUUID(),
                 e.data.type || name,
