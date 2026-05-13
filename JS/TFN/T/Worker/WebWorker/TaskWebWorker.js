@@ -66,7 +66,7 @@ Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
     };
 
     worker.onerror = (err) => {
-        postMessage(
+        self.postMessage(
             tycadome(
                 crypto.randomUUID(),
                 name,
@@ -91,7 +91,7 @@ onmessage = (e) => {
     const target = task.meta?.worker;
 
     if (!target || !workers[target]) {
-        postMessage(
+        self.postMessage(
             tycadome(
                 task.id || crypto.randomUUID(),
                 "system",
