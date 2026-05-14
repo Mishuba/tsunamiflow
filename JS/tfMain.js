@@ -265,7 +265,34 @@ document.addEventListener("DOMContentLoaded", () => {
     smoothingTimeConstant: 0.5,
     channelCountMode: "max"
   }
+  let flowCompressor = flowaudio.createDynamicsCompressor();
+  let flowDelay = flowaudio.createDelay();
+  /*
+    await flowaudio.audioWorklet.addModule("TfSoundsProcessor.js");
+  
+    let flowWorklet = new AudioWorkletNode(
+      flowaudio,
+      "TfSoundsProcessor",
+      options
+    );
+    */
+  let flowPanner = flowaudio.createPanner();
+  let flowEq = flowaudio.createBiquadFilter();
+
   Object.assign(flowAnalyser, TfSoundAnalyserOptions);
+
+  //tf sounds
+  let flowOscillator = flowaudio.createOscillator();
+  /*
+  flowOscillator.type = "sine";
+  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+  flowOscillator.start();
+  */
+
+  //tf distfortfion 
+  let flowDistortion = flowaudio.createWaveShaper();
+
+
   let MixerTF = flowaudio.createMediaStreamDestination();
 
   /* button click */
