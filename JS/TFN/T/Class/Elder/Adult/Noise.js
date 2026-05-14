@@ -263,4 +263,78 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
         this.emit("closed");
     }
+
+extractBands(fft) {
+  const bassEnd = 8;
+  const midEnd = 64;
+
+  let bass = 0;
+  let mid = 0;
+  let treble = 0;
+
+  for (let i = 0; i < fft.length; i++) {
+    if (i < bassEnd) bass += fft[i];
+    else if (i < midEnd) mid += fft[i];
+    else treble += fft[i];
+  }
+
+  return {
+    bass: bass / bassEnd,
+    mid: mid / (midEnd - bassEnd),
+    treble: treble / (fft.length - midEnd)
+  };
+}
+
+normalize(value, smoothing = 0.2, prev = 0) {
+  return prev + (value - prev) * smoothing;
+}
+
+updatePhysics(bass) {
+  const force = bass * 50;
+
+  player.velocity.y -= force;   // jump impulse
+  world.shake = force * 0.1;    // camera shake
+}
+
+updateEnemies(mid) {
+  if (mid > 0.6) {
+    spawnEnemyWave();
+  }
+
+  enemies.forEach(e => {
+    e.speed = 1 + mid * 3;
+  });
+}
+
+updateVisuals(treble) {
+  particles.spawnRate = treble * 100;
+
+  if (treble > 0.8) {
+    triggerLaserEffect();
+  }
+}
+
+detectBeat(bass) {
+  if (bass > 0.7 && lastBass <= 0.7) {
+    triggerEvent("BEAT_HIT");
+  }
+
+  lastBass = bass;
+}
+
+triggerEvent(type) {
+  switch (type) {
+    case "BEAT_HIT":
+      spawnShockwave();
+      break;
+
+    case "DROP":
+      activateSlowMotion();
+      break;
+
+    case "HIGH_ENERGY":
+      unlockAbility();
+      break;
+  }
+}
 }
