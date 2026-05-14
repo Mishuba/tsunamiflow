@@ -608,6 +608,26 @@ export class mediaWorker extends TsWorker {
         }
     }
 
+RadioVisualizer2(audio, particles) {
+
+    const { fft, volume } = audio;
+
+    this.clear();
+
+    // PARTICLE WORLD
+    for (let p of particles) {
+        this.update(p, audio, 2, this.canvas);
+        this.draw(p);
+    }
+
+    // FREQUENCY TERRAIN
+    for (let i = 0; i < fft.length; i++) {
+        const h = fft[i] * (1 + volume * 3);
+
+        drawColumn(i, h, audio.bass);
+    }
+}
+
     RadioVisualizer(dataArray, bufferLength, baseRadius, particles, volume) {
         this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
         this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
