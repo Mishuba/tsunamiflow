@@ -292,7 +292,6 @@ document.addEventListener("DOMContentLoaded", () => {
   //tf distfortfion 
   let flowDistortion = flowaudio.createWaveShaper();
 
-
   let MixerTF = flowaudio.createMediaStreamDestination();
 
   /* button click */
@@ -318,6 +317,11 @@ document.addEventListener("DOMContentLoaded", () => {
     SoundContext: flowaudio,
     masterGain: flowGain,
     TfSoundAnalyser: flowAnalyser,
+    TfTrackCompressor: flowCompressor,
+    TfSoundsDelay: flowDelay,
+    TfSoundsPanner: flowPanner,
+    TfSoundsWaveShaper: flowDistortion,
+    TfSoundsOscillator: flowOscillator,
     MixerDestination: MixerTF,
     canvas: RadioCanvas,
     visualizatorController: visualizatorController
