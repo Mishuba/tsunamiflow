@@ -53,7 +53,7 @@ Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
                 {
                     source: name,
                     layer: "compute",
-                    worker: worker
+                    worker: name
                 },
                 {
                     status: "pending",
