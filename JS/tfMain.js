@@ -233,7 +233,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioCanvas = document.getElementById("TFradioCanvas");
   let visualizatorController = null
   try {
-    let visualizatorController = RadioCanvas.transferControlToOffscreen();
+    visualizatorController = RadioCanvas.transferControlToOffscreen();
   } catch (err) {
     console.warn("Offscreen canvas transfer failed:", err);
   }
