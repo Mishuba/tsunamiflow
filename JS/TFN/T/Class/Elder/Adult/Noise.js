@@ -19,7 +19,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     TfSoundsContextBufferLength = null;
     TfTrackAnalyser = {};
     TfTrackCompressor = {};
-    TfSoundsFloat32FromIterable = null;
+    TfSoundsFloat32 = null;
     TfSoundsPeriodicWaveOptions = {};
     TfSoundsPeridocWave = null;
     TfSoundsPannerOptions = {};
@@ -40,6 +40,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         noiseSuppression: true,
         autoGainControl: true
     };
+    TfSoundWorklet = null;
     constructor(options = {}) {
         super(options);
 
@@ -59,6 +60,9 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
         if (options.TfSoundAnalyser) {
             this.TfSoundAnalyser = options.TfSoundAnalyser;
+        }
+        if (options.TfSoundWorklet) {
+            this.TfSoundWorklet = options.TfSoundWorklet;
         }
     }
     AudioState() {
@@ -264,77 +268,149 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         this.emit("closed");
     }
 
-extractBands(fft) {
-  const bassEnd = 8;
-  const midEnd = 64;
+    SendWorkletToWorker(type, action, meta, system, data) {
+        this.worker.postMessage(
+            this.tycadome(
+                "tycadome-guest" + Date.now(),
+                type,
+                action,
+                meta,
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: system,
+                    worklet: data,
+                    //baseRadius: this.baseRadius,
+                    //particles: this.particles
+                }
+            )
+        );
+    }
 
-  let bass = 0;
-  let mid = 0;
-  let treble = 0;
+    onWorkletMessage(e) {
+        this.TfSoundsFloat32 = new Float32Array(e.data);
+        this.processAudioForVideo();
+        //updateAnalyser();
+        this.worker.postMessage(
+            this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "visualizator",
+                "radio.playing",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "visual_data",
+                    dataArray: this.TfSoundContextDataArray,
+                    dataArrayLength: this.TfSoundContextDataArray.length,
+                    baseRadius: this.baseRadius,
+                    particles: this.particles,
+                    volume: this.TfSoundVolume
+                }
+            )
+        );
+    }
+    processAudioForVideo() {
+        this.TfSoundContextBufferLength = this.TfSoundsFloat32.length;
+        let sum = 0;
+        for (let i = 0; i < this.TfSoundContextBufferLength; i++) {
+            sum += this.TfSoundsFloat32[i] * this.TfSoundsFloat32[i];
+        }
+        this.TfSoundVolume = Math.sqrt(sum / this.TfSoundContextBufferLength);
+        this.TfSoundContextDataArray = new Uint8Array(this.TfSoundContextBufferLength / 4);
+        this.TfSoundChunkSize = Math.floor(this.TfSoundContextBufferLength / this.TfSoundContextDataArray.length);
 
-  for (let i = 0; i < fft.length; i++) {
-    if (i < bassEnd) bass += fft[i];
-    else if (i < midEnd) mid += fft[i];
-    else treble += fft[i];
-  }
+        for (let i = 0; i < this.TfSoundContextDataArray.length; i++) {
+            this.TfSoundchunkSum = 0;
+            for (let j = 0; j < this.TfSoundChunkSize; j++) {
+                this.TfSoundSample = this.TfSoundsFloat32[i * this.TfSoundChunkSize + j] || 0;
+                this.TfSoundchunkSum += Math.abs(this.TfSoundSample);
+            }
+            this.TfSoundContextDataArray[i] = Math.min(255, this.TfSoundchunkSum * 400);
+        }
+    }
+    // game logic below
+    extractBands(fft) {
+        const bassEnd = 8;
+        const midEnd = 64;
 
-  return {
-    bass: bass / bassEnd,
-    mid: mid / (midEnd - bassEnd),
-    treble: treble / (fft.length - midEnd)
-  };
-}
+        let bass = 0;
+        let mid = 0;
+        let treble = 0;
 
-normalize(value, smoothing = 0.2, prev = 0) {
-  return prev + (value - prev) * smoothing;
-}
+        for (let i = 0; i < fft.length; i++) {
+            if (i < bassEnd) bass += fft[i];
+            else if (i < midEnd) mid += fft[i];
+            else treble += fft[i];
+        }
 
-updatePhysics(bass) {
-  const force = bass * 50;
+        return {
+            bass: bass / bassEnd,
+            mid: mid / (midEnd - bassEnd),
+            treble: treble / (fft.length - midEnd)
+        };
+    }
 
-  player.velocity.y -= force;   // jump impulse
-  world.shake = force * 0.1;    // camera shake
-}
 
-updateEnemies(mid) {
-  if (mid > 0.6) {
-    spawnEnemyWave();
-  }
+    normalize(value, smoothing = 0.2, prev = 0) {
+        return prev + (value - prev) * smoothing;
+    }
 
-  enemies.forEach(e => {
-    e.speed = 1 + mid * 3;
-  });
-}
+    updatePhysics(bass) {
+        const force = bass * 50;
 
-updateVisuals(treble) {
-  particles.spawnRate = treble * 100;
+        player.velocity.y -= force;   // jump impulse
+        world.shake = force * 0.1;    // camera shake
+    }
 
-  if (treble > 0.8) {
-    triggerLaserEffect();
-  }
-}
+    updateEnemies(mid) {
+        if (mid > 0.6) {
+            spawnEnemyWave();
+        }
 
-detectBeat(bass) {
-  if (bass > 0.7 && lastBass <= 0.7) {
-    triggerEvent("BEAT_HIT");
-  }
+        enemies.forEach(e => {
+            e.speed = 1 + mid * 3;
+        });
+    }
 
-  lastBass = bass;
-}
+    updateVisuals(treble) {
+        particles.spawnRate = treble * 100;
 
-triggerEvent(type) {
-  switch (type) {
-    case "BEAT_HIT":
-      spawnShockwave();
-      break;
+        if (treble > 0.8) {
+            triggerLaserEffect();
+        }
+    }
 
-    case "DROP":
-      activateSlowMotion();
-      break;
+    detectBeat(bass) {
+        if (bass > 0.7 && lastBass <= 0.7) {
+            triggerEvent("BEAT_HIT");
+        }
 
-    case "HIGH_ENERGY":
-      unlockAbility();
-      break;
-  }
-}
+        lastBass = bass;
+    }
+
+    triggerEvent(type) {
+        switch (type) {
+            case "BEAT_HIT":
+                spawnShockwave();
+                break;
+
+            case "DROP":
+                activateSlowMotion();
+                break;
+
+            case "HIGH_ENERGY":
+                unlockAbility();
+                break;
+        }
+    }
 }

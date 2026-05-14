@@ -226,9 +226,11 @@ export class TsunamiFlowRadio extends TsunamiFlowAudio {
         "async",
         {
           system: "visual_data",
-          Analyser: this.TfSoundAnalyser,
+          dataArray: this.TfSoundContextDataArray,
+          dataArrayLength: this.TfSoundContextDataArray.length,
           baseRadius: this.baseRadius,
-          particles: this.particles
+          particles: this.particles,
+          volume: this.TfSoundVolume
         }
       )
     );

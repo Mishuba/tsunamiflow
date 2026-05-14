@@ -1,4 +1,4 @@
-class FFTProcessor extends AudioWorkletProcessor {
+export class FFTProcessor extends AudioWorkletProcessor {
   constructor() {
     super();
 

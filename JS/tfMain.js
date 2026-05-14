@@ -267,15 +267,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   let flowCompressor = flowaudio.createDynamicsCompressor();
   let flowDelay = flowaudio.createDelay();
-  /*
-    await flowaudio.audioWorklet.addModule("TfSoundsProcessor.js");
-  
-    let flowWorklet = new AudioWorkletNode(
-      flowaudio,
-      "TfSoundsProcessor",
-      options
-    );
-    */
+
+  await flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+
+  let flowWorklet = new AudioWorkletNode(
+    flowaudio,
+    "fft-processor",
+    options
+  );
+
   let flowPanner = flowaudio.createPanner();
   let flowEq = flowaudio.createBiquadFilter();
 
@@ -323,6 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
     TfSoundsWaveShaper: flowDistortion,
     TfSoundsOscillator: flowOscillator,
     MixerDestination: MixerTF,
+    TfSoundWorklet: flowWorklet,
     canvas: RadioCanvas,
     visualizatorController: visualizatorController
   });

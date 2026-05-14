@@ -555,12 +555,18 @@ export class mediaWorker extends TsWorker {
     }
 
     update(p, volume, baseRadius, canvas) {
-        p.radius = baseRadius + volume / 80;
+        const energy = volume * 80;
+
+        p.radius = baseRadius + energy;
+        p.dx += (Math.random() - 0.5) * volume;
+        p.dy += (Math.random() - 0.5) * volume;
         p.x += p.dx;
         p.y += p.dy;
+        p.dx *= 0.98;
+        p.dy *= 0.98;
 
-        if (p.x + p.radius > canvas.width || p.x - p.radius < 0) p.dx = -p.dx;
-        if (p.y + p.radius > canvas.height || p.y - p.radius < 0) p.dy = -p.dy;
+        if (p.x + p.radius > canvas.width || p.x - p.radius < 0) p.dx *= -1;
+        if (p.y + p.radius > canvas.height || p.y - p.radius < 0) p.dy *= -1;
     }
 
     draw(p) {
@@ -590,18 +596,12 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    RadioVisualizer(dataArray, bufferLength, baseRadius, particles) {
+    RadioVisualizer(dataArray, bufferLength, baseRadius, particles, volume) {
         this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
         this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
 
-        let CtxTotal = 0;
-        for (let i = 0; i < dataArray.length; i++) {
-            CtxTotal += dataArray[i];
-        }
-        const averageVolume = CtxTotal / dataArray.length;
-
         for (let i = 0; i < particles.length; i++) {
-            this.update(particles[i], averageVolume, baseRadius, this.radiooffscreencanvas);
+            this.update(particles[i], volume, baseRadius, this.radiooffscreencanvas);
             this.draw(particles[i]);
         }
 
@@ -609,7 +609,7 @@ export class mediaWorker extends TsWorker {
         let CtxX = 0;
 
         for (let i = 0; i < bufferLength; i++) {
-            const barHeight = dataArray[i];
+            const barHeight = dataArray[i] * (volume * 5 + 1);
             const CtxR = barHeight + 25 * (i / bufferLength);
             const CtxG = 250 * (i / bufferLength);
             const CtxB = 50;
@@ -618,7 +618,7 @@ export class mediaWorker extends TsWorker {
             CtxX += barWidth + 1;
         }
     }
-    startVisualizerLoop(dataArray, baseRadius, particles) {
+    startVisualizerLoop(dataArray, dataArrayLength, baseRadius, particles, volume) {
         if (this.visualizatorController) return;
 
         this.visualizatorController = true;
@@ -628,9 +628,10 @@ export class mediaWorker extends TsWorker {
 
             this.RadioVisualizer(
                 dataArray,
-                dataArray.length,
+                dataArrayLength,
                 baseRadius,
-                particles
+                particles,
+                volume
             );
             setTimeout(loop, 16);
         };
@@ -885,10 +886,8 @@ export class mediaWorker extends TsWorker {
             }
         } else if (event.data.type === "visualizator") {
             //
-            if (event.data.payload.system === "playing") {
-                this.startVisualizerLoop(event.data.payload.dataArray, event.data.payload.bufferLength, event.data.payload.baseRadius, event.data.payload.particles);
-            } else if (event.data.payload.system === "visual_data") {
-                //this.latestVisualizerData = event.data.payload.Analyser;
+            if (event.data.payload.system === "visual_data") {
+                this.startVisualizerLoop(event.data.payload.dataArray, event.data.payload.dataArrayLength, event.data.payload.baseRadius, event.data.payload.particles, event.data.payload.volume);
             } else if (event.data.payload.system === "loading") {
                 this.radiooffscreencanvas = event.data.payload.canvas;
                 this.initRadioOffscreen();
