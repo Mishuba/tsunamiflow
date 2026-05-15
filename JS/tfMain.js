@@ -293,10 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
     channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
     channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
   }
-  let flowWorklet = new AudioWorkletNode(
-    flowaudio,
-    "fft-processor"
-  );
+  let flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor");
 
   let flowPanner = flowaudio.createPanner();
   let flowEq = flowaudio.createBiquadFilter();
