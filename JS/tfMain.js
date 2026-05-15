@@ -256,12 +256,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
 
-  await flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-
   let Workletoptions = {
     numberOfInputs: 1, //0 oscillator
     numberOfOutputs: 1,
-    outputChannelCount: [1], //mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
+    //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
+    /*
     parameterData: {
       gain: 0.5,
       frequency: 440,
@@ -272,46 +271,55 @@ document.addEventListener("DOMContentLoaded", () => {
       pannerY: 0,
       pannerZ: 0
     },
+    */
+    /*
     processorOptions: {
       mode: "fft",
       bufferSize: 1024,
       customFlag: true
     },
+    */
     channelCount: 2,
     channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
     channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
   }
-  let flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor");
-  let flowGain = flowaudio.createGain();
-  flowGain.gain.value = 1;
-  let flowAnalyser = flowaudio.createAnalyser();
+
   let TfSoundAnalyserOptions = {
     fftSize: 2048,
     maxDecibels: 0,
     minDecibels: -100,
     smoothingTimeConstant: 0.5,
     channelCountMode: "max"
-  }
-  let flowCompressor = flowaudio.createDynamicsCompressor();
-  let flowDelay = flowaudio.createDelay();
+  };
 
-  let flowPanner = flowaudio.createPanner();
-  let flowEq = flowaudio.createBiquadFilter();
+  flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
 
-  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
+    let flowGain = flowaudio.createGain();
+    flowGain.gain.value = 1;
+    let flowAnalyser = flowaudio.createAnalyser();
+    let flowCompressor = flowaudio.createDynamicsCompressor();
+    let flowDelay = flowaudio.createDelay();
 
-  //tf sounds
-  let flowOscillator = flowaudio.createOscillator();
-  /*
-  flowOscillator.type = "sine";
-  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
-  flowOscillator.start();
-  */
+    let flowPanner = flowaudio.createPanner();
+    let flowEq = flowaudio.createBiquadFilter();
 
-  //tf distfortfion 
-  let flowDistortion = flowaudio.createWaveShaper();
+    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
 
-  let MixerTF = flowaudio.createMediaStreamDestination();
+    //tf sounds
+    let flowOscillator = flowaudio.createOscillator();
+    /*
+    flowOscillator.type = "sine";
+    flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+    flowOscillator.start();
+    */
+
+    //tf distfortfion 
+    let flowDistortion = flowaudio.createWaveShaper();
+
+    let MixerTF = flowaudio.createMediaStreamDestination();
+
+    let flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
+  });
 
   /* button click */
   if (toggle) {
