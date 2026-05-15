@@ -268,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let flowCompressor = flowaudio.createDynamicsCompressor();
   let flowDelay = flowaudio.createDelay();
 
-  await flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+  flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
   let flowWorklet = new AudioWorkletNode(
     flowaudio,
