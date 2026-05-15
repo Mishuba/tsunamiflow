@@ -554,20 +554,32 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    update(p, volume, baseRadius, canvas) {
-        const energy = volume * 80;
+    update(p, audio, baseRadius, canvas) {
 
-        p.radius = baseRadius + energy;
-        p.dx += (Math.random() - 0.5) * volume;
-        p.dy += (Math.random() - 0.5) * volume;
-        p.x += p.dx;
-        p.y += p.dy;
-        p.dx *= 0.98;
-        p.dy *= 0.98;
+    const energy = audio.volume * 80;
 
-        if (p.x + p.radius > canvas.width || p.x - p.radius < 0) p.dx *= -1;
-        if (p.y + p.radius > canvas.height || p.y - p.radius < 0) p.dy *= -1;
+    p.radius = baseRadius + energy;
+
+    // FULL AUDIO FORCE VECTOR
+    const forceX = audio.mid * (Math.random() - 0.5);
+    const forceY = audio.treble * (Math.random() - 0.5);
+
+    p.dx += forceX;
+    p.dy += forceY;
+
+    // BEAT PULSE
+    if (audio.beat) {
+        p.dx *= 1.3;
+        p.dy *= 1.3;
     }
+
+    // damping
+    p.dx *= 0.97;
+    p.dy *= 0.97;
+
+    p.x += p.dx;
+    p.y += p.dy;
+}
 
     draw(p) {
         this.offscreenctx.save();
@@ -595,6 +607,26 @@ export class mediaWorker extends TsWorker {
             particles.push(this.tfParticles(x, y, dx, dy, radius, color));
         }
     }
+
+RadioVisualizer2(audio, particles) {
+
+    const { fft, volume } = audio;
+
+    this.clear();
+
+    // PARTICLE WORLD
+    for (let p of particles) {
+        this.update(p, audio, 2, this.canvas);
+        this.draw(p);
+    }
+
+    // FREQUENCY TERRAIN
+    for (let i = 0; i < fft.length; i++) {
+        const h = fft[i] * (1 + volume * 3);
+
+        drawColumn(i, h, audio.bass);
+    }
+}
 
     RadioVisualizer(dataArray, bufferLength, baseRadius, particles, volume) {
         this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";

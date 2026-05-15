@@ -293,6 +293,33 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     onWorkletMessage(e) {
         this.TfSoundsFloat32 = new Float32Array(e.data);
         this.processAudioForVideo();
+    const pcm = e.data.pcm;
+    const features = this.dsp.process(pcm);
+
+    this.latestAudio = features;
+
+    // GAME SIGNALS
+    this.updateGame(features);
+
+    // VISUAL SIGNALS
+    this.worker.postMessage(this.tycadome(
+        "visual",
+        "radio",
+        "audio.frame",
+        {},
+        { status: "ok" },
+        "async",
+        {
+            system: "visual_data",
+            dataArray: features.fft,
+            volume: features.volume,
+            bass: features.bass,
+            mid: features.mid,
+            treble: features.treble,
+            beat: features.beat,
+            particles: this.particles
+        }
+    ));
         //updateAnalyser();
         this.worker.postMessage(
             this.tycadome(
@@ -365,22 +392,41 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         return prev + (value - prev) * smoothing;
     }
 
-    updatePhysics(bass) {
-        const force = bass * 50;
+    updatePhysics(audio) {
 
-        player.velocity.y -= force;   // jump impulse
-        world.shake = force * 0.1;    // camera shake
+    const force = audio.bass * 40;
+
+    // PLAYER IMPULSE
+    player.velocity.y -= force;
+
+    // WORLD REACTION
+    world.gravity = 1 + audio.mid;
+    world.shake = audio.beat ? audio.volume * 10 : audio.volume * 2;
+
+    // OBJECT INTERACTION
+    particles.forEach(p => {
+        p.dx += audio.treble * (Math.random() - 0.5);
+        p.dy += audio.treble * (Math.random() - 0.5);
+    });
+}
+
+updateGame(audio) {
+
+    // BEAT = ACTION TRIGGER
+    if (audio.beat) {
+        this.triggerEvent("BEAT_HIT");
     }
 
-    updateEnemies(mid) {
-        if (mid > 0.6) {
-            spawnEnemyWave();
-        }
-
-        enemies.forEach(e => {
-            e.speed = 1 + mid * 3;
-        });
+    // DROP = GAME SHIFT
+    if (audio.bass > 0.8) {
+        this.triggerEvent("DROP");
     }
+
+    // HIGH ENERGY MODE
+    if (audio.volume > 0.3 && audio.treble > 0.6) {
+        this.triggerEvent("HIGH_ENERGY");
+    }
+}
 
     updateVisuals(treble) {
         particles.spawnRate = treble * 100;
@@ -399,18 +445,19 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     }
 
     triggerEvent(type) {
-        switch (type) {
-            case "BEAT_HIT":
-                spawnShockwave();
-                break;
+    switch (type) {
 
-            case "DROP":
-                activateSlowMotion();
-                break;
+        case "BEAT_HIT":
+            spawnShockwave();
+            break;
 
-            case "HIGH_ENERGY":
-                unlockAbility();
-                break;
-        }
+        case "DROP":
+            world.timeScale = 0.5; // slow motion
+            break;
+
+        case "HIGH_ENERGY":
+            unlockAbility("overdrive");
+            break;
     }
+}
 }

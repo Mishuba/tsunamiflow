@@ -27,10 +27,10 @@ export class FFTProcessor extends AudioWorkletProcessor {
 
         // 🔥 SEND RAW AUDIO SNAPSHOT ONLY
         // NO FFT HERE
-        this.port.postMessage(
-          this.buffer,
-          [this.buffer.buffer] // transfer ownership = zero copy
-        );
+this.port.postMessage({
+  pcm: this.buffer,
+  sampleRate: sampleRate
+}, [this.buffer.buffer]);
 
         // recreate buffer (required after transfer)
         this.buffer = new Float32Array(this.bufferSize);
