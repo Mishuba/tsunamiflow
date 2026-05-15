@@ -270,10 +270,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
+  let Workletoptions = {
+    numberOfInputs: 1, //0 oscillator
+    numberOfOutputs: 1,
+    outputChannelCount: [1], //mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
+    parameterData: {
+      gain: 0.5,
+      frequency: 440,
+      delayTime: 0.5,
+      feedback: 0.5,
+      distortionAmount: 0.5,
+      pannerX: 0,
+      pannerY: 0,
+      pannerZ: 0
+    },
+    processorOptions: {
+      mode: "fft",
+      bufferSize: 1024,
+      customFlag: true
+    },
+    channelCount: 2,
+    channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
+    channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
+  }
   let flowWorklet = new AudioWorkletNode(
     flowaudio,
-    "fft-processor",
-    options
+    "fft-processor"
   );
 
   let flowPanner = flowaudio.createPanner();
