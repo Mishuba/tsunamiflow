@@ -206,6 +206,53 @@ let TfStickMan = new gameComponent(
 */
 
 document.addEventListener("DOMContentLoaded", () => {
+
+  const twoMore = document.getElementById("mainTsectionFdiv");
+  const TsunamiRadio = document.getElementById("TFradioPlayer");
+  const RadioTitle = document.getElementById("TfRadioStuff");
+  const RadioButtons = document.getElementById("CheckRadio");
+
+  const dock = document.getElementById("radioDock");
+  const toggle = document.getElementById("toggleRadio");
+  function updateRadioState() {
+    if (!dock || !toggle) return;
+    const collapsed = dock.classList.contains("collapsed");
+    toggle.textContent = collapsed ? "▼" : "▲";
+  }
+  function toggleRadioDock() {
+    if (!dock) return;
+    dock.classList.toggle("collapsed");
+    updateRadioState();
+  }
+
+  /* button click */
+  if (toggle) {
+    toggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      toggleRadioDock();
+    });
+  }
+
+  const header = document.getElementById("radioHeader");
+
+  /* header click */
+  if (header) {
+    header.addEventListener("click", () => {
+      toggleRadioDock();
+    });
+  }
+
+  /* set initial state */
+  updateRadioState();
+
+  const RadioCanvas = document.getElementById("TFradioCanvas");
+  let visualizatorController = null
+  try {
+    visualizatorController = RadioCanvas.transferControlToOffscreen();
+  } catch (err) {
+    console.warn("Offscreen canvas transfer failed:", err);
+  }
+
   let TfSite = new HeaderWeather();
   TfSite.EnHword(TFwordMishuba);
   console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray}`);
@@ -221,38 +268,6 @@ document.addEventListener("DOMContentLoaded", () => {
   TfSite.NewsArray.push("Mishuba ran track at University of South Carolina.");
   TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
   TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
-
-  const TsunamiRadio = document.getElementById("TFradioPlayer");
-  const RadioTitle = document.getElementById("TfRadioStuff");
-  const RadioButtons = document.getElementById("CheckRadio");
-  const RadioLastButton = document.createElement("button");
-  const RadioRestartButton = document.createElement("button");
-  const RadioStartButton = document.createElement("button");
-  const RadioSkipButton = document.createElement("button");
-
-  const RadioCanvas = document.getElementById("TFradioCanvas");
-  let visualizatorController = null
-  try {
-    visualizatorController = RadioCanvas.transferControlToOffscreen();
-  } catch (err) {
-    console.warn("Offscreen canvas transfer failed:", err);
-  }
-
-  const dock = document.getElementById("radioDock");
-  const toggle = document.getElementById("toggleRadio");
-  const header = document.getElementById("radioHeader");
-
-  function updateRadioState() {
-    if (!dock || !toggle) return;
-    const collapsed = dock.classList.contains("collapsed");
-    toggle.textContent = collapsed ? "▼" : "▲";
-  }
-
-  function toggleRadioDock() {
-    if (!dock) return;
-    dock.classList.toggle("collapsed");
-    updateRadioState();
-  }
 
   let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
 
@@ -293,17 +308,15 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   flowaudio.audioWorklet.addModule("./TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
-
     let flowGain = flowaudio.createGain();
     flowGain.gain.value = 1;
     let flowAnalyser = flowaudio.createAnalyser();
+    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
     let flowCompressor = flowaudio.createDynamicsCompressor();
     let flowDelay = flowaudio.createDelay();
 
     let flowPanner = flowaudio.createPanner();
     let flowEq = flowaudio.createBiquadFilter();
-
-    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
 
     //tf sounds
     let flowOscillator = flowaudio.createOscillator();
@@ -319,43 +332,23 @@ document.addEventListener("DOMContentLoaded", () => {
     let MixerTF = flowaudio.createMediaStreamDestination();
 
     let flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  });
 
-  /* button click */
-  if (toggle) {
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleRadioDock();
+    let nation = new TsunamiFlowDj({
+      audioElement: TsunamiRadio,
+      SoundContext: flowaudio,
+      masterGain: flowGain,
+      TfSoundAnalyser: flowAnalyser,
+      TfTrackCompressor: flowCompressor,
+      TfSoundsDelay: flowDelay,
+      TfSoundsPanner: flowPanner,
+      TfSoundsWaveShaper: flowDistortion,
+      TfSoundsOscillator: flowOscillator,
+      MixerDestination: MixerTF,
+      TfSoundWorklet: flowWorklet,
+      canvas: RadioCanvas,
+      visualizatorController: visualizatorController
     });
-  }
-
-  /* header click */
-  if (header) {
-    header.addEventListener("click", () => {
-      toggleRadioDock();
-    });
-  }
-
-  /* set initial state */
-  updateRadioState();
-
-  let nation = new TsunamiFlowDj({
-    audioElement: TsunamiRadio,
-    SoundContext: flowaudio,
-    masterGain: flowGain,
-    TfSoundAnalyser: flowAnalyser,
-    TfTrackCompressor: flowCompressor,
-    TfSoundsDelay: flowDelay,
-    TfSoundsPanner: flowPanner,
-    TfSoundsWaveShaper: flowDistortion,
-    TfSoundsOscillator: flowOscillator,
-    MixerDestination: MixerTF,
-    TfSoundWorklet: flowWorklet,
-    canvas: RadioCanvas,
-    visualizatorController: visualizatorController
   });
-
-  const twoMore = document.getElementById("mainTsectionFdiv");
 
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
@@ -381,9 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
   nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
 
   let style = new TsunamiFlowImageEngine();
-
   let network = new TsunamiLiveVideoController();
-
   let Stickman = new letsDoIt("Homepage Game", TfStickMan);
 
   /*
@@ -393,6 +384,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   }
 */
+  const RadioLastButton = document.createElement("button");
+  const RadioRestartButton = document.createElement("button");
+  const RadioStartButton = document.createElement("button");
+  const RadioSkipButton = document.createElement("button");
 
   let Controller = new maxwell({
     site: TfSite,
@@ -408,11 +403,8 @@ document.addEventListener("DOMContentLoaded", () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
-
     //dbstores: indexdb
   });
-
-  Controller.site.requestLocation();
 
   Controller.iframe.frame.addEventListener("load", () => {
     try {
@@ -425,30 +417,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
-    Controller.bindNavBar();
-    Controller.user.showProducts().then(() => {
-      Controller.bindPayments().then(() => {
-        Controller.bindUsers();
-        Controller.user.bindCart().then(() => {
-          let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
-          let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
-          Controller.worker = safeWorker;
-          Controller.sharedWorker = safeSharedWorker;
-          Controller.initTsunamiWorkers().then(() => {
-            console.log("TFN");
-            Controller.bindAudio();
+    Controller.site.requestLocation();
+    Controller.bindNavBar().then(() => {
+      Controller.user.showProducts().then(() => {
+        Controller.bindPayments().then(() => {
+          Controller.bindUsers();
+          Controller.user.bindCart().then(() => {
+            let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+            let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+            Controller.worker = safeWorker;
+            Controller.sharedWorker = safeSharedWorker;
+            Controller.initTsunamiWorkers().then(() => {
+              console.log("TFN");
+              Controller.bindAudio().then(() => {
+
+                if ("serviceWorker" in navigator) {
+                  window.addEventListener("load", async () => {
+                    navigator.serviceWorker.register("/service-worker.js")
+                      .then(reg => console.log("SW registered:", reg))
+                      .catch(err => console.error("SW registration failed:", err));
+                  });
+                }
+              });
+            });
           });
         });
       });
     });
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
-    }
   }
-
 });
