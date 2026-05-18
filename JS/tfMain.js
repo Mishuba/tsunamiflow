@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
   TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
   TfSite.EnHword(TFwordMishuba);
-  for (i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
+  for (let i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
     console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
   };
   const frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
@@ -313,62 +313,64 @@ document.addEventListener("DOMContentLoaded", () => {
     //tf distfortfion 
     const flowDistortion = flowaudio.createWaveShaper();
     const MixerTF = flowaudio.createMediaStreamDestination();
-    const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-    const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
 
-    const Controller = new maxwell({
-      site: TfSite,
-      iframe: frameTF,
-      user: nifage,
-      image: style,
-      sound: nation,
-      video: network,
-      game: Stickman,
-      AudioTitle: RadioTitle,
-      AudioButtonSpot: RadioButtons,
-      AudioPrevious: RadioLastButton,
-      AudioOver: RadioRestartButton,
-      AudioStart: RadioStartButton,
-      AudioSkip: RadioSkipButton,
+  }).catch((err) => {
 
-      //dbstores: indexdb
-    });
-    Controller.worker = safeWorker;
-    Controller.sharedWorker = safeSharedWorker;
-
-    Controller.iframe.frame.addEventListener("load", () => {
-      try {
-        Controller.iframe.frame.contentWindow.controller = Controller;
-        Controller.iframe.MenuSwitch(Controller.iframe.frame);
-      } catch (e) {
-        console.error("Cross-origin block:", e);
-      }
-    });
-    if (twoMore) {
-      twoMore.appendChild(Controller.iframe.frame)
-      Controller.bindNavBar();
-      Controller.bindUsers();
-    } else {
-
-    };
-    Controller.user.showProducts().then(() => {
-      Controller.bindPayments();
-      Controller.user.bindCart();
-      Controller.initTsunamiWorkers();
-      Controller.site.requestLocation();
-      console.log("TFN");
-      Controller.bindAudio();
-
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", async () => {
-          navigator.serviceWorker.register("/service-worker.js")
-            .then(reg => console.log("SW registered:", reg))
-            .catch(err => console.error("SW registration failed:", err));
-        });
-      }
-    }).catch(err => {
-      console.error("Cart binding error:", err);
-    });
   });
+  const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
+  const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
 
+  const Controller = new maxwell({
+    site: TfSite,
+    iframe: frameTF,
+    user: nifage,
+    image: style,
+    sound: nation,
+    video: network,
+    game: Stickman,
+    AudioTitle: RadioTitle,
+    AudioButtonSpot: RadioButtons,
+    AudioPrevious: RadioLastButton,
+    AudioOver: RadioRestartButton,
+    AudioStart: RadioStartButton,
+    AudioSkip: RadioSkipButton,
+
+    //dbstores: indexdb
+  });
+  Controller.worker = safeWorker;
+  Controller.sharedWorker = safeSharedWorker;
+
+  Controller.iframe.frame.addEventListener("load", () => {
+    try {
+      Controller.iframe.frame.contentWindow.controller = Controller;
+      Controller.iframe.MenuSwitch(Controller.iframe.frame);
+    } catch (e) {
+      console.error("Cross-origin block:", e);
+    }
+  });
+  if (twoMore) {
+    twoMore.appendChild(Controller.iframe.frame)
+    Controller.bindNavBar();
+    Controller.bindUsers();
+  } else {
+
+  };
+  Controller.user.showProducts().then(() => {
+    Controller.bindPayments();
+    Controller.user.bindCart();
+    Controller.initTsunamiWorkers();
+    Controller.site.requestLocation();
+    console.log("TFN");
+    Controller.bindAudio();
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", async () => {
+        navigator.serviceWorker.register("/service-worker.js")
+          .then(reg => console.log("SW registered:", reg))
+          .catch(err => console.error("SW registration failed:", err));
+      });
+    }
+  }).catch(err => {
+    console.error("Cart binding error:", err);
+  });
 });
