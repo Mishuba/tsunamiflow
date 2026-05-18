@@ -202,8 +202,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioStartButton = document.createElement("button");
   const RadioSkipButton = document.createElement("button");
 
-  const TFiframe = document.createElement("iframe").
-    TFiframe.allow = "camera; microphone; geolocation";
+  const TFiframe = document.createElement("iframe");
+  TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
