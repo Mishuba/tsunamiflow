@@ -249,8 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
   flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
-
-
     const flowGain = flowaudio.createGain();
     flowGain.gain.value = 1;
     const flowAnalyser = flowaudio.createAnalyser();
@@ -270,13 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
     //tf distfortfion 
     const flowDistortion = flowaudio.createWaveShaper();
     const MixerTF = flowaudio.createMediaStreamDestination();
-  }).catch(err => {
-
-  }).then(() => {
     const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  }).catch((e) => {
-
-  }).then(() => {
     const TfSite = new HeaderWeather();
     TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
     TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
@@ -294,9 +286,6 @@ document.addEventListener("DOMContentLoaded", () => {
     for (i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
       console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
     };
-  }).catch(err => {
-
-  }).then(() => {
     const frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
     frameTF.frame.title = "Main Website Content";
     frameTF.frame.id = "TsunamiContent";
@@ -310,31 +299,13 @@ document.addEventListener("DOMContentLoaded", () => {
     frameTF.frame.style.touchAction = "manipulation";
     frameTF.frame.style.pointerEvents = "auto";
     frameTF.frame.src = "Iframe/Pages/homepage.html";
-  }).catch(err => {
-    console.error("Error occurred while setting up iframe:", err);
-  }).then(() => {
     const nifage = new TfPrintful();
     nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
     nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
-  }).catch(err => {
-    console.error("Error occurred while setting up payment processor:", err);
-  }).then(() => {
     const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
-  }).catch(err => {
-    console.error("Error occurred while setting up audio controller:", err);
-  }).then(() => {
     const style = new TsunamiFlowImageEngine();
-  }).catch(err => {
-    console.error("Error occurred while setting up image engine:", err);
-  }).then(() => {
     const network = new TsunamiLiveVideoController();
-  }).catch(err => {
-    console.error("Error occurred while setting up video controller:", err);
-  }).then(() => {
     const TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  }).catch(err => {
-    console.error("Error occurred while setting up game component:", err);
-  }).then(() => {
     const Stickman = new letsDoIt("Homepage Game", TfStickMan);
     /*
     const indexdb = {
@@ -343,9 +314,6 @@ document.addEventListener("DOMContentLoaded", () => {
    
     }
   */
-  }).catch(err => {
-    console.error("Error occurred while setting up game components:", err);
-  }).then(() => {
     const Controller = new maxwell({
       site: TfSite,
       iframe: frameTF,
@@ -374,58 +342,32 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Cross-origin block:", e);
       }
     });
-  }).catch(err => {
-
-  }).then(() => {
     if (twoMore) {
       twoMore.appendChild(Controller.iframe.frame)
+      Controller.bindNavBar();
+      Controller.bindUsers();
     } else {
 
     };
+    Controller.user.showProducts().then(() => {
+      Controller.bindPayments();
+      Controller.user.bindCart();
+      Controller.initTsunamiWorkers();
+      Controller.site.requestLocation();
+      console.log("TFN");
+      Controller.bindAudio();
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", async () => {
+          navigator.serviceWorker.register("/service-worker.js")
+            .then(reg => console.log("SW registered:", reg))
+            .catch(err => console.error("SW registration failed:", err));
+        });
+      }
+    }).catch(err => {
+      console.error("Cart binding error:", err);
+    });
   }).catch(err => {
 
-  }).then(() => {
-    Controller.bindNavBar();
-  }).catch(err => {
-
-  }).then(() => {
-    Controller.bindUsers();
-  }).catch((e) => {
-    console.error("append error:", e);
-  }).then(() => {
-    Controller.user.showProducts()
-  }).catch((e) => {
-    console.error("Products showing error:", e);
-  }).then(() => {
-    Controller.bindPayments()
-  }).catch((e) => {
-    console.error("Payments binding error:", e);
-  }).then(() => {
-    Controller.user.bindCart()
-  }).catch(err => {
-    console.error("Cart binding error:", err);
-  }).then(() => {
-    Controller.initTsunamiWorkers()
-  }).catch((e) => {
-    console.error("Tsunami workers initialization error:", e);
-  }).then(() => {
-    Controller.site.requestLocation();
-  }).catch(err => {
-    console.error("Users binding error:", err);
-  }).then(() => {
-    console.log("TFN");
-    Controller.bindAudio();
-  }).catch(err => {
-    console.error("Audio binding error:", err);
-  }).then(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
-    }
-  }).catch(err => {
-    console.error("Service worker registration error:", err);
   });
 });
