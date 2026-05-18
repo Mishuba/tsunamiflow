@@ -247,28 +247,6 @@ document.addEventListener("DOMContentLoaded", () => {
     channelCountMode: "max"
   };
 
-  const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-  flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-  const flowGain = flowaudio.createGain();
-  flowGain.gain.value = 1;
-  const flowAnalyser = flowaudio.createAnalyser();
-  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-  const flowCompressor = flowaudio.createDynamicsCompressor();
-  const flowDelay = flowaudio.createDelay();
-  const flowPanner = flowaudio.createPanner();
-  const flowEq = flowaudio.createBiquadFilter();
-
-  //tf sounds
-  const flowOscillator = flowaudio.createOscillator();
-  /*
-  flowOscillator.type = "sine";
-  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
-  flowOscillator.start();
-  */
-  //tf distfortfion 
-  const flowDistortion = flowaudio.createWaveShaper();
-  const MixerTF = flowaudio.createMediaStreamDestination();
-  const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
   const TfSite = new HeaderWeather();
   TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
@@ -302,7 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const nifage = new TfPrintful();
   nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
   nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
-  const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
   const style = new TsunamiFlowImageEngine();
   const network = new TsunamiLiveVideoController();
   const TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
@@ -314,57 +291,84 @@ document.addEventListener("DOMContentLoaded", () => {
  
   }
 */
-  const Controller = new maxwell({
-    site: TfSite,
-    iframe: frameTF,
-    user: nifage,
-    image: style,
-    sound: nation,
-    video: network,
-    game: Stickman,
-    AudioTitle: RadioTitle,
-    AudioButtonSpot: RadioButtons,
-    AudioPrevious: RadioLastButton,
-    AudioOver: RadioRestartButton,
-    AudioStart: RadioStartButton,
-    AudioSkip: RadioSkipButton,
 
-    //dbstores: indexdb
+  const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
+  flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
+    const flowGain = flowaudio.createGain();
+    flowGain.gain.value = 1;
+    const flowAnalyser = flowaudio.createAnalyser();
+    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
+    const flowCompressor = flowaudio.createDynamicsCompressor();
+    const flowDelay = flowaudio.createDelay();
+    const flowPanner = flowaudio.createPanner();
+    const flowEq = flowaudio.createBiquadFilter();
+
+    //tf sounds
+    const flowOscillator = flowaudio.createOscillator();
+    /*
+    flowOscillator.type = "sine";
+    flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+    flowOscillator.start();
+    */
+    //tf distfortfion 
+    const flowDistortion = flowaudio.createWaveShaper();
+    const MixerTF = flowaudio.createMediaStreamDestination();
+    const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
+    const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
+
+    const Controller = new maxwell({
+      site: TfSite,
+      iframe: frameTF,
+      user: nifage,
+      image: style,
+      sound: nation,
+      video: network,
+      game: Stickman,
+      AudioTitle: RadioTitle,
+      AudioButtonSpot: RadioButtons,
+      AudioPrevious: RadioLastButton,
+      AudioOver: RadioRestartButton,
+      AudioStart: RadioStartButton,
+      AudioSkip: RadioSkipButton,
+
+      //dbstores: indexdb
+    });
+    Controller.worker = safeWorker;
+    Controller.sharedWorker = safeSharedWorker;
+
+    Controller.iframe.frame.addEventListener("load", () => {
+      try {
+        Controller.iframe.frame.contentWindow.controller = Controller;
+        Controller.iframe.MenuSwitch(Controller.iframe.frame);
+      } catch (e) {
+        console.error("Cross-origin block:", e);
+      }
+    });
+    if (twoMore) {
+      twoMore.appendChild(Controller.iframe.frame)
+      Controller.bindNavBar();
+      Controller.bindUsers();
+    } else {
+
+    };
+    Controller.user.showProducts().then(() => {
+      Controller.bindPayments();
+      Controller.user.bindCart();
+      Controller.initTsunamiWorkers();
+      Controller.site.requestLocation();
+      console.log("TFN");
+      Controller.bindAudio();
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", async () => {
+          navigator.serviceWorker.register("/service-worker.js")
+            .then(reg => console.log("SW registered:", reg))
+            .catch(err => console.error("SW registration failed:", err));
+        });
+      }
+    }).catch(err => {
+      console.error("Cart binding error:", err);
+    });
   });
-  Controller.worker = safeWorker;
-  Controller.sharedWorker = safeSharedWorker;
 
-  Controller.iframe.frame.addEventListener("load", () => {
-    try {
-      Controller.iframe.frame.contentWindow.controller = Controller;
-      Controller.iframe.MenuSwitch(Controller.iframe.frame);
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-  });
-  if (twoMore) {
-    twoMore.appendChild(Controller.iframe.frame)
-    Controller.bindNavBar();
-    Controller.bindUsers();
-  } else {
-
-  };
-  Controller.user.showProducts().then(() => {
-    Controller.bindPayments();
-    Controller.user.bindCart();
-    Controller.initTsunamiWorkers();
-    Controller.site.requestLocation();
-    console.log("TFN");
-    Controller.bindAudio();
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
-    }
-  }).catch(err => {
-    console.error("Cart binding error:", err);
-  });
 });
