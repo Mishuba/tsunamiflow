@@ -246,9 +246,11 @@ document.addEventListener("DOMContentLoaded", () => {
     smoothingTimeConstant: 0.5,
     channelCountMode: "max"
   };
+
+  const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
   flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
 
-    const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
+
     const flowGain = flowaudio.createGain();
     flowGain.gain.value = 1;
     const flowAnalyser = flowaudio.createAnalyser();
