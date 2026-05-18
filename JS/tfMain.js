@@ -22,7 +22,7 @@ function createSafeWorker(modulePath, classicPath) {
   }
 }
 
-let TFwordMishuba = {
+const TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
   quotes: [
@@ -94,7 +94,7 @@ let PlayerState = "stand";
 |--------------------------------------------------------------------------
 */
 
-let PhysicalAbility = [
+const PhysicalAbility = [
   { name: "health", points: 1 },
   { name: "stamina", points: 1 },
   { name: "weight", points: 1 },
@@ -102,7 +102,7 @@ let PhysicalAbility = [
   { name: "agility", points: 1 }
 ];
 
-let AckmaHawkIntellectualIntelligence = [
+const AckmaHawkIntellectualIntelligence = [
   { name: "Science", level: 0, experience: 0 },
   { name: "Creativity", level: 0, experience: 0 },
   { name: "Math", level: 0, experience: 0 },
@@ -110,7 +110,7 @@ let AckmaHawkIntellectualIntelligence = [
   { name: "Awareness", level: 0, experience: 0 }
 ];
 
-let AckmaHawkSocialIntelligence = [
+const AckmaHawkSocialIntelligence = [
   { name: "Reflection", level: 0, experience: 0 },
   { name: "honesty", level: 0, experience: 0 },
   { name: "deception", level: 0, experience: 0 },
@@ -118,7 +118,7 @@ let AckmaHawkSocialIntelligence = [
   { name: "charisma", level: 0, experience: 0 }
 ];
 
-let AckmaHawkEmotionalIntelligence = [
+const AckmaHawkEmotionalIntelligence = [
   { name: "feelings", level: 0, experience: 0 },
   { name: "mood", level: 0, experience: 0 },
   { name: "temper", level: 0, experience: 0 },
@@ -126,7 +126,7 @@ let AckmaHawkEmotionalIntelligence = [
   { name: "perspective", level: 0, experience: 0 }
 ];
 
-let AckmaHawkExistentialIntelligence = [
+const AckmaHawkExistentialIntelligence = [
   { name: "consciousness", level: 0, experience: 0 },
   { name: "time", level: 0, experience: 0 },
   { name: "dimension", level: 0, experience: 0 },
@@ -134,7 +134,7 @@ let AckmaHawkExistentialIntelligence = [
   { name: "defense", level: 0, experience: 0 }
 ];
 
-let AckmaHawkEnergeticIntelligence = [
+const AckmaHawkEnergeticIntelligence = [
   { name: "fire", level: 0, experience: 0 },
   { name: "water", level: 0, experience: 0 },
   { name: "air", level: 0, experience: 0 },
@@ -142,7 +142,7 @@ let AckmaHawkEnergeticIntelligence = [
   { name: "earth", level: 0, experience: 0 }
 ];
 
-let AckmaHawkMetaCognitiveIntelligence = [
+const AckmaHawkMetaCognitiveIntelligence = [
   { name: "magic", level: 0, experience: 0 },
   { name: "ESP", level: 0, experience: 0 },
   { name: "dexterity", level: 0, experience: 0 },
@@ -207,226 +207,224 @@ document.addEventListener("DOMContentLoaded", () => {
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
-  let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js").then(() => {
-    let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
-  }).catch(err => {
-    console.error("Error occurred while creating workers:", err);
-  }).then(() => {
-    let Workletoptions = {
-      numberOfInputs: 1, //0 oscillator
-      numberOfOutputs: 1,
-      //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
-      /*
-      parameterData: {
-        gain: 0.5,
-        frequency: 440,
-        delayTime: 0.5,
-        feedback: 0.5,
-        distortionAmount: 0.5,
-        pannerX: 0,
-        pannerY: 0,
-        pannerZ: 0
-      },
-      */
-      /*
-      processorOptions: {
-        mode: "fft",
-        bufferSize: 1024,
-        customFlag: true
-      },
-      */
-      channelCount: 2,
-      channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
-      channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
-    }
+  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-    let TfSoundAnalyserOptions = {
-      fftSize: 2048,
-      maxDecibels: 0,
-      minDecibels: -100,
-      smoothingTimeConstant: 0.5,
-      channelCountMode: "max"
-    };
-    flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js")
-  }).catch((e) => {
+  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
 
-  }).then(() => {
-    let flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-    let flowGain = flowaudio.createGain();
-    flowGain.gain.value = 1;
-    let flowAnalyser = flowaudio.createAnalyser();
-    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-    let flowCompressor = flowaudio.createDynamicsCompressor();
-    let flowDelay = flowaudio.createDelay();
-    let flowPanner = flowaudio.createPanner();
-    let flowEq = flowaudio.createBiquadFilter();
-
-    //tf sounds
-    let flowOscillator = flowaudio.createOscillator();
+  const Workletoptions = {
+    numberOfInputs: 1, //0 oscillator
+    numberOfOutputs: 1,
+    //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
     /*
-    flowOscillator.type = "sine";
-    flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
-    flowOscillator.start();
+    parameterData: {
+      gain: 0.5,
+      frequency: 440,
+      delayTime: 0.5,
+      feedback: 0.5,
+      distortionAmount: 0.5,
+      pannerX: 0,
+      pannerY: 0,
+      pannerZ: 0
+    },
     */
-    //tf distfortfion 
-    let flowDistortion = flowaudio.createWaveShaper();
-    let MixerTF = flowaudio.createMediaStreamDestination();
-  }).catch(err => {
-
-  }).then(() => {
-    let flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  }).catch((e) => {
-
-  }).then(() => {
-    let TfSite = new HeaderWeather();
-    TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-    TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-    TfSite.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-    TfSite.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-    TfSite.NewsArray.push("Mishuba was a percussionist in school band.");
-    TfSite.NewsArray.push("Mishuba attended multiple schools across states.");
-    TfSite.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-    TfSite.NewsArray.push("Mishuba graduated from Blythewood High School.");
-    TfSite.NewsArray.push("Mishuba ran track at University of South Carolina.");
-    TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
-    TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
-
-    TfSite.EnHword(TFwordMishuba);
-    for (i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
-      console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
-    };
-  }).catch(err => {
-
-  }).then(() => {
-    let frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
-    frameTF.frame.title = "Main Website Content";
-    frameTF.frame.id = "TsunamiContent";
-    frameTF.frame.name = "TsunamiMainFlowContent";
-    // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
-    const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
-    const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
-    frameTF.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-    frameTF.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
-    frameTF.frame.style.background = "white";
-    frameTF.frame.style.touchAction = "manipulation";
-    frameTF.frame.style.pointerEvents = "auto";
-    frameTF.frame.src = "Iframe/Pages/homepage.html";
-  }).catch(err => {
-    console.error("Error occurred while setting up iframe:", err);
-  }).then(() => {
-    let nifage = new TfPrintful();
-    nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
-    nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
-  }).catch(err => {
-    console.error("Error occurred while setting up payment processor:", err);
-  }).then(() => {
-    let nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
-  }).catch(err => {
-    console.error("Error occurred while setting up audio controller:", err);
-  }).then(() => {
-    let style = new TsunamiFlowImageEngine();
-  }).catch(err => {
-    console.error("Error occurred while setting up image engine:", err);
-  }).then(() => {
-    let network = new TsunamiLiveVideoController();
-  }).catch(err => {
-    console.error("Error occurred while setting up video controller:", err);
-  }).then(() => {
-    let TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  }).catch(err => {
-    console.error("Error occurred while setting up game component:", err);
-  }).then(() => {
-    let Stickman = new letsDoIt("Homepage Game", TfStickMan);
     /*
-    let indexdb = {
-      name: ,
-      keyPath: ,
-  
-    }
+    processorOptions: {
+      mode: "fft",
+      bufferSize: 1024,
+      customFlag: true
+    },
+    */
+    channelCount: 2,
+    channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
+    channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
+  }
+
+  const TfSoundAnalyserOptions = {
+    fftSize: 2048,
+    maxDecibels: 0,
+    minDecibels: -100,
+    smoothingTimeConstant: 0.5,
+    channelCountMode: "max"
+  };
+  flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js")
+}).then(() => {
+
+  const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
+  const flowGain = flowaudio.createGain();
+  flowGain.gain.value = 1;
+  const flowAnalyser = flowaudio.createAnalyser();
+  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
+  const flowCompressor = flowaudio.createDynamicsCompressor();
+  const flowDelay = flowaudio.createDelay();
+  const flowPanner = flowaudio.createPanner();
+  const flowEq = flowaudio.createBiquadFilter();
+
+  //tf sounds
+  const flowOscillator = flowaudio.createOscillator();
+  /*
+  flowOscillator.type = "sine";
+  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+  flowOscillator.start();
   */
-  }).catch(err => {
-    console.error("Error occurred while setting up game components:", err);
-  }).then(() => {
-    let Controller = new maxwell({
-      site: TfSite,
-      iframe: frameTF,
-      user: nifage,
-      image: style,
-      sound: nation,
-      video: network,
-      game: Stickman,
-      AudioTitle: RadioTitle,
-      AudioButtonSpot: RadioButtons,
-      AudioPrevious: RadioLastButton,
-      AudioOver: RadioRestartButton,
-      AudioStart: RadioStartButton,
-      AudioSkip: RadioSkipButton,
+  //tf distfortfion 
+  const flowDistortion = flowaudio.createWaveShaper();
+  const MixerTF = flowaudio.createMediaStreamDestination();
+}).catch(err => {
 
-      //dbstores: indexdb
-    });
-    Controller.worker = safeWorker;
-    Controller.sharedWorker = safeSharedWorker;
+}).then(() => {
+  const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
+}).catch((e) => {
 
-    Controller.iframe.frame.addEventListener("load", () => {
-      try {
-        Controller.iframe.frame.contentWindow.controller = Controller;
-        Controller.iframe.MenuSwitch(Controller.iframe.frame);
-      } catch (e) {
-        console.error("Cross-origin block:", e);
-      }
-    });
-  }).catch(err => {
+}).then(() => {
+  const TfSite = new HeaderWeather();
+  TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+  TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+  TfSite.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+  TfSite.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+  TfSite.NewsArray.push("Mishuba was a percussionist in school band.");
+  TfSite.NewsArray.push("Mishuba attended multiple schools across states.");
+  TfSite.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+  TfSite.NewsArray.push("Mishuba graduated from Blythewood High School.");
+  TfSite.NewsArray.push("Mishuba ran track at University of South Carolina.");
+  TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
+  TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
-  }).then(() => {
-    if (twoMore) {
-      twoMore.appendChild(Controller.iframe.frame)
-    } else {
+  TfSite.EnHword(TFwordMishuba);
+  for (i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
+    console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
+  };
+}).catch(err => {
 
-    };
-  }).catch(err => {
+}).then(() => {
+  const frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
+  frameTF.frame.title = "Main Website Content";
+  frameTF.frame.id = "TsunamiContent";
+  frameTF.frame.name = "TsunamiMainFlowContent";
+  // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
+  const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
+  const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
+  frameTF.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+  frameTF.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+  frameTF.frame.style.background = "white";
+  frameTF.frame.style.touchAction = "manipulation";
+  frameTF.frame.style.pointerEvents = "auto";
+  frameTF.frame.src = "Iframe/Pages/homepage.html";
+}).catch(err => {
+  console.error("Error occurred while setting up iframe:", err);
+}).then(() => {
+  const nifage = new TfPrintful();
+  nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
+  nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
+}).catch(err => {
+  console.error("Error occurred while setting up payment processor:", err);
+}).then(() => {
+  const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
+}).catch(err => {
+  console.error("Error occurred while setting up audio controller:", err);
+}).then(() => {
+  const style = new TsunamiFlowImageEngine();
+}).catch(err => {
+  console.error("Error occurred while setting up image engine:", err);
+}).then(() => {
+  const network = new TsunamiLiveVideoController();
+}).catch(err => {
+  console.error("Error occurred while setting up video controller:", err);
+}).then(() => {
+  const TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+}).catch(err => {
+  console.error("Error occurred while setting up game component:", err);
+}).then(() => {
+  const Stickman = new letsDoIt("Homepage Game", TfStickMan);
+  /*
+  const indexdb = {
+    name: ,
+    keyPath: ,
+ 
+  }
+*/
+}).catch(err => {
+  console.error("Error occurred while setting up game components:", err);
+}).then(() => {
+  const Controller = new maxwell({
+    site: TfSite,
+    iframe: frameTF,
+    user: nifage,
+    image: style,
+    sound: nation,
+    video: network,
+    game: Stickman,
+    AudioTitle: RadioTitle,
+    AudioButtonSpot: RadioButtons,
+    AudioPrevious: RadioLastButton,
+    AudioOver: RadioRestartButton,
+    AudioStart: RadioStartButton,
+    AudioSkip: RadioSkipButton,
 
-  }).then(() => {
-    Controller.bindNavBar();
-  }).catch(err => {
-
-  }).then(() => {
-    Controller.bindUsers();
-  }).catch((e) => {
-    console.error("append error:", e);
-  }).then(() => {
-    Controller.user.showProducts()
-  }).catch((e) => {
-    console.error("Products showing error:", e);
-  }).then(() => {
-    Controller.bindPayments()
-  }).catch((e) => {
-    console.error("Payments binding error:", e);
-  }).then(() => {
-    Controller.user.bindCart()
-  }).catch(err => {
-    console.error("Cart binding error:", err);
-  }).then(() => {
-    Controller.initTsunamiWorkers()
-  }).catch((e) => {
-    console.error("Tsunami workers initialization error:", e);
-  }).then(() => {
-    Controller.site.requestLocation();
-  }).catch(err => {
-    console.error("Users binding error:", err);
-  }).then(() => {
-    console.log("TFN");
-    Controller.bindAudio();
-  }).catch(err => {
-    console.error("Audio binding error:", err);
-  }).then(() => {
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
-    }
-  }).catch(err => {
-    console.error("Service worker registration error:", err);
+    //dbstores: indexdb
   });
+  Controller.worker = safeWorker;
+  Controller.sharedWorker = safeSharedWorker;
+
+  Controller.iframe.frame.addEventListener("load", () => {
+    try {
+      Controller.iframe.frame.contentWindow.controller = Controller;
+      Controller.iframe.MenuSwitch(Controller.iframe.frame);
+    } catch (e) {
+      console.error("Cross-origin block:", e);
+    }
+  });
+}).catch(err => {
+
+}).then(() => {
+  if (twoMore) {
+    twoMore.appendChild(Controller.iframe.frame)
+  } else {
+
+  };
+}).catch(err => {
+
+}).then(() => {
+  Controller.bindNavBar();
+}).catch(err => {
+
+}).then(() => {
+  Controller.bindUsers();
+}).catch((e) => {
+  console.error("append error:", e);
+}).then(() => {
+  Controller.user.showProducts()
+}).catch((e) => {
+  console.error("Products showing error:", e);
+}).then(() => {
+  Controller.bindPayments()
+}).catch((e) => {
+  console.error("Payments binding error:", e);
+}).then(() => {
+  Controller.user.bindCart()
+}).catch(err => {
+  console.error("Cart binding error:", err);
+}).then(() => {
+  Controller.initTsunamiWorkers()
+}).catch((e) => {
+  console.error("Tsunami workers initialization error:", e);
+}).then(() => {
+  Controller.site.requestLocation();
+}).catch(err => {
+  console.error("Users binding error:", err);
+}).then(() => {
+  console.log("TFN");
+  Controller.bindAudio();
+}).catch(err => {
+  console.error("Audio binding error:", err);
+}).then(() => {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("SW registered:", reg))
+        .catch(err => console.error("SW registration failed:", err));
+    });
+  }
+}).catch(err => {
+  console.error("Service worker registration error:", err);
+});
 });
