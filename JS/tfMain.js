@@ -150,7 +150,7 @@ const AckmaHawkMetaCognitiveIntelligence = [
   { name: "personal", level: 0, experience: 0 }
 ];
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const twoMore = document.getElementById("mainTsectionFdiv");
   const TsunamiRadio = document.getElementById("TFradioPlayer");
   const RadioTitle = document.getElementById("TfRadioStuff");
