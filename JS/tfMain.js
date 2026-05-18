@@ -293,30 +293,28 @@ document.addEventListener("DOMContentLoaded", () => {
 */
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-  flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(() => {
-    const flowGain = flowaudio.createGain();
-    flowGain.gain.value = 1;
-    const flowAnalyser = flowaudio.createAnalyser();
-    Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-    const flowCompressor = flowaudio.createDynamicsCompressor();
-    const flowDelay = flowaudio.createDelay();
-    const flowPanner = flowaudio.createPanner();
-    const flowEq = flowaudio.createBiquadFilter();
+  await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
-    //tf sounds
-    const flowOscillator = flowaudio.createOscillator();
-    /*
-    flowOscillator.type = "sine";
-    flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
-    flowOscillator.start();
-    */
-    //tf distfortfion 
-    const flowDistortion = flowaudio.createWaveShaper();
-    const MixerTF = flowaudio.createMediaStreamDestination();
+  const flowGain = flowaudio.createGain();
+  flowGain.gain.value = 1;
+  const flowAnalyser = flowaudio.createAnalyser();
+  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
+  const flowCompressor = flowaudio.createDynamicsCompressor();
+  const flowDelay = flowaudio.createDelay();
+  const flowPanner = flowaudio.createPanner();
+  const flowEq = flowaudio.createBiquadFilter();
 
-  }).catch((err) => {
+  //tf sounds
+  const flowOscillator = flowaudio.createOscillator();
+  /*
+  flowOscillator.type = "sine";
+  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+  flowOscillator.start();
+  */
+  //tf distfortfion 
+  const flowDistortion = flowaudio.createWaveShaper();
+  const MixerTF = flowaudio.createMediaStreamDestination();
 
-  });
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
   const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, SoundContext: flowaudio, masterGain: flowGain, TfSoundAnalyser: flowAnalyser, TfTrackCompressor: flowCompressor, TfSoundsDelay: flowDelay, TfSoundsPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, TfSoundWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
 
