@@ -202,14 +202,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const RadioStartButton = document.createElement("button");
   const RadioSkipButton = document.createElement("button");
 
-  const TFiframe = document.createElement("iframe").then(() => {
+  const TFiframe = document.createElement("iframe").
     TFiframe.allow = "camera; microphone; geolocation";
-    TFiframe.allowFullscreen = true;
-    TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
-  }).catch(err => {
-    console.error("Error occurred while creating TFiframe:", err);
-  }).then(() => {
-    let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+  TFiframe.allowFullscreen = true;
+  TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
+
+  let safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js").then(() => {
     let safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
   }).catch(err => {
     console.error("Error occurred while creating workers:", err);
