@@ -1,3 +1,5 @@
+//math core
+
 class Matrix {
   static dot(a, b) {
     return a.map((row, i) =>
