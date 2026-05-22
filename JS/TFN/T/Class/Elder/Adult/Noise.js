@@ -1,14 +1,24 @@
 import { TsDomCanvas } from "./Teen/T.js";
 export class TsunamiFlowAudio extends TsDomCanvas {
-    AudioSource = {};
-    AudioCxtId = null;
+    audioConstraints = {
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true
+    };
     //context
-    TfSoundsContext = null;
-    // new (window.AudioContext || window.webkitAudioContext)();
-    TfSoundsidCounter = 0;
-    TfSoundsGain = {};
+    MasterCxtId = null;
+    MasterSoundsContext = null;
+    MasteridCounter = 0;
     masterGain = null;
-    TfSoundAnalyser = null;
+    masterDelay = null;
+    masterPanner = null;
+    masterAnalyser = null;
+    masterFloat32 = null;
+    masterBufferLength = null;
+    masterDataArray = null;
+    masterCompressor = null;
+    TfSoundsDelayOptions = {};
+    TfSoundsPannerOptions = {};
     TfSoundAnalyserOptions = {
         fftSize: 2048,
         maxDecibels: 0,
@@ -16,31 +26,25 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         smoothingTimeConstant: 0.5,
         channelCountMode: "max"
     };
-    TfSoundsContextBufferLength = null;
-    TfTrackAnalyser = {};
-    TfTrackCompressor = {};
-    TfSoundsFloat32 = null;
-    TfSoundsPeriodicWaveOptions = {};
-    TfSoundsPeridocWave = null;
-    TfSoundsPannerOptions = {};
-    TfSoundsPanner = null;
-    TfSoundsDelayOptions = {};
-    TfSoundsDelay = null;
     TfSoundsCompressorOptions = {};
-    TfSoundsCompressor = null;
-    TfSoundsDefaultPlaylist = null;
+    TfSoundsPeriodicWaveOptions = {};
     TfSoundsOscillatorNodeOptions = {};
-    TfSoundsOscillator = null;
     TfSoundsWaveShaperNodeOptions = {};
-    TfSoundsWaveShaper = null;
-    TfSoundContextBufferLength = null;
-    TfSoundContextDataArray = null;
-    audioConstraints = {
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true
-    };
-    TfSoundWorklet = null;
+    TfSoundsContext = {};
+    AudioCxtId = null;
+    TfSoundsidCounter = 0;
+    TfSoundsDelay = {};
+    TfSoundsGain = {};
+    TfSoundsPanner = null;
+    TfSoundAnalyser = {};
+    TfSoundsContextBufferLength = {};
+    TfSoundContextDataArray = {};
+    TfSoundsCompressor = {};
+    TfSoundsFloat32 = {};
+    TfSoundsDefaultPlaylist = null;
+    fftSoundWorklet = null;
+    audio = null;
+    MixerDestination = null;
     constructor(options = {}) {
         super(options);
 
@@ -52,21 +56,116 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         }
 
         if (options.SoundContext) {
-            this.TfSoundsContext = options.SoundContext;
+            this.MasterSoundsContext = options.SoundContext;
         }
 
         if (options.masterGain) {
             this.masterGain = options.masterGain;
         }
-        if (options.TfSoundAnalyser) {
-            this.TfSoundAnalyser = options.TfSoundAnalyser;
+        if (options.masterAnalyser) {
+            this.masterAnalyser = options.masterAnalyser;
         }
         if (options.TfSoundWorklet) {
             this.TfSoundWorklet = options.TfSoundWorklet;
         }
     }
+    /// context
+    createTrackChain() {
+        return {
+            gain: this.MasterSoundsContext.createGain(),
+            //panner:
+            //delay: 
+            //worklet:
+            analyser: this.MasterSoundsContext.createAnalyser(),
+            //
+            compressor: this.MasterSoundsContext.createDynamicsCompressor()
+        };
+    }
+    initAudioContext() {
+        if (!this.MasterSoundsContext) {
+            this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+
+        if (!this.masterGain) {
+            // MASTER
+            this.masterGain = this.MasterSoundsContext.createGain();
+            this.masterGain.gain.value = 1;
+        }
+
+        if (!this.masterAnalyser) {
+            // GLOBAL ANALYSER BUS
+            this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
+            Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
+
+            // DATA BUFFER
+            this.masterBufferLength = this.masterAnalyser.frequencyBinCount;
+        }
+        // ROUTING
+
+        this.masterGain
+            .connect(this.masterAnalyser)
+            .connect(this.MasterSoundsContext.destination);
+
+        this.emit("ready", this.MasterSoundsContext);
+        if (this.MasterSoundsContext.state === "suspended") {
+            return this.MasterSoundsContext.resume();
+        }
+    }
+    connectaudio(id, element) {
+        if (this.TfSoundsContext[id]) return;
+        this.addAudioContextSource(element, id);
+    }
+    async HandleArrayBuffer(buffer) {
+        this.initAudioContext();
+
+        try {
+            const audioBuffer = await this.TfSoundsContext[id].decodeAudioData(buffer);
+            return new Float32Array(audioBuffer.getChannelData(0));
+        } catch (error) {
+            console.error("Error decoding audio data:", error);
+            return null;
+        }
+    }
+    playDecodedBuffer(id, float32Array) {
+        this.initAudioContext()
+        const buffer = this.TfSoundsContext[id].createBuffer(
+            1,
+            float32Array.length,
+            this.TfSoundsContext[id].sampleRate
+        );
+
+        buffer.copyToChannel(float32Array, 0);
+
+        const source = this.TfSoundsContext[id].createBufferSource();
+        source.buffer = buffer;
+
+        const chain = this.createTrackChain();
+
+        source
+            .connect(chain.gain)
+            .connect(chain.compressor)
+            .connect(chain.analyser)
+            .connect(this.masterGain);
+
+        source.start();
+        source.onended = () => {
+            source.disconnect();
+            chain.gain.disconnect();
+            chain.analyser.disconnect();
+            chain.compressor.disconnect();
+        };
+    }
+    setaudioVolume(id, value = 1) {
+        let gainNode = this.TfSoundsGain[id];
+
+        if (gainNode) {
+            gainNode.gain.value = value;
+        } else {
+            this.AudioElement.volume = value;
+        }
+    }
     AudioState() {
-        switch (this.AudioCxtId) {
+        switch (this.TfSoundsContext[this.MasterCxtId]) {
             case null:
                 console.log("The audio context state is unknown");
                 break;
@@ -80,15 +179,15 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 console.log("The audio context state is unknown");
                 break;
             default:
-                if (this.AudioSource[this.AudioCxtId]) {
-                    switch (this.AudioSource[this.AudioCxtId].state) {
+                if (this.TfSoundsContext[this.MasterCxtId]) {
+                    switch (this.TfSoundsContext[this.MasterCxtId].state) {
                         case "suspended":
-                            this.AudioSource[this.AudioCxtId].resume();
+                            this.TfSoundsContext[this.MasterCxtId].resume();
                             break;
                         case "running":
                             console.log("The audio context state is running");
                             if (this.AudioElement.waiting) {
-                                this.AudioSource[this.AudioCxtId].suspend();
+                                this.TfSoundsContext[this.MasterCxtId].suspend();
                             }
                             break;
                         case "closed":
@@ -107,55 +206,16 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
         }
     }
-    /// context
-    createTrackChain() {
-        return {
-            gain: this.TfSoundsContext.createGain(),
-            analyser: this.TfSoundsContext.createAnalyser(),
-            compressor: this.TfSoundsContext.createDynamicsCompressor()
-        };
-    }
-    initAudioContext() {
-        if (!this.TfSoundsContext) {
-            this.TfSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-
-        if (!this.masterGain) {
-            // MASTER
-            this.masterGain = this.TfSoundsContext.createGain();
-            this.masterGain.gain.value = 1;
-        }
-
-        if (!this.TfSoundAnalyser) {
-            // GLOBAL ANALYSER BUS
-            this.TfSoundAnalyser = this.TfSoundsContext.createAnalyser();
-            Object.assign(this.TfSoundAnalyser, this.TfSoundAnalyserOptions);
-
-            // DATA BUFFER
-            this.TfSoundsContextBufferLength = this.TfSoundAnalyser.frequencyBinCount;
-        }
-        // ROUTING
-
-        this.masterGain
-            .connect(this.TfSoundAnalyser)
-            .connect(this.TfSoundsContext.destination);
-
-        this.emit("ready", this.TfSoundsContext);
-        if (this.TfSoundsContext.state === "suspended") {
-            return this.TfSoundsContext.resume();
-        }
-    }
-
     addAudioContextSource(element, id = null) {
         this.initAudioContext();
 
-        const sourceId = id || `source-${++this.TfSoundsidCounter}`;
+        const sourceId = id || `source-${++this.MasteridCounter}`;
         let source;
 
         if (this.elementSourceMap.has(element)) {
             source = this.elementSourceMap.get(element);
         } else {
-            source = this.TfSoundsContext.createMediaElementSource(element);
+            source = this.MasterSoundsContext.createMediaElementSource(element);
             this.elementSourceMap.set(element, source);
         }
 
@@ -169,32 +229,28 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             .connect(this.masterGain);
 
         // ✅ STORE EVERYTHING (IMPORTANT)
-        this.AudioSource[sourceId] = source;
+        this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
 
         if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
-        if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
+        if (!this.TfSoundsCompressor) this.TfSoundsCompressor = {};
 
         this.TfTrackAnalyser[sourceId] = chain.analyser;
-        this.TfTrackCompressor[sourceId] = chain.compressor;
+        this.TfSoundsCompressor[sourceId] = chain.compressor;
 
         this.emit("sourceAdded", { id: sourceId });
 
         return sourceId;
     }
-
-    /* ----------------------------
-       Add MediaStreamSource
-    -----------------------------*/
     addAudioStreamSource(stream, id = null) {
         this.initAudioContext();
-        const sourceId = id || `source-${++this.TfSoundsidCounter}`;
+        const sourceId = id || `source-${++this.MasteridCounter}`;
         let source;
 
         if (this.elementSourceMap.has(stream)) {
             source = this.elementSourceMap.get(stream);
         } else {
-            source = this.TfSoundsContext.createMediaStreamSource(stream);
+            source = this.MasterSoundsContext.createMediaStreamSource(stream);
             this.elementSourceMap.set(stream, source);
         }
 
@@ -208,66 +264,112 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             .connect(this.masterGain);
 
         // ✅ STORE EVERYTHING (IMPORTANT)
-        this.AudioSource[sourceId] = source;
+        this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
 
         if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
-        if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
+        if (!this.TfSoundsCompressor) this.TfSoundsCompressor = {};
 
         this.TfTrackAnalyser[sourceId] = chain.analyser;
-        this.TfTrackCompressor[sourceId] = chain.compressor;
+        this.TfSoundsCompressor[sourceId] = chain.compressor;
 
         this.emit("sourceAdded", { id: sourceId, gain: chain.gain });
         return sourceId;
     }
+    addMixerMediaElement(element, id = null, monitor = false) {
+        this.initAudioContext();
+        if (!element) throw new Error("MediaElement is required");
+        const sourceId = id || `element-${++this.TfSoundsidCounter}`;
+        let source;
 
-    /* ----------------------------
-       Control Gain
-    -----------------------------*/
+        if (this.elementSourceMap.has(element)) {
+            source = this.MasterSoundsContext.createMediaElementSource(element);
+        } else {
+            source = this.MasterSoundsContext.createMediaElementSource(element);
+            this.elementSourceMap.set(element, source);
+        }
+
+        const chain = this.createTrackChain();
+
+        source
+            .connect(chain.gain)
+            .connect(chain.analyser)
+            .connect(chain.compressor)
+            .connect(this.masterGain);
+
+
+        if (monitor) source.connect(this.MasterSoundsContext.destination); // local playback
+
+        // ✅ STORE EVERYTHING (IMPORTANT)
+        this.TfSoundsContext[sourceId] = source;
+        this.TfSoundsGain[sourceId] = chain.gain;
+        /*
+                if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
+                if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
+        
+                this.TfTrackAnalyser[sourceId] = chain.analyser;
+                this.TfTrackCompressor[sourceId] = chain.compressor;
+        
+                */
+        /*
+        this.emit("sourceAdded", { id: sourceId, type: "media", source: source, gain: chain.gain });
+        */
+        return sourceId;
+    }
     setAudioContextGain(id, value = 1) {
         if (this.TfSoundsGain[id]) this.TfSoundsGain[id].gain.value = value;
     }
-
-    /* ----------------------------
-       Remove Source
-    -----------------------------*/
     removeAudioContextSource(id) {
-        const source = this.AudioSource[id];
+        const source = this.TfSoundsContext[id];
         const gain = this.TfSoundsGain[id];
         const analyser = this.TfTrackAnalyser[id];
-        const compressor = this.TfTrackCompressor[id];
+        const compressor = this.TfSoundsCompressor[id];
 
         if (source) source.disconnect();
         if (gain) gain.disconnect();
         if (analyser) analyser.disconnect();
         if (compressor) compressor.disconnect();
 
-        delete this.AudioSource[id];
+        delete this.TfSoundsContext[id];
         delete this.TfSoundsGain[id];
         delete this.TfTrackAnalyser[id];
-        delete this.TfTrackCompressor[id];
+        delete this.TfSoundsCompressor[id];
 
         this.emit("sourceRemoved", id);
     }
+    removeMixerSource(id) {
+        if (this.AudioSource[id]) {
+            this.AudioSource[id].disconnect();
+            this.TfSoundsGain[id].disconnect();
+            delete this.AudioSource[id];
+            delete this.TfSoundsGain[id];
+            this.emit("sourceRemoved", id);
+        }
+    }
     finishAudioContext() {
-        if (!this.TfSoundsContext) return;
+        if (!this.MasterSoundsContext) return;
 
-        Object.values(this.AudioSource).forEach(src => src.disconnect());
+        Object.values(this.TfSoundsContext).forEach(src => src.disconnect());
         Object.values(this.TfSoundsGain).forEach(g => g.disconnect());
 
         if (this.masterGain) this.masterGain.disconnect();
 
-        this.TfSoundsContext.close();
+        this.MasterSoundsContext.close();
 
-        this.TfSoundsContext = null;
-        this.AudioSource = {};
+        this.MasterSoundsContext = null;
+        this.TfSoundsContext = {};
         this.TfSoundsGain = {};
         this.elementSourceMap = new WeakMap();
         this.masterGain = null;
 
         this.emit("closed");
     }
-
+    resetMixer() {
+        Object.values(this.AudioSource).forEach(src => src.disconnect());
+        this.AudioSource = {};
+        this.TfSoundsGain = {};
+        this.emit("reset");
+    }
     SendWorkletToWorker(type, action, meta, system, data) {
         this.worker.postMessage(
             this.tycadome(
@@ -291,35 +393,35 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     }
 
     onWorkletMessage(e) {
-        this.TfSoundsFloat32 = new Float32Array(e.data);
+        this.masterFloat32 = new Float32Array(e.data);
         this.processAudioForVideo();
-    const pcm = e.data.pcm;
-    const features = this.dsp.process(pcm);
+        const pcm = e.data.pcm;
+        const features = this.dsp.process(pcm);
 
-    this.latestAudio = features;
+        this.latestAudio = features;
 
-    // GAME SIGNALS
-    this.updateGame(features);
+        // GAME SIGNALS
+        //this.updateGame(features);
 
-    // VISUAL SIGNALS
-    this.worker.postMessage(this.tycadome(
-        "visual",
-        "radio",
-        "audio.frame",
-        {},
-        { status: "ok" },
-        "async",
-        {
-            system: "visual_data",
-            dataArray: features.fft,
-            volume: features.volume,
-            bass: features.bass,
-            mid: features.mid,
-            treble: features.treble,
-            beat: features.beat,
-            particles: this.particles
-        }
-    ));
+        // VISUAL SIGNALS
+        this.worker.postMessage(this.tycadome(
+            "visual",
+            "radio",
+            "audio.frame",
+            {},
+            { status: "ok" },
+            "async",
+            {
+                system: "visual_data",
+                dataArray: features.fft,
+                volume: features.volume,
+                bass: features.bass,
+                mid: features.mid,
+                treble: features.treble,
+                beat: features.beat,
+                particles: this.particles
+            }
+        ));
         //updateAnalyser();
         this.worker.postMessage(
             this.tycadome(
@@ -337,8 +439,8 @@ export class TsunamiFlowAudio extends TsDomCanvas {
                 "async",
                 {
                     system: "visual_data",
-                    dataArray: this.TfSoundContextDataArray,
-                    dataArrayLength: this.TfSoundContextDataArray.length,
+                    dataArray: this.masterDataArray,
+                    dataArrayLength: this.masterDataArray.length,
                     baseRadius: this.baseRadius,
                     particles: this.particles,
                     volume: this.TfSoundVolume
@@ -347,22 +449,22 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         );
     }
     processAudioForVideo() {
-        this.TfSoundContextBufferLength = this.TfSoundsFloat32.length;
+        this.masterBufferLength = this.masterFloat32.length;
         let sum = 0;
-        for (let i = 0; i < this.TfSoundContextBufferLength; i++) {
-            sum += this.TfSoundsFloat32[i] * this.TfSoundsFloat32[i];
+        for (let i = 0; i < this.masterBufferLength; i++) {
+            sum += this.masterFloat32[i] * this.masterFloat32[i];
         }
-        this.TfSoundVolume = Math.sqrt(sum / this.TfSoundContextBufferLength);
-        this.TfSoundContextDataArray = new Uint8Array(this.TfSoundContextBufferLength / 4);
-        this.TfSoundChunkSize = Math.floor(this.TfSoundContextBufferLength / this.TfSoundContextDataArray.length);
+        this.TfSoundVolume = Math.sqrt(sum / this.masterBufferLength);
+        this.masterDataArray = new Uint8Array(this.masterBufferLength / 4);
+        this.TfSoundChunkSize = Math.floor(this.masterBufferLength / this.masterDataArray.length);
 
-        for (let i = 0; i < this.TfSoundContextDataArray.length; i++) {
+        for (let i = 0; i < this.masterDataArray.length; i++) {
             this.TfSoundchunkSum = 0;
             for (let j = 0; j < this.TfSoundChunkSize; j++) {
-                this.TfSoundSample = this.TfSoundsFloat32[i * this.TfSoundChunkSize + j] || 0;
+                this.TfSoundSample = this.masterFloat32[i * this.TfSoundChunkSize + j] || 0;
                 this.TfSoundchunkSum += Math.abs(this.TfSoundSample);
             }
-            this.TfSoundContextDataArray[i] = Math.min(255, this.TfSoundchunkSum * 400);
+            this.masterDataArray[i] = Math.min(255, this.TfSoundchunkSum * 400);
         }
     }
     // game logic below
@@ -394,39 +496,39 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
     updatePhysics(audio) {
 
-    const force = audio.bass * 40;
+        const force = audio.bass * 40;
 
-    // PLAYER IMPULSE
-    player.velocity.y -= force;
+        // PLAYER IMPULSE
+        player.velocity.y -= force;
 
-    // WORLD REACTION
-    world.gravity = 1 + audio.mid;
-    world.shake = audio.beat ? audio.volume * 10 : audio.volume * 2;
+        // WORLD REACTION
+        world.gravity = 1 + audio.mid;
+        world.shake = audio.beat ? audio.volume * 10 : audio.volume * 2;
 
-    // OBJECT INTERACTION
-    particles.forEach(p => {
-        p.dx += audio.treble * (Math.random() - 0.5);
-        p.dy += audio.treble * (Math.random() - 0.5);
-    });
-}
-
-updateGame(audio) {
-
-    // BEAT = ACTION TRIGGER
-    if (audio.beat) {
-        this.triggerEvent("BEAT_HIT");
+        // OBJECT INTERACTION
+        particles.forEach(p => {
+            p.dx += audio.treble * (Math.random() - 0.5);
+            p.dy += audio.treble * (Math.random() - 0.5);
+        });
     }
 
-    // DROP = GAME SHIFT
-    if (audio.bass > 0.8) {
-        this.triggerEvent("DROP");
-    }
+    updateGame(audio) {
 
-    // HIGH ENERGY MODE
-    if (audio.volume > 0.3 && audio.treble > 0.6) {
-        this.triggerEvent("HIGH_ENERGY");
+        // BEAT = ACTION TRIGGER
+        if (audio.beat) {
+            this.triggerEvent("BEAT_HIT");
+        }
+
+        // DROP = GAME SHIFT
+        if (audio.bass > 0.8) {
+            this.triggerEvent("DROP");
+        }
+
+        // HIGH ENERGY MODE
+        if (audio.volume > 0.3 && audio.treble > 0.6) {
+            this.triggerEvent("HIGH_ENERGY");
+        }
     }
-}
 
     updateVisuals(treble) {
         particles.spawnRate = treble * 100;
@@ -445,19 +547,19 @@ updateGame(audio) {
     }
 
     triggerEvent(type) {
-    switch (type) {
+        switch (type) {
 
-        case "BEAT_HIT":
-            spawnShockwave();
-            break;
+            case "BEAT_HIT":
+                spawnShockwave();
+                break;
 
-        case "DROP":
-            world.timeScale = 0.5; // slow motion
-            break;
+            case "DROP":
+                world.timeScale = 0.5; // slow motion
+                break;
 
-        case "HIGH_ENERGY":
-            unlockAbility("overdrive");
-            break;
+            case "HIGH_ENERGY":
+                unlockAbility("overdrive");
+                break;
+        }
     }
-}
 }
