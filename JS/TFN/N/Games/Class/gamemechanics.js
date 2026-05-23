@@ -181,29 +181,29 @@ export class letsDoIt {
         this.GameWorldAudio = new AudioContext();
     }
     HomePageAnimation(player) {
-    this.clear();
+        this.clear();
 
-    // Draw text
-    this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
+        // Draw text
+        this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
 
-    // Initialize speed if needed
-    if (player.speedX === 0) player.speedX = 1;
-    if (player.speedY === 0) player.speedY = 1;
+        // Initialize speed if needed
+        if (player.speedX === 0) player.speedX = 1;
+        if (player.speedY === 0) player.speedY = 1;
 
-    // Bounce logic
-    if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
-        player.speedX = -player.speedX;
+        // Bounce logic
+        if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
+            player.speedX = -player.speedX;
+        }
+
+        if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
+            this.frame = (this.frame + 1) % player.spriteDialog.length;
+            player.speedY = -player.speedY;
+        }
+
+        // Move text
+        player.textWidth += player.speedX;
+        player.textHeight += player.speedY;
     }
-
-    if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
-        this.frame = (this.frame + 1) % player.spriteDialog.length;
-        player.speedY = -player.speedY;
-    }
-
-    // Move text
-    player.textWidth += player.speedX;
-    player.textHeight += player.speedY;
-}
     createComponent(width, height, color, x, y, speedX, speedY, type) {
         return { width, height, speedX, speedY, color, x, y, type };
     }
@@ -1116,10 +1116,10 @@ export class letsDoIt {
                 }
                 break;
             default:
-                    if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-                crash = false;
-                break;
-            }     
+                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+                    crash = false;
+                    break;
+                }
         }
         return crash;
     }

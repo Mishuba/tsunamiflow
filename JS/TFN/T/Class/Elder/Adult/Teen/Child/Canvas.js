@@ -2,10 +2,16 @@ import { TsDom } from "./Child/N.js";
 export class TsDomCanvas extends TsDom { //dom n window
     canvas = null;
     contextTypecanvas = "2d";
-    tfframes = null;
     contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };
     canvasctx = null;
     iscanvasReady = false;
+    //Frames
+    tfframes = null;
+    //Game
+    frame = 0; // 10 //Moving Obstacles
+    frameDirection = 1;
+    StaggerFrame = 15;
+
     constructor(options = {}) {
         super(options);
     }
@@ -34,17 +40,36 @@ export class TsDomCanvas extends TsDom { //dom n window
         this.canvas.width = width;
         this.canvas.height = height;
     }
-
-    clearCanvas(color = "#000000") {
-        if (!this.iscanvasReady) return;
-        if (this.contextTypecanvas === "2d") {
-            this.canvasctx.fillStyle = color;
-            this.canvasctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        } else {
-            console.warn("Clear method not implemented for non-2d context");
-        }
+    createComponent(width, height, color, x, y, speedX, speedY, type) {
+        return { width, height, speedX, speedY, color, x, y, type };
     }
+    getComponentValue(key) {
+        return this.component[key];
+    }
+    HomePageAnimation(player) {
+        this.clearCanvas();
 
+        // Draw text
+        this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
+
+        // Initialize speed if needed
+        if (player.speedX === 0) player.speedX = 1;
+        if (player.speedY === 0) player.speedY = 1;
+
+        // Bounce logic
+        if (player.textWidth + player.speedX >= this.canvas.width || player.textWidth + player.speedX <= 0) {
+            player.speedX = -player.speedX;
+        }
+
+        if (player.textHeight + player.speedY >= this.canvas.height || player.textHeight + player.speedY <= 0) {
+            this.frame = (this.frame + 1) % player.spriteDialog.length;
+            player.speedY = -player.speedY;
+        }
+
+        // Move text
+        player.textWidth += player.speedX;
+        player.textHeight += player.speedY;
+    }
     tfSprite() {
         /*
             FirstGame.context.putImageData(imageData,dx,dy,dirtyX,dirtyY,dirtyWidth,dirtyHeight);
@@ -130,5 +155,18 @@ FirstGame.context.createImageData(width,height,settings);
 
 
         return this.canvasctx;
+    }
+    stopCanvasInterval() {
+        clearInterval(this.interval);
+    }
+    clearCanvas(color = "#000000") {
+        if (!this.iscanvasReady) return;
+        if (this.contextTypecanvas === "2d") {
+            this.canvasctx.fillStyle = color;
+            this.canvasctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        } else {
+            console.warn("Clear method not implemented for non-2d context");
+        }
     }
 }
