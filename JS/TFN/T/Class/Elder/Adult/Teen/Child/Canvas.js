@@ -12,6 +12,8 @@ export class TsDomCanvas extends TsDom { //dom n window
     frameDirection = 1;
     StaggerFrame = 15;
 
+    component = {};
+    TfObstacles = [];
     constructor(options = {}) {
         super(options);
     }
@@ -148,10 +150,10 @@ export class TsDomCanvas extends TsDom { //dom n window
 
     getCanvasContext() {
         /*
-//Make Canvas an image.
-//Context Stuff
-FirstGame.context.createImageData(width,height,settings);
-  */
+    //Make Canvas an image.
+    //Context Stuff
+    FirstGame.context.createImageData(width,height,settings);
+    */
 
 
         return this.canvasctx;
