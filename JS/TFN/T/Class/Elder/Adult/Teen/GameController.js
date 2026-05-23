@@ -30,6 +30,13 @@ export class GameController extends TsDom {
         }
         //window.addEventListener("gamepadconnected", (e) => this.onGamepadConnected(e));
     }
+    everyInterval(n, frameNumber) {
+        if ((frameNumber / n) % 1 == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     getControllerType(gamepad) {
         // Detect controller type based on button layout
         if (gamepad.buttons[0].value === 1) {
