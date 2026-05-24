@@ -1,3 +1,5 @@
+import { T } from "./Infant/storage.js";
+
 export class Dom {
     listeners = {};
     domListeners = new Map();
