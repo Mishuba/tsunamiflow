@@ -306,42 +306,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
         return sourceId;
     }
-    addMixerMediaElement(element, id = null, monitor = false) {
-        this.initAudioContext();
-        if (!element) throw new Error("MediaElement is required");
-        const sourceId = id || `element-${++this.TfSoundsidCounter}`;
-        let source;
-
-        if (this.elementSourceMap.has(element)) {
-            source = this.elementSourceMap.get(element);
-        } else {
-            source = this.MasterSoundsContext.createMediaElementSource(element);
-            this.elementSourceMap.set(element, source);
-        }
-
-        const chain = this.createTrackChain();
-
-        // ✅ CLEAN SIGNAL FLOW
-        source.connect(chain.gain)
-            .connect(chain.analyser)
-            .connect(chain.compressor)
-            .connect(chain.worklet)
-            .connect(chain.delay)
-            .connect(chain.panner)
-            .connect(this.MixerDestination || this.masterGain);
-        // ✅ STORE EVERYTHING (IMPORTANT)
-        this.TfSoundsContext[sourceId] = source;
-        this.TfSoundsGain[sourceId] = chain.gain;
-        this.TfSoundAnalyser[sourceId] = chain.analyser;
-        this.TfSoundsCompressor[sourceId] = chain.compressor;
-        this.SoundWorklet[sourceId] = chain.worklet;
-        this.TfSoundsDelay[sourceId] = chain.delay;
-        this.TfSoundsPanner[sourceId] = chain.panner;
-
-        this.emit("sourceAdded", { id: sourceId });
-
-        return sourceId;
-    }
     setAudioContextGain(id, value = 1) {
         if (this.TfSoundsGain[id]) this.TfSoundsGain[id].gain.value = value;
     }
