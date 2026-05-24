@@ -17,6 +17,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     masterBufferLength = null;
     masterDataArray = null;
     masterCompressor = null;
+    masterAudioWorklet = null;
     TfSoundsDelayOptions = {};
     TfSoundsPannerOptions = {};
     TfSoundAnalyserOptions = {
@@ -35,14 +36,14 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     TfSoundsidCounter = 0;
     TfSoundsDelay = {};
     TfSoundsGain = {};
-    TfSoundsPanner = null;
+    TfSoundsPanner = {};
     TfSoundAnalyser = {};
     TfSoundsContextBufferLength = {};
     TfSoundContextDataArray = {};
     TfSoundsCompressor = {};
     TfSoundsFloat32 = {};
+    SoundWorklet = {};
     TfSoundsDefaultPlaylist = null;
-    fftSoundWorklet = null;
     audio = null;
     MixerDestination = null;
     constructor(options = {}) {
@@ -72,39 +73,39 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     /// context
     createTrackChain() {
 
-    const chain = {
+        const chain = {
 
-        gain:
-            this.MasterSoundsContext.createGain(),
+            gain:
+                this.MasterSoundsContext.createGain(),
 
-        analyser:
-            this.MasterSoundsContext.createAnalyser(),
+            analyser:
+                this.MasterSoundsContext.createAnalyser(),
 
-        compressor:
-            this.MasterSoundsContext
-                .createDynamicsCompressor(),
+            compressor:
+                this.MasterSoundsContext
+                    .createDynamicsCompressor(),
 
-        delay:
-            this.MasterSoundsContext
-                .createDelay(),
+            delay:
+                this.MasterSoundsContext
+                    .createDelay(),
 
-        panner:
-            this.MasterSoundsContext
-                .createStereoPanner(),
+            panner:
+                this.MasterSoundsContext
+                    .createStereoPanner(),
 
-        worklet: new AudioWorkletNode(
-            this.MasterSoundsContext,
-            "fft-processor"
+            worklet: new AudioWorkletNode(
+                this.MasterSoundsContext,
+                "fft-processor"
+            )
+        };
+
+        Object.assign(
+            chain.analyser,
+            this.TfSoundAnalyserOptions
         );
-    };
 
-    Object.assign(
-        chain.analyser,
-        this.TfSoundAnalyserOptions
-    );
-
-    return chain;
-}
+        return chain;
+    }
     initAudioContext() {
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -123,11 +124,15 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
             // DATA BUFFER
             this.masterBufferLength = this.masterAnalyser.frequencyBinCount;
+        } else {
+            this.masterBufferLength = this.masterAnalyser.frequencyBinCount;
         }
         // ROUTING
 
         this.masterGain
             .connect(this.masterAnalyser)
+            .connect(this.masterCompressor)
+            .connect(this.masterAudioWorklet)
             .connect(this.MasterSoundsContext.destination);
 
         this.emit("ready", this.MasterSoundsContext);
@@ -246,21 +251,21 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         const chain = this.createTrackChain();
 
         // ✅ CLEAN SIGNAL FLOW
-        source
-            .connect(chain.gain)
+        source.connect(chain.gain)
             .connect(chain.analyser)
             .connect(chain.compressor)
+            .connect(chain.worklet)
+            .connect(chain.delay)
+            .connect(chain.panner)
             .connect(this.masterGain);
-
         // ✅ STORE EVERYTHING (IMPORTANT)
         this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
-
-        if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
-        if (!this.TfSoundsCompressor) this.TfSoundsCompressor = {};
-
-        this.TfTrackAnalyser[sourceId] = chain.analyser;
+        this.TfSoundAnalyser[sourceId] = chain.analyser;
         this.TfSoundsCompressor[sourceId] = chain.compressor;
+        this.SoundWorklet[sourceId] = chain.worklet;
+        this.TfSoundsDelay[sourceId] = chain.delay;
+        this.TfSoundsPanner[sourceId] = chain.panner;
 
         this.emit("sourceAdded", { id: sourceId });
 
@@ -281,23 +286,24 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         const chain = this.createTrackChain();
 
         // ✅ CLEAN SIGNAL FLOW
-        source
-            .connect(chain.gain)
+        source.connect(chain.gain)
             .connect(chain.analyser)
             .connect(chain.compressor)
+            .connect(chain.worklet)
+            .connect(chain.delay)
+            .connect(chain.panner)
             .connect(this.masterGain);
-
         // ✅ STORE EVERYTHING (IMPORTANT)
         this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
-
-        if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
-        if (!this.TfSoundsCompressor) this.TfSoundsCompressor = {};
-
-        this.TfTrackAnalyser[sourceId] = chain.analyser;
+        this.TfSoundAnalyser[sourceId] = chain.analyser;
         this.TfSoundsCompressor[sourceId] = chain.compressor;
+        this.SoundWorklet[sourceId] = chain.worklet;
+        this.TfSoundsDelay[sourceId] = chain.delay;
+        this.TfSoundsPanner[sourceId] = chain.panner;
 
-        this.emit("sourceAdded", { id: sourceId, gain: chain.gain });
+        this.emit("sourceAdded", { id: sourceId });
+
         return sourceId;
     }
     addMixerMediaElement(element, id = null, monitor = false) {
@@ -307,7 +313,7 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         let source;
 
         if (this.elementSourceMap.has(element)) {
-            source = this.MasterSoundsContext.createMediaElementSource(element);
+            source = this.elementSourceMap.get(element);
         } else {
             source = this.MasterSoundsContext.createMediaElementSource(element);
             this.elementSourceMap.set(element, source);
@@ -315,60 +321,56 @@ export class TsunamiFlowAudio extends TsDomCanvas {
 
         const chain = this.createTrackChain();
 
-        source
-            .connect(chain.gain)
+        // ✅ CLEAN SIGNAL FLOW
+        source.connect(chain.gain)
             .connect(chain.analyser)
             .connect(chain.compressor)
-            .connect(this.masterGain);
-
-
-        if (monitor) source.connect(this.MasterSoundsContext.destination); // local playback
-
+            .connect(chain.worklet)
+            .connect(chain.delay)
+            .connect(chain.panner)
+            .connect(this.MixerDestination || this.masterGain);
         // ✅ STORE EVERYTHING (IMPORTANT)
         this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
-        /*
-                if (!this.TfTrackAnalyser) this.TfTrackAnalyser = {};
-                if (!this.TfTrackCompressor) this.TfTrackCompressor = {};
-        
-                this.TfTrackAnalyser[sourceId] = chain.analyser;
-                this.TfTrackCompressor[sourceId] = chain.compressor;
-        
-                */
-        /*
-        this.emit("sourceAdded", { id: sourceId, type: "media", source: source, gain: chain.gain });
-        */
+        this.TfSoundAnalyser[sourceId] = chain.analyser;
+        this.TfSoundsCompressor[sourceId] = chain.compressor;
+        this.SoundWorklet[sourceId] = chain.worklet;
+        this.TfSoundsDelay[sourceId] = chain.delay;
+        this.TfSoundsPanner[sourceId] = chain.panner;
+
+        this.emit("sourceAdded", { id: sourceId });
+
         return sourceId;
     }
     setAudioContextGain(id, value = 1) {
         if (this.TfSoundsGain[id]) this.TfSoundsGain[id].gain.value = value;
     }
-    removeAudioContextSource(id) {
+    removeSource(id) {
         const source = this.TfSoundsContext[id];
         const gain = this.TfSoundsGain[id];
         const analyser = this.TfTrackAnalyser[id];
         const compressor = this.TfSoundsCompressor[id];
+        const worklet = this.SoundWorklet[id];
+        const delay = this.TfSoundsDelay[id];
+        const panner = this.TfSoundsPanner[id];
 
         if (source) source.disconnect();
         if (gain) gain.disconnect();
         if (analyser) analyser.disconnect();
         if (compressor) compressor.disconnect();
+        if (worklet) worklet.disconnect();
+        if (delay) delay.disconnect();
+        if (panner) panner.disconnect();
 
         delete this.TfSoundsContext[id];
         delete this.TfSoundsGain[id];
         delete this.TfTrackAnalyser[id];
         delete this.TfSoundsCompressor[id];
+        delete this.SoundWorklet[id];
+        delete this.TfSoundsDelay[id];
+        delete this.TfSoundsPanner[id];
 
         this.emit("sourceRemoved", id);
-    }
-    removeMixerSource(id) {
-        if (this.AudioSource[id]) {
-            this.AudioSource[id].disconnect();
-            this.TfSoundsGain[id].disconnect();
-            delete this.AudioSource[id];
-            delete this.TfSoundsGain[id];
-            this.emit("sourceRemoved", id);
-        }
     }
     finishAudioContext() {
         if (!this.MasterSoundsContext) return;
@@ -387,12 +389,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
         this.masterGain = null;
 
         this.emit("closed");
-    }
-    resetMixer() {
-        Object.values(this.AudioSource).forEach(src => src.disconnect());
-        this.AudioSource = {};
-        this.TfSoundsGain = {};
-        this.emit("reset");
     }
     SendWorkletToWorker(type, action, meta, system, data) {
         this.worker.postMessage(
@@ -415,7 +411,6 @@ export class TsunamiFlowAudio extends TsDomCanvas {
             )
         );
     }
-
     onWorkletMessage(e) {
         this.masterFloat32 = new Float32Array(e.data);
         this.processAudioForVideo();
