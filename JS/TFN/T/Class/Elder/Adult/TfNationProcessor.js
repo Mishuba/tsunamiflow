@@ -1,4 +1,4 @@
-class TfProcessor extends AudioWorkletProcessor {
+class FFTProcessor extends AudioWorkletProcessor {
 
     constructor() {
 
