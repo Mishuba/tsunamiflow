@@ -1,45 +1,53 @@
-export class FFTProcessor extends AudioWorkletProcessor {
-  constructor() {
-    super();
+class TfProcessor extends AudioWorkletProcessor {
 
-    this.bufferSize = 2048;
-    this.buffer = new Float32Array(this.bufferSize);
-    this.writeIndex = 0;
-  }
+    constructor() {
 
-  process(inputs, outputs) {
-    const input = inputs[0];
-    if (!input || !input[0]) return true;
+        super();
 
-    const channel = input[0];
-    const output = outputs[0];
+        this.drive = 1.5;
 
-    // 1. pass-through audio (zero distortion graph behavior)
-    if (output && output[0]) {
-      output[0].set(channel);
+        this.port.onmessage = (e) => {
+
+            if (e.data.drive !== undefined) {
+
+                this.drive = e.data.drive;
+            }
+        };
     }
 
-    // 2. collect samples ONLY
-    for (let i = 0; i < channel.length; i++) {
-      this.buffer[this.writeIndex++] = channel[i];
+    process(inputs, outputs) {
 
-      if (this.writeIndex >= this.bufferSize) {
+        const input = inputs[0];
+        const output = outputs[0];
 
-        // 🔥 SEND RAW AUDIO SNAPSHOT ONLY
-        // NO FFT HERE
-this.port.postMessage({
-  pcm: this.buffer,
-  sampleRate: sampleRate
-}, [this.buffer.buffer]);
+        if (!input.length) return true;
 
-        // recreate buffer (required after transfer)
-        this.buffer = new Float32Array(this.bufferSize);
-        this.writeIndex = 0;
-      }
+        for (let channel = 0;
+             channel < input.length;
+             channel++) {
+
+            const inData = input[channel];
+            const outData = output[channel];
+
+            for (let i = 0;
+                 i < inData.length;
+                 i++) {
+
+                let sample = inData[i];
+
+                // SOFT SATURATION
+
+                sample =
+                    Math.tanh(
+                        sample * this.drive
+                    );
+
+                outData[i] = sample;
+            }
+        }
+
+        return true;
     }
-
-    return true;
-  }
 }
 
 registerProcessor("fft-processor", FFTProcessor);
