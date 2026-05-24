@@ -1,4 +1,6 @@
-export class Dom {
+import { T } from "./Infant/storage.js";
+
+export class Dom extends T {
     listeners = {};
     domListeners = new Map();
     uaData = navigator.userAgentData || null;
