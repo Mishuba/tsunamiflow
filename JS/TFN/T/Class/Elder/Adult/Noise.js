@@ -71,16 +71,40 @@ export class TsunamiFlowAudio extends TsDomCanvas {
     }
     /// context
     createTrackChain() {
-        return {
-            gain: this.MasterSoundsContext.createGain(),
-            //panner:
-            //delay: 
-            //worklet:
-            analyser: this.MasterSoundsContext.createAnalyser(),
-            //
-            compressor: this.MasterSoundsContext.createDynamicsCompressor()
-        };
-    }
+
+    const chain = {
+
+        gain:
+            this.MasterSoundsContext.createGain(),
+
+        analyser:
+            this.MasterSoundsContext.createAnalyser(),
+
+        compressor:
+            this.MasterSoundsContext
+                .createDynamicsCompressor(),
+
+        delay:
+            this.MasterSoundsContext
+                .createDelay(),
+
+        panner:
+            this.MasterSoundsContext
+                .createStereoPanner(),
+
+        worklet: new AudioWorkletNode(
+            this.MasterSoundsContext,
+            "fft-processor"
+        );
+    };
+
+    Object.assign(
+        chain.analyser,
+        this.TfSoundAnalyserOptions
+    );
+
+    return chain;
+}
     initAudioContext() {
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
