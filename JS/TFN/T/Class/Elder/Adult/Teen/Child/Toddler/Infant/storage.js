@@ -1,4 +1,4 @@
-import "core" from "./Fetus.js"
+import "core" from "./Fetus/core.js"
 export class T expands core {
     listeners = {};
     domListeners = new Map();
