@@ -809,6 +809,7 @@ export class mediaWorker extends TsWorker {
             if (event.data.payload.system === "init_canvas") {
                 this.radiooffscreencanvas = event.data.payload.canvas;
             } else if (event.data.payload.system === "file") {
+                this.visualizatorLoop = true;
                 if (this.songList === null) {
                     await this.fetchRadioSongs();
                 } else {
@@ -816,6 +817,7 @@ export class mediaWorker extends TsWorker {
                 }
                 this.TheLastSongUsed = this.CurrentSong;
             } else if (event.data.payload.system === "start") {
+                this.visualizatorLoop = true;
                 if (this.songList === null) {
                     await this.fetchRadioSongs();
                 } else {
@@ -823,6 +825,7 @@ export class mediaWorker extends TsWorker {
                 }
                 this.TheLastSongUsed = this.CurrentSong;
             } else if (event.data.payload.system === "skip") {
+                this.visualizatorLoop = true;
                 this.TheLastSongUsed = this.CurrentSong;
                 if (this.songList === null) {
                     await this.fetchRadioSongs();
@@ -830,6 +833,7 @@ export class mediaWorker extends TsWorker {
                     this.RadioTime(this.songList);
                 }
             } else if (event.data.payload.system === "previous") {
+                this.visualizatorLoop = true;
                 if (this.TheLastSongUsed === null) {
                     if (this.songList === null) {
                         await this.fetchRadioSongs();
@@ -851,6 +855,7 @@ export class mediaWorker extends TsWorker {
                     }
                 }
             } else if (event.data.payload.system === "ended") {
+                this.visualizatorLoop = true;
                 if (this.songList === null) {
                     await this.fetchRadioSongs();
                 } else {

@@ -73,6 +73,28 @@ export class Studio extends Flow {
                     this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
                 }
 
+                this.worker.postMessage(tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "visualizator",
+                    "radio.playing",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "media"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "start_visual_data",
+                        bufferLength: this.TfSoundsContextBufferLength[this.AudioElement.id],
+                        dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
+                        baseRadius: this.baseRadius,
+                        particles: this.particles,
+                        volume: this.AudioElement.volume,
+                    }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
 
                 const loop = () => {
                     if (this.AudioElement.paused || this.AudioElement.ended) {
@@ -95,13 +117,10 @@ export class Studio extends Flow {
                         },
                         "async",
                         {
-                            system: "start_visual_data",
-                            bufferLength: this.TfSoundsContextBufferLength[this.AudioElement.id],
+                            system: "update_visual_data",
                             dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
-                            baseRadius: this.baseRadius,
-                            particles: this.particles,
-                            //volume: this.soundEngine.visualizatorController,
-                        }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
+                            volume: this.AudioElement.volume,
+                        }), [this.TfSoundsContextDataArray[this.AudioElement.id].buffer]);
                     requestAnimationFrame(loop);
                 };
                 loop();
@@ -113,6 +132,7 @@ export class Studio extends Flow {
                 console.error("Error playing audio:", error);
             }
         }
+
     }
     playingAudio() {
 
