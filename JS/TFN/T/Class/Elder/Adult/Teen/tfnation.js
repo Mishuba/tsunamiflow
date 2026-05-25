@@ -560,19 +560,19 @@ export class mediaWorker extends TsWorker {
 
     update(p, fftValue, volume, baseRadius) {
 
-    const energy = (fftValue / 255) * volume * 50;
+        const energy = (fftValue / 255) * volume * 50;
 
-    p.radius = baseRadius + energy;
+        p.radius = baseRadius + energy;
 
-    p.dx += (Math.random() - 0.5) * energy * 0.05;
-    p.dy += (Math.random() - 0.5) * energy * 0.05;
+        p.dx += (Math.random() - 0.5) * energy * 0.05;
+        p.dy += (Math.random() - 0.5) * energy * 0.05;
 
-    p.dx *= 0.97;
-    p.dy *= 0.97;
+        p.dx *= 0.97;
+        p.dy *= 0.97;
 
-    p.x += p.dx;
-    p.y += p.dy;
-}
+        p.x += p.dx;
+        p.y += p.dy;
+    }
 
     draw(p) {
         this.offscreenctx.save();
@@ -607,8 +607,8 @@ export class mediaWorker extends TsWorker {
         this.radiooffscreenctx.clearRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
 
         for (let i = 0; i < particles.length; i++) {
-            // this.update(particles[i], volume, baseRadius, this.radiooffscreencanvas);
-            this.particle(particles[i]);
+            const fftValue = dataArray[i % dataArray.length];
+            this.update(particles[i], fftValue, volume, baseRadius);
             this.draw(particles[i]);
         }
 
@@ -630,7 +630,7 @@ export class mediaWorker extends TsWorker {
         const loop = () => {
 
             this.RadioVisualizer(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
-            setTimeout(loop, 16);
+            renderFrame(loop());
         }
         loop();
     }
