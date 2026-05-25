@@ -723,28 +723,22 @@ disableChromaKey() {
     this.useChromaKey = false;
 }
     /////////////////////////////////////////////
-    async startTime() {
-    let TheTimeIGuess = new Promise((resolve) => {
-        let currentTime = new Date();
-        let TsunamiTimes = currentTime.toTimeString().slice(0, 5);// "HH:MM";
 
-        if (this.something === null) {
-            this.something = setInterval(() => {
-                currentTime = new Date();
-                TsunamiTimes = currentTime.toTimeString().slice(0, 5);
-            }, 1000);
-        } else {
-            TsunamiTimes = currentTime.toTimeString().slice(0, 5);
-        }
-        resolve(TsunamiTimes);
-    });
 
-    let TheRealTime = await TheTimeIGuess;
+startTime() {
+    if (this.TimerLoop) return;
 
-    if (this.TimerTimes.includes(TheRealTime) && !this.TimerTrigger.has(TheRealTime)) {
-        this.TimerTrigger.add(TheRealTime);
-        console.log(`Triggering event for ${TheRealTime}`);
+    this.TimerLoop = setInterval(() => {
+        const now = new Date();
 
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        const key = `${hour}:${minute}`;
+
+        if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
+
+            this.TimerTrigger.add(key);
 
         let tf = this.tycadome(
             "tycadome-guest" /*+ Date.now()*/,
@@ -763,37 +757,20 @@ disableChromaKey() {
             "async",
             {
                 system: "Tf Schedule",
-                time: TheRealTime,
+                time: key,
             });
         self.postMessage(tf);
-    } else {
-        let tf = this.tycadome(
-            "tycadome-guest" /*+ Date.now()*/,
-            "timer",
-            "scheduled.timer",
-            {
-                source: "web",
-                target: "device:web-001",
-                layer: "tf",
-                worker: "media",
-                backend: false
-            },
-            {
-                status: "pending",
-                priority: "low"
-            },
-            "async",
-            {
-                system: "Tf Schedule",
-                time: TheRealTime,
-            });
-        self.postMessage(tf);
-    }
 
-    if (TheRealTime === "23:59") {
-        this.TimerTrigger.clear();
-    }
+            
+        }
+
+        if (hour === 23 && minute === 59) {
+            this.TimerTrigger.clear();
+        }
+
+    }, 1000);
 }
+
     async MessageReceived(event) {
     if (event.data.type === "timer") {
         if (event.data.payload.system === "Tf Schedule") {
