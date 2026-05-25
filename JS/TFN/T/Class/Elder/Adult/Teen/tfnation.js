@@ -556,30 +556,30 @@ export class mediaWorker extends TsWorker {
 
     update(p, audio, baseRadius, canvas) {
 
-    const energy = audio.volume * 80;
+        const energy = audio.volume * 80;
 
-    p.radius = baseRadius + energy;
+        p.radius = baseRadius + energy;
 
-    // FULL AUDIO FORCE VECTOR
-    const forceX = audio.mid * (Math.random() - 0.5);
-    const forceY = audio.treble * (Math.random() - 0.5);
+        // FULL AUDIO FORCE VECTOR
+        const forceX = audio.mid * (Math.random() - 0.5);
+        const forceY = audio.treble * (Math.random() - 0.5);
 
-    p.dx += forceX;
-    p.dy += forceY;
+        p.dx += forceX;
+        p.dy += forceY;
 
-    // BEAT PULSE
-    if (audio.beat) {
-        p.dx *= 1.3;
-        p.dy *= 1.3;
+        // BEAT PULSE
+        if (audio.beat) {
+            p.dx *= 1.3;
+            p.dy *= 1.3;
+        }
+
+        // damping
+        p.dx *= 0.97;
+        p.dy *= 0.97;
+
+        p.x += p.dx;
+        p.y += p.dy;
     }
-
-    // damping
-    p.dx *= 0.97;
-    p.dy *= 0.97;
-
-    p.x += p.dx;
-    p.y += p.dy;
-}
 
     draw(p) {
         this.offscreenctx.save();
@@ -608,27 +608,27 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-RadioVisualizer2(audio, particles) {
+    RadioVisualizer2(audio, particles) {
 
-    const { fft, volume } = audio;
+        const { fft, volume } = audio;
 
-    this.clear();
+        this.clear();
 
-    // PARTICLE WORLD
-    for (let p of particles) {
-        this.update(p, audio, 2, this.canvas);
-        this.draw(p);
+        // PARTICLE WORLD
+        for (let p of particles) {
+            this.update(p, audio, 2, this.canvas);
+            this.draw(p);
+        }
+
+        // FREQUENCY TERRAIN
+        for (let i = 0; i < fft.length; i++) {
+            const h = fft[i] * (1 + volume * 3);
+
+            drawColumn(i, h, audio.bass);
+        }
     }
 
-    // FREQUENCY TERRAIN
-    for (let i = 0; i < fft.length; i++) {
-        const h = fft[i] * (1 + volume * 3);
-
-        drawColumn(i, h, audio.bass);
-    }
-}
-
-    RadioVisualizer(dataArray, bufferLength, baseRadius, particles, volume) {
+    RadioVisualizer(bufferLength, dataArray, baseRadius, particles, volume) {
         this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
         this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
 

@@ -8,6 +8,7 @@ export class Studio extends TsunamiFlowAudio {
     }
     loadaudio(src) {
         this.AudioElement.src = src;
+        this.addAudioContextSource(this.AudioElement, this.AudioElement.id);
         this.AudioElement.load();
         this.tfRadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", this.tfRadioLoadStartTime);
@@ -64,7 +65,35 @@ export class Studio extends TsunamiFlowAudio {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
                     await this.AudioElement.play();
+                    this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
+                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
+                } else {
+                    await this.AudioElement.play();
+                    this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
+                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
                 }
+                this.worker.postMessage(tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "visualizator",
+                    "radio.playing",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "media"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "visual_data",
+                        bufferLength: TfSoundsContextBufferLength[this.AudioElement.id],
+                        dataArray: this.TfSoundsContextDataArray[this.AudioElement.id],
+                        baseRadius: this.baseRadius,
+                        particles: this.particles,
+                        //volume: this.soundEngine.visualizatorController,
+                    }), [this.this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id]);
             }
         } catch (error) {
             if (error.name === "NotAllowedError") {
@@ -75,8 +104,7 @@ export class Studio extends TsunamiFlowAudio {
         }
     }
     playingAudio() {
-        //this.AudioState();
-        //this.updateAnalyser();
+
     }
     pauseaudio() {
         this.AudioElement.pause();
