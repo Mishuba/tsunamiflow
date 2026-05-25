@@ -558,14 +558,14 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    update(p) {
+    update(p, fftValue, volume, baseRadius) {
 
-    const energy = this.volume * 80;
+    const energy = (fftValue / 255) * volume * 50;
 
-    p.radius = this.baseRadius + energy;
+    p.radius = baseRadius + energy;
 
-    p.dx += (Math.random() - 0.5) * this.volume;
-    p.dy += (Math.random() - 0.5) * this.volume;
+    p.dx += (Math.random() - 0.5) * energy * 0.05;
+    p.dy += (Math.random() - 0.5) * energy * 0.05;
 
     p.dx *= 0.97;
     p.dy *= 0.97;
