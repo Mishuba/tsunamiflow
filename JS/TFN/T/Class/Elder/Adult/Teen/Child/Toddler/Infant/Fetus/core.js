@@ -22,8 +22,9 @@ export class core {
             "state": state, // {}
             "mode": mode, //"async"
             "payload": payload // {},
-transfer: []
         };
+
+        let transfer = [];
         return tf;
     }
     // Load an existing ArrayBuffer or TypedArray
