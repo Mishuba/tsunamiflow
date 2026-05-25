@@ -1,10 +1,10 @@
-import { TsunamiFlowAudio } from "./Elder/Adult/Noise";
+import { Flow } from "./Elder/Flow.js";
 
-export class Studio extends TsunamiFlowAudio {
+export class Studio extends Flow {
     WeLive = null;
     hls = null;
     constructor(options = {}) {
-
+        super(options);
     }
     loadaudio(src) {
         this.AudioElement.src = src;
@@ -72,29 +72,39 @@ export class Studio extends TsunamiFlowAudio {
                     this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
                     this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
                 }
-                this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
-                this.worker.postMessage(tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "visualizator",
-                    "radio.playing",
-                    {
-                        source: "web",
-                        target: "device:web-001",
-                        worker: "media"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "visual_data",
-                        bufferLength: this.TfSoundsContextBufferLength[this.AudioElement.id],
-                        dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
-                        baseRadius: this.baseRadius,
-                        particles: this.particles,
-                        //volume: this.soundEngine.visualizatorController,
-                    }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
+
+
+                const loop = () => {
+                    if (this.AudioElement.paused || this.AudioElement.ended) {
+                        return;
+                    }
+
+                    this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
+                    this.worker.postMessage(tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "visualizator",
+                        "radio.playing",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            worker: "media"
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "start_visual_data",
+                            bufferLength: this.TfSoundsContextBufferLength[this.AudioElement.id],
+                            dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
+                            baseRadius: this.baseRadius,
+                            particles: this.particles,
+                            //volume: this.soundEngine.visualizatorController,
+                        }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
+                    requestAnimationFrame(loop);
+                };
+                loop();
             }
         } catch (error) {
             if (error.name === "NotAllowedError") {

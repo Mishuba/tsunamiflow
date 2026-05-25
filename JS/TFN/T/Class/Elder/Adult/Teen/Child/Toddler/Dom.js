@@ -5,8 +5,8 @@ export class Dom extends T {
     domListeners = new Map();
     uaData = navigator.userAgentData || null;
     LegacyUaData = navigator.userAgent || null;
-    constructor() {
-
+    constructor(options = {}) {
+        super(options);
     }
     log(msg) {
         let logBox = this.find("TfLogBox");

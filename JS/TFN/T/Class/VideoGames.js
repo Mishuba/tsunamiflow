@@ -1,4 +1,6 @@
-export class letsDoIt {
+import { GameMechanics } from "./Elder/GameMechanics.js";
+
+export class letsDoIt extends GameMechanics {
     TgameFname = null;
     player1 = null;
     //Game Players
@@ -37,7 +39,7 @@ export class letsDoIt {
     AiStageBoss = new Image();
     AiRuler = new Image();
     constructor(options = {}) {
-
+        super(options);
     }
     updatingMyGame(user, position) {
         let xTF, heightTF, gap, minHeight, maxHeight, minGap, maxGap;

@@ -1,6 +1,5 @@
-import { TsDom } from "./Child/N.js";
 import { Dom } from "./Toddler/Dom.js";
-export class TsDomCanvas extends TsDom { //dom n window
+export class TsDomCanvas extends Dom { //dom n window
     canvas = null;
     contextTypecanvas = "2d";
     contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };

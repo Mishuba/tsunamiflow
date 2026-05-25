@@ -1,4 +1,6 @@
-export class GameMechanics {
+import { TFgameMovement } from "./Adult/GameMovements.js";
+
+export class GameMechanics extends TFgameMovement {
     //Ranking/PowerScaling
     GodRank = Infinity;
     RulerLevel = Math.pow(10, 10000);
@@ -96,7 +98,7 @@ export class GameMechanics {
     EarthMass = 5.972e24;
     EarthRadius = 6.371e6;
     constructor(options = {}) {
-
+        super(options);
     }
     GravitationAcceleration(g, m1, r) {
         let GravitationalAcceleration = (g * m1) / (r * r);;

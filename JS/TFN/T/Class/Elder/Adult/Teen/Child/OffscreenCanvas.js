@@ -1,6 +1,6 @@
-import { Ts } from "./Base/test.js";
+import { TsharedWorker } from "./Toddler/sharedWorker.js";
 
-export class TsWorker extends Ts {
+export class TsWorker extends TsharedWorker {
     offscreencanvas = null;
     offscreenctx = null;
     isoffscreenReady = false;

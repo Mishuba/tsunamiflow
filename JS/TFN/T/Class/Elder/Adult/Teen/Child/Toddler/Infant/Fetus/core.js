@@ -26,7 +26,7 @@ class core {
         return tf;
     }
     // Load an existing ArrayBuffer or TypedArray
-    async load(input) {
+    async loadArrayBuffer(input) {
         try {
             if (input instanceof ArrayBuffer) {
                 this.Arraybuffer = input;
@@ -59,7 +59,7 @@ class core {
     }
 
     // Replace buffer with a new one
-    replace(newBuffer) {
+    replaceArrayBuffer(newBuffer) {
         if (!newBuffer) return;
 
         if (!(newBuffer instanceof ArrayBuffer)) {
@@ -80,7 +80,7 @@ class core {
     }
 
     // Clear buffer from memory
-    clear() {
+    clearArrayBuffer() {
         this.Arraybuffer = null;
         this.ArraybyteLength = 0;
         this.Arrayview = null;

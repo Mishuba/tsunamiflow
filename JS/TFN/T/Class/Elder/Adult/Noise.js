@@ -1,5 +1,5 @@
-import { TsDomCanvas } from "./Teen/T.js";
-export class TsunamiFlowAudio extends TsDomCanvas {
+import { TsunamiFlowSound } from "./Teen/Sound.js";
+export class TsunamiFlowAudio extends TsunamiFlowSound {
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,

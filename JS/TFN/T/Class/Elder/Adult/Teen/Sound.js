@@ -1,6 +1,6 @@
-import { TsDomCanvas } from "./Teen/T.js";
+import { TsDomCanvas } from "./Child/Canvas.js";
 
-export class TsunamiFlowAudio extends TsDomCanvas {
+export class TsunamiFlowSound extends TsDomCanvas {
     radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
     ];
     SongList = null;

@@ -1,9 +1,11 @@
-export class TFgameMovement {
+import { GameController } from "./Teen/GameController.js";
+export class TFgameMovement extends GameController {
     player = null;
     image = null;
     playerAngle = 0;
     playerMoveAngle = 0;
     constructor(options = {}) {
+        super(options);
         if (options.player) {
             this.player = options.player;
         }

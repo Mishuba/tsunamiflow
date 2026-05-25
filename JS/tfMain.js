@@ -5,7 +5,7 @@ import { tfIframe } from "./../Iframe/Js/TfIframe.js";
 import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";
 import { TfPrintful } from "./TFN/T/Class/Tycadome.js";
 import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
-import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
+import { Studio } from "./TFN/T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 
@@ -316,7 +316,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  const nation = new TsunamiFlowDj({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
+  const nation = new Studio({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
 
   const Controller = new maxwell({
     site: TfSite,

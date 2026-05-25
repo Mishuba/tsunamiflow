@@ -1,5 +1,5 @@
-import "core" from "./Fetus/core.js"
-export class T expands core {
+import { core } from "./Fetus/core.js"
+export class T extends core {
     listeners = {};
     domListeners = new Map();
     namespace = "tf";

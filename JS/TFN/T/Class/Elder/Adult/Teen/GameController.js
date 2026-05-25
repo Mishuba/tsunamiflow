@@ -1,4 +1,6 @@
-export class GameController extends TsDom {
+import { TsDomCanvas } from "./Child/Canvas.js";
+
+export class GameController extends TsDomCanvas {
     //Game Controllers
     controllerIndex = null;
     controllerType = null;

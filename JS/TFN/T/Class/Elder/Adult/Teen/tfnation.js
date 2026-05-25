@@ -17,7 +17,11 @@ export class mediaWorker extends TsWorker {
     CurrentSong;
     songList;
     visualizatorController;
-    latestVisualizerData = null;
+    visualizatorLoop;
+    dataArrayLength = null;
+    baseRadius = null;
+    particles = null;
+    volume = null;
     radioRandom;
     rangeIndex;
     //vid below
@@ -614,7 +618,8 @@ export class mediaWorker extends TsWorker {
         this.radiooffscreenctx.clearRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
 
         for (let i = 0; i < particles.length; i++) {
-            this.update(particles[i], volume, baseRadius, this.radiooffscreencanvas);
+            // this.update(particles[i], volume, baseRadius, this.radiooffscreencanvas);
+            this.particle(particles[i]);
             this.draw(particles[i]);
         }
 
@@ -630,6 +635,15 @@ export class mediaWorker extends TsWorker {
             this.radiooffscreenctx.fillRect(CtxX, this.radiooffscreencanvas.height - barHeight, barWidth, barHeight);
             CtxX += barWidth + 1;
         }
+    }
+    startVisualizerLoop(event) {
+
+        const loop = () => {
+
+            this.RadioVisualizer(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
+            setTimeout(loop, 16);
+        }
+        loop();
     }
     stopVisualizerLoop() {
         this.visualizatorController = false;
@@ -878,11 +892,19 @@ export class mediaWorker extends TsWorker {
             }
         } else if (event.data.type === "visualizator") {
             //
-            if (event.data.payload.system === "visual_data") {
-                this.RadioVisualizer(event.data.payload.dataArrayLength, event.data.payload.baseRadius, event.data.payload.particles, event.data.payload.volume);
+            if (event.data.payload.system === "update_visual_data") {
+                this.dataArrayLength = event.data.payload.dataArrayLength;
+                this.volume = event.data.payload.volume;
             } else if (event.data.payload.system === "loading") {
                 this.radiooffscreencanvas = event.data.payload.canvas;
                 this.initRadioOffscreen();
+            } else if (event.data.payload.system === "start_visual_data") {
+                this.visualizatorLoop = true;
+                this.dataArrayLength = event.data.payload.dataArrayLength;
+                this.baseRadius = event.data.payload.baseRadius;
+                this.particles = event.data.payload.particles;
+                this.volume = event.data.payload.volume;
+                this.startVisualizerLoop(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
             }
         } else if (event.data.type === "processor") {
             //
