@@ -75,14 +75,16 @@ export class Studio extends Flow {
                     this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
                 }
 
-                this.worker.postMessage(tycadome(
+                let tt = tycadome(
                     "tycadome-guest" + Date.now(),
                     "visualizator",
                     "radio.playing",
                     {
                         source: "web",
                         target: "device:web-001",
-                        worker: "media"
+                        layer: "tf",
+                        worker: "media",
+                        backend: false
                     },
                     {
                         status: "pending",
@@ -96,7 +98,9 @@ export class Studio extends Flow {
                         baseRadius: this.baseRadius,
                         particles: this.particles,
                         volume: this.AudioElement.volume,
-                    }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
+                        transfer: [[this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer]
+                    });
+                this.worker.postMessage(tt, tt.transfer);
 
                 const loop = () => {
                     if (this.AudioElement.paused || this.AudioElement.ended) {
@@ -104,14 +108,17 @@ export class Studio extends Flow {
                     }
 
                     this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
-                    this.worker.postMessage(tycadome(
+
+                    let tc = tycadome(
                         "tycadome-guest" + Date.now(),
                         "visualizator",
                         "radio.playing",
                         {
                             source: "web",
                             target: "device:web-001",
-                            worker: "media"
+                            layer: "tf",
+                            worker: "media",
+                            backend: false
                         },
                         {
                             status: "pending",
@@ -119,10 +126,12 @@ export class Studio extends Flow {
                         },
                         "async",
                         {
-                            system: "update_visual_data",
+                            system: "start_visual_data",
                             dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
                             volume: this.AudioElement.volume,
-                        }), [this.TfSoundsContextDataArray[this.AudioElement.id].buffer]);
+                            transfer: [this.TfSoundsContextDataArray[this.AudioElement.id].buffer]
+                        });
+                    this.worker.postMessage(tc, tc.transfer);
                     requestAnimationFrame(loop);
                 };
                 loop();

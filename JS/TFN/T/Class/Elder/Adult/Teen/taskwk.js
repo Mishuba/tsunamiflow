@@ -71,7 +71,8 @@ export class TaskWorker {
                     source: "web",
                     target: "device:web-001",
                     layer: "tf",
-                    worker: "task"
+                    worker: "task",
+                    backend: false
                 },
                 {
                     status: "pending",
@@ -161,8 +162,6 @@ export class TaskWorker {
                 break;
             default:
                 this.workers[target].postMessage(task, task.transfer || []);
-                    
-                );
                 break;
         }
     };
