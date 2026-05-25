@@ -32,108 +32,53 @@ export class mediaWorker extends TsWorker {
     chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
     frameSkipCount = 2;
     frameCounter = 0;
-renderFrame =
-    typeof self.requestAnimationFrame === "function"
-        ? self.requestAnimationFrame.bind(self)
-        : (callback) => setTimeout(callback, 16);
+    renderFrame =
+        typeof self.requestAnimationFrame === "function"
+            ? self.requestAnimationFrame.bind(self)
+            : (callback) => setTimeout(callback, 16);
 
-cancelFrame =
-    typeof self.cancelAnimationFrame === "function"
-        ? self.cancelAnimationFrame.bind(self)
-        : clearTimeout.bind(self);
+    cancelFrame =
+        typeof self.cancelAnimationFrame === "function"
+            ? self.cancelAnimationFrame.bind(self)
+            : clearTimeout.bind(self);
 this.visualLoopId = null;
-    constructor(options = {}) {
-        super(options);
+constructor(options = {}) {
+    super(options);
+}
+UseImage(canvas, corner = false) {
+    this.initOffscreen();
+    this.resizeoffscreen(canvas.width, canvas.height);
+    if (corner) {
+        const logoW = canvas.width / 4;
+        const logoH = canvas.height / 4;
+        this.offscreenctx.drawImage(this.backgroundImg, canvas.width - logoW - 10, 10, logoW, logoH);
+    } else {
+        this.offscreenctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
     }
-    UseImage(canvas, corner = false) {
-        this.initOffscreen();
-        this.resizeoffscreen(canvas.width, canvas.height);
-        if (corner) {
-            const logoW = canvas.width / 4;
-            const logoH = canvas.height / 4;
-            this.offscreenctx.drawImage(this.backgroundImg, canvas.width - logoW - 10, 10, logoW, logoH);
-        } else {
-            this.offscreenctx.drawImage(this.backgroundImg, 0, 0, canvas.width, canvas.height);
-        }
-    }
+}
     async fetchRadioSongs() {
-        try {
-            this.songList = await this.requestWorld(
-                "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
-                null,
-                { "X-Request-Type": "fetchRadioSongs" },
-                "fetch"
-            );
-            this.RadioTime(this.songList);
-            this.nextRadioItem = this.songList;
-        } catch (e) {
-            this.songList = null;
-            console.error("JSON parse error:", e);
-            this.RadioTime(this.songList);
-        }
+    try {
+        this.songList = await this.requestWorld(
+            "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
+            null,
+            { "X-Request-Type": "fetchRadioSongs" },
+            "fetch"
+        );
+        this.RadioTime(this.songList);
+        this.nextRadioItem = this.songList;
+    } catch (e) {
+        this.songList = null;
+        console.error("JSON parse error:", e);
+        this.RadioTime(this.songList);
     }
-    NoSubFolder(PSL, tsu, response = null) {
-        if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
-            if (PSL[tsu].length >= 20) {
-                this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
-                this.CurrentSong = PSL[tsu][this.radioRandom];
-                console.log(this.CurrentSong);
+}
+NoSubFolder(PSL, tsu, response = null) {
+    if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
+        if (PSL[tsu].length >= 20) {
+            this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+            this.CurrentSong = PSL[tsu][this.radioRandom];
+            console.log(this.CurrentSong);
 
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        yjlisstfanalyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-
-            } else {
-                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                this.CurrentSong = PSL[11][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            }
-        } else {
             let tf = this.tycadome(
                 "tycadome-guest" + Date.now(),
                 "radio",
@@ -149,89 +94,20 @@ this.visualLoopId = null;
                 "async",
                 {
                     system: "file",
-                    file: undefined,
+                    file: this.CurrentSong,
                     playlist: this.songList,
-                    //        analyser: this.updateAnalyser(),
+                    //        yjlisstfanalyser: this.updateAnalyser(),
                     message: "",
                     buffer: ""
                 }
             );
 
             self.postMessage(tf);
-        }
-    }
 
-    ThreeFolderSub(PSL, tsu, nami, response = null) {
-        if (nami <= 19) {
-            this.rangeIndex = 0;
-        } else if (nami >= 20 && nami <= 39) {
-            this.rangeIndex = 1;
         } else {
-            this.rangeIndex = 2;
-        }
-
-        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
-
-        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 7) {
-                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            } else {
-                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
-                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                this.CurrentSong = PSL[11][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            }
-        } else {
+            this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            this.CurrentSong = PSL[11][this.radioRandom];
+            console.log(this.CurrentSong);
             let tf = this.tycadome(
                 "tycadome-guest" + Date.now(),
                 "radio",
@@ -247,7 +123,7 @@ this.visualLoopId = null;
                 "async",
                 {
                     system: "file",
-                    file: undefined,
+                    file: this.CurrentSong,
                     playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
@@ -257,81 +133,50 @@ this.visualLoopId = null;
 
             self.postMessage(tf);
         }
+    } else {
+        let tf = this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "radio.song",
+            {
+                source: "web",
+                target: "device:web-001"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "file",
+                file: undefined,
+                playlist: this.songList,
+                //        analyser: this.updateAnalyser(),
+                message: "",
+                buffer: ""
+            }
+        );
+
+        self.postMessage(tf);
+    }
+}
+
+ThreeFolderSub(PSL, tsu, nami, response = null) {
+    if (nami <= 19) {
+        this.rangeIndex = 0;
+    } else if (nami >= 20 && nami <= 39) {
+        this.rangeIndex = 1;
+    } else {
+        this.rangeIndex = 2;
     }
 
-    FourFolderSub(PSL, tsu, nami, response = null) {
-        if (nami <= 14) {
-            this.rangeIndex = 0;
-        } else if (nami >= 15 && nami <= 29) {
-            this.rangeIndex = 1;
-        } else if (nami >= 30 && nami <= 44) {
-            this.rangeIndex = 2;
-        } else {
-            this.rangeIndex = 3;
-        }
+    console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
 
-        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
-
-        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
-                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            } else {
-                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
-                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                this.CurrentSong = PSL[11][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            }
-        } else {
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 7) {
+            this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+            this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+            console.log(this.CurrentSong);
             let tf = this.tycadome(
                 "tycadome-guest" + Date.now(),
                 "radio",
@@ -347,7 +192,7 @@ this.visualLoopId = null;
                 "async",
                 {
                     system: "file",
-                    file: undefined,
+                    file: this.CurrentSong,
                     playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
@@ -356,74 +201,11 @@ this.visualLoopId = null;
             );
 
             self.postMessage(tf);
-        }
-    }
-
-    SixFolderSub(PSL, tsu, nami, response = null) {
-        this.rangeIndex = Math.floor(nami / 10);
-
-        console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
-
-        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 3) {
-                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            } else {
-                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
-                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                this.CurrentSong = PSL[11][this.radioRandom];
-                console.log(this.CurrentSong);
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        playlist: this.songList,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-            }
         } else {
+            console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+            this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            this.CurrentSong = PSL[11][this.radioRandom];
+            console.log(this.CurrentSong);
             let tf = this.tycadome(
                 "tycadome-guest" + Date.now(),
                 "radio",
@@ -439,7 +221,7 @@ this.visualLoopId = null;
                 "async",
                 {
                     system: "file",
-                    file: undefined,
+                    file: this.CurrentSong,
                     playlist: this.songList,
                     //        analyser: this.updateAnalyser(),
                     message: "",
@@ -449,508 +231,726 @@ this.visualLoopId = null;
 
             self.postMessage(tf);
         }
-    }
-
-    RadioTime(PSL, response = null) {
-        this.now = new Date();
-        this.hour = this.now.getHours();
-        this.minute = this.now.getMinutes();
-
-        switch (this.hour) {
-            case 0:
-                this.FourFolderSub(PSL, 0, this.minute, response);
-                break;
-            case 1:
-                if (this.minute <= 4) {
-                    this.NoSubFolder(PSL, 1, response);
-                } else if (this.minute <= 14) {
-                    this.ThreeFolderSub(PSL, 1, this.minute, response);
-                } else if (this.minute <= 29) {
-                    this.ThreeFolderSub(PSL, 1, this.minute, response);
-                } else {
-                    this.ThreeFolderSub(PSL, 1, this.minute, response);
-                }
-                break;
-            case 2:
-                this.NoSubFolder(PSL, 2, response);
-                break;
-            case 3:
-                this.ThreeFolderSub(PSL, 3, this.minute, response);
-                break;
-            case 4:
-                this.ThreeFolderSub(PSL, 4, this.minute, response);
-                break;
-            case 5:
-                this.ThreeFolderSub(PSL, 5, this.minute, response);
-                break;
-            case 6:
-                this.ThreeFolderSub(PSL, 6, this.minute, response);
-                break;
-            case 7:
-                this.ThreeFolderSub(PSL, 7, this.minute, response);
-                break;
-            case 8:
-                this.SixFolderSub(PSL, 8, this.minute, response);
-                break;
-            case 9:
-                this.ThreeFolderSub(PSL, 9, this.minute, response);
-                break;
-            case 10:
-                this.NoSubFolder(PSL, 10, response);
-                break;
-            case 11:
-                this.CurrentSong = PSL[11][
-                    Math.floor(Math.random() * (PSL[11].length - 1))
-                ];
-                let tf = this.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "radio",
-                    "radio.song",
-                    {
-                        source: "web",
-                        target: "device:web-001"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "file",
-                        file: this.CurrentSong,
-                        //        analyser: this.updateAnalyser(),
-                        message: "",
-                        buffer: ""
-                    }
-                );
-
-                self.postMessage(tf);
-                break;
-            case 12:
-                this.FourFolderSub(PSL, 12, this.minute, response);
-                break;
-            case 13:
-                this.FourFolderSub(PSL, 13, this.minute, response);
-                break;
-            case 14:
-                this.FourFolderSub(PSL, 14, this.minute, response);
-                break;
-            case 15:
-                this.FourFolderSub(PSL, 15, this.minute, response);
-                break;
-            case 16:
-                this.FourFolderSub(PSL, 16, this.minute, response);
-                break;
-            case 17:
-                this.NoSubFolder(PSL, 17, response);
-                break;
-            case 18:
-                this.SixFolderSub(PSL, 18, this.minute, response);
-                break;
-            case 19:
-                this.FourFolderSub(PSL, 19, this.minute, response);
-                break;
-            case 20:
-                this.FourFolderSub(PSL, 20, this.minute, response);
-                break;
-            case 21:
-                this.NoSubFolder(PSL, 21, response);
-                break;
-            case 22:
-                this.NoSubFolder(PSL, 22, response);
-                break;
-            case 23:
-                this.NoSubFolder(PSL, 23, response);
-                break;
-            default:
-                self.postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
-                break;
-        }
-    }
-
-    update(p, fftValue, volume, baseRadius) {
-
-        const energy = (fftValue / 255) * volume * 50;
-
-        p.radius = baseRadius + energy;
-
-        p.dx += (Math.random() - 0.5) * energy * 0.05;
-        p.dy += (Math.random() - 0.5) * energy * 0.05;
-
-        p.dx *= 0.97;
-        p.dy *= 0.97;
-
-        p.x += p.dx;
-        p.y += p.dy;
-    }
-
-    draw(p) {
-        this.offscreenctx.save();
-        this.offscreenctx.beginPath();
-        this.offscreenctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
-        this.offscreenctx.fillStyle = p.color;
-        this.offscreenctx.shadowColor = p.color;
-        this.offscreenctx.shadowBlur = 20;
-        this.offscreenctx.fill();
-        this.offscreenctx.restore();
-    }
-
-    tfParticles(x, y, dx, dy, radius, color) {
-        return { x, y, dx, dy, radius, color };
-    }
-
-    particle(particles) {
-        for (let i = 0; i < 100; i++) {
-            const x = Math.random() * this.radiooffscreencanvas.width;
-            const y = Math.random() * this.radiooffscreencanvas.height;
-            const dx = (Math.random() - 0.5) * 0.5;
-            const dy = (Math.random() - 0.5) * 0.5;
-            const radius = Math.random() * 0.5 + 0.2;
-            const color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
-            particles.push(this.tfParticles(x, y, dx, dy, radius, color));
-        }
-    }
-    RadioVisualizer(dataArray, baseRadius, particles, volume) {
-        this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
-        this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
-
-        this.radiooffscreenctx.clearRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
-
-        for (let i = 0; i < particles.length; i++) {
-            const fftValue = dataArray[i % dataArray.length];
-            this.update(particles[i], fftValue, volume, baseRadius);
-            this.draw(particles[i]);
-        }
-
-        const barWidth = this.radiooffscreencanvas.width / dataArray.length;
-        let CtxX = 0;
-
-        for (let i = 0; i < dataArray.length; i++) {
-            const barHeight = dataArray[i] * (volume);
-            const CtxR = dataArray[i] + 100;
-            const CtxG = i * 2;
-            const CtxB = 255;
-            this.radiooffscreenctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
-            this.radiooffscreenctx.fillRect(CtxX, this.radiooffscreencanvas.height - barHeight, barWidth, barHeight);
-            CtxX += barWidth + 1;
-        }
-    }
-    startVisualizerLoop(event) {
-
-        const loop = () => {
-
-            this.RadioVisualizer(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
-            renderFrame(loop());
-        }
-        loop();
-    }
-    stopVisualizerLoop() {
-        this.visualizatorController = false;
-    }
-    //////////////////End of Audio ////////////////////////////
-    UseVideo(w, h) {
-        this.initOffscreen();
-        if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
-    }
-    webcam(frameData) {
-        this.frameCounter++;
-        if (this.frameCounter % this.frameSkipCount !== 0) {
-            return frameData;
-        }
-
-        const chromaData = frameData.data;
-        const key = this.chromaKeyColorWebcam;
-
-        for (let i = 0; i < chromaData.length; i += 4) {
-            const r = chromaData[i];
-            const g = chromaData[i + 1];
-            const b = chromaData[i + 2];
-
-            const diff =
-                Math.abs(r - key.r) +
-                Math.abs(g - key.g) +
-                Math.abs(b - key.b);
-
-            if (diff < 120) {
-                chromaData[i + 3] = 0; // true transparency
+    } else {
+        let tf = this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "radio.song",
+            {
+                source: "web",
+                target: "device:web-001"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "file",
+                file: undefined,
+                playlist: this.songList,
+                //        analyser: this.updateAnalyser(),
+                message: "",
+                buffer: ""
             }
-        }
+        );
 
+        self.postMessage(tf);
+    }
+}
+
+FourFolderSub(PSL, tsu, nami, response = null) {
+    if (nami <= 14) {
+        this.rangeIndex = 0;
+    } else if (nami >= 15 && nami <= 29) {
+        this.rangeIndex = 1;
+    } else if (nami >= 30 && nami <= 44) {
+        this.rangeIndex = 2;
+    } else {
+        this.rangeIndex = 3;
+    }
+
+    console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
+            this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+            this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+            console.log(this.CurrentSong);
+            let tf = this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: this.CurrentSong,
+                    playlist: this.songList,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
+
+            self.postMessage(tf);
+        } else {
+            console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+            this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            this.CurrentSong = PSL[11][this.radioRandom];
+            console.log(this.CurrentSong);
+            let tf = this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: this.CurrentSong,
+                    playlist: this.songList,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
+
+            self.postMessage(tf);
+        }
+    } else {
+        let tf = this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "radio.song",
+            {
+                source: "web",
+                target: "device:web-001"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "file",
+                file: undefined,
+                playlist: this.songList,
+                //        analyser: this.updateAnalyser(),
+                message: "",
+                buffer: ""
+            }
+        );
+
+        self.postMessage(tf);
+    }
+}
+
+SixFolderSub(PSL, tsu, nami, response = null) {
+    this.rangeIndex = Math.floor(nami / 10);
+
+    console.log(`Accessing PSL[${tsu}] with this.rangeIndex: ${this.rangeIndex}`);
+
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 3) {
+            this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+            this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
+            console.log(this.CurrentSong);
+            let tf = this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: this.CurrentSong,
+                    playlist: this.songList,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
+
+            self.postMessage(tf);
+        } else {
+            console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+            this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            this.CurrentSong = PSL[11][this.radioRandom];
+            console.log(this.CurrentSong);
+            let tf = this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: this.CurrentSong,
+                    playlist: this.songList,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
+
+            self.postMessage(tf);
+        }
+    } else {
+        let tf = this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "radio.song",
+            {
+                source: "web",
+                target: "device:web-001"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "file",
+                file: undefined,
+                playlist: this.songList,
+                //        analyser: this.updateAnalyser(),
+                message: "",
+                buffer: ""
+            }
+        );
+
+        self.postMessage(tf);
+    }
+}
+
+RadioTime(PSL, response = null) {
+    this.now = new Date();
+    this.hour = this.now.getHours();
+    this.minute = this.now.getMinutes();
+
+    switch (this.hour) {
+        case 0:
+            this.FourFolderSub(PSL, 0, this.minute, response);
+            break;
+        case 1:
+            if (this.minute <= 4) {
+                this.NoSubFolder(PSL, 1, response);
+            } else if (this.minute <= 14) {
+                this.ThreeFolderSub(PSL, 1, this.minute, response);
+            } else if (this.minute <= 29) {
+                this.ThreeFolderSub(PSL, 1, this.minute, response);
+            } else {
+                this.ThreeFolderSub(PSL, 1, this.minute, response);
+            }
+            break;
+        case 2:
+            this.NoSubFolder(PSL, 2, response);
+            break;
+        case 3:
+            this.ThreeFolderSub(PSL, 3, this.minute, response);
+            break;
+        case 4:
+            this.ThreeFolderSub(PSL, 4, this.minute, response);
+            break;
+        case 5:
+            this.ThreeFolderSub(PSL, 5, this.minute, response);
+            break;
+        case 6:
+            this.ThreeFolderSub(PSL, 6, this.minute, response);
+            break;
+        case 7:
+            this.ThreeFolderSub(PSL, 7, this.minute, response);
+            break;
+        case 8:
+            this.SixFolderSub(PSL, 8, this.minute, response);
+            break;
+        case 9:
+            this.ThreeFolderSub(PSL, 9, this.minute, response);
+            break;
+        case 10:
+            this.NoSubFolder(PSL, 10, response);
+            break;
+        case 11:
+            this.CurrentSong = PSL[11][
+                Math.floor(Math.random() * (PSL[11].length - 1))
+            ];
+            let tf = this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "radio.song",
+                {
+                    source: "web",
+                    target: "device:web-001"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "file",
+                    file: this.CurrentSong,
+                    //        analyser: this.updateAnalyser(),
+                    message: "",
+                    buffer: ""
+                }
+            );
+
+            self.postMessage(tf);
+            break;
+        case 12:
+            this.FourFolderSub(PSL, 12, this.minute, response);
+            break;
+        case 13:
+            this.FourFolderSub(PSL, 13, this.minute, response);
+            break;
+        case 14:
+            this.FourFolderSub(PSL, 14, this.minute, response);
+            break;
+        case 15:
+            this.FourFolderSub(PSL, 15, this.minute, response);
+            break;
+        case 16:
+            this.FourFolderSub(PSL, 16, this.minute, response);
+            break;
+        case 17:
+            this.NoSubFolder(PSL, 17, response);
+            break;
+        case 18:
+            this.SixFolderSub(PSL, 18, this.minute, response);
+            break;
+        case 19:
+            this.FourFolderSub(PSL, 19, this.minute, response);
+            break;
+        case 20:
+            this.FourFolderSub(PSL, 20, this.minute, response);
+            break;
+        case 21:
+            this.NoSubFolder(PSL, 21, response);
+            break;
+        case 22:
+            this.NoSubFolder(PSL, 22, response);
+            break;
+        case 23:
+            this.NoSubFolder(PSL, 23, response);
+            break;
+        default:
+            self.postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
+            break;
+    }
+}
+
+update(p, fftValue, volume, baseRadius) {
+
+    const energy = (fftValue / 255) * volume * 50;
+
+    p.radius = baseRadius + energy;
+
+    p.dx += (Math.random() - 0.5) * energy * 0.05;
+    p.dy += (Math.random() - 0.5) * energy * 0.05;
+
+    p.dx *= 0.97;
+    p.dy *= 0.97;
+
+    p.x += p.dx;
+    p.y += p.dy;
+}
+
+draw(p) {
+    this.offscreenctx.save();
+    this.offscreenctx.beginPath();
+    this.offscreenctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+    this.offscreenctx.fillStyle = p.color;
+    this.offscreenctx.shadowColor = p.color;
+    this.offscreenctx.shadowBlur = 20;
+    this.offscreenctx.fill();
+    this.offscreenctx.restore();
+}
+
+tfParticles(x, y, dx, dy, radius, color) {
+    return { x, y, dx, dy, radius, color };
+}
+
+particle(particles) {
+    for (let i = 0; i < 100; i++) {
+        const x = Math.random() * this.radiooffscreencanvas.width;
+        const y = Math.random() * this.radiooffscreencanvas.height;
+        const dx = (Math.random() - 0.5) * 0.5;
+        const dy = (Math.random() - 0.5) * 0.5;
+        const radius = Math.random() * 0.5 + 0.2;
+        const color = `rgba(${Math.floor(Math.random() * 100 + 155)}, ${Math.floor(Math.random() * 100 + 155)}, 255, 0.8)`;
+        particles.push(this.tfParticles(x, y, dx, dy, radius, color));
+    }
+}
+RadioVisualizer(dataArray, baseRadius, particles, volume) {
+    this.radiooffscreenctx.fillStyle = "rgb(10, 10, 30)";
+    this.radiooffscreenctx.fillRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
+
+    this.radiooffscreenctx.clearRect(0, 0, this.radiooffscreencanvas.width, this.radiooffscreencanvas.height);
+
+    for (let i = 0; i < particles.length; i++) {
+        const fftValue = dataArray[i % dataArray.length];
+        this.update(particles[i], fftValue, volume, baseRadius);
+        this.draw(particles[i]);
+    }
+
+    const barWidth = this.radiooffscreencanvas.width / dataArray.length;
+    let CtxX = 0;
+
+    for (let i = 0; i < dataArray.length; i++) {
+        const barHeight = dataArray[i] * (volume);
+        const CtxR = dataArray[i] + 100;
+        const CtxG = i * 2;
+        const CtxB = 255;
+        this.radiooffscreenctx.fillStyle = `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
+        this.radiooffscreenctx.fillRect(CtxX, this.radiooffscreencanvas.height - barHeight, barWidth, barHeight);
+        CtxX += barWidth + 1;
+    }
+}
+startVisualizerLoop(event) {
+
+    const loop = () => {
+
+        this.RadioVisualizer(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
+        this.renderFrame(loop());
+    }
+    loop();
+}
+stopVisualizerLoop() {
+    this.visualizatorController = false;
+}
+//////////////////End of Audio ////////////////////////////
+UseVideo(w, h) {
+    this.initOffscreen();
+    if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
+}
+webcam(frameData) {
+    this.frameCounter++;
+    if (this.frameCounter % this.frameSkipCount !== 0) {
         return frameData;
     }
+
+    const chromaData = frameData.data;
+    const key = this.chromaKeyColorWebcam;
+
+    for (let i = 0; i < chromaData.length; i += 4) {
+        const r = chromaData[i];
+        const g = chromaData[i + 1];
+        const b = chromaData[i + 2];
+
+        const diff =
+            Math.abs(r - key.r) +
+            Math.abs(g - key.g) +
+            Math.abs(b - key.b);
+
+        if (diff < 120) {
+            chromaData[i + 3] = 0; // true transparency
+        }
+    }
+
+    return frameData;
+}
     async drawingFrame(vidCanv, TfWebcam) {
-        this.initOffscreen();
-        this.resizeoffscreen(vidCanv.width, vidCanv.height);
+    this.initOffscreen();
+    this.resizeoffscreen(vidCanv.width, vidCanv.height);
 
-        this.offscreenctx.clearRect(0, 0, vidCanv.width, vidCanv.height);
+    this.offscreenctx.clearRect(0, 0, vidCanv.width, vidCanv.height);
 
-        // Draw background
-        if (this.backgroundVideo) {
-            this.UseVideo(vidCanv.width, vidCanv.height);
-            if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
-        } else if (this.backgroundImg) {
-            this.UseImage(vidCanv, true);
-        }
-
-        // Draw to offscreen for chroma key
-        this.offscreenctx.drawImage(TfWebcam, 0, 0, vidCanv.width, vidCanv.height);
-
-        if (this.useChromaKey) {
-            const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
-            const processed = this.webcam(frame);
-            this.offscreenctx.putImageData(processed, 0, 0);
-        }
-
-        // Composite webcam over background
-        return this.offscreenctx;
+    // Draw background
+    if (this.backgroundVideo) {
+        this.UseVideo(vidCanv.width, vidCanv.height);
+        if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
+    } else if (this.backgroundImg) {
+        this.UseImage(vidCanv, true);
     }
 
-    setChromaHex(hex) {
-        this.rgb = parseInt(hex.slice(1), 16);
-        this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
-        this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
-        this.chromaKeyColorWebcam.b = this.rgb & 255;
+    // Draw to offscreen for chroma key
+    this.offscreenctx.drawImage(TfWebcam, 0, 0, vidCanv.width, vidCanv.height);
+
+    if (this.useChromaKey) {
+        const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
+        const processed = this.webcam(frame);
+        this.offscreenctx.putImageData(processed, 0, 0);
     }
 
-    ColorPickerChromaKey(chroma) {
-        this.Tfhex = chroma.value;
-        this.setChromaHex(this.Tfhex);
-        this.useChromaKey = true;
-    }
+    // Composite webcam over background
+    return this.offscreenctx;
+}
 
-    disableChromaKey() {
-        this.frameCounter = 0;
-        this.useChromaKey = false;
-    }
+setChromaHex(hex) {
+    this.rgb = parseInt(hex.slice(1), 16);
+    this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
+    this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
+    this.chromaKeyColorWebcam.b = this.rgb & 255;
+}
+
+ColorPickerChromaKey(chroma) {
+    this.Tfhex = chroma.value;
+    this.setChromaHex(this.Tfhex);
+    this.useChromaKey = true;
+}
+
+disableChromaKey() {
+    this.frameCounter = 0;
+    this.useChromaKey = false;
+}
     /////////////////////////////////////////////
     async startTime() {
-        let TheTimeIGuess = new Promise((resolve) => {
-            let currentTime = new Date();
-            let TsunamiTimes = currentTime.toTimeString().slice(0, 5);// "HH:MM";
+    let TheTimeIGuess = new Promise((resolve) => {
+        let currentTime = new Date();
+        let TsunamiTimes = currentTime.toTimeString().slice(0, 5);// "HH:MM";
 
-            if (this.something === null) {
-                this.something = setInterval(() => {
-                    currentTime = new Date();
-                    TsunamiTimes = currentTime.toTimeString().slice(0, 5);
-                }, 1000);
-            } else {
+        if (this.something === null) {
+            this.something = setInterval(() => {
+                currentTime = new Date();
                 TsunamiTimes = currentTime.toTimeString().slice(0, 5);
-            }
-            resolve(TsunamiTimes);
-        });
-
-        let TheRealTime = await TheTimeIGuess;
-
-        if (this.TimerTimes.includes(TheRealTime) && !this.TimerTrigger.has(TheRealTime)) {
-            this.TimerTrigger.add(TheRealTime);
-            console.log(`Triggering event for ${TheRealTime}`);
-
-
-            let tf = this.tycadome(
-                "tycadome-guest" /*+ Date.now()*/,
-                "timer",
-                "scheduled.timer",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    layer: "tf",
-                    worker: "media"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "Tf Schedule",
-                    time: TheRealTime,
-                });
-            self.postMessage(tf);
+            }, 1000);
         } else {
-            let tf = this.tycadome(
-                "tycadome-guest" /*+ Date.now()*/,
-                "timer",
-                "scheduled.timer",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    layer: "tf",
-                    worker: "media",
-                    backend: false
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "Tf Schedule",
-                    time: TheRealTime,
-                });
-            self.postMessage(tf);
+            TsunamiTimes = currentTime.toTimeString().slice(0, 5);
         }
+        resolve(TsunamiTimes);
+    });
 
-        if (TheRealTime === "23:59") {
-            this.TimerTrigger.clear();
-        }
+    let TheRealTime = await TheTimeIGuess;
+
+    if (this.TimerTimes.includes(TheRealTime) && !this.TimerTrigger.has(TheRealTime)) {
+        this.TimerTrigger.add(TheRealTime);
+        console.log(`Triggering event for ${TheRealTime}`);
+
+
+        let tf = this.tycadome(
+            "tycadome-guest" /*+ Date.now()*/,
+            "timer",
+            "scheduled.timer",
+            {
+                source: "web",
+                target: "device:web-001",
+                layer: "tf",
+                worker: "media"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "Tf Schedule",
+                time: TheRealTime,
+            });
+        self.postMessage(tf);
+    } else {
+        let tf = this.tycadome(
+            "tycadome-guest" /*+ Date.now()*/,
+            "timer",
+            "scheduled.timer",
+            {
+                source: "web",
+                target: "device:web-001",
+                layer: "tf",
+                worker: "media",
+                backend: false
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "Tf Schedule",
+                time: TheRealTime,
+            });
+        self.postMessage(tf);
     }
+
+    if (TheRealTime === "23:59") {
+        this.TimerTrigger.clear();
+    }
+}
     async MessageReceived(event) {
-        if (event.data.type === "timer") {
-            if (event.data.payload.system === "Tf Schedule") {
-                if (!this.something) {
-                    this.something = setInterval(() => {
-                        this.startTime();
-                    }, 60000);
-                }
-            }
-        }
-        if (event.data.type === "radio") {
-            if (event.data.payload.system === "init_canvas") {
-                this.radiooffscreencanvas = event.data.payload.canvas;
-            } else if (event.data.payload.system === "file") {
-                this.visualizatorLoop = true;
-                if (this.songList === null) {
-                    await this.fetchRadioSongs();
-                } else {
-                    this.RadioTime(this.songList);
-                }
-                this.TheLastSongUsed = this.CurrentSong;
-            } else if (event.data.payload.system === "start") {
-                this.visualizatorLoop = true;
-                if (this.songList === null) {
-                    await this.fetchRadioSongs();
-                } else {
-                    this.RadioTime(this.songList);
-                }
-                this.TheLastSongUsed = this.CurrentSong;
-            } else if (event.data.payload.system === "skip") {
-                this.visualizatorLoop = true;
-                this.TheLastSongUsed = this.CurrentSong;
-                if (this.songList === null) {
-                    await this.fetchRadioSongs();
-                } else {
-                    this.RadioTime(this.songList);
-                }
-            } else if (event.data.payload.system === "previous") {
-                this.visualizatorLoop = true;
-                if (this.TheLastSongUsed === null) {
-                    if (this.songList === null) {
-                        await this.fetchRadioSongs();
-                    } else {
-                        this.RadioTime(this.songList);
-                    }
-                    this.TheLastSongUsed = this.CurrentSong;
-                } else if (this.TheLastSongUsed !== this.CurrentSong) {
-                    if (this.songList === null) {
-                        await this.fetchRadioSongs();
-                    } else {
-                        this.RadioTime(this.songList);
-                    }
-                } else {
-                    if (this.songList === null) {
-                        await this.fetchRadioSongs();
-                    } else {
-                        this.RadioTime(this.songList);
-                    }
-                }
-            } else if (event.data.payload.system === "ended") {
-                this.visualizatorLoop = true;
-                if (this.songList === null) {
-                    await this.fetchRadioSongs();
-                } else {
-                    this.RadioTime(this.songList);
-                }
-                this.TheLastSongUsed = this.CurrentSong;
-            } else if (event.data.payload.system === "pcm") {
-
-            }
-        } else if (event.data.type === "stream") {
-            //Streaming Chuncks
-            if (event.data.payload.system === "audio array") {
-
-
-                // console.log("Processing audio array:", event.data.audioArray);
-
-            } else {
-
-            }
-        } else if (event.data.type === "downloads") {
-            // Handle Downloads  
-            if (event.data.payload.system === "") {
-
-            } else {
-
-            }
-        } else if (event.data.type === "calculations") {
-            //Audio Processing
-            if (event.data.payload.system === "fft") {
-
-            } else if (event.data.payload.system === "Peak Detection") {
-
-            } else if (event.data.payload.system === "signaling") {
-
-            } else if (event.data.payload.system === "RMS") {
-
-            } else {
-
-            }
-        } else if (event.data.type === "visualizator") {
-            //
-            if (event.data.payload.system === "update_visual_data") {
-                this.dataArrayLength = event.data.payload.dataArrayLength;
-                this.volume = event.data.payload.volume;
-            } else if (event.data.payload.system === "loading") {
-                this.radiooffscreencanvas = event.data.payload.canvas;
-                this.initRadioOffscreen();
-            } else if (event.data.payload.system === "start_visual_data") {
-                this.visualizatorLoop = true;
-                this.dataArrayLength = event.data.payload.dataArrayLength;
-                this.baseRadius = event.data.payload.baseRadius;
-                this.particles = event.data.payload.particles;
-                this.volume = event.data.payload.volume;
-                this.startVisualizerLoop(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
-            }
-        } else if (event.data.type === "processor") {
-            //
-            if (event.data.payload.system === "stereo") {
-                // Stereo 
-
-                //Mono
-            } else if (event.data.payload.system === "amplitude") {
-
-            } else if (event.data.payload.system === "volume peak Detection") {
-
-            } else if (event.data.payload.system === "filtering") {
-
-            } else if (event.data.payload.system === "Zero Crossing") {
-
-            } else if (event.data.payload.system === "Pitch Detection") {
-
-            } else if (event.data.payload.system === "decode") {
-
-            } else {
-
-            }
-        } else if (event.data.type === "game") {
-            //
-            if (event.data.payload.system === "") {
-
-            } else {
-
+    if (event.data.type === "timer") {
+        if (event.data.payload.system === "Tf Schedule") {
+            if (!this.something) {
+                this.something = setInterval(() => {
+                    this.startTime();
+                }, 60000);
             }
         }
     }
-    initRadioOffscreen() {
-        if (!this.radiooffscreencanvas) return;
+    if (event.data.type === "radio") {
+        if (event.data.payload.system === "init_canvas") {
+            this.radiooffscreencanvas = event.data.payload.canvas;
+        } else if (event.data.payload.system === "file") {
+            this.visualizatorLoop = true;
+            if (this.songList === null) {
+                await this.fetchRadioSongs();
+            } else {
+                this.RadioTime(this.songList);
+            }
+            this.TheLastSongUsed = this.CurrentSong;
+        } else if (event.data.payload.system === "start") {
+            this.visualizatorLoop = true;
+            if (this.songList === null) {
+                await this.fetchRadioSongs();
+            } else {
+                this.RadioTime(this.songList);
+            }
+            this.TheLastSongUsed = this.CurrentSong;
+        } else if (event.data.payload.system === "skip") {
+            this.visualizatorLoop = true;
+            this.TheLastSongUsed = this.CurrentSong;
+            if (this.songList === null) {
+                await this.fetchRadioSongs();
+            } else {
+                this.RadioTime(this.songList);
+            }
+        } else if (event.data.payload.system === "previous") {
+            this.visualizatorLoop = true;
+            if (this.TheLastSongUsed === null) {
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
+                this.TheLastSongUsed = this.CurrentSong;
+            } else if (this.TheLastSongUsed !== this.CurrentSong) {
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
+            } else {
+                if (this.songList === null) {
+                    await this.fetchRadioSongs();
+                } else {
+                    this.RadioTime(this.songList);
+                }
+            }
+        } else if (event.data.payload.system === "ended") {
+            this.visualizatorLoop = true;
+            if (this.songList === null) {
+                await this.fetchRadioSongs();
+            } else {
+                this.RadioTime(this.songList);
+            }
+            this.TheLastSongUsed = this.CurrentSong;
+        } else if (event.data.payload.system === "pcm") {
 
-        try {
-            this.radiooffscreenctx = this.radiooffscreencanvas.getContext(this.contextType);
-            if (!this.radiooffscreenctx) throw new Error(`${this.contextType} context not supported`);
-            this.isradiooffscreenReady = true;
-            console.log(`OffscreenCanvas initialized with ${this.contextType} context`);
-        } catch (err) {
-            console.error("OffscreenCanvas init failed:", err);
-            this.radiooffscreenctx = null;
+        }
+    } else if (event.data.type === "stream") {
+        //Streaming Chuncks
+        if (event.data.payload.system === "audio array") {
+
+
+            // console.log("Processing audio array:", event.data.audioArray);
+
+        } else {
+
+        }
+    } else if (event.data.type === "downloads") {
+        // Handle Downloads  
+        if (event.data.payload.system === "") {
+
+        } else {
+
+        }
+    } else if (event.data.type === "calculations") {
+        //Audio Processing
+        if (event.data.payload.system === "fft") {
+
+        } else if (event.data.payload.system === "Peak Detection") {
+
+        } else if (event.data.payload.system === "signaling") {
+
+        } else if (event.data.payload.system === "RMS") {
+
+        } else {
+
+        }
+    } else if (event.data.type === "visualizator") {
+        //
+        if (event.data.payload.system === "update_visual_data") {
+            this.dataArrayLength = event.data.payload.dataArrayLength;
+            this.volume = event.data.payload.volume;
+        } else if (event.data.payload.system === "loading") {
+            this.radiooffscreencanvas = event.data.payload.canvas;
+            this.initRadioOffscreen();
+        } else if (event.data.payload.system === "start_visual_data") {
+            this.visualizatorLoop = true;
+            this.dataArrayLength = event.data.payload.dataArrayLength;
+            this.baseRadius = event.data.payload.baseRadius;
+            this.particles = event.data.payload.particles;
+            this.volume = event.data.payload.volume;
+            this.startVisualizerLoop(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
+        }
+    } else if (event.data.type === "processor") {
+        //
+        if (event.data.payload.system === "stereo") {
+            // Stereo 
+
+            //Mono
+        } else if (event.data.payload.system === "amplitude") {
+
+        } else if (event.data.payload.system === "volume peak Detection") {
+
+        } else if (event.data.payload.system === "filtering") {
+
+        } else if (event.data.payload.system === "Zero Crossing") {
+
+        } else if (event.data.payload.system === "Pitch Detection") {
+
+        } else if (event.data.payload.system === "decode") {
+
+        } else {
+
+        }
+    } else if (event.data.type === "game") {
+        //
+        if (event.data.payload.system === "") {
+
+        } else {
+
         }
     }
+}
+initRadioOffscreen() {
+    if (!this.radiooffscreencanvas) return;
+
+    try {
+        this.radiooffscreenctx = this.radiooffscreencanvas.getContext(this.contextType);
+        if (!this.radiooffscreenctx) throw new Error(`${this.contextType} context not supported`);
+        this.isradiooffscreenReady = true;
+        console.log(`OffscreenCanvas initialized with ${this.contextType} context`);
+    } catch (err) {
+        console.error("OffscreenCanvas init failed:", err);
+        this.radiooffscreenctx = null;
+    }
+}
 }

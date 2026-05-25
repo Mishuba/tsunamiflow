@@ -140,7 +140,7 @@ export class TsunamiFlowAudio extends TsunamiFlowSound {
             return this.MasterSoundsContext.resume();
         }
     }
-    connectaudio(id, element) {
+    connectaudio(element, id) {
         if (this.TfSoundsContext[id]) return;
         this.addAudioContextSource(element, id);
     }

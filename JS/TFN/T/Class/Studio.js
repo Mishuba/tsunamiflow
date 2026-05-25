@@ -10,7 +10,6 @@ export class Studio extends Flow {
     }
     loadaudio(src) {
         this.AudioElement.src = src;
-        this.addAudioContextSource(this.AudioElement, this.AudioElement.id);
         this.AudioElement.load();
         this.tfRadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", this.tfRadioLoadStartTime);
@@ -51,7 +50,7 @@ export class Studio extends Flow {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio() {
-        ////this.addAudioContextSource(this.elementSourceMap, "Tsunami Radio");
+        this.connectaudio(this.AudioElement, this.AudioElement.id);
         console.log("Audio playback is can play through");
     }
     endedAudio() {
