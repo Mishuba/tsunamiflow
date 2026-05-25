@@ -3,7 +3,7 @@ import { TsunamiFlowAudio } from "./Elder/Adult/Noise";
 export class Studio extends TsunamiFlowAudio {
     WeLive = null;
     hls = null;
-    constuctor(options = {}) {
+    constructor(options = {}) {
 
     }
     loadaudio(src) {
@@ -49,7 +49,7 @@ export class Studio extends TsunamiFlowAudio {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio() {
-        this.addAudioContextSource(this.elementSourceMap, "Tsunami Radio");
+        ////this.addAudioContextSource(this.elementSourceMap, "Tsunami Radio");
         console.log("Audio playback is can play through");
     }
     endedAudio() {
@@ -72,6 +72,7 @@ export class Studio extends TsunamiFlowAudio {
                     this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
                     this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
                 }
+                this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
                 this.worker.postMessage(tycadome(
                     "tycadome-guest" + Date.now(),
                     "visualizator",
@@ -88,12 +89,12 @@ export class Studio extends TsunamiFlowAudio {
                     "async",
                     {
                         system: "visual_data",
-                        bufferLength: TfSoundsContextBufferLength[this.AudioElement.id],
-                        dataArray: this.TfSoundsContextDataArray[this.AudioElement.id],
+                        bufferLength: this.TfSoundsContextBufferLength[this.AudioElement.id],
+                        dataArray: [...this.TfSoundsContextDataArray[this.AudioElement.id]],
                         baseRadius: this.baseRadius,
                         particles: this.particles,
                         //volume: this.soundEngine.visualizatorController,
-                    }), [this.this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id]);
+                    }), [this.TfSoundsContextBufferLength[this.AudioElement.id]], this.TfSoundsContextDataArray[this.AudioElement.id].buffer);
             }
         } catch (error) {
             if (error.name === "NotAllowedError") {
