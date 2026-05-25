@@ -21,7 +21,8 @@ export class core {
             "timestamp": Math.floor(Date.now() / 1000),
             "state": state, // {}
             "mode": mode, //"async"
-            "payload": payload // {}
+            "payload": payload // {},
+transfer: []
         };
         return tf;
     }
