@@ -17,6 +17,7 @@ export class T extends core {
     CacheautoOpen = true;
     PRECACHE = [];
     constructor(options = {}) {
+        super(options);
         if (options.dbName) {
 
         }
