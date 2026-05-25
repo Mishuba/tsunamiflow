@@ -12,7 +12,7 @@ export class core {
     constructor(options = {}) {
 
     }
-    tycadome(id, type, action, meta, state, mode, payload) {
+    tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
         let tf = {
             "id": id, //options.id
             "type": type, //command
@@ -24,7 +24,26 @@ export class core {
             "payload": payload // {},
         };
 
-        let transfer = [];
+// Attach transferables only if valid
+    const safeTransfer = [];
+
+    if (Array.isArray(transfer) && transfer.length > 0) {
+        for (const item of transfer) {
+            if (
+                item instanceof ArrayBuffer ||
+                item instanceof MessagePort ||
+                item instanceof ImageBitmap ||
+                item instanceof OffscreenCanvas ||
+                item instanceof AudioData ||
+                item instanceof VideoFrame
+            ) {
+                safeTransfer.push(item);
+            }
+        }
+    }
+
+    tf.transfer = safeTransfer;
+
         return tf;
     }
     // Load an existing ArrayBuffer or TypedArray
