@@ -1,4 +1,4 @@
-class core {
+export class core {
     lang = "en-US";
     Arraybuffer = null;
     ArraybyteLength = 0;
