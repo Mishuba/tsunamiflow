@@ -137,7 +137,7 @@ export class TaskWorker {
 
         switch (target) {
             case "task":
-                if (event.data.type === "timer") {
+                if (task.type === "timer") {
                     if (event.data.payload.system === "Tf Schedule") {
                         if (!this.TimerLoop) {
                             this.startTime();
@@ -147,19 +147,8 @@ export class TaskWorker {
 
                 break;
             default:
-                this.workers[target].postMessage(
-                    tycadome(
-                        task.id,
-                        task.type,
-                        task.action,
-                        task.meta,
-                        {
-                            status: "processing",
-                            priority: "low"
-                        },
-                        task.mode || "async",
-                        task.payload || {}
-                    )
+       this.workers[target].postMessage(task, task.transfer || []);
+                    
                 );
                 break;
         }
@@ -173,7 +162,7 @@ export class TaskWorker {
                 {
                     source: name,
                     layer: "compute",
-                    worker: worker
+                    worker: name
                 },
                 {
                     status: "pending",
