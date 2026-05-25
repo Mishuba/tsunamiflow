@@ -57,6 +57,7 @@ export class Studio extends Flow {
     endedAudio() {
         console.log("The audio should have ended");
         this.AudioElement.src = "";
+        this.removeSource(this.AudioElement.id);
         this.AudioNetworkState();
     }
     waitingAudio() {
