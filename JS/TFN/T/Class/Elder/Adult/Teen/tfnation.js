@@ -558,32 +558,21 @@ export class mediaWorker extends TsWorker {
         }
     }
 
-    update(p, audio, baseRadius, canvas) {
+    update(p) {
 
-        const energy = audio.volume * 80;
+    const energy = this.volume * 80;
 
-        p.radius = baseRadius + energy;
+    p.radius = this.baseRadius + energy;
 
-        // FULL AUDIO FORCE VECTOR
-        const forceX = audio.mid * (Math.random() - 0.5);
-        const forceY = audio.treble * (Math.random() - 0.5);
+    p.dx += (Math.random() - 0.5) * this.volume;
+    p.dy += (Math.random() - 0.5) * this.volume;
 
-        p.dx += forceX;
-        p.dy += forceY;
+    p.dx *= 0.97;
+    p.dy *= 0.97;
 
-        // BEAT PULSE
-        if (audio.beat) {
-            p.dx *= 1.3;
-            p.dy *= 1.3;
-        }
-
-        // damping
-        p.dx *= 0.97;
-        p.dy *= 0.97;
-
-        p.x += p.dx;
-        p.y += p.dy;
-    }
+    p.x += p.dx;
+    p.y += p.dy;
+}
 
     draw(p) {
         this.offscreenctx.save();
