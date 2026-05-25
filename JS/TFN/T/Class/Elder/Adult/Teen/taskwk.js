@@ -2,21 +2,23 @@ export class TaskWorker {
     workers = null;
     TimerLoop = null;
     TimerTrigger = new Set();
-const now = new Date();
 
-const hour = now.getHours();
-const minute = now.getMinutes();
-
-const key = `${hour}:${minute}`;
-
-if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
-    this.TimerTrigger.add(key);
-
-    // trigger
-}
     constructor(options = {}) {
         if (options.workers) {
             this.workers = options.workers;
+
+            const now = new Date();
+
+            const hour = now.getHours();
+            const minute = now.getMinutes();
+
+            const key = `${hour}:${minute}`;
+
+            if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
+                this.TimerTrigger.add(key);
+
+                // trigger
+            }
         } else {
             this.workers = {
                 input: new Worker(
@@ -158,7 +160,7 @@ if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
 
                 break;
             default:
-       this.workers[target].postMessage(task, task.transfer || []);
+                this.workers[target].postMessage(task, task.transfer || []);
                     
                 );
                 break;
