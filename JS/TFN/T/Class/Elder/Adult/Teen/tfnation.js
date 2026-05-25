@@ -32,6 +32,16 @@ export class mediaWorker extends TsWorker {
     chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
     frameSkipCount = 2;
     frameCounter = 0;
+renderFrame =
+    typeof self.requestAnimationFrame === "function"
+        ? self.requestAnimationFrame.bind(self)
+        : (callback) => setTimeout(callback, 16);
+
+cancelFrame =
+    typeof self.cancelAnimationFrame === "function"
+        ? self.cancelAnimationFrame.bind(self)
+        : clearTimeout.bind(self);
+this.visualLoopId = null;
     constructor(options = {}) {
         super(options);
     }
