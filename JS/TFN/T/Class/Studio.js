@@ -1,6 +1,8 @@
 import { Flow } from "./Elder/Flow.js";
 
 export class Studio extends Flow {
+    _wired = false;
+    _radioBound = false;
     WeLive = null;
     hls = null;
     constructor(options = {}) {
@@ -223,5 +225,99 @@ export class Studio extends Flow {
         this.AudioElement.pause();
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
+    }
+    RadioEventListeners() {
+        if (this._radioBound) {
+            return;
+        } else {
+            this._radioBound = true;
+
+            /*     this.AudioElement.addEventListener("emptied", async (emptied) => {
+                    this.emptiedAudio(emptied);
+                    //cancelAnimationFrame(this.effects.visualizatorController);
+                  });
+                  this._storeDomListener(this.soundengine.AudioElement.id, this.soundengine.AudioElement, runHandler, "emptied");
+            */
+
+            this.AudioElement.addEventListener("waiting", (waiting) => {
+                this.waitingAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.waitingAudio, "waiting");
+
+            this.AudioElement.addEventListener("stalled", (stalled) => {
+                this.stalledAudio(stalled);
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.stalledAudio, "stalled");
+
+            this.AudioElement.addEventListener("loadstart", async () => {
+                this.loadstartAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
+
+            this.AudioElement.addEventListener("suspended", (suspend) => {
+                this.suspendedAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
+
+            this.AudioElement.addEventListener("loadedmetadata", async () => {
+                this.loadedmetadataAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadedmetadataAudio, "loadedmetadata");
+
+            this.AudioElement.addEventListener("loadeddata", () => {
+                this.loadeddataAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadeddataAudio, "loadeddata");
+
+            this.AudioElement.addEventListener("canplay", () => {
+                this.canplayAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
+
+            this.AudioElement.addEventListener("canplaythrough", async () => {
+                if (!this._wired) {
+                    //this.initAudioContext();
+                    //this.connectaudio();
+                    this._wired = true;
+                }
+                this.canplaythroughAudio();
+            });
+
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
+
+            this.AudioElement.addEventListener("play", () => {
+                this.playaudio();
+                //this.startAnalyserLoop();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
+
+            this.AudioElement.addEventListener("playing", () => {
+                this.playingAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
+
+            this.AudioElement.addEventListener("pause", async () => {
+                this.pauseaudio();
+                this.stopAnalyserLoop();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseaudio, "pause");
+
+            this.AudioElement.addEventListener("timeupdate", () => {
+                this.timeupdateAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.timeupdateAudio, "timeupdate");
+
+            this.AudioElement.addEventListener("volumechange", (volumechange) => {
+                //this.volumechangeAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
+
+            this.AudioElement.addEventListener("ended", async (ended) => {
+                //  this.destroyRadioSource();
+                this.endedAudio();
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
+
+        }
     }
 }
