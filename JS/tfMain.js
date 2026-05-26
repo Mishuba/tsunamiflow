@@ -191,12 +191,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateRadioState();
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-  let visualizatorController = null
+  let visualizatorController = null;
+/*
   try {
     visualizatorController = RadioCanvas.transferControlToOffscreen();
   } catch (err) {
     console.warn("Offscreen canvas transfer failed:", err);
   }
+*/
 
   const RadioLastButton = document.createElement("button");
   const RadioRestartButton = document.createElement("button");
