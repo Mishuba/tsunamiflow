@@ -42,7 +42,7 @@ function tycadome(
     };
 }
 
-Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
+Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
     worker.onmessage = (e) => {
         /* tfTaskWorker.OnWorkerMessage(e); */
         self.postMessage(
@@ -79,7 +79,7 @@ Object.entries(workers/*tfTaskWorker.workers*/).forEach(([name, worker]) => {
                     priority: "low"
                 },
                 "async",
-                {}
+                err
             )
         );
     };
