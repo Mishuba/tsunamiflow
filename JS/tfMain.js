@@ -339,7 +339,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //dbstores: indexdb
   });
   Controller.worker = safeWorker;
-  Controller.sharedWorker = safeSharedWorker;
+  //Controller.sharedWorker = safeSharedWorker;
 
   Controller.iframe.frame.addEventListener("load", () => {
     try {
