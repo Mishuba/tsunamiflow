@@ -181,11 +181,38 @@ export class maxwell {
             default:
                 if (payload.system === "error") {
                     console.error("Worker error:", payload);
+
                 } else {
                     if (data.meta.message) {
                         console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
+
+console.warn("Type:", data.type);
+    console.warn("Payload:", payload);
+    console.warn("Full Data:", data);
+    console.warn("Event:", event);
+
+    if (data.meta?.message) {
+        console.warn("Meta Message:", data.meta.message);
+    }
+
+    console.trace();
+
+    console.groupEnd();
                     } else {
                         console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
+
+console.warn("Type:", data.type);
+    console.warn("Payload:", payload);
+    console.warn("Full Data:", data);
+    console.warn("Event:", event);
+
+    if (data.meta?.message) {
+        console.warn("Meta Message:", data.meta.message);
+    }
+
+    console.trace();
+
+    console.groupEnd();
                     }
 
                     this.handleSchedule(this.find("TFtime").innerHTML);
