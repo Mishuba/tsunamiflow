@@ -79,7 +79,14 @@ Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
                     priority: "low"
                 },
                 "async",
-                err
+                {
+                    message: err.message,
+                    filename: err.filename,
+                    lineno: err.lineno,
+                    colno: err.colno,
+                    stack: err.stack
+                }
+
             )
         );
     };
@@ -105,7 +112,7 @@ onmessage = (e) => {
                     priority: "low"
                 },
                 "async",
-                task
+                task.payload || {}
             )
         );
         return;
