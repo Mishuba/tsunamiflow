@@ -24,41 +24,41 @@ const PRECACHE_URLS = [
     "/install/index.html",
 
     "/MyStyle/tfMain.css",
-    "/JS/tfMain.js",
-    "/JS/TFN/maxwell.js",
+    "JS/tfMain.js",
+    "JS/TFN/maxwell.js",
 
-    "/JS/TFN/T/Worker/Shared.js",
-    "/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js",
-    "/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js",
-    "/JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js",
-    "/JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js",
-    "/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js",
+    "JS/TFN/T/Worker/Shared.js",
+    "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js",
+    "JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js",
+    "JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js",
+    "JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js",
+    "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js",
 
-    "/JS/TFN/T/Class/weather.js",
-    "/JS/TFN/T/Class/Tycadome.js",
-    "/JS/TFN/T/Class/LiveVidController.js",
-    "/JS/TFN/T/Class/DjController.js",
+    "JS/TFN/T/Class/weather.js",
+    "JS/TFN/T/Class/Tycadome.js",
+    "JS/TFN/T/Class/LiveVidController.js",
+    "JS/TFN/T/Class/DjController.js",
 
-    "/JS/TFN/T/Class/Elder/news.js",
-    "/JS/TFN/T/Class/Elder/Img.js",
-    "/JS/TFN/T/Class/Elder/videoRecorder.js",
-    "/JS/TFN/T/Class/Elder/SignUpLoginOutf.js",
-    "/JS/TFN/T/Class/Elder/TfRadio.js",
+    "JS/TFN/T/Class/Elder/news.js",
+    "JS/TFN/T/Class/Elder/Img.js",
+    "JS/TFN/T/Class/Elder/videoRecorder.js",
+    "JS/TFN/T/Class/Elder/SignUpLoginOutf.js",
+    "JS/TFN/T/Class/Elder/TfRadio.js",
 
-    "/JS/TFN/T/Class/Elder/Adult/words.js",
-    "/JS/TFN/T/Class/Elder/Adult/Video.js",
-    "/JS/TFN/T/Class/Elder/Adult/Money.js",
-    "/JS/TFN/T/Class/Elder/Adult/Image.js",
-    "/JS/TFN/T/Class/Elder/Adult/Audio.js",
+    "JS/TFN/T/Class/Elder/Adult/words.js",
+    "JS/TFN/T/Class/Elder/Adult/Video.js",
+    "JS/TFN/T/Class/Elder/Adult/Money.js",
+    "JS/TFN/T/Class/Elder/Adult/Image.js",
+    "JS/TFN/T/Class/Elder/Adult/Audio.js",
 
-    "/JS/TFN/T/Class/Elder/Adult/Teen/T.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/OffscreenCanvas.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/N.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/F.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/test.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/foundation/base.js",
-    "/JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/foundation/W.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/T.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/OffscreenCanvas.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/N.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/F.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/test.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/foundation/base.js",
+    "JS/TFN/T/Class/Elder/Adult/Teen/Child/Base/foundation/W.js",
 
     "/icons/72Logo.png",
     "/icons/96Logo.png",
@@ -205,7 +205,7 @@ self.addEventListener("install", (event) => {
                     if (!res || !res.ok) return;
 
                     await shell.put(url, res.clone());
-                } catch {}
+                } catch { }
             })
         );
 

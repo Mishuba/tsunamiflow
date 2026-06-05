@@ -1,5 +1,17 @@
 console.log("Task Worker:" + import.meta.url);
 
+function safeStringify(obj) {
+    try {
+        return JSON.stringify(obj);
+    } catch (e) {
+        try {
+            return String(obj);
+        } catch (e2) {
+            return null;
+        }
+    }
+}
+
 const workers = {
     input: new Worker(
         new URL("./kid/GameInputWebWorker.js", import.meta.url),
@@ -45,11 +57,41 @@ function tycadome(
 Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
     worker.onmessage = (e) => {
         /* tfTaskWorker.OnWorkerMessage(e); */
+        const d = e.data || {};
+
+        // If child worker posts an error-like message, forward as worker.error with details.
+        if (d.type === "error" || d.action === "worker.error" || d.payload?.system === "error") {
+            self.postMessage(
+                tycadome(
+                    d.id || crypto.randomUUID(),
+                    name,
+                    "worker.error",
+                    {
+                        source: name,
+                        originalType: d.type || d.action || "error",
+                        layer: "compute",
+                        worker: name
+                    },
+                    {
+                        status: "failed",
+                        priority: "high"
+                    },
+                    "async",
+                    {
+                        message: d.message || d.payload?.message || null,
+                        detail: d.payload || d,
+                        raw: safeStringify(d)
+                    }
+                )
+            );
+            return;
+        }
+
         self.postMessage(
             tycadome(
-                e.data.id || crypto.randomUUID(),
-                e.data.type || name,
-                e.data.action || "completed",
+                d.id || crypto.randomUUID(),
+                d.type || name,
+                d.action || "completed",
                 {
                     source: name,
                     layer: "compute",
@@ -60,19 +102,27 @@ Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
                     priority: "low"
                 },
                 "async",
-                e.data.payload || e.data
+                d.payload || d
             )
         );
     };
 
-    worker.onerror = (err) => {
+    worker.onerror = (errEvent) => {
+        // ErrorEvent from worker.onerror can vary across browsers; extract safely.
+        const message = errEvent?.message || errEvent?.type || null;
+        const filename = errEvent?.filename || errEvent?.fileName || null;
+        const lineno = errEvent?.lineno || errEvent?.lineNumber || null;
+        const colno = errEvent?.colno || errEvent?.columnNumber || null;
+        const stack = errEvent?.error?.stack || errEvent?.stack || null;
+
         self.postMessage(
             tycadome(
                 crypto.randomUUID(),
                 name,
                 "worker.error",
                 {
-                    message: err.message
+                    source: name,
+                    message: message
                 },
                 {
                     status: "failed",
@@ -80,13 +130,13 @@ Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
                 },
                 "async",
                 {
-                    message: err.message,
-                    filename: err.filename,
-                    lineno: err.lineno,
-                    colno: err.colno,
-                    stack: err.stack
+                    message,
+                    filename,
+                    lineno,
+                    colno,
+                    stack,
+                    rawEvent: safeStringify(errEvent)
                 }
-
             )
         );
     };
