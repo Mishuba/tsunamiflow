@@ -33,9 +33,19 @@ try {
     }
 } catch (error) {
     console.error("Error initializing mediaWorker:", error);
-    self.postMessage({ type: "error", message: error.message });
-    self.onerror = (e) => {
-        console.error("Worker error:", e);
+    try {
+        self.postMessage({ type: "error", action: "worker.error", payload: { message: error.message, stack: error.stack || null, detail: error } });
+    } catch (e) {
+        console.error("Failed to post worker init error:", e);
     }
+    self.onerror = (e) => {
+        try {
+            const err = e?.error || e;
+            self.postMessage({ type: "error", action: "worker.error", payload: { message: err?.message || String(err), filename: err?.fileName || null, lineno: err?.lineNumber || null, colno: err?.columnNumber || null, stack: err?.stack || null, rawEvent: e } });
+        } catch (postErr) {
+            console.error("Worker onerror failed to post:", postErr);
+        }
+        console.error("Worker error:", e);
+    };
 }
 

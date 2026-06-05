@@ -33,7 +33,11 @@ export class WorkerManager {
 
   initTimeWorker(audioElement) {
     if (!this.timeWorker) {
-      this.timeWorker = new Worker("JS/TFN/F/Compute/Class/Worker/Class/WebWorker/Timer.js", { type: "module" });
+      try {
+        this.timeWorker = new Worker(new URL("./Timer.js", import.meta.url), { type: "module" });
+      } catch (err) {
+        this.timeWorker = new Worker("JS/TFN/F/Compute/Class/Worker/Class/WebWorker/Timer.js", { type: "module" });
+      }
       this.timeWorker.onmessage = (e) => this.handleTimeMessage(e, audioElement);
       this.timeWorker.onerror = (e) => this.handleError("TimeWorker", e);
     }
@@ -41,7 +45,11 @@ export class WorkerManager {
 
   initRadioWorker(audioEl) {
     if (!this.radioWorker) {
-      this.radioWorker = new Worker("WebWorker/TsunamiRadio.js", { type: "module" });
+      try {
+        this.radioWorker = new Worker(new URL("./TsunamiRadio.js", import.meta.url), { type: "module" });
+      } catch (err) {
+        this.radioWorker = new Worker("WebWorker/TsunamiRadio.js", { type: "module" });
+      }
       this.radioWorker.onmessage = (e) => this.handleRadioMessage(e, audioEl);
       this.radioWorker.onerror = (e) => this.handleError("RadioWorker", e);
     }

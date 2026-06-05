@@ -84,7 +84,12 @@ canvasctx.imageSmoothingEnabled;
     startWebworkers() {
         if (this.worker) return;
 
-        this.worker = new Worker("./WebWorker.js");
+        try {
+            this.worker = new Worker(new URL("./WebWorker.js", import.meta.url), { type: "module" });
+        } catch (err) {
+            // fallback for non-module contexts or older browsers
+            this.worker = new Worker("./WebWorker.js");
+        }
 
         this.receiveWebworkerMessage(); // 🔥 central handler
 

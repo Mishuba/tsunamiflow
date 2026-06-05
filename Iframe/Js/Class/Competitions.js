@@ -62,8 +62,13 @@ async function TFtranformationWrtc() {
     if (supportsEncodedTransforms) {
         TFpcWrtc.ontrack = (TFeventWrtc) => {
             try {
-                // Use relative path from this script to the worker file
-                const TFtrackWorkWrtc = new Worker("../../../JS/NewsTransformWorker.js");
+                // Use module-safe worker instantiation with fallback
+                let TFtrackWorkWrtc;
+                try {
+                    TFtrackWorkWrtc = new Worker(new URL("../../../JS/NewsTransformWorker.js", import.meta.url), { type: "module" });
+                } catch (err) {
+                    TFtrackWorkWrtc = new Worker("../../../JS/NewsTransformWorker.js");
+                }
                 TFeventWrtc.receiver.transform = new RTCRtpScriptTransform(TFtrackWorkWrtc, { name: "receiverTransform" });
                 if (TFeventWrtc.streams && TFeventWrtc.streams[0]) {
                     TFremoteVideoWrtc.srcObject = TFeventWrtc.streams[0];
