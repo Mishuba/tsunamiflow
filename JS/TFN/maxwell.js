@@ -774,7 +774,7 @@ console.warn("Type:", data.type);
         this.iframe.worker = this.worker;
         this.user.worker = this.worker;
         this.imageEngine.worker = this.worker;
-        this.soundEngine.worker = this.worker;
+        this.soundEngine.worker = this.mediaworker;
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
