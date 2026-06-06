@@ -214,6 +214,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
 
+const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+
   const Workletoptions = {
     numberOfInputs: 1, //0 oscillator
     numberOfOutputs: 1,
@@ -339,6 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //dbstores: indexdb
   });
   Controller.worker = safeWorker;
+  Controller.mediaworker = safeMediaWorker;
   //Controller.sharedWorker = safeSharedWorker;
 
   Controller.iframe.frame.addEventListener("load", () => {
