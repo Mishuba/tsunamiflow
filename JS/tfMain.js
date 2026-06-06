@@ -210,11 +210,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
-  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+
+const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
 const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+
+const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+
+const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+
+const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+
+const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
   const Workletoptions = {
     numberOfInputs: 1, //0 oscillator
@@ -341,7 +351,12 @@ const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebW
     //dbstores: indexdb
   });
   Controller.worker = safeWorker;
+  Controller.audioimageworker = safeImageWorker;
   Controller.audioworker = safeMediaWorker;
+Controller.videoworker = safeVideoWorker ;
+Controller.gameinputworker = safeGameInputWorker;
+Controller.gameworldworker = safeGameWorldWorker;
+Controller.aiworker = safeAiWorker;
   //Controller.sharedWorker = safeSharedWorker;
 
   Controller.iframe.frame.addEventListener("load", () => {

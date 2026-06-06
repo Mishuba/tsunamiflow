@@ -770,11 +770,18 @@ console.warn("Type:", data.type);
             return;
         }
 
+        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
+        this.worker.onerror = (e) => this.handleError(this.worker, e);
+
         this.site.worker = this.worker;
         this.iframe.worker = this.worker;
         this.user.worker = this.worker;
-        this.imageEngine.worker = this.worker;
+
+        this.imageEngine.worker = this.imageworker;
+        this.imageEngine.worker.onerror = (e) => this.handleError(this.imageEngine.worker, e);
+
         this.soundEngine.worker = this.mediaworker;
+        this.soundEngine.worker.onerror = (e) => this.handleError(this.soundEngine.worker, e);
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
@@ -796,9 +803,12 @@ console.warn("Type:", data.type);
             }),
             [this.soundEngine.visualizatorController]);
             */
-        this.videoEngine.worker = this.worker;
-        this.game.worker = this.worker;
-
+        this.videoEngine.worker = this.videoworker;
+        this.videoeEngine.worker.onerror = (e) => this.handleError(this.videoEngine.worker, e);
+        //this.game.inputWorker = this.gameinputworker;
+        //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
+        //this.game.worldWorker = this.gameworldworker;
+        //this.game.worldWorker.onerror = (e) => this.handleError(this.game.worldWorker, e);
         /*
         this.site.sharedWorker = this.sharedWorker;
         this.iframe.sharedWorker = this.sharedWorker;
@@ -808,11 +818,6 @@ console.warn("Type:", data.type);
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 */
-        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-        this.worker.onerror = (e) => this.handleError(this.worker, e);
-
-        console.log("starting radio");
-
         // this.startSharedWorker();
         // this.sendToSharedWorker("register");
         // this.sharedWorker.port.onmessage = (e) => {

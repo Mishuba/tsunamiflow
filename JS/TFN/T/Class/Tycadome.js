@@ -93,7 +93,20 @@ export class TfPrintful extends User {
             if (xhr.status !== 200) {
                 console.error("Fetch failed:", xhr.responseText);
                 return;
+            } else if (!xhr.responseText) {
+                console.warn("Empty response received");
+                return;
+            } else if (xhr.responseText.trim() === "[]") {
+                console.warn("Received empty items array");
+                return;
+            } else if (xhr.responseText.trim().startsWith("Error")) {
+                console.error("Server error response:", xhr.responseText);
+                return;
+            } else if (xhr.responseText.trim().startsWith("<")) {
+                console.error("Unexpected HTML response:", xhr.responseText);
+                return;
             }
+
 
             const data = JSON.parse(xhr.responseText);
             console.log("Printful items:", data.items);
