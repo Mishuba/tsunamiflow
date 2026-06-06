@@ -2,6 +2,11 @@ export class maxwell {
     listeners = {};
     domListeners = new Map();
     worker = null;
+    imageworker = null;
+    audioworker = null;
+    videoworker = null;
+    gameinputworker = null;
+    gameworldworker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
     site = null;
