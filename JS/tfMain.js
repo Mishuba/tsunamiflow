@@ -341,7 +341,7 @@ const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebW
     //dbstores: indexdb
   });
   Controller.worker = safeWorker;
-  Controller.mediaworker = safeMediaWorker;
+  Controller.audioworker = safeMediaWorker;
   //Controller.sharedWorker = safeSharedWorker;
 
   Controller.iframe.frame.addEventListener("load", () => {
