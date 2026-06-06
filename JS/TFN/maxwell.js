@@ -7,6 +7,7 @@ export class maxwell {
     videoworker = null;
     gameinputworker = null;
     gameworldworker = null;
+    aiworker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
     site = null;
