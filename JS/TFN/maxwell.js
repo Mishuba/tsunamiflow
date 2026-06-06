@@ -192,33 +192,33 @@ export class maxwell {
                     if (data.meta.message) {
                         console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
 
-console.warn("Type:", data.type);
-    console.warn("Payload:", payload);
-    console.warn("Full Data:", data);
-    console.warn("Event:", event);
+                        console.warn("Type:", data.type);
+                        console.warn("Payload:", payload);
+                        console.warn("Full Data:", data);
+                        console.warn("Event:", event);
 
-    if (data.meta?.message) {
-        console.warn("Meta Message:", data.meta.message);
-    }
+                        if (data.meta?.message) {
+                            console.warn("Meta Message:", data.meta.message);
+                        }
 
-    console.trace();
+                        console.trace();
 
-    console.groupEnd();
+                        console.groupEnd();
                     } else {
                         console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
 
-console.warn("Type:", data.type);
-    console.warn("Payload:", payload);
-    console.warn("Full Data:", data);
-    console.warn("Event:", event);
+                        console.warn("Type:", data.type);
+                        console.warn("Payload:", payload);
+                        console.warn("Full Data:", data);
+                        console.warn("Event:", event);
 
-    if (data.meta?.message) {
-        console.warn("Meta Message:", data.meta.message);
-    }
+                        if (data.meta?.message) {
+                            console.warn("Meta Message:", data.meta.message);
+                        }
 
-    console.trace();
+                        console.trace();
 
-    console.groupEnd();
+                        console.groupEnd();
                     }
 
                     this.handleSchedule(this.find("TFtime").innerHTML);
@@ -778,10 +778,10 @@ console.warn("Type:", data.type);
         this.user.worker = this.worker;
 
         this.imageEngine.worker = this.imageworker;
-        this.imageEngine.worker.onerror = (e) => this.handleError(this.imageEngine.worker, e);
+        this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        this.soundEngine.worker = this.mediaworker;
-        this.soundEngine.worker.onerror = (e) => this.handleError(this.soundEngine.worker, e);
+        this.soundEngine.worker = this.audioworker;
+        this.audioworker.onerror = (e) => this.handleError(this.audioworker.worker, e);
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
@@ -804,7 +804,7 @@ console.warn("Type:", data.type);
             [this.soundEngine.visualizatorController]);
             */
         this.videoEngine.worker = this.videoworker;
-        this.videoeEngine.worker.onerror = (e) => this.handleError(this.videoEngine.worker, e);
+        this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
         //this.game.worldWorker = this.gameworldworker;
