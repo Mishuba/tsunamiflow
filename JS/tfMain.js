@@ -214,7 +214,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
 
-const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
   const Workletoptions = {
     numberOfInputs: 1, //0 oscillator
