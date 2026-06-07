@@ -231,12 +231,9 @@ export class core {
         }
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
-    async requestWorld(method, url, data = null, headers = {}, transport = "fetch") {
+    async requestWorld(method = "GET", url = "https://world.tsunamiflow.club/server.php", data = null, headers = {}, transport = "fetch") {
         switch (transport.toLowerCase()) {
 
-            /* =========================================
-               FETCH (Recommended Default)
-            ========================================= */
             case "fetch":
                 try {
                     const options = {
@@ -314,9 +311,6 @@ export class core {
                     return null;
                 }
 
-            /* =========================================
-               XMLHTTPREQUEST
-            ========================================= */
             case "xml":
             case "xhr":
                 return new Promise((resolve, reject) => {
@@ -373,18 +367,11 @@ export class core {
                     }
                 });
 
-            /* =========================================
-               SEND BEACON
-            ========================================= */
             case "beacon":
                 return await this.SendBeacon(url, data);
 
-            /* =========================================
-               DEFAULT
-            ========================================= */
-            case "arraybuffer":
             case "binary":
-            case "audio":
+            case "arraybuffer":
                 try {
                     const response = await fetch(url, {
                         method,
@@ -419,6 +406,9 @@ export class core {
 
                     return null;
                 }
+            case "audio":
+
+                return;
             default:
                 this.emit("error", {
                     type: "transport",
