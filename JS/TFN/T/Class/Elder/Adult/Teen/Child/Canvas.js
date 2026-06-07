@@ -1,6 +1,7 @@
 import { Dom } from "./Toddler/Dom.js";
 export class TsDomCanvas extends Dom {
     canvas = null;
+    offscreencanvas = null;
     contextTypecanvas = ("bitmaprenderer", "2d", "webgl", "webgl2", 'webgpu', "experimental-webgl");
 
     contextTypecanvasoption = {

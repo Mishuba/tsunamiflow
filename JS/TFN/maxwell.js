@@ -510,6 +510,7 @@ export class maxwell {
     bindAudio() {
         this.RadioReady();
         this.soundEngine.RadioEventListeners();
+        this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
@@ -717,7 +718,6 @@ export class maxwell {
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
         this.soundEngine.worker = this.audioworker;
-        this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),

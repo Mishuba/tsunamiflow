@@ -606,6 +606,11 @@ export class Studio extends Flow {
         this.tfRadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", this.tfRadioLoadStartTime);
     }
+    emptiedAudio() {
+        //cancelAnimationFrame(this.effects.visualizatorController);
+        console.log("The Tsunami Audio has been emptied and is ready to be loaded with a new source.");
+        this.AudioNetworkState();
+    }
     stalledAudio(stalled) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
         console.log("The Tsunami Audio networkState " + this.AudioElement.networkState);
@@ -640,16 +645,16 @@ export class Studio extends Flow {
     }
     canplayAudio() {
         console.log("Audio playback is can play");
+        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     canplaythroughAudio() {
-        //this.connectaudio(this.AudioElement, this.AudioElement.id);
+
         console.log("Audio playback is can play through");
     }
     endedAudio() {
         console.log("The audio should have ended");
+        this.removeSource(this.AudioElement.id);
         this.AudioElement.src = "";
-        //this.removeSource(this.AudioElement.id);
-        this.AudioNetworkState();
     }
     waitingAudio() {
         console.log("Audio playback is waiting");
@@ -660,11 +665,11 @@ export class Studio extends Flow {
                 if (this.AudioElement.paused) {
                     await this.AudioElement.play();
                     this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
-                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
+                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
                 } else {
                     await this.AudioElement.play();
                     this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
-                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.masterBufferLength / 4);
+                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
                 }
 
                 const loop = () => {
@@ -785,12 +790,10 @@ export class Studio extends Flow {
         } else {
             this._radioBound = true;
 
-            /*     this.AudioElement.addEventListener("emptied", async (emptied) => {
-                    this.emptiedAudio(emptied);
-                    //cancelAnimationFrame(this.effects.visualizatorController);
-                  });
-                  this._storeDomListener(this.soundengine.AudioElement.id, this.soundengine.AudioElement, runHandler, "emptied");
-            */
+            this.AudioElement.addEventListener("emptied", async (emptied) => {
+                this.emptiedAudio(emptied);
+            });
+            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.emptiedAudio, "emptied");
 
             this.AudioElement.addEventListener("waiting", (waiting) => {
                 this.waitingAudio();
@@ -828,11 +831,6 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                if (!this._wired) {
-                    //this.initAudioContext();
-                    //this.connectaudio();
-                    this._wired = true;
-                }
                 this.canplaythroughAudio();
             });
 
@@ -840,7 +838,6 @@ export class Studio extends Flow {
 
             this.AudioElement.addEventListener("play", () => {
                 this.playaudio();
-                //this.startAnalyserLoop();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
@@ -863,14 +860,12 @@ export class Studio extends Flow {
             this.AudioElement.addEventListener("volumechange", (volumechange) => {
                 //this.volumechangeAudio();
             });
-            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
+            //this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
             this.AudioElement.addEventListener("ended", async (ended) => {
-                //  this.destroyRadioSource();
                 this.endedAudio();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
-
         }
     }
 }

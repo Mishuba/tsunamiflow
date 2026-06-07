@@ -64,12 +64,6 @@ const TFwordMishuba = {
   ]
 };
 
-/*
-|--------------------------------------------------------------------------
-| Sprite / Game Setup
-|--------------------------------------------------------------------------
-*/
-
 const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
 const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
 
@@ -88,12 +82,6 @@ let tfSNW = 30;
 let tfSNH = 30;
 
 let PlayerState = "stand";
-
-/*
-|--------------------------------------------------------------------------
-| Player Stats / Systems
-|--------------------------------------------------------------------------
-*/
 
 const PhysicalAbility = [
   { name: "health", points: 1 },
@@ -191,14 +179,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateRadioState();
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-  let visualizatorController = null;
-  /*
-    try {
-      visualizatorController = RadioCanvas.transferControlToOffscreen();
-    } catch (err) {
-      console.warn("Offscreen canvas transfer failed:", err);
-    }
-  */
+
+  try {
+    const OffscreenCanvasRadio = document.createElement("canvas");
+    const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+  } catch (err) {
+    console.warn("Offscreen canvas transfer failed:", err);
+  }
 
   const RadioLastButton = document.createElement("button");
   const RadioRestartButton = document.createElement("button");
@@ -331,7 +318,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  const nation = new Studio({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas, visualizatorController: visualizatorController });
+  const nation = new Studio({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas, offscreencanvas: RadioOffscreenCanvas });
 
   const Controller = new maxwell({
     site: TfSite,
@@ -367,29 +354,31 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Cross-origin block:", e);
     }
   });
+
+  Controller.site.requestLocation();
+
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame)
     Controller.bindNavBar();
     Controller.bindUsers();
-  } else {
+  }
 
-  };
+  Controller.bindAudio();
+
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
     Controller.user.bindCart();
     Controller.initTsunamiWorkers();
-    Controller.site.requestLocation();
     console.log("TFN");
-    Controller.bindAudio();
-
-    if ("serviceWorker" in navigator) {
-      window.addEventListener("load", async () => {
-        navigator.serviceWorker.register("/service-worker.js")
-          .then(reg => console.log("SW registered:", reg))
-          .catch(err => console.error("SW registration failed:", err));
-      });
-    }
   }).catch(err => {
     console.error("Cart binding error:", err);
   });
+
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", async () => {
+      navigator.serviceWorker.register("/service-worker.js")
+        .then(reg => console.log("SW registered:", reg))
+        .catch(err => console.error("SW registration failed:", err));
+    });
+  }
 });

@@ -1,6 +1,7 @@
 import { TsDomCanvas } from "./Child/Canvas.js";
 
 export class TsunamiFlowSound extends TsDomCanvas {
+    AudioContextInitialized = false;
     audioConstraints = {
         echoCancellation: true,
         noiseSuppression: true,
@@ -108,6 +109,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
         return chain;
     }
     initAudioContext() {
+        if (this.AudioContextInitialized) {
+            if (this.MasterSoundsContext.state === "suspended") {
+                return this.MasterSoundsContext.resume();
+            }
+            return this.MasterSoundsContext;
+        }
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
         }
@@ -151,19 +158,80 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (this.MasterSoundsContext.state === "suspended") {
             return this.MasterSoundsContext.resume();
         }
+        this.AudioContextInitialized = true;
+        return this.MasterSoundsContext;
+    }
+    addAudioContextSource(element, id = null, type = null) {
+        const sourceId = id || `source-${++this.MasteridCounter}`;
+        let source;
+
+        if (this.elementSourceMap.has(element)) {
+            source = this.elementSourceMap.get(element);
+        } else {
+            if (type === "audio") {
+                source = this.MasterSoundsContext.createMediaElementSource(element);
+                this.elementSourceMap.set(element, source);
+            } else if (type === "video") {
+                source = this.MasterSoundsContext.createMediaStreamSource(stream);
+                this.elementSourceMap.set(stream, source);
+            }
+        }
+
+        const chain = this.createTrackChain();
+
+        // ✅ CLEAN SIGNAL FLOW
+        source.connect(chain.gain)
+            .connect(chain.analyser)
+            .connect(chain.compressor)
+            .connect(chain.worklet)
+            .connect(chain.delay)
+            .connect(chain.panner)
+            .connect(this.masterGain);
+        // ✅ STORE EVERYTHING (IMPORTANT)
+        this.TfSoundsContext[sourceId] = source;
+        this.TfSoundsGain[sourceId] = chain.gain;
+        this.TfSoundAnalyser[sourceId] = chain.analyser;
+        this.TfSoundsCompressor[sourceId] = chain.compressor;
+        this.SoundWorklet[sourceId] = chain.worklet;
+        this.TfSoundsDelay[sourceId] = chain.delay;
+        this.TfSoundsPanner[sourceId] = chain.panner;
+
+        this.emit("sourceAdded", { id: sourceId });
+
+        return sourceId;
     }
     connectaudio(element, id, type = "audio") {
+        this.initAudioContext();
         if (this.TfSoundsContext[id]) return;
-
-        if (type === "audio") {
-            this.addAudioContextSource(element, id);
-        } else if (type === "video") {
-            this.addAudioStreamSource(element, id);
-        } else {
-            return;
-        }
+        this.addAudioContextSource(element, id, type);
     }
+    removeSource(id) {
+        const source = this.TfSoundsContext[id];
+        const gain = this.TfSoundsGain[id];
+        const analyser = this.TfTrackAnalyser[id];
+        const compressor = this.TfSoundsCompressor[id];
+        const worklet = this.SoundWorklet[id];
+        const delay = this.TfSoundsDelay[id];
+        const panner = this.TfSoundsPanner[id];
 
+        if (source) source.disconnect();
+        if (gain) gain.disconnect();
+        if (analyser) analyser.disconnect();
+        if (compressor) compressor.disconnect();
+        if (worklet) worklet.disconnect();
+        if (delay) delay.disconnect();
+        if (panner) panner.disconnect();
+
+        delete this.TfSoundsContext[id];
+        delete this.TfSoundsGain[id];
+        delete this.TfTrackAnalyser[id];
+        delete this.TfSoundsCompressor[id];
+        delete this.SoundWorklet[id];
+        delete this.TfSoundsDelay[id];
+        delete this.TfSoundsPanner[id];
+
+        this.emit("sourceRemoved", id);
+    }
     async HandleArrayBuffer(buffer) {
         this.initAudioContext();
 
@@ -176,7 +244,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
     }
 
-    Contextstate() {
+    AudioContextState() {
         switch (this.AudioCxtId) {
             case null:
             case undefined:
@@ -210,48 +278,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
                             break;
                     }
                 }
-        }
-    }
-    AudioState() {
-        switch (this.TfSoundsContext[this.MasterCxtId]) {
-            case null:
-                console.log("The audio context state is unknown");
-                break;
-            case undefined:
-                console.log("The audio context state is unknown");
-                break;
-            case "":
-                console.log("The audio context state is unknown");
-                break;
-            case " ":
-                console.log("The audio context state is unknown");
-                break;
-            default:
-                if (this.TfSoundsContext[this.MasterCxtId]) {
-                    switch (this.TfSoundsContext[this.MasterCxtId].state) {
-                        case "suspended":
-                            this.TfSoundsContext[this.MasterCxtId].resume();
-                            break;
-                        case "running":
-                            console.log("The audio context state is running");
-                            if (this.AudioElement.waiting) {
-                                this.TfSoundsContext[this.MasterCxtId].suspend();
-                            }
-                            break;
-                        case "closed":
-                            console.log("The Audio context state must be closed");
-                            if (this.AudioElement.paused) {
-                                //this.StopVisualizator();
-                            }
-                            break;
-                        default:
-                            console.log("The audio context state is unknown");
-                            break;
-                    }
-                } else {
-                    console.log("The audio context state is does not exist");
-                }
-
         }
     }
     playDecodedBuffer(id, float32Array) {
@@ -292,104 +318,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
             this.AudioElement.volume = value;
         }
     }
-    addAudioContextSource(element, id = null) {
-        const sourceId = id || `source-${++this.MasteridCounter}`;
-        let source;
-
-        if (this.elementSourceMap.has(element)) {
-            source = this.elementSourceMap.get(element);
-        } else {
-            source = this.MasterSoundsContext.createMediaElementSource(element);
-            this.elementSourceMap.set(element, source);
-        }
-
-        const chain = this.createTrackChain();
-
-        // ✅ CLEAN SIGNAL FLOW
-        source.connect(chain.gain)
-            .connect(chain.analyser)
-            .connect(chain.compressor)
-            .connect(chain.worklet)
-            .connect(chain.delay)
-            .connect(chain.panner)
-            .connect(this.masterGain);
-        // ✅ STORE EVERYTHING (IMPORTANT)
-        this.TfSoundsContext[sourceId] = source;
-        this.TfSoundsGain[sourceId] = chain.gain;
-        this.TfSoundAnalyser[sourceId] = chain.analyser;
-        this.TfSoundsCompressor[sourceId] = chain.compressor;
-        this.SoundWorklet[sourceId] = chain.worklet;
-        this.TfSoundsDelay[sourceId] = chain.delay;
-        this.TfSoundsPanner[sourceId] = chain.panner;
-
-        this.emit("sourceAdded", { id: sourceId });
-
-        return sourceId;
-    }
-    addAudioStreamSource(stream, id = null) {
-        this.initAudioContext();
-        const sourceId = id || `source-${++this.MasteridCounter}`;
-        let source;
-
-        if (this.elementSourceMap.has(stream)) {
-            source = this.elementSourceMap.get(stream);
-        } else {
-            source = this.MasterSoundsContext.createMediaStreamSource(stream);
-            this.elementSourceMap.set(stream, source);
-        }
-
-        const chain = this.createTrackChain();
-
-        // ✅ CLEAN SIGNAL FLOW
-        source.connect(chain.gain)
-            .connect(chain.analyser)
-            .connect(chain.compressor)
-            .connect(chain.worklet)
-            .connect(chain.delay)
-            .connect(chain.panner)
-            .connect(this.masterGain);
-        // ✅ STORE EVERYTHING (IMPORTANT)
-        this.TfSoundsContext[sourceId] = source;
-        this.TfSoundsGain[sourceId] = chain.gain;
-        this.TfSoundAnalyser[sourceId] = chain.analyser;
-        this.TfSoundsCompressor[sourceId] = chain.compressor;
-        this.SoundWorklet[sourceId] = chain.worklet;
-        this.TfSoundsDelay[sourceId] = chain.delay;
-        this.TfSoundsPanner[sourceId] = chain.panner;
-
-        this.emit("sourceAdded", { id: sourceId });
-
-        return sourceId;
-    }
     setAudioContextGain(id, value = 1) {
         if (this.TfSoundsGain[id]) this.TfSoundsGain[id].gain.value = value;
-    }
-    removeSource(id) {
-        const source = this.TfSoundsContext[id];
-        const gain = this.TfSoundsGain[id];
-        const analyser = this.TfTrackAnalyser[id];
-        const compressor = this.TfSoundsCompressor[id];
-        const worklet = this.SoundWorklet[id];
-        const delay = this.TfSoundsDelay[id];
-        const panner = this.TfSoundsPanner[id];
-
-        if (source) source.disconnect();
-        if (gain) gain.disconnect();
-        if (analyser) analyser.disconnect();
-        if (compressor) compressor.disconnect();
-        if (worklet) worklet.disconnect();
-        if (delay) delay.disconnect();
-        if (panner) panner.disconnect();
-
-        delete this.TfSoundsContext[id];
-        delete this.TfSoundsGain[id];
-        delete this.TfTrackAnalyser[id];
-        delete this.TfSoundsCompressor[id];
-        delete this.SoundWorklet[id];
-        delete this.TfSoundsDelay[id];
-        delete this.TfSoundsPanner[id];
-
-        this.emit("sourceRemoved", id);
     }
     finishAudioContext() {
         if (!this.MasterSoundsContext) return;
