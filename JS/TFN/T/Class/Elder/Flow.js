@@ -52,8 +52,6 @@ export class Flow extends TsunamiFlowAudio {
         this.canvasctx.fillStyle = "rgb(10, 10, 30)";
         this.canvasctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.canvasctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
         for (let i = 0; i < particles.length; i++) {
             const fftValue = dataArray[i % dataArray.length];
             this.update(particles[i], fftValue, volume, baseRadius);
@@ -74,57 +72,56 @@ export class Flow extends TsunamiFlowAudio {
         }
     }
     startVisualizerLoop() {
+        if (!this.AudioElement) return;
 
-    if (!this.AudioElement) return;
+        const id = this.AudioElement.id;
 
-    const id = this.AudioElement.id;
-
-    // Create once
-    if (!this.TfSoundsContextBufferLength[id]) {
-        this.TfSoundsContextBufferLength[id] =
-            this.TfSoundAnalyser[id].frequencyBinCount;
-    }
-
-    if (!this.TfSoundsContextDataArray[id]) {
-        this.TfSoundsContextDataArray[id] =
-            new Uint8Array(
-                this.TfSoundsContextBufferLength[id] / 4
-            );
-    }
-
-    const dataArray = this.TfSoundsContextDataArray[id];
-
-    const loop = () => {
-
-        // Keep animation frame alive
-        this.visualizerFrame = requestAnimationFrame(loop);
-
-        if (
-            !this.AudioElement ||
-            this.AudioElement.paused ||
-            this.AudioElement.ended
-        ) {
-            return;
+        // Create once
+        if (!this.TfSoundsContextBufferLength[id]) {
+            this.TfSoundsContextBufferLength[id] =
+                this.TfSoundAnalyser[id].frequencyBinCount;
         }
 
-        this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+        if (!this.TfSoundsContextDataArray[id]) {
+            this.TfSoundsContextDataArray[id] =
+                new Uint8Array(
+                    this.TfSoundsContextBufferLength[id] / 4
+                );
+        }
 
-        this.RadioVisualizer(
-            dataArray,
-            this.baseRadius,
-            this.particles,
-            this.AudioElement.volume
-        );
-    };
+        const dataArray = this.TfSoundsContextDataArray[id];
 
-    cancelAnimationFrame(this.visualizerFrame);
-    loop();
-}
+        const loop = () => {
 
-stopVisualizerLoop() {
-    if (this.visualizerFrame) {
+            // Keep animation frame alive
+            this.visualizerFrame = requestAnimationFrame(loop);
+
+            if (
+                !this.AudioElement ||
+                this.AudioElement.paused ||
+                this.AudioElement.ended
+            ) {
+                return;
+            }
+
+            this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+
+            this.RadioVisualizer(
+                dataArray,
+                this.baseRadius,
+                this.particles,
+                this.AudioElement.volume
+            );
+        };
+
         cancelAnimationFrame(this.visualizerFrame);
-        this.visualizerFrame = null;
+        loop();
     }
-}
+
+    stopVisualizerLoop() {
+        if (this.visualizerFrame) {
+            cancelAnimationFrame(this.visualizerFrame);
+            this.visualizerFrame = null;
+        }
+    }
 }

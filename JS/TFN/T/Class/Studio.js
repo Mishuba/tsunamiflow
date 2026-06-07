@@ -667,8 +667,6 @@ export class Studio extends Flow {
 
                 } else {
                     await this.AudioElement.play();
-                    this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
-                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
                 }
             }
         } catch (error) {
