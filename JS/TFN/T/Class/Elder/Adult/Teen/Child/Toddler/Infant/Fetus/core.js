@@ -54,7 +54,6 @@ export class core {
     }
     async createvideoFrame(frame) {
         this.VideoFrame = new VideoFrame(frame);
-
         /*
         let decoder = new videodecoder({
         output: frame => {

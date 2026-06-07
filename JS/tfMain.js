@@ -180,13 +180,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
 
-  try {
-    const OffscreenCanvasRadio = document.createElement("canvas");
-    const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
-  } catch (err) {
-    console.warn("Offscreen canvas transfer failed:", err);
-  }
-
   const RadioLastButton = document.createElement("button");
   const RadioRestartButton = document.createElement("button");
   const RadioStartButton = document.createElement("button");
@@ -356,15 +349,23 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   Controller.site.requestLocation();
-
+  const OffscreenCanvasRadio = document.createElement("canvas");
+  OffscreenCanvasRadio.width = RadioCanvas.width;
+  OffscreenCanvasRadio.height = RadioCanvas.height;
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame)
     Controller.bindNavBar();
     Controller.bindUsers();
+    twoMore.appendChild(OffscreenCanvasRadio);
+    try {
+      const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+    } catch (err) {
+      console.warn("Offscreen canvas transfer failed:", err);
+    }
   }
 
   Controller.bindAudio();
-
+  Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
     Controller.user.bindCart();
