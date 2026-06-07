@@ -717,7 +717,7 @@ export class maxwell {
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
         this.soundEngine.worker = this.audioworker;
-        this.soundEngine.AudioFile(null);
+        this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
