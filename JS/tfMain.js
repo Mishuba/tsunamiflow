@@ -359,13 +359,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     twoMore.appendChild(OffscreenCanvasRadio);
     try {
       const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+      Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
     } catch (err) {
       console.warn("Offscreen canvas transfer failed:", err);
     }
   }
-
   Controller.bindAudio();
-  Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
+
   Controller.user.showProducts().then(() => {
     Controller.bindPayments();
     Controller.user.bindCart();
