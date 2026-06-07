@@ -537,8 +537,7 @@ export class Studio extends Flow {
                     break;
                 default:
                     console.log("Received unknown message from worker:", data);
-                    break;
-
+                    this.AudioFile(null);
                     if (payload.system === "error") {
                         console.error("Worker error:", payload);
 
@@ -575,10 +574,12 @@ export class Studio extends Flow {
                             console.groupEnd();
                         }
                     }
+                    break;
             }
         };
 
         this.worker.onerror = (e) => {
+            this.AudioFile(e);
             console.error("RAW WORKER ERROR:", e);
             console.error(`[${this.worker}] message:`, e.message);
             console.error(`[${this.worker}] filename:`, e.filename);
@@ -641,13 +642,13 @@ export class Studio extends Flow {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio() {
-        this.connectaudio(this.AudioElement, this.AudioElement.id);
+        //this.connectaudio(this.AudioElement, this.AudioElement.id);
         console.log("Audio playback is can play through");
     }
     endedAudio() {
         console.log("The audio should have ended");
         this.AudioElement.src = "";
-        this.removeSource(this.AudioElement.id);
+        //this.removeSource(this.AudioElement.id);
         this.AudioNetworkState();
     }
     waitingAudio() {
