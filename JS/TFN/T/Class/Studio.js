@@ -802,9 +802,9 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.stalledAudio, "stalled");
 
             this.AudioElement.addEventListener("loadstart", async () => {
-                this.loadstartAudio();
+                //this.loadstartAudio();
             });
-            this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
+            //this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
 
             this.AudioElement.addEventListener("suspended", (suspend) => {
                 this.suspendedAudio();
