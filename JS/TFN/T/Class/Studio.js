@@ -577,6 +577,15 @@ export class Studio extends Flow {
                     }
             }
         };
+
+        this.worker.onerror = (e) => {
+            console.error("RAW WORKER ERROR:", e);
+            console.error(`[${this.worker}] message:`, e.message);
+            console.error(`[${this.worker}] filename:`, e.filename);
+            console.error(`[${this.worker}] lineno:`, e.lineno);
+            console.error(`[${this.worker}] colno:`, e.colno);
+            this.emit("error", { worker: this.worker, error: e });
+        }
     }
 
     AudioFile(event) {

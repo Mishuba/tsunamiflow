@@ -713,10 +713,8 @@ export class maxwell {
         this.user.worker = this.worker;
 
         this.imageEngine.worker = this.imageworker;
-        this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
+        //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        this.soundEngine.worker = this.audioworker;
-        this.audioworker.onerror = (e) => this.handleError(this.audioworker.worker, e);
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
@@ -739,7 +737,7 @@ export class maxwell {
             [this.soundEngine.visualizatorController]);
             */
         this.videoEngine.worker = this.videoworker;
-        this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
+        //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
         //this.game.worldWorker = this.gameworldworker;
