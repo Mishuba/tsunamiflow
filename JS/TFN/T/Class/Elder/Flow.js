@@ -73,12 +73,20 @@ export class Flow extends TsunamiFlowAudio {
             CtxX += barWidth + 1;
         }
     }
-    startVisualizerLoop(event) {
-
+    startVisualizerLoop() {
         const loop = () => {
+            if (this.AudioElement.paused || this.AudioElement.ended) {
+
+                return;
+            }
+
+            this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
+            this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
+
+            this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
 
             this.RadioVisualizer([...this.TfSoundsContextDataArray[this.AudioElement.id]], this.baseRadius, this.particles, this.AudioElement.volume);
-            this.renderFrame(loop());
+            requestAnimationFrame(loop);
         }
         loop();
     }

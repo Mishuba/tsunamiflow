@@ -292,6 +292,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     keyPath: ,
  
   }
+
+  //dbstores: indexdb
 */
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
@@ -334,8 +336,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
-
-    //dbstores: indexdb
   });
   Controller.worker = safeWorker;
   Controller.audioimageworker = safeImageWorker;

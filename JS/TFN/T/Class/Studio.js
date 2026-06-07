@@ -642,10 +642,10 @@ export class Studio extends Flow {
     }
     loadeddataAudio() {
         console.log("The audio data is loaded");
+        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     canplayAudio() {
         console.log("Audio playback is can play");
-        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     canplaythroughAudio() {
 
@@ -664,26 +664,12 @@ export class Studio extends Flow {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
                     await this.AudioElement.play();
-                    this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
-                    this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
+
                 } else {
                     await this.AudioElement.play();
                     this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
                     this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
                 }
-
-                const loop = () => {
-                    if (this.AudioElement.paused || this.AudioElement.ended) {
-                        return;
-                    }
-
-                    this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
-
-                    this.RadioVisualizer([...this.TfSoundsContextDataArray[this.AudioElement.id]], this.baseRadius, this.particles, this.AudioElement.volume);
-
-                    requestAnimationFrame(loop);
-                };
-                loop();
             }
         } catch (error) {
             if (error.name === "NotAllowedError") {
@@ -695,7 +681,7 @@ export class Studio extends Flow {
 
     }
     playingAudio() {
-
+        this.startVisualizerLoop();
     }
     pauseaudio() {
         this.AudioElement.pause();
