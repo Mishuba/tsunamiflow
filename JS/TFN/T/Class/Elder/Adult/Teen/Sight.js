@@ -55,23 +55,6 @@ export class TsunamiFlowSight extends TsDomCanvas {
     }
 
     /* ----------------------------
-       FAST DECODE (ImageBitmap)
-    -----------------------------*/
-    async createBitmap(image) {
-        if (!this.imageElement) {
-            await this.loadImage(image);
-        } else if (image) {
-            await this.loadImage(image);
-        }
-
-        this.bitmap = await createImageBitmap(this.imageElement);
-
-        this.emit("bitmap", this.bitmap);
-
-        return this.bitmap;
-    }
-
-    /* ----------------------------
        EXPORT
     -----------------------------*/
     toBlob(type = "image/png", quality = 0.92) {

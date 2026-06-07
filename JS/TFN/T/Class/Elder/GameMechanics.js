@@ -525,4 +525,99 @@ export class GameMechanics extends TFgameMovement {
         //character.strength += 2; // Increase strength per level
         console.log(`Level Up! New Level: ${character.CharacterLevel}`);
     }
+    // game logic below
+    extractBands(fft) {
+        const bassEnd = 8;
+        const midEnd = 64;
+
+        let bass = 0;
+        let mid = 0;
+        let treble = 0;
+
+        for (let i = 0; i < fft.length; i++) {
+            if (i < bassEnd) bass += fft[i];
+            else if (i < midEnd) mid += fft[i];
+            else treble += fft[i];
+        }
+
+        return {
+            bass: bass / bassEnd,
+            mid: mid / (midEnd - bassEnd),
+            treble: treble / (fft.length - midEnd)
+        };
+    }
+
+
+    normalize(value, smoothing = 0.2, prev = 0) {
+        return prev + (value - prev) * smoothing;
+    }
+
+    updatePhysics(audio) {
+
+        const force = audio.bass * 40;
+
+        // PLAYER IMPULSE
+        player.velocity.y -= force;
+
+        // WORLD REACTION
+        world.gravity = 1 + audio.mid;
+        world.shake = audio.beat ? audio.volume * 10 : audio.volume * 2;
+
+        // OBJECT INTERACTION
+        particles.forEach(p => {
+            p.dx += audio.treble * (Math.random() - 0.5);
+            p.dy += audio.treble * (Math.random() - 0.5);
+        });
+    }
+
+    updateGame(audio) {
+
+        // BEAT = ACTION TRIGGER
+        if (audio.beat) {
+            this.triggerEvent("BEAT_HIT");
+        }
+
+        // DROP = GAME SHIFT
+        if (audio.bass > 0.8) {
+            this.triggerEvent("DROP");
+        }
+
+        // HIGH ENERGY MODE
+        if (audio.volume > 0.3 && audio.treble > 0.6) {
+            this.triggerEvent("HIGH_ENERGY");
+        }
+    }
+
+    updateVisuals(treble) {
+        particles.spawnRate = treble * 100;
+
+        if (treble > 0.8) {
+            triggerLaserEffect();
+        }
+    }
+
+    detectBeat(bass) {
+        if (bass > 0.7 && lastBass <= 0.7) {
+            triggerEvent("BEAT_HIT");
+        }
+
+        lastBass = bass;
+    }
+
+    triggerEvent(type) {
+        switch (type) {
+
+            case "BEAT_HIT":
+                spawnShockwave();
+                break;
+
+            case "DROP":
+                world.timeScale = 0.5; // slow motion
+                break;
+
+            case "HIGH_ENERGY":
+                unlockAbility("overdrive");
+                break;
+        }
+    }
 }

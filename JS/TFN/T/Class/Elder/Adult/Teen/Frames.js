@@ -1,5 +1,4 @@
 import { TsDomCanvas } from "./Child/Canvas.js";
-
 export class TsunamiFlowFrames extends TsDomCanvas {
 
     constructor(options = {}) {

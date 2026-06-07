@@ -1,5 +1,6 @@
 import { core } from "./Fetus/core.js"
 export class T extends core {
+    devicelanguage = navigator.language || navigator.userLanguage || this.lang;
     listeners = {};
     domListeners = new Map();
     namespace = "tf";
@@ -27,10 +28,6 @@ export class T extends core {
         if (options.dbstores) {
         }
     }
-    /* ========================= */
-    /* ===== PERMISSION WRAP === */
-    /* ========================= */
-
     _wrapPermission(name) {
         return {
             async query() {
@@ -51,11 +48,6 @@ export class T extends core {
         }
         return "unsupported";
     }
-
-    /* ========================= */
-    /* ===== CAMERA / MIC ====== */
-    /* ========================= */
-
     async requestMedia(constraints = {}) {
         try {
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -64,15 +56,6 @@ export class T extends core {
             return { status: "denied", error: err };
         }
     }
-
-    async requestCamera() {
-        return this.requestMedia({ video: true });
-    }
-
-    async requestMicrophone() {
-        return this.requestMedia({ audio: true });
-    }
-
     /* ========================= */
     /* ===== CAPABILITIES ====== */
     /* ========================= */

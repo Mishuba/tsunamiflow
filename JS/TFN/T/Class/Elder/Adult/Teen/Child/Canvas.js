@@ -118,12 +118,37 @@ export class TsDomCanvas extends Dom {
         player.textWidth += player.speedX;
         player.textHeight += player.speedY;
     }
-    async usingframes(frame) {
+    async usingframes(type = null, frame, format = null) {
+        let bitmap;
+        let vidframe;
         if (!this.iscanvasReady) return;
         try {
-            //this.loadImage(frame);
-            //await this.createBitmap();
-            this.canvasctx.transferFromImageBitmap(frame);
+            if (type === "video" && !(frame instanceof HTMLVideoElement)) {
+                console.warn("Expected HTMLVideoElement for video frames");
+                vidframe = await this.createvideoFrame(frame);
+            }
+            if (format === "bitmap" && this.canvasctx instanceof ImageBitmapRenderingContext) {
+                if (!vidframe) {
+                    console.warn("No video frame available for bitmap rendering");
+                    bitmap = await this.createBitmap(frame);
+                    return;
+                } else {
+                    bitmap = await this.createBitmap(vidframe);
+
+                }
+                this.canvasctx.transferFromImageBitmap(bitmap);
+                this.closeBitmap();
+                this.closevideoFrame();
+                return;
+            } else {
+                if (vidframe) {
+                    this.canvasctx.drawImage(vidframe, 0, 0, this.canvas.width, this.canvas.height);
+                    this.closevideoFrame();
+                } else {
+                    this.canvasctx.drawImage(frame, 0, 0, this.canvas.width, this.canvas.height);
+                }
+                return;
+            }
 
         } catch (e) {
             console.warn("Failed to use video frames:", e);

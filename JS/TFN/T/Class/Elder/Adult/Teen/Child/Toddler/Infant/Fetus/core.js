@@ -1,6 +1,6 @@
 export class core {
     lang = "en-US";
-    devicelanguage = null;
+    VideoFrame = null;
     Arraybuffer = null;
     ArraybyteLength = 0;
     Arrayview = null;
@@ -46,6 +46,39 @@ export class core {
         tf.transfer = safeTransfer;
 
         return tf;
+    }
+    async createBitmap(image) {
+        this.bitmap = await createImageBitmap(this.image);
+        this.emit("bitmap", this.bitmap);
+        return this.bitmap;
+    }
+    async createvideoFrame(frame) {
+        this.VideoFrame = new VideoFrame(frame);
+
+        /*
+        let decoder = new videodecoder({
+        output: frame => {
+        // handle decoded frame
+        let bitmap = await this.createBitmap(frame);
+        this.emit("videoframe", bitmap);
+        
+        }
+        error: console.error
+        });
+        */
+        return this.VideoFrame;
+    }
+    closeBitmap() {
+        if (this.bitmap) {
+            this.bitmap.close();
+            this.bitmap = null;
+        }
+    }
+    closevideoFrame() {
+        if (this.VideoFrame) {
+            this.VideoFrame.close();
+            this.VideoFrame = null;
+        }
     }
     // Load an existing ArrayBuffer or TypedArray
     async loadArrayBuffer(input) {

@@ -94,6 +94,9 @@ export class maxwell {
                 this.soundEngine.AudioNetworkState();
                 return;
             }
+            else {
+
+            }
         }
         //this.ensureRadioPlaying(audio);
     }
@@ -107,7 +110,6 @@ export class maxwell {
 
                 if (payload.system === "Tf Schedule") {
                     await this.handleSchedule(payload.time);
-                    this.soundEngine.AudioNetworkState();
                 } else if (payload.system === "Tf Time") {
                     this.find("TFweather").innerHTML = this.site.requestLocation();
                     this.soundEngine.AudioNetworkState();
@@ -115,73 +117,6 @@ export class maxwell {
                     this.site.UpdateNews();
                     this.site.requestLocation();
                     this.soundEngine.AudioNetworkState();
-                }
-                break;
-
-            case "radio":
-                try {
-                    /*
-                    if (!this.soundEngine.TfSoundsContext) {
-                        console.log("The audio soundEngine context state does not exist");
-
-                    } else if (this.soundEngine.TfSoundsContext.state === undefined) {
-                        console.log("The audio soundEngine context state is undefined");
-                    } else if (this.soundEngine.TfSoundsContext.state === null) {
-                        console.log("The audio soundEngine context state is null");
-                    } else {
-                        switch (this.soundEngine.TfSoundsContext.state) {
-                            case "suspended":
-                                console.log("The audio soundEngine context state is suspended, resuming...");
-                                this.soundEngine.TfSoundsContext.resume();
-                                break;
-                            case "running":
-                                console.log("The audio soundEngine context state is running");
-                                break;
-                            case "closed":
-                                console.log("The Audio soundEngine context state must be closed");
-                                break;
-                            default:
-                                console.log("The audio soundEngine context state is unknown");
-                                break;
-                        }
-                    }
-                    */
-                    console.log("did notf check contfextf");
-                } catch (err) {
-                    console.error("Error handling radio message:", err);
-                    this.handleError("this.soundEngine.TfSoundsContext", err);
-                } finally {
-                    if (payload.system === "file") {
-                        console.log("payload.file", payload.file);
-                        let tfSong = this.soundEngine.AudioFile(event);
-                        switch (this.soundEngine.AudioElement.src) {
-                            case "":
-
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                            case " ":
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                            case null:
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                            case undefined:
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                            case "about:blank":
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                            default:
-                                this.soundEngine.loadaudio(tfSong);
-                                break;
-                        }
-                    } else if (payload.system === "previous") {
-                        this.soundEngine.loadaudio(tfSong);
-                    } else if (payload.system === "skip") {
-                        this.soundEngine.loadaudio(tfSong);
-                    } else {
-                        this.soundEngine.loadaudio(tfSong);
-                    }
                 }
                 break;
             default:
