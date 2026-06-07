@@ -1,5 +1,6 @@
 export class core {
     lang = "en-US";
+    devicelanguage = null;
     Arraybuffer = null;
     ArraybyteLength = 0;
     Arrayview = null;
@@ -24,25 +25,25 @@ export class core {
             "payload": payload // {},
         };
 
-// Attach transferables only if valid
-    const safeTransfer = [];
+        // Attach transferables only if valid
+        const safeTransfer = [];
 
-    if (Array.isArray(transfer) && transfer.length > 0) {
-        for (const item of transfer) {
-            if (
-                item instanceof ArrayBuffer ||
-                item instanceof MessagePort ||
-                item instanceof ImageBitmap ||
-                item instanceof OffscreenCanvas ||
-                item instanceof AudioData ||
-                item instanceof VideoFrame
-            ) {
-                safeTransfer.push(item);
+        if (Array.isArray(transfer) && transfer.length > 0) {
+            for (const item of transfer) {
+                if (
+                    item instanceof ArrayBuffer ||
+                    item instanceof MessagePort ||
+                    item instanceof ImageBitmap ||
+                    item instanceof OffscreenCanvas ||
+                    item instanceof AudioData ||
+                    item instanceof VideoFrame
+                ) {
+                    safeTransfer.push(item);
+                }
             }
         }
-    }
 
-    tf.transfer = safeTransfer;
+        tf.transfer = safeTransfer;
 
         return tf;
     }
@@ -109,7 +110,11 @@ export class core {
     // Load blob from an existing Blob or ArrayBuffer
     async loadblob(blobOrBuffer) {
         try {
-            if (blobOrBuffer instanceof Blob) {
+            if (typeof blobOrBuffer === "string") {
+                // URL
+                const res = await fetch(blobOrBuffer);
+                this.blob = await res.blob();
+            } else if (blobOrBuffer instanceof Blob) {
                 this.blob = blobOrBuffer;
             } else if (blobOrBuffer instanceof ArrayBuffer) {
                 this.blob = new Blob([blobOrBuffer], { type: this.blobtype });

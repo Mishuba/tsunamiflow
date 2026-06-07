@@ -30,7 +30,7 @@ export class TsunamiFlowSight extends TsDomCanvas {
             this.canvas = document.createElement("canvas");
         }
 
-        this.initCanvas();
+        this.initCanvas("bitmaprenderer");
     }
 
     /* ----------------------------
@@ -38,25 +38,8 @@ export class TsunamiFlowSight extends TsDomCanvas {
     -----------------------------*/
     async loadImage(input) {
         try {
-            let blob;
-
-            if (typeof input === "string") {
-                // URL
-                const res = await fetch(input);
-                blob = await res.blob();
-            } else if (input instanceof Blob) {
-                blob = input;
-            } else if (input instanceof ArrayBuffer) {
-                blob = new Blob([input]);
-            } else {
-                throw new Error("Unsupported image input");
-            }
-
-            // Clean previous URL
-            if (this.objectURL) URL.revokeObjectURL(this.objectURL);
-
-            this.objectURL = URL.createObjectURL(blob);
-            this.imageElement.src = this.objectURL;
+            await this.loadblob(input);
+            this.imageElement.src = this.blobobjectURL;
 
             await this.imageElement.decode();
 
@@ -74,8 +57,12 @@ export class TsunamiFlowSight extends TsDomCanvas {
     /* ----------------------------
        FAST DECODE (ImageBitmap)
     -----------------------------*/
-    async createBitmap() {
-        if (!this.imageElement) return;
+    async createBitmap(image) {
+        if (!this.imageElement) {
+            await this.loadImage(image);
+        } else if (image) {
+            await this.loadImage(image);
+        }
 
         this.bitmap = await createImageBitmap(this.imageElement);
 

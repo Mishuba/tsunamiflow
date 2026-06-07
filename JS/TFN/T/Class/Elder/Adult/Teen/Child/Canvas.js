@@ -1,8 +1,35 @@
 import { Dom } from "./Toddler/Dom.js";
-export class TsDomCanvas extends Dom { //dom n window
+export class TsDomCanvas extends Dom {
     canvas = null;
-    contextTypecanvas = "2d";
-    contextTypecanvasoption = { colorSpace: "srgb", willReadFrequently: true };
+    contextTypecanvas = ("bitmaprenderer", "2d", "webgl", "webgl2", 'webgpu', "experimental-webgl");
+
+    contextTypecanvasoption = {
+        alpha: true,
+        desynchronized: true,
+        colorSpace: "srgb",
+        willReadFrequently: true,
+        //colorType: "float16",
+    };
+    contextTypecanvaswebgloption = {
+        alpha: true,
+        depth: true,
+        stencil: false,
+        antialias: true,
+        premultipliedAlpha: true,
+        preserveDrawingBuffer: true,
+        powerPreference: "high-performance",
+        failIfMajorPerformanceCaveat: true,
+        desynchronized: true,
+        xrCompatible: true,
+    };
+    canvaswebgpuconfigure = {
+        device: null,
+        format: "bgra8unorm",
+        alphaMode: "premultiplied", //opaque
+        usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
+        colorSpace: "srgb", //display-p3
+        viewFormats: ["bgra8unorm", "rgba16float"]
+    };
     canvasctx = null;
     iscanvasReady = false;
     //Frames
@@ -17,16 +44,41 @@ export class TsDomCanvas extends Dom { //dom n window
     constructor(options = {}) {
         super(options);
     }
-    initCanvas() {
+    initCanvas(type = "2d") {
         if (this.canvas !== null) {
             if (this.canvas === this.find("TFradioCanvas")) {
                 return;
             } else {
                 try {
-                    this.canvasctx = this.canvas.getContext(this.contextTypecanvas, this.contextTypecanvasoption);
-                    if (!this.canvasctx) throw new Error(`${this.contextTypecanvas} context not supported`);
-                    this.iscanvasReady = true;
-                    console.log(`Canvas initialized with ${this.contextTypecanvas} context`);
+                    switch (type) {
+                        case "2d":
+                            this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
+                            this.iscanvasReady = true;
+                            console.log(`Canvas initialized with ${type} context`);
+                            break;
+                        case "webgl":
+                            this.canvasctx = this.canvas.getContext("webgl", this.contextTypecanvaswebgloption);
+                            this.iscanvasReady = true;
+                            console.log(`Canvas initialized with ${type} context`);
+                            break;
+                        case "webgl2":
+                            this.canvasctx = this.canvas.getContext("webgl2", this.contextTypecanvaswebgloption);
+                            this.iscanvasReady = true;
+                            console.log(`Canvas initialized with ${type} context`);
+                            break;
+                        case "webgpu":
+                            // Handle WebGPU context initialization
+                            this.iscanvasReady = true;
+                            console.log(`Canvas initialized with ${type} context`);
+                            break;
+                        case "bitmaprenderer":
+                            this.canvasctx = this.canvas.getContext("bitmaprenderer");
+                            this.iscanvasReady = true;
+                            console.log(`Canvas initialized with ${type} context`);
+                            break;
+                        default:
+                            throw new Error(`Context type '${type}' not supported`);
+                    }
                 } catch (err) {
                     console.error("Canvas init failed:", err);
                     this.canvasctx = null;
@@ -41,12 +93,6 @@ export class TsDomCanvas extends Dom { //dom n window
         if (!this.iscanvasReady) return;
         this.canvas.width = width;
         this.canvas.height = height;
-    }
-    createComponent(width, height, color, x, y, speedX, speedY, type) {
-        return { width, height, speedX, speedY, color, x, y, type };
-    }
-    getComponentValue(key) {
-        return this.component[key];
     }
     HomePageAnimation(player) {
         this.clearCanvas();
@@ -71,6 +117,51 @@ export class TsDomCanvas extends Dom { //dom n window
         // Move text
         player.textWidth += player.speedX;
         player.textHeight += player.speedY;
+    }
+    async usingframes(frame) {
+        if (!this.iscanvasReady) return;
+        try {
+            //this.loadImage(frame);
+            //await this.createBitmap();
+            this.canvasctx.transferFromImageBitmap(frame);
+
+        } catch (e) {
+            console.warn("Failed to use video frames:", e);
+        }
+    }
+    setFrames(frames) {
+        switch (frames) {
+            case "image":
+            case "imagebitmap":
+                this.tfframes = new VideoFrame(frames, { timestamp: 0 });
+                break;
+            case "canvas":
+                this.tfframes = new VideoFrame(this.canvas, { timestamp: performance.now() * 1000 });
+                break;
+            case "video":
+                this.tfframes = new VideoFrame(frames);
+                break;
+            default:
+                try {
+                    this.tfframes = new VideoFrame(pixelBuffer, {
+                        format: "RGBA",
+                        codedWidth: this.canvas.width,
+                        codedHeight: this.canvas.height,
+                        timestamp: 0
+                    });
+                    this.useDataOnCanvas(this.tfframes);
+                } catch (e) {
+                    console.warn("Unsupported frames type:", frames);
+                    this.tfframes = null;
+                }
+                break;
+        }
+    }
+    createComponent(width, height, color, x, y, speedX, speedY, type) {
+        return { width, height, speedX, speedY, color, x, y, type };
+    }
+    getComponentValue(key) {
+        return this.component[key];
     }
     tfSprite() {
         /*
@@ -116,37 +207,6 @@ export class TsDomCanvas extends Dom { //dom n window
         }
 
     }
-
-    setFrames(frames) {
-        switch (frames) {
-            case "image":
-            case "imagebitmap":
-                this.tfframes = new VideoFrame(frames, { timestamp: 0 });
-                break;
-            case "canvas":
-                this.tfframes = new VideoFrame(this.canvas, { timestamp: performance.now() * 1000 });
-                break;
-            case "video":
-                this.tfframes = new VideoFrame(frames);
-                break;
-            default:
-                try {
-                    this.tfframes = new VideoFrame(pixelBuffer, {
-                        format: "RGBA",
-                        codedWidth: this.canvas.width,
-                        codedHeight: this.canvas.height,
-                        timestamp: 0
-                    });
-                    this.useDataOnCanvas(this.tfframes);
-                } catch (e) {
-                    console.warn("Unsupported frames type:", frames);
-                    this.tfframes = null;
-                }
-                break;
-        }
-    }
-
-
 
     getCanvasContext() {
         /*
