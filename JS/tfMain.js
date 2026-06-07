@@ -313,7 +313,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  const nation = new Studio({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas, offscreencanvas: RadioOffscreenCanvas });
+  const nation = new Studio({ audioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const Controller = new maxwell({
     site: TfSite,
