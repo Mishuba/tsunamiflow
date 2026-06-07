@@ -74,20 +74,57 @@ export class Flow extends TsunamiFlowAudio {
         }
     }
     startVisualizerLoop() {
-        const loop = () => {
-            if (this.AudioElement.paused || this.AudioElement.ended) {
 
-                return;
-            }
+    if (!this.AudioElement) return;
 
-            this.TfSoundsContextBufferLength[this.AudioElement.id] = this.TfSoundsContext[this.AudioElement.id].frequencyBinCount;
-            this.TfSoundsContextDataArray[this.AudioElement.id] = new Uint8Array(this.TfSoundsContextBufferLength[this.AudioElement.id] / 4);
+    const id = this.AudioElement.id;
 
-            this.TfSoundAnalyser[this.AudioElement.id].getByteFrequencyData(this.TfSoundsContextDataArray[this.AudioElement.id]);
-
-            this.RadioVisualizer([...this.TfSoundsContextDataArray[this.AudioElement.id]], this.baseRadius, this.particles, this.AudioElement.volume);
-            requestAnimationFrame(loop);
-        }
-        loop();
+    // Create once
+    if (!this.TfSoundsContextBufferLength[id]) {
+        this.TfSoundsContextBufferLength[id] =
+            this.TfSoundAnalyser[id].frequencyBinCount;
     }
+
+    if (!this.TfSoundsContextDataArray[id]) {
+        this.TfSoundsContextDataArray[id] =
+            new Uint8Array(
+                this.TfSoundsContextBufferLength[id] / 4
+            );
+    }
+
+    const dataArray = this.TfSoundsContextDataArray[id];
+
+    const loop = () => {
+
+        // Keep animation frame alive
+        this.visualizerFrame = requestAnimationFrame(loop);
+
+        if (
+            !this.AudioElement ||
+            this.AudioElement.paused ||
+            this.AudioElement.ended
+        ) {
+            return;
+        }
+
+        this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+
+        this.RadioVisualizer(
+            dataArray,
+            this.baseRadius,
+            this.particles,
+            this.AudioElement.volume
+        );
+    };
+
+    cancelAnimationFrame(this.visualizerFrame);
+    loop();
+}
+
+stopVisualizerLoop() {
+    if (this.visualizerFrame) {
+        cancelAnimationFrame(this.visualizerFrame);
+        this.visualizerFrame = null;
+    }
+}
 }
