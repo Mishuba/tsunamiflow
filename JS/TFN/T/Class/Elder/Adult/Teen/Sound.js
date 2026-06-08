@@ -143,6 +143,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         if (!this.masterAudioWorklet) {
             // GLOBAL AUDIO WORKLET
+            this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
             this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor");
             this.masterAudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
         }
