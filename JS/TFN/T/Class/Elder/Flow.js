@@ -85,7 +85,7 @@ export class Flow extends TsunamiFlowAudio {
                 this.TfSoundAnalyser[id].frequencyBinCount;
         }
 
-        if (!this.TfSoundsContextDataArray[id]) {
+        if (!this.TfSoundsContextDataArray[id] === undefined || null) {
 
             this.masterDataArray =
                 new Uint8Array(
