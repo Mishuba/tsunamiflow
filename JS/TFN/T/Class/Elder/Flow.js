@@ -77,35 +77,48 @@ export class Flow extends TsunamiFlowAudio {
         const id = this.AudioElement.id;
 
         // Create once
-        if (!this.TfSoundsContextBufferLength[id]) {
-            this.masterBufferLength =
-                this.masterAnalyser.frequencyBinCount;
+        if (typeof this.TfSoundsContextBufferLength[id] === "undefined") {
+            if (typeof this.masterBufferLength === "undefined") {
+                this.masterBufferLength =
+                    this.masterAnalyser.frequencyBinCount;
+            } else {
+                if (!this.masterBufferLength) {
+                    this.masterBufferLength =
+                        this.masterAnalyser.frequencyBinCount;
+                } else {
+
+                }
+            }
         } else {
-            this.TfSoundsContextBufferLength[id] =
-                this.TfSoundAnalyser[id].frequencyBinCount;
+            if (!this.TfSoundsContextBufferLength[id]) {
+                this.TfSoundsContextBufferLength[id] =
+                    this.TfSoundAnalyser[id].frequencyBinCount;
+            } else {
+
+            }
         }
 
-        this.masterDataArray =
-            new Uint8Array(
-                this.masterBufferLength / 4
-            );
-        const dataArray = this.masterDataArray;
-        /*
-                if (!this.TfSoundsContextDataArray[id] === undefined || null) {
-        
-                    this.masterDataArray =
-                        new Uint8Array(
-                            this.masterBufferLength / 4
-                        );
-                    const dataArray = this.masterDataArray;
-                } else {
-                    this.TfSoundsContextDataArray[id] =
-                        new Uint8Array(
-                            this.TfSoundsContextBufferLength[id] / 4
-                        );
-                    const dataArray = this.TfSoundsContextDataArray[id];
-                }
-                */
+        if (typeof this.TfSoundsContextDataArray[id] === undefined) {
+            if (!this.masterDataArray) {
+                this.masterDataArray =
+                    new Uint8Array(
+                        this.masterBufferLength / 4
+                    );
+            } else {
+
+            }
+            const dataArray = this.masterDataArray;
+        } else {
+            if (!this.TfSoundsContextDataArray[id]) {
+                this.TfSoundsContextDataArray[id] =
+                    new Uint8Array(
+                        this.TfSoundsContextBufferLength[id] / 4
+                    );
+            } else {
+
+            }
+            const dataArray = this.TfSoundsContextDataArray[id];
+        }
 
         const loop = () => {
 
@@ -120,14 +133,12 @@ export class Flow extends TsunamiFlowAudio {
                 return;
             }
 
-            this.masterDataArray.getByteFrequencyData(dataArray);
-            /*
-                        if (!this.TfSoundAnalyser[id]) {
-            
-                        } else {
-                            this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
-                        }
-            */
+
+            if (typeof this.TfSoundAnalyser[id] === "undefined") {
+                this.masterDataArray.getByteFrequencyData(dataArray);
+            } else {
+                this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+            }
 
             this.RadioVisualizer(
                 dataArray,
