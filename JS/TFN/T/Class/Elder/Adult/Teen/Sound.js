@@ -128,14 +128,14 @@ export class TsunamiFlowSound extends TsDomCanvas {
             this.masterGain
                 .connect(this.masterAnalyser)
                 .connect(this.masterCompressor)
-                //.connect(this.masterAudioWorklet)
+                .connect(this.masterAudioWorklet)
                 .connect(this.MasterSoundsContext.destination);
         } else {
             this.ContextElement
                 .connect(this.masterGain)
                 .connect(this.masterAnalyser)
                 .connect(this.masterCompressor)
-                //.connect(this.masterAudioWorklet)
+                .connect(this.masterAudioWorklet)
                 .connect(this.MasterSoundsContext.destination);
         }
     }
