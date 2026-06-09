@@ -113,7 +113,12 @@ export class Flow extends TsunamiFlowAudio {
                 return;
             }
 
-            this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+            if (!this.TfSoundAnalyser[id]) {
+                this.masterDataArray.getByteFrequencyData(dataArray);
+            } else {
+                this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+            }
+
 
             this.RadioVisualizer(
                 dataArray,
