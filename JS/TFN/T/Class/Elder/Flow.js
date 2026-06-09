@@ -85,20 +85,27 @@ export class Flow extends TsunamiFlowAudio {
                 this.TfSoundAnalyser[id].frequencyBinCount;
         }
 
-        if (!this.TfSoundsContextDataArray[id] === undefined || null) {
-
-            this.masterDataArray =
-                new Uint8Array(
-                    this.masterBufferLength / 4
-                );
-            const dataArray = this.masterDataArray;
-        } else {
-            this.TfSoundsContextDataArray[id] =
-                new Uint8Array(
-                    this.TfSoundsContextBufferLength[id] / 4
-                );
-            const dataArray = this.TfSoundsContextDataArray[id];
-        }
+        this.masterDataArray =
+            new Uint8Array(
+                this.masterBufferLength / 4
+            );
+        const dataArray = this.masterDataArray;
+        /*
+                if (!this.TfSoundsContextDataArray[id] === undefined || null) {
+        
+                    this.masterDataArray =
+                        new Uint8Array(
+                            this.masterBufferLength / 4
+                        );
+                    const dataArray = this.masterDataArray;
+                } else {
+                    this.TfSoundsContextDataArray[id] =
+                        new Uint8Array(
+                            this.TfSoundsContextBufferLength[id] / 4
+                        );
+                    const dataArray = this.TfSoundsContextDataArray[id];
+                }
+                */
 
         const loop = () => {
 
@@ -113,12 +120,14 @@ export class Flow extends TsunamiFlowAudio {
                 return;
             }
 
-            if (!this.TfSoundAnalyser[id]) {
-                this.masterDataArray.getByteFrequencyData(dataArray);
-            } else {
-                this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
-            }
-
+            this.masterDataArray.getByteFrequencyData(dataArray);
+            /*
+                        if (!this.TfSoundAnalyser[id]) {
+            
+                        } else {
+                            this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
+                        }
+            */
 
             this.RadioVisualizer(
                 dataArray,
