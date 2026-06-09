@@ -59,8 +59,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
             };
         }
 
-        if (options.SoundContext) {
-            this.MasterSoundsContext = options.SoundContext;
+        if (options.MasterSoundsContext) {
+            this.MasterSoundsContext = options.MasterSoundsContext;
         }
         if (options.ContextElement) {
             this.ContextElement = options.ContextElement;
