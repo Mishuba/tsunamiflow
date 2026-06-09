@@ -68,8 +68,20 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (options.masterAnalyser) {
             this.masterAnalyser = options.masterAnalyser;
         }
-        if (options.TfSoundWorklet) {
-            this.TfSoundWorklet = options.TfSoundWorklet;
+        if (options.masterCompressor) {
+            this.masterCompressor = options.masterCompressor;
+        }
+        if (options.masterDelay) {
+            this.masterDelay = options.masterDelay;
+        }
+        if (options.masterPanner) {
+            this.masterPanner = options.masterPanner;
+        }
+        if (options.masterAudioWorklet) {
+            this.masterAudioWorklet = options.masterAudioWorklet;
+        }
+        if (options.MixerDestination) {
+            this.MixerDestination = options.MixerDestination;
         }
     }
     /// context
@@ -143,9 +155,11 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         if (!this.masterAudioWorklet) {
             // GLOBAL AUDIO WORKLET
-            this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-            this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor");
-            this.masterAudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
+            this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
+                this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor");
+                this.masterAudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
+            });
+
         }
         // ROUTING
 
