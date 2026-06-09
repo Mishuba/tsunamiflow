@@ -10,6 +10,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
     //context
     MasterCxtId = null;
     MasterSoundsContext = null;
+    ContextElement = null;
     MasteridCounter = 0;
     masterGain = null;
     masterDelay = null;
@@ -61,7 +62,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (options.SoundContext) {
             this.MasterSoundsContext = options.SoundContext;
         }
-
+        if (options.ContextElement) {
+            this.ContextElement = options.ContextElement;
+        }
         if (options.masterGain) {
             this.masterGain = options.masterGain;
         }
@@ -120,6 +123,22 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return chain;
     }
+    doctxok() {
+        if (!this.ContextElement) {
+            this.masterGain
+                .connect(this.masterAnalyser)
+                .connect(this.masterCompressor)
+                .connect(this.masterAudioWorklet)
+                .connect(this.MasterSoundsContext.destination);
+        } else {
+            this.ContextElement
+                .connect(this.masterGain)
+                .connect(this.masterAnalyser)
+                .connect(this.masterCompressor)
+                .connect(this.masterAudioWorklet)
+                .connect(this.MasterSoundsContext.destination);
+        }
+    }
     initAudioContext() {
         if (this.AudioContextInitialized) {
             if (this.MasterSoundsContext.state === "suspended") {
@@ -130,7 +149,14 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-
+        if (!this.ContextElement) {
+            if (this.AudioElement) {
+                // MASTER
+                this.ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
+            } else {
+                this.ContextElement = null;
+            }
+        }
         if (!this.masterGain) {
             // MASTER
             this.masterGain = this.MasterSoundsContext.createGain();
@@ -155,20 +181,16 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         if (!this.masterAudioWorklet) {
             // GLOBAL AUDIO WORKLET
-            this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
+            await this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
                 this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor");
                 this.masterAudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
             });
-
+            this.doctxok();
+        } else {
+            this.doctxok();
         }
+
         // ROUTING
-
-        this.masterGain
-            .connect(this.masterAnalyser)
-            .connect(this.masterCompressor)
-            .connect(this.masterAudioWorklet)
-            .connect(this.MasterSoundsContext.destination);
-
         this.emit("ready", this.MasterSoundsContext);
         if (this.MasterSoundsContext.state === "suspended") {
             return this.MasterSoundsContext.resume();
