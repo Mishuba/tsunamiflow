@@ -139,7 +139,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 .connect(this.MasterSoundsContext.destination);
         }
     }
-    initAudioContext() {
+    async initAudioContext() {
         if (this.AudioContextInitialized) {
             if (this.MasterSoundsContext.state === "suspended") {
                 return this.MasterSoundsContext.resume();
