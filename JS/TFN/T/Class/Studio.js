@@ -642,7 +642,7 @@ export class Studio extends Flow {
     }
     loadeddataAudio() {
         console.log("The audio data is loaded");
-        await this.initAudioContext();
+        this.initAudioContext();
     }
     canplayAudio() {
         console.log("Audio playback is can play");
