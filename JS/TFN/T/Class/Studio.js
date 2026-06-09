@@ -642,7 +642,7 @@ export class Studio extends Flow {
     }
     loadeddataAudio() {
         console.log("The audio data is loaded");
-        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
+        // this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     canplayAudio() {
         console.log("Audio playback is can play");
