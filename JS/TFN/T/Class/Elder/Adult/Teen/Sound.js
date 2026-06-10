@@ -35,6 +35,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
     TfSoundsOscillatorNodeOptions = {};
     TfSoundsWaveShaperNodeOptions = {};
     TfSoundsContext = {};
+    // Backwards-compatible alias: some modules use the pluralized name
+    TfSoundsContextDataArray = {};
     AudioCxtId = null;
     TfSoundsidCounter = 0;
     TfSoundsDelay = {};

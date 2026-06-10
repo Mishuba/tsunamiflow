@@ -98,26 +98,17 @@ export class Flow extends TsunamiFlowAudio {
             }
         }
 
-        if (typeof this.TfSoundsContextDataArray[id] === undefined) {
+        let dataArray;
+        if (typeof this.TfSoundsContextDataArray === "undefined" || typeof this.TfSoundsContextDataArray[id] === "undefined") {
             if (!this.masterDataArray) {
-                this.masterDataArray =
-                    new Uint8Array(
-                        this.masterBufferLength / 4
-                    );
-            } else {
-
+                this.masterDataArray = new Uint8Array(this.masterBufferLength / 4);
             }
-            const dataArray = this.masterDataArray;
+            dataArray = this.masterDataArray;
         } else {
             if (!this.TfSoundsContextDataArray[id]) {
-                this.TfSoundsContextDataArray[id] =
-                    new Uint8Array(
-                        this.TfSoundsContextBufferLength[id] / 4
-                    );
-            } else {
-
+                this.TfSoundsContextDataArray[id] = new Uint8Array(this.TfSoundsContextBufferLength[id] / 4);
             }
-            const dataArray = this.TfSoundsContextDataArray[id];
+            dataArray = this.TfSoundsContextDataArray[id];
         }
 
         const loop = () => {
