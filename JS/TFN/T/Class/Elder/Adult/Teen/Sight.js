@@ -30,7 +30,7 @@ export class TsunamiFlowSight extends TsDomCanvas {
             this.canvas = document.createElement("canvas");
         }
 
-        this.initCanvas("bitmaprenderer");
+        if (!this.iscanvasReady) this.initCanvas("bitmaprenderer");
     }
 
     /* ----------------------------
