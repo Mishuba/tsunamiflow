@@ -46,47 +46,54 @@ export class TsDomCanvas extends Dom {
         super(options);
     }
     initCanvas(type = "2d") {
-        if (this.canvas !== null) {
-            if (this.canvas === this.find("TFradioCanvas")) {
-                return;
-            } else {
-                try {
-                    switch (type) {
-                        case "2d":
-                            this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
-                            this.iscanvasReady = true;
-                            console.log(`Canvas initialized with ${type} context`);
-                            break;
-                        case "webgl":
-                            this.canvasctx = this.canvas.getContext("webgl", this.contextTypecanvaswebgloption);
-                            this.iscanvasReady = true;
-                            console.log(`Canvas initialized with ${type} context`);
-                            break;
-                        case "webgl2":
-                            this.canvasctx = this.canvas.getContext("webgl2", this.contextTypecanvaswebgloption);
-                            this.iscanvasReady = true;
-                            console.log(`Canvas initialized with ${type} context`);
-                            break;
-                        case "webgpu":
-                            // Handle WebGPU context initialization
-                            this.iscanvasReady = true;
-                            console.log(`Canvas initialized with ${type} context`);
-                            break;
-                        case "bitmaprenderer":
-                            this.canvasctx = this.canvas.getContext("bitmaprenderer");
-                            this.iscanvasReady = true;
-                            console.log(`Canvas initialized with ${type} context`);
-                            break;
-                        default:
-                            throw new Error(`Context type '${type}' not supported`);
-                    }
-                } catch (err) {
-                    console.error("Canvas init failed:", err);
-                    this.canvasctx = null;
-                }
-            }
+        if (this.iscanvasReady) {
+            return;
         } else {
-            console.warn("No canvas element found for initialization");
+            if (this.canvas !== null) {
+                if (this.canvas === this.find("TFradioCanvas")) {
+                    this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
+                    this.iscanvasReady = true;
+                    console.log(`Canvas initialized with ${type} context`);
+                    return;
+                } else {
+                    try {
+                        switch (type) {
+                            case "2d":
+                                this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
+                                this.iscanvasReady = true;
+                                console.log(`Canvas initialized with ${type} context`);
+                                break;
+                            case "webgl":
+                                this.canvasctx = this.canvas.getContext("webgl", this.contextTypecanvaswebgloption);
+                                this.iscanvasReady = true;
+                                console.log(`Canvas initialized with ${type} context`);
+                                break;
+                            case "webgl2":
+                                this.canvasctx = this.canvas.getContext("webgl2", this.contextTypecanvaswebgloption);
+                                this.iscanvasReady = true;
+                                console.log(`Canvas initialized with ${type} context`);
+                                break;
+                            case "webgpu":
+                                // Handle WebGPU context initialization
+                                this.iscanvasReady = true;
+                                console.log(`Canvas initialized with ${type} context`);
+                                break;
+                            case "bitmaprenderer":
+                                this.canvasctx = this.canvas.getContext("bitmaprenderer");
+                                this.iscanvasReady = true;
+                                console.log(`Canvas initialized with ${type} context`);
+                                break;
+                            default:
+                                throw new Error(`Context type '${type}' not supported`);
+                        }
+                    } catch (err) {
+                        console.error("Canvas init failed:", err);
+                        this.canvasctx = null;
+                    }
+                }
+            } else {
+                console.warn("No canvas element found for initialization");
+            }
         }
     }
 
