@@ -126,7 +126,7 @@ export class Flow extends TsunamiFlowAudio {
 
 
             if (typeof this.TfSoundAnalyser[id] === "undefined") {
-                this.masterDataArray.getByteFrequencyData(dataArray);
+                this.masterAnalyser.getByteFrequencyData(dataArray);
             } else {
                 this.TfSoundAnalyser[id].getByteFrequencyData(dataArray);
             }
