@@ -2,7 +2,8 @@ import { Dom } from "./Toddler/Dom.js";
 export class TsDomCanvas extends Dom {
     canvas = null;
     offscreencanvas = null;
-    contextTypecanvas = ("bitmaprenderer", "2d", "webgl", "webgl2", 'webgpu', "experimental-webgl");
+    // Default preferred context type
+    contextTypecanvas = "2d";
 
     contextTypecanvasoption = {
         alpha: true,
@@ -46,54 +47,57 @@ export class TsDomCanvas extends Dom {
         super(options);
     }
     initCanvas(type = "2d") {
-        if (this.iscanvasReady) {
-            return;
-        } else {
-            if (this.canvas !== null) {
-                if (this.canvas === this.find("TFradioCanvas")) {
-                    this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
-                    this.iscanvasReady = true;
-                    console.log(`Canvas initialized with ${type} context`);
-                    return;
-                } else {
-                    try {
-                        switch (type) {
-                            case "2d":
-                                this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
-                                this.iscanvasReady = true;
-                                console.log(`Canvas initialized with ${type} context`);
-                                break;
-                            case "webgl":
-                                this.canvasctx = this.canvas.getContext("webgl", this.contextTypecanvaswebgloption);
-                                this.iscanvasReady = true;
-                                console.log(`Canvas initialized with ${type} context`);
-                                break;
-                            case "webgl2":
-                                this.canvasctx = this.canvas.getContext("webgl2", this.contextTypecanvaswebgloption);
-                                this.iscanvasReady = true;
-                                console.log(`Canvas initialized with ${type} context`);
-                                break;
-                            case "webgpu":
-                                // Handle WebGPU context initialization
-                                this.iscanvasReady = true;
-                                console.log(`Canvas initialized with ${type} context`);
-                                break;
-                            case "bitmaprenderer":
-                                this.canvasctx = this.canvas.getContext("bitmaprenderer");
-                                this.iscanvasReady = true;
-                                console.log(`Canvas initialized with ${type} context`);
-                                break;
-                            default:
-                                throw new Error(`Context type '${type}' not supported`);
-                        }
-                    } catch (err) {
-                        console.error("Canvas init failed:", err);
-                        this.canvasctx = null;
-                    }
+        if (this.iscanvasReady === true) return;
+
+        // Ensure we have a reference to a canvas element. Try multiple fallbacks.
+        if (typeof this.canvas === "undefined" || this.canvas === null) {
+            try {
+                if (typeof this.find === "function") {
+                    const found = this.find("TFradioCanvas");
+                    if (found) this.canvas = found;
                 }
-            } else {
-                console.warn("No canvas element found for initialization");
+            } catch (e) {
+                // ignore
             }
+
+            // Fallback to common DOM lookups
+            if (!this.canvas && typeof document !== "undefined") {
+                this.canvas = document.getElementById("TFradioCanvas") || document.querySelector("canvas") || null;
+            }
+        }
+
+        if (!this.canvas) {
+            console.warn("No canvas element found for initialization");
+            return;
+        }
+
+        try {
+            switch (type) {
+                case "2d":
+                    this.canvasctx = this.canvas.getContext("2d", this.contextTypecanvasoption);
+                    break;
+                case "webgl":
+                    this.canvasctx = this.canvas.getContext("webgl", this.contextTypecanvaswebgloption);
+                    break;
+                case "webgl2":
+                    this.canvasctx = this.canvas.getContext("webgl2", this.contextTypecanvaswebgloption);
+                    break;
+                case "webgpu":
+                    // WebGPU requires async setup; mark ready and let caller configure device
+                    this.canvasctx = this.canvas.getContext("webgpu");
+                    break;
+                case "bitmaprenderer":
+                    this.canvasctx = this.canvas.getContext("bitmaprenderer");
+                    break;
+                default:
+                    throw new Error(`Context type '${type}' not supported`);
+            }
+
+            this.iscanvasReady = true;
+            console.log(`Canvas initialized with ${type} context`);
+        } catch (err) {
+            console.error("Canvas init failed:", err);
+            this.canvasctx = null;
         }
     }
 
@@ -106,7 +110,9 @@ export class TsDomCanvas extends Dom {
         this.clearCanvas();
 
         // Draw text
-        this.context.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
+        if (this.canvasctx && typeof this.canvasctx.fillText === 'function') {
+            this.canvasctx.fillText(player.spriteDialog[this.frame], player.textWidth, player.textHeight);
+        }
 
         // Initialize speed if needed
         if (player.speedX === 0) player.speedX = 1;
@@ -256,12 +262,15 @@ export class TsDomCanvas extends Dom {
     }
     clearCanvas(color = "#000000") {
         if (!this.iscanvasReady) return;
-        if (this.contextTypecanvas === "2d") {
-            this.canvasctx.fillStyle = color;
-            this.canvasctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (this.canvasctx && typeof this.canvasctx.clearRect === 'function') {
+            // Clear canvas, then fill with color if provided
+            this.canvasctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            if (color) {
+                this.canvasctx.fillStyle = color;
+                this.canvasctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+            }
         } else {
-            console.warn("Clear method not implemented for non-2d context");
+            console.warn("Clear method not implemented for non-2d or unavailable context");
         }
     }
 }
