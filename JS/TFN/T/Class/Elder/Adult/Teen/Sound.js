@@ -210,11 +210,17 @@ export class TsunamiFlowSound extends TsDomCanvas {
             source = this.elementSourceMap.get(element);
         } else {
             if (type === "audio") {
-                source = this.MasterSoundsContext.createMediaElementSource(element);
-                this.elementSourceMap.set(element, source);
+                if (!this.AudioElement) 
+                {
+                    source = this.MasterSoundsContext.createMediaElementSource(element);
+                    this.elementSourceMap.set(element, source);
+                } else {
+                    this.elementSourceMap.set(element, source);
+                }
+
             } else if (type === "video") {
-                source = this.MasterSoundsContext.createMediaStreamSource(stream);
-                this.elementSourceMap.set(stream, source);
+                source = this.MasterSoundsContext.createMediaStreamSource(element);
+                this.elementSourceMap.set(element, source);
             }
         }
 
