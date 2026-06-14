@@ -210,12 +210,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
             source = this.elementSourceMap.get(element);
         } else {
             if (type === "audio") {
-                if (!this.AudioElement) 
-                {
+                if (!this.AudioElement) {
                     source = this.MasterSoundsContext.createMediaElementSource(element);
                     this.elementSourceMap.set(element, source);
                 } else {
                     this.elementSourceMap.set(element, source);
+                    source = this.elementSourceMap.get(element);
                 }
 
             } else if (type === "video") {
@@ -250,7 +250,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
     connectaudio(element, id, type = "audio") {
         this.initAudioContext();
         if (this.TfSoundsContext[id]) return;
-        this.addAudioContextSource(element, id, type);
+        //this.addAudioContextSource(element, id, type);
     }
     removeSource(id) {
         const source = this.TfSoundsContext[id];
