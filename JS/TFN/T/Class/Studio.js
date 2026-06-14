@@ -187,8 +187,8 @@ export class Studio extends Flow {
     ];
     constructor(options = {}) {
         super(options);
-        if (options.audioElement) {
-            this.AudioElement = options.audioElement;
+        if (options.AudioElement) {
+            this.AudioElement = options.AudioElement;
         }
     }
     AudioNetworkState() {
