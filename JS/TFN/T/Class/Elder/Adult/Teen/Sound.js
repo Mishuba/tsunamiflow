@@ -1,6 +1,7 @@
 import { TsDomCanvas } from "./Child/Canvas.js";
 
 export class TsunamiFlowSound extends TsDomCanvas {
+    AudioElement = null;
     AudioContextInitialized = false;
     audioConstraints = {
         echoCancellation: true,
@@ -49,7 +50,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
     TfSoundsFloat32 = {};
     SoundWorklet = {};
     TfSoundsDefaultPlaylist = null;
-    audio = null;
     MixerDestination = null;
     constructor(options = {}) {
         super(options);
@@ -151,6 +151,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
         }
+        /*
         if (!this.ContextElement) {
             if (this.AudioElement) {
                 // MASTER
@@ -159,6 +160,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 this.ContextElement = null;
             }
         }
+        */
         if (!this.masterGain) {
             // MASTER
             this.masterGain = this.MasterSoundsContext.createGain();
@@ -283,7 +285,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
     }
 
-    AudioContextState() {
+    AudioContextState(context, id) {
         switch (this.AudioCxtId) {
             case null:
             case undefined:
