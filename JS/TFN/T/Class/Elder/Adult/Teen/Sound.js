@@ -210,14 +210,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
             source = this.elementSourceMap.get(element);
         } else {
             if (type === "audio") {
-                if (!this.AudioElement) {
                     source = this.MasterSoundsContext.createMediaElementSource(element);
                     this.elementSourceMap.set(element, source);
-                } else {
-                    this.elementSourceMap.set(element, source);
-                    source = this.elementSourceMap.get(element);
-                }
-
             } else if (type === "video") {
                 source = this.MasterSoundsContext.createMediaStreamSource(element);
                 this.elementSourceMap.set(element, source);
@@ -230,7 +224,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
         source.connect(chain.gain)
             .connect(chain.analyser)
             .connect(chain.compressor)
-            .connect(chain.worklet)
             .connect(chain.delay)
             .connect(chain.panner)
             .connect(this.masterGain);
@@ -239,7 +232,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
         this.TfSoundsGain[sourceId] = chain.gain;
         this.TfSoundAnalyser[sourceId] = chain.analyser;
         this.TfSoundsCompressor[sourceId] = chain.compressor;
-        this.SoundWorklet[sourceId] = chain.worklet;
         this.TfSoundsDelay[sourceId] = chain.delay;
         this.TfSoundsPanner[sourceId] = chain.panner;
 
@@ -250,7 +242,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
     connectaudio(element, id, type = "audio") {
         this.initAudioContext();
         if (this.TfSoundsContext[id]) return;
-        //this.addAudioContextSource(element, id, type);
+        this.addAudioContextSource(element, id, type);
     }
     removeSource(id) {
         const source = this.TfSoundsContext[id];
