@@ -10,6 +10,7 @@ export class core {
     blobobjectURL = null;
     blobonReady = null;
     maxBeaconSize = 64 * 1024;
+    crossorigin = anonymous;
     constructor(options = {}) {
 
     }

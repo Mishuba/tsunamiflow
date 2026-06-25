@@ -647,7 +647,7 @@ export class Studio extends Flow {
     }
     canplaythroughAudio() {
         console.log("Audio playback is can play through");
-        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
+        //this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     endedAudio() {
         console.log("The audio should have ended");
