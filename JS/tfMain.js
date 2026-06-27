@@ -299,7 +299,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const flowAnalyser = flowaudio.createAnalyser();
   Object.assign(flowAnalyser, TfSoundAnalyserOptions);
   const butftfer = flowAnalyser.frequencyBinCount;
-  const fdatfaarrayj = new Uint8Array(butftfer); //new Uint8Array(butftfer) / 4;
+  //const fdatfaarrayj = new Uint8Array(butftfer); //new Uint8Array(butftfer) / 4;
   const flowCompressor = flowaudio.createDynamicsCompressor();
   const flowDelay = flowaudio.createDelay();
   const flowPanner = flowaudio.createPanner();
@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .connect(flowaudio.destination);
 
 
-  const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterDataArray = fdatfaarrayj, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const Controller = new maxwell({
     site: TfSite,
