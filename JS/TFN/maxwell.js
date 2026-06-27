@@ -508,6 +508,7 @@ export class maxwell {
         });
     }
     bindAudio() {
+        this.soundEngine.initAudioContext();
         this.RadioReady();
         this.soundEngine.RadioEventListeners();
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));

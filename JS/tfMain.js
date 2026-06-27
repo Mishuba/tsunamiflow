@@ -342,23 +342,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
   });
-  Controller.worker = safeWorker;
-  Controller.audioimageworker = safeImageWorker;
-  Controller.audioworker = safeMediaWorker;
-  Controller.videoworker = safeVideoWorker;
-  Controller.gameinputworker = safeGameInputWorker;
-  Controller.gameworldworker = safeGameWorldWorker;
-  Controller.aiworker = safeAiWorker;
-  //Controller.sharedWorker = safeSharedWorker;
 
-  Controller.iframe.frame.addEventListener("load", () => {
-    try {
-      Controller.iframe.frame.contentWindow.controller = Controller;
-      Controller.iframe.MenuSwitch(Controller.iframe.frame);
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-  });
 
   Controller.site.requestLocation();
   const OffscreenCanvasRadio = document.createElement("canvas");
@@ -385,6 +369,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.log("TFN");
   }).catch(err => {
     console.error("Cart binding error:", err);
+  });
+
+  Controller.worker = safeWorker;
+  Controller.audioimageworker = safeImageWorker;
+  Controller.audioworker = safeMediaWorker;
+  Controller.videoworker = safeVideoWorker;
+  Controller.gameinputworker = safeGameInputWorker;
+  Controller.gameworldworker = safeGameWorldWorker;
+  Controller.aiworker = safeAiWorker;
+  //Controller.sharedWorker = safeSharedWorker;
+
+  Controller.iframe.frame.addEventListener("load", () => {
+    try {
+      Controller.iframe.frame.contentWindow.controller = Controller;
+      Controller.iframe.MenuSwitch(Controller.iframe.frame);
+    } catch (e) {
+      console.error("Cross-origin block:", e);
+    }
   });
 
   if ("serviceWorker" in navigator) {
