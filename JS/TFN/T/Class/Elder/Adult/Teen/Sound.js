@@ -73,6 +73,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (options.masterAnalyser) {
             this.masterAnalyser = options.masterAnalyser;
         }
+        if (options.masterDataArray) {
+            this.masterDataArray = options.masterDataArray;
+        }
         if (options.masterCompressor) {
             this.masterCompressor = options.masterCompressor;
         }
