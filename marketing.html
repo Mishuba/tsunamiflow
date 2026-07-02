@@ -34,13 +34,12 @@
             margin: 0 auto 20px;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            background-image: url('https://placeholder.com'); /* Placeholder Cover */
             background-size: cover;
             background-position: center;
         }
         h1 { font-size: 24px; margin: 10px 0 5px; }
         h2 { font-size: 16px; color: #ccc; font-weight: 300; margin: 0 0 25px; }
-        
+
         .platform-list {
             display: flex;
             flex-direction: column;
@@ -72,11 +71,28 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
-        /* Platform Brand Colors */
         .download { border-left: 4px solid #28a745; }
         .spotify { border-left: 4px solid #1DB954; }
         .apple { border-left: 4px solid #FC3C44; }
         .youtube { border-left: 4px solid #FF0000; }
+        .buy { border-left: 4px solid #f0a500; }
+
+        audio {
+            width: 100%;
+            margin-top: 20px;
+        }
+        iframe {
+            width: 100%;
+            max-width: 400px;
+            height: 220px;
+            margin-top: 20px;
+            border-radius: 12px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin: 25px 0;
+        }
     </style>
 </head>
 <body>
@@ -84,68 +100,77 @@
     <div class="card">
         <!-- Song Artwork -->
         <div class="cover-art" id="coverArt"></div>
-        
+
         <!-- Song Details -->
         <h1 id="songTitle">Song Title</h1>
         <h2 id="artistName">Artist Name</h2>
-        
+
         <!-- Destination Links -->
         <div class="platform-list">
             <!-- Direct Audio Download -->
-            <a href="YOUR_MP3_FILE_URL.mp3" download="https://radio.tsunamiflow.club/Music/Inspiration/Motivation/Silverback%20Gorilla.wav" class="btn download" target="_blank">
+            <a href="#" class="btn download" download target="_blank">
                 <span>💾 Direct Download</span>
                 <span class="action-text">download</span>
             </a>
-            
+
             <!-- Streaming Services -->
-            <a href="YOUR_SPOTIFY_LINK" class="btn spotify" target="_blank">
+            <a href="#" class="btn spotify" target="_blank">
                 <span>🟢 Spotify</span>
                 <span class="action-text">Stream</span>
             </a>
-            
-            <a href="https://music.apple.com/us/album/silverback-gorilla-single/6783850617" class="btn apple" target="_blank">
+
+            <a href="#" class="btn apple" target="_blank">
                 <span>🍎 Apple Music</span>
                 <span class="action-text">Stream</span>
             </a>
-            
+
+            <a href="https://www.youtube.com/watch?v=9s0gRg3ZxAs" class="btn youtube" target="_blank">
+                <span>🔴 YouTube</span>
                 <span class="action-text">Watch</span>
             </a>
-            <a href="https://unitedmasters.com/m/silverback-gorilla" class="btn youtube" target="_blank">
-              <span>🔴 Buy Link</span>
-              <span class="action-text">buy</span>
+
+            <a href="https://unitedmasters.com/m/silverback-gorilla" class="btn buy" target="_blank">
+                <span>🛒 Buy Link</span>
+                <span class="action-text">buy</span>
             </a>
         </div>
+
+        <!-- Audio Player -->
+        <audio src="https://radio.tsunamiflow.club/Music/Inspiration/Motivation/Silverback%20Gorilla.wav" controls controlsList="nodownload"></audio>
+
+        <hr>
+
+        <!-- YouTube Embed -->
+        <iframe src="https://www.youtube.com/embed/9s0gRg3ZxAs?si=NMNM9EExbLTgRJBn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
-
-<audio src="https://radio.tsunamiflow.club/Music/Inspiration/Motivation/Silverback%20Gorilla.wav" controls nodownload>
-
-<hr>
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/9s0gRg3ZxAs?si=NMNM9EExbLTgRJBn" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
     <script>
         // QUICK CUSTOMIZATION PANEL
-        // Change these variables to instantly update your webpage details!
         const songConfig = {
             title: "Silverback Gorilla",
             artist: "Mishuba",
-            coverUrl: "",
-            downloadUrl: "https://radio.tsunamiflow.club/Music/Inspiration/Motivation/Silverback%20Gorilla.wav", // Replace with your MP3 link
-            spotifyUrl: "https://open.spotify.com/track/00m7bg8Np8kQ8TwXyz8vrE?si=MG3Y-gYhQz2SjVhFdQcEng", // Replace with your Spotify track link
-            appleUrl: "https://music.apple.com/us/album/silverback-gorilla-single/6783850617", // Replace with your Apple Music track link
-            youtubeUrl: "https://unitedmasters.com/m/silverback-gorilla" // Replace with your YouTube track link
+            coverUrl: "", // add a real image URL here
+            downloadUrl: "https://radio.tsunamiflow.club/Music/Inspiration/Motivation/Silverback%20Gorilla.wav",
+            spotifyUrl: "https://open.spotify.com/track/00m7bg8Np8kQ8TwXyz8vrE?si=MG3Y-gYhQz2SjVhFdQcEng",
+            appleUrl: "https://music.apple.com/us/album/silverback-gorilla-single/6783850617",
+            youtubeUrl: "https://www.youtube.com/watch?v=9s0gRg3ZxAs",
+            buyUrl: "https://unitedmasters.com/m/silverback-gorilla"
         };
 
-        // Injecting the configurations into the HTML elements automatically
         document.getElementById('songTitle').textContent = songConfig.title;
         document.getElementById('artistName').textContent = songConfig.artist;
-        document.getElementById('coverArt').style.backgroundImage = `url('${songConfig.coverUrl}')`;
-        
-        document.querySelector('.download').href = songConfig.downloadUrl;
-        document.querySelector('.download').setAttribute('download', `${songConfig.title}.mp3`);
+        if (songConfig.coverUrl) {
+            document.getElementById('coverArt').style.backgroundImage = `url('${songConfig.coverUrl}')`;
+        }
+
+        const downloadBtn = document.querySelector('.download');
+        downloadBtn.href = songConfig.downloadUrl;
+        downloadBtn.setAttribute('download', `${songConfig.title}.wav`);
+
         document.querySelector('.spotify').href = songConfig.spotifyUrl;
         document.querySelector('.apple').href = songConfig.appleUrl;
         document.querySelector('.youtube').href = songConfig.youtubeUrl;
+        document.querySelector('.buy').href = songConfig.buyUrl;
     </script>
 </body>
 </html>
