@@ -298,7 +298,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-  const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
+  //const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
 
   await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
@@ -325,15 +325,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  Tradio
-    .connect(flowGain)
+  flowGain
     .connect(flowAnalyser)
     .connect(flowCompressor)
     .connect(flowWorklet)
     .connect(flowaudio.destination);
 
 
-  const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ /*AudioElement: TsunamiRadio,*/ MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const Controller = new maxwell({
     site: TfSite,
