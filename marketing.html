@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listen & Download Now</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .cover-art {
+            width: 180px;
+            height: 180px;
+            background-color: #444;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            background-image: url('https://placeholder.com'); /* Placeholder Cover */
+            background-size: cover;
+            background-position: center;
+        }
+        h1 { font-size: 24px; margin: 10px 0 5px; }
+        h2 { font-size: 16px; color: #ccc; font-weight: 300; margin: 0 0 25px; }
+        
+        .platform-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            font-size: 15px;
+            transition: background 0.2s, transform 0.1s;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        .btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+        .action-text {
+            font-size: 13px;
+            font-weight: normal;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        /* Platform Brand Colors */
+        .download { border-left: 4px solid #28a745; }
+        .spotify { border-left: 4px solid #1DB954; }
+        .apple { border-left: 4px solid #FC3C44; }
+        .youtube { border-left: 4px solid #FF0000; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <!-- Song Artwork -->
+        <div class="cover-art" id="coverArt"></div>
+        
+        <!-- Song Details -->
+        <h1 id="songTitle">Song Title</h1>
+        <h2 id="artistName">Artist Name</h2>
+        
+        <!-- Destination Links -->
+        <div class="platform-list">
+            <!-- Direct Audio Download -->
+            <a href="YOUR_MP3_FILE_URL.mp3" download="Song_Title.mp3" class="btn download" target="_blank">
+                <span>💾 Direct Download</span>
+                <span class="action-text">download</span>
+            </a>
+            
+            <!-- Streaming Services -->
+            <a href="YOUR_SPOTIFY_LINK" class="btn spotify" target="_blank">
+                <span>🟢 Spotify</span>
+                <span class="action-text">Stream</span>
+            </a>
+            
+            <a href="YOUR_APPLE_MUSIC_LINK" class="btn apple" target="_blank">
+                <span>🍎 Apple Music</span>
+                <span class="action-text">Stream</span>
+            </a>
+            
+            <a href="YOUR_YOUTUBE_LINK" class="btn youtube" target="_blank">
+                <span>🔴 YouTube Music</span>
+                <span class="action-text">Watch</span>
+            </a>
+            <a href="YOUR_YOUTUBE_LINK" class="btn youtube" target="_blank">
+              <span>🔴 Buy Link</span>
+              <span class="action-text">buy</span>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // QUICK CUSTOMIZATION PANEL
+        // Change these variables to instantly update your webpage details!
+        const songConfig = {
+            title: "Midnight Drive",
+            artist: "Neon Horizon",
+            coverUrl: "https://unsplash.com", // Free stock abstract image
+            downloadUrl: "https://soundhelix.com", // Replace with your MP3 link
+            spotifyUrl: "https://spotify.com", // Replace with your Spotify track link
+            appleUrl: "https://apple.com", // Replace with your Apple Music track link
+            youtubeUrl: "https://youtube.com" // Replace with your YouTube track link
+        };
+
+        // Injecting the configurations into the HTML elements automatically
+        document.getElementById('songTitle').textContent = songConfig.title;
+        document.getElementById('artistName').textContent = songConfig.artist;
+        document.getElementById('coverArt').style.backgroundImage = `url('${songConfig.coverUrl}')`;
+        
+        document.querySelector('.download').href = songConfig.downloadUrl;
+        document.querySelector('.download').setAttribute('download', `${songConfig.title}.mp3`);
+        document.querySelector('.spotify').href = songConfig.spotifyUrl;
+        document.querySelector('.apple').href = songConfig.appleUrl;
+        document.querySelector('.youtube').href = songConfig.youtubeUrl;
+    </script>
+</body>
+</html>
