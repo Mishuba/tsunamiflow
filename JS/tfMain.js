@@ -10,6 +10,14 @@ import { Studio } from "./TFN/T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", async () => {
+    navigator.serviceWorker.register("/service-worker.js")
+      .then(reg => console.log("SW registered:", reg))
+      .catch(err => console.error("SW registration failed:", err));
+  });
+}
+
 function createSafeWorker(modulePath, classicPath) {
   try {
     return new Worker(
@@ -389,11 +397,5 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  if ("serviceWorker" in navigator) {
-    window.addEventListener("load", async () => {
-      navigator.serviceWorker.register("/service-worker.js")
-        .then(reg => console.log("SW registered:", reg))
-        .catch(err => console.error("SW registration failed:", err));
-    });
-  }
+
 });
