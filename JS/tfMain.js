@@ -356,9 +356,28 @@ document.addEventListener("DOMContentLoaded", async () => {
   OffscreenCanvasRadio.width = RadioCanvas.width;
   OffscreenCanvasRadio.height = RadioCanvas.height;
   if (twoMore) {
-    twoMore.appendChild(Controller.iframe.frame)
+    twoMore.appendChild(Controller.iframe.frame);
     Controller.bindNavBar();
     Controller.bindUsers();
+    Controller.worker = safeWorker;
+    Controller.audioimageworker = safeImageWorker;
+    Controller.audioworker = safeMediaWorker;
+    Controller.videoworker = safeVideoWorker;
+    Controller.gameinputworker = safeGameInputWorker;
+    Controller.gameworldworker = safeGameWorldWorker;
+    Controller.aiworker = safeAiWorker;
+    //Controller.sharedWorker = safeSharedWorker;
+
+    Controller.user.showProducts().then(() => {
+      Controller.bindPayments();
+      Controller.user.bindCart();
+      Controller.initTsunamiWorkers();
+      console.log("TFN");
+    }).catch(err => {
+      console.error("Cart binding error:", err);
+    });
+
+    Controller.bindAudio();
     twoMore.appendChild(OffscreenCanvasRadio);
     try {
       const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
@@ -367,25 +386,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.warn("Offscreen canvas transfer failed:", err);
     }
   }
-  Controller.bindAudio();
-
-  Controller.user.showProducts().then(() => {
-    Controller.bindPayments();
-    Controller.user.bindCart();
-    Controller.initTsunamiWorkers();
-    console.log("TFN");
-  }).catch(err => {
-    console.error("Cart binding error:", err);
-  });
-
-  Controller.worker = safeWorker;
-  Controller.audioimageworker = safeImageWorker;
-  Controller.audioworker = safeMediaWorker;
-  Controller.videoworker = safeVideoWorker;
-  Controller.gameinputworker = safeGameInputWorker;
-  Controller.gameworldworker = safeGameWorldWorker;
-  Controller.aiworker = safeAiWorker;
-  //Controller.sharedWorker = safeSharedWorker;
 
   Controller.iframe.frame.addEventListener("load", () => {
     try {
@@ -395,6 +395,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Cross-origin block:", e);
     }
   });
-
-
 });
