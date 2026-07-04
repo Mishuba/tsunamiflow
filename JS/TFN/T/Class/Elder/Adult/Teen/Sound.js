@@ -145,13 +145,14 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
     }
     async initAudioContext() {
-        /*
+
         if (this.AudioContextInitialized) {
             if (this.MasterSoundsContext.state === "suspended") {
                 return this.MasterSoundsContext.resume();
             }
             return this.MasterSoundsContext;
         }
+        /*
         if (!this.MasterSoundsContext) {
             this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
         }
