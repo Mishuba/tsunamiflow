@@ -252,7 +252,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
     removeSource(id) {
         const source = this.TfSoundsContext[id];
         const gain = this.TfSoundsGain[id];
-        const analyser = this.TfTrackAnalyser[id];
+        const analyser = this.TfSoundAnalyser[id];
         const compressor = this.TfSoundsCompressor[id];
         const worklet = this.SoundWorklet[id];
         const delay = this.TfSoundsDelay[id];
@@ -268,7 +268,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         delete this.TfSoundsContext[id];
         delete this.TfSoundsGain[id];
-        delete this.TfTrackAnalyser[id];
+        delete this.TfSoundAnalyser[id];
         delete this.TfSoundsCompressor[id];
         delete this.SoundWorklet[id];
         delete this.TfSoundsDelay[id];

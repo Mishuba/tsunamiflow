@@ -18,19 +18,28 @@ if ("serviceWorker" in navigator) {
   });
 }
 
-function createSafeWorker(modulePath, classicPath) {
+function createSafeWorker(modulePath, classicPath, shared = false) {
   try {
-    return new Worker(
-      new URL(modulePath, import.meta.url),
-      { type: "module" }
-    );
-
+    if (shared === false) {
+      return new Worker(
+        new URL(modulePath, import.meta.url),
+        { type: "module" }
+      );
+    } else {
+      return new SharedWorker(
+        new URL(modulePath, import.meta.url),
+        { type: "module" }
+      );
+    }
   } catch (err) {
     console.warn("Module worker failed. Falling back:", err);
-    return new Worker(classicPath);
+    if (shared === false) {
+      return new Worker(classicPath);
+    } else {
+      return new SharedWorker(classicPath);
+    }
   }
 }
-
 const TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
@@ -200,7 +209,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js");
+  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js", true);
 
   const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
@@ -293,7 +302,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     keyPath: ,
  
   }
-
+ 
   //dbstores: indexdb
 */
 
@@ -334,6 +343,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
+  nation.worker = safeMediaWorker;
+
   const Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -366,7 +377,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     Controller.gameinputworker = safeGameInputWorker;
     Controller.gameworldworker = safeGameWorldWorker;
     Controller.aiworker = safeAiWorker;
-    //Controller.sharedWorker = safeSharedWorker;
+    Controller.sharedWorker = safeSharedWorker;
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();

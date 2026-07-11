@@ -830,7 +830,7 @@ export class Studio extends Flow {
 
             this.AudioElement.addEventListener("pause", async () => {
                 this.pauseaudio();
-                this.stopAnalyserLoop();
+                //this.stopAnalyserLoop();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseaudio, "pause");
 
