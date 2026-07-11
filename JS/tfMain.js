@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .connect(flowaudio.destination);
 
 
-  const nation = new Studio({ /*AudioElement: TsunamiRadio,*/ MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const Controller = new maxwell({
     site: TfSite,

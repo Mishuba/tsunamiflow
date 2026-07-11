@@ -772,13 +772,11 @@ export class Studio extends Flow {
             return;
         } else {
             this._radioBound = true;
-
-            /*
             this.AudioElement.addEventListener("emptied", async (emptied) => {
                 this.emptiedAudio(emptied);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.emptiedAudio, "emptied");
-*/
+
             this.AudioElement.addEventListener("waiting", (waiting) => {
                 this.waitingAudio();
             });
