@@ -343,7 +343,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
-  nation.worker = safeMediaWorker;
+  //nation.worker = safeMediaWorker;
 
   const Controller = new maxwell({
     site: TfSite,

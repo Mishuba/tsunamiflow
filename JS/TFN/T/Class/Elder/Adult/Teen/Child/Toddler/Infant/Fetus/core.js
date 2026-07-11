@@ -12,7 +12,17 @@ export class core {
     maxBeaconSize = 64 * 1024;
     crossorigin = "anonymous";
     constructor(options = {}) {
-
+        if (options.lang) this.lang = options.lang;
+        if (options.crossorigin) this.crossorigin = options.crossorigin;
+        if (options.maxBeaconSize) this.maxBeaconSize = options.maxBeaconSize;
+        if (options.ArrayonReady) this.ArrayonReady = options.ArrayonReady;
+        if (options.blobonReady) this.blobonReady = options.blobonReady;
+        if (options.blobtype) this.blobtype = options.blobtype;
+        if (options.Arraybuffer) this.loadArrayBuffer(options.Arraybuffer);
+        if (options.blob) this.loadblob(options.blob);
+        if (options.Arrayview) this.Arrayview = options.Arrayview;
+        if (options.VideoFrame) this.VideoFrame = options.VideoFrame;
+        if (options.blobobjectURL) this.blobobjectURL = options.blobobjectURL;
     }
     tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
         let tf = {

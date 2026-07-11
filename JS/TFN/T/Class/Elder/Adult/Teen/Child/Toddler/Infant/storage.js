@@ -2,7 +2,6 @@ import { core } from "./Fetus/core.js"
 export class T extends core {
     devicelanguage = navigator.language || navigator.userLanguage || this.lang;
     listeners = {};
-    domListeners = new Map();
     namespace = "tf";
     cookieenabled = navigator.cookieEnabled;
     cookies = this.cookieenabled ? this.parsecookie() : {};
@@ -20,12 +19,22 @@ export class T extends core {
     constructor(options = {}) {
         super(options);
         if (options.dbName) {
-
+            this.dbName = options.dbName;
         }
         if (options.dbversion) {
-
+            this.dbversion = options.dbversion;
         }
         if (options.dbstores) {
+            this.dbstores = options.dbstores;
+        }
+        if (options.cacheName) {
+            this.cacheName = options.cacheName;
+        }
+        if (options.CacheonReady) {
+            this.CacheonReady = options.CacheonReady;
+        }
+        if (options.CacheautoOpen !== undefined) {
+            this.CacheautoOpen = options.CacheautoOpen;
         }
     }
     _wrapPermission(name) {

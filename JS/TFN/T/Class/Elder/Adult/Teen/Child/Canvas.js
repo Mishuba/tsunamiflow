@@ -1,5 +1,7 @@
 import { Dom } from "./Toddler/Dom.js";
 export class TsDomCanvas extends Dom {
+    worker = null;
+    sharedworker = null;
     canvas = null;
     offscreencanvas = null;
     // Default preferred context type
@@ -45,6 +47,54 @@ export class TsDomCanvas extends Dom {
     TfObstacles = [];
     constructor(options = {}) {
         super(options);
+        if (options.canvas) {
+            this.canvas = options.canvas;
+        }
+        if (options.offscreencanvas) {
+            this.offscreencanvas = options.offscreencanvas;
+        }
+        if (options.contextTypecanvas) {
+            this.contextTypecanvas = options.contextTypecanvas;
+        }
+        if (options.contextTypecanvasoption) {
+            this.contextTypecanvasoption = options.contextTypecanvasoption;
+        }
+        if (options.contextTypecanvaswebgloption) {
+            this.contextTypecanvaswebgloption = options.contextTypecanvaswebgloption;
+        }
+        if (options.canvaswebgpuconfigure) {
+            this.canvaswebgpuconfigure = options.canvaswebgpuconfigure;
+        }
+        if (options.canvasctx) {
+            this.canvasctx = options.canvasctx;
+        }
+        if (options.iscanvasReady !== undefined) {
+            this.iscanvasReady = options.iscanvasReady;
+        }
+        if (options.tfframes) {
+            this.tfframes = options.tfframes;
+        }
+        if (options.frame !== undefined) {
+            this.frame = options.frame;
+        }
+        if (options.frameDirection !== undefined) {
+            this.frameDirection = options.frameDirection;
+        }
+        if (options.StaggerFrame !== undefined) {
+            this.StaggerFrame = options.StaggerFrame;
+        }
+        if (options.component) {
+            this.component = options.component;
+        }
+        if (options.TfObstacles) {
+            this.TfObstacles = options.TfObstacles;
+        }
+        if (options.worker) {
+            this.worker = options.worker;
+        }
+        if (options.sharedworker) {
+            this.sharedworker = options.sharedworker;
+        }
     }
     initCanvas(type = "2d") {
         if (this.iscanvasReady === true) return;
