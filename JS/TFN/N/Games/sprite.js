@@ -3,6 +3,7 @@ const AckmaHawkBattleBackground = "Pictures/Logo/Tsunami Flow Logo.png";
 const StickMan = new Image();
 //StickMan.src = linkToSpriteSheet;
 
+import { AiGameManager } from '../../T/aiGameManager.js';
 let AckmaHawkSpriteSheet = "";
 
 let tfSSCX = 0; //Character State Location Row
@@ -346,7 +347,108 @@ export class letsDoIt {
         };
         this.SoundTrack;
         this.GameWorldAudio = new AudioContext();
+                // AI manager: controls non-player agents and spawning
+                try {
+                    this.aiManager = new AiGameManager(this, { spawnInterval: 300, maxEnemies: 6 });
+                    this._aiRunning = true;
+                    this._aiTick = this._aiTick.bind(this);
+                    requestAnimationFrame(this._aiTick);
+                } catch (e) {
+                    console.warn('AiGameManager not available', e);
+                    this.aiManager = null;
+                    this._aiRunning = false;
+                }
+                // Add simple UI controls for AI (save/load/start/stop)
+                try {
+                    const container = document.createElement('div');
+                    container.style.position = 'fixed';
+                    container.style.right = '8px';
+                    container.style.top = '8px';
+                    container.style.zIndex = 99999;
+                    container.style.display = 'flex';
+                    container.style.flexDirection = 'column';
+                    container.style.gap = '6px';
+
+                    const startBtn = document.createElement('button'); startBtn.innerText = 'AI Start';
+                    const stopBtn = document.createElement('button'); stopBtn.innerText = 'AI Stop';
+                    const saveBtn = document.createElement('button'); saveBtn.innerText = 'AI Save';
+                    const loadBtn = document.createElement('button'); loadBtn.innerText = 'AI Load';
+                    const epsDownBtn = document.createElement('button'); epsDownBtn.innerText = 'ε -';
+                    const epsUpBtn = document.createElement('button'); epsUpBtn.innerText = 'ε +';
+                    const lrDownBtn = document.createElement('button'); lrDownBtn.innerText = 'lr -';
+                    const lrUpBtn = document.createElement('button'); lrUpBtn.innerText = 'lr +';
+                    const syncDownBtn = document.createElement('button'); syncDownBtn.innerText = 'sync -';
+                    const syncUpBtn = document.createElement('button'); syncUpBtn.innerText = 'sync +';
+                    const status = document.createElement('div');
+                    status.style.color = '#fff';
+                    status.style.fontSize = '12px';
+                    status.style.padding = '6px';
+                    status.style.background = 'rgba(0,0,0,0.7)';
+                    status.style.borderRadius = '6px';
+
+                    const updateStatus = () => {
+                        if (!this.aiManager) return;
+                        const first = this.aiManager.agents.find(a => a.ai && typeof a.ai.epsilon === 'number');
+                        const epsilon = first ? first.ai.epsilon.toFixed(3) : 'n/a';
+                        const lr = first && first.model ? first.model.lr.toFixed(4) : 'n/a';
+                        const sync = first && typeof first.targetSyncInterval === 'number' ? first.targetSyncInterval : 'n/a';
+                        const count = this.aiManager.agents.length;
+                        status.innerText = `agents:${count} ε:${epsilon} lr:${lr} sync:${sync} spawn:${this.aiManager.spawnInterval}`;
+                    };
+
+                    const changeEpsilon = (delta) => {
+                        if (!this.aiManager) return;
+                        this.aiManager.agents.forEach(agent => {
+                            if (agent.ai && typeof agent.ai.epsilon === 'number') {
+                                agent.ai.epsilon = Math.max(0, agent.ai.epsilon + delta);
+                            }
+                        });
+                        updateStatus();
+                    };
+                    const changeLr = (delta) => {
+                        if (!this.aiManager) return;
+                        this.aiManager.agents.forEach(agent => {
+                            if (agent.model && typeof agent.model.lr === 'number') {
+                                agent.model.lr = Math.max(0.00001, agent.model.lr + delta);
+                            }
+                        });
+                        updateStatus();
+                    };
+                    const changeSync = (delta) => {
+                        if (!this.aiManager) return;
+                        this.aiManager.agents.forEach(agent => {
+                            if (typeof agent.targetSyncInterval === 'number') {
+                                agent.targetSyncInterval = Math.max(1, agent.targetSyncInterval + delta);
+                            }
+                        });
+                        updateStatus();
+                    };
+
+                    startBtn.onclick = () => { try { this.startAI(); } catch (e) { console.warn(e); } };
+                    stopBtn.onclick = () => { try { this.stopAI(); } catch (e) { console.warn(e); } };
+                    saveBtn.onclick = () => { try { if (this.aiManager) this.aiManager.saveState(); alert('AI state saved'); } catch (e) { console.warn(e); } };
+                    loadBtn.onclick = () => { try { if (this.aiManager) this.aiManager.loadState(); updateStatus(); alert('AI state loaded'); } catch (e) { console.warn(e); } };
+                    epsDownBtn.onclick = () => { changeEpsilon(-0.01); };
+                    epsUpBtn.onclick = () => { changeEpsilon(0.01); };
+                    lrDownBtn.onclick = () => { changeLr(-0.001); };
+                    lrUpBtn.onclick = () => { changeLr(0.001); };
+                    syncDownBtn.onclick = () => { changeSync(-10); };
+                    syncUpBtn.onclick = () => { changeSync(10); };
+
+                    [startBtn, stopBtn, saveBtn, loadBtn, epsDownBtn, epsUpBtn, lrDownBtn, lrUpBtn, syncDownBtn, syncUpBtn, status]
+                        .forEach(b => { b.style.padding = '6px 8px'; b.style.fontSize = '12px'; container.appendChild(b); });
+                    document.body.appendChild(container);
+                    updateStatus();
+                } catch (e) { console.warn('failed to add AI UI controls', e); }
     }
+        _aiTick() {
+            if (!this._aiRunning || !this.aiManager) return;
+            try { this.aiManager.step(1); } catch (e) { console.warn('aiManager.step error', e); }
+            requestAnimationFrame(this._aiTick);
+        }
+
+        startAI() { if (!this._aiRunning) { this._aiRunning = true; requestAnimationFrame(this._aiTick); } }
+        stopAI() { this._aiRunning = false; }
     HomePageAnimation(player) {
     this.clear();
 

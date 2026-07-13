@@ -2,12 +2,6 @@ export class maxwell {
     listeners = {};
     domListeners = new Map();
     worker = null;
-    imageworker = null;
-    audioworker = null;
-    videoworker = null;
-    gameinputworker = null;
-    gameworldworker = null;
-    aiworker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
     site = null;
@@ -29,8 +23,7 @@ export class maxwell {
         screens: {}
     };
     game = null;
-    //listeners = {};
-
+    ai = null;
     constructor(option = {}) {
         if (option.user) {
             this.user = option.user;
@@ -70,6 +63,12 @@ export class maxwell {
         }
         if (option.iframe) {
             this.iframe = option.iframe;
+        }
+        if (option.worker) {
+            this.worker = option.worker;
+        }
+        if (option.sharedWorker) {
+            this.sharedWorker = option.sharedWorker;
         }
     }
     find(elem, frame = null) {
@@ -131,6 +130,7 @@ export class maxwell {
                         console.warn("Payload:", payload);
                         console.warn("Full Data:", data);
                         console.warn("Event:", event);
+                        console.warn("error: ", payload.error);
 
                         if (data.meta?.message) {
                             console.warn("Meta Message:", data.meta.message);
@@ -711,14 +711,8 @@ export class maxwell {
         this.worker.onmessage = (e) => this.handleWorkerMessage(e);
         this.worker.onerror = (e) => this.handleError(this.worker, e);
 
-        this.site.worker = this.worker;
-        this.iframe.worker = this.worker;
-        this.user.worker = this.worker;
-
-        this.imageEngine.worker = this.imageworker;
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        this.soundEngine.worker = this.audioworker;
         /*
         this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
@@ -740,7 +734,6 @@ export class maxwell {
             }),
             [this.soundEngine.visualizatorController]);
             */
-        this.videoEngine.worker = this.videoworker;
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
@@ -755,10 +748,10 @@ export class maxwell {
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 */
-        // this.startSharedWorker();
-        // this.sendToSharedWorker("register");
-        // this.sharedWorker.port.onmessage = (e) => {
-        //     this.receiveSharedWorkerMessage(e)
-        // };
+        this.startSharedWorker();
+        this.sendToSharedWorker("register");
+        this.sharedWorker.port.onmessage = (e) => {
+            this.receiveSharedWorkerMessage(e)
+        };
     }
 }

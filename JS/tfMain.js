@@ -9,6 +9,7 @@ import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
 import { Studio } from "./TFN/T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
+import { AiInterface } from "./TFN/T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -207,21 +208,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
-  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "JS/TFN/T/Worker/Shared.js", true);
+  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
 
-  const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
-  const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
-  const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
 
-  const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js");
+  const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js");
 
-  const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js");
+  const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js");
 
-  const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/AiWebWorker.js", "JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js");
+  const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/AiWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js");
 
   const Workletoptions = {
     numberOfInputs: 1, //0 oscillator
@@ -259,7 +260,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     channelCountMode: "max"
   };
 
-  const TfSite = new HeaderWeather();
+  const TfSite = new HeaderWeather({
+    worker: safeWorker,
+    sharedWorker: safeSharedWorker,
+  });
   TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
   TfSite.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
@@ -289,7 +293,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   frameTF.frame.style.touchAction = "manipulation";
   frameTF.frame.style.pointerEvents = "auto";
   frameTF.frame.src = "Iframe/Pages/homepage.html";
-  const nifage = new TfPrintful();
+  const nifage = new TfPrintful({
+    worker: safeWorker,
+    sharedWorker: safeSharedWorker,
+  });
   nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
   nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
   const style = new TsunamiFlowImageEngine();
@@ -341,11 +348,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     .connect(flowaudio.destination);
 
 
-  const nation = new Studio({ AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
-  //nation.worker = safeMediaWorker;
+  const nation = new Studio({ worker: safeMediaWorker, sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
+  const ai = new AiInterface({ worker: safeAiWorker, sharedworker: safeSharedWorker });
   const Controller = new maxwell({
+    worker: safeWorker,
+    sharedWorker: safeSharedWorker,
     site: TfSite,
     iframe: frameTF,
     user: nifage,
@@ -359,6 +368,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
+    ai: ai
   });
 
 
@@ -370,14 +380,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     twoMore.appendChild(Controller.iframe.frame);
     Controller.bindNavBar();
     Controller.bindUsers();
-    Controller.worker = safeWorker;
-    Controller.audioimageworker = safeImageWorker;
-    Controller.audioworker = safeMediaWorker;
-    Controller.videoworker = safeVideoWorker;
-    Controller.gameinputworker = safeGameInputWorker;
-    Controller.gameworldworker = safeGameWorldWorker;
-    Controller.aiworker = safeAiWorker;
-    Controller.sharedWorker = safeSharedWorker;
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();

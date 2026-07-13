@@ -1,26 +1,18 @@
 // Use a relative module specifier so the worker resolves correctly in production.
 import { mediaWorker } from "./../../../Class/Elder/Adult/Teen/tfnation.js";
 
-let mediawk = null;
+const mediawk = null;
 
-/*
-|--------------------------------------------------------------------------
-| Safe Worker Bootstrap
-|--------------------------------------------------------------------------
-| 1. Verify import worked
-| 2. Create class instance safely
-| 3. Return startup errors to orchestrator
-|--------------------------------------------------------------------------
-*/
+console.log("Imported mediaWorker:", mediaWorker);
+
+if (!mediaWorker) {
+    throw new Error("mediaWorker import is undefined");
+}
+
+mediawk = new mediaWorker();
 
 try {
-    console.log("Imported mediaWorker:", mediaWorker);
 
-    if (!mediaWorker) {
-        throw new Error("mediaWorker import is undefined");
-    }
-
-    mediawk = new mediaWorker();
 
     //mediawk.startTime();
     console.log("MediaWebWorker initialized successfully");
@@ -44,8 +36,10 @@ try {
             self.postMessage({ type: "error", action: "worker.error", payload: { message: err?.message || String(err), filename: err?.fileName || null, lineno: err?.lineNumber || null, colno: err?.columnNumber || null, stack: err?.stack || null, rawEvent: e } });
         } catch (postErr) {
             console.error("Worker onerror failed to post:", postErr);
+            console.trace();
         }
         console.error("Worker error:", e);
+        console.trace();
     };
 }
 
