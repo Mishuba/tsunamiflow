@@ -1,4 +1,4 @@
-import { AiInterface, SimpleDQNModel } from './T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js';
+import { AiInterface, SimpleDQNModel } from './Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js';
 
 export class AiGameManager {
     constructor(game, options = {}) {
