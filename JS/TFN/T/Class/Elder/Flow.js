@@ -25,14 +25,14 @@ export class Flow extends TsunamiFlowAudio {
         p.y += p.dy;
     }
     draw(p) {
-        this.canvasctx.save();
+        //this.canvasctx.save();
         this.canvasctx.beginPath();
         this.canvasctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
         this.canvasctx.fillStyle = p.color;
         this.canvasctx.shadowColor = p.color;
         this.canvasctx.shadowBlur = 20;
         this.canvasctx.fill();
-        this.canvasctx.restore();
+        //this.canvasctx.restore();
     }
     tfParticles(x, y, dx, dy, radius, color) {
         return { x, y, dx, dy, radius, color };
