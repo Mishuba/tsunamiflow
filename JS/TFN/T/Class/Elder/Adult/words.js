@@ -72,28 +72,29 @@ export class HeaderWords extends TsDomCanvas {
         return this.theWords;
     }
     WordOfTheDay(time) {
-        if (this.theWords === null || undefined) {
+        if (this.theWords === null || this.theWords === undefined) {
             if (this.WordOfTheDayArray.length === 0) {
                 console.error("no words");
                 return;
             } else {
-                this.theWords = Math.floor(Math.random() * (this.WordOfTheDayArray.length - 1));
-                this.FirstWord = this.WordOfTheDayArray[this.theWords].word.word;
-                this.FirstDefinition = this.WordOfTheDayArray[this.theWords].word.definition;
-                this.FirstQuoteText = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].text;
-                this.FirstQuoteHistoryFact = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.fact.one;
-                this.FirstQuoteHistoryFact2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.fact.two;
-                this.FirstQuoteHistoryMyth = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.myth.one;
-                this.FirstQuoteHistoryMyth2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.myth.two;
-                this.FirstQuoteHistoryLegend = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.legend.one;
-                this.FirstQuoteHistoryLegend2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.QuoteStuff].history.legend.two;
-                this.SecondQuoteText = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].text;
-                this.SecondQuoteHistoryFact = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.fact.one;
-                this.SecondQuoteHistoryFact2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.fact.two;
-                this.SecondQuoteHistoryMyth = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.myth.one;
-                this.SecondQuoteHistoryMyth2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.myth.two;
-                this.SecondQuoteHistoryLegend = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.legend.one;
-                this.SecondQuoteHistoryLegend2 = this.WordOfTheDayArray[this.theWords].word.quotes[this.TheOtherWords].history.legend.two;
+                this.theWords = Math.floor(Math.random() * this.WordOfTheDayArray.length);
+                const wordEntry = this.WordOfTheDayArray[this.theWords];
+                this.FirstWord = wordEntry.word;
+                this.FirstDefinition = wordEntry.definition;
+                this.FirstQuoteText = wordEntry.quotes[this.QuoteStuff].text;
+                this.FirstQuoteHistoryFact = wordEntry.quotes[this.QuoteStuff].history.fact.one;
+                this.FirstQuoteHistoryFact2 = wordEntry.quotes[this.QuoteStuff].history.fact.two;
+                this.FirstQuoteHistoryMyth = wordEntry.quotes[this.QuoteStuff].history.myth.one;
+                this.FirstQuoteHistoryMyth2 = wordEntry.quotes[this.QuoteStuff].history.myth.two;
+                this.FirstQuoteHistoryLegend = wordEntry.quotes[this.QuoteStuff].history.legend.one;
+                this.FirstQuoteHistoryLegend2 = wordEntry.quotes[this.QuoteStuff].history.legend.two;
+                this.SecondQuoteText = wordEntry.quotes[this.TheOtherWords].text;
+                this.SecondQuoteHistoryFact = wordEntry.quotes[this.TheOtherWords].history.fact.one;
+                this.SecondQuoteHistoryFact2 = wordEntry.quotes[this.TheOtherWords].history.fact.two;
+                this.SecondQuoteHistoryMyth = wordEntry.quotes[this.TheOtherWords].history.myth.one;
+                this.SecondQuoteHistoryMyth2 = wordEntry.quotes[this.TheOtherWords].history.myth.two;
+                this.SecondQuoteHistoryLegend = wordEntry.quotes[this.TheOtherWords].history.legend.one;
+                this.SecondQuoteHistoryLegend2 = wordEntry.quotes[this.TheOtherWords].history.legend.two;
 
                 this.SomeQuote = `${this.FirstWord} <br /> Definition: ${this.FirstDefinition} <br /> Quote: ${this.FirstQuoteText}`;
                 this.SomeQuote2 = `${this.FirstWord} <br/> Definition: ${this.FirstDefinition} <br /> Quote: ${this.SecondQuoteText}`;

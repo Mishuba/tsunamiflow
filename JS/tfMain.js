@@ -352,6 +352,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const nation = new Studio({ worker: safeMediaWorker, sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const ai = new AiInterface({ worker: safeAiWorker, sharedworker: safeSharedWorker });
+
   const Controller = new maxwell({
     worker: safeWorker,
     sharedWorker: safeSharedWorker,
