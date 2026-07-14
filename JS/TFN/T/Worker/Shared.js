@@ -20,6 +20,68 @@ import { TsharedWorker } from "./../Class/Elder/Adult/Teen/Child/Base/F.js";
 
 const ports = [];
 
+function disconnectPort(port) {
+    const index = ports.indexOf(port);
+    if (index !== -1) {
+        ports.splice(index, 1);
+    }
+}
+
+self.onconnect = (event) => {
+    const [port] = event.ports;
+    if (!port) return;
+
+    ports.push(port);
+
+    port.onmessage = (e) => {
+        try {
+            handleBackendTask(e.data, port);
+        } catch (err) {
+            port.postMessage(
+                tycadome(
+                    crypto.randomUUID(),
+                    "system",
+                    "shared.error",
+                    { reason: "port message handler failed", error: err?.message || String(err) },
+                    "failed",
+                    "async",
+                    { message: err?.message || String(err), stack: err?.stack || null }
+                )
+            );
+        }
+    };
+
+    port.onmessageerror = (err) => {
+        port.postMessage(
+            tycadome(
+                crypto.randomUUID(),
+                "system",
+                "shared.error",
+                { reason: "message error from port" },
+                "failed",
+                "async",
+                { detail: err }
+            )
+        );
+    };
+
+    if (typeof port.start === "function") {
+        port.start();
+    }
+
+    port.postMessage(
+        tycadome(
+            crypto.randomUUID(),
+            "system",
+            "shared.connected",
+            { source: "shared.worker" },
+            "completed",
+            "async",
+            { message: "shared worker connected" }
+        )
+    );
+};
+
 /*
 |--------------------------------------------------------------------------
 | Core Backend Controller

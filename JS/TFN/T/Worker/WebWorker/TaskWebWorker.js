@@ -12,23 +12,20 @@ function safeStringify(obj) {
     }
 }
 
+function createChildWorker(modulePath) {
+    try {
+        return new Worker(new URL(modulePath, import.meta.url), { type: "module" });
+    } catch (err) {
+        console.error(`Failed to create child worker ${modulePath}:`, err);
+        return null;
+    }
+}
+
 const workers = {
-    input: new Worker(
-        new URL("./kid/GameInputWebWorker.js", import.meta.url),
-        { type: "module" }
-    ),
-    media: new Worker(
-        new URL("./kid/MediaWebWorker.js", import.meta.url),
-        { type: "module" }
-    ),
-    world: new Worker(
-        new URL("./kid/GameWorldWebWorker.js", import.meta.url),
-        { type: "module" }
-    ),
-    ai: new Worker(
-        new URL("./kid/AiWebWorker.js", import.meta.url),
-        { type: "module" }
-    )
+    input: createChildWorker("./kid/GameInputWebWorker.js"),
+    media: createChildWorker("./kid/MediaWebWorker.js"),
+    world: createChildWorker("./kid/GameWorldWebWorker.js"),
+    ai: createChildWorker("./kid/AiWebWorker.js")
 };
 // let tfTaskWorker = new TaskWorker({workers: workers});
 //tfTaskWorker.workers
@@ -55,6 +52,11 @@ function tycadome(
 }
 
 Object.entries(workers /*tfTaskWorker.workers*/).forEach(([name, worker]) => {
+    if (!worker) {
+        console.warn(`Child worker ${name} failed to start and will be skipped.`);
+        return;
+    }
+
     worker.onmessage = (e) => {
         /* tfTaskWorker.OnWorkerMessage(e); */
         const d = e.data || {};

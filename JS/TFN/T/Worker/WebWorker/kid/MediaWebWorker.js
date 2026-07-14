@@ -1,7 +1,7 @@
 // Use a relative module specifier so the worker resolves correctly in production.
 import { mediaWorker } from "./../../../Class/Elder/Adult/Teen/tfnation.js";
 
-const mediawk = null;
+let mediawk = null;
 
 console.log("Imported mediaWorker:", mediaWorker);
 
@@ -12,17 +12,27 @@ if (!mediaWorker) {
 mediawk = new mediaWorker();
 
 try {
-
-
     //mediawk.startTime();
     console.log("MediaWebWorker initialized successfully");
 
     self.onmessage = (e) => {
-        mediawk.MessageReceived(e);
-    }
+        if (mediawk && typeof mediawk.MessageReceived === "function") {
+            mediawk.MessageReceived(e);
+        } else {
+            self.postMessage({
+                type: "error",
+                action: "worker.error",
+                payload: {
+                    message: "Media worker is not initialized or MessageReceived is not available",
+                    detail: e.data || null
+                }
+            });
+        }
+    };
+
     self.onerror = (e) => {
         console.error("Worker error:", e);
-    }
+    };
 } catch (error) {
     console.error("Error initializing mediaWorker:", error);
     try {
@@ -30,6 +40,19 @@ try {
     } catch (e) {
         console.error("Failed to post worker init error:", e);
     }
+
+    self.onmessage = (e) => {
+        self.postMessage({
+            type: "error",
+            action: "worker.error",
+            payload: {
+                message: "MediaWebWorker failed to initialize",
+                detail: error?.message || String(error),
+                originalEvent: e.data || null
+            }
+        });
+    };
+
     self.onerror = (e) => {
         try {
             const err = e?.error || e;
