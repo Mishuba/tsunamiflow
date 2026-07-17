@@ -2,23 +2,41 @@ export class TaskWorker {
     workers = null;
     TimerLoop = null;
     TimerTrigger = new Set();
-
+    /*
+    function safeStringify(obj) {
+        try {
+            return JSON.stringify(obj);
+        } catch (e) {
+            try {
+                return String(obj);
+            } catch (e2) {
+                return null;
+            }
+        }
+    }
+    
+    function createChildWorker(modulePath) {
+        try {
+            let twk = new Worker(new URL(modulePath, import.meta.url), { type: "module" });
+            console.log(`worker created at ${import.meta.url} ${modulePath} `);
+            return twk;
+        } catch (err) {
+            console.error(`Failed to create child worker ${modulePath}:`, err);
+            return null;
+        }
+    }
+    
+    const workers = {
+        input: createChildWorker("./kid/GameInputWebWorker.js"),
+        media: createChildWorker("./kid/MediaWebWorker.js"),
+        world: createChildWorker("./kid/GameWorldWebWorker.js"),
+        ai: createChildWorker("./kid/AiWebWorker.js")
+    };
+    */
     constructor(options = {}) {
         if (options.workers) {
             this.workers = options.workers;
 
-            const now = new Date();
-
-            const hour = now.getHours();
-            const minute = now.getMinutes();
-
-            const key = `${hour}:${minute}`;
-
-            if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
-                this.TimerTrigger.add(key);
-
-                // trigger
-            }
         } else {
             this.workers = {
                 input: new Worker(
@@ -38,6 +56,18 @@ export class TaskWorker {
                     { type: "module" }
                 )
             };
+        }
+        const now = new Date();
+
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        const key = `${hour}:${minute}`;
+
+        if (minute % 5 === 0 && !this.TimerTrigger.has(key)) {
+            this.TimerTrigger.add(key);
+
+            // trigger
         }
     }
     async startTime() {

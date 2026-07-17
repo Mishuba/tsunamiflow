@@ -579,7 +579,8 @@ export class Studio extends Flow {
 
         this.worker.onerror = (e) => {
             this.AudioFile(e);
-            console.error("RAW WORKER ERROR:", e);
+            console.error("RAW WORKER ERROR:", e.rawEvent);
+            console.error("Error Stack " + e.stack);
             console.error(`[${this.worker}] message:`, e.message);
             console.error(`[${this.worker}] filename:`, e.filename);
             console.error(`[${this.worker}] lineno:`, e.lineno);
