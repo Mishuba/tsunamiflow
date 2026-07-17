@@ -347,7 +347,8 @@ export class letsDoIt {
         };
         this.SoundTrack;
         this.GameWorldAudio = new AudioContext();
-                // AI manager: controls non-player agents and spawning
+        // AI manager: controls non-player agents and spawning
+        /*
                 try {
                     this.aiManager = new AiGameManager(this, { spawnInterval: 300, maxEnemies: 6 });
                     this._aiRunning = true;
@@ -448,7 +449,9 @@ export class letsDoIt {
         }
 
         startAI() { if (!this._aiRunning) { this._aiRunning = true; requestAnimationFrame(this._aiTick); } }
-        stopAI() { this._aiRunning = false; }
+    stopAI() { this._aiRunning = false; }
+    */
+        }
     HomePageAnimation(player) {
     this.clear();
 
