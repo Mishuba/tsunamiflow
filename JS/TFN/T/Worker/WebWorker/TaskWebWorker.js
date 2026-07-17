@@ -1,8 +1,8 @@
 import { TaskWorker } from "../../Class/Elder/Adult/Teen/taskwk.js";
 console.log("Task Worker:" + import.meta.url);
 
-let tfTaskWorker = new TaskWorker({ workers: workers });
-tfTaskWorker.workers
+let tfTaskWorker = new TaskWorker();
+
 
 function tycadome(
     id,
