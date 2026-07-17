@@ -65,7 +65,7 @@ Object.entries(tfTaskWorker.workers).forEach(([name, worker]) => {
                     lineno,
                     colno,
                     stack,
-                    rawEvent: safeStringify(errEvent)
+                    rawEvent: tfTaskWorker.safeStringify(errEvent)
                 }
             )
         );

@@ -3,17 +3,7 @@ export class TaskWorker {
     TimerLoop = null;
     TimerTrigger = new Set();
     /*
-    function safeStringify(obj) {
-        try {
-            return JSON.stringify(obj);
-        } catch (e) {
-            try {
-                return String(obj);
-            } catch (e2) {
-                return null;
-            }
-        }
-    }
+git add s
     
     function createChildWorker(modulePath) {
         try {
@@ -215,4 +205,15 @@ export class TaskWorker {
             )
         );
     }
-}
+    safeStringify(obj) {
+        try {
+            return JSON.stringify(obj);
+        } catch (e) {
+            try {
+                return String(obj);
+            } catch (e2) {
+                return null;
+            }
+        }
+    }
+} 
