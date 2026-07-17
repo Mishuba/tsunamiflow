@@ -172,7 +172,9 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
 
         this.Videorecorder.onstart = () => {
             this.Videorecording = true;
+            /*
             if (this.RecorderonStart) this.RecorderonStart();
+            */
         };
 
         this.Videorecorder.ondataavailable = (e) => {
@@ -180,14 +182,22 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
 
             this.Recorderchunks.push(e.data);
 
-            if (this.RecorderonData) {
-                this.RecorderonData(e.data);
+            if (this.isLive) {
+                e.data.arrayBuffer().then(buf => this.ws.send(buf));
             }
         };
 
+        /*
+        if (this.RecorderonData) {
+            this.RecorderonData(e.data);
+        }
+        */
+
         this.Videorecorder.onstop = () => {
             this.Videorecording = false;
+            /*
             if (this.RecorderonStop) this.RecorderonStop();
+            */
         };
 
         this.Videorecorder.start(this.RecorderchunkMs);

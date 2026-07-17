@@ -1,5 +1,6 @@
 export class core {
     lang = "en-US";
+    tsunamisocketlink = null;
     VideoFrame = null;
     Arraybuffer = null;
     ArraybyteLength = 0;

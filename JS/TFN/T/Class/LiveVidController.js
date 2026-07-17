@@ -17,7 +17,12 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
             return null;
         } else {
             // Capture video from canvas
-            this.videoStreamerStream = this.canvas.captureStream(fps);
+            if (!this.videoStreamerStream) {
+                this.videoStreamerStream = this.canvas.captureStream(fps);
+            } else {
+                // Do something
+            }
+
             const tracks = [...this.videoStreamerStream.getVideoTracks()];
 
             // Capture audio from AudioContext if provided
@@ -31,6 +36,7 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
             this.emit("start", this.stream);
 
             return this.stream;
+
         }
     }
     stopStream() {

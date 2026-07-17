@@ -16,14 +16,17 @@ export class HeaderWeather extends HeaderNews {
         //use the latitude and longitude location points.
         let something = "https://api.weatherapi.com/v1" + "/current.json" + "?key=" + "cf5a64c9095e425ab0f52816230110" + "&q=" + TFlat + "," + TFlong + "&aqi=no";
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', something);
+        xhr.open('GET', something);
+        xhr.responseType = 'json';
 
-        xhr.onload = async function (e) {
+        xhr.onload = async function () {
             if (this.status == 200) {
-                // get the JSON reponse
-                //parse when receiving 
-                //stringify when sending
-                let infoWeather = ('response', JSON.parse(this.response));
+                const infoWeather = this.response;
+
+                if (!infoWeather || !infoWeather.location) {
+                    console.error('Weather API returned invalid response', this.response);
+                    return;
+                }
 
                 let IWname = infoWeather.location.name;
                 let IWregion = infoWeather.location["region"];
@@ -46,14 +49,18 @@ export class HeaderWeather extends HeaderNews {
         xhr.send();
     }
     City(CityName) {
-        let something = "https://api.weatherapi.com/v1" + "/current.json" + "?key=" + "cf5a64c9095e425ab0f52816230110" + "&q=" + CityName + "&aqi=no";
+        let something = "https://api.weatherapi.com/v1" + "/current.json" + "?key=" + "cf5a64c9095e425ab0f52816230110" + "&q=" + encodeURIComponent(CityName) + "&aqi=no";
 
         const userCity = new XMLHttpRequest();
-        userCity.open("POST", something);
-        userCity.onload = function (e) {
+        userCity.open("GET", something);
+        userCity.responseType = 'json';
+        userCity.onload = function () {
             if (this.status == 200) {
-                //get  the JSON response
-                let infoWeather = ('response', JSON.stringify(this.response));
+                const infoWeather = this.response;
+                if (!infoWeather || !infoWeather.location) {
+                    console.error('Weather API returned invalid response', this.response);
+                    return;
+                }
                 let IWname = infoWeather.location.name;
                 let IWregion = infoWeather.location["region"];
                 let IWcountry = infoWeather.location["country"];
@@ -99,37 +106,46 @@ export class HeaderWeather extends HeaderNews {
     requestLocation() {
         if (!navigator.geolocation) {
             console.log("geo not working");
-        } else {
-            console.log("geo working");
-            navigator.permissions.query({
-                name: "geolocation"
-            }).then(result => {
+            return;
+        }
+
+        const success = this.LatAndLong.bind(this);
+        const failure = this.Error.bind(this);
+        const requestPosition = () => navigator.geolocation.getCurrentPosition(success, failure, this.DSLO);
+
+        console.log("geo working");
+        navigator.permissions.query({ name: "geolocation" })
+            .then(result => {
                 if (result.state === "granted") {
                     console.log("geolocation is accessible and you are able to use it for different things. granted");
                     console.log("getting the information on the current position.");
-                    navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
+                    requestPosition();
                 } else if (result.state === "prompt") {
-                    //console.log("geolocation needs to be requested");
                     if (confirm("TF is asking if you will allow it to access your location.")) {
-                        navigator.geolocation.getCurrentPosition(this.LatAndLong, this.Error, this.DSLO);
+                        requestPosition();
                     } else {
-                        let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
-                        if (letmegetloc !== "") {
-                            this.City(letmegetloc);
+                        const letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
+                        const cityName = letmegetloc?.trim();
+                        if (cityName) {
+                            this.City(cityName);
                         } else {
                             console.log("the weather will not work.");
                         }
-                    };
+                    }
                 } else {
                     console.log("geo denied");
-                    let letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
-                    if (!letmegetloc === "" || " ") {
-                        this.City(letmegetloc);
+                    const letmegetloc = prompt("If you want weather updates please type your city name with no spaces if not just press enter. (Your Location will not be accessed");
+                    const cityName = letmegetloc?.trim();
+                    if (cityName) {
+                        this.City(cityName);
                     } else {
                         console.log("the weather will not work.");
                     }
                 }
+            })
+            .catch(err => {
+                console.warn("Permission query failed:", err);
+                requestPosition();
             });
-        };
     }
 }

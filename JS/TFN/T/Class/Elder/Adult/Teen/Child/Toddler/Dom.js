@@ -7,8 +7,8 @@ export class Dom extends T {
     constructor(options = {}) {
         super(options);
     }
-    log(msg) {
-        let logBox = this.find("TfLogBox");
+    log(element, msg) {
+        let logBox = this.find(element);
         if (!logBox) return;
 
         logBox.innerText += msg + "\n";
@@ -67,8 +67,8 @@ export class Dom extends T {
         if (supportsPointer) {
             const eventType = isForm ? "submit" : "click";
 
-            console.log("elementf " + el);
-            console.log("eventf tfyjpe" + eventType);
+            //console.log("element " + el);
+            //console.log("event type" + eventType);
             el.addEventListener(eventType, runHandler);
             this._storeDomListener(id, el, runHandler, eventType);
             return;
@@ -158,6 +158,17 @@ export class Dom extends T {
             } catch (error) {
                 console.error(`Error occurred while emitting event "${event}":`, error);
             }
+        });
+    }
+    _storeDomListener(id, el, handler, eventType) {
+        if (!this.domListeners.has(id)) {
+            this.domListeners.set(id, []);
+        }
+
+        this.domListeners.get(id).push({
+            el,
+            handler,
+            eventType
         });
     }
     getBrands() {

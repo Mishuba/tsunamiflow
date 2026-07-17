@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Chroma Key Canvas</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-    <meta name="keyword" content="mishuba, challenges, business, music, property, rap, pop, rock, news, thoughts, clothes, shoes, games, shows, movies, books, love, inspiration, information, research" />
-    <meta name="description" content="Tsunami Flow is the homebase for turning your dreams to goals and mastering your life." />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+    <meta name="keyword"
+        content="mishuba, challenges, business, music, property, rap, pop, rock, news, thoughts, clothes, shoes, games, shows, movies, books, love, inspiration, information, research" />
+    <meta name="description"
+        content="Tsunami Flow is the homebase for turning your dreams to goals and mastering your life." />
     <style>
         body {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
+
         #TFcanvas {
             border: 1px solid black;
         }
+
         #TsunamiFlowVideoStuff {
             position: absolute;
             width: 1px;
@@ -22,19 +27,22 @@
             overflow: hidden;
             clip-path: inset(100%);
         }
+
         #TFchromaKey {
             margin-top: 10px;
         }
+
         .button {
             display: block;
             margin: 10px 0;
         }
     </style>
 </head>
+
 <body>
 
     <h1>Chroma Key Canvas</h1>
-   <button id="TfControlShit">Press To have access to button controls.</button>
+    <button id="TfControlShit">Press To have access to button controls.</button>
     <button id="TfStartShit">Press to start your webcam</button>
     <button id="TfStopShit">Stop Webcam</button>
 
@@ -45,76 +53,112 @@
     <button id="rmvTFchromakey">Remove Chroma Key Color</button>
 
     <video id="TsunamiFlowVideoStuff" width="640" height="480" autoplay></video>
-   <input type="file" id="TFuploadImage" accept="image/*">
+    <input type="file" id="TFuploadImage" accept="image/*">
     <button id="rmvTFimg">Remove Image</button>
     <input type="file" id="TFuploadVideo" accept="video/*">
     <button id="rmvTFvid">Remove Video</button>
     <canvas id="TFcanvas" width="640" height="480"></canvas>
-   <button id="TfStartRecPlz">Start Recording</button>
+    <button id="TfStartRecPlz">Start Recording</button>
     <button id="TfStopRecPlz">Stop Recording</button>
 
-<div>
-<input id="streamKey" placeholder="Enter Stream Key" />
-<button id="GoLive">Start Broadcast</button>
-<button id="StopLive">Stop</button><br>
-<label><input type="checkbox" id="videoToggle" checked> Include Video</label>
-<label><input type="checkbox" id="musicToggle" checked> Include Music</label>
-</div>
+    <div>
+        <label>Stream Key:</label>
 
-<div class="section playlist">
-<h3>🎶 Music Player</h3>
-<audio id="music" controls></audio><br>
-<select id="playlist">
-<option value="">-- Select Song --</option>
-<option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
-<option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
-<option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
-</select>
-<input type="file" id="fileInput" accept="audio/*">
-</div>
+        <input id="streamKey" placeholder="Enter Stream Key" /><br><br>
+        <label>Role:</label><br>
+        <select id="role" style="width:200px;">
+            <option value="broadcaster">broadcaster</option>
+            <option value="audio_only">audio_only</option>
+        </select><br><br>
+        <button id="GoLive">Start Broadcast</button>
+        <button id="StopLive">Stop</button><br>
+        <label><input type="checkbox" id="videoToggle" checked> Include Video</label>
+        <label><input type="checkbox" id="musicToggle" checked> Include Music</label>
+    </div>
 
-<div class="section soundboard">
-<h3>🎛️ Sound Effects</h3>
-<button data-sound="crowd">Crowd Clapping</button>
-<button data-sound="bomb">Bomb</button>
-<button data-sound="gun">Gun Shots</button>
-<button data-sound="laugh">Crowd Laughing</button>
-<button data-sound="intro">Intro</button>
-<button data-sound="hellnah">Hell Nah</button>
-<button data-sound="shock">Shocked</button>
-<button data-sound="wtf">Questioned (WTF)</button>
-<button data-sound="other">Other</button>
-</div>
 
-<div class="section sliders">
-<div class="slider-group">
-<label>🎤 Mic Volume</label><br>
-<input type="range" id="micVol" min="0" max="1" step="0.01" value="1">
-</div>
-<div class="slider-group">
-<label>🎵 Music Volume</label><br>
-<input type="range" id="musicVol" min="0" max="1" step="0.01" value="0.8">
-</div>
-<div class="slider-group">
-<label>💥 Effects Volume</label><br>
-<input type="range" id="fxVol" min="0" max="1" step="0.01" value="0.9">
-</div>
-</div>
-<h3>Log</h3>
-<div id="log"></div>
+    <div class="section playlist">
+        <h3>🎶 Music Player</h3>
+        <audio id="music" controls></audio><br>
+        <select id="playlist">
+            <option value="">-- Select Song --</option>
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">Song 1</option>
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">Song 2</option>
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">Song 3</option>
+        </select>
+        <input type="file" id="fileInput" accept="audio/*">
+    </div>
+
+    <div class="section soundboard">
+        <h3>🎛️ Sound Effects</h3>
+        <button data-sound="crowd">Crowd Clapping</button>
+        <button data-sound="bomb">Bomb</button>
+        <button data-sound="gun">Gun Shots</button>
+        <button data-sound="laugh">Crowd Laughing</button>
+        <button data-sound="intro">Intro</button>
+        <button data-sound="hellnah">Hell Nah</button>
+        <button data-sound="shock">Shocked</button>
+        <button data-sound="wtf">Questioned (WTF)</button>
+        <button data-sound="other">Other</button>
+    </div>
+
+    <div class="section sliders">
+        <div class="slider-group">
+            <label>🎤 Mic Volume</label><br>
+            <input type="range" id="micVol" min="0" max="1" step="0.01" value="1">
+        </div>
+        <div class="slider-group">
+            <label>🎵 Music Volume</label><br>
+            <input type="range" id="musicVol" min="0" max="1" step="0.01" value="0.8">
+        </div>
+        <div class="slider-group">
+            <label>💥 Effects Volume</label><br>
+            <input type="range" id="fxVol" min="0" max="1" step="0.01" value="0.9">
+        </div>
+    </div>
+    <h3>Log</h3>
+    <div id="TsunamiLog"></div>
     <script type="module" crossorigin="anonymous">
 
-const sounds = {
-crowd:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
-bomb:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
-gun:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effect (Loading and shooting) (3_10 Guns).mp3"),
-laugh:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
-intro:new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
-hellnah:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
-shock:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/I cant believe youve done this (Full Facepunch Meme) - Sound Effect for editing.mp3"),
-wtf:new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
-other:new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
-};
+        /*
+        const startBtn = document.getElementById("start");
+        const stopBtn = document.getElementById("stop");
+        const preview = document.getElementById("preview");
+        const videoToggle = document.getElementById("videoToggle");
+        const musicToggle = document.getElementById("musicToggle");
+        const music = document.getElementById("music");
+        const playlist = document.getElementById("playlist");
+        const fileInput = document.getElementById("fileInput");
+        const soundButtons = document.querySelectorAll(".soundboard button");
+
+        
+        const fxSources = {};
+        for (const key in sounds) fxSources[key] = audioCtx.createMediaElementSource(sounds[key]);
+
+        document.getElementById("micVol").oninput = e => micGain && (micGain.gain.value = e.target.value);
+        document.getElementById("musicVol").oninput = e => musicGain && (musicGain.gain.value = e.target.value);
+        document.getElementById("fxVol").oninput = e => fxGain && (fxGain.gain.value = e.target.value);
+
+        playlist.onchange = () => { if (playlist.value) { music.src = playlist.value; music.play(); } };
+        fileInput.onchange = e => { const file = e.target.files[0]; if (file) { music.src = URL.createObjectURL(file); music.play(); } };
+
+        soundButtons.forEach(btn => { btn.onclick = () => { const orig = sounds[btn.dataset.sound]; if (!orig) return; const s = orig.cloneNode(); s.play().catch(() => { }); }; });
+
+
+        const sounds = {
+            crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
+            bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
+            gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effect (Loading and shooting) (3_10 Guns).mp3"),
+            laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
+            intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
+            hellnah: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
+            shock: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/I cant believe youve done this (Full Facepunch Meme) - Sound Effect for editing.mp3"),
+            wtf: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
+            other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
+        };
+
+                */
     </script>
 </body>
+
 </html>

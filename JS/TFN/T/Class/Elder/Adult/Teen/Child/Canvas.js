@@ -1,6 +1,7 @@
 import { Dom } from "./Toddler/Dom.js";
 export class TsDomCanvas extends Dom {
     worker = null;
+    tsunamisocket = null;
     sharedworker = null;
     canvas = null;
     offscreencanvas = null;
@@ -47,6 +48,9 @@ export class TsDomCanvas extends Dom {
     TfObstacles = [];
     constructor(options = {}) {
         super(options);
+        if (options.tsunamisocket) {
+            this.tsunamisocket = options.tsunamisocket;
+        }
         if (options.canvas) {
             this.canvas = options.canvas;
         }

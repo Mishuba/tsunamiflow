@@ -4,6 +4,9 @@ export class maxwell {
     worker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
+    tsunamisocket = null;
+    tsunamisocketlink = null;
+    wsUrl = null;
     site = null;
     iframe = null;
     user = null;
@@ -25,6 +28,12 @@ export class maxwell {
     game = null;
     ai = null;
     constructor(option = {}) {
+        if (option.tsunamisocket) {
+            this.tsunamisocket = option.tsunamisocket;
+        }
+        if (option.tsunamisocketlink) {
+            this.tsunamisocketlink = option.tsunamisocketlink;
+        }
         if (option.user) {
             this.user = option.user;
         }
@@ -71,6 +80,13 @@ export class maxwell {
             this.sharedWorker = option.sharedWorker;
         }
     }
+    log(element, msg) {
+        let logBox = this.find(element);
+        if (!logBox) return;
+
+        logBox.innerText += msg + "\n";
+        logBox.scrollTop = logBox.scrollHeight;
+    }
     find(elem, frame = null) {
         if (frame !== null) {
             return frame.contentDocument.getElementById(elem);
@@ -78,6 +94,40 @@ export class maxwell {
             return document.getElementById(elem);
         }
     }
+    connectWS(key = "viewer", role = "viewer") {
+        this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+        this.tsunamisocket = new WebSocket(this.wsUrl);
+        this.tsunamisocket.binaryType = "arraybuffer";
+
+        this.tsunamisocket.onopen = () => {
+            log("🌐 WebSocket connected.");
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("stopBtn").disabled = false;
+            /*
+            if (reconnectTimer) clearTimeout(reconnectTimer);
+            */
+        };
+
+        this.tsunamisocket.onclose = () => {
+            log("⚠️ WebSocket closed.");
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("stopBtn").disabled = true;
+        };
+
+        this.tsunamisocket.onerror = (err) => {
+            log("❌ WebSocket error: " + err);
+        };
+
+        this.tsunamisocket.onmessage = event => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "ffmpeg_stderr") log("[FFmpeg] " + data.message);
+            } catch {
+                // ignore non-JSON
+            }
+        };
+    }
+
     async handleSchedule(time) {
         for (const word of this.site.WordTimes) {
             if (time === word) {
@@ -226,8 +276,8 @@ export class maxwell {
         if (supportsPointer) {
             const eventType = isForm ? "submit" : "click";
 
-            console.log("elementf " + el);
-            console.log("eventf tfyjpe" + eventType);
+            //console.log("element " + el);
+            //console.log("event type" + eventType);
             el.addEventListener(eventType, runHandler);
             this._storeDomListener(id, el, runHandler, eventType);
             return;
@@ -530,14 +580,15 @@ export class maxwell {
                 try {
                     await this.videoEngine.startwebcam();            // get MediaStream
                     this.videoEngine.attachwebcam();
-
-                    //this.effects.isPlaying = true;
-
-                    if (!this.soundEngine._webcamWired) {
-                        this.soundEngine.webcamAudioStream.addMixerMediaElement(this.videoEngine.videoElement, this.videoEngine.videoElement.id, false);
-                        this.soundEngine._webcamWired = true;
-                    }
                     /*
+                                        if (!this.soundEngine._webcamWired) {
+                                            this.soundEngine.webcamAudioStream.addMixerMediaElement(this.videoEngine.videoElement, this.videoEngine.videoElement.id, false);
+                                            this.soundEngine._webcamWired = true;
+                                        }
+                                        */
+                    /*
+                                        //this.effects.isPlaying = true;
+
                     // FRAME DRAW LOOP
                     const drawLoop = async () => {
                     if (!this.effects.isPlaying) return;
@@ -588,23 +639,35 @@ export class maxwell {
         this.onMe("TfStartRecPlz", () => {
             this.videoEngine.startStream();
             this.videoEngine.startRecorder({
-                audioStream: this.soundEngine.getMixerStream(),
+                stream: this.videoEngine.stream,
                 fps: 30
             });
         }, false, iframe);
 
         this.onMe("TfStopRecPlz", () => {
-            this.videoEngine.stopStream();
+            this.videoEngine.stopRecorder();
         }, false, iframe);
 
         this.onMe("GoLive", () => {
             this.videoEngine.isLive = true;
-            this.videoEngine.startSharedWorker();
-            this.videoEngine.sendToSharedWorker("stream", null);
+
+            if (!this.videoEngine.Videorecorderstream) {
+                this.videoEngine.startStream();
+                this.videoEngine.startRecorder({
+                    stream: this.videoEngine.stream,
+                    fps: 30
+                });
+            } else {
+
+                //ws.send(JSON.stringify({ type: 'start_stream' }));
+            }
+            //this.videoEngine.sendToSharedWorker("stream", this.videoEngine.Videorecorderstream);
         }, false, iframe);
 
         this.onMe("StopLive", () => {
             this.videoEngine.isLive = false;
+            this.videoEngine.stopRecorder();
+            this.videoEngine.stopStream();
         }, false, iframe);
     }
     async bindStore() {
