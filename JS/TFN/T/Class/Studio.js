@@ -199,7 +199,7 @@ export class Studio extends Flow {
                 if (this.AudioElement.src === "") {
                     console.log("The radio source is ''");
 
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -224,7 +224,7 @@ export class Studio extends Flow {
                         }));
                 } else if (!this.AudioElement.src) {
                     ("The radio source does not exist");
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -249,7 +249,7 @@ export class Studio extends Flow {
                         }));
                 } else if (this.AudioElement.src === " ") {
                     console.log("The radio source is ' '");
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -274,7 +274,7 @@ export class Studio extends Flow {
                         }));
                 } else if (this.AudioElement.src === "about:blank") {
                     console.log("The radio source is about:blank");
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -308,7 +308,7 @@ export class Studio extends Flow {
             } else if (this.AudioElement.networkState === 3) {
                 console.log("Radio networkState has NETWORK_NO_SOURCE");
                 //No valid source
-                this.worker.postMessage(this.tycadome(
+                Studio.worker.postMessage(this.tycadome(
                     "tycadome-guest" + Date.now(),
                     "radio",
                     "radio.network.state",
@@ -379,7 +379,7 @@ export class Studio extends Flow {
 
             if (this.AudioElement.ended) {
                 if (this.AudioElement.src === "") {
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -403,7 +403,7 @@ export class Studio extends Flow {
                             time: "Timer",
                         }));
                 } else if (this.AudioElement.src === undefined) {
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -427,7 +427,7 @@ export class Studio extends Flow {
                             time: "Timer",
                         }));
                 } else if (!this.AudioElement.src) {
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -451,7 +451,7 @@ export class Studio extends Flow {
                             time: "Timer",
                         }));
                 } else {
-                    this.worker.postMessage(this.tycadome(
+                    Studio.worker.postMessage(this.tycadome(
                         "tycadome-guest" + Date.now(),
                         "radio",
                         "radio.network.state",
@@ -489,7 +489,7 @@ export class Studio extends Flow {
         } else {
             if (this.AudioElement.networkState === 3) {
                 console.log("The network could not find the source.");
-                this.worker.postMessage(this.tycadome(
+                Studio.worker.postMessage(this.tycadome(
                     "tycadome-guest" + Date.now(),
                     "radio",
                     "radio.network.state",
@@ -517,7 +517,7 @@ export class Studio extends Flow {
             }
         }
 
-        this.worker.onmessage = (event) => {
+        Studio.worker.onmessage = (event) => {
             const data = event.data;
             switch (data.type) {
                 case "radio":
@@ -577,15 +577,15 @@ export class Studio extends Flow {
             }
         };
 
-        this.worker.onerror = (e) => {
+        Studio.worker.onerror = (e) => {
             this.AudioFile(e);
             console.error("RAW WORKER ERROR:", e.rawEvent);
             console.error("Error Stack " + e.stack);
-            console.error(`[${this.worker}] message:`, e.message);
-            console.error(`[${this.worker}] filename:`, e.filename);
-            console.error(`[${this.worker}] lineno:`, e.lineno);
-            console.error(`[${this.worker}] colno:`, e.colno);
-            this.emit("error", { worker: this.worker, error: e });
+            console.error(`[${Studio.worker}] message:`, e.message);
+            console.error(`[${Studio.worker}] filename:`, e.filename);
+            console.error(`[${Studio.worker}] lineno:`, e.lineno);
+            console.error(`[${Studio.worker}] colno:`, e.colno);
+            this.emit("error", { worker: Studio.worker, error: e });
         }
     }
 

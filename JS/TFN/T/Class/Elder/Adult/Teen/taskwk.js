@@ -2,27 +2,6 @@ export class TaskWorker {
     workers = null;
     TimerLoop = null;
     TimerTrigger = new Set();
-    /*
-git add s
-    
-    function createChildWorker(modulePath) {
-        try {
-            let twk = new Worker(new URL(modulePath, import.meta.url), { type: "module" });
-            console.log(`worker created at ${import.meta.url} ${modulePath} `);
-            return twk;
-        } catch (err) {
-            console.error(`Failed to create child worker ${modulePath}:`, err);
-            return null;
-        }
-    }
-    
-    const workers = {
-        input: createChildWorker("./kid/GameInputWebWorker.js"),
-        media: createChildWorker("./kid/MediaWebWorker.js"),
-        world: createChildWorker("./kid/GameWorldWebWorker.js"),
-        ai: createChildWorker("./kid/AiWebWorker.js")
-    };
-    */
     constructor(options = {}) {
         if (options.workers) {
             this.workers = options.workers;
@@ -58,6 +37,32 @@ git add s
             this.TimerTrigger.add(key);
 
             // trigger
+        }
+    }
+    createSafeWorker(modulePath, classicPath, shared = false) {
+        try {
+            if (shared === false) {
+                let ihj = new Worker(
+                    new URL(modulePath, import.meta.url),
+                    { type: "module" }
+                );
+                console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+                return ihj;
+            } else {
+                let ihj = new SharedWorker(
+                    new URL(modulePath, import.meta.url),
+                    { type: "module" }
+                );
+                console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+                return ihj;
+            }
+        } catch (err) {
+            console.warn("Module worker failed. Falling back:", err);
+            if (shared === false) {
+                return new Worker(classicPath);
+            } else {
+                return new SharedWorker(classicPath);
+            }
         }
     }
     async startTime() {

@@ -22,15 +22,19 @@ if ("serviceWorker" in navigator) {
 function createSafeWorker(modulePath, classicPath, shared = false) {
   try {
     if (shared === false) {
-      return new Worker(
+      let ihj = new Worker(
         new URL(modulePath, import.meta.url),
         { type: "module" }
       );
+      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+      return ihj;
     } else {
-      return new SharedWorker(
+      let ihj = new SharedWorker(
         new URL(modulePath, import.meta.url),
         { type: "module" }
       );
+      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+      return ihj;
     }
   } catch (err) {
     console.warn("Module worker failed. Falling back:", err);
@@ -386,7 +390,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
       Controller.user.bindCart();
-      Controller.initTsunamiWorkers();
+      //Controller.initTsunamiWorkers();
       console.log("TFN");
     }).catch(err => {
       console.error("Cart binding error:", err);
