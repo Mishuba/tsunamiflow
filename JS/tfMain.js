@@ -388,39 +388,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     ai: ai
   });
 
-
-  Controller.site.requestLocation();
-  const OffscreenCanvasRadio = document.createElement("canvas");
-  OffscreenCanvasRadio.width = RadioCanvas.width;
-  OffscreenCanvasRadio.height = RadioCanvas.height;
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
-    Controller.bindNavBar();
-    Controller.bindUsers();
+    twoMore.appendChild(OffscreenCanvasRadio);
+
+    const OffscreenCanvasRadio = document.createElement("canvas");
+    OffscreenCanvasRadio.width = RadioCanvas.width;
+    OffscreenCanvasRadio.height = RadioCanvas.height;
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
       Controller.user.bindCart();
+      Controller.site.requestLocation();
+      Controller.bindNavBar();
+      Controller.bindUsers();
       if (window.Worker) {
-        Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
+        try {
+          const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+          Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
+          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
+        } catch (err) {
+          console.warn("Offscreen canvas transfer failed:", err);
+        } finally {
+          Controller.bindAudio();
+        }
+      } else {
+        Controller.bindAudio();
       }
+
       console.log("TFN");
     }).catch(err => {
       console.error("Cart binding error:", err);
     });
-
-
-    twoMore.appendChild(OffscreenCanvasRadio);
-    try {
-      const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
-      Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
-
-    } catch (err) {
-      console.warn("Offscreen canvas transfer failed:", err);
-    } finally {
-      Controller.bindAudio();
-
-    }
   }
 
   Controller.iframe.frame.addEventListener("load", () => {
