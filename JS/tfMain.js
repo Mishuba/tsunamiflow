@@ -388,13 +388,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     ai: ai
   });
 
+  const OffscreenCanvasRadio = document.createElement("canvas");
+  OffscreenCanvasRadio.width = RadioCanvas.width;
+  OffscreenCanvasRadio.height = RadioCanvas.height;
+
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
     twoMore.appendChild(OffscreenCanvasRadio);
-
-    const OffscreenCanvasRadio = document.createElement("canvas");
-    OffscreenCanvasRadio.width = RadioCanvas.width;
-    OffscreenCanvasRadio.height = RadioCanvas.height;
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
