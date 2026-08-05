@@ -792,9 +792,10 @@ export class maxwell {
             "async",
             {
                 system: "loading",
-                canvas: this.soundEngine.visualizatorController,
+                canvas: this.soundEngine.offscreencanvas,
             }),
-            [this.soundEngine.visualizatorController]);
+            [this.soundEngine.offscreencanvas]);
+
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
