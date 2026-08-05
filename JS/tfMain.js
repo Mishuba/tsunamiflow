@@ -372,8 +372,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
   const Controller = new maxwell({
-    worker: safeWorker,
-    sharedWorker: safeSharedWorker,
     site: TfSite,
     iframe: frameTF,
     user: nifage,
@@ -404,7 +402,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       Controller.bindPayments();
       Controller.user.bindCart();
       if (window.Worker) {
-        Controller.initTsunamiWorkers();
+        Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
       }
       console.log("TFN");
     }).catch(err => {

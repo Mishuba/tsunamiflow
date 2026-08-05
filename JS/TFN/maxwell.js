@@ -759,7 +759,7 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    async initTsunamiWorkers() {
+    async initTsunamiWorkers(worker) {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             this.soundEngine.AudioFile(null);
@@ -771,12 +771,12 @@ export class maxwell {
             return;
         }
 
-        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-        this.worker.onerror = (e) => this.handleError(this.worker, e);
+        worker.onmessage = (e) => this.handleWorkerMessage(e);
+        worker.onerror = (e) => this.handleError(worker, e);
 
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        this.worker.postMessage(this.soundEngine.tycadome(
+        worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
             "init_canvas",
