@@ -105,5 +105,5 @@ Object.entries(tfTaskWorker.workers).forEach(([name, worker]) => {
 });
 
 onmessage = (e) => {
-    tfTaskWorker.OnMessage(e);
+    tfTaskWorker.OnMainMessage(e);
 };
