@@ -21,7 +21,7 @@ if ("serviceWorker" in navigator) {
 
 function createSafeWorker(modulePath, classicPath, shared = false) {
   try {
-    let ihj
+    var ihj
     if (shared === false) {
       if (window.Worker) {
         ihj = new Worker(
