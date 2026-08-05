@@ -384,7 +384,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         this.emit("closed");
     }
     SendWorkletToWorker(type, action, meta, system, data) {
-        this.worker.postMessage(
+        this.masterAudioWorklet.postMessage(
             this.tycadome(
                 "tycadome-guest" + Date.now(),
                 type,

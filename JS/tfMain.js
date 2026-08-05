@@ -21,28 +21,40 @@ if ("serviceWorker" in navigator) {
 
 function createSafeWorker(modulePath, classicPath, shared = false) {
   try {
+    let ihj
     if (shared === false) {
-      let ihj = new Worker(
-        new URL(modulePath, import.meta.url),
-        { type: "module" }
-      );
-      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-      return ihj;
+      if (window.Worker) {
+        ihj = new Worker(
+          new URL(modulePath, import.meta.url),
+          { type: "module" });
+        console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+      } else {
+
+      }
     } else {
       let ihj = new SharedWorker(
         new URL(modulePath, import.meta.url),
         { type: "module" }
       );
       console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-      return ihj;
     }
   } catch (err) {
     console.warn("Module worker failed. Falling back:", err);
     if (shared === false) {
-      return new Worker(classicPath);
+      if (window.Worker) {
+        ihj = new Worker(classicPath);
+      } else {
+
+      }
     } else {
-      return new SharedWorker(classicPath);
+      if (window.SharedWorker) {
+        ihj = new SharedWorker(classicPath);
+      } else {
+
+      }
     }
+  } finally {
+    return ihj;
   }
 }
 const TFwordMishuba = {
@@ -215,18 +227,20 @@ document.addEventListener("DOMContentLoaded", async () => {
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
   const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
-
-  const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-
-  const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-
-  const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-
-  const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js");
-
-  const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js");
-
-  const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/AiWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js");
+  /*
+    const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  
+    const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  
+    const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
+  
+    const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js");
+  
+    const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js");
+  
+    const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/AiWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js");
+  
+    */
 
   const Workletoptions = {
     numberOfInputs: 1, //0 oscillator
@@ -266,7 +280,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";
   const TfSite = new HeaderWeather({
-    worker: safeWorker,
     sharedWorker: safeSharedWorker,
   });
   TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
@@ -354,9 +367,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
 
-  const nation = new Studio({ worker: safeMediaWorker, sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
-  const ai = new AiInterface({ worker: safeAiWorker, sharedworker: safeSharedWorker });
+  const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
   const Controller = new maxwell({
     worker: safeWorker,
@@ -390,19 +403,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
       Controller.user.bindCart();
-      //Controller.initTsunamiWorkers();
+      if (window.Worker) {
+        Controller.initTsunamiWorkers();
+      }
       console.log("TFN");
     }).catch(err => {
       console.error("Cart binding error:", err);
     });
 
-    Controller.bindAudio();
+
     twoMore.appendChild(OffscreenCanvasRadio);
     try {
       const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
       Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
+
     } catch (err) {
       console.warn("Offscreen canvas transfer failed:", err);
+    } finally {
+      Controller.bindAudio();
+
     }
   }
 

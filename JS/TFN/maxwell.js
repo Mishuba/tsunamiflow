@@ -776,8 +776,7 @@ export class maxwell {
 
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        /*
-        this.soundEngine.worker.postMessage(this.soundEngine.tycadome(
+        this.worker.postMessage(this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
             "init_canvas",
@@ -796,7 +795,6 @@ export class maxwell {
                 canvas: this.soundEngine.visualizatorController,
             }),
             [this.soundEngine.visualizatorController]);
-            */
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
