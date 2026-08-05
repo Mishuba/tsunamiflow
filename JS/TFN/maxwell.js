@@ -557,10 +557,10 @@ export class maxwell {
             //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
     }
-    bindAudio() {
+    bindAudio(worker) {
         this.soundEngine.initAudioContext();
         this.RadioReady();
-        this.soundEngine.RadioEventListeners();
+        this.soundEngine.RadioEventListeners(worker);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
     bindVidSystem() {

@@ -606,12 +606,12 @@ export class Studio extends Flow {
         this.tfRadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", this.tfRadioLoadStartTime);
     }
-    emptiedAudio() {
+    emptiedAudio(worker) {
         //cancelAnimationFrame(this.effects.visualizatorController);
         console.log("The Tsunami Audio has been emptied and is ready to be loaded with a new source.");
-        this.AudioNetworkState();
+        this.AudioNetworkState(worker);
     }
-    stalledAudio(stalled) {
+    stalledAudio(stalled, worker) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
         console.log("The Tsunami Audio networkState " + this.AudioElement.networkState);
         console.log("The Tsunami Audio readyState " + this.AudioElement.readyState);
@@ -619,7 +619,7 @@ export class Studio extends Flow {
         console.log("The Tsunami Audio currentsrc " + this.AudioElement.currentsrc);
         console.log("The Tsunami Audio paused " + this.AudioElement.paused);
         console.log("The Tsunami Audio buffered " + this.AudioElement.buffered);
-        this.AudioNetworkState();
+        this.AudioNetworkState(worker);
     }
     suspendedAudio(suspend) {
         console.log("The audio is suspended" + suspend);
@@ -768,13 +768,13 @@ export class Studio extends Flow {
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
     }
-    RadioEventListeners() {
+    RadioEventListeners(worker) {
         if (this._radioBound) {
             return;
         } else {
             this._radioBound = true;
             this.AudioElement.addEventListener("emptied", async (emptied) => {
-                this.emptiedAudio(emptied);
+                this.emptiedAudio(worker);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.emptiedAudio, "emptied");
 
@@ -784,7 +784,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.waitingAudio, "waiting");
 
             this.AudioElement.addEventListener("stalled", (stalled) => {
-                this.stalledAudio(stalled);
+                this.stalledAudio(stalled, worker);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.stalledAudio, "stalled");
 

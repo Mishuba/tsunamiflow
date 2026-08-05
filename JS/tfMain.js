@@ -413,7 +413,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           Controller.bindAudio();
         }
       } else {
-        Controller.bindAudio();
+        Controller.bindAudio(safeWorker);
       }
 
       console.log("TFN");
