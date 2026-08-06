@@ -153,7 +153,7 @@ export class maxwell {
         }
         //this.ensureRadioPlaying(audio);
     }
-    async handleWorkerMessage(event) {
+    async handleWorkerMessage(event, worker) {
         const data = event.data || {};
         const payload = data.payload || {};
 
@@ -169,7 +169,7 @@ export class maxwell {
                 } else {
                     this.site.UpdateNews();
                     this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState();
+                    this.soundEngine.AudioNetworkState(worker);
                 }
                 break;
             default:
@@ -706,6 +706,9 @@ export class maxwell {
     }
 
     handleError(source, error) {
+        if (this.soundEngine.AudioElement.src === "") {
+            this.soundEngine.AudioFile(error);
+        }
         console.error("RAW WORKER ERROR:", error);
         console.error(`[${source}] message:`, error.message);
         console.error(`[${source}] filename:`, error.filename);
