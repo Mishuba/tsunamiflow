@@ -373,7 +373,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
   let OffscreenCanvasRadio = document.createElement("canvas");
-  const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
 
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
@@ -400,7 +399,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
-    //twoMore.appendChild(OffscreenCanvasRadio);
+    twoMore.appendChild(OffscreenCanvasRadio);
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
@@ -410,6 +409,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       Controller.bindUsers();
       if (window.Worker) {
         try {
+          let RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
