@@ -277,7 +277,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     channelCountMode: "max"
   };
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
+  const swport = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
+  const safeSharedWorker = swport.port;
+  safeSharedWorker.start();
 
   const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";
   const TfSite = new HeaderWeather({

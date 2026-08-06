@@ -715,47 +715,37 @@ export class maxwell {
         console.error(`[${source}] colno:`, error.colno);
         this.emit("error", { source, error });
     }
-    startSharedWorker(sharedworker) {
-        if (sharedworker) {
-            this.sharedWorkerPort = sharedworker.port;
+    receiveSharedWorkerMessage(e) {
+        const msg = e.data;
 
-            this.sharedWorkerPort.start();
-        } else {
-            //this.sharedWorker = new SharedWorker("/SharedWorker.js");
-            return
+        const swtf = tycadome(
+            e.data.id || crypto.randomUUID(),
+            e.data.type || "backend",
+            e.data.action || "completed",
+            {
+                source: "shared.worker",
+                layer: "backend",
+                worker: "shared"
+            },
+            {
+                status: e.data.state || "completed",
+                priority: "low"
+            },
+            "async",
+            e.data.payload || e.data
+        );
+        switch (e.data.type) {
+            case "ws_message":
+                console.log("WS:", e.data.payload);
+                break;
+
+            case "radio.play":
+                //this.handleRadio(msg.data);
+                break;
+
+            default:
+                break;
         }
-    }
-
-    receiveSharedWorkerMessage() {
-        this.sharedWorker.port.postMessage.onmessage = (e) => {
-            const msg = e.data;
-
-            const swtf = tycadome(
-                e.data.id || crypto.randomUUID(),
-                e.data.type || "backend",
-                e.data.action || "completed",
-                {
-                    source: "shared.worker",
-                    layer: "backend",
-                    worker: "shared"
-                },
-                {
-                    status: e.data.state || "completed",
-                    priority: "low"
-                },
-                "async",
-                e.data.payload || e.data
-            );
-            switch (e.data.type) {
-                case "ws_message":
-                    console.log("WS:", e.data.payload);
-                    break;
-
-                case "radio.play":
-                    //this.handleRadio(msg.data);
-                    break;
-            }
-        };
     }
 
     sendToSharedWorker(data = null) {
@@ -814,10 +804,10 @@ export class maxwell {
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 */
-        this.startSharedWorker(sharedworker);
         this.sendToSharedWorker("register");
-        this.sharedWorker.port.onmessage = (e) => {
+        sharedworker.onmessage = (e) => {
             this.receiveSharedWorkerMessage(e)
         };
+        //sharedworker.onerror = (e) => this.handleError(sharedworker, e);
     }
 }
