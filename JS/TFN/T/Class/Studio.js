@@ -679,7 +679,7 @@ export class Studio extends Flow {
     }
     playingAudio() {
         if (!this.iscanvasReady) this.initCanvas();
-        this.startVisualizerLoop();
+        //this.startVisualizerLoop();
     }
     pauseaudio() {
         this.AudioElement.pause();

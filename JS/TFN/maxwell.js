@@ -537,7 +537,6 @@ export class maxwell {
 
         this.onMe("TFradioPreviousButton", () => {
             this.soundEngine.previousSong();
-            //RadioWorker.postMessage({type: "radio",system: "previous"});
         });
 
         this.onMe("TFRadioRestartButton", () => {
@@ -558,14 +557,13 @@ export class maxwell {
 
         this.onMe("TFradioSkipButton", () => {
             this.soundEngine.AudioElement.removeAttribute("src");;
-            //RadioWorker.postMessage({ type: "radio", system: "file"});
         });
     }
     bindAudio(worker) {
-        this.soundEngine.initAudioContext();
         this.RadioReady();
         this.soundEngine.RadioEventListeners(worker);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
+        this.soundEngine.initAudioContext();
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
@@ -770,7 +768,7 @@ export class maxwell {
 
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        worker.postMessage(this.soundEngine.tycadome(
+        let cool = this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
             "visualizator",
             "init_canvas",
@@ -787,8 +785,8 @@ export class maxwell {
             {
                 system: "loading",
                 canvas: offscreencanvas,
-            }),
-            [offscreencanvas]);
+            });
+        worker.postMessage(cool, [offscreencanvas]);
 
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;

@@ -372,7 +372,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
-  const OffscreenCanvasRadio = document.createElement("canvas");
+  let OffscreenCanvasRadio = document.createElement("canvas");
   const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
 
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
