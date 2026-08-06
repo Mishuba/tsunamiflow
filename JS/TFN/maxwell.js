@@ -804,10 +804,8 @@ export class maxwell {
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 */
-        this.sendToSharedWorker("register");
-        sharedworker.onmessage = (e) => {
-            this.receiveSharedWorkerMessage(e)
-        };
+        //this.sendToSharedWorker("register");
+        //sharedworker.onmessage = (e) => {this.receiveSharedWorkerMessage(e)};
         //sharedworker.onerror = (e) => this.handleError(sharedworker, e);
     }
 }
