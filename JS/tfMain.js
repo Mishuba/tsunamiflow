@@ -57,6 +57,8 @@ function createSafeWorker(modulePath, classicPath, shared = false) {
     return ihj;
   }
 }
+
+
 const TFwordMishuba = {
   word: "Mishuba",
   definition: "A heterosexual North American entertainer.",
@@ -275,6 +277,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     channelCountMode: "max"
   };
 
+  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
+
   const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";
   const TfSite = new HeaderWeather({
     sharedWorker: safeSharedWorker,
@@ -373,7 +377,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
   const Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
