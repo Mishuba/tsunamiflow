@@ -42,6 +42,9 @@ export class mediaWorker extends TsWorker {
     visualLoopId = null;
     constructor(options = {}) {
         super(options);
+        if (options.radiooffscreencanvas) {
+            this.radiooffscreencanvas = options.radiooffscreencanvas;
+        }
     }
     UseImage(canvas, corner = false) {
         this.initOffscreen();
@@ -795,8 +798,8 @@ export class mediaWorker extends TsWorker {
                 this.dataArrayLength = event.data.payload.dataArrayLength;
                 this.volume = event.data.payload.volume;
             } else if (event.data.payload.system === "loading") {
-                this.radiooffscreencanvas = event.data.payload.canvas;
-                this.initRadioOffscreen();
+                //this.radiooffscreencanvas = event.data.payload.canvas;
+                //this.initRadioOffscreen();
             } else if (event.data.payload.system === "start_visual_data") {
                 this.visualizatorLoop = true;
                 this.dataArrayLength = event.data.payload.dataArrayLength;

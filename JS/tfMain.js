@@ -224,9 +224,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
-  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
-
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
   /*
     const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
   
@@ -371,6 +368,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
+  const OffscreenCanvasRadio = document.createElement("canvas");
+  const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+
+  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
+
+  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
   const Controller = new maxwell({
     site: TfSite,
     iframe: frameTF,
@@ -388,8 +391,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     ai: ai
   });
 
-  const OffscreenCanvasRadio = document.createElement("canvas");
-  const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+
   //OffscreenCanvasRadio.width = RadioCanvas.width;
   //OffscreenCanvasRadio.height = RadioCanvas.height;
 
@@ -405,12 +407,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       Controller.bindUsers();
       if (window.Worker) {
         try {
-          Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
-          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
+          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
-          Controller.bindAudio();
+          Controller.bindAudio(safeWorker);
         }
       } else {
         Controller.bindAudio(safeWorker);

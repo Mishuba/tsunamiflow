@@ -7,6 +7,7 @@ export class maxwell {
     tsunamisocket = null;
     tsunamisocketlink = null;
     wsUrl = null;
+    offscreencanvas = null;
     site = null;
     iframe = null;
     user = null;
@@ -33,6 +34,9 @@ export class maxwell {
         }
         if (option.tsunamisocketlink) {
             this.tsunamisocketlink = option.tsunamisocketlink;
+        }
+        if (option.offscreencanvas) {
+            this.offscreencanvas = option.offscreencanvas;
         }
         if (option.user) {
             this.user = option.user;
@@ -711,9 +715,9 @@ export class maxwell {
         console.error(`[${source}] colno:`, error.colno);
         this.emit("error", { source, error });
     }
-    startSharedWorker() {
-        if (this.sharedWorker) {
-            this.sharedWorkerPort = this.sharedWorker.port;
+    startSharedWorker(sharedworker) {
+        if (sharedworker) {
+            this.sharedWorkerPort = sharedworker.port;
 
             this.sharedWorkerPort.start();
         } else {
@@ -759,7 +763,7 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    async initTsunamiWorkers(worker) {
+    async initTsunamiWorkers(worker, sharedworker, offscreencanvas) {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             this.soundEngine.AudioFile(null);
@@ -792,9 +796,9 @@ export class maxwell {
             "async",
             {
                 system: "loading",
-                canvas: this.soundEngine.offscreencanvas,
+                canvas: offscreencanvas,
             }),
-            [this.soundEngine.offscreencanvas]);
+            [offscreencanvas]);
 
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
@@ -810,7 +814,7 @@ export class maxwell {
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
 */
-        this.startSharedWorker();
+        this.startSharedWorker(sharedworker);
         this.sendToSharedWorker("register");
         this.sharedWorker.port.onmessage = (e) => {
             this.receiveSharedWorkerMessage(e)
