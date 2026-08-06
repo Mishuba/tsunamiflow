@@ -313,7 +313,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   frameTF.frame.style.pointerEvents = "auto";
   frameTF.frame.src = "Iframe/Pages/homepage.html";
   const nifage = new TfPrintful({
-    worker: safeWorker,
     sharedWorker: safeSharedWorker,
   });
   nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
