@@ -389,12 +389,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   const OffscreenCanvasRadio = document.createElement("canvas");
-  OffscreenCanvasRadio.width = RadioCanvas.width;
-  OffscreenCanvasRadio.height = RadioCanvas.height;
+  const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+  //OffscreenCanvasRadio.width = RadioCanvas.width;
+  //OffscreenCanvasRadio.height = RadioCanvas.height;
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
-    twoMore.appendChild(OffscreenCanvasRadio);
+    //twoMore.appendChild(OffscreenCanvasRadio);
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
@@ -404,7 +405,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       Controller.bindUsers();
       if (window.Worker) {
         try {
-          const RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
           Controller.soundEngine.offscreencanvas = RadioOffscreenCanvas;
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
         } catch (err) {
