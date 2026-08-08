@@ -788,7 +788,11 @@ export class maxwell {
             {
                 system: "loading",
                 canvas: offscreencanvas,
-            });
+            },
+            [
+                offscreencanvas
+            ]
+        );
         worker.postMessage(cool, [offscreencanvas]);
 
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
