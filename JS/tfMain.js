@@ -10,7 +10,7 @@ import { Studio } from "./TFN/T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 import { AiInterface } from "./TFN/T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
-import { createSafeWorker } from "./TFN/T/Functions/Workers/beginning.js";
+//import { createSafeWorker } from "./TFN/T/Functions/Workers/beginning.js";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -18,6 +18,45 @@ if ("serviceWorker" in navigator) {
       .then(reg => console.log("SW registered:", reg))
       .catch(err => console.error("SW registration failed:", err));
   });
+}
+
+function createSafeWorker(modulePath, classicPath, shared = false) {
+  try {
+    var ihj
+    if (shared === false) {
+      if (window.Worker) {
+        ihj = new Worker(
+          new URL(modulePath, import.meta.url),
+          { type: "module" });
+        console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+      } else {
+
+      }
+    } else {
+      let ihj = new SharedWorker(
+        new URL(modulePath, import.meta.url),
+        { type: "module" }
+      );
+      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+    }
+  } catch (err) {
+    console.warn("Module worker failed. Falling back:", err);
+    if (shared === false) {
+      if (window.Worker) {
+        ihj = new Worker(classicPath);
+      } else {
+
+      }
+    } else {
+      if (window.SharedWorker) {
+        ihj = new SharedWorker(classicPath);
+      } else {
+
+      }
+    }
+  } finally {
+    return ihj;
+  }
 }
 
 const TFwordMishuba = {
