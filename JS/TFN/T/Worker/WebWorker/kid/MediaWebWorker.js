@@ -1,5 +1,7 @@
 // Use a relative module specifier so the worker resolves correctly in production.
-import { mediaWorker } from "./../../../Class/Elder/Adult/Teen/tfnation.js";
+import { mediaWorker } from "https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
+
+console.log("Media Worker:" + import.meta.url);
 
 if (!mediaWorker) {
     throw new Error("mediaWorker import is undefined");
