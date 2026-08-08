@@ -7,6 +7,9 @@ export class TsWorker extends TsharedWorker {
     contextType = "2d";
     constructor(options = {}) {
         super(options);
+        if (options.offscreencanvas) {
+            this.offscreencanvas = options.offscreencanvas;
+        }
     }
     initOffscreen() {
         if (!this.offscreencanvas) return;
