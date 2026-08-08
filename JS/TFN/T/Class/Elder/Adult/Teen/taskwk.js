@@ -20,17 +20,7 @@ export class TaskWorker {
             // trigger
         }
     }
-    safeStringify(obj) {
-        try {
-            return JSON.stringify(obj);
-        } catch (e) {
-            try {
-                return String(obj);
-            } catch (e2) {
-                return null;
-            }
-        }
-    }
+
     createSafeWorker(modulePath, classicPath, shared = false) {
         try {
             if (shared === false) {

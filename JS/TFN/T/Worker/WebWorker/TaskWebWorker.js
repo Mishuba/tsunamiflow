@@ -50,7 +50,17 @@ function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
 
     return tf;
 }
-
+function safeStringify(obj) {
+    try {
+        return JSON.stringify(obj);
+    } catch (e) {
+        try {
+            return String(obj);
+        } catch (e2) {
+            return null;
+        }
+    }
+}
 function createChildWorker(modulePath, classicPath, shared = false) {
     try {
         if (shared === false) {
