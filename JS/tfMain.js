@@ -404,7 +404,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
       Controller.user.bindCart();
-      Controller.site.requestLocation();
       Controller.bindNavBar();
       Controller.bindUsers();
       if (window.Worker) {
@@ -419,7 +418,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       } else {
         Controller.bindAudio(safeWorker);
       }
-
+      Controller.site.requestLocation();
       console.log("TFN");
     }).catch(err => {
       console.error("Cart binding error:", err);
