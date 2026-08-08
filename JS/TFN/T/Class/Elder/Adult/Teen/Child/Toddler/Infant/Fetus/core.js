@@ -25,6 +25,15 @@ export class core {
         if (options.VideoFrame) this.VideoFrame = options.VideoFrame;
         if (options.blobobjectURL) this.blobobjectURL = options.blobobjectURL;
     }
+    emit(event, data) {
+        (this.listeners[event] || []).forEach((fn) => {
+            try {
+                fn(data);
+            } catch (error) {
+                console.error(`Error occurred while emitting event "${event}":`, error);
+            }
+        });
+    }
     tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
         let tf = {
             "id": id, //options.id

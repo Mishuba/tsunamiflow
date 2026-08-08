@@ -773,8 +773,8 @@ export class maxwell {
 
         let cool = this.soundEngine.tycadome(
             "tycadome-guest" + Date.now(),
-            "visualizator",
-            "init_canvas",
+            "canvas",
+            "load.radio.canvas",
             {
                 source: "web",
                 target: "device:web-001",

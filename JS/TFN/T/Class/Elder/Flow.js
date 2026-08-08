@@ -71,7 +71,7 @@ export class Flow extends TsunamiFlowAudio {
             CtxX += barWidth + 1;
         }
     }
-    startVisualizerLoop() {
+    startVisualizerLoop(worker) {
         if (!this.AudioElement) return;
 
         const id = this.AudioElement.id;
