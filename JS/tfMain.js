@@ -10,6 +10,7 @@ import { Studio } from "./TFN/T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
 import { AiInterface } from "./TFN/T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
+import { createSafeWorker } from "./TFN/T/Functions/Workers/beginning.js";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -18,46 +19,6 @@ if ("serviceWorker" in navigator) {
       .catch(err => console.error("SW registration failed:", err));
   });
 }
-
-function createSafeWorker(modulePath, classicPath, shared = false) {
-  try {
-    var ihj
-    if (shared === false) {
-      if (window.Worker) {
-        ihj = new Worker(
-          new URL(modulePath, import.meta.url),
-          { type: "module" });
-        console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-      } else {
-
-      }
-    } else {
-      let ihj = new SharedWorker(
-        new URL(modulePath, import.meta.url),
-        { type: "module" }
-      );
-      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-    }
-  } catch (err) {
-    console.warn("Module worker failed. Falling back:", err);
-    if (shared === false) {
-      if (window.Worker) {
-        ihj = new Worker(classicPath);
-      } else {
-
-      }
-    } else {
-      if (window.SharedWorker) {
-        ihj = new SharedWorker(classicPath);
-      } else {
-
-      }
-    }
-  } finally {
-    return ihj;
-  }
-}
-
 
 const TFwordMishuba = {
   word: "Mishuba",
@@ -366,9 +327,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .connect(flowWorklet)
     .connect(flowaudio.destination);
 
-
-
-  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio,/* ContextElement: Tradio,*/ masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, /*masterDataArray = fdatfaarrayj,*/ masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
@@ -396,6 +355,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   //OffscreenCanvasRadio.width = RadioCanvas.width;
   //OffscreenCanvasRadio.height = RadioCanvas.height;
+  //OffscreenCanvasRadio.id = "TFradioCanvas";
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
@@ -409,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (window.Worker) {
         try {
           let RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
-          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
+          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, OffscreenCanvasRadio);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
