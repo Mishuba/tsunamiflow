@@ -553,6 +553,15 @@ export class Studio extends Flow {
         try {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
+
+                    if (this.visualizatorloop === null) {
+                        this.visualizatorloop = true;
+                    } else if (this.visualizatorloop === false) {
+                        this.visualizatorloop = true;
+                    } else {
+                        this.visualizatorloop = true;
+                    }
+
                     await this.AudioElement.play();
 
                 } else {
@@ -573,6 +582,7 @@ export class Studio extends Flow {
         //this.startVisualizerLoop();
     }
     pauseaudio() {
+        this.visualizatorloop = false;
         this.AudioElement.pause();
         console.log("Audio playback is paused");
     }

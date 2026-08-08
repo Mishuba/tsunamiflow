@@ -1,5 +1,3 @@
-import { mediaWorker } from "../../../Class/Elder/Adult/Teen/tfnation.js";
-
 function postWorkerError(err) {
 	try {
 		const e = err?.error || err;
