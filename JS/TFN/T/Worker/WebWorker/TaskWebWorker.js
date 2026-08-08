@@ -217,7 +217,8 @@ Object.entries(workers).forEach(([name, worker]) => {
                 "worker.error",
                 {
                     source: name,
-                    message: message
+                    message: message,
+                    //worker: name,
                 },
                 {
                     status: "failed",

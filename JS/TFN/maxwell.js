@@ -766,6 +766,7 @@ export class maxwell {
             return;
         }
 
+
         worker.onmessage = (e) => this.handleWorkerMessage(e);
         worker.onerror = (e) => this.handleError(worker, e);
 
@@ -794,6 +795,10 @@ export class maxwell {
             ]
         );
         worker.postMessage(cool, [offscreencanvas]);
+
+        this.soundengine.masterAudioWorklet.node.port.onmessage = (e) => {
+            this.soundengine.onWorkletMessage(e);
+        };
 
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;

@@ -404,14 +404,28 @@ export class TsunamiFlowSound extends TsDomCanvas {
             )
         );
     }
-    onWorkletMessage(e) {
-        this.masterFloat32 = new Float32Array(e.data);
-        this.processAudioForVideo();
+    onWorkletMessage(e, worker) {
+        switch (event.data.type) {
+            case "audio.worklet":
+                worker.postmessage(this.tycadome(
+                    e.data.id,
+                    e.data.type,
+                    e.data.action,
+                    e.data.meta,
+                    e.data.state,
+                    e.data.mode,
+                    e.data.payload
+                ));
+        }
+        this.masterFloat32 = new Float32Array(e.data.payload.output);
+
+        //this.processAudioForVideo();
+        /*
         const pcm = e.data.pcm;
         const features = this.dsp.process(pcm);
-
+        
         this.latestAudio = features;
-
+        */
         // GAME SIGNALS
         //this.updateGame(features);
 
@@ -434,31 +448,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 particles: this.particles
             }
         ));
-        //updateAnalyser();
-        this.masterAudioWorklet.postMessage(
-            this.tycadome(
-                "tycadome-guest" + Date.now(),
-                "visualizator",
-                "radio.playing",
-                {
-                    source: "web",
-                    target: "device:web-001"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "visual_data",
-                    dataArray: this.masterDataArray,
-                    dataArrayLength: this.masterDataArray.length,
-                    baseRadius: this.baseRadius,
-                    particles: this.particles,
-                    volume: this.TfSoundVolume
-                }
-            )
-        );
     }
     processAudioForVideo() {
         this.masterBufferLength = this.masterFloat32.length;

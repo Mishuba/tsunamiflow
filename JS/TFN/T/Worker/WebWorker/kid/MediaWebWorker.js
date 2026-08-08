@@ -377,7 +377,7 @@ async function MessageReceived(event) {
                     //TheLastSongUsed = CurrentSong;
                     break;
             }
-        case "visualizator":
+        case "audio-worklet":
 
             switch (event.data.action) {
                 case "update_visual_data":
@@ -393,7 +393,9 @@ async function MessageReceived(event) {
                     this.volume = event.data.payload.volume;
                     this.startVisualizerLoop(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
                     break;
+                case "audio.visual.data":
 
+                    break;
                 default:
 
                     break;
