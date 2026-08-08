@@ -1,4 +1,4 @@
-import { TaskWorker } from "../../Class/Elder/Adult/Teen/taskwk.js";
+//import { TaskWorker } from "../../Class/Elder/Adult/Teen/taskwk.js";
 console.log("Task Worker:" + import.meta.url);
 
 var TimerLoop = null;
@@ -160,12 +160,19 @@ async function startTime() {
         TimerTrigger.clear();
     }
 }
-
+/*
 const workers = {
     input: createChildWorker("./kid/GameInputWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js"),
     media: createChildWorker("./kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js"),
     world: createChildWorker("./kid/GameWorldWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js"),
     ai: createChildWorker("./kid/AiWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js")
+};
+*/
+const workers = {
+    input: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js"),
+    media: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js"),
+    world: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js"),
+    ai: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js")
 };
 
 Object.entries(workers).forEach(([name, worker]) => {
