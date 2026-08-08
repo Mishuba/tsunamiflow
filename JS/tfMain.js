@@ -359,7 +359,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
-    twoMore.appendChild(OffscreenCanvasRadio);
+    //twoMore.appendChild(OffscreenCanvasRadio);
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
@@ -369,7 +369,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (window.Worker) {
         try {
           let RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
-          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, OffscreenCanvasRadio);
+          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
