@@ -559,11 +559,11 @@ export class maxwell {
             this.soundEngine.AudioElement.removeAttribute("src");;
         });
     }
-    bindAudio(worker) {
+    bindAudio(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
         this.RadioReady();
         this.soundEngine.RadioEventListeners(worker);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
-        this.soundEngine.initAudioContext();
+        let contextaudio = this.soundEngine.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;

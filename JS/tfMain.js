@@ -332,7 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
-  //const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
+  const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
 
   await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
@@ -359,10 +359,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  flowGain
+  Tradio.connect(flowGain)
     .connect(flowAnalyser)
-    .connect(flowCompressor)
     .connect(flowWorklet)
+    .connect(flowCompressor)
     .connect(flowaudio.destination);
 
   const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
@@ -410,7 +410,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
-          Controller.bindAudio(safeWorker);
+          Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowCompressor, flowDelay, flowPanner);
         }
       } else {
         Controller.bindAudio(safeWorker);

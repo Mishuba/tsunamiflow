@@ -93,32 +93,27 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
     }
     /// context
-    createTrackChain() {
+    createTrackChain(SoundsContext) {
 
         const chain = {
 
             gain:
-                this.MasterSoundsContext.createGain(),
+                SoundsContext.createGain(),
 
             analyser:
-                this.MasterSoundsContext.createAnalyser(),
+                SoundsContext.createAnalyser(),
 
             compressor:
-                this.MasterSoundsContext
+                SoundsContext
                     .createDynamicsCompressor(),
 
             delay:
-                this.MasterSoundsContext
+                SoundsContext
                     .createDelay(),
 
             panner:
-                this.MasterSoundsContext
+                SoundsContext
                     .createStereoPanner(),
-
-            worklet: new AudioWorkletNode(
-                this.MasterSoundsContext,
-                "fft-processor"
-            )
         };
 
         Object.assign(
@@ -144,55 +139,50 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 .connect(this.MasterSoundsContext.destination);
         }
     }
-    async initAudioContext() {
+    async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
 
         if (this.AudioContextInitialized) {
-            if (this.MasterSoundsContext.state === "suspended") {
-                return this.MasterSoundsContext.resume();
+            if (SoundsContext.state === "suspended") {
+                return SoundsContext.resume();
             }
-            return this.MasterSoundsContext;
+            return SoundsContext;
         }
-        /*
-        if (!this.MasterSoundsContext) {
-            this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        if (!SoundsContext) {
+            SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-        
-        if (!this.ContextElement) {
+
+        if (!ContextElement) {
             if (this.AudioElement) {
                 // MASTER
-                this.ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
+                ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
             } else {
-                this.ContextElement = null;
+                ContextElement = null;
             }
         }
-        
-        if (!this.masterGain) {
+
+        if (!Gain) {
             // MASTER
-            this.masterGain = this.MasterSoundsContext.createGain();
-            this.masterGain.gain.value = 1;
+            Gain = SoundsContext.createGain();
+            Gain.gain.value = 1;
         }
 
-        if (!this.masterAnalyser) {
+        if (!Analyser) {
             // GLOBAL ANALYSER BUS
-            this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
-            Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
-
-            // DATA BUFFER
-            this.masterBufferLength = this.masterAnalyser.frequencyBinCount;
-        } else {
-            this.masterBufferLength = this.masterAnalyser.frequencyBinCount;
+            Analyser = SoundsContext.createAnalyser();
+            Object.assign(Analyser, this.TfSoundAnalyserOptions);
         }
 
-                if (!this.masterCompressor) {
-                    // GLOBAL COMPRESSOR BUS
-                    this.masterCompressor = this.MasterSoundsContext.createDynamicsCompressor();
-                }
-        
-                if (!this.masterAudioWorklet) {
+        if (!rCompressor) {
+            // GLOBAL COMPRESSOR BUS
+            Compressor = SoundsContext.createDynamicsCompressor();
+        }
+        /*
+                if (!AudioWorklet) {
                     // GLOBAL AUDIO WORKLET
-                    this.MasterSoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
-                        this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor");
-                        this.masterAudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
+                    SoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
+                        AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor");
+                        AudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
                     });
                     //this.doctxok();
                 } else {
@@ -200,12 +190,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 }
         */
         // ROUTING
-        this.emit("ready", this.MasterSoundsContext);
-        if (this.MasterSoundsContext.state === "suspended") {
-            return this.MasterSoundsContext.resume();
+        this.emit("ready", SoundsContext);
+        if (SoundsContext.state === "suspended") {
+            return SoundsContext.resume();
         }
         this.AudioContextInitialized = true;
-        return this.MasterSoundsContext;
+        return SoundsContext;
     }
     addAudioContextSource(element, id = null, type = null) {
         const sourceId = id || `source-${++this.MasteridCounter}`;
