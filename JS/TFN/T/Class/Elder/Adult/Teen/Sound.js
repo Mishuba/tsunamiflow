@@ -211,7 +211,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return sourceId;
     }
-    connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner, id = "guest", type = "audio") {
+    connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner, id = "radio", type = "audio") {
         this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         //if (this.TfSoundsContext[id]) return;
         //this.addAudioContextSource(element, SoundsContext, Gain, id, type);
