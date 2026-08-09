@@ -539,7 +539,7 @@ export class Studio extends Flow {
     }
     canplaythroughAudio() {
         console.log("Audio playback is can play through");
-        //this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
+        this.connectaudio(this.AudioElement, this.AudioElement.id, "audio");
     }
     endedAudio() {
         console.log("The audio should have ended");
@@ -553,14 +553,6 @@ export class Studio extends Flow {
         try {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
-
-                    if (this.visualizatorloop === null) {
-                        this.visualizatorloop = true;
-                    } else if (this.visualizatorloop === false) {
-                        this.visualizatorloop = true;
-                    } else {
-                        this.visualizatorloop = true;
-                    }
 
                     await this.AudioElement.play();
 
@@ -578,8 +570,7 @@ export class Studio extends Flow {
 
     }
     playingAudio() {
-        if (!this.iscanvasReady) this.initCanvas();
-        //this.startVisualizerLoop();
+
     }
     pauseaudio() {
         this.visualizatorloop = false;
