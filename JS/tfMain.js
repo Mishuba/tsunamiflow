@@ -340,8 +340,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   flowGain.gain.value = 1;
   const flowAnalyser = flowaudio.createAnalyser();
   Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-  const butftfer = flowAnalyser.frequencyBinCount;
-  //const fdatfaarrayj = new Uint8Array(butftfer); //new Uint8Array(butftfer) / 4;
   const flowCompressor = flowaudio.createDynamicsCompressor();
   const flowDelay = flowaudio.createDelay();
   const flowPanner = flowaudio.createPanner();
@@ -359,13 +357,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  Tradio.connect(flowGain)
-    .connect(flowAnalyser)
-    .connect(flowWorklet)
-    .connect(flowCompressor)
-    .connect(flowaudio.destination);
+  Tradio.connect(flowGain).connect(flowAnalyser).connect(flowWorklet).connect(flowCompressor).connect(flowaudio.destination);
 
-  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
+  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
@@ -413,7 +407,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowCompressor, flowDelay, flowPanner);
         }
       } else {
-        Controller.bindAudio(safeWorker);
+        Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowCompressor, flowDelay, flowPanner);
       }
       Controller.site.requestLocation();
       console.log("TFN");

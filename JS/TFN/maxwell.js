@@ -563,7 +563,7 @@ export class maxwell {
         this.RadioReady();
         this.soundEngine.RadioEventListeners(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
-        let contextaudio = this.soundEngine.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        //this.soundEngine.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
