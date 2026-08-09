@@ -538,19 +538,6 @@ function RadioVisualizer(features) {
 }
 
 function scheduleVisualizerFrame(callback) {
-    if (
-        typeof requestAnimationFrame === "function"
-    ) {
-        visualizerUsingTimeout = false;
-
-        return requestAnimationFrame(callback);
-    }
-
-    visualizerUsingTimeout = true;
-
-    return setTimeout(callback, 16);
-}
-function scheduleVisualizerFrame(callback) {
     // Try requestAnimationFrame first
     try {
         if (typeof requestAnimationFrame === "function") {

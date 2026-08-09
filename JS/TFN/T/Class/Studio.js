@@ -541,9 +541,27 @@ export class Studio extends Flow {
         //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         console.log("Audio playback is can play through");
     }
-    endedAudio() {
+    endedAudio(worker, SoundsContext) {
         console.log("The audio should have ended");
         //this.removeSource(this.AudioElement.id);
+        worker.postMessage(this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "audio.ended",
+            {
+                worker: "media"
+            },
+            {
+                "status": "pending",
+                "priority": "low"
+            },
+            {
+                "async": true
+            },
+            {
+                system: "audio",
+                message: "start visualizator"
+            }));
         this.AudioElement.src = "";
     }
     waitingAudio() {
@@ -616,9 +634,27 @@ export class Studio extends Flow {
     playingAudio() {
 
     }
-    pauseaudio() {
-        this.visualizatorloop = false;
+    pauseaudio(worker, SoundsContext) {
+        //this.visualizatorloop = false;
         this.AudioElement.pause();
+        worker.postMessage(this.tycadome(
+            "tycadome-guest" + Date.now(),
+            "radio",
+            "audio.paused",
+            {
+                worker: "media"
+            },
+            {
+                "status": "pending",
+                "priority": "low"
+            },
+            {
+                "async": true
+            },
+            {
+                system: "audio",
+                message: "start visualizator"
+            }));
         console.log("Audio playback is paused");
     }
     previousaudio(music) {
@@ -766,7 +802,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
             this.AudioElement.addEventListener("pause", async () => {
-                this.pauseaudio();
+                this.pauseaudio(worker, SoundsContext);
                 //this.stopAnalyserLoop();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseaudio, "pause");
@@ -782,7 +818,7 @@ export class Studio extends Flow {
             //this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
             this.AudioElement.addEventListener("ended", async (ended) => {
-                this.endedAudio();
+                this.endedAudio(worker, SoundsContext);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
         }
