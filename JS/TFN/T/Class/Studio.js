@@ -549,14 +549,22 @@ export class Studio extends Flow {
     waitingAudio() {
         console.log("Audio playback is waiting");
     }
-    async playaudio() {
+    async playaudio(SoundsContext) {
         try {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
 
+                    if (SoundsContext?.state === 'suspended') {
+                        await SoundsContext.resume();
+                        console.log('AudioContext resumed from playaudio');
+                    }
                     await this.AudioElement.play();
 
                 } else {
+                    if (SoundsContext?.state === 'suspended') {
+                        await SoundsContext.resume();
+                        console.log('AudioContext resumed from playaudio');
+                    }
                     await this.AudioElement.play();
                 }
             }
@@ -712,7 +720,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
 
             this.AudioElement.addEventListener("play", () => {
-                this.playaudio();
+                this.playaudio(SoundsContext);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 

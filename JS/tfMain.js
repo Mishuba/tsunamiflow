@@ -332,6 +332,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
 
   const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
+
+  if (flowaudio.state === 'suspended') {
+    document.addEventListener('click', () => {
+      flowaudio.resume().then(() => {
+        console.log('✅ AudioContext resumed');
+      }).catch(err => {
+        console.error('❌ Resume failed:', err);
+      });
+    }, { once: true });
+  }
+
   const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
 
   await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
@@ -357,7 +368,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  Tradio.connect(flowGain).connect(flowAnalyser).connect(flowCompressor).connect(flowaudio.destination);
+  Tradio.connect(flowGain);
+  flowGain.connect(flowAnalyser); flowAnalyser.connect(flowCompressor);
+  flowCompressor.connect(flowaudio.destination);
 
   flowAnalyser.connect(flowWorklet)
 
