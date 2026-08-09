@@ -549,7 +549,7 @@ export class Studio extends Flow {
     waitingAudio() {
         console.log("Audio playback is waiting");
     }
-    async playaudio(SoundsContext) {
+    async playaudio(worker, SoundsContext) {
         try {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
@@ -560,12 +560,48 @@ export class Studio extends Flow {
                     }
                     await this.AudioElement.play();
 
+                    worker.postMessage(this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "audio.play",
+                        {
+                            worker: "media"
+                        },
+                        {
+                            "status": "pending",
+                            "priority": "low"
+                        },
+                        {
+                            "async": true
+                        },
+                        {
+                            system: "audio",
+                            message: "start visualizator"
+                        }));
                 } else {
                     if (SoundsContext?.state === 'suspended') {
                         await SoundsContext.resume();
                         console.log('AudioContext resumed from playaudio');
                     }
                     await this.AudioElement.play();
+                    worker.postMessage(this.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "radio",
+                        "audio.play",
+                        {
+                            worker: "media"
+                        },
+                        {
+                            "status": "pending",
+                            "priority": "low"
+                        },
+                        {
+                            "async": true
+                        },
+                        {
+                            system: "audio",
+                            message: "start visualizator"
+                        }));
                 }
             }
         } catch (error) {
@@ -610,7 +646,7 @@ export class Studio extends Flow {
         this.AudioProcessBar = (this.AudioElement.currentTime / duration) * 100;
         this.TaudioFtime = `Time: ${this.FormatAudioTime(this.AudioTiming)} / ${this.FormatAudioTime(Math.floor(this.AudioElement.duration))}`;
     }
-    StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8") {
+    StartLiveAudio(url = "https://world.tsunamiflow.club/hls/anything.m3u8", worker = null, soundcontext = null) {
         if (this.WeLive) return;
 
         this.WeLive = true;
@@ -720,7 +756,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
 
             this.AudioElement.addEventListener("play", () => {
-                this.playaudio(SoundsContext);
+                this.playaudio(worker, SoundsContext);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
