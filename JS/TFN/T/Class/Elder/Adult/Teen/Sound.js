@@ -414,40 +414,21 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     e.data.meta,
                     e.data.state,
                     e.data.mode,
-                    e.data.payload
+                    {
+                        system: "visual_data",
+                        dataArray: e.data.payload.fft,
+                        volume: e.data.payload.volume,
+                        bass: e.data.payload.bass,
+                        mid: e.data.payload.mid,
+                        treble: e.data.payload.treble,
+                        beat: e.data.payload.beat,
+                        particles: this.particles
+                    }
                 ));
         }
-        this.masterFloat32 = new Float32Array(e.data.payload.output);
 
-        //this.processAudioForVideo();
-        /*
-        const pcm = e.data.pcm;
-        const features = this.dsp.process(pcm);
-        
-        this.latestAudio = features;
-        */
         // GAME SIGNALS
         //this.updateGame(features);
-
-        // VISUAL SIGNALS
-        this.masterAudioWorklet.postMessage(this.tycadome(
-            "visual",
-            "radio",
-            "audio.frame",
-            {},
-            { status: "ok" },
-            "async",
-            {
-                system: "visual_data",
-                dataArray: features.fft,
-                volume: features.volume,
-                bass: features.bass,
-                mid: features.mid,
-                treble: features.treble,
-                beat: features.beat,
-                particles: this.particles
-            }
-        ));
     }
     processAudioForVideo() {
         this.masterBufferLength = this.masterFloat32.length;

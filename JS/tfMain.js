@@ -242,8 +242,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     */
 
   const Workletoptions = {
-    numberOfInputs: 1, //0 oscillator
+    numberOfInputs: 1, // 0
     numberOfOutputs: 1,
+
+    processorOptions: {
+      mode: "fft",
+      fftSize: 2048,
+      customFlag: true
+    },
     //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
     /*
     parameterData: {
@@ -257,17 +263,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       pannerZ: 0
     },
     */
-    /*
-    processorOptions: {
-      mode: "fft",
-      bufferSize: 1024,
-      customFlag: true
-    },
-    */
     channelCount: 2,
-    channelCountMode: "max", // max(uses max possible channels) || clamped-max (clamps to channelCount) || explicit (uses channelCount)
-    channelInterpretation: "speakers" //discrete (each channel is distinct) || speakers (maps to left/right for 2 channels, more channels follow standard surround sound mapping)
-  }
+    channelCountMode: "max",
+    channelInterpretation: "speakers"
+  };
 
   const TfSoundAnalyserOptions = {
     fftSize: 2048,
@@ -366,7 +365,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     .connect(flowWorklet)
     .connect(flowaudio.destination);
 
-  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet, canvas: RadioCanvas });
+  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterBufferLength: butftfer, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
@@ -391,11 +390,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     ai: ai
   });
 
-
-  //OffscreenCanvasRadio.width = RadioCanvas.width;
-  //OffscreenCanvasRadio.height = RadioCanvas.height;
-  //OffscreenCanvasRadio.id = "TFradioCanvas";
-
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
     //twoMore.appendChild(OffscreenCanvasRadio);
@@ -407,7 +401,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       Controller.bindUsers();
       if (window.Worker) {
         try {
-          let RadioOffscreenCanvas = OffscreenCanvasRadio.transferControlToOffscreen();
+          let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);

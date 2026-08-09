@@ -11,9 +11,35 @@ if (!mediaWorker) {
 }
 */
 
+//variables
+let offscreencanvas = null;
+let canvasctx = null;
+const maxBeaconSize = 64 * 1024;
+
+let baseRadius = 2;
+const particles = [];
+
 var songList = null;
 var CurrentSong = null;
+
+//boolean
+let visualizerRunning = false;
+let visualizerFrame = null;
+let visualizerUsingTimeout = false;
+
 var listeners = {};
+
+//objects
+var TfAudioVisualData = {
+    dataArray: new Uint8Array(0),
+    volume: 0,
+    bass: 0,
+    mid: 0,
+    treble: 0,
+    beat: false,
+    timestamp: 0
+};
+
 function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
     let tf = {
         "id": id, //options.id
@@ -80,7 +106,7 @@ async function SendBeacon(url, data) {
 
     const size = getSize(payload);
 
-    if (size > this.maxBeaconSize) {
+    if (size > maxBeaconSize) {
         emit("error", { url, data, reason: "Payload too large" });
         return false;
     }
@@ -298,6 +324,277 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
             return null;
     }
 }
+function draw(p, features) {
+    canvasctx.beginPath();
+
+    canvasctx.arc(
+        p.x,
+        p.y,
+        p.radius,
+        0,
+        Math.PI * 2,
+        false
+    );
+
+    const bass = features.bass;
+    const mid = features.mid;
+    const treble = features.treble;
+
+    canvasctx.fillStyle = p.color;
+
+    canvasctx.shadowColor =
+        p.color;
+
+    canvasctx.shadowBlur =
+        20 + features.volume * 30;
+
+    canvasctx.fill();
+}
+function update(
+    p,
+    fftValue,
+    volume,
+    baseRadius,
+    bass,
+    mid,
+    treble,
+    beat
+) {
+    /*
+     * FFT energy for this particle.
+     */
+    const fftEnergy =
+        (fftValue / 255) * volume;
+
+    /*
+     * Global bass energy.
+     *
+     * Bass drives the overall particle expansion.
+     */
+    const bassEnergy =
+        bass * 30;
+
+    /*
+     * Combine FFT energy and bass.
+     */
+    const energy =
+        fftEnergy * 50 +
+        bassEnergy;
+
+    /*
+     * Beat gives an additional impulse.
+     */
+    const beatEnergy =
+        beat ? 25 : 0;
+
+    /*
+     * Particle radius.
+     */
+    p.radius =
+        baseRadius +
+        energy +
+        beatEnergy;
+
+    /*
+     * Movement.
+     */
+    p.dx +=
+        (Math.random() - 0.5) *
+        energy *
+        0.05;
+
+    p.dy +=
+        (Math.random() - 0.5) *
+        energy *
+        0.05;
+
+    /*
+     * Bass makes movement stronger.
+     */
+    p.dx +=
+        (Math.random() - 0.5) *
+        bass *
+        0.5;
+
+    p.dy +=
+        (Math.random() - 0.5) *
+        bass *
+        0.5;
+
+    /*
+     * Damping.
+     */
+    p.dx *= 0.97;
+    p.dy *= 0.97;
+
+    /*
+     * Position.
+     */
+    p.x += p.dx;
+    p.y += p.dy;
+
+    /*
+     * Keep particles on screen.
+     */
+    if (p.x < 0) p.x = offscreencanvas.width;
+    if (p.x > offscreencanvas.width) p.x = 0;
+
+    if (p.y < 0) p.y = offscreencanvas.height;
+    if (p.y > offscreencanvas.height) p.y = 0;
+}
+
+function tfParticles(x, y, dx, dy, radius, color) {
+    return { x, y, dx, dy, radius, color };
+}
+function particle() {
+    // Clear existing particles
+    for (let i = 0; i <= 100; i++) {
+        const x = Math.random() * offscreencanvas.width;
+        const y = Math.random() * offscreencanvas.height;
+        const dx = (Math.random() - 0.5) * 0.5;
+        const dy = (Math.random() - 0.5) * 0.5;
+        const radius = Math.random() * 0.5 + 0.2;
+        const color = `rgba(${Math.floor(Math.random() * 256)}, ` +
+            `${Math.floor(Math.random() * 256)}, ` +
+            `${Math.floor(Math.random() * 256)}, 0.8)`;
+        particles.push(tfParticles(x, y, dx, dy, radius, color));
+    }
+}
+function RadioVisualizer(features) {
+    const dataArray = features.dataArray;
+
+    if (
+        !offscreencanvas ||
+        !canvasctx ||
+        !dataArray ||
+        dataArray.length === 0
+    ) {
+        return;
+    }
+
+    const volume = features.volume;
+    const bass = features.bass;
+    const mid = features.mid;
+    const treble = features.treble;
+    const beat = features.beat;
+
+    canvasctx.fillStyle = "rgb(10, 10, 30)";
+    canvasctx.fillRect(
+        0,
+        0,
+        offscreencanvas.width,
+        offscreencanvas.height
+    );
+
+    for (let i = 0; i < particles.length; i++) {
+        const fftValue =
+            dataArray[i % dataArray.length];
+
+        update(
+            particles[i],
+            fftValue,
+            volume,
+            baseRadius,
+            bass,
+            mid,
+            treble,
+            beat
+        );
+
+        draw(particles[i], features);
+    }
+
+    const barWidth =
+        offscreencanvas.width / dataArray.length;
+
+    let CtxX = 0;
+
+    for (let i = 0; i < dataArray.length; i++) {
+        const fft = dataArray[i];
+
+        const barHeight =
+            fft * volume;
+
+        const CtxR =
+            Math.min(255, fft + 100);
+
+        const CtxG =
+            Math.min(255, i * 2);
+
+        const CtxB = 255;
+
+        canvasctx.fillStyle =
+            `rgb(${CtxR}, ${CtxG}, ${CtxB})`;
+
+        canvasctx.fillRect(
+            CtxX,
+            offscreencanvas.height - barHeight,
+            Math.max(0, barWidth - 1),
+            barHeight
+        );
+
+        CtxX += barWidth;
+    }
+}
+
+function scheduleVisualizerFrame(callback) {
+    if (
+        typeof requestAnimationFrame === "function"
+    ) {
+        visualizerUsingTimeout = false;
+
+        return requestAnimationFrame(callback);
+    }
+
+    visualizerUsingTimeout = true;
+
+    return setTimeout(callback, 16);
+}
+
+function startVisualizerLoop(audioFeatures) {
+    if (!offscreencanvas) {
+        return;
+    }
+
+    if (visualizerRunning) {
+        return;
+    }
+
+    visualizerRunning = true;
+
+    const vizloop = () => {
+        if (!visualizerRunning) {
+            return;
+        }
+
+        RadioVisualizer(audioFeatures);
+
+        visualizerFrame = scheduleVisualizerFrame(vizloop);
+    };
+
+    vizloop();
+}
+
+function cancelVisualizerFrame(id) {
+    if (id === null) {
+        return;
+    }
+
+    if (visualizerUsingTimeout) {
+        clearTimeout(id);
+    } else {
+        cancelAnimationFrame(id);
+    }
+}
+
+function stopVisualizerLoop() {
+    visualizerRunning = false;
+
+    if (visualizerFrame !== null) {
+        cancelVisualizerFrame(visualizerFrame);
+        visualizerFrame = null;
+    }
+}
 
 async function MessageReceived(event) {
     switch (event.data.type) {
@@ -306,7 +603,11 @@ async function MessageReceived(event) {
             switch (event.data.action) {
 
                 case "load.radio.canvas":
-                    const offscreencanvas = event.data.payload.canvas;
+                    offscreencanvas = event.data.payload.canvas;
+                    canvasctx =
+                        offscreencanvas.getContext("2d");
+                    particles.length = 0;
+                    particle();
                     break;
                 default:
                     break;
@@ -316,25 +617,23 @@ async function MessageReceived(event) {
         case "radio":
             if (songList === null) {
                 try {
-                    songList = await this.requestWorld(
+                    songList = await requestWorld(
                         "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
                         null,
                         { "X-Request-Type": "fetchRadioSongs" },
                         "fetch"
                     );
-                    //this.RadioTime(songList);
-                    //this.nextRadioItem = songList;
+                    //RadioTime(songList);
+                    //nextRadioItem = songList;
                 } catch (e) {
                     songList = null;
                     console.error("JSON parse error:", e);
-                    //this.RadioTime(songList);
+                    //RadioTime(songList);
                 }
             }
 
             switch (event.data.action) {
                 case "get.radio.file":
-                    this.visualizatorLoop = true;
-
                     switch (event.data.payload.system) {
                         case "files":
                             //CurrentSong = RadioTime(songList);
@@ -363,36 +662,51 @@ async function MessageReceived(event) {
                                 })
                             );
                             break;
-
-                        case "pcm":
-
-                            break;
                         default:
                             break;
                     }
                     break;
+                case "audio.paused":
+                    stopVisualizerLoop();
+                    break;
 
+                case "audio.ended":
+                    stopVisualizerLoop();
+                    break;
+                case "audio.play":
+                    startVisualizerLoop(TfAudioVisualData);
+                    break;
                 default:
                     //RadioTime(songList);
                     //TheLastSongUsed = CurrentSong;
                     break;
             }
+            break;
         case "audio-worklet":
+            const p = event.data.payload;
 
+            TfAudioVisualData.dataArray =
+                p.dataArray;
+
+            TfAudioVisualData.volume =
+                p.volume;
+
+            TfAudioVisualData.bass =
+                p.bass;
+
+            TfAudioVisualData.mid =
+                p.mid;
+
+            TfAudioVisualData.treble =
+                p.treble;
+
+            TfAudioVisualData.beat =
+                p.beat;
+
+            TfAudioVisualData.timestamp =
+                performance.now();
+            /*
             switch (event.data.action) {
-                case "update_visual_data":
-                    this.dataArrayLength = event.data.payload.dataArrayLength;
-                    this.volume = event.data.payload.volume;
-                    break;
-
-                case "start_visual_data":
-                    this.visualizatorLoop = true;
-                    this.dataArrayLength = event.data.payload.dataArrayLength;
-                    this.baseRadius = event.data.payload.baseRadius;
-                    this.particles = event.data.payload.particles;
-                    this.volume = event.data.payload.volume;
-                    this.startVisualizerLoop(this.dataArrayLength, this.baseRadius, this.particles, this.volume);
-                    break;
                 case "audio.visual.data":
 
                     break;
@@ -400,7 +714,8 @@ async function MessageReceived(event) {
 
                     break;
             }
-
+            */
+            break;
         case "stream":
 
             switch (event.data.action) {
@@ -480,7 +795,6 @@ async function MessageReceived(event) {
 }
 
 try {
-    //mediawk.startTime();
     self.onmessage = (e) => {
         MessageReceived(e);
     };
@@ -488,7 +802,7 @@ try {
     self.onerror = (e) => {
         try {
             const err = e?.error || e;
-            self.postMessage(mediawk.tycadome(
+            self.postMessage(tycadome(
                 "tycadome-guest" /*+ Date.now()*/,
                 "error",
                 "audio.worker.error",
