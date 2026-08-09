@@ -414,7 +414,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           //flowWorklet.port.start();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
           flowWorklet.port.onmessage = (e) => {
-            Controller.soundengine.onWorkletMessage(e, safeWorker);
+            nation.onWorkletMessage(e, safeWorker);
           };
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
