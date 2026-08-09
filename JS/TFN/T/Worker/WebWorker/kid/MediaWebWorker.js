@@ -550,7 +550,36 @@ function scheduleVisualizerFrame(callback) {
 
     return setTimeout(callback, 16);
 }
+function scheduleVisualizerFrame(callback) {
+    // Try requestAnimationFrame first
+    try {
+        if (typeof requestAnimationFrame === "function") {
+            visualizerUsingTimeout = false;
+            return requestAnimationFrame(callback);
+        }
+    } catch (error) {
+        if (error.name === "NotSupportedError") {
+            console.warn("❌ requestAnimationFrame not supported, falling back to setTimeout");
+        } else {
+            console.error("Error in requestAnimationFrame:", error);
+        }
+    }
 
+    // Fall back to setTimeout
+    try {
+        visualizerUsingTimeout = true;
+        return setTimeout(callback, 16);
+    } catch (error) {
+        if (error.name === "NotSupportedError") {
+            console.warn("❌ setTimeout not supported");
+        } else {
+            console.error("Error in setTimeout:", error);
+        }
+    }
+
+    console.error("❌ No viable scheduling method available");
+    return null;
+}
 function startVisualizerLoop(audioFeatures) {
     if (!offscreencanvas) {
         return;
