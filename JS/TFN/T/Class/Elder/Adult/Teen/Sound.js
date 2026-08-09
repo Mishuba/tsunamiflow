@@ -173,7 +173,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             Object.assign(Analyser, this.TfSoundAnalyserOptions);
         }
 
-        if (!rCompressor) {
+        if (!Compressor) {
             // GLOBAL COMPRESSOR BUS
             Compressor = SoundsContext.createDynamicsCompressor();
         }
