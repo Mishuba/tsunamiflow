@@ -254,7 +254,6 @@ export class Studio extends Flow {
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
                             //No valid source
-                            break;
 
                             worker.postMessage(this.tycadome(
                                 "tycadome-guest" + Date.now(),
@@ -278,6 +277,7 @@ export class Studio extends Flow {
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 }));
+                            break;
                         default:
 
                             break;

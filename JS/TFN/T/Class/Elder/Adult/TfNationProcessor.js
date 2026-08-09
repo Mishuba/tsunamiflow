@@ -429,12 +429,12 @@ class FFTProcessor extends AudioWorkletProcessor {
             normalizedBass * 0.2;
 
         return {
-            dataArray,
-            volume,
+            dataArray: this.dataArray,
+            volume: Math.sqrt(sumSquares / this.fftSize),
             bass: normalizedBass,
             mid: normalizedMid,
             treble: normalizedTreble,
-            beat
+            beat: this.previousBass < this.beatThreshold && normalizedBass >= this.beatThreshold
         };
     }
 

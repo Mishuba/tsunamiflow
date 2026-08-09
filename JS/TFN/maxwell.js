@@ -772,29 +772,6 @@ export class maxwell {
 
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
-        let cool = this.soundEngine.tycadome(
-            "tycadome-guest" + Date.now(),
-            "canvas",
-            "load.radio.canvas",
-            {
-                source: "web",
-                target: "device:web-001",
-                worker: "media"
-            },
-            {
-                status: "pending",
-                priority: "low"
-            },
-            "async",
-            {
-                system: "loading",
-                canvas: offscreencanvas,
-            },
-            [
-                offscreencanvas
-            ]
-        );
-        worker.postMessage(cool, [offscreencanvas]);
 
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;

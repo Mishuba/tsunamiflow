@@ -378,8 +378,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
-  let OffscreenCanvasRadio = document.createElement("canvas");
-
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
   const Controller = new maxwell({
@@ -401,6 +399,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
+    Controller.iframe.frame.addEventListener("load", () => {
+      try {
+        Controller.iframe.frame.contentWindow.controller = Controller;
+        Controller.iframe.MenuSwitch(Controller.iframe.frame);
+      } catch (e) {
+        console.error("Cross-origin block:", e);
+      }
+    });
     //twoMore.appendChild(OffscreenCanvasRadio);
 
     Controller.user.showProducts().then(() => {
@@ -411,6 +417,32 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (window.Worker) {
         try {
           let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
+
+
+          safeWorker.postMessage(
+            nation.tycadome(
+              "tycadome-guest" + Date.now(),
+              "canvas",
+              "load.radio.canvas",
+              {
+                source: "web",
+                target: "device:web-001",
+                worker: "media"
+              },
+              {
+                status: "pending",
+                priority: "low"
+              },
+              "async",
+              {
+                system: "loading",
+                canvas: RadioOffscreenCanvas,
+              },
+              [
+                RadioOffscreenCanvas
+              ]
+            ),
+            [RadioOffscreenCanvas]);
           //flowWorklet.port.start();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
           flowWorklet.port.onmessage = (e) => {
@@ -431,12 +463,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  Controller.iframe.frame.addEventListener("load", () => {
-    try {
-      Controller.iframe.frame.contentWindow.controller = Controller;
-      Controller.iframe.MenuSwitch(Controller.iframe.frame);
-    } catch (e) {
-      console.error("Cross-origin block:", e);
-    }
-  });
 });

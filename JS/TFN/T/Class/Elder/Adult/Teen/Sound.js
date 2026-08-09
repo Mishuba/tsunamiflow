@@ -383,16 +383,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     e.data.meta,
                     e.data.state,
                     e.data.mode,
-                    {
-                        system: "visual_data",
-                        dataArray: e.data.payload.fft,
-                        volume: e.data.payload.volume,
-                        bass: e.data.payload.bass,
-                        mid: e.data.payload.mid,
-                        treble: e.data.payload.treble,
-                        beat: e.data.payload.beat,
-                        particles: this.particles
-                    }
+                    e.data.payload
                 ));
         }
 
