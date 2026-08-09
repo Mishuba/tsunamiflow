@@ -398,7 +398,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
           //flowWorklet.port.start();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
-          flowWorklet.node.port.onmessage = (e) => {
+          flowWorklet.port.onmessage = (e) => {
             Controller.soundengine.onWorkletMessage(e);
           };
         } catch (err) {
