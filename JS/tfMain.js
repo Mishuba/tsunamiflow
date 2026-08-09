@@ -402,7 +402,11 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (window.Worker) {
         try {
           let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
+          //flowWorklet.port.start();
           Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
+          flowWorklet.node.port.onmessage = (e) => {
+            Controller.soundengine.onWorkletMessage(e);
+          };
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {

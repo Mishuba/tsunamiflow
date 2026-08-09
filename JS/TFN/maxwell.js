@@ -796,10 +796,6 @@ export class maxwell {
         );
         worker.postMessage(cool, [offscreencanvas]);
 
-        this.soundengine.masterAudioWorklet.node.port.onmessage = (e) => {
-            this.soundengine.onWorkletMessage(e);
-        };
-
         //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
         //this.game.inputWorker = this.gameinputworker;
         //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
