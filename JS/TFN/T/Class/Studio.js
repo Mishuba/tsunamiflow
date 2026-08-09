@@ -538,7 +538,7 @@ export class Studio extends Flow {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
-        this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         console.log("Audio playback is can play through");
     }
     endedAudio() {
