@@ -537,12 +537,13 @@ export class Studio extends Flow {
     canplayAudio() {
         console.log("Audio playback is can play");
     }
-    canplaythroughAudio() {
+    canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+        this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         console.log("Audio playback is can play through");
     }
     endedAudio() {
         console.log("The audio should have ended");
-        this.removeSource(this.AudioElement.id);
+        //this.removeSource(this.AudioElement.id);
         this.AudioElement.src = "";
     }
     waitingAudio() {
@@ -659,7 +660,7 @@ export class Studio extends Flow {
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
     }
-    RadioEventListeners(worker) {
+    RadioEventListeners(worker, element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
         if (this._radioBound) {
             return;
         } else {
@@ -705,7 +706,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio();
+                this.canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner, id, "audio");
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");

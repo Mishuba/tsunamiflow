@@ -96,24 +96,11 @@ export class TsunamiFlowSound extends TsDomCanvas {
     createTrackChain(SoundsContext) {
 
         const chain = {
-
-            gain:
-                SoundsContext.createGain(),
-
-            analyser:
-                SoundsContext.createAnalyser(),
-
-            compressor:
-                SoundsContext
-                    .createDynamicsCompressor(),
-
-            delay:
-                SoundsContext
-                    .createDelay(),
-
-            panner:
-                SoundsContext
-                    .createStereoPanner(),
+            gain: SoundsContext.createGain(),
+            analyser: SoundsContext.createAnalyser(),
+            compressor: SoundsContext.createDynamicsCompressor(),
+            delay: SoundsContext.createDelay(),
+            panner: SoundsContext.createStereoPanner(),
         };
 
         Object.assign(
@@ -123,20 +110,11 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return chain;
     }
-    doctxok() {
-        if (!this.ContextElement) {
-            this.masterGain
-                .connect(this.masterAnalyser)
-                .connect(this.masterCompressor)
-                .connect(this.masterAudioWorklet)
-                .connect(this.MasterSoundsContext.destination);
+    doctxok(SoundsContext, Gain, Analyser, Compressor, ContextElement) {
+        if (!ContextElement) {
+            Gain.connect(Analyser).connect(Compressor).connect(SoundsContext.destination);
         } else {
-            this.ContextElement
-                .connect(this.masterGain)
-                .connect(this.masterAnalyser)
-                .connect(this.masterCompressor)
-                .connect(this.masterAudioWorklet)
-                .connect(this.MasterSoundsContext.destination);
+            ContextElement.connect(Gain).connect(Analyser).connect(Compressor).connect(SoundsContext.destination);
         }
     }
     async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
@@ -197,7 +175,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         this.AudioContextInitialized = true;
         return SoundsContext;
     }
-    addAudioContextSource(element, id = null, type = null) {
+    addAudioContextSource(element, SoundsContext, Gain, id = null, type = null) {
         const sourceId = id || `source-${++this.MasteridCounter}`;
         let source;
 
@@ -205,10 +183,10 @@ export class TsunamiFlowSound extends TsDomCanvas {
             source = this.elementSourceMap.get(element);
         } else {
             if (type === "audio") {
-                source = this.MasterSoundsContext.createMediaElementSource(element);
+                source = SoundsContext.createMediaElementSource(element);
                 this.elementSourceMap.set(element, source);
             } else if (type === "video") {
-                source = this.MasterSoundsContext.createMediaStreamSource(element);
+                source = SoundsContext.createMediaStreamSource(element);
                 this.elementSourceMap.set(element, source);
             }
         }
@@ -217,11 +195,10 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         // ✅ CLEAN SIGNAL FLOW
         source.connect(chain.gain)
-            .connect(chain.analyser)
-            .connect(chain.compressor)
-            .connect(chain.delay)
-            .connect(chain.panner)
-            .connect(this.masterGain);
+            .connect(chain.analyser).connect(chain.compressor)
+            //.connect(chain.delay)
+            //.connect(chain.panner)
+            .connect(Gain);
         // ✅ STORE EVERYTHING (IMPORTANT)
         this.TfSoundsContext[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
@@ -234,10 +211,10 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return sourceId;
     }
-    connectaudio(element, id, type = "audio") {
-        this.initAudioContext();
-        if (this.TfSoundsContext[id]) return;
-        this.addAudioContextSource(element, id, type);
+    connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner, id = "guest", type = "audio") {
+        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        //if (this.TfSoundsContext[id]) return;
+        //this.addAudioContextSource(element, SoundsContext, Gain, id, type);
     }
     removeSource(id) {
         const source = this.TfSoundsContext[id];
@@ -355,21 +332,23 @@ export class TsunamiFlowSound extends TsDomCanvas {
     setAudioContextGain(id, value = 1) {
         if (this.TfSoundsGain[id]) this.TfSoundsGain[id].gain.value = value;
     }
-    finishAudioContext() {
-        if (!this.MasterSoundsContext) return;
+    finishAudioContext(SoundContext, Gain) {
+        if (!SoundsContext) return;
 
         Object.values(this.TfSoundsContext).forEach(src => src.disconnect());
         Object.values(this.TfSoundsGain).forEach(g => g.disconnect());
 
-        if (this.masterGain) this.masterGain.disconnect();
+        if (Gain) {
+            Gain.disconnect();
+        }
 
-        this.MasterSoundsContext.close();
+        SoundsContext.close();
 
-        this.MasterSoundsContext = null;
+        SoundsContext = null;
         this.TfSoundsContext = {};
         this.TfSoundsGain = {};
         this.elementSourceMap = new WeakMap();
-        this.masterGain = null;
+        rGain = null;
 
         this.emit("closed");
     }

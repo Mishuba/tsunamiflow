@@ -561,7 +561,7 @@ export class maxwell {
     }
     bindAudio(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
         this.RadioReady();
-        this.soundEngine.RadioEventListeners(worker);
+        this.soundEngine.RadioEventListeners(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
         let contextaudio = this.soundEngine.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
     }
