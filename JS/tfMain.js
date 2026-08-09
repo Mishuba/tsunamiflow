@@ -357,7 +357,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  Tradio.connect(flowGain).connect(flowAnalyser).connect(flowWorklet).connect(flowCompressor).connect(flowaudio.destination);
+  Tradio.connect(flowGain).connect(flowAnalyser).connect(flowCompressor).connect(flowaudio.destination);
+
+  flowAnalyser.connect(flowWorklet)
 
   const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
 
