@@ -369,10 +369,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
   Tradio.connect(flowGain);
-  flowGain.connect(flowAnalyser); flowAnalyser.connect(flowCompressor);
+  flowGain.connect(flowAnalyser);
+  flowAnalyser.connect(flowWorklet);
+  flowWorklet.connect(flowCompressor);
   flowCompressor.connect(flowaudio.destination);
 
-  flowAnalyser.connect(flowWorklet)
+
 
   const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
 

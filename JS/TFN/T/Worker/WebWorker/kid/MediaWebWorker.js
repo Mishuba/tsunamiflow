@@ -469,6 +469,7 @@ function RadioVisualizer(features) {
         !dataArray ||
         dataArray.length === 0
     ) {
+        console.warn("⚠️ No audio data yet, skipping frame");
         return;
     }
 
@@ -569,6 +570,7 @@ function scheduleVisualizerFrame(callback) {
 }
 function startVisualizerLoop(audioFeatures) {
     if (!offscreencanvas) {
+        console.error("❌ No canvas available");
         return;
     }
 
@@ -577,6 +579,8 @@ function startVisualizerLoop(audioFeatures) {
     }
 
     visualizerRunning = true;
+    console.log("✅ Visualizer loop started");
+
 
     const vizloop = () => {
         if (!visualizerRunning) {
