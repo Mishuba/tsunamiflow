@@ -30,8 +30,15 @@ let visualizerUsingTimeout = false;
 var listeners = {};
 
 //objects
-
-
+let TfAudioVisualData = {
+        dataArray: new Uint8Array(0),
+        volume: 0,
+        bass: 0,
+        mid: 0,
+        treble: 0,
+        beat: false,
+        timestamp: 0
+    };
 function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
     let tf = {
         "id": id, //options.id
@@ -608,15 +615,7 @@ function stopVisualizerLoop() {
 }
 
 async function MessageReceived(event) {
-    let TfAudioVisualData = {
-        dataArray: new Uint8Array(0),
-        volume: 0,
-        bass: 0,
-        mid: 0,
-        treble: 0,
-        beat: false,
-        timestamp: 0
-    };
+    
     switch (event.data.type) {
 
         case "canvas":
