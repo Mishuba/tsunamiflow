@@ -30,7 +30,7 @@ let visualizerUsingTimeout = false;
 var listeners = {};
 
 //objects
-var TfAudioVisualData = {
+let TfAudioVisualData = {
     dataArray: new Uint8Array(0),
     volume: 0,
     bass: 0,
@@ -460,8 +460,8 @@ function particle() {
         particles.push(tfParticles(x, y, dx, dy, radius, color));
     }
 }
-function RadioVisualizer(features) {
-    const dataArray = features.dataArray;
+function RadioVisualizer(features = TfAudioVisualData) {
+    const dataArray = features?.dataArray;
 
     if (
         !offscreencanvas ||
@@ -568,7 +568,7 @@ function scheduleVisualizerFrame(callback) {
     console.error("❌ No viable scheduling method available");
     return null;
 }
-function startVisualizerLoop(audioFeatures) {
+function startVisualizerLoop(audioFeatures = TfAudioVisualData) {
     if (!offscreencanvas) {
         console.error("❌ No canvas available");
         return;
@@ -581,13 +581,12 @@ function startVisualizerLoop(audioFeatures) {
     visualizerRunning = true;
     console.log("✅ Visualizer loop started");
 
-
     const vizloop = () => {
         if (!visualizerRunning) {
             return;
         }
 
-        RadioVisualizer(audioFeatures);
+        RadioVisualizer(audioFeatures || TfAudioVisualData);
 
         visualizerFrame = scheduleVisualizerFrame(vizloop);
     };
@@ -617,6 +616,7 @@ function stopVisualizerLoop() {
 }
 
 async function MessageReceived(event) {
+
     switch (event.data.type) {
 
         case "canvas":
@@ -694,7 +694,7 @@ async function MessageReceived(event) {
                     stopVisualizerLoop();
                     break;
                 case "audio.play":
-                    startVisualizerLoop(TfAudioVisualData);
+                    startVisualizerLoop();
                     break;
                 default:
                     //RadioTime(songList);
@@ -702,40 +702,30 @@ async function MessageReceived(event) {
                     break;
             }
             break;
-        case "audio-worklet":
-            const p = event.data.payload;
+        case "audio-worklet": {
+            const payload = event.data.payload || {};
 
-            TfAudioVisualData.dataArray =
-                p.dataArray;
+            if (event.data.action === "audio.visual.data") {
+                if (payload.dataArray) {
+                    TfAudioVisualData.dataArray =
+                        payload.dataArray instanceof Uint8Array
+                            ? payload.dataArray
+                            : new Uint8Array(payload.dataArray);
+                }
 
-            TfAudioVisualData.volume =
-                p.volume;
+                TfAudioVisualData.volume = Number(payload.volume) || 0;
+                TfAudioVisualData.bass = Number(payload.bass) || 0;
+                TfAudioVisualData.mid = Number(payload.mid) || 0;
+                TfAudioVisualData.treble = Number(payload.treble) || 0;
+                TfAudioVisualData.beat = Boolean(payload.beat);
+                TfAudioVisualData.timestamp = Date.now();
 
-            TfAudioVisualData.bass =
-                p.bass;
-
-            TfAudioVisualData.mid =
-                p.mid;
-
-            TfAudioVisualData.treble =
-                p.treble;
-
-            TfAudioVisualData.beat =
-                p.beat;
-
-            TfAudioVisualData.timestamp =
-                performance.now();
-            /*
-            switch (event.data.action) {
-                case "audio.visual.data":
-
-                    break;
-                default:
-
-                    break;
+                if (!visualizerRunning) {
+                    startVisualizerLoop();
+                }
             }
-            */
             break;
+        }
         case "stream":
 
             switch (event.data.action) {
