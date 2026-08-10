@@ -694,7 +694,8 @@ async function MessageReceived(event) {
                     stopVisualizerLoop();
                     break;
                 case "audio.play":
-                    startVisualizerLoop(TfAudioVisualData);
+                 
+ //startVisualizerLoop(TfAudioVisualData);
                     break;
                 default:
                     //RadioTime(songList);
