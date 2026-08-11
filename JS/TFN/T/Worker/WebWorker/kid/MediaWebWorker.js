@@ -31,14 +31,14 @@ var listeners = {};
 
 //objects
 let TfAudioVisualData = {
-        dataArray: new Uint8Array(0),
-        volume: 0,
-        bass: 0,
-        mid: 0,
-        treble: 0,
-        beat: false,
-        timestamp: 0
-    };
+    dataArray: new Uint8Array(0),
+    volume: 0,
+    bass: 0,
+    mid: 0,
+    treble: 0,
+    beat: false,
+    timestamp: 0
+};
 function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
     let tf = {
         "id": id, //options.id
@@ -468,6 +468,7 @@ function RadioVisualizer(features) {
         !dataArray ||
         dataArray.length === 0
     ) {
+
         console.warn("⚠️ No audio data yet, skipping frame");
         return;
     }
@@ -615,7 +616,7 @@ function stopVisualizerLoop() {
 }
 
 async function MessageReceived(event) {
-    
+
     switch (event.data.type) {
 
         case "canvas":
@@ -655,7 +656,7 @@ async function MessageReceived(event) {
                 case "get.radio.file":
                     switch (event.data.payload.system) {
                         case "files":
-                            //CurrentSong = RadioTime(songList);
+                            CurrentSong = RadioTime(songList);
                             self.postMessage(tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -675,7 +676,7 @@ async function MessageReceived(event) {
                                 {
                                     system: "files",
                                     playlist: songList,
-                                    file: "none",
+                                    file: CurrentSong,
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 })
@@ -693,8 +694,8 @@ async function MessageReceived(event) {
                     stopVisualizerLoop();
                     break;
                 case "audio.play":
-                 
- //startVisualizerLoop(TfAudioVisualData);
+
+                    //startVisualizerLoop(TfAudioVisualData);
                     break;
                 default:
                     //RadioTime(songList);
