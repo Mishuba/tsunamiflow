@@ -172,6 +172,16 @@ export class maxwell {
                     this.soundEngine.AudioNetworkState(worker);
                 }
                 break;
+            case 'radio':
+                switch (data.action) {
+                    case 'receive.radio.file':
+                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
+                        break;
+
+                    default:
+                        break;
+                }
+                break;
             default:
                 if (payload.system === "error") {
                     console.error("Worker error:", payload);

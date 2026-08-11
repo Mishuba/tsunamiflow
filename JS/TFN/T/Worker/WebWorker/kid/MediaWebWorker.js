@@ -247,7 +247,7 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                                 data: xhr.responseText
                             });
 
-                            resolve(xhr.responseText);
+                            resolve(JSON.parse(xhr.response));
                         } else {
                             emit("error", {
                                 type: "xhr",
@@ -280,8 +280,8 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                         {
                             type: "xhr",
                             error: "Network Error",
-                            status: response.status,
-                            statusText: response.statusText,
+                            status: xhr.status,
+                            statusText: xhr.statusText,
                             url,
                             method,
                             body: data
@@ -938,6 +938,7 @@ async function MessageReceived(event) {
                     switch (event.data.payload.system) {
                         case "files":
                             let tfrSong = RadioTime(songList);
+                            console.log(tfrSong);
                             self.postMessage(tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
