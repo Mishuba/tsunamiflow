@@ -1,7 +1,5 @@
 import { Flow } from "./Elder/Flow.js";
-
-
-
+CurrentSong = null;
 export class Studio extends Flow {
     radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
     ];
@@ -548,12 +546,12 @@ export class Studio extends Flow {
         if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
             if (PSL[tsu].length >= 20) {
                 let radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
-                let CurrentSong = PSL[tsu][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[tsu][radioRandom];
+                return this.CurrentSong;
             } else {
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                let CurrentSong = PSL[11][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[11][radioRandom];
+                return this.CurrentSong;
 
             }
         } else {
@@ -575,14 +573,14 @@ export class Studio extends Flow {
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
             if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
                 let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-                return CurrentSong
+                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return this.CurrentSong
 
             } else {
                 console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                let CurrentSong = PSL[11][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[11][radioRandom];
+                return this.CurrentSong;
 
             }
         } else {
@@ -606,14 +604,14 @@ export class Studio extends Flow {
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
             if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
                 let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return this.CurrentSong;
 
             } else {
                 console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                let CurrentSong = PSL[11][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[11][radioRandom];
+                return this.CurrentSong;
 
             }
         } else {
@@ -630,15 +628,15 @@ export class Studio extends Flow {
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
             if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
                 let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return this.CurrentSong;
 
 
             } else {
                 console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                let CurrentSong = PSL[11][rangeIndex][radioRandom];
-                return CurrentSong;
+                this.CurrentSong = PSL[11][rangeIndex][radioRandom];
+                return this.CurrentSong;
             }
         } else {
 
@@ -693,10 +691,10 @@ export class Studio extends Flow {
                 break;
             case 11:
 
-                let CurrentSong = PSL[11][
+                this.CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
-                return CurrentSong;
+                return this.CurrentSong;
 
                 break;
             case 12:
@@ -736,10 +734,10 @@ export class Studio extends Flow {
                 return this.NoSubFolder(PSL, 23, response);
                 break;
             default:
-                let CurrentSong = PSL[11][
+                this.CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
-                return CurrentSong;
+                return this.CurrentSong;
                 break;
         }
     }
