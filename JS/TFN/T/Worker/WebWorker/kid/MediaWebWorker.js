@@ -246,8 +246,8 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                                 url,
                                 data: xhr.responseText
                             });
-
-                            resolve(JSON.parse(xhr.response));
+                            console.log("the radio xml responseType");
+                            resolve(JSON.parse(xhr.responseText));
                         } else {
                             emit("error", {
                                 type: "xhr",
