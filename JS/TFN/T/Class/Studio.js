@@ -1,5 +1,7 @@
 import { Flow } from "./Elder/Flow.js";
 
+
+
 export class Studio extends Flow {
     radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
     ];
@@ -542,17 +544,220 @@ export class Studio extends Flow {
 
         }
     }
+    NoSubFolder(PSL, tsu, response = null) {
+        if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
+            if (PSL[tsu].length >= 20) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+                let CurrentSong = PSL[tsu][radioRandom];
+                return CurrentSong;
+            } else {
+                let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                let CurrentSong = PSL[11][radioRandom];
+                return CurrentSong;
 
-    AudioFile(event) {
-        if (!event?.data?.payload?.file) {
-            const i = Math.floor(Math.random() * this.DefaultPlaylist.length);
-            this.SongList = this.DefaultPlaylist[i];
-            console.log("From Default playlist:", this.SongList);
+            }
         } else {
-            this.radioSchedule = event.data.payload.playlist;
-            this.SongList = event.data.payload.file;
-            console.log("From backend:", this.SongList);
+
         }
+    }
+
+    ThreeFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 19) {
+            let rangeIndex = 0;
+        } else if (nami >= 20 && nami <= 39) {
+            let rangeIndex = 1;
+        } else {
+            let rangeIndex = 2;
+        }
+
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return CurrentSong
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                let CurrentSong = PSL[11][radioRandom];
+                return CurrentSong;
+
+            }
+        } else {
+
+        }
+    }
+
+    FourFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 14) {
+            let rangeIndex = 0;
+        } else if (nami >= 15 && nami <= 29) {
+            let rangeIndex = 1;
+        } else if (nami >= 30 && nami <= 44) {
+            let rangeIndex = 2;
+        } else {
+            let rangeIndex = 3;
+        }
+
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return CurrentSong;
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                let CurrentSong = PSL[11][radioRandom];
+                return CurrentSong;
+
+            }
+        } else {
+
+        }
+    }
+
+    SixFolderSub(PSL, tsu, nami, response = null) {
+        let rangeIndex = Math.floor(nami / 10);
+
+
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                let CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+                return CurrentSong;
+
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                let CurrentSong = PSL[11][rangeIndex][radioRandom];
+                return CurrentSong;
+            }
+        } else {
+
+        }
+    }
+    RadioTime(PSL, response = null) {
+        let now = new Date();
+        let hour = now.getHours();
+        let minute = now.getMinutes();
+
+        switch (hour) {
+            case 0:
+                return this.FourFolderSub(PSL, 0, minute, response);
+                break;
+            case 1:
+                if (minute <= 4) {
+                    return this.NoSubFolder(PSL, 1, response);
+                } else if (minute <= 14) {
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
+                } else if (minute <= 29) {
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
+                } else {
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
+                }
+                break;
+            case 2:
+                return this.NoSubFolder(PSL, 2, response);
+                break;
+            case 3:
+                return this.ThreeFolderSub(PSL, 3, minute, response);
+                break;
+            case 4:
+                return this.ThreeFolderSub(PSL, 4, minute, response);
+                break;
+            case 5:
+                return this.ThreeFolderSub(PSL, 5, minute, response);
+                break;
+            case 6:
+                return this.ThreeFolderSub(PSL, 6, minute, response);
+                break;
+            case 7:
+                return this.ThreeFolderSub(PSL, 7, minute, response);
+                break;
+            case 8:
+                return this.SixFolderSub(PSL, 8, minute, response);
+                break;
+            case 9:
+                return this.ThreeFolderSub(PSL, 9, minute, response);
+                break;
+            case 10:
+                return this.NoSubFolder(PSL, 10, response);
+                break;
+            case 11:
+
+                let CurrentSong = PSL[11][
+                    Math.floor(Math.random() * (PSL[11].length - 1))
+                ];
+                return CurrentSong;
+
+                break;
+            case 12:
+                return this.FourFolderSub(PSL, 12, minute, response);
+                break;
+            case 13:
+                return this.FourFolderSub(PSL, 13, minute, response);
+                break;
+            case 14:
+                return this.FourFolderSub(PSL, 14, minute, response);
+                break;
+            case 15:
+                return this.FourFolderSub(PSL, 15, minute, response);
+                break;
+            case 16:
+                return this.FourFolderSub(PSL, 16, minute, response);
+                break;
+            case 17:
+                return this.NoSubFolder(PSL, 17, response);
+                break;
+            case 18:
+                return this.SixFolderSub(PSL, 18, minute, response);
+                break;
+            case 19:
+                return this.FourFolderSub(PSL, 19, minute, response);
+                break;
+            case 20:
+                return this.FourFolderSub(PSL, 20, minute, response);
+                break;
+            case 21:
+                return this.NoSubFolder(PSL, 21, response);
+                break;
+            case 22:
+                return this.NoSubFolder(PSL, 22, response);
+                break;
+            case 23:
+                return this.NoSubFolder(PSL, 23, response);
+                break;
+            default:
+                let CurrentSong = PSL[11][
+                    Math.floor(Math.random() * (PSL[11].length - 1))
+                ];
+                return CurrentSong;
+                break;
+        }
+    }
+    AudioFile(event) {
+        if (this.radioSchedule === null) {
+            if (!event?.data?.payload?.file) {
+                const i = Math.floor(Math.random() * this.DefaultPlaylist.length);
+                return this.SongList = this.DefaultPlaylist[i];
+                console.log("From Default playlist:", this.SongList);
+            } else {
+                this.radioSchedule = event.data.payload.playlist;
+                return this.SongList = event.data.payload.file;
+                console.log("From backend:", this.SongList);
+            }
+        } else {
+            return this.RadioTime(this.radioSchedule);
+        }
+
         return this.SongList;
     }
     loadaudio(src) {
