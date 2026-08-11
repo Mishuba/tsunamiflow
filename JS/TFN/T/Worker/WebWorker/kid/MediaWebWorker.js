@@ -1,15 +1,7 @@
-// Use a relative module specifier so the worker resolves correctly in production.
-//import { mediaWorker } from "https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/Teen/tfnation.js";
+
 
 console.log("Media Worker:" + import.meta.url);
-/*
-if (!mediaWorker) {
-    throw new Error("mediaWorker import is undefined");
-} else {
-    let mediawk = new mediaWorker();
-    console.log("Imported mediaWorker:", mediaWorker);
-}
-*/
+
 
 //variables
 let offscreencanvas = null;
@@ -20,7 +12,7 @@ let baseRadius = 2;
 const particles = [];
 
 var songList = null;
-var CurrentSong = null;
+
 
 //boolean
 let visualizerRunning = false;
@@ -88,7 +80,7 @@ function getSize(payload) {
 function emit(event, data) {
     (listeners[event] || []).forEach((fn) => {
         try {
-            console.log(data);
+            fn(data);
         } catch (error) {
             console.error(`Error occurred while emitting event "${event}":`, error);
         }
@@ -805,7 +797,9 @@ function RadioTime(PSL, response = null) {
             return NoSubFolder(PSL, 23, response);
             break;
         default:
-            return NoSubFolder(PSL, 11, response);
+            return CurrentSong = PSL[11][
+                Math.floor(Math.random() * (PSL[11].length - 1))
+            ];
             break;
     }
 }
@@ -835,7 +829,7 @@ async function MessageReceived(event) {
                         "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
                         null,
                         { "X-Request-Type": "fetchRadioSongs" },
-                        "fetch"
+                        "xml"
                     );
                     //RadioTime(songList);
                     //nextRadioItem = songList;
