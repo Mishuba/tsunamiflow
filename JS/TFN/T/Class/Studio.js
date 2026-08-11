@@ -1,10 +1,11 @@
 import { Flow } from "./Elder/Flow.js";
-CurrentSong = null;
+
 export class Studio extends Flow {
     radioTypes = ["video/webm", "audio/webm", "video/webm;codecs=vp8", "video/webm;codecs=daala", "video/webm;codecs=h264", "audio/webm;codecs=opus", "video/mp4", "audio/mp3"
     ];
     radioSchedule = null;
     SongList = null;
+    CurrentSong = null;
     randomMusicDefault = null;
     AudioReady = null;
     elementSourceMap = new WeakMap();
