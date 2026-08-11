@@ -719,7 +719,7 @@ export class maxwell {
 
     handleError(source, error) {
         if (this.soundEngine.AudioElement.src === "") {
-            this.soundEngine.AudioFile(error);
+            this.soundEngine.AudioFile(null);
         }
         console.error("RAW WORKER ERROR:", error);
         console.error(`[${source}] message:`, error.message);

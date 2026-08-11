@@ -319,29 +319,30 @@ export class Studio extends Flow {
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
                             //No valid source
-
-                            worker.postMessage(this.tycadome(
-                                "tycadome-guest" + Date.now(),
-                                "radio",
-                                "get.radio.file",
-                                {
-                                    source: "web",
-                                    target: "device:web-001",
-                                    layer: "tf",
-                                    worker: "media",
-                                    backend: false
-                                },
-                                {
-                                    status: "pending",
-                                    priority: "low"
-                                },
-                                "async",
-                                {
-                                    system: "files",
-                                    file: "none",
-                                    message: "the radio source is ''",
-                                    buffer: "nothing should be buffering.",
-                                }));
+                            /*
+                                                        worker.postMessage(this.tycadome(
+                                                            "tycadome-guest" + Date.now(),
+                                                            "radio",
+                                                            "get.radio.file",
+                                                            {
+                                                                source: "web",
+                                                                target: "device:web-001",
+                                                                layer: "tf",
+                                                                worker: "media",
+                                                                backend: false
+                                                            },
+                                                            {
+                                                                status: "pending",
+                                                                priority: "low"
+                                                            },
+                                                            "async",
+                                                            {
+                                                                system: "files",
+                                                                file: "none",
+                                                                message: "the radio source is ''",
+                                                                buffer: "nothing should be buffering.",
+                                                            }));
+                                                        */
                             break;
                         default:
 
@@ -360,6 +361,7 @@ export class Studio extends Flow {
                             break;
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
+                            /*
                             worker.postMessage(this.tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -382,6 +384,7 @@ export class Studio extends Flow {
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 }));
+                                */
                             break;
                         default:
                             console.log("Unexpected radio networkState.");
@@ -400,6 +403,7 @@ export class Studio extends Flow {
                             break;
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
+                            /*
                             worker.postMessage(this.tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -422,6 +426,7 @@ export class Studio extends Flow {
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 }));
+                            */
                             break;
                         default:
                             console.log("Unexpected radio networkState.");
@@ -437,6 +442,7 @@ export class Studio extends Flow {
                             break;
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
+                            /*
                             worker.postMessage(this.tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -459,6 +465,7 @@ export class Studio extends Flow {
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 }));
+                                */
                             break;
                         default:
                             console.log("Unexpected radio networkState.");
@@ -477,6 +484,7 @@ export class Studio extends Flow {
                             break;
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
+                            /*
                             worker.postMessage(this.tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -499,6 +507,7 @@ export class Studio extends Flow {
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 }));
+                            */
                             break;
                         case 4:
 
@@ -746,15 +755,15 @@ export class Studio extends Flow {
         if (this.radioSchedule === null) {
             if (!event?.data?.payload?.file) {
                 const i = Math.floor(Math.random() * this.DefaultPlaylist.length);
-                return this.SongList = this.DefaultPlaylist[i];
+                this.SongList = this.DefaultPlaylist[i];
                 console.log("From Default playlist:", this.SongList);
             } else {
                 this.radioSchedule = event.data.payload.playlist;
-                return this.SongList = event.data.payload.file;
+                this.SongList = event.data.payload.file;
                 console.log("From backend:", this.SongList);
             }
         } else {
-            return this.RadioTime(this.radioSchedule);
+            this.SongList = this.RadioTime(this.radioSchedule);
         }
 
         return this.SongList;
@@ -768,7 +777,7 @@ export class Studio extends Flow {
     emptiedAudio(worker) {
         //cancelAnimationFrame(this.effects.visualizatorController);
         console.log("The Tsunami Audio has been emptied and is ready to be loaded with a new source.");
-        this.AudioNetworkState(worker);
+        //this.AudioNetworkState(worker);
     }
     stalledAudio(stalled, worker) {
         console.log("The Tsunami Audio has stalled for some reason" + stalled);
@@ -778,7 +787,7 @@ export class Studio extends Flow {
         console.log("The Tsunami Audio currentsrc " + this.AudioElement.currentsrc);
         console.log("The Tsunami Audio paused " + this.AudioElement.paused);
         console.log("The Tsunami Audio buffered " + this.AudioElement.buffered);
-        this.AudioNetworkState(worker);
+        //this.AudioNetworkState(worker);
     }
     suspendedAudio(suspend) {
         console.log("The audio is suspended" + suspend);
@@ -799,41 +808,48 @@ export class Studio extends Flow {
         //create html data
         console.log("Audio playback is metadata loaded");
     }
-    loadeddataAudio() {
+    loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+        //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
         console.log("The audio data is loaded");
     }
     canplayAudio() {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
-        //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+
         console.log("Audio playback is can play through");
     }
     endedAudio(worker, SoundsContext) {
         console.log("The audio should have ended");
         //this.removeSource(this.AudioElement.id);
-        worker.postMessage(this.tycadome(
-            "tycadome-guest" + Date.now(),
-            "radio",
-            "get.radio.file",
-            {
-                source: "web",
-                target: "device:web-001",
-                layer: "tf",
-                worker: "media",
-                backend: false
-            },
-            {
-                status: "pending",
-                priority: "low"
-            },
-            "async",
-            {
-                system: "files",
-                file: "none",
-                message: "the radio source is ''",
-                buffer: "nothing should be buffering.",
-            }));
+        if (this.radioSchedule === null) {
+            worker.postMessage(this.tycadome(
+                "tycadome-guest" + Date.now(),
+                "radio",
+                "get.radio.file",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    layer: "tf",
+                    worker: "media",
+                    backend: false
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "files",
+                    file: "none",
+                    message: "the radio source is ''",
+                    buffer: "nothing should be buffering.",
+                }));
+        } else {
+            this.loadaudio(this.RadioTime(this.radioSchedule));
+        }
+
     }
     waitingAudio() {
         console.log("Audio playback is waiting");
@@ -1042,7 +1058,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
 
             this.AudioElement.addEventListener("loadedmetadata", async () => {
-                this.loadedmetadataAudio();
+                this.loadedmetadataAudio(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadedmetadataAudio, "loadedmetadata");
 
