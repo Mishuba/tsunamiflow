@@ -165,14 +165,31 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                 const response = await fetch(url, options);
 
                 if (!response.ok) {
-                    emit("error", {
-                        type: "fetch",
-                        status: response.status,
-                        statusText: response.statusText,
-                        url
-                    });
+                    self.postMessage(tycadome(
+                        'tycadomeguest' + Date.now(),
+                        'error',
+                        'fetch.exception',
+                        {
+                            source: 'web',
+                            target: 'device:web-001',
+                            layer: 'tf',
+                            worker: 'media',
+                        },
+                        {
+                            status: 'failed',
+                            priority: 'high'
+                        },
+                        'async',
+                        {
+                            type: "fetch",
+                            status: response.status,
+                            statusText: response.statusText,
+                            url,
+                            method,
+                            body: data
+                        }));
 
-                    throw new Error(response.statusText);
+                    return null;
                 }
 
                 const contentType = response.headers.get("content-type") || "";
@@ -244,16 +261,36 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                     }
                 };
 
-                xhr.onerror = () => {
-                    emit("error", {
-                        type: "xhr",
-                        url,
-                        error: "Network Error"
-                    });
+                xhr.onerror = (response) => {
+                    self.postMessage(tycadome(
+                        'tycadomeguest' + Date.now(),
+                        'error',
+                        'xml.exception',
+                        {
+                            source: 'web',
+                            target: 'device:web-001',
+                            layer: 'tf',
+                            worker: 'media',
+                        },
+                        {
+                            status: 'failed',
+                            priority: 'high'
+                        },
+                        'async',
+                        {
+                            type: "xhr",
+                            error: "Network Error",
+                            status: response.status,
+                            statusText: response.statusText,
+                            url,
+                            method,
+                            body: data
+                        }));
 
                     console.error("XHR Network Error");
                     reject("Network Error");
                 };
+
 
                 if (
                     data &&
@@ -278,11 +315,31 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                 });
 
                 if (!response.ok) {
-                    emit("error", {
-                        type: "binary",
-                        status: response.status,
-                        url
-                    });
+                    self.postMessage(tycadome(
+                        'tycadomeguest' + Date.now(),
+                        'error',
+                        'binary.arraybuffer.exception',
+                        {
+                            source: 'web',
+                            target: 'device:web-001',
+                            layer: 'tf',
+                            worker: 'media',
+                        },
+                        {
+                            status: 'failed',
+                            priority: 'high'
+                        },
+                        'async',
+                        {
+                            type: "binary.arraybuffer",
+                            error: response,
+                            status: response.status,
+                            statusText: response.statusText,
+                            url,
+                            method,
+                            body: data
+                        }));
+
                     return null;
                 }
 
@@ -297,11 +354,31 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                 return buffer;
 
             } catch (err) {
-                emit("error", {
-                    type: "binary",
-                    url,
-                    error: err.message
-                });
+                self.postMessage(tycadome(
+                    'tycadomeguest' + Date.now(),
+                    'error',
+                    'binary.arraybuffer.exception',
+                    {
+                        source: 'web',
+                        target: 'device:web-001',
+                        layer: 'tf',
+                        worker: 'media',
+                    },
+                    {
+                        status: 'failed',
+                        priority: 'high'
+                    },
+                    'async',
+                    {
+                        type: "binary.arraybuffer",
+                        error: err.message,
+                        status: response.status,
+                        statusText: response.statusText,
+                        url,
+                        method,
+                        body: data
+                    }));
+
 
                 return null;
             }
@@ -309,10 +386,26 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
 
             return;
         default:
-            emit("error", {
-                type: "transport",
-                error: `Unknown transport: ${transport}`
-            });
+            self.postMessage(tycadome(
+                'tycadomeguest' + Date.now(),
+                'error',
+                'binary.arraybuffer.exception',
+                {
+                    source: 'web',
+                    target: 'device:web-001',
+                    layer: 'tf',
+                    worker: 'media',
+                },
+                {
+                    status: 'failed',
+                    priority: 'high'
+                },
+                'async',
+                {
+                    type: "transport",
+                    error: `Unknown transport: ${transport}`
+                }));
+
 
             console.error(`Unknown transport type: ${transport}`);
             return null;
