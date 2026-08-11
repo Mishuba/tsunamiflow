@@ -207,42 +207,106 @@ export class Studio extends Flow {
                             switch (this.AudioElement.src) {
                                 case "":
                                     console.log("The radio source is ''");
-
+                                    worker.postMessage(this.tycadome(
+                                        "tycadome-guest" + Date.now(),
+                                        "radio",
+                                        "get.radio.file",
+                                        {
+                                            source: "web",
+                                            target: "device:web-001",
+                                            layer: "tf",
+                                            worker: "media",
+                                            backend: false
+                                        },
+                                        {
+                                            status: "pending",
+                                            priority: "low"
+                                        },
+                                        "async",
+                                        {
+                                            system: "files",
+                                            file: "none",
+                                            message: "the radio source is ''",
+                                            buffer: "nothing should be buffering.",
+                                        }));
                                     break;
 
                                 case " ":
-
+                                    worker.postMessage(this.tycadome(
+                                        "tycadome-guest" + Date.now(),
+                                        "radio",
+                                        "get.radio.file",
+                                        {
+                                            source: "web",
+                                            target: "device:web-001",
+                                            layer: "tf",
+                                            worker: "media",
+                                            backend: false
+                                        },
+                                        {
+                                            status: "pending",
+                                            priority: "low"
+                                        },
+                                        "async",
+                                        {
+                                            system: "files",
+                                            file: "none",
+                                            message: "the radio source is ''",
+                                            buffer: "nothing should be buffering.",
+                                        }));
                                     break;
                                 case "about:blank":
-
+                                    worker.postMessage(this.tycadome(
+                                        "tycadome-guest" + Date.now(),
+                                        "radio",
+                                        "get.radio.file",
+                                        {
+                                            source: "web",
+                                            target: "device:web-001",
+                                            layer: "tf",
+                                            worker: "media",
+                                            backend: false
+                                        },
+                                        {
+                                            status: "pending",
+                                            priority: "low"
+                                        },
+                                        "async",
+                                        {
+                                            system: "files",
+                                            file: "none",
+                                            message: "the radio source is ''",
+                                            buffer: "nothing should be buffering.",
+                                        }));
+                                    break;
+                                case !this.AudioElement.src:
+                                    worker.postMessage(this.tycadome(
+                                        "tycadome-guest" + Date.now(),
+                                        "radio",
+                                        "get.radio.file",
+                                        {
+                                            source: "web",
+                                            target: "device:web-001",
+                                            layer: "tf",
+                                            worker: "media",
+                                            backend: false
+                                        },
+                                        {
+                                            status: "pending",
+                                            priority: "low"
+                                        },
+                                        "async",
+                                        {
+                                            system: "files",
+                                            file: "none",
+                                            message: "the radio source is ''",
+                                            buffer: "nothing should be buffering.",
+                                        }));
                                     break;
                                 default:
                                     console.log("Unexpected radio source.");
                                     break;
                             }
-
-                            worker.postMessage(this.tycadome(
-                                "tycadome-guest" + Date.now(),
-                                "radio",
-                                "get.radio.file",
-                                {
-                                    source: "web",
-                                    target: "device:web-001",
-                                    layer: "tf",
-                                    worker: "media",
-                                    backend: false
-                                },
-                                {
-                                    status: "pending",
-                                    priority: "low"
-                                },
-                                "async",
-                                {
-                                    system: "files",
-                                    file: "none",
-                                    message: "the radio source is ''",
-                                    buffer: "nothing should be buffering.",
-                                }));
                             break;
 
                         case 2:
