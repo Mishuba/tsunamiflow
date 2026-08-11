@@ -611,22 +611,25 @@ export class Studio extends Flow {
         worker.postMessage(this.tycadome(
             "tycadome-guest" + Date.now(),
             "radio",
-            "audio.ended",
+            "get.radio.file",
             {
-                worker: "media"
+                source: "web",
+                target: "device:web-001",
+                layer: "tf",
+                worker: "media",
+                backend: false
             },
             {
-                "status": "pending",
-                "priority": "low"
+                status: "pending",
+                priority: "low"
             },
+            "async",
             {
-                "async": true
-            },
-            {
-                system: "audio",
-                message: "start visualizator"
+                system: "files",
+                file: "none",
+                message: "the radio source is ''",
+                buffer: "nothing should be buffering.",
             }));
-        this.AudioElement.src = "";
     }
     waitingAudio() {
         console.log("Audio playback is waiting");
