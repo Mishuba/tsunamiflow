@@ -28,6 +28,9 @@ let visualizerFrame = null;
 let visualizerUsingTimeout = false;
 
 var listeners = {};
+let radioRandom = null;
+let CurrentSong = null;
+let rangeIndex = null;
 
 //objects
 let TfAudioVisualData = {
@@ -614,7 +617,201 @@ function stopVisualizerLoop() {
         visualizerFrame = null;
     }
 }
+function NoSubFolder(PSL, tsu, response = null) {
+    if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
+        if (PSL[tsu].length >= 20) {
+            radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+            return CurrentSong = PSL[tsu][radioRandom];
 
+
+
+
+        } else {
+            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            return CurrentSong = PSL[11][radioRandom];
+
+
+        }
+    } else {
+
+    }
+}
+
+function ThreeFolderSub(PSL, tsu, nami, response = null) {
+    if (nami <= 19) {
+        rangeIndex = 0;
+    } else if (nami >= 20 && nami <= 39) {
+        rangeIndex = 1;
+    } else {
+        rangeIndex = 2;
+    }
+
+    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
+            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+        } else {
+            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            return CurrentSong = PSL[11][radioRandom];
+
+
+        }
+    } else {
+
+    }
+}
+
+function FourFolderSub(PSL, tsu, nami, response = null) {
+    if (nami <= 14) {
+        rangeIndex = 0;
+    } else if (nami >= 15 && nami <= 29) {
+        rangeIndex = 1;
+    } else if (nami >= 30 && nami <= 44) {
+        rangeIndex = 2;
+    } else {
+        rangeIndex = 3;
+    }
+
+    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
+            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+        } else {
+            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            return CurrentSong = PSL[11][radioRandom];
+
+
+        }
+    } else {
+
+    }
+}
+
+function SixFolderSub(PSL, tsu, nami, response = null) {
+    rangeIndex = Math.floor(nami / 10);
+
+    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
+            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+        } else {
+            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+        }
+    } else {
+
+    }
+}
+
+function RadioTime(PSL, response = null) {
+    let now = new Date();
+    let hour = now.getHours();
+    let minute = now.getMinutes();
+
+    switch (hour) {
+        case 0:
+            FourFolderSub(PSL, 0, minute, response);
+            break;
+        case 1:
+            if (minute <= 4) {
+                NoSubFolder(PSL, 1, response);
+            } else if (minute <= 14) {
+                ThreeFolderSub(PSL, 1, minute, response);
+            } else if (minute <= 29) {
+                ThreeFolderSub(PSL, 1, minute, response);
+            } else {
+                ThreeFolderSub(PSL, 1, minute, response);
+            }
+            break;
+        case 2:
+            NoSubFolder(PSL, 2, response);
+            break;
+        case 3:
+            ThreeFolderSub(PSL, 3, minute, response);
+            break;
+        case 4:
+            ThreeFolderSub(PSL, 4, minute, response);
+            break;
+        case 5:
+            ThreeFolderSub(PSL, 5, minute, response);
+            break;
+        case 6:
+            ThreeFolderSub(PSL, 6, minute, response);
+            break;
+        case 7:
+            ThreeFolderSub(PSL, 7, minute, response);
+            break;
+        case 8:
+            SixFolderSub(PSL, 8, minute, response);
+            break;
+        case 9:
+            ThreeFolderSub(PSL, 9, minute, response);
+            break;
+        case 10:
+            NoSubFolder(PSL, 10, response);
+            break;
+        case 11:
+            return CurrentSong = PSL[11][
+                Math.floor(Math.random() * (PSL[11].length - 1))
+            ];
+
+            break;
+        case 12:
+            FourFolderSub(PSL, 12, minute, response);
+            break;
+        case 13:
+            FourFolderSub(PSL, 13, minute, response);
+            break;
+        case 14:
+            FourFolderSub(PSL, 14, minute, response);
+            break;
+        case 15:
+            FourFolderSub(PSL, 15, minute, response);
+            break;
+        case 16:
+            FourFolderSub(PSL, 16, minute, response);
+            break;
+        case 17:
+            NoSubFolder(PSL, 17, response);
+            break;
+        case 18:
+            SixFolderSub(PSL, 18, minute, response);
+            break;
+        case 19:
+            FourFolderSub(PSL, 19, minute, response);
+            break;
+        case 20:
+            FourFolderSub(PSL, 20, minute, response);
+            break;
+        case 21:
+            NoSubFolder(PSL, 21, response);
+            break;
+        case 22:
+            NoSubFolder(PSL, 22, response);
+            break;
+        case 23:
+            NoSubFolder(PSL, 23, response);
+            break;
+        default:
+            self.postMessage(PSL[11][Math.floor(Math.random() * (PSL[11].length - 1))]);
+            break;
+    }
+}
 async function MessageReceived(event) {
 
     switch (event.data.type) {
@@ -656,7 +853,7 @@ async function MessageReceived(event) {
                 case "get.radio.file":
                     switch (event.data.payload.system) {
                         case "files":
-                            CurrentSong = RadioTime(songList);
+                            let tfrSong = RadioTime(songList);
                             self.postMessage(tycadome(
                                 "tycadome-guest" + Date.now(),
                                 "radio",
@@ -676,7 +873,7 @@ async function MessageReceived(event) {
                                 {
                                     system: "files",
                                     playlist: songList,
-                                    file: CurrentSong,
+                                    file: tfrSong,
                                     message: "the radio source is ''",
                                     buffer: "nothing should be buffering.",
                                 })
