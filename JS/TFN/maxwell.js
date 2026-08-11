@@ -165,7 +165,7 @@ export class maxwell {
                     await this.handleSchedule(payload.time);
                 } else if (payload.system === "Tf Time") {
                     this.find("TFweather").innerHTML = this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState();
+                    this.soundEngine.AudioNetworkState(worker);
                 } else {
                     this.site.UpdateNews();
                     this.site.requestLocation();
@@ -175,8 +175,8 @@ export class maxwell {
             case 'radio':
                 switch (data.action) {
                     case 'receive.radio.file':
-                        this.soundEngine.radioSchedule = payload.songList;
-                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(payload.file));
+
+                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(payload));
                         break;
 
                     default:
