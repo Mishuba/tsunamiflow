@@ -808,9 +808,9 @@ export class Studio extends Flow {
         //create html data
         console.log("Audio playback is metadata loaded");
     }
-    loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet) {
+    loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet, worker) {
         //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
-        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet);
+        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet, worker);
         console.log("The audio data is loaded");
     }
     canplayAudio() {
@@ -1063,7 +1063,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadedmetadataAudio, "loadedmetadata");
 
             this.AudioElement.addEventListener("loadeddata", () => {
-                this.loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet);
+                this.loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet, worker);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadeddataAudio, "loadeddata");
 

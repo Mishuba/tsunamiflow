@@ -117,7 +117,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             ContextElement.connect(Gain).connect(Analyser).connect(worklet).connect(SoundsContext.destination);
         }
     }
-    async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet) {
+    async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet, worker) {
 
         if (this.AudioContextInitialized) {
             if (SoundsContext.state === "suspended") {
@@ -184,16 +184,20 @@ export class TsunamiFlowSound extends TsDomCanvas {
         } else {
             if (!worklet) {
                 // GLOBAL AUDIO WORKLET
-                SoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
-                    worklet = new AudioWorkletNode(SoundsContext, "fft-processor");
-                    worklet.port.onmessage = this.onWorkletMessage.bind(this);
-                    this.masterAudioWorklet = worklet;
-                });
+                await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+                worklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions)ss;
+
+
                 //this.masterAudioContextChain =
                 this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
-            } else {
+                worklet.port.onmessage = this.onWorkletMessage.bind(this);
                 this.masterAudioWorklet = worklet;
+            } else {
                 this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
+                worklet.port.onmessage = async (message) => {
+                    this.onWorkletMessage(message, worker);
+                }
+                this.masterAudioWorklet = worklet;
             }
         }
 
