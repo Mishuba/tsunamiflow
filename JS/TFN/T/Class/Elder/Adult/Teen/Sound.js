@@ -153,19 +153,21 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
 
         if (this.MasterSoundsContext === SoundsContext) {
-            console.log("The radio BLANK is the same as the one passed.");
+            console.log("The radio SoundsContext is the same as the one passed.");
         } else {
+            console.error("the radio SoundsContext is not the same as the one passed");
             if (!SoundsContext) {
                 SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-
+                this.MasterSoundsContext = SoundsContext;
             } else {
                 this.MasterSoundsContext = SoundsContext;
             }
         }
 
         if (this.ContextElement === ContextElement) {
-
+            console.log("The radio ContextElement is the same as the one passed.");
         } else {
+            console.error("the radio ContextElement is not the same as the one passed");
             if (!ContextElement) {
                 if (this.AudioElement) {
                     // MASTER
@@ -180,8 +182,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
 
         if (this.masterGain === Gain) {
-
+            console.log("The radio Gain is the same as the one passed.");
         } else {
+            console.error("the radio Gain is not the same as the one passed");
             if (!Gain) {
                 // MASTER
                 Gain = SoundsContext.createGain();
@@ -193,8 +196,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
 
         if (this.masterAnalyser === Analyser) {
-
+            console.log("The radio Analyser is the same as the one passed.");
         } else {
+            console.error("the radio Analyser is not the same as the one passed");
             if (!Analyser) {
                 // GLOBAL ANALYSER BUS
                 Analyser = SoundsContext.createAnalyser();
@@ -206,8 +210,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
 
         if (this.masterAudioWorklet === worklet) {
-
+            console.log("The radio AudioWorklet is the same as the one passed.");
         } else {
+            console.error("the radio AudioWorklet is not the same as the one passed");
             if (!worklet) {
                 // GLOBAL AUDIO WORKLET
                 await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
