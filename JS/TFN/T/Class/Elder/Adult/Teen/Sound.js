@@ -22,6 +22,32 @@ export class TsunamiFlowSound extends TsDomCanvas {
     masterDataArray = null;
     masterCompressor = null;
     masterAudioWorklet = null;
+    Workletoptions = {
+        numberOfInputs: 1, // 0
+        numberOfOutputs: 1,
+
+        processorOptions: {
+            mode: "fft",
+            fftSize: 2048,
+            customFlag: true
+        },
+        //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
+        /*
+        parameterData: {
+          gain: 0.5,
+          frequency: 440,
+          delayTime: 0.5,
+          feedback: 0.5,
+          distortionAmount: 0.5,
+          pannerX: 0,
+          pannerY: 0,
+          pannerZ: 0
+        },
+        */
+        channelCount: 2,
+        channelCountMode: "max",
+        channelInterpretation: "speakers"
+    };
     TfSoundsDelayOptions = {};
     TfSoundsPannerOptions = {};
     TfSoundAnalyserOptions = {
@@ -185,7 +211,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             if (!worklet) {
                 // GLOBAL AUDIO WORKLET
                 await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-                worklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions)ss;
+                worklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
 
                 //this.masterAudioContextChain =
