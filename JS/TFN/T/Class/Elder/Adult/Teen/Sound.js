@@ -110,14 +110,14 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return chain;
     }
-    doctxok(SoundsContext, Gain, Analyser, Compressor, ContextElement) {
+    doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet) {
         if (!ContextElement) {
-            Gain.connect(Analyser).connect(Compressor).connect(SoundsContext.destination);
+            Gain.connect(Analyser).connect(worklet).connect(SoundsContext.destination);
         } else {
-            ContextElement.connect(Gain).connect(Analyser).connect(Compressor).connect(SoundsContext.destination);
+            ContextElement.connect(Gain).connect(Analyser).connect(worklet).connect(SoundsContext.destination);
         }
     }
-    async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+    async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet) {
 
         if (this.AudioContextInitialized) {
             if (SoundsContext.state === "suspended") {
@@ -126,47 +126,77 @@ export class TsunamiFlowSound extends TsDomCanvas {
             return SoundsContext;
         }
 
-        if (!SoundsContext) {
-            SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
+        if (this.MasterSoundsContext === SoundsContext) {
+            console.log("The radio BLANK is the same as the one passed.");
+        } else {
+            if (!SoundsContext) {
+                SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
 
-        if (!ContextElement) {
-            if (this.AudioElement) {
-                // MASTER
-                ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
             } else {
-                ContextElement = null;
+                this.MasterSoundsContext = SoundsContext;
             }
         }
 
-        if (!Gain) {
-            // MASTER
-            Gain = SoundsContext.createGain();
-            Gain.gain.value = 1;
-        }
+        if (this.ContextElement === ContextElement) {
 
-        if (!Analyser) {
-            // GLOBAL ANALYSER BUS
-            Analyser = SoundsContext.createAnalyser();
-            Object.assign(Analyser, this.TfSoundAnalyserOptions);
-        }
-
-        if (!Compressor) {
-            // GLOBAL COMPRESSOR BUS
-            Compressor = SoundsContext.createDynamicsCompressor();
-        }
-        /*
-                if (!AudioWorklet) {
-                    // GLOBAL AUDIO WORKLET
-                    SoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
-                        AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor");
-                        AudioWorklet.port.onmessage = this.onWorkletMessage.bind(this);
-                    });
-                    //this.doctxok();
+        } else {
+            if (!ContextElement) {
+                if (this.AudioElement) {
+                    // MASTER
+                    ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
+                    this.ContextElement = ContextElement;
                 } else {
-                    //this.doctxok();
+                    ContextElement = null;
                 }
-        */
+            } else {
+                this.ContextElement = ContextElement;
+            }
+        }
+
+        if (this.masterGain === Gain) {
+
+        } else {
+            if (!Gain) {
+                // MASTER
+                Gain = SoundsContext.createGain();
+                Gain.gain.value = 1;
+                this.masterGain = Gain;
+            } else {
+                this.masterGain = Gain;
+            }
+        }
+
+        if (this.masterAnalyser === Analyser) {
+
+        } else {
+            if (!Analyser) {
+                // GLOBAL ANALYSER BUS
+                Analyser = SoundsContext.createAnalyser();
+                Object.assign(Analyser, this.TfSoundAnalyserOptions);
+                this.masterAnalyser = Analyser;
+            } else {
+                this.masterAnalyser = Analyser;
+            }
+        }
+
+        if (this.masterAudioWorklet === worklet) {
+
+        } else {
+            if (!worklet) {
+                // GLOBAL AUDIO WORKLET
+                SoundsContext.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js").then(async () => {
+                    worklet = new AudioWorkletNode(SoundsContext, "fft-processor");
+                    worklet.port.onmessage = this.onWorkletMessage.bind(this);
+                    this.masterAudioWorklet = worklet;
+                });
+                //this.masterAudioContextChain =
+                this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
+            } else {
+                this.masterAudioWorklet = worklet;
+                this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
+            }
+        }
+
         // ROUTING
         this.emit("ready", SoundsContext);
         if (SoundsContext.state === "suspended") {
@@ -211,8 +241,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         return sourceId;
     }
-    connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner, id = "radio", type = "audio") {
-        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+    connectaudio(SoundsContext, ContextElement, Gain, Analyser, worklet, id = "radio", type = "audio") {
+        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet);
         //if (this.TfSoundsContext[id]) return;
         //this.addAudioContextSource(element, SoundsContext, Gain, id, type);
     }

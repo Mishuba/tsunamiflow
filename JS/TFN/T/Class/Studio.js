@@ -808,15 +808,15 @@ export class Studio extends Flow {
         //create html data
         console.log("Audio playback is metadata loaded");
     }
-    loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+    loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet) {
         //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
-        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet);
         console.log("The audio data is loaded");
     }
     canplayAudio() {
         console.log("Audio playback is can play");
     }
-    canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+    canplaythroughAudio() {
 
         console.log("Audio playback is can play through");
     }
@@ -1027,7 +1027,7 @@ export class Studio extends Flow {
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
     }
-    RadioEventListeners(worker, element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+    RadioEventListeners(worker, element, SoundsContext, ContextElement, Gain, Analyser, worklet) {
         if (this._radioBound) {
             return;
         } else {
@@ -1058,12 +1058,12 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
 
             this.AudioElement.addEventListener("loadedmetadata", async () => {
-                this.loadedmetadataAudio(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+                this.loadedmetadataAudio();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadedmetadataAudio, "loadedmetadata");
 
             this.AudioElement.addEventListener("loadeddata", () => {
-                this.loadeddataAudio();
+                this.loadeddataAudio(SoundsContext, ContextElement, Gain, Analyser, worklet);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadeddataAudio, "loadeddata");
 
@@ -1073,7 +1073,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+                this.canplaythroughAudio(element, SoundsContext, ContextElement, Gain, Analyser, worklet);
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");

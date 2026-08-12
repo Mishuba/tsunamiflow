@@ -226,21 +226,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
 
-  /*
-    const safeImageWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-  
-    const safeMediaWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-  
-    const safeVideoWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js");
-  
-    const safeGameInputWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js");
-  
-    const safeGameWorldWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js");
-  
-    const safeAiWorker = createSafeWorker("./TFN/T/Worker/WebWorker/kid/AiWebWorker.js", "./JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js");
-  
-    */
-
   const Workletoptions = {
     numberOfInputs: 1, // 0
     numberOfOutputs: 1,
@@ -368,15 +353,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   const MixerTF = flowaudio.createMediaStreamDestination();
 
   const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
+  /*
   Tradio.connect(flowGain);
   flowGain.connect(flowAnalyser);
   flowAnalyser.connect(flowWorklet);
   flowWorklet.connect(flowCompressor);
   flowCompressor.connect(flowaudio.destination);
+*/
 
-
-
-  const nation = new Studio({ sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet }); //canvas: RadioCanvas
+  const nation = new Studio({ ContextElement: Tradio, sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet });
 
   const ai = new AiInterface({ sharedworker: safeSharedWorker });
 
@@ -409,7 +394,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Cross-origin block:", e);
       }
     });
-    //twoMore.appendChild(OffscreenCanvasRadio);
 
     Controller.user.showProducts().then(() => {
       Controller.bindPayments();
@@ -421,8 +405,8 @@ document.addEventListener("DOMContentLoaded", async () => {
           let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
 
 
-          safeWorker.postMessage(
-            nation.tycadome(
+          Controller.worker.postMessage(
+            Controller.soundengine.tycadome(
               "tycadome-guest" + Date.now(),
               "canvas",
               "load.radio.canvas",
@@ -446,17 +430,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             ),
             [RadioOffscreenCanvas]);
           //flowWorklet.port.start();
-          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker, RadioOffscreenCanvas);
-          flowWorklet.port.onmessage = (e) => {
-            nation.onWorkletMessage(e, safeWorker);
-          };
+          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
-          Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowCompressor, flowDelay, flowPanner);
+          Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowWorklet);
         }
       } else {
-        Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowCompressor, flowDelay, flowPanner);
+        Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowWorklet);
       }
       Controller.site.requestLocation();
       console.log("TFN");

@@ -571,11 +571,10 @@ export class maxwell {
             this.soundEngine.AudioElement.removeAttribute("src");;
         });
     }
-    bindAudio(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner) {
+    bindAudio(worker, SoundsContext, ContextElement, Gain, Analyser, worklet) {
         this.RadioReady();
-        this.soundEngine.RadioEventListeners(worker, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
+        this.soundEngine.RadioEventListeners(worker, SoundsContext, ContextElement, Gain, Analyser, worklet);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
-        //this.soundEngine.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
     }
     bindVidSystem() {
         if (this.videoEngine._videoBound) return;
@@ -766,7 +765,7 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    async initTsunamiWorkers(worker, sharedworker, offscreencanvas) {
+    async initTsunamiWorkers(worker, sharedworker) {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             this.soundEngine.AudioFile(null);
@@ -781,6 +780,7 @@ export class maxwell {
 
         worker.onmessage = (e) => this.handleWorkerMessage(e);
         worker.onerror = (e) => this.handleError(worker, e);
+
 
         //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
 
