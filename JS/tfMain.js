@@ -436,7 +436,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
 
             TsunamiController.worker.postMessage(
-              TsunamiController.soundengine.tycadome(
+              TsunamiController.soundEngine.tycadome(
                 "tycadome-guest" + Date.now(),
                 "canvas",
                 "load.radio.canvas",
@@ -465,10 +465,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           } catch (err) {
             console.warn("Offscreen canvas transfer failed:", err);
           } finally {
-            TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundengine.MasterSoundsContext, TsunamiController.soundengine.ContextElement, TsunamiController.soundengine.masterGain, TsunamiController.soundengine.masterAnalyser, TsunamiController.soundengine.masterAudioWorklet);
+            TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
           }
         } else {
-          TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundengine.MasterSoundsContext, TsunamiController.soundengine.ContextElement, TsunamiController.soundengine.masterGain, TsunamiController.soundengine.masterAnalyser, TsunamiController.soundengine.masterAudioWorklet);
+          TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
         }
         TsunamiController.site.requestLocation();
         console.log("TFN");
