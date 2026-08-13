@@ -177,7 +177,6 @@ const AckmaHawkMetaCognitiveIntelligence = [
 
 document.addEventListener("DOMContentLoaded", async () => {
   const twoMore = document.getElementById("mainTsectionFdiv");
-  const TsunamiRadio = document.getElementById("TFradioPlayer");
   const RadioTitle = document.getElementById("TfRadioStuff");
   const RadioButtons = document.getElementById("CheckRadio");
 
@@ -225,6 +224,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   TFiframe.allow = "camera; microphone; geolocation";
   TFiframe.allowFullscreen = true;
   TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
+  TFiframe.frame.title = "Main Website Content";
+  TFiframe.frame.id = "TsunamiContent";
+  TFiframe.frame.name = "TsunamiMainFlowContent";
+  TFiframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+  TFiframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+  TFiframe.frame.style.background = "white";
+  TFiframe.frame.style.touchAction = "manipulation";
+  TFiframe.frame.style.pointerEvents = "auto";
+  TFiframe.frame.src = "Iframe/Pages/homepage.html";
 
   const Workletoptions = {
     numberOfInputs: 1, // 0
@@ -284,26 +292,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   for (let i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
     console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
   };
-  const frameTF = new tfIframe(TFiframe, HomepageUpdates, FirstGame);
-  frameTF.frame.title = "Main Website Content";
-  frameTF.frame.id = "TsunamiContent";
-  frameTF.frame.name = "TsunamiMainFlowContent";
+
   // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
   const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
   const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
-  frameTF.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-  frameTF.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
-  frameTF.frame.style.background = "white";
-  frameTF.frame.style.touchAction = "manipulation";
-  frameTF.frame.style.pointerEvents = "auto";
-  frameTF.frame.src = "Iframe/Pages/homepage.html";
-  const nifage = new TfPrintful({
-    sharedWorker: safeSharedWorker,
-  });
-  nifage.stripePublicKey = "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ";
-  nifage.backendUrl = "https://world.tsunamiflow.club/StripeStuff.php";
-  const style = new TsunamiFlowImageEngine();
-  const network = new TsunamiLiveVideoController();
+
   const TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
   const Stickman = new letsDoIt("Homepage Game", TfStickMan);
   /*
@@ -314,9 +307,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
  
   //dbstores: indexdb
-*/
-
-  const flowaudio = new (window.AudioContext || window.webkitAudioContext)();
 
   if (flowaudio.state === 'suspended') {
     document.addEventListener('click', () => {
@@ -328,52 +318,41 @@ document.addEventListener("DOMContentLoaded", async () => {
     }, { once: true });
   }
 
-  const Tradio = flowaudio.createMediaElementSource(TsunamiRadio);
+  //await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
 
-  await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-
-  const flowGain = flowaudio.createGain();
-  flowGain.gain.value = 1;
-  const flowAnalyser = flowaudio.createAnalyser();
-  Object.assign(flowAnalyser, TfSoundAnalyserOptions);
-  const flowCompressor = flowaudio.createDynamicsCompressor();
-  const flowDelay = flowaudio.createDelay();
-  const flowPanner = flowaudio.createPanner();
   const flowEq = flowaudio.createBiquadFilter();
-
-  //tf sounds
-  const flowOscillator = flowaudio.createOscillator();
-  /*
-  flowOscillator.type = "sine";
-  flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
-  flowOscillator.start();
-  */
-  //tf distfortfion 
-  const flowDistortion = flowaudio.createWaveShaper();
-  const MixerTF = flowaudio.createMediaStreamDestination();
-
-  const flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions);
-  /*
-  Tradio.connect(flowGain);
-  flowGain.connect(flowAnalyser);
-  flowAnalyser.connect(flowWorklet);
-  flowWorklet.connect(flowCompressor);
-  flowCompressor.connect(flowaudio.destination);
 */
-
-  const nation = new Studio({ ContextElement: Tradio, sharedworker: safeSharedWorker, AudioElement: TsunamiRadio, MasterSoundsContext: flowaudio, masterGain: flowGain, masterAnalyser: flowAnalyser, masterCompressor: flowCompressor, masterDelay: flowDelay, masterPanner: flowPanner, TfSoundsWaveShaper: flowDistortion, TfSoundsOscillator: flowOscillator, MixerDestination: MixerTF, masterAudioWorklet: flowWorklet });
-
-  const ai = new AiInterface({ sharedworker: safeSharedWorker });
-
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
   const Controller = new maxwell({
     site: TfSite,
-    iframe: frameTF,
-    user: nifage,
-    image: style,
-    sound: nation,
-    video: network,
+    iframe: new tfIframe(TFiframe, HomepageUpdates, FirstGame),
+    user: new TfPrintful({
+      stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
+      backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
+    }),
+    image: new TsunamiFlowImageEngine(),
+    sound: new Studio({
+      sharedworker: safeSharedWorker,
+      AudioElement: document.getElementById("TFradioPlayer"),
+      MasterSoundsContext: new (window.AudioContext || window.webkitAudioContext)(),
+      ContextElement: flowaudio.createMediaElementSource(TsunamiRadio),
+      masterGain: flowaudio.createGain(),
+      masterAnalyser: flowaudio.createAnalyser(TfSoundAnalyserOptions),
+      masterCompressor: flowaudio.createDynamicsCompressor(),
+      masterDelay: flowaudio.createDelay(),
+      masterPanner: flowaudio.createPanner(),
+      TfSoundsWaveShaper: flowaudio.createWaveShaper(),
+      TfSoundsOscillator: flowaudio.createOscillator(),
+      /*
+        flowOscillator.type = "sine";
+        flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+        flowOscillator.start();
+      */
+      MixerDestination: flowaudio.createMediaStreamDestination(),
+      masterAudioWorklet: flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions)
+    }),
+    video: new TsunamiLiveVideoController(),
     game: Stickman,
     AudioTitle: RadioTitle,
     AudioButtonSpot: RadioButtons,
@@ -381,8 +360,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     AudioOver: RadioRestartButton,
     AudioStart: RadioStartButton,
     AudioSkip: RadioSkipButton,
-    ai: ai
+    ai: new AiInterface({ sharedworker: safeSharedWorker })
   });
+
+  //tf sounds
+  /*
+  Tradio.connect(flowGain);
+  flowGain.connect(flowAnalyser);
+  flowAnalyser.connect(flowWorklet);
+  flowWorklet.connect(flowCompressor);
+  flowCompressor.connect(flowaudio.destination);
+*/
 
   if (twoMore) {
     twoMore.appendChild(Controller.iframe.frame);
