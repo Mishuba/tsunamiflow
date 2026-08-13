@@ -224,14 +224,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 this.masterAudioWorklet.port.onmessage = async (message) => {
                     this.onWorkletMessage(message, worker).bind(this);
                 }
-
             } else {
                 this.masterAudioWorklet = worklet;
                 this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
                 this.masterAudioWorklet.port.onmessage = async (message) => {
-                    this.onWorkletMessage(message, worker).bind(this);
+                    this.onWorkletMessage(message, worker);
                 }
-
             }
         }
 

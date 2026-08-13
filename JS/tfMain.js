@@ -263,8 +263,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     const AudioElement = document.getElementById("TFradioPlayer");
     const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    await SoundsContext.audioWorklet.addModule(
-      "./fft-processor.js"
+    console.log(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url));
+    await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions
     );
     /*
       flowOscillator.type = "sine";
@@ -461,6 +461,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               [RadioOffscreenCanvas]);
             //flowWorklet.port.start();
             TsunamiController.initTsunamiWorkers(safeWorker, safeSharedWorker);
+
           } catch (err) {
             console.warn("Offscreen canvas transfer failed:", err);
           } finally {
