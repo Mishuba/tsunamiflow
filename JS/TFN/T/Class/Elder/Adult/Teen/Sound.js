@@ -238,12 +238,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 }
             } else {
                 this.MasterSoundsContext = SoundsContext;
-                this.ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
-                this.masterGain = this.MasterSoundsContext.createGain();
+                this.ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
+                this.masterGain = SoundsContext.createGain();
                 this.masterGain.gain.value = 1;
-                this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
+                this.masterAnalyser = SoundsContext.createAnalyser();
                 Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
-                await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+                await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
                 this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                 //this.masterAudioContextChain =
