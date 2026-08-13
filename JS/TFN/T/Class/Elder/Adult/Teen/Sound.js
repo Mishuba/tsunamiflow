@@ -162,6 +162,11 @@ export class TsunamiFlowSound extends TsDomCanvas {
                         console.log("The radio Analyser is the same as the one passed.");
                         if (this.masterAudioWorklet === worklet) {
                             console.log("The radio AudioWorklet is the same as the one passed.");
+
+                            this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
+                            this.masterAudioWorklet.port.onmessage = async (message) => {
+                                this.onWorkletMessage(message, worker).bind(this);
+                            }
                         } else {
                             console.error("the radio AudioWorklet is not the same as the one passed");
                             await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
@@ -217,8 +222,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
             }
         } else {
             console.error("the radio SoundsContext is not the same as the one passed");
-            if (!SoundsContext) {
-                if (this.MasterSoundsContext !== null || this.MasterSoundsContext !== undefined) {
+            if (SoundsContext !== typeof AudioContext) {
+                if (this.MasterSoundsContext === typeof AudioContext) {
 
                 } else {
                     this.MasterSoundsContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -238,13 +243,13 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 }
             } else {
                 this.MasterSoundsContext = SoundsContext;
-                this.ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
-                this.masterGain = SoundsContext.createGain();
+                this.ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
+                this.masterGain = this.MasterSoundsContext.createGain();
                 this.masterGain.gain.value = 1;
-                this.masterAnalyser = SoundsContext.createAnalyser();
+                this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
                 Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
                 await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-                this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
+                this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
 
                 //this.masterAudioContextChain =
                 this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
