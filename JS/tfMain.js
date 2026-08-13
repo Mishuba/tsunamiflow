@@ -296,21 +296,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       sharedworker: safeSharedWorker,
       AudioElement: document.getElementById("TFradioPlayer"),
       MasterSoundsContext: new (window.AudioContext || window.webkitAudioContext)(),
-      ContextElement: flowaudio.createMediaElementSource(TsunamiRadio),
-      masterGain: flowaudio.createGain(),
-      masterAnalyser: flowaudio.createAnalyser(TfSoundAnalyserOptions),
-      masterCompressor: flowaudio.createDynamicsCompressor(),
-      masterDelay: flowaudio.createDelay(),
-      masterPanner: flowaudio.createPanner(),
-      TfSoundsWaveShaper: flowaudio.createWaveShaper(),
-      TfSoundsOscillator: flowaudio.createOscillator(),
+      ContextElement: Controller.soundEngine.MasterSoundsContext.createMediaElementSource(TsunamiRadio),
+      masterGain: Controller.soundEngine.MasterSoundsContext.createGain(),
+      masterAnalyser: Controller.soundEngine.MasterSoundsContext.createAnalyser(TfSoundAnalyserOptions),
+      masterCompressor: Controller.soundEngine.MasterSoundsContext.createDynamicsCompressor(),
+      masterDelay: Controller.soundEngine.MasterSoundsContext.createDelay(),
+      masterPanner: Controller.soundEngine.MasterSoundsContext.createPanner(),
+      TfSoundsWaveShaper: Controller.soundEngine.MasterSoundsContext.createWaveShaper(),
+      TfSoundsOscillator: Controller.soundEngine.MasterSoundsContext.createOscillator(),
       /*
         flowOscillator.type = "sine";
-        flowOscillator.frequency.setValueAtTime(440, flowaudio.currentTime);
+        flowOscillator.frequency.setValueAtTime(440, Controller.soundEngine.MasterSoundsContext.currentTime);
         flowOscillator.start();
       */
-      MixerDestination: flowaudio.createMediaStreamDestination(),
-      masterAudioWorklet: flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions)
+      MixerDestination: Controller.soundEngine.MasterSoundsContext.createMediaStreamDestination(),
+      masterAudioWorklet: new AudioWorkletNode(Controller.soundEngine.MasterSoundsContext, "fft-processor", Workletoptions)
     }),
     video: new TsunamiLiveVideoController(),
     game: new letsDoIt(
