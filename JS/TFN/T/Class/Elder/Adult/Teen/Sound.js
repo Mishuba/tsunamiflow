@@ -171,7 +171,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             if (!ContextElement) {
                 if (this.AudioElement) {
                     // MASTER
-                    ContextElement = SoundsContext.createMediaElementSource(this.AudioElement);
+                    ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
                     this.ContextElement = ContextElement;
                 } else {
                     ContextElement = null;
@@ -187,7 +187,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             console.error("the radio Gain is not the same as the one passed");
             if (!Gain) {
                 // MASTER
-                Gain = SoundsContext.createGain();
+                Gain = this.MasterSoundsContext.createGain();
                 Gain.gain.value = 1;
                 this.masterGain = Gain;
             } else {
@@ -201,7 +201,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
             console.error("the radio Analyser is not the same as the one passed");
             if (!Analyser) {
                 // GLOBAL ANALYSER BUS
-                Analyser = SoundsContext.createAnalyser();
+                Analyser = this.MasterSoundsContext.createAnalyser();
                 Object.assign(Analyser, this.TfSoundAnalyserOptions);
                 this.masterAnalyser = Analyser;
             } else {
@@ -215,20 +215,23 @@ export class TsunamiFlowSound extends TsDomCanvas {
             console.error("the radio AudioWorklet is not the same as the one passed");
             if (!worklet) {
                 // GLOBAL AUDIO WORKLET
-                await SoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+                await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
                 worklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
-
+                this.masterAudioWorklet = worklet;
                 //this.masterAudioContextChain =
-                this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
-                worklet.port.onmessage = this.onWorkletMessage.bind(this);
-                this.masterAudioWorklet = worklet;
-            } else {
-                this.doctxok(SoundsContext, ContextElement, Gain, Analyser, worklet);
-                worklet.port.onmessage = async (message) => {
-                    this.onWorkletMessage(message, worker);
+                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
+                this.masterAudioWorklet.port.onmessage = async (message) => {
+                    this.onWorkletMessage(message, worker).bind(this);
                 }
+
+            } else {
                 this.masterAudioWorklet = worklet;
+                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
+                this.masterAudioWorklet.port.onmessage = async (message) => {
+                    this.onWorkletMessage(message, worker).bind(this);
+                }
+
             }
         }
 
