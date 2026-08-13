@@ -177,8 +177,6 @@ const AckmaHawkMetaCognitiveIntelligence = [
 
 document.addEventListener("DOMContentLoaded", async () => {
   const twoMore = document.getElementById("mainTsectionFdiv");
-  const RadioTitle = document.getElementById("TfRadioStuff");
-  const RadioButtons = document.getElementById("CheckRadio");
 
   const dock = document.getElementById("radioDock");
   const toggle = document.getElementById("toggleRadio");
@@ -214,11 +212,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   updateRadioState();
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
-
-  const RadioLastButton = document.createElement("button");
-  const RadioRestartButton = document.createElement("button");
-  const RadioStartButton = document.createElement("button");
-  const RadioSkipButton = document.createElement("button");
 
   const TFiframe = document.createElement("iframe");
   TFiframe.allow = "camera; microphone; geolocation";
@@ -273,32 +266,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   //safeSharedWorker.port.start();
 
   const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";
-  const TfSite = new HeaderWeather({
-    sharedWorker: safeSharedWorker,
-  });
-  TfSite.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-  TfSite.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-  TfSite.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-  TfSite.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-  TfSite.NewsArray.push("Mishuba was a percussionist in school band.");
-  TfSite.NewsArray.push("Mishuba attended multiple schools across states.");
-  TfSite.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-  TfSite.NewsArray.push("Mishuba graduated from Blythewood High School.");
-  TfSite.NewsArray.push("Mishuba ran track at University of South Carolina.");
-  TfSite.NewsArray.push("Mishuba received TEFL certification in 2017.");
-  TfSite.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
-
-  TfSite.EnHword(TFwordMishuba);
-  for (let i = 0; i < TfSite.WordOfTheDayArray.length; i++) {
-    console.log(`suppose tfo be word ${TfSite.WordOfTheDayArray[i]}`);
-  };
 
   // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
   const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
   const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
 
-  const TfStickMan = new gameComponent(tfSNW, tfSNH, linkToSpriteSheet, tfSPX, tfSPY, "sprite", tfSSCX, tfSSCY, tfSCW, tfSCH, "30px", "Consolas", 280, 40, "center", "alphabetic", "inherit", 0, "auto", "normal", "normal", "auto", 0, undefined, [], PlayerState, AckmaHawkBattleBackground, "Hubert", "Maxwell", "StickMan", PhysicalAbility, AckmaHawkIntellectualIntelligence, AckmaHawkSocialIntelligence, AckmaHawkEmotionalIntelligence, AckmaHawkExistentialIntelligence, AckmaHawkEnergeticIntelligence, AckmaHawkMetaCognitiveIntelligence, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-  const Stickman = new letsDoIt("Homepage Game", TfStickMan);
   /*
   const indexdb = {
     name: ,
@@ -325,7 +297,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
   const Controller = new maxwell({
-    site: TfSite,
+    site: new HeaderWeather({
+      sharedWorker: safeSharedWorker,
+    }),
     iframe: new tfIframe(TFiframe, HomepageUpdates, FirstGame),
     user: new TfPrintful({
       stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
@@ -353,15 +327,89 @@ document.addEventListener("DOMContentLoaded", async () => {
       masterAudioWorklet: flowWorklet = new AudioWorkletNode(flowaudio, "fft-processor", Workletoptions)
     }),
     video: new TsunamiLiveVideoController(),
-    game: Stickman,
-    AudioTitle: RadioTitle,
-    AudioButtonSpot: RadioButtons,
-    AudioPrevious: RadioLastButton,
-    AudioOver: RadioRestartButton,
-    AudioStart: RadioStartButton,
-    AudioSkip: RadioSkipButton,
+    game: new letsDoIt(
+      "Homepage Game",
+      new gameComponent(
+        tfSNW,
+        tfSNH,
+        linkToSpriteSheet,
+        tfSPX,
+        tfSPY,
+        "sprite",
+        tfSSCX,
+        tfSSCY,
+        tfSCW,
+        tfSCH,
+        "30px",
+        "Consolas",
+        280,
+        40,
+        "center",
+        "alphabetic",
+        "inherit",
+        0,
+        "auto",
+        "normal",
+        "normal",
+        "auto",
+        0,
+        undefined,
+        [],
+        PlayerState,
+        AckmaHawkBattleBackground,
+        "Hubert",
+        "Maxwell",
+        "StickMan",
+        PhysicalAbility,
+        AckmaHawkIntellectualIntelligence,
+        AckmaHawkSocialIntelligence,
+        AckmaHawkEmotionalIntelligence,
+        AckmaHawkExistentialIntelligence,
+        AckmaHawkEnergeticIntelligence,
+        AckmaHawkMetaCognitiveIntelligence,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      )
+    ),
+    AudioTitle: document.getElementById("TfRadioStuff"),
+    AudioButtonSpot: document.getElementById("CheckRadio");,
+    AudioPrevious: document.createElement("button"),
+    AudioOver: document.createElement("button"),
+    AudioStart: document.createElement("button"),
+    AudioSkip: document.createElement("button"),
     ai: new AiInterface({ sharedworker: safeSharedWorker })
   });
+
+  Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+  Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+  Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+  Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+  Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
+  Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
+  Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+  Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
+  Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
+  Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
+  Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+
+  Controller.site.EnHword(TFwordMishuba);
+  for (let i = 0; i < Controller.site.WordOfTheDayArray.length; i++) {
+    console.log(`suppose tfo be word ${Controller.site.WordOfTheDayArray[i]}`);
+  };
 
   //tf sounds
   /*
@@ -392,7 +440,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         try {
           let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
 
-
           Controller.worker.postMessage(
             Controller.soundengine.tycadome(
               "tycadome-guest" + Date.now(),
@@ -422,10 +469,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         } catch (err) {
           console.warn("Offscreen canvas transfer failed:", err);
         } finally {
-          Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowWorklet);
+          Controller.bindAudio(Controller.worker, Controller.soundengine.MasterSoundsContext, Controller.soundengine.ContextElement, Controller.soundengine.masterGain, Controller.soundengine.masterAnalyser, Controller.soundengine.masterAudioWorklet);
         }
       } else {
-        Controller.bindAudio(safeWorker, flowaudio, Tradio, flowGain, flowAnalyser, flowWorklet);
+        Controller.bindAudio(Controller.worker, Controller.soundengine.MasterSoundsContext, Controller.soundengine.ContextElement, Controller.soundengine.masterGain, Controller.soundengine.masterAnalyser, Controller.soundengine.masterAudioWorklet);
       }
       Controller.site.requestLocation();
       console.log("TFN");
