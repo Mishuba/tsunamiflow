@@ -213,20 +213,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   const RadioCanvas = document.getElementById("TFradioCanvas");
 
-  const TFiframe = document.createElement("iframe");
-  TFiframe.allow = "camera; microphone; geolocation";
-  TFiframe.allowFullscreen = true;
-  TFiframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
-  TFiframe.frame.title = "Main Website Content";
-  TFiframe.frame.id = "TsunamiContent";
-  TFiframe.frame.name = "TsunamiMainFlowContent";
-  TFiframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-  TFiframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
-  TFiframe.frame.style.background = "white";
-  TFiframe.frame.style.touchAction = "manipulation";
-  TFiframe.frame.style.pointerEvents = "auto";
-  TFiframe.frame.src = "Iframe/Pages/homepage.html";
-
   const Workletoptions = {
     numberOfInputs: 1, // 0
     numberOfOutputs: 1,
@@ -300,7 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     site: new HeaderWeather({
       sharedWorker: safeSharedWorker,
     }),
-    iframe: new tfIframe(TFiframe, HomepageUpdates, FirstGame),
+    iframe: new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame),
     user: new TfPrintful({
       stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
       backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
@@ -421,7 +407,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
 
   if (twoMore) {
+    Controller.iframe.allow = "camera; microphone; geolocation";
+    Controller.iframe.allowFullscreen = true;
+    Controller.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
     twoMore.appendChild(Controller.iframe.frame);
+    Controller.iframe.frame.title = "Main Website Content";
+    Controller.iframe.frame.id = "TsunamiContent";
+    Controller.iframe.frame.name = "TsunamiMainFlowContent";
+    Controller.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+    Controller.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+    Controller.iframe.frame.style.background = "white";
+    Controller.iframe.frame.style.touchAction = "manipulation";
+    Controller.iframe.frame.style.pointerEvents = "auto";
+    Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
     Controller.iframe.frame.addEventListener("load", () => {
       try {
         Controller.iframe.frame.contentWindow.controller = Controller;
