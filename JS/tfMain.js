@@ -256,139 +256,141 @@ document.addEventListener("DOMContentLoaded", async () => {
  
   //dbstores: indexdb
 
-  if (flowaudio.state === 'suspended') {
-    document.addEventListener('click', () => {
-      flowaudio.resume().then(() => {
-        console.log('✅ AudioContext resumed');
-      }).catch(err => {
-        console.error('❌ Resume failed:', err);
-      });
-    }, { once: true });
-  }
-
-  //await flowaudio.audioWorklet.addModule("JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-
-  const flowEq = flowaudio.createBiquadFilter();
 */
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
-  const Controller = new maxwell({
-    site: new HeaderWeather({
-      sharedWorker: safeSharedWorker,
-    }),
-    iframe: new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame),
-    user: new TfPrintful({
-      stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
-      backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
-    }),
-    image: new TsunamiFlowImageEngine(),
-    sound: new Studio({
-      sharedworker: safeSharedWorker,
-      AudioElement: document.getElementById("TFradioPlayer"),
-      MasterSoundsContext: new (window.AudioContext || window.webkitAudioContext)(),
-      ContextElement: Controller.soundEngine.MasterSoundsContext.createMediaElementSource(TsunamiRadio),
-      masterGain: Controller.soundEngine.MasterSoundsContext.createGain(),
-      masterAnalyser: Controller.soundEngine.MasterSoundsContext.createAnalyser(TfSoundAnalyserOptions),
-      masterCompressor: Controller.soundEngine.MasterSoundsContext.createDynamicsCompressor(),
-      masterDelay: Controller.soundEngine.MasterSoundsContext.createDelay(),
-      masterPanner: Controller.soundEngine.MasterSoundsContext.createPanner(),
-      TfSoundsWaveShaper: Controller.soundEngine.MasterSoundsContext.createWaveShaper(),
-      TfSoundsOscillator: Controller.soundEngine.MasterSoundsContext.createOscillator(),
-      /*
-        flowOscillator.type = "sine";
-        flowOscillator.frequency.setValueAtTime(440, Controller.soundEngine.MasterSoundsContext.currentTime);
-        flowOscillator.start();
-      */
-      MixerDestination: Controller.soundEngine.MasterSoundsContext.createMediaStreamDestination(),
-      masterAudioWorklet: new AudioWorkletNode(Controller.soundEngine.MasterSoundsContext, "fft-processor", Workletoptions)
-    }),
-    video: new TsunamiLiveVideoController(),
-    game: new letsDoIt(
-      "Homepage Game",
-      new gameComponent(
-        tfSNW,
-        tfSNH,
-        "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
-        tfSPX,
-        tfSPY,
-        "sprite",
-        tfSSCX,
-        tfSSCY,
-        tfSCW,
-        tfSCH,
-        "30px",
-        "Consolas",
-        280,
-        40,
-        "center",
-        "alphabetic",
-        "inherit",
-        0,
-        "auto",
-        "normal",
-        "normal",
-        "auto",
-        0,
-        undefined,
-        [],
-        "stand",
-        "./Pictures/Logo/Tsunami Flow Logo.png",
-        "Hubert",
-        "Maxwell",
-        "StickMan",
-        PhysicalAbility,
-        AckmaHawkIntellectualIntelligence,
-        AckmaHawkSocialIntelligence,
-        AckmaHawkEmotionalIntelligence,
-        AckmaHawkExistentialIntelligence,
-        AckmaHawkEnergeticIntelligence,
-        AckmaHawkMetaCognitiveIntelligence,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-      )
-    ),
-    AudioTitle: document.getElementById("TfRadioStuff"),
-    AudioButtonSpot: document.getElementById("CheckRadio"),
-    AudioPrevious: document.createElement("button"),
-    AudioOver: document.createElement("button"),
-    AudioStart: document.createElement("button"),
-    AudioSkip: document.createElement("button"),
-    ai: new AiInterface({
-      sharedworker: safeSharedWorker
-    })
-  });
+  async function createController() {
+    const AudioElement = document.getElementById("TFradioPlayer");
+    const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
 
-  Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-  Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-  Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-  Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-  Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
-  Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
-  Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-  Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
-  Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
-  Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
-  Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+    await SoundsContext.audioWorklet.addModule(
+      "./fft-processor.js"
+    );
+    /*
+      flowOscillator.type = "sine";
+      flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+      flowOscillator.start();
+    */
+    //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
+    const Controller = new maxwell({
+      site: new HeaderWeather({
+        sharedWorker: safeSharedWorker,
+      }),
+      iframe: new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame),
+      user: new TfPrintful({
+        stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
+        backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
+      }),
+      image: new TsunamiFlowImageEngine(),
+      sound: new Studio({
+        sharedworker: safeSharedWorker,
+        AudioElement: document.getElementById("TFradioPlayer"),
+        MasterSoundsContext: SoundsContext,
+        ContextElement: SoundsContext.createMediaElementSource(TsunamiRadio),
+        masterGain: SoundsContext.createGain(),
+        masterAnalyser: SoundsContext.createAnalyser(TfSoundAnalyserOptions),
+        masterCompressor: SoundsContext.createDynamicsCompressor(),
+        masterDelay: SoundsContext.createDelay(),
+        masterPanner: SoundsContext.createPanner(),
+        TfSoundsWaveShaper: SoundsContext.createWaveShaper(),
+        TfSoundsOscillator: SoundsContext.createOscillator(),
+        /*
+          flowOscillator.type = "sine";
+          flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+          flowOscillator.start();
+        */
+        MixerDestination: SoundsContext.createMediaStreamDestination(),
+        masterAudioWorklet: new AudioWorkletNode(SoundsContext, "fft-processor", Workletoptions)
+      }),
+      video: new TsunamiLiveVideoController(),
+      game: new letsDoIt(
+        "Homepage Game",
+        new gameComponent(
+          tfSNW,
+          tfSNH,
+          "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
+          tfSPX,
+          tfSPY,
+          "sprite",
+          tfSSCX,
+          tfSSCY,
+          tfSCW,
+          tfSCH,
+          "30px",
+          "Consolas",
+          280,
+          40,
+          "center",
+          "alphabetic",
+          "inherit",
+          0,
+          "auto",
+          "normal",
+          "normal",
+          "auto",
+          0,
+          undefined,
+          [],
+          "stand",
+          "./Pictures/Logo/Tsunami Flow Logo.png",
+          "Hubert",
+          "Maxwell",
+          "StickMan",
+          PhysicalAbility,
+          AckmaHawkIntellectualIntelligence,
+          AckmaHawkSocialIntelligence,
+          AckmaHawkEmotionalIntelligence,
+          AckmaHawkExistentialIntelligence,
+          AckmaHawkEnergeticIntelligence,
+          AckmaHawkMetaCognitiveIntelligence,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        )
+      ),
+      AudioTitle: document.getElementById("TfRadioStuff"),
+      AudioButtonSpot: document.getElementById("CheckRadio"),
+      AudioPrevious: document.createElement("button"),
+      AudioOver: document.createElement("button"),
+      AudioStart: document.createElement("button"),
+      AudioSkip: document.createElement("button"),
+      ai: new AiInterface({
+        sharedworker: safeSharedWorker
+      })
+    });
 
-  Controller.site.EnHword(TFwordMishuba);
-  for (let i = 0; i < Controller.site.WordOfTheDayArray.length; i++) {
-    console.log(`suppose tfo be word ${Controller.site.WordOfTheDayArray[i]}`);
-  };
+    Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+    Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+    Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+    Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+    Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
+    Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
+    Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+    Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
+    Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
+    Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
+    Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+
+    Controller.site.EnHword(TFwordMishuba);
+    for (let i = 0; i < Controller.site.WordOfTheDayArray.length; i++) {
+      console.log(`suppose tfo be word ${Controller.site.WordOfTheDayArray[i]}`);
+    };
+
+    return Controller;
+  }
 
   //tf sounds
   /*
@@ -399,76 +401,81 @@ document.addEventListener("DOMContentLoaded", async () => {
   flowCompressor.connect(flowaudio.destination);
   */
 
-  if (twoMore) {
-    Controller.iframe.allow = "camera; microphone; geolocation";
-    Controller.iframe.allowFullscreen = true;
-    Controller.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
-    twoMore.appendChild(Controller.iframe.frame);
-    Controller.iframe.frame.title = "Main Website Content";
-    Controller.iframe.frame.id = "TsunamiContent";
-    Controller.iframe.frame.name = "TsunamiMainFlowContent";
-    Controller.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-    Controller.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
-    Controller.iframe.frame.style.background = "white";
-    Controller.iframe.frame.style.touchAction = "manipulation";
-    Controller.iframe.frame.style.pointerEvents = "auto";
-    Controller.iframe.frame.src = "Iframe/Pages/homepage.html";
-    Controller.iframe.frame.addEventListener("load", () => {
-      try {
-        Controller.iframe.frame.contentWindow.controller = Controller;
-        Controller.iframe.MenuSwitch(Controller.iframe.frame);
-      } catch (e) {
-        console.error("Cross-origin block:", e);
-      }
-    });
-
-    Controller.user.showProducts().then(() => {
-      Controller.bindPayments();
-      Controller.user.bindCart();
-      Controller.bindNavBar();
-      Controller.bindUsers();
-      if (window.Worker) {
+  async function beginTheTycadome() {
+    const TsunamiController = await createController();
+    if (twoMore) {
+      TsunamiController.iframe.allow = "camera; microphone; geolocation";
+      TsunamiController.iframe.allowFullscreen = true;
+      TsunamiController.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
+      twoMore.appendChild(TsunamiController.iframe.frame);
+      TsunamiController.iframe.frame.title = "Main Website Content";
+      TsunamiController.iframe.frame.id = "TsunamiContent";
+      TsunamiController.iframe.frame.name = "TsunamiMainFlowContent";
+      TsunamiController.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+      TsunamiController.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+      TsunamiController.iframe.frame.style.background = "white";
+      TsunamiController.iframe.frame.style.touchAction = "manipulation";
+      TsunamiController.iframe.frame.style.pointerEvents = "auto";
+      TsunamiController.iframe.frame.src = "Iframe/Pages/homepage.html";
+      TsunamiController.iframe.frame.addEventListener("load", () => {
         try {
-          let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
-
-          Controller.worker.postMessage(
-            Controller.soundengine.tycadome(
-              "tycadome-guest" + Date.now(),
-              "canvas",
-              "load.radio.canvas",
-              {
-                source: "web",
-                target: "device:web-001",
-                worker: "media"
-              },
-              {
-                status: "pending",
-                priority: "low"
-              },
-              "async",
-              {
-                system: "loading",
-                canvas: RadioOffscreenCanvas,
-              },
-              [
-                RadioOffscreenCanvas
-              ]
-            ),
-            [RadioOffscreenCanvas]);
-          //flowWorklet.port.start();
-          Controller.initTsunamiWorkers(safeWorker, safeSharedWorker);
-        } catch (err) {
-          console.warn("Offscreen canvas transfer failed:", err);
-        } finally {
-          Controller.bindAudio(Controller.worker, Controller.soundengine.MasterSoundsContext, Controller.soundengine.ContextElement, Controller.soundengine.masterGain, Controller.soundengine.masterAnalyser, Controller.soundengine.masterAudioWorklet);
+          TsunamiController.iframe.frame.contentWindow.controller = TsunamiController;
+          TsunamiController.iframe.MenuSwitch(TsunamiController.iframe.frame);
+        } catch (e) {
+          console.error("Cross-origin block:", e);
         }
-      } else {
-        Controller.bindAudio(Controller.worker, Controller.soundengine.MasterSoundsContext, Controller.soundengine.ContextElement, Controller.soundengine.masterGain, Controller.soundengine.masterAnalyser, Controller.soundengine.masterAudioWorklet);
-      }
-      Controller.site.requestLocation();
-      console.log("TFN");
-    }).catch(err => {
-      console.error("Cart binding error:", err);
-    });
+      });
+
+      TsunamiController.user.showProducts().then(() => {
+        TsunamiController.bindPayments();
+        TsunamiController.user.bindCart();
+        TsunamiController.bindNavBar();
+        TsunamiController.bindUsers();
+        if (window.Worker) {
+          try {
+            let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
+
+            TsunamiController.worker.postMessage(
+              TsunamiController.soundengine.tycadome(
+                "tycadome-guest" + Date.now(),
+                "canvas",
+                "load.radio.canvas",
+                {
+                  source: "web",
+                  target: "device:web-001",
+                  worker: "media"
+                },
+                {
+                  status: "pending",
+                  priority: "low"
+                },
+                "async",
+                {
+                  system: "loading",
+                  canvas: RadioOffscreenCanvas,
+                },
+                [
+                  RadioOffscreenCanvas
+                ]
+              ),
+              [RadioOffscreenCanvas]);
+            //flowWorklet.port.start();
+            TsunamiController.initTsunamiWorkers(safeWorker, safeSharedWorker);
+          } catch (err) {
+            console.warn("Offscreen canvas transfer failed:", err);
+          } finally {
+            TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundengine.MasterSoundsContext, TsunamiController.soundengine.ContextElement, TsunamiController.soundengine.masterGain, TsunamiController.soundengine.masterAnalyser, TsunamiController.soundengine.masterAudioWorklet);
+          }
+        } else {
+          TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundengine.MasterSoundsContext, TsunamiController.soundengine.ContextElement, TsunamiController.soundengine.masterGain, TsunamiController.soundengine.masterAnalyser, TsunamiController.soundengine.masterAudioWorklet);
+        }
+        TsunamiController.site.requestLocation();
+        console.log("TFN");
+      }).catch(err => {
+        console.error("Cart binding error:", err);
+      });
+    }
   }
+
+  beginTheTycadome();
 });
