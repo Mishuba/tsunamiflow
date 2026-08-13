@@ -450,7 +450,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           } catch (err) {
             console.warn("Offscreen canvas transfer failed:", err);
           } finally {
-            TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
+            TsunamiController.bindAudio(safeWorker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
           }
         } else {
           TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
