@@ -100,12 +100,6 @@ const TFwordMishuba = {
   ]
 };
 
-const linkToSpriteSheet = "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png";
-const AckmaHawkBattleBackground = "./Pictures/Logo/Tsunami Flow Logo.png";
-
-const StickMan = new Image();
-StickMan.src = linkToSpriteSheet;
-
 let tfSSCX = 0;
 let tfSSCY = 0;
 let tfSCW = 120;
@@ -116,8 +110,6 @@ let tfSPY = 160;
 
 let tfSNW = 30;
 let tfSNH = 30;
-
-let PlayerState = "stand";
 
 const PhysicalAbility = [
   { name: "health", points: 1 },
@@ -251,8 +243,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
   //safeSharedWorker.port.start();
 
-  const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";
-
   // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
   const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
   const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
@@ -282,6 +272,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
+  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
   const Controller = new maxwell({
     site: new HeaderWeather({
       sharedWorker: safeSharedWorker,
@@ -318,7 +309,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       new gameComponent(
         tfSNW,
         tfSNH,
-        linkToSpriteSheet,
+        "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
         tfSPX,
         tfSPY,
         "sprite",
@@ -341,8 +332,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         0,
         undefined,
         [],
-        PlayerState,
-        AckmaHawkBattleBackground,
+        "stand",
+        "./Pictures/Logo/Tsunami Flow Logo.png",
         "Hubert",
         "Maxwell",
         "StickMan",
@@ -377,7 +368,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     AudioOver: document.createElement("button"),
     AudioStart: document.createElement("button"),
     AudioSkip: document.createElement("button"),
-    ai: new AiInterface({ sharedworker: safeSharedWorker })
+    ai: new AiInterface({
+      sharedworker: safeSharedWorker
+    })
   });
 
   Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
@@ -404,7 +397,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   flowAnalyser.connect(flowWorklet);
   flowWorklet.connect(flowCompressor);
   flowCompressor.connect(flowaudio.destination);
-*/
+  */
 
   if (twoMore) {
     Controller.iframe.allow = "camera; microphone; geolocation";
@@ -478,5 +471,4 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.error("Cart binding error:", err);
     });
   }
-
 });
