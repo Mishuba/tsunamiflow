@@ -286,7 +286,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         sharedworker: safeSharedWorker,
         AudioElement: document.getElementById("TFradioPlayer"),
         MasterSoundsContext: SoundsContext,
-        ContextElement: SoundsContext.createMediaElementSource(TsunamiRadio),
+        ContextElement: SoundsContext.createMediaElementSource(AudioElement),
         masterGain: SoundsContext.createGain(),
         masterAnalyser: SoundsContext.createAnalyser(TfSoundAnalyserOptions),
         masterCompressor: SoundsContext.createDynamicsCompressor(),
