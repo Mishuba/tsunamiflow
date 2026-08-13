@@ -372,7 +372,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       )
     ),
     AudioTitle: document.getElementById("TfRadioStuff"),
-    AudioButtonSpot: document.getElementById("CheckRadio");,
+    AudioButtonSpot: document.getElementById("CheckRadio"),
     AudioPrevious: document.createElement("button"),
     AudioOver: document.createElement("button"),
     AudioStart: document.createElement("button"),
