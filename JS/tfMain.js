@@ -286,16 +286,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         sharedworker: safeSharedWorker,
         AudioElement: document.getElementById("TFradioPlayer"),
         MasterSoundsContext: SoundsContext,
-        masterDelay: SoundsContext.createDelay(),
-        masterPanner: SoundsContext.createPanner(),
-        TfSoundsWaveShaper: SoundsContext.createWaveShaper(),
-        TfSoundsOscillator: SoundsContext.createOscillator(),
-        /*
-          flowOscillator.type = "sine";
-          flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
-          flowOscillator.start();
-        */
-        MixerDestination: SoundsContext.createMediaStreamDestination(),
       }),
       video: new TsunamiLiveVideoController(),
       game: new letsDoIt(

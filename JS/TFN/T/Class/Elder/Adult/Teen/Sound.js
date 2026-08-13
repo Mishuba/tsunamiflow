@@ -218,10 +218,20 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     this.ContextElement = this.MasterSoundsContext.createMediaElementSource(this.AudioElement);
                     this.masterGain = this.MasterSoundsContext.createGain();
                     this.masterGain.gain.value = 1;
+                    /*
+                    TfSoundsWaveShaper: SoundsContext.createWaveShaper(),
+                    TfSoundsOscillator: SoundsContext.createOscillator(),
+                      flowOscillator.type = "sine";
+                      flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+                      flowOscillator.start();
+                      masterPanner: SoundsContext.createPanner(),
+                      masterDelay: SoundsContext.createDelay(),
+                    */
                     this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
                     Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
                     await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-                    this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
+                    this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
+                    this.MixerDestination = this.MasterSoundsContext.createMediaStreamDestination();
 
                     //this.masterAudioContextChain =
                     this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
