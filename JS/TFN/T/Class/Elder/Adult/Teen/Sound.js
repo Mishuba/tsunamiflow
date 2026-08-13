@@ -142,6 +142,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
         } else {
             ContextElement.connect(Gain).connect(Analyser).connect(worklet).connect(SoundsContext.destination);
         }
+        worklet.port.onmessage = async (message) => {
+            this.onWorkletMessage(message, worker).bind(this);
+        }
     }
     async initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet, worker) {
 
@@ -163,20 +166,14 @@ export class TsunamiFlowSound extends TsDomCanvas {
                         if (this.masterAudioWorklet === worklet) {
                             console.log("The radio AudioWorklet is the same as the one passed.");
 
-                            this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                            this.masterAudioWorklet.port.onmessage = async (message) => {
-                                this.onWorkletMessage(message, worker).bind(this);
-                            }
+                            this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
                         } else {
                             console.error("the radio AudioWorklet is not the same as the one passed");
                             await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
                             this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                             //this.masterAudioContextChain =
-                            this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                            this.masterAudioWorklet.port.onmessage = async (message) => {
-                                this.onWorkletMessage(message, worker).bind(this);
-                            }
+                            this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
                         }
                     } else {
                         this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
@@ -185,10 +182,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                         this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                         //this.masterAudioContextChain =
-                        this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                        this.masterAudioWorklet.port.onmessage = async (message) => {
-                            this.onWorkletMessage(message, worker).bind(this);
-                        }
+                        this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
                     }
                 } else {
                     this.masterGain = this.MasterSoundsContext.createGain();
@@ -199,10 +193,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                     //this.masterAudioContextChain =
-                    this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                    this.masterAudioWorklet.port.onmessage = async (message) => {
-                        this.onWorkletMessage(message, worker).bind(this);
-                    }
+                    this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
                 }
             } else {
                 console.error("the radio ContextElement is not the same as the one passed");
@@ -215,10 +206,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                 //this.masterAudioContextChain =
-                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                this.masterAudioWorklet.port.onmessage = async (message) => {
-                    this.onWorkletMessage(message, worker).bind(this);
-                }
+                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
             }
         } else {
             console.error("the radio SoundsContext is not the same as the one passed");
@@ -236,10 +224,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     this.masterAudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", this.Workletoptions);
 
                     //this.masterAudioContextChain =
-                    this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                    this.masterAudioWorklet.port.onmessage = async (message) => {
-                        this.onWorkletMessage(message, worker).bind(this);
-                    }
+                    this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
                 }
             } else {
                 this.MasterSoundsContext = SoundsContext;
@@ -252,10 +237,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
 
                 //this.masterAudioContextChain =
-                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet);
-                this.masterAudioWorklet.port.onmessage = async (message) => {
-                    this.onWorkletMessage(message, worker).bind(this);
-                }
+                this.doctxok(this.MasterSoundsContext, this.ContextElement, this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker);
             }
         }
 
