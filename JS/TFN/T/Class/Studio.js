@@ -481,6 +481,7 @@ export class Studio extends Flow {
                             break;
                         case 2:
                             console.log("Radio networkState is NETWORK_LOADING");
+
                             break;
                         case 3:
                             console.log("Radio networkState has NETWORK_NO_SOURCE");
@@ -817,7 +818,7 @@ export class Studio extends Flow {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio(SoundsContext, worker) {
-        this.initAudioContext(SoundsContext, worker);
+        await this.initAudioContext(SoundsContext, worker);
         console.log("Audio playback is can play through");
     }
     endedAudio(worker, SoundsContext) {
