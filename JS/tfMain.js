@@ -353,21 +353,21 @@ document.addEventListener("DOMContentLoaded", async () => {
       })
     });
 
-    Controller.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-    Controller.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-    Controller.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-    Controller.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-    Controller.site.NewsArray.push("Mishuba was a percussionist in school band.");
-    Controller.site.NewsArray.push("Mishuba attended multiple schools across states.");
-    Controller.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-    Controller.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
-    Controller.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
-    Controller.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
-    Controller.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+    TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+    TsunamiController.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+    TsunamiController.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+    TsunamiController.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+    TsunamiController.site.NewsArray.push("Mishuba was a percussionist in school band.");
+    TsunamiController.site.NewsArray.push("Mishuba attended multiple schools across states.");
+    TsunamiController.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+    TsunamiController.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
+    TsunamiController.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
+    TsunamiController.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
+    TsunamiController.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
 
-    Controller.site.EnHword(TFwordMishuba);
-    for (let i = 0; i < Controller.site.WordOfTheDayArray.length; i++) {
-      console.log(`suppose tfo be word ${Controller.site.WordOfTheDayArray[i]}`);
+    TsunamiController.site.EnHword(TFwordMishuba);
+    for (let i = 0; i < TsunamiController.site.WordOfTheDayArray.length; i++) {
+      console.log(`suppose tfo be word ${TsunamiController.site.WordOfTheDayArray[i]}`);
     };
 
 
