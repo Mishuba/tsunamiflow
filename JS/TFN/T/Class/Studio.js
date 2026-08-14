@@ -816,8 +816,8 @@ export class Studio extends Flow {
     canplayAudio() {
         console.log("Audio playback is can play");
     }
-    canplaythroughAudio(SoundsContext, ContextElement, Gain, Analyser, worklet, worker) {
-        this.initAudioContext(SoundsContext, ContextElement, Gain, Analyser, worklet, worker);
+    canplaythroughAudio(SoundsContext, worker) {
+        this.initAudioContext(SoundsContext, worker);
         console.log("Audio playback is can play through");
     }
     endedAudio(worker, SoundsContext) {
@@ -1027,7 +1027,7 @@ export class Studio extends Flow {
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
     }
-    RadioEventListeners(worker, element, SoundsContext, ContextElement, Gain, Analyser, worklet) {
+    RadioEventListeners(worker, SoundsContext) {
         if (this._radioBound) {
             return;
         } else {
@@ -1073,7 +1073,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio(SoundsContext, ContextElement, Gain, Analyser, worklet, worker);
+                this.canplaythroughAudio(SoundsContext, worker);
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");

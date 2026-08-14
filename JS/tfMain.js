@@ -259,20 +259,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 */
   const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
 
-  async function createController() {
-    const AudioElement = document.getElementById("TFradioPlayer");
-    const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+  const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
 
-    console.log(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url));
-    await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions
-    );
-    /*
-      flowOscillator.type = "sine";
-      flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
-      flowOscillator.start();
-    */
-    //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
-    const Controller = new maxwell({
+  console.log(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url));
+  //await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
+  /*
+    flowOscillator.type = "sine";
+    flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+    flowOscillator.start();
+  */
+  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
+  async function beginTheTycadome() {
+    const TsunamiController = new maxwell({
       site: new HeaderWeather({
         sharedWorker: safeSharedWorker,
       }),
@@ -283,9 +281,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       }),
       image: new TsunamiFlowImageEngine(),
       sound: new Studio({
-        sharedworker: safeSharedWorker,
         AudioElement: document.getElementById("TFradioPlayer"),
-        MasterSoundsContext: SoundsContext,
       }),
       video: new TsunamiLiveVideoController(),
       game: new letsDoIt(
@@ -374,20 +370,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       console.log(`suppose tfo be word ${Controller.site.WordOfTheDayArray[i]}`);
     };
 
-    return Controller;
-  }
 
-  //tf sounds
-  /*
-  Tradio.connect(flowGain);
-  flowGain.connect(flowAnalyser);
-  flowAnalyser.connect(flowWorklet);
-  flowWorklet.connect(flowCompressor);
-  flowCompressor.connect(flowaudio.destination);
-  */
-
-  async function beginTheTycadome() {
-    const TsunamiController = await createController();
+    //tf sounds
+    /*
+    Tradio.connect(flowGain);
+    flowGain.connect(flowAnalyser);
+    flowAnalyser.connect(flowWorklet);
+    flowWorklet.connect(flowCompressor);
+    flowCompressor.connect(flowaudio.destination);
+    */
     if (twoMore) {
       TsunamiController.iframe.allow = "camera; microphone; geolocation";
       TsunamiController.iframe.allowFullscreen = true;
@@ -450,10 +441,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           } catch (err) {
             console.warn("Offscreen canvas transfer failed:", err);
           } finally {
-            TsunamiController.bindAudio(safeWorker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
+            TsunamiController.bindAudio(safeWorker, SoundsContext);
           }
         } else {
-          TsunamiController.bindAudio(TsunamiController.worker, TsunamiController.soundEngine.MasterSoundsContext, TsunamiController.soundEngine.ContextElement, TsunamiController.soundEngine.masterGain, TsunamiController.soundEngine.masterAnalyser, TsunamiController.soundEngine.masterAudioWorklet);
+          TsunamiController.bindAudio(safeWorker, SoundsContext);
         }
         TsunamiController.site.requestLocation();
         console.log("TFN");

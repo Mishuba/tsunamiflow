@@ -571,9 +571,9 @@ export class maxwell {
             this.soundEngine.AudioElement.removeAttribute("src");;
         });
     }
-    bindAudio(worker, SoundsContext, ContextElement, Gain, Analyser, worklet) {
+    bindAudio(worker, SoundsContext) {
         this.RadioReady();
-        this.soundEngine.RadioEventListeners(worker, SoundsContext, ContextElement, Gain, Analyser, worklet);
+        this.soundEngine.RadioEventListeners(worker, SoundsContext);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
     bindVidSystem() {
