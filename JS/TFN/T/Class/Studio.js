@@ -1017,7 +1017,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio(SoundsContext, worker, this.AudioElement, this.AudioElement.id, "audio");
+                this.canplaythroughAudio(SoundsContext, worker, this.AudioElement, "radio", "audio");
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
