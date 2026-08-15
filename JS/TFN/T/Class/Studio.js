@@ -810,8 +810,6 @@ export class Studio extends Flow {
         console.log("Audio playback is metadata loaded");
     }
     loadeddataAudio() {
-        //this.connectaudio(element, SoundsContext, ContextElement, Gain, Analyser, Compressor, Delay, Panner);
-
         console.log("The audio data is loaded");
     }
     canplayAudio() {

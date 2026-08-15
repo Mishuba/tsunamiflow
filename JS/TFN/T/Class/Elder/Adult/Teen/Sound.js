@@ -154,10 +154,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
             window.AudioContext || window.webkitAudioContext;
 
         if (this.AudioContextInitialized && this.MasterSoundsContext) {
+            if (this.MasterSoundsContext.state === "suspended") {
+                await this.MasterSoundsContext.resume();
+            }
+
             if (this.elementSourceMap.has(id)) {
-                if (this.MasterSoundsContext.state === "suspended") {
-                    await this.MasterSoundsContext.resume();
-                }
+
             } else {
                 if (element !== null) {
                     this.addAudioContextSource(element, id, type);
@@ -165,6 +167,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     console.log("the element is null" + Element);
                 }
             }
+
             return this.MasterSoundsContext;
         }
 
@@ -196,6 +199,15 @@ export class TsunamiFlowSound extends TsDomCanvas {
         //this.masterAudioContextChain =
         this.doctxok(this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker, this.MasterSoundsContext, element, id);
 
+        if (this.elementSourceMap.has(id)) {
+
+        } else {
+            if (element !== null) {
+                this.addAudioContextSource(element, id, type);
+            } else {
+                console.log("the element is null" + Element);
+            }
+        }
         // ROUTING
         this.emit("ready", this.MasterSoundsContext);
         if (this.MasterSoundsContext.state === "suspended") {
