@@ -818,7 +818,7 @@ export class Studio extends Flow {
         console.log("Audio playback is can play");
     }
     canplaythroughAudio(SoundsContext, worker) {
-        this.initAudioContext(SoundsContext, worker);
+        this.initAudioContext(SoundsContext, worker, this.AudioElement, "radio", "audio");
         console.log("Audio playback is can play through");
         this.playaudio(worker, SoundsContext);
     }
@@ -949,10 +949,10 @@ export class Studio extends Flow {
 
             this.hls.loadSource(url);
             this.hls.attachMedia(this.AudioElement);
-            this.addAudioContextSource(addAudioContextSource, "live talking");
+            //this.addAudioContextSource(addAudioContextSource, "live talking");
         } else {
             this.AudioElement.src = url;
-            this.addAudioContextSource(addAudioContextSource, "live talking");
+            //this.addAudioContextSource(addAudioContextSource, "live talking");
         }
 
         this.playaudio();

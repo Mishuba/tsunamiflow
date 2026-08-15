@@ -6,7 +6,9 @@ console.log("Media Worker:" + import.meta.url);
 //variables
 let offscreencanvas = null;
 let canvasctx = null;
+let isradiooffscreenReady = null;
 const maxBeaconSize = 64 * 1024;
+let canvastype = null;
 
 let baseRadius = 2;
 const particles = [];
@@ -34,6 +36,21 @@ let TfAudioVisualData = {
     beat: false,
     timestamp: 0
 };
+function initRadioOffscreen() {
+    if (!offscreencanvas) return;
+
+    try {
+        canvasctx = offscreencanvas.getContext(canvastype);
+        if (!canvasctx) throw new Error(`${canvastype} context not supported`);
+        isradiooffscreenReady = true;
+        console.log(`OffscreenCanvas initialized with ${canvastype} context`);
+    } catch (err) {
+        console.error("OffscreenCanvas init failed:", err);
+        canvasctx = null;
+    } finally {
+        return canvasctx;
+    }
+}
 function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
     let tf = {
         "id": id, //options.id
