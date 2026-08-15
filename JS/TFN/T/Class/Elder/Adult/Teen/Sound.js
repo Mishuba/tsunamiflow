@@ -240,7 +240,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         // ✅ CLEAN SIGNAL FLOW
         source.connect(chain.gain);
         //.connect(chain.analyser).connect(chain.compressor)
-        //.connect(chain.delay)
+        //.connect(chain.delay)mn
         //.connect(chain.panner)
         chain.gain.connect(this.masterGain);
         // ✅ STORE EVERYTHING (IMPORTANT)

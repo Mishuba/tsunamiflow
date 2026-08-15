@@ -815,8 +815,8 @@ export class Studio extends Flow {
     canplayAudio() {
         console.log("Audio playback is can play");
     }
-    canplaythroughAudio(SoundsContext, worker) {
-        this.initAudioContext(SoundsContext, worker, this.AudioElement, "radio", "audio");
+    canplaythroughAudio(SoundsContext, worker, element, id, type) {
+        this.initAudioContext(SoundsContext, worker, element, id, type);
         console.log("Audio playback is can play through");
         this.playaudio(worker, SoundsContext);
     }
@@ -1017,7 +1017,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio(SoundsContext, worker);
+                this.canplaythroughAudio(SoundsContext, worker, this.AudioElement, this.AudioElement.id, "audio");
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
