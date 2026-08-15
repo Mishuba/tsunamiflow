@@ -820,6 +820,7 @@ export class Studio extends Flow {
     canplaythroughAudio(SoundsContext, worker) {
         this.initAudioContext(SoundsContext, worker);
         console.log("Audio playback is can play through");
+        await this.playaudio(worker, SoundsContext);
     }
     endedAudio(worker, SoundsContext) {
         console.log("The audio should have ended");
@@ -865,49 +866,12 @@ export class Studio extends Flow {
                         console.log('AudioContext resumed from playaudio');
                     }
                     await this.AudioElement.play();
-
-                    worker.postMessage(this.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "radio",
-                        "audio.play",
-                        {
-                            worker: "media"
-                        },
-                        {
-                            "status": "pending",
-                            "priority": "low"
-                        },
-                        {
-                            "async": true
-                        },
-                        {
-                            system: "audio",
-                            message: "start visualizator"
-                        }));
                 } else {
                     if (SoundsContext?.state === 'suspended') {
                         await SoundsContext.resume();
                         console.log('AudioContext resumed from playaudio');
                     }
                     await this.AudioElement.play();
-                    worker.postMessage(this.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "radio",
-                        "audio.play",
-                        {
-                            worker: "media"
-                        },
-                        {
-                            "status": "pending",
-                            "priority": "low"
-                        },
-                        {
-                            "async": true
-                        },
-                        {
-                            system: "audio",
-                            message: "start visualizator"
-                        }));
                 }
             }
         } catch (error) {
@@ -917,7 +881,6 @@ export class Studio extends Flow {
                 console.error("Error playing audio:", error);
             }
         }
-
     }
     playingAudio() {
 
@@ -925,24 +888,6 @@ export class Studio extends Flow {
     pauseaudio(worker, SoundsContext) {
         //this.visualizatorloop = false;
         this.AudioElement.pause();
-        worker.postMessage(this.tycadome(
-            "tycadome-guest" + Date.now(),
-            "radio",
-            "audio.paused",
-            {
-                worker: "media"
-            },
-            {
-                "status": "pending",
-                "priority": "low"
-            },
-            {
-                "async": true
-            },
-            {
-                system: "audio",
-                message: "start visualizator"
-            }));
         console.log("Audio playback is paused");
     }
     previousaudio(music) {
