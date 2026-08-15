@@ -411,7 +411,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           try {
             let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
 
-            TsunamiController.worker.postMessage(
+            safeWorker.postMessage(
               TsunamiController.soundEngine.tycadome(
                 "tycadome-guest" + Date.now(),
                 "canvas",
