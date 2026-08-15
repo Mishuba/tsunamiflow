@@ -176,7 +176,7 @@ export class maxwell {
                 switch (data.action) {
                     case 'receive.radio.file':
 
-                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(payload));
+                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(event));
                         break;
 
                     default:

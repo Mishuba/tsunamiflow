@@ -241,11 +241,7 @@ async function requestWorld(method = "GET", url = "https://world.tsunamiflow.clu
                 xhr.onreadystatechange = () => {
                     if (xhr.readyState === 4) {
                         if (xhr.status >= 200 && xhr.status < 300) {
-                            emit("success", {
-                                type: "xhr",
-                                url,
-                                data: xhr.responseText
-                            });
+
                             console.log("the radio xml responseType is " + xhr.responseType);
 
                             resolve(JSON.parse(xhr.responseText));
