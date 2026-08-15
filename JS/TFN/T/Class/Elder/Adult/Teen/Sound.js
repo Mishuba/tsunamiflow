@@ -216,7 +216,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         this.AudioContextInitialized = true;
         return this.MasterSoundsContext;
     }
-    addAudioContextSource(element, id = null, type = null) {
+    addAudioContextSource(element, id, type) {
         const sourceId = id || `source-${++this.MasteridCounter}`;
         let source;
 
