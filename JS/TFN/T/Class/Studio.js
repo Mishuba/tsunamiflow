@@ -820,7 +820,7 @@ export class Studio extends Flow {
     canplaythroughAudio(SoundsContext, worker) {
         this.initAudioContext(SoundsContext, worker);
         console.log("Audio playback is can play through");
-        await this.playaudio(worker, SoundsContext);
+        this.playaudio(worker, SoundsContext);
     }
     endedAudio(worker, SoundsContext) {
         console.log("The audio should have ended");
