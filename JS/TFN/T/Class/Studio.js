@@ -1021,7 +1021,6 @@ export class Studio extends Flow {
                     element: this.AudioElement,
                     system: "radio",
                     elementid: this.AudioElement.id,
-                    source: this.AudioElement.src
                 }, "audio");
             });
 
