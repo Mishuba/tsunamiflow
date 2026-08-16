@@ -404,11 +404,22 @@ export class maxwell {
 
             TsunamiController.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.all}`;
             switch (find("tNetwork").innerHTML) {
+                case "Live":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Live}`;
                 case "TV":
                     //this.iframe.frame.src = playlist.Tv;
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
-                case "Video Games":
+                    break;
+
+                case "Movies":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`;
+                    break;
+                case "Podcast":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    break;
+                case "Video Games":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Podcast}`;
+                    break;
                 default:
                     //this.iframe.frame.src = playlist.Live;
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
