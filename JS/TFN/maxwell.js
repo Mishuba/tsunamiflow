@@ -402,8 +402,8 @@ export class maxwell {
                 Movies: "movies.html",
                 Podcast: "podcast.html"
             };
-            console.log(e);
-            switch (find(e.element.id).option.value) {
+            console.log(find(e.element.id).option);
+            switch (find(e.element.id).option) {
                 case "Live":
                     this.iframe.frame.src = playlist.Live;
                     this.isItOk = true;

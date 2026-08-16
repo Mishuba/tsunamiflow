@@ -154,8 +154,9 @@ export class tfIframe {
       "roster.html",
       "news.html",
       "competitions.html",
-      "tfnetwork.html",
-      "community.html"
+      "TFnetwork.html",
+      "Community.html",
+
     ];
 
     if (allowedPages.includes(this.pageName)) {
