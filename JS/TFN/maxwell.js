@@ -354,7 +354,7 @@ export class maxwell {
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
-        this.onMe("tfNetwork", "change", (e) => {
+        this.onMe("tfNetwork", "click", (e) => {
             let playlist = {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
@@ -403,7 +403,7 @@ export class maxwell {
                 Podcast: "podcast.html"
             };
             console.log(e);
-            switch (e.target.value) {
+            switch (e.element.option.value) {
                 case "Live":
                     this.iframe.frame.src = playlist.Live;
                     this.isItOk = true;
