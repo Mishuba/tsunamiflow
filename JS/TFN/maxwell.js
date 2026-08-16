@@ -1,6 +1,7 @@
 export class maxwell {
     listeners = {};
     domListeners = new Map();
+    isItOk = null;
     worker = null;
     sharedWorker = null;
     sharedWorkerPort = null;
@@ -353,15 +354,15 @@ export class maxwell {
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
-        this.onMe("tfNetwork", "click", () => {
+        this.onMe("tfNetwork", "change", (e) => {
             let playlist = {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
                     videos: "PLyt4VU_WgIQM_8UE1n3H03ymT8IAAg6SU",
 
                 },
-                Live: "Iframe/Pages/TFnetwork.html",
-                Tv: "",
+                Live: "Iframe/Pages/news.html",
+                Tv: "Iframe/Pages/tfNetwork.html",
                 documentary: {
                     all: "",
                     case_study: "PLyt4VU_WgIQPtl62SJ0lX6U4SwdTsR-rU"
@@ -402,43 +403,52 @@ export class maxwell {
                 Podcast: "podcast.html"
             };
 
-
-            TsunamiController.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.all}`;
-            switch (find("tNetwork").innerHTML) {
+            switch (e.target.value) {
                 case "Live":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Live}`;
+                    this.iframe.frame.src = playlist.Live;
+                    this.isItOk = true;
                     break;
                 case "Studio Sessions":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`;
+                    this.isItOk = false;
                     break;
                 case "Music Videos":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`;
+                    this.isItOk = false;
                     break;
                 case "TV":
                     //this.iframe.frame.src = playlist.Tv;
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    this.isItOk = false;
                     break;
 
                 case "Movies":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`;
+                    this.isItOk = false;
                     break;
                 case "Case Study":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`;
+                    this.isItOk = false;
                     break;
                 case "documentary":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`;
+                    this.isItOk = false;
                     break;
                 case "Podcast":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    this.isItOk = false;
                     break;
                 case "Video Games":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Podcast}`;
+                    this.isItOk = false;
                     break;
                 default:
                     //this.iframe.frame.src = playlist.Live;
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    this.isItOk = false;
                     break;
             };
+
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
