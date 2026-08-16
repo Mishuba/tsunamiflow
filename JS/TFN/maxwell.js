@@ -354,7 +354,7 @@ export class maxwell {
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
-        this.onMe("tfNetwork", "click", (e) => {
+        this.onMe("tfNetwork", "change", (e) => {
             let playlist = {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
