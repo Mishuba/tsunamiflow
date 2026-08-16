@@ -403,7 +403,7 @@ export class maxwell {
                 Podcast: "podcast.html"
             };
             console.log(e);
-            switch (e.element.option.value) {
+            switch (find(e.element.id).option.value) {
                 case "Live":
                     this.iframe.frame.src = playlist.Live;
                     this.isItOk = true;
