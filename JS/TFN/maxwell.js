@@ -363,6 +363,7 @@ export class maxwell {
                 Live: "Iframe/Pages/TFnetwork.html",
                 Tv: "",
                 documentary: {
+                    all: "",
                     case_study: "PLyt4VU_WgIQPtl62SJ0lX6U4SwdTsR-rU"
                 },
                 Video_Games: {
@@ -406,6 +407,13 @@ export class maxwell {
             switch (find("tNetwork").innerHTML) {
                 case "Live":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Live}`;
+                    break;
+                case "Studio Sessions":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`;
+                    break;
+                case "Music Videos":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`;
+                    break;
                 case "TV":
                     //this.iframe.frame.src = playlist.Tv;
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
@@ -413,6 +421,12 @@ export class maxwell {
 
                 case "Movies":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`;
+                    break;
+                case "Case Study":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`;
+                    break;
+                case "documentary":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`;
                     break;
                 case "Podcast":
                     this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
