@@ -417,7 +417,7 @@ export class maxwell {
                     this.isItOk = false;
                     break;
                 case "TV":
-                    //this.iframe.frame.src = playlist.Tv;
+                    this.iframe.frame.src = playlist.Tv;
                     this.isItOk = false;
                     break;
 
@@ -442,7 +442,7 @@ export class maxwell {
                     this.isItOk = false;
                     break;
                 default:
-                    //this.iframe.frame.src = playlist.Live;
+                    this.iframe.frame.src = playlist.Live;
                     this.isItOk = false;
                     break;
             };
