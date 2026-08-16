@@ -385,7 +385,7 @@ export class maxwell {
                     watchdogs: {
                         1: "",
                         2: "",
-                        3: "PLyt4VU_WgIQPRMHCLTKdzyYkBKCJ6t3QA"
+                        Legion: "PLyt4VU_WgIQPRMHCLTKdzyYkBKCJ6t3QA"
                     },
                     legend_of_the_dragoon: "PLyt4VU_WgIQM1z_4fItJGGDGgKb9nPN4H",
                     dark_souls: {
@@ -438,8 +438,31 @@ export class maxwell {
                     this.isItOk = false;
                     break;
                 case "Video Games":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Podcast}`;
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
                     this.isItOk = false;
+                    break;
+                case "Kingdom Deliverance":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.kindom_deliverance[1]}`;
+                    break;
+
+                case "Elden Ring":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.legend_of_the_dragoon}`;
+                    break;
+
+                case "Watchdogs Legion":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.watchdogs.Legion}`;
+                    break;
+                case "Lord of the Rings: Middle Earth Shadow Of War":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.lord_of_the_rings.shadow_of_war}`;
+                    break;
+                case "Devil May Cry V":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.devil_may_cry[5]}`;
+                    break;
+                case "Project Nimbus":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.project_nimbus}`;
+                    break;
+                case "Skyrim":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`;
                     break;
                 default:
                     this.iframe.frame.src = playlist.Live;
