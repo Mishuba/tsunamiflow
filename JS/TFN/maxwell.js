@@ -354,19 +354,67 @@ export class maxwell {
         }, true);
 
         this.onMe("tfNetwork", "click", () => {
-            this.iframe.frame.src = "Iframe/Pages/TFnetwork.html";
+            let playlist = {
+                Music: {
+                    studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
+                    videos: "PLyt4VU_WgIQM_8UE1n3H03ymT8IAAg6SU",
+
+                },
+                Live: "Iframe/Pages/TFnetwork.html",
+                Tv: "",
+                documentary: {
+                    case_study: "PLyt4VU_WgIQPtl62SJ0lX6U4SwdTsR-rU"
+                },
+                Video_Games: {
+                    all: "PLyt4VU_WgIQOquMVvzdZlUakV3jmO9Y0A",
+                    skyrim: "PLyt4VU_WgIQNw20PRrK98BC0g-2Zuq434",
+                    project_nimbus: "PLyt4VU_WgIQMyJAW3qitfWOgr9Fvtwsd_",
+                    devil_may_cry: {
+                        1: "1.html",
+                        2: "2.html",
+                        3: "3.html",
+                        4: "4.html",
+                        5: "PLyt4VU_WgIQMs8lH7FR4jS0xZCqSkFY7R"
+                    },
+                    lord_of_the_rings: {
+                        shadow_of_mordor: "",
+                        shadow_of_war: "PLyt4VU_WgIQOOM5XVo0FZqm4In3N3rJEP"
+                    },
+                    watchdogs: {
+                        1: "",
+                        2: "",
+                        3: "PLyt4VU_WgIQPRMHCLTKdzyYkBKCJ6t3QA"
+                    },
+                    legend_of_the_dragoon: "PLyt4VU_WgIQM1z_4fItJGGDGgKb9nPN4H",
+                    dark_souls: {
+                        1: "",
+                        2: "",
+                        3: "",
+                    },
+                    elden_ring: "PLyt4VU_WgIQMIC9i6Zwzf_nKsssiZMn2m",
+                    kindom_deliverance: {
+                        1: "PLyt4VU_WgIQM6LT2E1xVDaMK40_eTvURq",
+                        2: ""
+                    }
+                },
+                Movies: "movies.html",
+                Podcast: "podcast.html"
+            };
+
+
+            TsunamiController.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.all}`;
+            switch (find("tNetwork").innerHTML) {
+                case "TV":
+                    //this.iframe.frame.src = playlist.Tv;
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                case "Video Games":
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                default:
+                    //this.iframe.frame.src = playlist.Live;
+                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    break;
+            };
             this.iframe.MenuSwitch(this.iframe.frame);
-            /*
-               <video
-                   controls
-        autoplay
-        muted
-        playsinline
-        width="925"
-      >
-        <source src="https://media.tsunamiflow.club/videos/tftv.mp4" type="video/mp4">
-      </video>
-            */
         }, true);
 
         this.onMe("tfCommunity", "click", () => {
@@ -603,7 +651,7 @@ export class maxwell {
                                         */
                     /*
                                         //this.effects.isPlaying = true;
-
+        
                     // FRAME DRAW LOOP
                     const drawLoop = async () => {
                     if (!this.effects.isPlaying) return;
@@ -710,11 +758,11 @@ export class maxwell {
             console.log("Controller connected at index:", this.game.controllerIndex);
             this.game.controllerType = this.getControllerType(gamepad);
             console.log("Controller type detected:", this.game.controllerType);
-            console.log(`Gamepad connected: ${gamepad.id}`);
+            console.log(`Gamepad connected: ${gamepad.id} `);
         } else {
             this.game.controllerIndex = null;
             this.game.controllerType = null;
-            console.log(`Gamepad disconnected: ${gamepad.id}`);
+            console.log(`Gamepad disconnected: ${gamepad.id} `);
         }
     }
 
@@ -723,10 +771,10 @@ export class maxwell {
             this.soundEngine.AudioFile(null);
         }
         console.error("RAW WORKER ERROR:", error);
-        console.error(`[${source}] message:`, error.message);
-        console.error(`[${source}] filename:`, error.filename);
-        console.error(`[${source}] lineno:`, error.lineno);
-        console.error(`[${source}] colno:`, error.colno);
+        console.error(`[${source}]message: `, error.message);
+        console.error(`[${source}]filename: `, error.filename);
+        console.error(`[${source}]lineno: `, error.lineno);
+        console.error(`[${source}]colno: `, error.colno);
         this.emit("error", { source, error });
     }
     receiveSharedWorkerMessage(e) {
@@ -800,7 +848,7 @@ export class maxwell {
         this.soundEngine.sharedWorker = this.sharedWorker;
         this.videoEngine.sharedWorker = this.sharedWorker;
         this.game.sharedWorker = this.sharedWorker;
-*/
+    */
         //this.sendToSharedWorker("register");
         //sharedworker.onmessage = (e) => {this.receiveSharedWorkerMessage(e)};
         //sharedworker.onerror = (e) => this.handleError(sharedworker, e);

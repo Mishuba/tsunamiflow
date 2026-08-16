@@ -393,6 +393,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       TsunamiController.iframe.frame.style.touchAction = "manipulation";
       TsunamiController.iframe.frame.style.pointerEvents = "auto";
       TsunamiController.iframe.frame.src = "Iframe/Pages/homepage.html";
+
       TsunamiController.iframe.frame.addEventListener("load", () => {
         try {
           TsunamiController.iframe.frame.contentWindow.controller = TsunamiController;
