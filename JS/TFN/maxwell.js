@@ -402,7 +402,7 @@ export class maxwell {
                 Movies: "movies.html",
                 Podcast: "podcast.html"
             };
-
+            console.log(e);
             switch (e.target.value) {
                 case "Live":
                     this.iframe.frame.src = playlist.Live;
