@@ -354,7 +354,7 @@ export class maxwell {
             this.iframe.MenuSwitch(this.iframe.frame);
         }, true);
 
-        this.onMe("tfNetwork", "change", (e) => {
+        this.onMe("tfNetwork", "change", async (e) => {
             let playlist = {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
@@ -402,7 +402,7 @@ export class maxwell {
                 Movies: "movies.html",
                 Podcast: "podcast.html"
             };
-            console.log(find(e.element.id).option);
+            console.log(find(e.element.id));
             switch (find(e.element.id).option) {
                 case "Live":
                     this.iframe.frame.src = playlist.Live;
@@ -418,7 +418,6 @@ export class maxwell {
                     break;
                 case "TV":
                     //this.iframe.frame.src = playlist.Tv;
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
                     this.isItOk = false;
                     break;
 
@@ -444,7 +443,6 @@ export class maxwell {
                     break;
                 default:
                     //this.iframe.frame.src = playlist.Live;
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
                     this.isItOk = false;
                     break;
             };
