@@ -1142,7 +1142,7 @@ export class maxwell {
 
         }
 
-        this.sharedWorker.port.start();
+        //this.sharedWorker.port.start();
         worker.onmessage = (e) => this.handleWorkerMessage(e);
         worker.onerror = (e) => this.handleError(worker, e);
 
