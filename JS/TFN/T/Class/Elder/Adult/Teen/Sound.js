@@ -210,7 +210,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 this.addAudioContextSource(element, id, type);
             }
         } else {
-            console.log("the element is null" + elementlement);
+            console.log("the element is null" + element);
         }
         // ROUTING
         this.emit("ready", this.MasterSoundsContext);
