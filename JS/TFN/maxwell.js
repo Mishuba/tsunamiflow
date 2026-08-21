@@ -165,13 +165,16 @@ export class maxwell {
         if (option.image) {
             this.imageEngine = option.image;
         }
-        if (option.sound) {
+        if (option.MasterSoundsContext) {
             this.soundEngine = new Studio({
-                masterSoundContext: option.sound
+                AudioElement: document.getElementById("TFradioPlayer"),
+                MasterSoundsContext: option.MasterSoundsContext
             });
         } else {
             //const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-            this.soundEngine = new Studio();
+            this.soundEngine = new Studio({
+                AudioElement: document.getElementByIdfind("TFradioPlayer")
+            });
         }
         if (option.video) {
             this.videoEngine = option.video;
@@ -715,6 +718,7 @@ export class maxwell {
     }
     bindAudio() {
         this.RadioReady();
+        //this.soundEngine.AudioElement = find("TFradioPlayer");
         this.soundEngine.RadioEventListeners(this.worker, this.soundEngine.MasterSoundsContext);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
