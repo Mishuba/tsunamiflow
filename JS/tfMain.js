@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 */
   await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
 
-  let AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", Workletoptions);
+  const AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", Workletoptions);
 
   AudioWorklet.connect(SoundsContext.destination);
   /*

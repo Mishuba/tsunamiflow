@@ -89,7 +89,12 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
 
         if (options.MasterSoundsContext) {
-            this.MasterSoundsContext = options.MasterSoundsContext;
+            if (options.masterAudioWorklet) {
+                this.MasterSoundsContext = options.MasterSoundsContext;
+                this.masterAudioWorklet = options.masterAudioWorklet;
+                this.initAudioContext(options.worker, null,);
+            }
+
         }
         if (options.ContextElement) {
             this.ContextElement = options.ContextElement;
@@ -112,44 +117,27 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (options.masterPanner) {
             this.masterPanner = options.masterPanner;
         }
-        if (options.masterAudioWorklet) {
-            this.masterAudioWorklet = options.masterAudioWorklet;
-        }
         if (options.MixerDestination) {
             this.MixerDestination = options.MixerDestination;
         }
     }
     /// context
-    createTrackChain(SoundsContext = this.MasterSoundsContext) {
+    createTrackChain() {
 
         const chain = {
-            gain: SoundsContext.createGain(),
-            //analyser: SoundsContext.createAnalyser(),
-            //compressor: SoundsContext.createDynamicsCompressor(),
-            //delay: SoundsContext.createDelay(),
-            //panner: SoundsContext.createStereoPanner(),
+            gain: this.MasterSoundsContext.createGain(),
+            analyser: this.MasterSoundsContext.createAnalyser(),
+            //compressor: this.MasterSoundsContext.createDynamicsCompressor(),
+            //delay: this.MasterSoundsContext.createDelay(),
+            //panner: this.MasterSoundsContext.createStereoPanner(),
         };
 
         //Object.assign(chain.analyser, this.TfSoundAnalyserOptions);
         return chain;
     }
-    doctxok(Gain, Analyser, worklet, worker, SoundsContext = this.MasterSoundsContext, Element = null, id = "radio") {
-        Gain.connect(Analyser);
-        Analyser.connect(worklet);
-
-        //worklet.connect(SoundsContext.destination);
-        if (this.MixerDestination) {
-            worklet.connect(this.MixerDestination);
-        }
-
-        worklet.port.onmessage = (message) => {
-            if (worker) {
-                this.onWorkletMessage(message, worker);
-            }
-        }
-    }
-    async initAudioContext(SoundsContext = this.MasterSoundsContext,
-        worker = null, element = null, id = "radio", type = "audio") {
+    async initAudioContext(worker = null, element = null, id = {
+        type: "radio", element: "audio"
+    }, type = "audio") {
         const AudioContextClass =
             window.AudioContext || window.webkitAudioContext;
 
@@ -171,24 +159,21 @@ export class TsunamiFlowSound extends TsDomCanvas {
             return this.MasterSoundsContext;
         }
 
-        if (!(SoundsContext instanceof AudioContextClass)) {
-            if (!(this.MasterSoundsContext instanceof AudioContextClass)) {
-                this.MasterSoundsContext = new AudioContextClass();
-            }
-        } else {
-            this.MasterSoundsContext = SoundsContext;
+
+        if (!(this.MasterSoundsContext instanceof AudioContextClass)) {
+            this.MasterSoundsContext = new AudioContextClass();
         }
 
         this.masterGain = this.MasterSoundsContext.createGain();
         this.masterGain.gain.value = 1;
         /*
-        TfSoundsWaveShaper: SoundsContext.createWaveShaper(),
-        TfSoundsOscillator: SoundsContext.createOscillator(),
+        TfSoundsWaveShaper: this.MasterSoundsContext.createWaveShaper(),
+        TfSoundsOscillator: this.MasterSoundsContext.createOscillator(),
           flowOscillator.type = "sine";
-          flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+          flowOscillator.frequency.setValueAtTime(440, this.MasterSoundsContext.currentTime);
           flowOscillator.start();
-          masterPanner: SoundsContext.createPanner(),
-          masterDelay: SoundsContext.createDelay(),
+          masterPanner: this.MasterSoundsContext.createPanner(),
+          masterDelay: this.MasterSoundsContext.createDelay(),
         */
         this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
         Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
@@ -197,16 +182,35 @@ export class TsunamiFlowSound extends TsDomCanvas {
         this.MixerDestination = this.MasterSoundsContext.createMediaStreamDestination();
 
         //this.masterAudioContextChain =
-        this.doctxok(this.masterGain, this.masterAnalyser, this.masterAudioWorklet, worker, this.MasterSoundsContext, element, id);
+        console.log("connecting master gain to analyzers");
+        this.masterGain.connect(this.masterAnalyser);
+        console.log("success connecting master analyser to the audio worklet")
+        this.masterAnalyser.connect(this.masterAudioWorklet);
+        console.log("sucess");
+        //worklet.connect(this.MasterSoundsContext.destination);
+        console.log("checking to see a mixer destination.");
+        if (this.MixerDestination) {
+            console.log("mixer destination exist and connecting the audioworklet to it");
+            this.masterAudioWorklet.connect(this.MixerDestination);
+            console.log("success");
+        }
 
-        if (this.elementSourceMap.has(id)) {
-
-        } else {
-            if (element !== null) {
-                this.addAudioContextSource(element, id, type);
-            } else {
-                console.log("the element is null" + Element);
+        console.log("creating a on message event listener to go with audio worklet.");
+        this.masterAudioWorklet.port.onmessage = (message) => {
+            if (worker) {
+                this.onWorkletMessage(message, worker);
             }
+        };
+        console.log('created and now done with setting up mastercontext');
+
+        if (element !== null) {
+            if (this.elementSourceMap.has(id)) {
+                console.log("the element is already added");
+            } else {
+                this.addAudioContextSource(element, id, type);
+            }
+        } else {
+            console.log("the element is null" + elementlement);
         }
         // ROUTING
         this.emit("ready", this.MasterSoundsContext);
@@ -222,8 +226,9 @@ export class TsunamiFlowSound extends TsDomCanvas {
 
         if (this.elementSourceMap.has(id)) {
             //this.TfSoundsSource[id] = this.elementSourceMap.get(id);
-            return sourceId;
+            return;// sourceId;
         } else {
+
             if (type === "audio" || type === "video") {
                 source = this.MasterSoundsContext.createMediaElementSource(element);
                 this.elementSourceMap.set(id, source);
@@ -235,25 +240,26 @@ export class TsunamiFlowSound extends TsDomCanvas {
             }
         }
 
-        const chain = this.createTrackChain(this.MasterSoundsContext);
+        const chain = this.createTrackChain();
 
         // ✅ CLEAN SIGNAL FLOW
         source.connect(chain.gain);
-        //.connect(chain.analyser).connect(chain.compressor)
+        chain.gain.connect(chain.analyser);
+        //.connect(chain.compressor)
         //.connect(chain.delay)mn
         //.connect(chain.panner)
-        chain.gain.connect(this.masterGain);
+        chain.analyser.connect(this.masterGain);
         // ✅ STORE EVERYTHING (IMPORTANT)
-        //this.TfSoundsContext[sourceId] = SoundsContext;
+        //this.TfSoundsContext[sourceId] = this.MasterSoundsContext;
         this.TfSoundsSource[sourceId] = source;
         this.TfSoundsGain[sourceId] = chain.gain;
-        //this.TfSoundAnalyser[sourceId] = chain.analyser;
+        this.TfSoundAnalyser[sourceId] = chain.analyser;
         //this.TfSoundsCompressor[sourceId] = chain.compressor;
         //this.TfSoundsDelay[sourceId] = chain.delay;
         //this.TfSoundsPanner[sourceId] = chain.panner;
 
         //this.emit("sourceAdded", { id: sourceId });
-        return sourceId;
+        //return sourceId;
     }
     removeSource(id) {
         const source = this.TfSoundsSource[id];
@@ -295,24 +301,24 @@ export class TsunamiFlowSound extends TsDomCanvas {
         }
     }
 
-    AudioContextState(SoundsContext = this.MasterSoundsContext, element = this.AudioElement) {
-        if (!SoundsContext) {
+    AudioContextState() {
+        if (!this.MasterSoundsContext) {
             console.log("The audio soundEngine context state does not exist");
         } else {
-            switch (SoundsContext.state) {
+            switch (this.MasterSoundsContext.state) {
                 case "suspended":
                     console.log("The audio soundEngine context state is suspended, resuming...");
-                    SoundsContext.resume();
+                    this.MasterSoundsContext.resume();
                     break;
                 case "running":
                     console.log("The audio soundEngine context state is running");
-                    if (element.waiting) {
-                        SoundsContext.suspend();
+                    if (this.AudioElement.waiting) {
+                        this.MasterSoundsContext.suspend();
                     }
                     break;
                 case "closed":
                     console.log("The Audio soundEngine context state must be closed");
-                    if (element.paused) {
+                    if (this.AudioElement.paused) {
                         //this.StopVisualizator();
                     }
                     break;
