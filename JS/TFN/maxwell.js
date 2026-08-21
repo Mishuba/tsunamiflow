@@ -166,10 +166,18 @@ export class maxwell {
             this.imageEngine = option.image;
         }
         if (option.MasterSoundsContext) {
-            this.soundEngine = new Studio({
-                AudioElement: document.getElementById("TFradioPlayer"),
-                MasterSoundsContext: option.MasterSoundsContext
-            });
+            if (option.masterAudioWorklet) {
+                this.soundEngine = new Studio({
+                    AudioElement: document.getElementById("TFradioPlayer"),
+                    MasterSoundsContext: option.MasterSoundsContext,
+                    masterAudioWorklet: option.masterAudioWorklet
+                });
+            } else {
+                this.soundEngine = new Studio({
+                    AudioElement: document.getElementById("TFradioPlayer"),
+                    MasterSoundsContext: option.MasterSoundsContext
+                });
+            }
         } else {
             //const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
             this.soundEngine = new Studio({

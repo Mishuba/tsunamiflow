@@ -137,7 +137,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         Gain.connect(Analyser);
         Analyser.connect(worklet);
 
-        worklet.connect(SoundsContext.destination);
+        //worklet.connect(SoundsContext.destination);
         if (this.MixerDestination) {
             worklet.connect(this.MixerDestination);
         }
@@ -192,8 +192,8 @@ export class TsunamiFlowSound extends TsDomCanvas {
         */
         this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
         Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
-        await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-        this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
+        //await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+        //this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
         this.MixerDestination = this.MasterSoundsContext.createMediaStreamDestination();
 
         //this.masterAudioContextChain =
