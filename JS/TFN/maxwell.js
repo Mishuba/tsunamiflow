@@ -713,9 +713,9 @@ export class maxwell {
             this.soundEngine.AudioElement.removeAttribute("src");;
         });
     }
-    bindAudio(worker, SoundsContext) {
+    bindAudio() {
         this.RadioReady();
-        this.soundEngine.RadioEventListeners(worker, SoundsContext);
+        this.soundEngine.RadioEventListeners(this.worker, this.soundEngine.MasterSoundsContext);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
     bindVidSystem() {
@@ -1172,7 +1172,7 @@ export class maxwell {
             return;
         }
 
-        this.bindAudio(this.worker, SoundsContext);
+        this.bindAudio();
     }
     bindFrameEvent(event) {
         switch (event) {
@@ -1249,7 +1249,7 @@ export class maxwell {
                                 console.warn("Offscreen canvas transfer failed:", err);
                             }
                         } else {
-                            this.bindAudio(this.worker, this.soundEngine.MasterSoundsContext);
+                            this.bindAudio();
                         }
                         this.site.requestLocation();
                         console.log("TFN");
