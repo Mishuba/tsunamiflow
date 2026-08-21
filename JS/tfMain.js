@@ -90,12 +90,11 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   flowOscillator.type = "sine";
   flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
   flowOscillator.start();
-*/
-  await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
+
+    await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
 
   const AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", Workletoptions);
-
-  AudioWorklet.connect(SoundsContext.destination);
+*/
   /*
 Tradio.connect(flowGain);
 flowGain.connect(flowAnalyser);

@@ -164,8 +164,11 @@ export class TsunamiFlowSound extends TsDomCanvas {
             this.MasterSoundsContext = new AudioContextClass();
         }
 
-        this.masterGain = this.MasterSoundsContext.createGain();
-        this.masterGain.gain.value = 1;
+        if (this.masterGain === null) {
+            this.masterGain = this.MasterSoundsContext.createGain();
+            this.masterGain.gain.value = 1;
+        }
+
         /*
         TfSoundsWaveShaper: this.MasterSoundsContext.createWaveShaper(),
         TfSoundsOscillator: this.MasterSoundsContext.createOscillator(),
@@ -175,10 +178,18 @@ export class TsunamiFlowSound extends TsDomCanvas {
           masterPanner: this.MasterSoundsContext.createPanner(),
           masterDelay: this.MasterSoundsContext.createDelay(),
         */
-        this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
-        Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
-        //await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
-        //this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
+
+        if (this.masterAnalyser === null) {
+            this.masterAnalyser = this.MasterSoundsContext.createAnalyser();
+            Object.assign(this.masterAnalyser, this.TfSoundAnalyserOptions);
+        }
+
+        if (this.masterAudioWorklet === null) {
+            await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
+            this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
+
+        }
+
         this.MixerDestination = this.MasterSoundsContext.createMediaStreamDestination();
 
         //this.masterAudioContextChain =
@@ -187,7 +198,7 @@ export class TsunamiFlowSound extends TsDomCanvas {
         console.log("success connecting master analyser to the audio worklet")
         this.masterAnalyser.connect(this.masterAudioWorklet);
         console.log("sucess");
-        //worklet.connect(this.MasterSoundsContext.destination);
+        this.masterAudioWorklet.connect(this.MasterSoundsContext.destination);
         console.log("checking to see a mixer destination.");
         if (this.MixerDestination) {
             console.log("mixer destination exist and connecting the audioworklet to it");
