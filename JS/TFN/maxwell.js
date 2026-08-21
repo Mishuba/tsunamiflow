@@ -913,18 +913,15 @@ export class maxwell {
     }
     createSafeWorker(modulePath, classicPath, shared = false) {
         try {
-            var ihj
             if (shared === false) {
                 if (window.Worker) {
-                    ihj = new Worker(
+                    this.worker = new Worker(
                         new URL(modulePath, import.meta.url),
                         { type: "module" });
                     console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-                } else {
-
                 }
             } else {
-                let ihj = new SharedWorker(
+                this.sharedWorker = new SharedWorker(
                     new URL(modulePath, import.meta.url),
                     { type: "module" }
                 );
@@ -934,19 +931,13 @@ export class maxwell {
             console.warn("Module worker failed. Falling back:", err);
             if (shared === false) {
                 if (window.Worker) {
-                    ihj = new Worker(classicPath);
-                } else {
-
+                    this.worker = new Worker(classicPath);
                 }
             } else {
                 if (window.SharedWorker) {
-                    ihj = new SharedWorker(classicPath);
-                } else {
-
+                    this.sharedWorker = new SharedWorker(classicPath);
                 }
             }
-        } finally {
-            return ihj;
         }
     }
     async handleSchedule(time) {
@@ -1138,7 +1129,7 @@ export class maxwell {
         }
 
         if (sharedworker === null) {
-            this.sharedWorker = this.createSafeWorker("./TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
+            this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
         }
 
