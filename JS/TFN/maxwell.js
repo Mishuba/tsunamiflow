@@ -1227,8 +1227,8 @@ export class maxwell {
                     this.iframe.frame.title = "Main Website Content";
                     this.iframe.frame.id = "TsunamiContent";
                     this.iframe.frame.name = "TsunamiMainFlowContent";
-                    this.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-                    this.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+                    this.iframe.frame.style.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
+                    this.iframe.frame.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
                     this.iframe.frame.style.background = "white";
                     this.iframe.frame.style.touchAction = "manipulation";
                     this.iframe.frame.style.pointerEvents = "auto";
