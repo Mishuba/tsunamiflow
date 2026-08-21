@@ -109,7 +109,6 @@ flowCompressor.connect(flowaudio.destination);
 
   const TsunamiController = new maxwell({
     MasterSoundsContext: SoundsContext,
-    masterAudioWorklet: AudioWorklet
   });
 
   TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
