@@ -1133,9 +1133,9 @@ export class maxwell {
 
         }
 
-        //this.sharedWorker.port.start();
-        worker.onmessage = (e) => this.handleWorkerMessage(e);
-        worker.onerror = (e) => this.handleError(worker, e);
+        this.sharedWorker.port.start();
+        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
+        this.worker.onerror = (e) => this.handleError(worker, e);
 
         this.worker.postMessage(
             this.soundEngine.tycadome(
