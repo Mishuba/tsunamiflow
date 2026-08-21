@@ -173,7 +173,7 @@ export class maxwell {
         } else {
             //const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
             this.soundEngine = new Studio({
-                AudioElement: document.getElementByIdfind("TFradioPlayer")
+                AudioElement: document.getElementById("TFradioPlayer")
             });
         }
         if (option.video) {
