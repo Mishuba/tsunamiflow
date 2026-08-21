@@ -51,7 +51,7 @@ const TFwordMishuba = {
 
 document.addEventListener("DOMContentLoaded", async (event) => {
 
-  //const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+  const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
   /*
     const Workletoptions = {
       numberOfInputs: 1, // 0
@@ -103,7 +103,9 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   flowWorklet.connect(flowCompressor);
   flowCompressor.connect(flowaudio.destination);
   */
-  const TsunamiController = new maxwell();
+  const TsunamiController = new maxwell({
+    MasterSoundsContext: SoundsContext
+  });
 
   TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   TsunamiController.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");

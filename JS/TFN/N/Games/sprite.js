@@ -3,7 +3,7 @@ const AckmaHawkBattleBackground = "Pictures/Logo/Tsunami Flow Logo.png";
 const StickMan = new Image();
 //StickMan.src = linkToSpriteSheet;
 
-import { AiGameManager } from '../../T/aiGameManager.js';
+//import { AiGameManager } from '../../T/aiGameManager.js';
 let AckmaHawkSpriteSheet = "";
 
 let tfSSCX = 0; //Character State Location Row
