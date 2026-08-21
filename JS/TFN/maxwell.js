@@ -915,27 +915,29 @@ export class maxwell {
         try {
             if (shared === false) {
                 if (window.Worker) {
-                    this.worker = new Worker(
+                    console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+                    return new Worker(
                         new URL(modulePath, import.meta.url),
                         { type: "module" });
-                    console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+
                 }
             } else {
-                this.sharedWorker = new SharedWorker(
+                console.log("shared worker " + new URL(modulePath, import.meta.url) + " created.");
+                return new SharedWorker(
                     new URL(modulePath, import.meta.url),
                     { type: "module" }
                 );
-                console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+
             }
         } catch (err) {
             console.warn("Module worker failed. Falling back:", err);
             if (shared === false) {
                 if (window.Worker) {
-                    this.worker = new Worker(classicPath);
+                    return new Worker(classicPath);
                 }
             } else {
                 if (window.SharedWorker) {
-                    this.sharedWorker = new SharedWorker(classicPath);
+                    return new SharedWorker(classicPath);
                 }
             }
         }
@@ -1126,8 +1128,10 @@ export class maxwell {
 
         if (this.worker === null) {
             this.worker = this.createSafeWorker("T/Worker/WebWorker/TaskWebWorker.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", false);
-            this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-            this.worker.onerror = (e) => this.handleError(worker, e);
+            this.worker.onmessage = async (e) => {
+                await this.handleWorkerMessage(e, this.worker);
+            }
+            this.worker.onerror = (e) => this.handleError(this.worker, e);
             this.worker.postMessage(
                 this.soundEngine.tycadome(
                     "tycadome-guest" + Date.now(),
