@@ -1117,51 +1117,48 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    async initTsunamiWorkers(worker = this.worker, sharedworker = this.sharedWorker) {
+    async initTsunamiWorkers() {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             this.soundEngine.AudioFile(null);
             return;
         }
 
-        if (worker === null) {
+        if (this.worker === null) {
             this.worker = this.createSafeWorker("T/Worker/WebWorker/TaskWebWorker.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", false);
+            this.worker.onmessage = (e) => this.handleWorkerMessage(e);
+            this.worker.onerror = (e) => this.handleError(worker, e);
+            this.worker.postMessage(
+                this.soundEngine.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "canvas",
+                    "load.radio.canvas",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "media"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "loading",
+                        canvas: this.RadioOffscreenCanvas,
+                    },
+                    [
+                        this.RadioOffscreenCanvas
+                    ]
+                ),
+                [this.RadioOffscreenCanvas]);
         }
 
-        if (sharedworker === null) {
+        if (this.sharedworker === null) {
             this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
+            this.sharedWorker.port.start();
         }
-
-        this.sharedWorker.port.start();
-        this.worker.onmessage = (e) => this.handleWorkerMessage(e);
-        this.worker.onerror = (e) => this.handleError(worker, e);
-
-        this.worker.postMessage(
-            this.soundEngine.tycadome(
-                "tycadome-guest" + Date.now(),
-                "canvas",
-                "load.radio.canvas",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    worker: "media"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "loading",
-                    canvas: this.RadioOffscreenCanvas,
-                },
-                [
-                    this.RadioOffscreenCanvas
-                ]
-            ),
-            [this.RadioOffscreenCanvas]);
-
 
         if (typeof EventSource === "undefined") {
             console.warn("Server Sent Events not supported");
