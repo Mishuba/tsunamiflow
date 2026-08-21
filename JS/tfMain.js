@@ -105,7 +105,6 @@ document.addEventListener("DOMContentLoaded", async (event) => {
   */
   const TsunamiController = new maxwell();
 
-
   TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
   TsunamiController.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
   TsunamiController.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
