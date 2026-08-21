@@ -7,6 +7,13 @@ let frameSkipCount = 2;
 let frameCounter = 0;
 
 /*
+
+*/
+
+
+
+
+/*
 let renderFrame =
     typeof self.requestAnimationFrame === "function"
         ? self.requestAnimationFrame.bind(self)

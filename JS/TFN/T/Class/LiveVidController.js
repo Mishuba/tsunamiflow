@@ -11,6 +11,52 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
     constructor(option = {}) {
         super(option);
     }
+    mixVideos(localVid, ScreenShareVid, OtherVid, img = null, img2 = null) {
+
+        this.canvasctx.drawImage(OtherVid, 0, 0, width, height);
+
+        this.canvasctx.drawImage(
+            localVid,
+            this.canvas.width - 200,
+            this.canvas.height - 150,
+            200,
+            150
+        );
+    }
+    startMixing() {
+
+        if (this.mixing) return;
+
+        this.mixing = true;
+
+        const render = () => {
+
+            if (!this.mixing) return;
+
+            this.mixVideos();
+
+            this.animationFrame =
+                requestAnimationFrame(render);
+        };
+
+        render();
+    }
+    capturemixVids() {
+        this.canvasStream = this.canvas.captureStream(30);
+        if (this.webcamaudioTrack) {
+            this.canvasStream.addTrack(this.webcamaudioTrack);
+            //this.ScreenShareaudioTrack
+        }
+    }
+    stopMixing() {
+
+        this.mixing = false;
+
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+            this.animationFrame = null;
+        }
+    }
     startStream({ audioStream = null, fps = 30 }) {
         if (!this.canvas) {
             //use video not canvas
@@ -66,7 +112,7 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
         this.WebRtfcPc.ontrack = (event) => {
             event.streams[0].getTracks().forEach(track => this.remoteVideoStream.addTrack(track));
             if (this.remoteVideoElement) this.remoteVideoElement.srcObject = this.remoteVideoStream;
-            this.emit("remoteUpdated", this.remoteStream);
+            this.emit("remoteUpdated", this.remoteVideoStream);
         };
 
         this.WebRtfcPc.onicecandidate = (event) => {
@@ -113,8 +159,8 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
     closePeer() {
         if (this.WebRtfcPc) this.WebRtfcPc.close();
         this.WebRtfcPc = null;
-        remoteVideoStream.getTracks().forEach(track => track.stop());
-        remoteVideoStream = new MediaStream();
+        this.remoteVideoStream.getTracks().forEach(track => track.stop());
+        this.remoteVideoStream = new MediaStream();
         if (this.remoteElement) this.remoteElement.srcObject = null;
     }
 

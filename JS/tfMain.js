@@ -1,16 +1,4 @@
-import { gameComponent } from "./TFN/N/Games/Class/planetuniverse.js";
-import { letsDoIt } from "./TFN/N/Games/Class/gamemechanics.js";
-import { HeaderWeather } from "./TFN/T/Class/weather.js";
-import { tfIframe } from "./../Iframe/Js/TfIframe.js";
-import { HomepageUpdates, FirstGame } from "./TFN/N/Games/sprite.js";
-import { TfPrintful } from "./TFN/T/Class/Tycadome.js";
-import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
-//import { TsunamiFlowDj } from "./TFN/T/Class/DjController.js";
-import { Studio } from "./TFN/T/Class/Studio.js";
-import { TsunamiLiveVideoController } from "./TFN/T/Class/LiveVidController.js";
 import { maxwell } from "./TFN/maxwell.js";
-import { AiInterface } from "./TFN/T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
-//import { createSafeWorker } from "./TFN/T/Functions/Workers/beginning.js";
 
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", async () => {
@@ -18,45 +6,6 @@ if ("serviceWorker" in navigator) {
       .then(reg => console.log("SW registered:", reg))
       .catch(err => console.error("SW registration failed:", err));
   });
-}
-
-function createSafeWorker(modulePath, classicPath, shared = false) {
-  try {
-    var ihj
-    if (shared === false) {
-      if (window.Worker) {
-        ihj = new Worker(
-          new URL(modulePath, import.meta.url),
-          { type: "module" });
-        console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-      } else {
-
-      }
-    } else {
-      let ihj = new SharedWorker(
-        new URL(modulePath, import.meta.url),
-        { type: "module" }
-      );
-      console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-    }
-  } catch (err) {
-    console.warn("Module worker failed. Falling back:", err);
-    if (shared === false) {
-      if (window.Worker) {
-        ihj = new Worker(classicPath);
-      } else {
-
-      }
-    } else {
-      if (window.SharedWorker) {
-        ihj = new SharedWorker(classicPath);
-      } else {
-
-      }
-    }
-  } finally {
-    return ihj;
-  }
 }
 
 const TFwordMishuba = {
@@ -100,138 +49,36 @@ const TFwordMishuba = {
   ]
 };
 
-let tfSSCX = 0;
-let tfSSCY = 0;
-let tfSCW = 120;
-let tfSCH = 120;
+document.addEventListener("DOMContentLoaded", async (event) => {
 
-let tfSPX = 60;
-let tfSPY = 160;
-
-let tfSNW = 30;
-let tfSNH = 30;
-
-const PhysicalAbility = [
-  { name: "health", points: 1 },
-  { name: "stamina", points: 1 },
-  { name: "weight", points: 1 },
-  { name: "strength", points: 1 },
-  { name: "agility", points: 1 }
-];
-
-const AckmaHawkIntellectualIntelligence = [
-  { name: "Science", level: 0, experience: 0 },
-  { name: "Creativity", level: 0, experience: 0 },
-  { name: "Math", level: 0, experience: 0 },
-  { name: "Memory", level: 0, experience: 0 },
-  { name: "Awareness", level: 0, experience: 0 }
-];
-
-const AckmaHawkSocialIntelligence = [
-  { name: "Reflection", level: 0, experience: 0 },
-  { name: "honesty", level: 0, experience: 0 },
-  { name: "deception", level: 0, experience: 0 },
-  { name: "manipulation", level: 0, experience: 0 },
-  { name: "charisma", level: 0, experience: 0 }
-];
-
-const AckmaHawkEmotionalIntelligence = [
-  { name: "feelings", level: 0, experience: 0 },
-  { name: "mood", level: 0, experience: 0 },
-  { name: "temper", level: 0, experience: 0 },
-  { name: "attitude", level: 0, experience: 0 },
-  { name: "perspective", level: 0, experience: 0 }
-];
-
-const AckmaHawkExistentialIntelligence = [
-  { name: "consciousness", level: 0, experience: 0 },
-  { name: "time", level: 0, experience: 0 },
-  { name: "dimension", level: 0, experience: 0 },
-  { name: "space", level: 0, experience: 0 },
-  { name: "defense", level: 0, experience: 0 }
-];
-
-const AckmaHawkEnergeticIntelligence = [
-  { name: "fire", level: 0, experience: 0 },
-  { name: "water", level: 0, experience: 0 },
-  { name: "air", level: 0, experience: 0 },
-  { name: "lightning", level: 0, experience: 0 },
-  { name: "earth", level: 0, experience: 0 }
-];
-
-const AckmaHawkMetaCognitiveIntelligence = [
-  { name: "magic", level: 0, experience: 0 },
-  { name: "ESP", level: 0, experience: 0 },
-  { name: "dexterity", level: 0, experience: 0 },
-  { name: "genetic", level: 0, experience: 0 },
-  { name: "personal", level: 0, experience: 0 }
-];
-
-document.addEventListener("DOMContentLoaded", async () => {
-  const twoMore = document.getElementById("mainTsectionFdiv");
-
-  const dock = document.getElementById("radioDock");
-  const toggle = document.getElementById("toggleRadio");
-  function updateRadioState() {
-    if (!dock || !toggle) return;
-    const collapsed = dock.classList.contains("collapsed");
-    toggle.textContent = collapsed ? "▼" : "▲";
-  }
-  function toggleRadioDock() {
-    if (!dock) return;
-    dock.classList.toggle("collapsed");
-    updateRadioState();
-  }
-
-  /* button click */
-  if (toggle) {
-    toggle.addEventListener("click", (e) => {
-      e.stopPropagation();
-      toggleRadioDock();
-    });
-  }
-
-  const header = document.getElementById("radioHeader");
-
-  /* header click */
-  if (header) {
-    header.addEventListener("click", () => {
-      toggleRadioDock();
-    });
-  }
-
-  /* set initial state */
-  updateRadioState();
-
-  const RadioCanvas = document.getElementById("TFradioCanvas");
-
-  const Workletoptions = {
-    numberOfInputs: 1, // 0
-    numberOfOutputs: 1,
-
-    processorOptions: {
-      mode: "fft",
-      fftSize: 2048,
-      customFlag: true
-    },
-    //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
-    /*
-    parameterData: {
-      gain: 0.5,
-      frequency: 440,
-      delayTime: 0.5,
-      feedback: 0.5,
-      distortionAmount: 0.5,
-      pannerX: 0,
-      pannerY: 0,
-      pannerZ: 0
-    },
-    */
-    channelCount: 2,
-    channelCountMode: "max",
-    channelInterpretation: "speakers"
-  };
-
+  //const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
+  /*
+    const Workletoptions = {
+      numberOfInputs: 1, // 0
+      numberOfOutputs: 1,
+   
+      processorOptions: {
+        mode: "fft",
+        fftSize: 2048,
+        customFlag: true
+      },
+      //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
+      parameterData: {
+        gain: 0.5,
+        frequency: 440,
+        delayTime: 0.5,
+        feedback: 0.5,
+        distortionAmount: 0.5,
+        pannerX: 0,
+        pannerY: 0,
+        pannerZ: 0
+      },
+   
+      channelCount: 2,
+      channelCountMode: "max",
+      channelInterpretation: "speakers"
+    };
+  
   const TfSoundAnalyserOptions = {
     fftSize: 2048,
     maxDecibels: 0,
@@ -240,220 +87,66 @@ document.addEventListener("DOMContentLoaded", async () => {
     channelCountMode: "max"
   };
 
-  const safeSharedWorker = createSafeWorker("./TFN/T/Worker/Shared.js", "./JS/TFN/T/Worker/Shared.js", true);
-  //safeSharedWorker.port.start();
+  //await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
+/*
+  flowOscillator.type = "sine";
+  flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
+  flowOscillator.start();
+*/
+  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
 
-  // Use client sizes where available and set style widths/heights in px to avoid undefined .width/.height on elements
-  const parentWidth = twoMore ? (twoMore.clientWidth || twoMore.offsetWidth || 800) : 800;
-  const parentHeight = twoMore ? (twoMore.clientHeight || twoMore.offsetHeight || 600) : 600;
+  //tf sounds
+  /*
+  Tradio.connect(flowGain);
+  flowGain.connect(flowAnalyser);
+  flowAnalyser.connect(flowWorklet);
+  flowWorklet.connect(flowCompressor);
+  flowCompressor.connect(flowaudio.destination);
+  */
+  const TsunamiController = new maxwell();
+
+
+  TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
+  TsunamiController.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
+  TsunamiController.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
+  TsunamiController.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
+  TsunamiController.site.NewsArray.push("Mishuba was a percussionist in school band.");
+  TsunamiController.site.NewsArray.push("Mishuba attended multiple schools across states.");
+  TsunamiController.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
+  TsunamiController.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
+  TsunamiController.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
+  TsunamiController.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
+  TsunamiController.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
+
+  TsunamiController.site.EnHword(TFwordMishuba);
+  for (let i = 0; i < TsunamiController.site.WordOfTheDayArray.length; i++) {
+    console.log(`suppose tfo be word ${TsunamiController.site.WordOfTheDayArray[i]}`);
+  };
+
+  TsunamiController.onDomEvent("DOMContentLoaded");
+
 
   /*
-  const indexdb = {
-    name: ,
-    keyPath: ,
- 
+TsunamiController.iframe.frame.addEventListener("load", () => {
+  try {
+    TsunamiController.iframe.frame.contentWindow.controller = TsunamiController;
+    TsunamiController.iframe.MenuSwitch(TsunamiController.iframe.frame);
+  } catch (e) {
+    console.error("Cross-origin block:", e);
   }
- 
-  //dbstores: indexdb
+});
 
 */
-  const safeWorker = createSafeWorker("./TFN/T/Worker/WebWorker/TaskWebWorker.js", "./JS/TFN/T/Worker/WebWorker/TaskWebWorker.js");
-
-  const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-
-  console.log(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url));
-  //await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
-  /*
-    flowOscillator.type = "sine";
-    flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
-    flowOscillator.start();
-  */
-  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
-  async function beginTheTycadome() {
-    const TsunamiController = new maxwell({
-      site: new HeaderWeather({
-        sharedWorker: safeSharedWorker,
-      }),
-      iframe: new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame),
-      user: new TfPrintful({
-        stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
-        backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
-      }),
-      image: new TsunamiFlowImageEngine(),
-      sound: new Studio({
-        AudioElement: document.getElementById("TFradioPlayer"),
-      }),
-      video: new TsunamiLiveVideoController(),
-      game: new letsDoIt(
-        "Homepage Game",
-        new gameComponent(
-          tfSNW,
-          tfSNH,
-          "./Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
-          tfSPX,
-          tfSPY,
-          "sprite",
-          tfSSCX,
-          tfSSCY,
-          tfSCW,
-          tfSCH,
-          "30px",
-          "Consolas",
-          280,
-          40,
-          "center",
-          "alphabetic",
-          "inherit",
-          0,
-          "auto",
-          "normal",
-          "normal",
-          "auto",
-          0,
-          undefined,
-          [],
-          "stand",
-          "./Pictures/Logo/Tsunami Flow Logo.png",
-          "Hubert",
-          "Maxwell",
-          "StickMan",
-          PhysicalAbility,
-          AckmaHawkIntellectualIntelligence,
-          AckmaHawkSocialIntelligence,
-          AckmaHawkEmotionalIntelligence,
-          AckmaHawkExistentialIntelligence,
-          AckmaHawkEnergeticIntelligence,
-          AckmaHawkMetaCognitiveIntelligence,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1,
-          1
-        )
-      ),
-      AudioTitle: document.getElementById("TfRadioStuff"),
-      AudioButtonSpot: document.getElementById("CheckRadio"),
-      AudioPrevious: document.createElement("button"),
-      AudioOver: document.createElement("button"),
-      AudioStart: document.createElement("button"),
-      AudioSkip: document.createElement("button"),
-      ai: new AiInterface({
-        sharedworker: safeSharedWorker
-      })
-    });
-
-    TsunamiController.site.NewsArray.push("Mishuba was born at 6 pounds 5 ounces...");
-    TsunamiController.site.NewsArray.push("Mishuba played basketball from 7th to 10th grade.");
-    TsunamiController.site.NewsArray.push("Mishuba received his BA in Sociology from the University of South Carolina in 2014.");
-    TsunamiController.site.NewsArray.push("Mishuba received a Presidential Physical Fitness Award signed by Bill Clinton.");
-    TsunamiController.site.NewsArray.push("Mishuba was a percussionist in school band.");
-    TsunamiController.site.NewsArray.push("Mishuba attended multiple schools across states.");
-    TsunamiController.site.NewsArray.push("Mishuba was a state 400m champion in 2008 and 2009.");
-    TsunamiController.site.NewsArray.push("Mishuba graduated from Blythewood High School.");
-    TsunamiController.site.NewsArray.push("Mishuba ran track at University of South Carolina.");
-    TsunamiController.site.NewsArray.push("Mishuba received TEFL certification in 2017.");
-    TsunamiController.site.NewsArray.push("Mishuba received MS in Entertainment Business from Full Sail University in 2020.");
-
-    TsunamiController.site.EnHword(TFwordMishuba);
-    for (let i = 0; i < TsunamiController.site.WordOfTheDayArray.length; i++) {
-      console.log(`suppose tfo be word ${TsunamiController.site.WordOfTheDayArray[i]}`);
-    };
-
-
-    //tf sounds
-    /*
-    Tradio.connect(flowGain);
-    flowGain.connect(flowAnalyser);
-    flowAnalyser.connect(flowWorklet);
-    flowWorklet.connect(flowCompressor);
-    flowCompressor.connect(flowaudio.destination);
-    */
-    if (twoMore) {
-      TsunamiController.iframe.allow = "camera; microphone; geolocation";
-      TsunamiController.iframe.allowFullscreen = true;
-      TsunamiController.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
-      twoMore.appendChild(TsunamiController.iframe.frame);
-      TsunamiController.iframe.frame.title = "Main Website Content";
-      TsunamiController.iframe.frame.id = "TsunamiContent";
-      TsunamiController.iframe.frame.name = "TsunamiMainFlowContent";
-      TsunamiController.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
-      TsunamiController.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
-      TsunamiController.iframe.frame.style.background = "white";
-      TsunamiController.iframe.frame.style.touchAction = "manipulation";
-      TsunamiController.iframe.frame.style.pointerEvents = "auto";
-      TsunamiController.iframe.frame.src = "Iframe/Pages/homepage.html";
-
-      TsunamiController.iframe.frame.addEventListener("load", () => {
-        try {
-          TsunamiController.iframe.frame.contentWindow.controller = TsunamiController;
-          TsunamiController.iframe.MenuSwitch(TsunamiController.iframe.frame);
-        } catch (e) {
-          console.error("Cross-origin block:", e);
-        }
-      });
-
-      TsunamiController.user.showProducts().then(() => {
-        TsunamiController.bindPayments();
-        TsunamiController.user.bindCart();
-        TsunamiController.bindNavBar();
-        TsunamiController.bindUsers();
-        if (window.Worker) {
-          try {
-            let RadioOffscreenCanvas = RadioCanvas.transferControlToOffscreen();
-
-            safeWorker.postMessage(
-              TsunamiController.soundEngine.tycadome(
-                "tycadome-guest" + Date.now(),
-                "canvas",
-                "load.radio.canvas",
-                {
-                  source: "web",
-                  target: "device:web-001",
-                  worker: "media"
-                },
-                {
-                  status: "pending",
-                  priority: "low"
-                },
-                "async",
-                {
-                  system: "loading",
-                  canvas: RadioOffscreenCanvas,
-                },
-                [
-                  RadioOffscreenCanvas
-                ]
-              ),
-              [RadioOffscreenCanvas]);
-            //flowWorklet.port.start();
-            TsunamiController.initTsunamiWorkers(safeWorker, safeSharedWorker);
-
-          } catch (err) {
-            console.warn("Offscreen canvas transfer failed:", err);
-          } finally {
-            TsunamiController.bindAudio(safeWorker, SoundsContext);
-          }
-        } else {
-          TsunamiController.bindAudio(safeWorker, SoundsContext);
-        }
-        TsunamiController.site.requestLocation();
-        console.log("TFN");
-      }).catch(err => {
-        console.error("Cart binding error:", err);
-      });
-    }
-  }
-
-  beginTheTycadome();
 });
+
+/*
+const indexdb = {
+  name: ,
+  keyPath: ,
+
+}
+
+//dbstores: indexdb
+
+*/
+

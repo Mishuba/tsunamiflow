@@ -60,7 +60,9 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
         this.ScreenSharevideoTrack = this.ScreenSharestream.getVideoTracks()[0] || null;
         this.ScreenShareaudioTrack = this.ScreenSharestream.getAudioTracks()[0] || null;
 
-        if (this.ScreenShareonReady) this.onReady(this.ScreenSharestream);
+        if (this.ScreenShareonReady) {
+            this.ScreenSharestream
+        };
 
         return this.ScreenSharestream;
     }
@@ -252,8 +254,8 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
     }
     loadedVideoMetadata(element, canvas) {
         this.VideoNetworkState();
-        canvas = element.videoWidth;
-        canvas = element.videoHeight;
+        canvas.width = element.videoWidth;
+        canvas.height = element.videoHeight;
     }
     loadedVideoData(context) {
         this.VideoState(context);

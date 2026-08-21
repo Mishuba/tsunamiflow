@@ -1,133 +1,204 @@
 import { TsunamiFlowFrames } from "./Teen/Frames.js";
 
 export class TsunamiFlowVideo extends TsunamiFlowFrames {
+
     videoElement = null;
     remoteVideoElement = null;
-    VideoProcessor = null;
-    VideoReader = null;
     autoplay = true;
     muted = false;
     controls = false;
     onReady = null;
     streamVideo = null;
-    supportedVideomediaSource = "MediaSource" in window;
-    VideomediaSource = new MediaSource();
-    VideomediaSourceBuffer = null;
-    VideoobjectUrl = null;
-    queueVideo = [];
     constructor(option = {}) {
         super(option);
-        if (!this.supportedVideomediaSource) {
-            console.warn("MediaSource API not supported");
-            this.VideomediaSource = null;
-        }
         if (option.videoElement) {
             this.videoElement = option.videoElement;
+            this.videoElement.autoplay = this.autoplay;
+            this.videoElement.muted = this.muted;
+            this.videoElement.controls = this.controls;
         } else {
-            this.videoElement = document.createElement("video");
+            //this.videoElement = document.createElement("video");
         }
-        this.videoElement.autoplay = this.autoplay;
-        this.videoElement.muted = this.muted;
-        this.videoElement.controls = this.controls;
+        /*
         this.VideomediaSource = new MediaSource();
         this.VideomediaSource.addEventListener("sourceopen", () => this.emit("sourceopen"));
         this.VideomediaSource.addEventListener("sourceended", () => this.emit("sourceended"));
         this.VideomediaSource.addEventListener("sourceclose", () => this.emit("sourceclose"));
-        if (option.canvas) {
-            this.canvas = option.canvas;
-        } else {
-            this.canvas = document.createElement("video");
-        }
+        */
     }
     attachVideoStream(stream) {
-        if (!stream) throw new Error("No MediaStream provided");
+        if (!(stream instanceof MediaStream)) {
+            throw new TypeError(
+                "attachVideoStream requires a MediaStream"
+            );
+        }
+
+        if (this.streamVideo) {
+            this.detachVideoStream();
+        }
 
         this.streamVideo = stream;
+
         this.videoElement.srcObject = stream;
 
-        // Ensure playback starts
         this.videoElement.play().catch(() => { });
 
-        this.emit("streamAttached", stream);
-        if (this.onReady) this.onReady(stream);
+        this.emit(
+            "streamAttached",
+            stream
+        );
+
+        if (this.onReady) {
+            this.onReady(stream);
+        }
     }
     detachVideoStream() {
-        if (this.videoElement.srcObject) {
-            this.videoElement.srcObject.getTracks().forEach(track => track.stop());
+        if (this.videoElement?.srcObject) {
             this.videoElement.srcObject = null;
         }
+
         this.streamVideo = null;
+
         this.emit("streamDetached");
     }
+    stopVideoStream() {
+        if (this.videoElement?.srcObject) {
+
+            this.videoElement.srcObject
+                .getTracks()
+                .forEach(track => track.stop());
+
+            this.videoElement.srcObject = null;
+        }
+
+        this.streamVideo = null;
+
+        this.emit("streamDetached");
+    }
+
     replaceVideoStream(newStream) {
         this.detachVideoStream();
         this.attachVideoStream(newStream);
     }
-    VideoNetworkState(element) {
-        if (element === null) {
+
+    VideoNetworkState(element = this.videoElement) {
+        if (!element) {
             return;
         }
-        // ---- NETWORK STATE ----
+
         switch (element.networkState) {
-            case element.NETWORK_EMPTY:
-                console.log("Video network: EMPTY (no source)");
+
+            case HTMLMediaElement.NETWORK_EMPTY:
+                console.log(
+                    "Video network: EMPTY"
+                );
                 break;
-            case element.NETWORK_IDLE:
-                console.log("Video network: IDLE");
+
+            case HTMLMediaElement.NETWORK_IDLE:
+                console.log(
+                    "Video network: IDLE"
+                );
                 break;
-            case element.NETWORK_LOADING:
-                console.log("Video network: LOADING");
+
+            case HTMLMediaElement.NETWORK_LOADING:
+                console.log(
+                    "Video network: LOADING"
+                );
                 break;
-            case element.NETWORK_NO_SOURCE:
-                console.warn("Video network: NO SOURCE");
+
+            case HTMLMediaElement.NETWORK_NO_SOURCE:
+                console.warn(
+                    "Video network: NO SOURCE"
+                );
                 break;
         }
-        // ---- READY STATE ----
+
         switch (element.readyState) {
-            case element.HAVE_NOTHING:
-                console.log("Video readyState: HAVE_NOTHING");
+
+            case HTMLMediaElement.HAVE_NOTHING:
+                console.log(
+                    "Video readyState: HAVE_NOTHING"
+                );
                 break;
-            case element.HAVE_METADATA:
-                console.log("Video readyState: HAVE_METADATA");
+
+            case HTMLMediaElement.HAVE_METADATA:
+                console.log(
+                    "Video readyState: HAVE_METADATA"
+                );
                 break;
-            case element.HAVE_CURRENT_DATA:
-                console.log("Video readyState: HAVE_CURRENT_DATA");
+
+            case HTMLMediaElement.HAVE_CURRENT_DATA:
+                console.log(
+                    "Video readyState: HAVE_CURRENT_DATA"
+                );
                 break;
-            case element.HAVE_FUTURE_DATA:
-                console.log("Video readyState: HAVE_FUTURE_DATA");
+
+            case HTMLMediaElement.HAVE_FUTURE_DATA:
+                console.log(
+                    "Video readyState: HAVE_FUTURE_DATA"
+                );
                 break;
-            case element.HAVE_ENOUGH_DATA:
-                console.log("Video readyState: HAVE_ENOUGH_DATA");
+
+            case HTMLMediaElement.HAVE_ENOUGH_DATA:
+                console.log(
+                    "Video readyState: HAVE_ENOUGH_DATA"
+                );
                 break;
         }
-        // ---- PLAYBACK STATE ----
+
         if (element.ended) {
-            console.log("Video playback ended normally");
+            console.log(
+                "Video playback ended normally"
+            );
             return;
         }
+
         if (element.paused) {
+
             if (element.currentTime === 0) {
-                console.log("Video not started yet");
+                console.log(
+                    "Video not started yet"
+                );
             } else {
-                console.log(`Video paused at ${element.currentTime.toFixed(2)}s`);
+                console.log(
+                    `Video paused at ${element.currentTime.toFixed(2)
+                    }s`
+                );
             }
+
             return;
         }
+
         console.log("Video is playing");
     }
+
     VideoState(context) {
         if (!context) {
-            console.warn("AudioContext missing");
+            console.warn(
+                "AudioContext missing"
+            );
             return;
         }
 
-        if (context.state === "suspended" && !element.paused) {
+        if (
+            context.state === "suspended" &&
+            !this.videoElement.paused
+        ) {
             context.resume();
-            console.log("AudioContext resumed for video");
+
+            console.log(
+                "AudioContext resumed for video"
+            );
         }
 
-        if (context.state === "running" && element.paused && element.currentTime === 0) {
-            console.log("Video idle, AudioContext left running");
+        if (
+            context.state === "running" &&
+            this.videoElement.paused &&
+            this.videoElement.currentTime === 0
+        ) {
+            console.log(
+                "Video idle, AudioContext left running"
+            );
         }
     }
 }

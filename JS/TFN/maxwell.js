@@ -1,3 +1,14 @@
+import { gameComponent } from "./N/Games/Class/planetuniverse.js";
+import { letsDoIt } from "./N/Games/Class/gamemechanics.js";
+import { HeaderWeather } from "./T/Class/weather.js";
+import { tfIframe } from "./../../Iframe/Js/TfIframe.js";
+import { HomepageUpdates, FirstGame } from "./N/Games/sprite.js";
+import { TfPrintful } from "./T/Class/Tycadome.js";
+import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
+import { Studio } from "./T/Class/Studio.js";
+import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
+import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
+
 export class maxwell {
     listeners = {};
     domListeners = new Map();
@@ -9,26 +20,133 @@ export class maxwell {
     tsunamisocketlink = null;
     wsUrl = null;
     offscreencanvas = null;
-    site = null;
-    iframe = null;
-    user = null;
-    imageEngine = null;
-    soundEngine = null;
+    mainSection = null;
+    site = new HeaderWeather();
+    iframe = new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame);
+    user = new TfPrintful({
+        stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
+        backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
+    });
+    imageEngine = new TsunamiFlowImageEngine();
+    //soundEngine = null;
+    radiodock = null;
+    radiotoggle = null;
+    radioheader = null;
+    RadioCanvas = null;
     audioTitle = null;
     audioSystem = null;
     audioLast = null;
     audioRestart = null;
     audioStart = null;
     audioSkip = null;
-    videoEngine = null;
+    videoEngine = new TsunamiLiveVideoController();
     mediaBin = {
         webcams: {},
         videos: {},
         images: {},
         screens: {}
     };
-    game = null;
-    ai = null;
+    ackmaHawk = new gameComponent(
+        30,
+        30,
+        "https://www.tsunamiflow.club/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
+        60,
+        160,
+        "sprite",
+        0,
+        0,
+        120,
+        120,
+        "30px",
+        "Consolas",
+        280,
+        40,
+        "center",
+        "alphabetic",
+        "inherit",
+        0,
+        "auto",
+        "normal",
+        "normal",
+        "auto",
+        0,
+        undefined,
+        [],
+        "stand",
+        "https://www.tsunamiflow.club/Pictures/Logo/Tsunami Flow Logo.png",
+        "Hubert",
+        "Maxwell",
+        "StickMan",
+        [
+            { name: "health", points: 1 },
+            { name: "stamina", points: 1 },
+            { name: "weight", points: 1 },
+            { name: "strength", points: 1 },
+            { name: "agility", points: 1 }
+        ],
+        [
+            { name: "Science", level: 0, experience: 0 },
+            { name: "Creativity", level: 0, experience: 0 },
+            { name: "Math", level: 0, experience: 0 },
+            { name: "Memory", level: 0, experience: 0 },
+            { name: "Awareness", level: 0, experience: 0 }
+        ],
+        [
+            { name: "Reflection", level: 0, experience: 0 },
+            { name: "honesty", level: 0, experience: 0 },
+            { name: "deception", level: 0, experience: 0 },
+            { name: "manipulation", level: 0, experience: 0 },
+            { name: "charisma", level: 0, experience: 0 }
+        ],
+        [
+            { name: "feelings", level: 0, experience: 0 },
+            { name: "mood", level: 0, experience: 0 },
+            { name: "temper", level: 0, experience: 0 },
+            { name: "attitude", level: 0, experience: 0 },
+            { name: "perspective", level: 0, experience: 0 }
+        ],
+        [
+            { name: "consciousness", level: 0, experience: 0 },
+            { name: "time", level: 0, experience: 0 },
+            { name: "dimension", level: 0, experience: 0 },
+            { name: "space", level: 0, experience: 0 },
+            { name: "defense", level: 0, experience: 0 }
+        ],
+        [
+            { name: "fire", level: 0, experience: 0 },
+            { name: "water", level: 0, experience: 0 },
+            { name: "air", level: 0, experience: 0 },
+            { name: "lightning", level: 0, experience: 0 },
+            { name: "earth", level: 0, experience: 0 }
+        ],
+        [
+            { name: "magic", level: 0, experience: 0 },
+            { name: "ESP", level: 0, experience: 0 },
+            { name: "dexterity", level: 0, experience: 0 },
+            { name: "genetic", level: 0, experience: 0 },
+            { name: "personal", level: 0, experience: 0 }
+        ],
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+    );
+    game = new letsDoIt(
+        "Homepage Game", this.ackmaHawk
+    );
+    ai = new AiInterface();
     TimerTimes = ["00:00", "00:05", "00:10", "00:15", "00:20", "00:30", "00:40", "00:45", "00:50", "01:00", "01:05", "01:10", "01:15", "01:20", "01:30", "01:40", "01:45", "01:50", "02:00", "02:05", "02:10", "02:15", "02:20", "02:30", "02:40", "02:45", "02:50", "03:00", "03:05", "03:10", "03:15", "03:20", "03:30", "03:40", "03:45", "03:50", "04:00", "04:05", "04:10", "04:15", "04:20", "04:30", "04:40", "04:45", "04:50", "05:00", "05:05", "05:10", "05:15", "05:20", "05:30", "05:40", "05:45", "05:50", "06:00", "06:05", "06:10", "06:15", "06:20", "06:30", "06:40", "06:45", "06:50", "07:00", "07:05", "07:10", "07:15", "07:20", "07:30", "07:40", "07:45", "07:50", "08:00", "08:05", "08:10", "08:15", "08:20", "08:30", "08:40", "08:45", "08:50", "09:00", "09:05", "09:10", "09:15", "09:20", "09:30", "09:40", "09:45", "09:50", "10:00", "10:05", "10:10", "10:15", "10:20", "10:30", "10:40", "10:45", "10:50", "11:00", "11:05", "11:10", "11:15", "11:20", "11:30", "11:40", "11:45", "11:50", "12:00", "12:05", "12:10", "12:15", "12:20", "12:30", "12:40", "12:45", "12:50", "13:00", "13:05", "13:10", "13:15", "13:20", "13:30", "13:40", "13:45", "13:50", "14:00", "14:05", "14:10", "14:15", "14:20", "14:30", "14:40", "14:45", "14:50", "15:00", "15:05", "15:10", "15:15", "15:20", "15:30", "15:40", "15:45", "15:50", "16:00", "16:05", "16:10", "16:15", "16:20", "16:30", "16:40", "16:45", "16:50", "17:00", "17:05", "17:10", "17:15", "17:20", "17:30", "17:40", "17:45", "17:50", "18:00", "18:05", "18:10", "18:15", "18:20", "18:30", "18:40", "18:45", "18:50", "19:00", "19:05", "19:10", "19:15", "19:20", "19:30", "19:40", "19:45", "19:50", "20:00", "20:05", "20:10", "20:15", "20:20", "20:30", "20:40", "20:45", "20:50", "21:00", "21:05", "21:10", "21:15", "21:20", "21:30", "21:40", "21:45", "21:50", "22:00", "22:05", "22:10", "22:15", "22:20", "22:30", "22:40", "22:45", "22:50", "23:00", "23:05", "23:10", "23:15", "23:20", "23:30", "23:40", "23:45", "23:50",];
 
     constructor(option = {}) {
@@ -48,7 +166,9 @@ export class maxwell {
             this.imageEngine = option.image;
         }
         if (option.sound) {
-            this.soundEngine = option.sound;
+            this.soundEngine = new Studio({
+                masterSoundContext: option.sound
+            })
         }
         if (option.video) {
             this.videoEngine = option.video;
@@ -101,134 +221,6 @@ export class maxwell {
             return document.getElementById(elem);
         }
     }
-    connectWS(key = "viewer", role = "viewer") {
-        this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
-        this.tsunamisocket = new WebSocket(this.wsUrl);
-        this.tsunamisocket.binaryType = "arraybuffer";
-
-        this.tsunamisocket.onopen = () => {
-            log("🌐 WebSocket connected.");
-            document.getElementById("startBtn").disabled = true;
-            document.getElementById("stopBtn").disabled = false;
-            /*
-            if (reconnectTimer) clearTimeout(reconnectTimer);
-            */
-        };
-
-        this.tsunamisocket.onclose = () => {
-            log("⚠️ WebSocket closed.");
-            document.getElementById("startBtn").disabled = false;
-            document.getElementById("stopBtn").disabled = true;
-        };
-
-        this.tsunamisocket.onerror = (err) => {
-            log("❌ WebSocket error: " + err);
-        };
-
-        this.tsunamisocket.onmessage = event => {
-            try {
-                const data = JSON.parse(event.data);
-                if (data.type === "ffmpeg_stderr") log("[FFmpeg] " + data.message);
-            } catch {
-                // ignore non-JSON
-            }
-        };
-    }
-
-    async handleSchedule(time) {
-        for (const word of this.site.WordTimes) {
-            if (time === word) {
-                let TfWotd = this.find("tfWordOfTheDay");
-                TfWotd.innerHTML = this.site.WordOfTheDay(time);
-            } break;
-        }
-
-        this.site.UpdateNews();
-
-        for (const tfRT of this.soundEngine.RadioTimes) {
-            if (time === tfRT) {
-                this.soundEngine.AudioNetworkState();
-                return;
-            }
-            else {
-
-            }
-        }
-        //this.ensureRadioPlaying(audio);
-    }
-    async handleWorkerMessage(event, worker) {
-        const data = event.data || {};
-        const payload = data.payload || {};
-
-        switch (data.type) {
-            case "timer":
-                this.find("TFtime").innerHTML = payload.time;
-
-                if (payload.system === "Tf Schedule") {
-                    await this.handleSchedule(payload.time);
-                } else if (payload.system === "Tf Time") {
-                    this.find("TFweather").innerHTML = this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(worker);
-                } else {
-                    this.site.UpdateNews();
-                    this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(worker);
-                }
-                break;
-            case 'radio':
-                switch (data.action) {
-                    case 'receive.radio.file':
-
-                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(event));
-                        break;
-
-                    default:
-                        console.log(data);
-                        break;
-                }
-                break;
-            default:
-                if (payload.system === "error") {
-                    console.error("Worker error:", payload);
-
-                } else {
-                    if (data.meta.message) {
-                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
-
-                        console.warn("Type:", data.type);
-                        console.warn("Payload:", payload);
-                        console.warn("Full Data:", data);
-                        console.warn("Event:", event);
-                        console.warn("error: ", payload.error);
-
-                        if (data.meta?.message) {
-                            console.warn("Meta Message:", data.meta.message);
-                        }
-
-                        console.trace();
-
-                        console.groupEnd();
-                    } else {
-                        console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
-
-                        console.warn("Type:", data.type);
-                        console.warn("Payload:", payload);
-                        console.warn("Full Data:", data);
-                        console.warn("Event:", event);
-
-                        if (data.meta?.message) {
-                            console.warn("Meta Message:", data.meta.message);
-                        }
-
-                        console.trace();
-
-                        console.groupEnd();
-                    }
-
-                    this.handleSchedule(this.find("TFtime").innerHTML);
-                }
-        }
-    }
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
@@ -248,6 +240,10 @@ export class maxwell {
             handler,
             eventType
         });
+    }
+    removeEventListener(event, callback) {
+        if (!this.listeners[event]) return;
+        this.listeners[event] = this.listeners[event].filter(fn => fn !== callback);
     }
     onMe(id, eventName, callback = null, preventDefault = false, iframe = null) {
         const el = this.find(id, iframe);
@@ -326,6 +322,41 @@ export class maxwell {
         el.addEventListener(clickType, runHandler);
         this._storeDomListener(id, el, runHandler, clickType);
 
+    }
+
+    onIframeEvent(event) {
+        switch (event) {
+            case "load":
+
+                break;
+        }
+    }
+    onClipboard(id, eventName, type = "copy", preventDefault = false, iframe = null) {
+        let el = this.find(id, iframe);
+        if (!el) return;
+
+        const validEvents = ["copy", "cut", "paste"];
+        if (!validEvents.includes(type)) {
+            console.warn(`Invalid clipboard event: ${type}`);
+            return;
+        }
+
+        const handler = (event) => {
+            if (preventDefault) {
+                event.preventDefault();
+            }
+
+            this.emit(eventName, {
+                event,
+                element: el,
+                type,
+                clipboardData: event.clipboardData
+            });
+        };
+
+        el.addEventListener(type, handler);
+
+        this._storeDomListener(id, el, handler, type);
     }
     off(id) {
         const entries = this.domListeners.get(id);
@@ -626,15 +657,17 @@ export class maxwell {
         return Object.values(this.mediaBin.videos)
             .sort((a, b) => b.created - a.created);
     }
-
+    updateRadioState() {
+        if (!this.radiodock || !this.radiotoggle) return;
+        this.radiocollapsed = this.radiodock.classList.contains("collapsed");
+        this.radiotoggle.textContent = this.radiocollapsed ? "▼" : "▲";
+    }
+    toggleRadioDock() {
+        if (!this.radiodock) return;
+        this.radiodock.classList.toggle("collapsed");
+        this.updateRadioState();
+    }
     RadioReady() {
-        const title = this.audioTitle || document.createElement('div');
-        const last = this.audioLast || document.createElement('button');
-        const buttonSpot = this.audioSystem || document.createElement('div');
-        const restart = this.audioRestart || document.createElement('button');
-        const start = this.audioStart || document.createElement('button');
-        const skip = this.audioSkip || document.createElement('button');
-
         title.innerHTML = "Welcome to TFN Radio";
 
         last.id = "TFradioPreviousButton";
@@ -686,7 +719,9 @@ export class maxwell {
         if (this.videoEngine._videoBound) return;
         this.videoEngine._videoBound = true;
         const iframe = this.iframe.frame;
-
+        this.onMe("RemoveCameraStream", async () => {
+            this.videoEngine.detachVideoStream();
+        })
         // START WEBCAM + DRAW LOOP
         this.onMe("TfStartShit", async () => {
             if (this.videoEngine.canvas === null) {
@@ -754,13 +789,63 @@ export class maxwell {
         //this.onMe("TFuploadVideo", (e) => this.effects.UploadVideo(e), false, iframe);
         //this.onMe("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
 
+        this.onMe("CaptureScreen", () => {
+            this.screenStream = this.videoEngine.startScreenShare();
+            this.videoEngine.attachVideoStream(this.screenStream);;
+        })
         // START / STOP RECORDING if recorder exists
         this.onMe("TfStartRecPlz", () => {
-            this.videoEngine.startStream();
+            //this.videoEngine.startStream();
+            if (this.videoEngine.canvas === null) {
+                this.videoEngine.canvas = this.find("TFcanvas", true);
+            }
+            if (this.videoEngine.videoElement === null) {
+                this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
+            }
+            if (!this.videoEngine.webcamstream) {
+                try {
+                    this.videoEngine.startwebcam();            // get MediaStream
+                    this.videoEngine.attachwebcam();
+                    /*
+                        if (!this.soundEngine._webcamWired) {
+                        this.soundEngine.webcamAudioStream.addMixerMediaElement(this.videoEngine.videoElement, this.videoEngine.videoElement.id, false);
+                        this.soundEngine._webcamWired = true;
+                    }
+                    */
+                    /*
+                        //this.effects.isPlaying = true;
+        
+                    // FRAME DRAW LOOP
+                    const drawLoop = async () => {
+                    if (!this.effects.isPlaying) return;
+                    await this.effects.drawingFrame(this.videoCanv, this.videoElem);
+                    requestAnimationFrame(drawLoop);
+                    };
+                    drawLoop();
+                    */
+                } catch (err) {
+                    console.error("Webcam start failed:", err);
+                }
+            }
             this.videoEngine.startRecorder({
-                stream: this.videoEngine.stream,
+                stream: this.videoEngine.webcamstream,
                 fps: 30
             });
+
+            //this.videoEngine.startRecorder({ stream: this.screenStream, fps: 30});
+            // or
+
+            /*
+            this.videoEngine.createVideoEncoder({
+                width: 600,
+                height: 480,
+                codec: "vp8",
+                bitrate: 2_000_000,
+                framerate: 30
+            });
+            
+            await this.videoEngine.VideoWebCodecs(flow.webcamvideoTrack);
+                        */
         }, false, iframe);
 
         this.onMe("TfStopRecPlz", () => {
@@ -788,6 +873,11 @@ export class maxwell {
             this.videoEngine.stopRecorder();
             this.videoEngine.stopStream();
         }, false, iframe);
+
+        this.onMe("Download Recording", () => {
+            this.VideoDownload = this.videoEngine.downloadRecorder();
+            console.log(this.VideoDownload);
+        })
     }
     async bindStore() {
         await this.user.showProducts();
@@ -821,7 +911,138 @@ export class maxwell {
             console.log(`Gamepad disconnected: ${gamepad.id} `);
         }
     }
+    createSafeWorker(modulePath, classicPath, shared = false) {
+        try {
+            var ihj
+            if (shared === false) {
+                if (window.Worker) {
+                    ihj = new Worker(
+                        new URL(modulePath, import.meta.url),
+                        { type: "module" });
+                    console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+                } else {
 
+                }
+            } else {
+                let ihj = new SharedWorker(
+                    new URL(modulePath, import.meta.url),
+                    { type: "module" }
+                );
+                console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
+            }
+        } catch (err) {
+            console.warn("Module worker failed. Falling back:", err);
+            if (shared === false) {
+                if (window.Worker) {
+                    ihj = new Worker(classicPath);
+                } else {
+
+                }
+            } else {
+                if (window.SharedWorker) {
+                    ihj = new SharedWorker(classicPath);
+                } else {
+
+                }
+            }
+        } finally {
+            return ihj;
+        }
+    }
+    async handleSchedule(time) {
+        for (const word of this.site.WordTimes) {
+            if (time === word) {
+                let TfWotd = this.find("tfWordOfTheDay");
+                TfWotd.innerHTML = this.site.WordOfTheDay(time);
+            } break;
+        }
+
+        this.site.UpdateNews();
+
+        for (const tfRT of this.soundEngine.RadioTimes) {
+            if (time === tfRT) {
+                this.soundEngine.AudioNetworkState();
+                return;
+            }
+            else {
+
+            }
+        }
+        //this.ensureRadioPlaying(audio);
+    }
+    async handleWorkerMessage(event, worker) {
+        const data = event.data || {};
+        const payload = data.payload || {};
+
+        switch (data.type) {
+            case "timer":
+                this.find("TFtime").innerHTML = payload.time;
+
+                if (payload.system === "Tf Schedule") {
+                    await this.handleSchedule(payload.time);
+                } else if (payload.system === "Tf Time") {
+                    this.find("TFweather").innerHTML = this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState(worker);
+                } else {
+                    this.site.UpdateNews();
+                    this.site.requestLocation();
+                    this.soundEngine.AudioNetworkState(worker);
+                }
+                break;
+            case 'radio':
+                switch (data.action) {
+                    case 'receive.radio.file':
+
+                        this.soundEngine.loadaudio(this.soundEngine.AudioFile(event));
+                        break;
+
+                    default:
+                        console.log(data);
+                        break;
+                }
+                break;
+            default:
+                if (payload.system === "error") {
+                    console.error("Worker error:", payload);
+
+                } else {
+                    if (data.meta.message) {
+                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
+
+                        console.warn("Type:", data.type);
+                        console.warn("Payload:", payload);
+                        console.warn("Full Data:", data);
+                        console.warn("Event:", event);
+                        console.warn("error: ", payload.error);
+
+                        if (data.meta?.message) {
+                            console.warn("Meta Message:", data.meta.message);
+                        }
+
+                        console.trace();
+
+                        console.groupEnd();
+                    } else {
+                        console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
+
+                        console.warn("Type:", data.type);
+                        console.warn("Payload:", payload);
+                        console.warn("Full Data:", data);
+                        console.warn("Event:", event);
+
+                        if (data.meta?.message) {
+                            console.warn("Meta Message:", data.meta.message);
+                        }
+
+                        console.trace();
+
+                        console.groupEnd();
+                    }
+
+                    this.handleSchedule(this.find("TFtime").innerHTML);
+                }
+        }
+    }
     handleError(source, error) {
         if (this.soundEngine.AudioElement.src === "") {
             this.soundEngine.AudioFile(null);
@@ -833,6 +1054,40 @@ export class maxwell {
         console.error(`[${source}]colno: `, error.colno);
         this.emit("error", { source, error });
     }
+    connectWS(key = "viewer", role = "viewer") {
+        this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+        this.tsunamisocket = new WebSocket(this.wsUrl);
+        this.tsunamisocket.binaryType = "arraybuffer";
+
+        this.tsunamisocket.onopen = () => {
+            log("🌐 WebSocket connected.");
+            document.getElementById("startBtn").disabled = true;
+            document.getElementById("stopBtn").disabled = false;
+            /*
+            if (reconnectTimer) clearTimeout(reconnectTimer);
+            */
+        };
+
+        this.tsunamisocket.onclose = () => {
+            log("⚠️ WebSocket closed.");
+            document.getElementById("startBtn").disabled = false;
+            document.getElementById("stopBtn").disabled = true;
+        };
+
+        this.tsunamisocket.onerror = (err) => {
+            log("❌ WebSocket error: " + err);
+        };
+
+        this.tsunamisocket.onmessage = event => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.type === "ffmpeg_stderr") log("[FFmpeg] " + data.message);
+            } catch {
+                // ignore non-JSON
+            }
+        };
+    }
+
     receiveSharedWorkerMessage(e) {
         const msg = e.data;
 
@@ -871,42 +1126,146 @@ export class maxwell {
 
         this.sharedWorkerPort.postMessage(data);
     }
-    async initTsunamiWorkers(worker, sharedworker) {
+    async initTsunamiWorkers(worker = this.worker, sharedworker = this.sharedWorker) {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
             this.soundEngine.AudioFile(null);
             return;
         }
 
+        if (worker === null) {
+            this.worker = this.createSafeWorker("T/Worker/WebWorker/TaskWebWorker.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", false);
+        }
+
+        if (sharedworker === null) {
+            this.sharedWorker = this.createSafeWorker("./TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
+
+        }
+
+        this.sharedWorker.port.start();
+        worker.onmessage = (e) => this.handleWorkerMessage(e);
+        worker.onerror = (e) => this.handleError(worker, e);
+
+        this.worker.postMessage(
+            this.soundEngine.tycadome(
+                "tycadome-guest" + Date.now(),
+                "canvas",
+                "load.radio.canvas",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    worker: "media"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "loading",
+                    canvas: this.RadioOffscreenCanvas,
+                },
+                [
+                    this.RadioOffscreenCanvas
+                ]
+            ),
+            [this.RadioOffscreenCanvas]);
+
+
         if (typeof EventSource === "undefined") {
             console.warn("Server Sent Events not supported");
             return;
         }
 
+        this.bindAudio(this.worker, SoundsContext);
+    }
+    bindFrameEvent(event) {
+        switch (event) {
+            case "load":
+                try {
+                    this.iframe.frame.contentWindow.controller = maxwell;
+                    this.iframe.MenuSwitch(this.iframe.frame);
+                } catch (e) {
+                    console.error("Cross-origin block:", e);
+                }
+                break;
+        }
+    }
+    async onDomEvent(event) {
+        switch (event) {
+            case "DOMContentLoaded":
+                this.mainSection = this.find("mainTsectionFdiv");
+                this.mainSectionWidth = this.mainSection ? (this.mainSection.clientWidth || this.mainSection.offsetWidth || 800) : 800;
+                this.mainSectionHeight = this.mainSection ? (this.mainSection.clientHeight || this.mainSection.offsetHeight || 600) : 600;
 
-        worker.onmessage = (e) => this.handleWorkerMessage(e);
-        worker.onerror = (e) => this.handleError(worker, e);
+                this.radiodock = document.getElementById("radioDock");
+                this.radiotoggle = document.getElementById("toggleRadio");
+                this.radioheader = document.getElementById("radioHeader");
+                this.RadioCanvas = document.getElementById("TFradioCanvas");
 
+                if (this.radioheader) {
+                    this.radioheader.addEventListener("click", () => {
+                        this.toggleRadioDock();
+                    });
+                }
 
-        //this.imageworker.onerror = (e) => this.handleError(this.imageworker, e);
+                this.audioSkip = document.createElement("button");
+                this.audioTitle = find("TfRadioStuff") || document.createElement('div');
+                this.audioLast = document.createElement('button');
+                this.audioSystem = document.createElement('button');
+                this.audioRestart = document.createElement('button');
+                this.audioStart = document.createElement('button');
+                this.audioSkip = document.createElement('button');
 
+                this.videoCanvas = document.createElement("canvas");
 
-        //this.videoworker.onerror = (e) => this.handleError(this.videoworker, e);
-        //this.game.inputWorker = this.gameinputworker;
-        //this.game.inputWorker.onerror = (e) => this.handleError(this.game.inputWorker, e);
-        //this.game.worldWorker = this.gameworldworker;
-        //this.game.worldWorker.onerror = (e) => this.handleError(this.game.worldWorker, e);
-        /*
-        this.site.sharedWorker = this.sharedWorker;
-        this.iframe.sharedWorker = this.sharedWorker;
-        this.user.sharedWorker = this.sharedWorker;
-        this.imageEngine.sharedWorker = this.sharedWorker;
-        this.soundEngine.sharedWorker = this.sharedWorker;
-        this.videoEngine.sharedWorker = this.sharedWorker;
-        this.game.sharedWorker = this.sharedWorker;
-    */
-        //this.sendToSharedWorker("register");
-        //sharedworker.onmessage = (e) => {this.receiveSharedWorkerMessage(e)};
-        //sharedworker.onerror = (e) => this.handleError(sharedworker, e);
+                if (this.mainSection) {
+                    this.iframe.allow = "camera; microphone; geolocation";
+                    this.iframe.allowFullscreen = true;
+                    this.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
+                    this.mainSection.appendChild(this.iframe.frame);
+                    this.iframe.frame.title = "Main Website Content";
+                    this.iframe.frame.id = "TsunamiContent";
+                    this.iframe.frame.name = "TsunamiMainFlowContent";
+                    this.iframe.frame.style.width = `${Math.max(0, parentWidth - 1)}px`;
+                    this.iframe.frame.style.height = `${Math.max(0, parentHeight - 1)}px`;
+                    this.iframe.frame.style.background = "white";
+                    this.iframe.frame.style.touchAction = "manipulation";
+                    this.iframe.frame.style.pointerEvents = "auto";
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+
+                    this.iframe.frame.addEventListener("load", () => {
+                        this.bindFrameEvent("load");
+                    });
+
+                    this.updateRadioState();
+
+                    this.user.showProducts().then(() => {
+                        this.bindPayments();
+                        this.user.bindCart();
+                        this.bindNavBar();
+                        this.bindUsers();
+                        if (window.Worker) {
+                            try {
+                                this.VideooOffscreenCanvas = this.videoCanvas.transferControlToOffscreen();
+                                this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
+                                this.initTsunamiWorkers();
+                            } catch (err) {
+                                console.warn("Offscreen canvas transfer failed:", err);
+                            }
+                        } else {
+                            this.bindAudio(this.worker, this.soundEngine.MasterSoundsContext);
+                        }
+                        this.site.requestLocation();
+                        console.log("TFN");
+                    }).catch(err => {
+                        console.error("Cart binding error:", err);
+                    });
+                }
+                break;
+
+            default:
+                break;
+        }
     }
 }

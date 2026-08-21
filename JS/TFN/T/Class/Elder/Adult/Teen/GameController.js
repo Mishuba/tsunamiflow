@@ -39,6 +39,7 @@ export class GameController extends TsDomCanvas {
             return false;
         }
     }
+
     getControllerType(gamepad) {
         // Detect controller type based on button layout
         if (gamepad.buttons[0].value === 1) {

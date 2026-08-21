@@ -21,6 +21,26 @@ export class Dom extends T {
             return document.getElementById(elem);
         }
     }
+    emit(event, data) {
+        (this.listeners[event] || []).forEach((fn) => {
+            try {
+                fn(data);
+            } catch (error) {
+                console.error(`Error occurred while emitting event "${event}":`, error);
+            }
+        });
+    }
+    _storeDomListener(id, el, handler, eventType) {
+        if (!this.domListeners.has(id)) {
+            this.domListeners.set(id, []);
+        }
+
+        this.domListeners.get(id).push({
+            el,
+            handler,
+            eventType
+        });
+    }
     on(id, eventName, callback = null, preventDefault = false, iframe = null) {
         const el = this.find(id, iframe);
 
@@ -158,17 +178,6 @@ export class Dom extends T {
             } catch (error) {
                 console.error(`Error occurred while emitting event "${event}":`, error);
             }
-        });
-    }
-    _storeDomListener(id, el, handler, eventType) {
-        if (!this.domListeners.has(id)) {
-            this.domListeners.set(id, []);
-        }
-
-        this.domListeners.get(id).push({
-            el,
-            handler,
-            eventType
         });
     }
     getBrands() {

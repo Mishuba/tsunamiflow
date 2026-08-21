@@ -1,27 +1,218 @@
 import { TsDomCanvas } from "./Child/Canvas.js";
 export class TsunamiFlowFrames extends TsDomCanvas {
-
+    queueVideo = [];
+    VideoProcessor = null;
+    VideoReader = null;
+    VideomediaSource = null;
+    VideomediaSourceBuffer = null;
+    VideoFrameCount = 0;
+    VideoKeyFrameInterval = 60;
+    VideoEncoder = null;
+    VideoEncoderConfig = null;
+    VideoEncodedChunks = [];
+    VideoEncoding = false;
+    VideoobjectUrl = null;
+    VideoReading = false;
+    supportedVideomediaSource = "MediaSource" in window;
     constructor(options = {}) {
         super(options);
     }
     VideoWebCodecs(stream) {
-        let track;
-        if (stream.getVideoTracks()[0]) {
-            track = stream.getVideoTracks()[0];
-        } else {
-            track = stream;
+        if (this.VideoReading) {
+            console.warn("VideoWebCodecs is already running");
+            return;
         }
-        this.VideoProcessor = new MediaStreamTrackProcessor({ track });
-        this.VideoReader = this.VideoProcessor.readable.getReader();
+
+        const track = stream instanceof MediaStream
+            ? stream.getVideoTracks()[0]
+            : stream;
+
+        if (!track || track.kind !== "video") {
+            throw new TypeError(
+                "VideoWebCodecs requires a video MediaStreamTrack"
+            );
+        }
+
+        this.VideoProcessor = new MediaStreamTrackProcessor({
+            track
+        });
+
+        this.VideoReader =
+            this.VideoProcessor.readable.getReader();
+
+        return this._readVideoFrames();
+    }
+
+    async _readVideoFrames() {
+        if (!this.VideoReader) {
+            throw new Error("VideoReader is not initialized");
+        }
+
+        this.VideoReading = true;
+
+        try {
+            while (this.VideoReading) {
+                const {
+                    done,
+                    value: frame
+                } = await this.VideoReader.read();
+
+                if (done) {
+                    break;
+                }
+
+                try {
+                    const processedFrame =
+                        this.processVideoFrame(frame);
+
+                    if (
+                        this.VideoEncoder &&
+                        this.VideoEncoder.state === "configured"
+                    ) {
+                        const keyFrame =
+                            this.VideoFrameCount %
+                            this.VideoKeyFrameInterval === 0;
+
+                        this.VideoEncoder.encode(
+                            processedFrame,
+                            {
+                                keyFrame
+                            }
+                        );
+
+                        this.VideoFrameCount++;
+                    }
+
+                    processedFrame.close();
+                } catch (error) {
+                    console.error(
+                        "Failed to process VideoFrame:",
+                        error
+                    );
+                } finally {
+                    frame.close();
+                }
+            }
+        } catch (error) {
+            if (this.VideoReading) {
+                console.error(
+                    "VideoReader failed:",
+                    error
+                );
+            }
+        } finally {
+            this.VideoReading = false;
+        }
+    }
+    _handleEncodedVideoChunk(chunk, metadata) {
+
+        console.log(
+            "Encoded chunk:",
+            chunk.type,
+            chunk.timestamp,
+            chunk.byteLength
+        );
+
+        console.log(
+            "Metadata:",
+            metadata
+        );
+
+        this.VideoEncodedChunks.push({
+            chunk,
+            metadata
+        });
+    }
+    processVideoFrame(frame) {
+        const canvas = this.canvas;
+        const ctx = canvas.getContext("2d");
+
+        canvas.width = frame.displayWidth;
+        canvas.height = frame.displayHeight;
+
+        ctx.drawImage(frame, 0, 0);
+
+        return new VideoFrame(canvas, {
+            timestamp: frame.timestamp
+        });
+    }
+    async createVideoEncoder({
+        width,
+        height,
+        codec = "vp8",
+        bitrate = 2_000_000,
+        framerate = 30
+    } = {}) {
+
+        if (typeof VideoEncoder === "undefined") {
+            throw new Error(
+                "WebCodecs VideoEncoder is not supported"
+            );
+        }
+
+        if (!width || !height) {
+            throw new TypeError(
+                "VideoEncoder requires width and height"
+            );
+        }
+
+        const config = {
+            codec,
+            width,
+            height,
+            bitrate,
+            framerate,
+            latencyMode: "realtime"
+        };
+
+        const support =
+            await VideoEncoder.isConfigSupported(config);
+
+        if (!support.supported) {
+            throw new Error(
+                `Unsupported VideoEncoder config: ${codec}`
+            );
+        }
+
+        this.VideoEncoderConfig = support.config;
+
+        this.VideoEncoder = new VideoEncoder({
+            output: (chunk, metadata) => {
+                this._handleEncodedVideoChunk(
+                    chunk,
+                    metadata
+                );
+            },
+
+            error: (error) => {
+                console.error(
+                    "VideoEncoder error:",
+                    error
+                );
+            }
+        });
+
+        this.VideoEncoder.configure(
+            this.VideoEncoderConfig
+        );
+
+        this.VideoEncoding = true;
+
+        console.log(
+            "VideoEncoder configured:",
+            this.VideoEncoderConfig
+        );
+
+        return this.VideoEncoder;
     }
     attachVideoMediaSource() {
-        if (!this.supportedVideomediaSource || !this.videoElement) return;
+        if (!this.VideomediaSource || !this.videoElement) return;
 
         if (this.VideoobjectUrl) {
             URL.revokeObjectURL(this.VideoobjectUrl);
         }
 
-        this.VideoobjectUrl = URL.createObjectURL(this.mediaSource);
+        this.VideoobjectUrl = URL.createObjectURL(this.VideomediaSource);
         this.videoElement.src = this.VideoobjectUrl;
 
         console.log("MediaSource attached to video element");
@@ -43,7 +234,7 @@ export class TsunamiFlowFrames extends TsDomCanvas {
             this.VideomediaSourceBuffer = this.VideomediaSource.addSourceBuffer(mimeType);
 
             this.VideomediaSourceBuffer.addEventListener("updateend", () => {
-                this._processQueue();
+                this._processVideomediaSourceQueue();
             });
 
             console.log("SourceBuffer created:", mimeType);
@@ -73,9 +264,9 @@ export class TsunamiFlowFrames extends TsDomCanvas {
         }
     }
     _processVideomediaSourceQueue() {
-
-        if (!this.queueVideo.length) return;
+        if (!this.VideomediaSourceBuffer) return;
         if (this.VideomediaSourceBuffer.updating) return;
+        if (!this.queueVideo.length) return;
 
         const data = this.queueVideo.shift();
 
@@ -83,6 +274,9 @@ export class TsunamiFlowFrames extends TsDomCanvas {
             this.VideomediaSourceBuffer.appendBuffer(data);
         } catch (err) {
             console.error("Queue append failed:", err);
+
+            // Put it back if the append failed.
+            this.queueVideo.unshift(data);
         }
     }
     endVideomediaSourceStream() {
@@ -90,19 +284,41 @@ export class TsunamiFlowFrames extends TsDomCanvas {
             this.VideomediaSource.endOfStream();
         }
     }
-    destroyVideomediaSource() {
+    async stopVideoWebCodecs() {
 
-        if (this.videoElement) {
-            this.videoElement.removeAttribute("src");
-            this.videoElement.load();
+        this.VideoReading = false;
+
+        if (this.VideoReader) {
+            try {
+                await this.VideoReader.cancel();
+            } catch (error) {
+                console.warn(
+                    "Failed to cancel VideoReader:",
+                    error
+                );
+            }
+
+            try {
+                this.VideoReader.releaseLock();
+            } catch { }
         }
 
-        if (this.VideoobjectUrl) {
-            URL.revokeObjectURL(this.VideoobjectUrl);
+        this.VideoReader = null;
+        this.VideoProcessor = null;
+
+        if (this.VideoEncoder) {
+
+            try {
+                await this.VideoEncoder.flush();
+            } catch { }
+
+            try {
+                this.VideoEncoder.close();
+            } catch { }
         }
 
-        this.queueVideo = [];
-        this.VideomediaSourceBuffer = null;
-        this.VideomediaSource = null;
+        this.VideoEncoder = null;
+        this.VideoEncoderConfig = null;
+        this.VideoEncoding = false;
     }
 }
