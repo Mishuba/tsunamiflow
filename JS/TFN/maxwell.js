@@ -4,7 +4,7 @@ import { HeaderWeather } from "./T/Class/weather.js";
 import { tfIframe } from "./../../Iframe/Js/TfIframe.js";
 import { HomepageUpdates, FirstGame } from "./N/Games/sprite.js";
 import { TfPrintful } from "./T/Class/Tycadome.js";
-import { TsunamiFlowImageEngine } from "./TFN/T/Class/Elder/Img.js";
+import { TsunamiFlowImageEngine } from "./T/Class/Elder/Img.js";
 import { Studio } from "./T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
