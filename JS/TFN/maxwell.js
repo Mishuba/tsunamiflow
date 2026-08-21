@@ -671,23 +671,23 @@ export class maxwell {
         this.updateRadioState();
     }
     RadioReady() {
-        title.innerHTML = "Welcome to TFN Radio";
+        this.audioTitle.innerHTML = "Welcome to TFN Radio";
 
-        last.id = "TFradioPreviousButton";
-        last.innerHTML = "Previous";
-        buttonSpot.appendChild(last);
+        this.audioLast.id = "TFradioPreviousButton";
+        this.audioLast.innerHTML = "Previous";
+        //this.audioSystem.appendChild(last);
 
-        restart.id = "TFRadioRestartButton";
-        restart.innerHTML = "Restart";
-        buttonSpot.appendChild(restart);
+        this.audioRestart.id = "TFRadioRestartButton";
+        this.audioRestart.innerHTML = "Restart";
+        //this.audioSystem.appendChild(restart);
 
-        start.id = "TFradioButton";
-        start.innerHTML = "Start Radio";
-        buttonSpot.appendChild(start);
+        this.audioStart.id = "TFradioButton";
+        this.audioStart.innerHTML = "Start Radio";
+        //this.audioSystem.appendChild(start);
 
-        skip.id = "TFradioSkipButton";
-        skip.innerHTML = "Next";
-        buttonSpot.appendChild(skip);
+        this.audioSkip.id = "TFradioSkipButton";
+        this.audioSkip.innerHTML = "Next";
+        //this.audioSystem.appendChild(this.audioSkip);
 
         this.onMe("TFradioPreviousButton", () => {
             this.soundEngine.previousSong();
@@ -1207,7 +1207,7 @@ export class maxwell {
                 this.audioSkip = document.createElement("button");
                 this.audioTitle = find("TfRadioStuff") || document.createElement('div');
                 this.audioLast = document.createElement('button');
-                this.audioSystem = document.createElement('button');
+                this.audioSystem = document.createElement('div');
                 this.audioRestart = document.createElement('button');
                 this.audioStart = document.createElement('button');
                 this.audioSkip = document.createElement('button');
