@@ -8,6 +8,7 @@ export class Studio extends Flow {
     CurrentSong = null;
     randomMusicDefault = null;
     AudioReady = null;
+    rangeIndex = null;
     elementSourceMap = new WeakMap();
     RadioTimes = ["00:00", "01:00", "01:05", "01:15", "01:30", "02:00", "03:00", "03:20", "03:40", "04:00", "04:20", "04:40", "05:00", "05:20", "05:40", "06:00", "06:20", "06:40", "07:00", "07:20", "07:40", "08:00", "08:10", "08:20", "08:30", "08:40", "08:50", "09:00", "09:20", "09:40", "10:00", "11:00", "12:00", "12:15", "12:30", "12:45", "13:00", "13:15", "13:30", "13:45", "14:00", "14:15", "14:30", "14:45", "15:00", "15:15", "15:30", "15:45", "16:00", "16:15", "16:30", "16:45", "17:00", "18:00", "18:10", "18:20", "18:30", "18:40", "18:50", "19:00", "19:20", "19:40", "20:00", "20:15", "20:30", "20:45", "21:00", "22:00", "23:00"
     ];
@@ -572,23 +573,23 @@ export class Studio extends Flow {
 
     ThreeFolderSub(PSL, tsu, nami, response = null) {
         if (nami <= 19) {
-            let rangeIndex = 0;
+            this.rangeIndex = 0;
         } else if (nami >= 20 && nami <= 39) {
-            let rangeIndex = 1;
+            this.rangeIndex = 1;
         } else {
-            let rangeIndex = 2;
+            this.rangeIndex = 2;
         }
 
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
-                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 7) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][radioRandom];
                 return this.CurrentSong
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][radioRandom];
                 return this.CurrentSong;
@@ -601,25 +602,25 @@ export class Studio extends Flow {
 
     FourFolderSub(PSL, tsu, nami, response = null) {
         if (nami <= 14) {
-            let rangeIndex = 0;
+            this.rangeIndex = 0;
         } else if (nami >= 15 && nami <= 29) {
-            let rangeIndex = 1;
+            this.rangeIndex = 1;
         } else if (nami >= 30 && nami <= 44) {
-            let rangeIndex = 2;
+            this.rangeIndex = 2;
         } else {
-            let rangeIndex = 3;
+            this.rangeIndex = 3;
         }
 
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
-                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][radioRandom];
                 return this.CurrentSong;
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
                 this.CurrentSong = PSL[11][radioRandom];
                 return this.CurrentSong;
@@ -631,22 +632,22 @@ export class Studio extends Flow {
     }
 
     SixFolderSub(PSL, tsu, nami, response = null) {
-        let rangeIndex = Math.floor(nami / 10);
+        this.rangeIndex = Math.floor(nami / 10);
 
 
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
-                let radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                this.CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 3) {
+                let radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                this.CurrentSong = PSL[tsu][this.rangeIndex][radioRandom];
                 return this.CurrentSong;
 
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
                 let radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                this.CurrentSong = PSL[11][rangeIndex][radioRandom];
+                this.CurrentSong = PSL[11][this.rangeIndex][radioRandom];
                 return this.CurrentSong;
             }
         } else {
