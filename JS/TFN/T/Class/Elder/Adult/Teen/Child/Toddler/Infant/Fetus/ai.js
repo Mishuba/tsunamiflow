@@ -528,41 +528,6 @@ export class AiInterface {
     return x * (1 - x);
   }
 
-  // Training loop with multi-output support and backpropagation to hidden layer.
-  // `labels` should be an array where each item is either a scalar (for single output)
-  // or an array of target values matching the output layer size.
-  kMeans(data, k = 2, iterations = 10) {
-    let centroids = data.slice(0, k);
-
-    for (let iter = 0; iter < iterations; iter++) {
-      let clusters = Array.from({ length: k }, () => []);
-
-      for (let point of data) {
-        let distances = centroids.map(c =>
-          Math.hypot(...c.map((v, i) => v - point[i]))
-        );
-
-        let idx = distances.indexOf(Math.min(...distances));
-        clusters[idx].push(point);
-      }
-
-      const prevCentroids = centroids;
-      centroids = clusters.map((cluster, idx) => {
-        if (!cluster.length) {
-          // if cluster empty, keep previous centroid or pick a random data point
-          return prevCentroids && prevCentroids[idx]
-            ? prevCentroids[idx]
-            : data[Math.floor(Math.random() * data.length)];
-        }
-        return cluster[0].map((_, i) =>
-          cluster.reduce((sum, p) => sum + p[i], 0) / cluster.length
-        );
-      });
-    }
-
-    return centroids;
-  }
-
   // forward pipeline: filters is array of kernels for conv layer1, options may include pooling and activation
   // image: 2D (grayscale) or 3D [H][W][C]
   // returns feature maps (or flattened vector if flatten=true)
@@ -578,6 +543,69 @@ export class AiInterface {
       this.by = Array.from({ length: outputSize }, () => 0);
     }
     this.hidden = Array.from({ length: hiddenSize }, () => 0);
+  }
+
+  // Simple training loop for tabular environments
+  trainDQN(env, episodes = 1000, maxSteps = 200) {
+    for (let ep = 0; ep < episodes; ep++) {
+      let state = env.reset();
+      for (let t = 0; t < maxSteps; t++) {
+        const action = this.chooseAction(state);
+        const { nextState, reward, done } = env.step(action);
+        this.update(state, action, reward, nextState);
+        state = nextState;
+        if (done) break;
+      }
+      // optionally decay epsilon
+      if (typeof env.onEpisodeEnd === 'function') env.onEpisodeEnd(ep);
+    }
+  }
+
+
+  remember(transition) {
+    this.replay.push(transition);
+    if (this.replay.length > this.replaySize) this.replay.shift();
+  }
+
+  sampleBatch() {
+    const batch = [];
+    const n = Math.min(this.batchSize, this.replay.length);
+    for (let i = 0; i < n; i++) {
+      const idx = Math.floor(Math.random() * this.replay.length);
+      batch.push(this.replay[idx]);
+    }
+    return batch;
+  }
+
+  async trainStep() {
+    if (this.replay.length < this.batchSize) return;
+    const batch = this.sampleBatch();
+    const trainer = (this.model && typeof this.model.train === 'function') ? this.model : (this.targetModel && typeof this.targetModel.train === 'function' ? this.targetModel : null);
+    if (trainer) {
+      try {
+        await trainer.train(batch, { gamma: this.gamma, targetModel: this.targetModel });
+      } catch (e) {
+        console.warn('model.train failed, falling back to tabular', e);
+        for (const tr of batch) {
+          try { this.update(tr.state, tr.action, tr.reward, tr.nextState); } catch (err) { /* ignore */ }
+        }
+      }
+    } else {
+      // Simple fallback: perform tabular Q-updates for each sampled transition
+      for (const tr of batch) {
+        try {
+          const s = tr.state;
+          const a = tr.action;
+          const r = typeof tr.reward === 'number' ? tr.reward : 0;
+          const ns = tr.nextState;
+          this.update(s, a, r, ns);
+        } catch (err) { /* ignore */ }
+      }
+    }
+
+    if (typeof this.decayEpsilon === 'function') {
+      this.decayEpsilon();
+    }
   }
 
 
