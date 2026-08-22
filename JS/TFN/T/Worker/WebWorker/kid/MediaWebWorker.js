@@ -79,7 +79,7 @@ class TsunamilowNation {
             p.color;
 
         this.canvasctx.shadowBlur =
-            20 + this.volume * 30;
+            20 + this.TfAudioVisualData.volume * 30;
 
         this.canvasctx.fill();
     }
@@ -214,10 +214,8 @@ class TsunamilowNation {
     }
     RadioVisualizer() {
         if (
-            !this.offscreencanvas ||
-            !this.canvasctx ||
-            !this.dataArray ||
-            this.dataArray.length === 0
+            !this.TfAudioVisualData.dataArray ||
+            this.TfAudioVisualData.dataArray.length === 0
         ) {
             console.warn("⚠️ No audio data yet, skipping frame");
             return;
@@ -232,7 +230,7 @@ class TsunamilowNation {
 
         for (let i = 0; i < this.particles.length; i++) {
             this.fftValue =
-                this.dataArray[i % this.dataArray.length];
+                this.TfAudioVisualData.dataArray[i % this.TfAudioVisualData.dataArray.length];
 
             this.update(this.particles[i]);
 
@@ -240,15 +238,15 @@ class TsunamilowNation {
         }
 
         this.barWidth =
-            this.offscreencanvas.width / this.dataArray.length;
+            this.offscreencanvas.width / this.TfAudioVisualData.dataArray.length;
 
         let CtxX = 0;
 
-        for (let i = 0; i < this.dataArray.length; i++) {
-            const fft = this.dataArray[i];
+        for (let i = 0; i < this.TfAudioVisualData.dataArray.length; i++) {
+            const fft = this.TfAudioVisualData.dataArray[i];
 
             this.barHeight =
-                fft * this.volume;
+                fft * this.TfAudioVisualData.volume;
 
             const CtxR =
                 Math.min(255, fft + 100);
