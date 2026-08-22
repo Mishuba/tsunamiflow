@@ -453,6 +453,18 @@ export class TsunamiFlowSound extends TsDomCanvas {
                     e.data.mode,
                     e.data.payload
                 ));
+                break;
+            default:
+                worker.postMessage(this.tycadome(
+                    e.data.id,
+                    e.data.type,
+                    e.data.action,
+                    e.data.meta,
+                    e.data.state,
+                    e.data.mode,
+                    e.data.payload
+                ));
+                break;
         }
 
         // GAME SIGNALS
