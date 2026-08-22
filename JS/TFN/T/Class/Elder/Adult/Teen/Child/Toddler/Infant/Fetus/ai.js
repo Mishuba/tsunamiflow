@@ -531,58 +531,6 @@ export class AiInterface {
   // Training loop with multi-output support and backpropagation to hidden layer.
   // `labels` should be an array where each item is either a scalar (for single output)
   // or an array of target values matching the output layer size.
-  train(network, data, labels, lr = 0.1) {
-    if (!network.layer1 || !network.layer2) return;
-
-    const nHidden = network.layer1.neurons.length;
-    const nOutput = network.layer2.neurons.length;
-
-    for (let i = 0; i < data.length; i++) {
-      const input = data[i];
-      const target = labels[i];
-
-      // forward
-      const hidden = network.layer1.forward(input);
-      const output = network.layer2.forward(hidden);
-
-      // ensure target is array for multi-output
-      const targetArr = Array.isArray(target) ? target : [target];
-
-      // compute output deltas and update output-layer weights/biases
-      const deltasOut = Array(nOutput).fill(0);
-      for (let k = 0; k < nOutput; k++) {
-        const outK = output[k];
-        const tK = targetArr[k] !== undefined ? targetArr[k] : 0;
-        const err = tK - outK;
-        const delta = err * (outK * (1 - outK));
-        deltasOut[k] = delta;
-
-        const outNeuron = network.layer2.neurons[k];
-        for (let j = 0; j < outNeuron.weights.length; j++) {
-          outNeuron.weights[j] += lr * delta * hidden[j];
-        }
-        outNeuron.bias += lr * delta;
-      }
-
-      // backpropagate errors to hidden layer and update hidden weights/biases
-      for (let j = 0; j < nHidden; j++) {
-        // error contribution from all output deltas
-        let errHidden = 0;
-        for (let k = 0; k < nOutput; k++) {
-          const outNeuron = network.layer2.neurons[k];
-          errHidden += deltasOut[k] * outNeuron.weights[j];
-        }
-        const hVal = hidden[j];
-        const deltaH = errHidden * (hVal * (1 - hVal));
-
-        const hiddenNeuron = network.layer1.neurons[j];
-        for (let m = 0; m < hiddenNeuron.weights.length; m++) {
-          hiddenNeuron.weights[m] += lr * deltaH * input[m];
-        }
-        hiddenNeuron.bias += lr * deltaH;
-      }
-    }
-  }
   kMeans(data, k = 2, iterations = 10) {
     let centroids = data.slice(0, k);
 
@@ -618,20 +566,7 @@ export class AiInterface {
   // forward pipeline: filters is array of kernels for conv layer1, options may include pooling and activation
   // image: 2D (grayscale) or 3D [H][W][C]
   // returns feature maps (or flattened vector if flatten=true)
-  forwardCNN(image, filters, options = {}) {
-    const { convOptions = {}, poolSize = 2, poolStride = 2, poolType = 'max', activation = 'relu', flatten = false } = options;
 
-    // conv -> activation -> pool
-    const convOut = AiInterface.convolve(image, filters, convOptions);
-    // convOut may be single map or array
-    const maps = Array.isArray(convOut) ? convOut : [convOut];
-
-    const activated = maps.map(m => activation === 'relu' ? AiInterface.reluMap(m) : m);
-    const pooled = activated.map(m => AiInterface.pool(m, poolSize, poolStride, poolType));
-
-    if (flatten) return AiInterface.flatten(pooled);
-    return pooled.length === 1 ? pooled[0] : pooled;
-  }
 
   RNNCell(inputSize, hiddenSize, outputSize = null, activation = 'tanh', outputActivation = null) {
     const rand = () => (Math.random() - 0.5) * 0.2;
@@ -823,15 +758,6 @@ export class AiInterface {
     return results;
   }
 
-  infer(a, relation) {
-    const firstHop = this.getEdges({ a, relation });
-    const secondHop = [];
-    for (const edge of firstHop) {
-      secondHop.push(...this.getEdges({ a: edge.b, relation }));
-    }
-    return secondHop.map(edge => edge.b).filter((value, index, self) => self.indexOf(value) === index);
-  }
-
   KnowledgetoJSON() {
     return JSON.stringify({ nodes: this.nodes, edges: this.edges });
   }
@@ -976,44 +902,6 @@ export class AiInterface {
     };
   }
 
-  prove(goal, maxDepth = 10) {
-    const visited = new Set();
-
-    const dfs = (target, depth) => {
-      if (depth > maxDepth) return false;
-      if (this.hasFact(target)) return true;
-      if (visited.has(target)) return false;
-      visited.add(target);
-
-      for (const rule of this.rules) {
-        const consequents = Array.isArray(rule.consequent) ? rule.consequent : [rule.consequent];
-        if (!consequents.some(consequent => consequent === target)) continue;
-
-        const antecedent = rule.antecedent;
-        if (Array.isArray(antecedent)) {
-          if (antecedent.every(term => dfs(term, depth + 1))) {
-            return true;
-          }
-        } else if (typeof antecedent === 'string') {
-          if (dfs(antecedent, depth + 1)) return true;
-        } else if (typeof antecedent === 'function') {
-          if (antecedent(this)) return true;
-        } else if (antecedent && typeof antecedent === 'object') {
-          if (antecedent.all && antecedent.all.every(term => dfs(term, depth + 1))) {
-            return true;
-          }
-          if (antecedent.any && antecedent.any.some(term => dfs(term, depth + 1))) {
-            return true;
-          }
-        }
-      }
-
-      return false;
-    };
-
-    return dfs(goal, 0);
-  }
-
   query(predicate) {
     if (!predicate) {
       return Array.from(this.facts.entries()).map(([fact, metadata]) => ({ fact, metadata }));
@@ -1085,69 +973,6 @@ export class AiInterface {
     if (bestNext === -Infinity) bestNext = 0;
     const newQ = oldQ + this.alpha * (reward + this.gamma * bestNext - oldQ);
     this.setQ(state, action, newQ);
-  }
-
-  // Simple training loop for tabular environments
-  trainDQN(env, episodes = 1000, maxSteps = 200) {
-    for (let ep = 0; ep < episodes; ep++) {
-      let state = env.reset();
-      for (let t = 0; t < maxSteps; t++) {
-        const action = this.chooseAction(state);
-        const { nextState, reward, done } = env.step(action);
-        this.update(state, action, reward, nextState);
-        state = nextState;
-        if (done) break;
-      }
-      // optionally decay epsilon
-      if (typeof env.onEpisodeEnd === 'function') env.onEpisodeEnd(ep);
-    }
-  }
-
-
-  remember(transition) {
-    this.replay.push(transition);
-    if (this.replay.length > this.replaySize) this.replay.shift();
-  }
-
-  sampleBatch() {
-    const batch = [];
-    const n = Math.min(this.batchSize, this.replay.length);
-    for (let i = 0; i < n; i++) {
-      const idx = Math.floor(Math.random() * this.replay.length);
-      batch.push(this.replay[idx]);
-    }
-    return batch;
-  }
-
-  async trainStep() {
-    if (this.replay.length < this.batchSize) return;
-    const batch = this.sampleBatch();
-    const trainer = (this.model && typeof this.model.train === 'function') ? this.model : (this.targetModel && typeof this.targetModel.train === 'function' ? this.targetModel : null);
-    if (trainer) {
-      try {
-        await trainer.train(batch, { gamma: this.gamma, targetModel: this.targetModel });
-      } catch (e) {
-        console.warn('model.train failed, falling back to tabular', e);
-        for (const tr of batch) {
-          try { this.update(tr.state, tr.action, tr.reward, tr.nextState); } catch (err) { /* ignore */ }
-        }
-      }
-    } else {
-      // Simple fallback: perform tabular Q-updates for each sampled transition
-      for (const tr of batch) {
-        try {
-          const s = tr.state;
-          const a = tr.action;
-          const r = typeof tr.reward === 'number' ? tr.reward : 0;
-          const ns = tr.nextState;
-          this.update(s, a, r, ns);
-        } catch (err) { /* ignore */ }
-      }
-    }
-
-    if (typeof this.decayEpsilon === 'function') {
-      this.decayEpsilon();
-    }
   }
 
   setModel(model) {

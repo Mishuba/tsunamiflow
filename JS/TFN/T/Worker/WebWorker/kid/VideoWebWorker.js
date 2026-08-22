@@ -1,10 +1,82 @@
 
-let backgroundVideo;
-let Tfhex;
-let rgb;
-let chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
-let frameSkipCount = 2;
-let frameCounter = 0;
+class vidWorker {
+    backgroundVideo;
+    Tfhex;
+    rgb;
+    chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
+    frameSkipCount = 2;
+    frameCounter = 0;
+    constructor(options = {}) {
+
+    }
+    initRadioOffscreen(canvas, canvastype) {
+        if (this.offscreencanvas !== null) {
+            return;
+        } else {
+            try {
+                this.offscreencanvas = canvas;
+                this.canvasctx = this.offscreencanvas.getContext(canvastype);
+                if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
+                this.isoffscreenReady = true;
+                console.log(`OffscreenCanvas initialized with ${canvastype} context`);
+            } catch (err) {
+                console.error("OffscreenCanvas init failed:", err);
+                this.canvasctx = null;
+            }
+        }
+    }
+    scheduleVisualizerFrame(callback) {
+        // Try requestAnimationFrame first
+        try {
+            if (typeof requestAnimationFrame === "function") {
+                this.visualizerUsingTimeout = false;
+                return requestAnimationFrame(callback);
+            }
+        } catch (error) {
+            if (error.name === "NotSupportedError") {
+                console.warn("❌ requestAnimationFrame not supported, falling back to setTimeout");
+            } else {
+                console.error("Error in requestAnimationFrame:", error);
+            }
+        }
+
+        // Fall back to setTimeout
+        try {
+            this.visualizerUsingTimeout = true;
+            return setTimeout(callback, 16);
+        } catch (error) {
+            if (error.name === "NotSupportedError") {
+                console.warn("❌ setTimeout not supported");
+            } else {
+                console.error("Error in setTimeout:", error);
+            }
+        }
+
+        console.error("❌ No viable scheduling method available");
+        return null;
+    }
+    cancelVisualizerFrame(id) {
+        if (id === null) {
+            return;
+        }
+
+        if (this.visualizerUsingTimeout) {
+            clearTimeout(id);
+        } else {
+            cancelAnimationFrame(id);
+        }
+    }
+    stopVisualizerLoop() {
+        visualizerRunning = false;
+
+        if (visualizerFrame !== null) {
+            this.cancelVisualizerFrame(visualizerFrame);
+            visualizerFrame = null;
+        }
+    }
+
+}
+
 
 /*
 

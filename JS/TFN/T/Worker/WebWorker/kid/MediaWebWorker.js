@@ -295,11 +295,11 @@ class TsunamilowNation {
         vizloop();
     }
     stopVisualizerLoop() {
-        visualizerRunning = false;
+        this.visualizerRunning = false;
 
-        if (visualizerFrame !== null) {
-            this.cancelVisualizerFrame(visualizerFrame);
-            visualizerFrame = null;
+        if (this.visualizerFrame !== null) {
+            this.cancelVisualizerFrame(this.visualizerFrame);
+            this.visualizerFrame = null;
         }
     }
     tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
