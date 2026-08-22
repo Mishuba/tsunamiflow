@@ -159,7 +159,7 @@ class FFTProcessor extends AudioWorkletProcessor {
 
                 this.port.postMessage(this.tycadome(
                     "user-id",
-                    "audio-worklet",
+                    "audio.worklet",
                     "audio.visual.data",
 
                     {
