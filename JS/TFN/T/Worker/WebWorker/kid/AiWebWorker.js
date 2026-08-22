@@ -1,7 +1,7 @@
 // Use relative import so the worker resolves when loaded as a module.
 
 //neural network
-export class AiInterface {
+class AiWorkerInterface {
 	layer1 = null;
 	layer2 = null;
 	weights = null;
