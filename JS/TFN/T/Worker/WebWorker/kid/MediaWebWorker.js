@@ -1001,7 +1001,7 @@ async function MessageReceived(event) {
                     break;
             }
             break;
-        case "audio-worklet": {
+        case "audio.worklet": {
             const payload = event.data.payload || {};
             console.log("the audio worklet payload is " + payload);
 
