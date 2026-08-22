@@ -220,7 +220,7 @@ class TsunamilowNation {
             console.warn("⚠️ No audio data yet, skipping frame");
             return;
         }
-        this.canvasctx.fillStyle = "rgb(239, 228, 14)";
+        this.canvasctx.fillStyle = "rgb(8, 8, 8)";
         this.canvasctx.fillRect(
             0,
             0,
