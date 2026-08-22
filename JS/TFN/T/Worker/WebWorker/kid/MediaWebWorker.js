@@ -46,17 +46,19 @@ class TsunamilowNation {
         }
     }
     initRadioOffscreen(canvas, canvastype) {
-        if (!this.offscreencanvas) return;
-
-        try {
-            this.offscreencanvas = canvas;
-            this.canvasctx = this.offscreencanvas.getContext(canvastype);
-            if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
-            this.isoffscreenReady = true;
-            console.log(`OffscreenCanvas initialized with ${canvastype} context`);
-        } catch (err) {
-            console.error("OffscreenCanvas init failed:", err);
-            this.canvasctx = null;
+        if (this.offscreencanvas !== null) {
+            return;
+        } else {
+            try {
+                this.offscreencanvas = canvas;
+                this.canvasctx = this.offscreencanvas.getContext(canvastype);
+                if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
+                this.isoffscreenReady = true;
+                console.log(`OffscreenCanvas initialized with ${canvastype} context`);
+            } catch (err) {
+                console.error("OffscreenCanvas init failed:", err);
+                this.canvasctx = null;
+            }
         }
     }
     draw(p) {
