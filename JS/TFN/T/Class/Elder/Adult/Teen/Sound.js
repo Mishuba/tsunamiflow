@@ -187,6 +187,13 @@ export class TsunamiFlowSound extends TsDomCanvas {
         if (this.masterAudioWorklet === null) {
             await this.MasterSoundsContext.audioWorklet.addModule("https://tsunamiflow.club/JS/TFN/T/Class/Elder/Adult/TfNationProcessor.js");
             this.masterAudioWorklet = new AudioWorkletNode(this.MasterSoundsContext, "fft-processor", this.Workletoptions);
+            console.log("creating a on message event listener to go with audio worklet.");
+            this.masterAudioWorklet.port.onmessage = (message) => {
+                if (worker) {
+                    this.onWorkletMessage(message, worker);
+                }
+            };
+            console.log('created and now done with setting up mastercontext');
         }
 
         this.MixerDestination = this.MasterSoundsContext.createMediaStreamDestination();
@@ -204,14 +211,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
             this.masterAudioWorklet.connect(this.MixerDestination);
             console.log("success");
         }
-
-        console.log("creating a on message event listener to go with audio worklet.");
-        this.masterAudioWorklet.port.onmessage = (message) => {
-            if (worker) {
-                this.onWorkletMessage(message, worker);
-            }
-        };
-        console.log('created and now done with setting up mastercontext');
 
         if (element !== null) {
             if (this.elementSourceMap.has(id)) {

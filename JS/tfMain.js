@@ -52,61 +52,24 @@ const TFwordMishuba = {
 document.addEventListener("DOMContentLoaded", async (event) => {
 
   const SoundsContext = new (window.AudioContext || window.webkitAudioContext)();
-  const Workletoptions = {
-    numberOfInputs: 1, // 0
-    numberOfOutputs: 1,
 
-    processorOptions: {
-      mode: "fft",
-      fftSize: 2048,
-      customFlag: true
-    },
-    //outputChannelCount: [2], //[1]mono [2]stereo [2,2]dual stereo outputs // for more outputs use array length and channelCountMode "max"
-    parameterData: {
-      gain: 0.5,
-      frequency: 440,
-      delayTime: 0.5,
-      feedback: 0.5,
-      distortionAmount: 0.5,
-      pannerX: 0,
-      pannerY: 0,
-      pannerZ: 0
-    },
-
-    channelCount: 2,
-    channelCountMode: "max",
-    channelInterpretation: "speakers"
-  };
-  /*
-  const TfSoundAnalyserOptions = {
-    fftSize: 2048,
-    maxDecibels: 0,
-    minDecibels: -100,
-    smoothingTimeConstant: 0.5,
-    channelCountMode: "max"
-  };
-*/
   /*
   flowOscillator.type = "sine";
   flowOscillator.frequency.setValueAtTime(440, SoundsContext.currentTime);
   flowOscillator.start();
+  
+  */
 
-    await SoundsContext.audioWorklet.addModule(new URL("TFN/T/Class/Elder/Adult/TfNationProcessor.js", import.meta.url), Workletoptions);
-
-  const AudioWorklet = new AudioWorkletNode(SoundsContext, "fft-processor", Workletoptions);
-*/
   /*
-Tradio.connect(flowGain);
-flowGain.connect(flowAnalyser);
-flowAnalyser.connect(flowWorklet);
-flowWorklet.connect(flowCompressor);
-flowCompressor.connect(flowaudio.destination);
+const indexdb = {
+  name: ,
+  keyPath: ,
+
+}
+
+//dbstores: indexdb
+
 */
-
-  //const MyWebSocketLink = "wss://world.tsunamiflow.club/ws";s
-
-  //tf sounds
-
   const TsunamiController = new maxwell({
     MasterSoundsContext: SoundsContext,
   });
@@ -129,29 +92,7 @@ flowCompressor.connect(flowaudio.destination);
   };
 
   TsunamiController.onDomEvent("DOMContentLoaded");
-
-
-  /*
-TsunamiController.iframe.frame.addEventListener("load", () => {
-  try {
-    TsunamiController.iframe.frame.contentWindow.controller = TsunamiController;
-    TsunamiController.iframe.MenuSwitch(TsunamiController.iframe.frame);
-  } catch (e) {
-    console.error("Cross-origin block:", e);
-  }
 });
 
-*/
-});
 
-/*
-const indexdb = {
-  name: ,
-  keyPath: ,
-
-}
-
-//dbstores: indexdb
-
-*/
 

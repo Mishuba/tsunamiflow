@@ -15,11 +15,9 @@ export class maxwell {
     isItOk = null;
     worker = null;
     sharedWorker = null;
-    sharedWorkerPort = null;
-    tsunamisocket = null;
-    tsunamisocketlink = null;
     wsUrl = null;
-    offscreencanvas = null;
+    tsunamisocket = null;
+    tsunamisocketlink = "wss://world.tsunamiflow.club/ws";
     mainSection = null;
     site = new HeaderWeather();
     iframe = new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame);
@@ -725,8 +723,8 @@ export class maxwell {
         });
     }
     bindAudio() {
+        this.soundEngine.initAudioContext(this.worker, this.soundEngine.AudioElement, { type: "radio", element: "audio" }, "audio");
         this.RadioReady();
-        //this.soundEngine.AudioElement = find("TFradioPlayer");
         this.soundEngine.RadioEventListeners(this.worker, this.soundEngine.MasterSoundsContext);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
@@ -1000,7 +998,7 @@ export class maxwell {
             case 'radio':
                 switch (data.action) {
                     case 'receive.radio.file':
-
+                        this.soundEngine.initAudioContext(this.worker, this.soundEngine.AudioElement, { type: "radio", element: "audio" }, "audio");
                         this.soundEngine.loadaudio(this.soundEngine.AudioFile(event));
                         break;
 
@@ -1053,7 +1051,8 @@ export class maxwell {
     }
     handleError(source, error) {
         if (this.soundEngine.AudioElement.src === "") {
-            this.soundEngine.AudioFile(null);
+            this.soundEngine.initAudioContext(this.worker, this.soundEngine.AudioElement, { type: "radio", element: "audio" }, "audio");
+            this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
         }
         console.error("RAW WORKER ERROR:", error);
         console.error(`[${source}]message: `, error.message);
@@ -1129,54 +1128,49 @@ export class maxwell {
         }
     }
 
-    sendToSharedWorker(data = null) {
-        if (!this.sharedWorkerPort) return;
-
-        this.sharedWorkerPort.postMessage(data);
-    }
     async initTsunamiWorkers() {
         if (typeof Worker === "undefined") {
             console.warn("No Web Worker support");
-            this.soundEngine.AudioFile(null);
+            this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
             return;
-        }
-
-        if (this.worker === null) {
-            this.worker = this.createSafeWorker("T/Worker/WebWorker/TaskWebWorker.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", false);
-            this.worker.onmessage = async (e) => {
-                await this.handleWorkerMessage(e, this.worker);
+        } else {
+            if (this.worker === null) {
+                this.worker = this.createSafeWorker("T/Worker/WebWorker/TaskWebWorker.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/WebWorker/TaskWebWorker.js", false);
+                this.worker.onmessage = async (e) => {
+                    await this.handleWorkerMessage(e, this.worker);
+                }
+                this.worker.onerror = (e) => this.handleError(this.worker, e);
+                this.worker.postMessage(
+                    this.soundEngine.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "canvas",
+                        "load.radio.canvas",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            worker: "media"
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "loading",
+                            canvas: this.RadioOffscreenCanvas,
+                        },
+                        [
+                            this.RadioOffscreenCanvas
+                        ]
+                    ),
+                    [this.RadioOffscreenCanvas]);
             }
-            this.worker.onerror = (e) => this.handleError(this.worker, e);
-            this.worker.postMessage(
-                this.soundEngine.tycadome(
-                    "tycadome-guest" + Date.now(),
-                    "canvas",
-                    "load.radio.canvas",
-                    {
-                        source: "web",
-                        target: "device:web-001",
-                        worker: "media"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "loading",
-                        canvas: this.RadioOffscreenCanvas,
-                    },
-                    [
-                        this.RadioOffscreenCanvas
-                    ]
-                ),
-                [this.RadioOffscreenCanvas]);
-        }
 
-        if (this.sharedworker === null) {
-            this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
+            if (this.sharedworker === null) {
+                this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
-            this.sharedWorker.port.start();
+                this.sharedWorker.port.start();
+            }
         }
 
         if (typeof EventSource === "undefined") {

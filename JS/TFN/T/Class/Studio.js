@@ -754,6 +754,7 @@ export class Studio extends Flow {
         }
     }
     AudioFile(event) {
+
         if (this.radioSchedule === null) {
             if (!event?.data?.payload?.file) {
                 const i = Math.floor(Math.random() * this.DefaultPlaylist.length);
@@ -775,25 +776,32 @@ export class Studio extends Flow {
         this.AudioElement.load();
         this.tfRadioLoadStartTime = Date.now();
         console.log("Load start time recorded:", this.tfRadioLoadStartTime);
+
     }
-    emptiedAudio(worker) {
-        //cancelAnimationFrame(this.effects.visualizatorController);
-        console.log("The Tsunami Audio has been emptied and is ready to be loaded with a new source.");
-        //this.AudioNetworkState(worker);
+    emptiedAudio() {
+        console.log("The Tsunami Audio has been emptied,this i need to learn more about empty because this event breaks my code a lot. i am currently passing a worker. maybe do something with that. Do not do AudioNetworkState. maybe remove and delete thing.");
+        this.AudioElement.controls = false;
     }
-    stalledAudio(stalled, worker) {
-        console.log("The Tsunami Audio has stalled for some reason" + stalled);
+    stalledAudio(stalled) {
+        console.log(`The Tsunami Audio has stalled for some reason. the type should be ${stalled.type} and the target should be ${stalled.target}. the stalled event is ussually because the browser started to get dat but then stopped (usually because the network is slow or data isnt available yet). it just means playback might get stuck. `);
         console.log("The Tsunami Audio networkState " + this.AudioElement.networkState);
         console.log("The Tsunami Audio readyState " + this.AudioElement.readyState);
         console.log("The Tsunami Audio error " + this.AudioElement.error);
         console.log("The Tsunami Audio currentsrc " + this.AudioElement.currentsrc);
         console.log("The Tsunami Audio paused " + this.AudioElement.paused);
-        console.log("The Tsunami Audio buffered " + this.AudioElement.buffered);
-        //this.AudioNetworkState(worker);
+        console.log("buffered length " + this.AudioElement.buffered.length);
+        this.AudioElement.controls = false;
     }
     suspendedAudio(suspend) {
         console.log("The audio is suspended" + suspend);
+        console.log("The Tsunami Audio networkState " + this.AudioElement.networkState);
+        console.log("The Tsunami Audio readyState " + this.AudioElement.readyState);
+        console.log("The Tsunami Audio error " + this.AudioElement.error);
+        console.log("The Tsunami Audio currentsrc " + this.AudioElement.currentsrc);
+        console.log("The Tsunami Audio paused " + this.AudioElement.paused);
+        console.log("buffered length " + this.AudioElement.buffered.length);
         //  this.AudioState();
+        this.AudioElement.controls = false;
     }
     setaudioLoop(loop = true) {
         this.AudioElement.loop = loop;
@@ -802,6 +810,9 @@ export class Studio extends Flow {
     setaudioPlaybackRate(rate = 1) {
         this.AudioElement.playbackRate = rate;
     }
+    volumeaudio() {
+
+    }
 
     muteaudio(state = true) {
         this.AudioElement.muted = state;
@@ -809,19 +820,24 @@ export class Studio extends Flow {
     loadedmetadataAudio() {
         //create html data
         console.log("Audio playback is metadata loaded");
+        console.log("buffered length " + this.AudioElement.buffered.length);
+        this.AudioElement.controls = false;
     }
     loadeddataAudio() {
         console.log("The audio data is loaded");
+        console.log("buffered length " + this.AudioElement.buffered.length);
     }
     canplayAudio() {
         console.log("Audio playback is can play");
+        console.log("buffered length " + this.AudioElement.buffered.length);
+        this.AudioElement.controls = false;
     }
-    canplaythroughAudio(SoundsContext, worker, element, id, type) {
-        this.initAudioContext(SoundsContext, worker, element, id, type);
+    canplaythroughAudio() {
         console.log("Audio playback is can play through");
-        this.playaudio(worker, SoundsContext);
+        this.playaudio();
+        this.AudioElement.controls = true;
     }
-    endedAudio(worker, SoundsContext) {
+    endedAudio(worker) {
         console.log("The audio should have ended");
         //this.removeSource(this.AudioElement.id);
         if (this.radioSchedule === null) {
@@ -850,24 +866,26 @@ export class Studio extends Flow {
         } else {
             this.loadaudio(this.RadioTime(this.radioSchedule));
         }
-
+        this.AudioElement.controls = true;
     }
     waitingAudio() {
         console.log("Audio playback is waiting");
+        console.log("buffered length " + this.AudioElement.buffered.length);
+        this.AudioElement.controls = false;
     }
-    async playaudio(worker, SoundsContext) {
+    async playaudio() {
         try {
             if (this.AudioElement.paused || this.AudioElement.ended || this.AudioElement.currentTime === 0) {
                 if (this.AudioElement.paused) {
 
-                    if (SoundsContext?.state === 'suspended') {
-                        await SoundsContext.resume();
+                    if (this.MasterSoundsContext?.state === 'suspended') {
+                        await this.MasterSoundsContext.resume();
                         console.log('AudioContext resumed from playaudio');
                     }
                     await this.AudioElement.play();
                 } else {
-                    if (SoundsContext?.state === 'suspended') {
-                        await SoundsContext.resume();
+                    if (this.MasterSoundsContext?.state === 'suspended') {
+                        await this.MasterSoundsContext.resume();
                         console.log('AudioContext resumed from playaudio');
                     }
                     await this.AudioElement.play();
@@ -882,26 +900,28 @@ export class Studio extends Flow {
         }
     }
     playingAudio() {
-
+        this.AudioElement.controls = true;
+        console.log(`the played length is this.AudioElement.played.length`);
     }
-    pauseaudio(worker, SoundsContext) {
+    pauseaudio() {
         //this.visualizatorloop = false;
         this.AudioElement.pause();
         console.log("Audio playback is paused");
     }
     previousaudio(music) {
-        this.AudioElement.src = music;
-        this.AudioElement.play();
+        this.loadaudio(music)
     }
     restartaudio() {
         if (this.AudioElement) {
             this.AudioElement.pause();
             this.AudioElement.currentTime = 0;
             console.log("Audio playback is stopped");
+            this.playaudio();
         }
     }
     seekaudio(time) {
         this.AudioElement.currentTime = time;
+
     }
     FormatAudioTime(second) {
         this.AudioMinutes = Math.floor(second / 60);
@@ -972,23 +992,23 @@ export class Studio extends Flow {
         this.removeSource("live talking");
         this.AudioElement.removeAttribute("src");
     }
-    RadioEventListeners(worker, SoundsContext) {
+    RadioEventListeners(worker) {
         if (this._radioBound) {
             return;
         } else {
             this._radioBound = true;
-            this.AudioElement.addEventListener("emptied", async (emptied) => {
-                this.emptiedAudio(worker);
+            this.AudioElement.addEventListener("emptied", async () => {
+                this.emptiedAudio();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.emptiedAudio, "emptied");
 
-            this.AudioElement.addEventListener("waiting", (waiting) => {
+            this.AudioElement.addEventListener("waiting", () => {
                 this.waitingAudio();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.waitingAudio, "waiting");
 
             this.AudioElement.addEventListener("stalled", (stalled) => {
-                this.stalledAudio(stalled, worker);
+                this.stalledAudio(stalled);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.stalledAudio, "stalled");
 
@@ -998,7 +1018,7 @@ export class Studio extends Flow {
             //this._storeDomListener(this.AudioElement.id, this.AudioElement, this.loadstartAudio, "loadstart");
 
             this.AudioElement.addEventListener("suspended", (suspend) => {
-                this.suspendedAudio();
+                this.suspendedAudio(suspend);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.suspendAudio, "suspended");
 
@@ -1018,17 +1038,13 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplayAudio, "canplay");
 
             this.AudioElement.addEventListener("canplaythrough", async () => {
-                this.canplaythroughAudio(SoundsContext, worker, this.AudioElement, {
-                    element: this.AudioElement,
-                    system: "radio",
-                    elementid: this.AudioElement.id,
-                }, "audio");
+                this.canplaythroughAudio();
             });
 
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.canplaythroughAudio, "canplaythrough");
 
             this.AudioElement.addEventListener("play", () => {
-                this.playaudio(worker, SoundsContext);
+                this.playaudio();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playAudio, "play");
 
@@ -1038,7 +1054,7 @@ export class Studio extends Flow {
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.playingAudio, "playing");
 
             this.AudioElement.addEventListener("pause", async () => {
-                this.pauseaudio(worker, SoundsContext);
+                this.pauseaudio();
                 //this.stopAnalyserLoop();
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.pauseaudio, "pause");
@@ -1048,13 +1064,13 @@ export class Studio extends Flow {
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.timeupdateAudio, "timeupdate");
 
-            this.AudioElement.addEventListener("volumechange", (volumechange) => {
+            this.AudioElement.addEventListener("volumechange", () => {
                 //this.volumechangeAudio();
             });
             //this._storeDomListener(this.AudioElement.id, this.AudioElement, this.volumechangeAudio, "volumechange");
 
-            this.AudioElement.addEventListener("ended", async (ended) => {
-                this.endedAudio(worker, SoundsContext);
+            this.AudioElement.addEventListener("ended", async () => {
+                this.endedAudio(worker);
             });
             this._storeDomListener(this.AudioElement.id, this.AudioElement, this.endedAudio, "ended");
         }
