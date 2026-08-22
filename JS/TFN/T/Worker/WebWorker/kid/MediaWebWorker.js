@@ -291,7 +291,7 @@ class TsunamilowNation {
 
             this.RadioVisualizer();
 
-            this.visualizerFrame = scheduleVisualizerFrame(vizloop);
+            this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
         };
 
         vizloop();
@@ -300,7 +300,7 @@ class TsunamilowNation {
         visualizerRunning = false;
 
         if (visualizerFrame !== null) {
-            cancelVisualizerFrame(visualizerFrame);
+            this.cancelVisualizerFrame(visualizerFrame);
             visualizerFrame = null;
         }
     }
