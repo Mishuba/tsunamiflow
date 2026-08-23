@@ -100,8 +100,13 @@ export class User extends StripeDonation {
     // Update cost/payment
     if (membershipCostEl) membershipCostEl.innerHTML = config.displayText;
     if (paymentTypeEl) paymentTypeEl.innerHTML = config.paymentText;
-    //if (hiddenMC) hiddenMC.value = config.cost;
-    //if (hiddenPT) hiddenPT.value = config.payment;
+    if (hiddenMC) hiddenMC.value = config.cost;
+    if (hiddenPT) hiddenPT.value = config.payment;
+    //this.mountCard("user card element area."); or create one univeral spot.
+    /*
+the idea press pay button. other than 0 user submit payment. once accepted data sent to server. and put into database.
+   
+    */
   }
   signup(fields, extraFields) {
     const SubFormData = new FormData();
