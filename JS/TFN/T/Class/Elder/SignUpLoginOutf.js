@@ -64,6 +64,7 @@ export class User extends StripeDonation {
     },
   };
   reconnectInterval = 2000;
+
   constructor(options = {}) {
     super(options);
 
