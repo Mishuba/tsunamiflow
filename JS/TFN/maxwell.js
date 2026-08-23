@@ -1161,6 +1161,17 @@ export class maxwell {
                         }
                         break;
                     default:
+                        const { i, res, err } = data;
+                        const hand = this.aiWorkerPromises.get(i);
+
+                        if (!hand) return;
+                        this.aiWorkerPromises.delete(i);
+
+                        if (err) {
+                            hand.reject(new Error(err));
+                        } else {
+                            hand.resolve(res);
+                        }
                         break;
                 }
                 break;
