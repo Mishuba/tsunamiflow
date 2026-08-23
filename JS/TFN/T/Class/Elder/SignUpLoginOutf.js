@@ -83,7 +83,7 @@ export class User extends StripeDonation {
       }
     });
   }
-  updateMembership(membershipSelect, sections, membershipCostEl, paymentTypeEl) {
+  updateMembership(membershipSelect, sections, membershipCostEl, paymentTypeEl, hiddenMC, hiddenPT) {
     const level = membershipSelect.value;
     this.hideAllSections(sections);
 
@@ -105,7 +105,7 @@ export class User extends StripeDonation {
     //this.mountCard("user card element area."); or create one univeral spot.
     /*
 the idea press pay button. other than 0 user submit payment. once accepted data sent to server. and put into database.
-   
+
     */
   }
   signup(fields, extraFields) {

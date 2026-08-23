@@ -638,7 +638,7 @@ export class maxwell {
             address: this.find("AddressDetailsSubscribers"), // if present
             costInfo: this.find("membershipCostInfo"),
         };
-        this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl);
+        this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         this.onMe("TFCompleteForm", "submit", async () => {
             this.user.signup(this.userFields, this.extraFields);
         }, true, false);
