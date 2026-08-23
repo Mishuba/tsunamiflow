@@ -641,7 +641,7 @@ export class maxwell {
         this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         this.onMe("TFCompleteForm", "submit", async () => {
             this.user.signup(this.userFields, this.extraFields);
-        }, true, false);
+        }, true, null);
     }
 
     async addVideoToBin(file) {
