@@ -1294,11 +1294,10 @@ export class maxwell {
         }
     }
     sendMessage(username = "guest") {
-        this.chatInput = input.value.trim();
-        if (!this.chatInput || this.tsunamisocket.readyState !== WebSocket.OPEN) {
+        if (!this.chatInput.value.trim() || this.tsunamisocket.readyState !== WebSocket.OPEN) {
             return
         }
-        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput, username: username }));
+        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: username }));
         //or
         /*socket.send(this.user.tycadome(
             "guest",
@@ -1315,11 +1314,11 @@ export class maxwell {
             },
             "async",
             {
-                message: message,
+                message: this.chatInput.value.trim(),
                 username: this.username
             }
         ));*/
-        input.value = "";
+        this.chatInput.value = "";
     }
     receiveSharedWorkerMessage(e) {
         const msg = e.data;
