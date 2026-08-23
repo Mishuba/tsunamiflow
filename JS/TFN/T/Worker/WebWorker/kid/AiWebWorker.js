@@ -1,5 +1,7 @@
 // Use relative import so the worker resolves when loaded as a module.
 
+// let aiworker = AiWorkerInterace{inputSize: config.inputSize || 4,outputSize: config.outputSize || 2,	actions: config.actions || ['left', 'right'],alpha: config.alpha || 0.1,gamma: config.gamma || 0.99,epsilon: config.epsilon || 0.1,...config};
+
 //neural network
 class AiWorkerInterface {
 	layer1 = null;
@@ -470,7 +472,40 @@ class AiWorkerInterface {
 			}
 		}
 	}
+	tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
+		let tf = {
+			"id": id, //options.id
+			"type": type, //command
+			"action": action, // video.start
+			"meta": meta, // {}
+			"timestamp": Math.floor(Date.now() / 1000),
+			"state": state, // {}
+			"mode": mode, //"async"
+			"payload": payload // {},
+		};
 
+		// Attach transferables only if valid
+		const safeTransfer = [];
+
+		if (Array.isArray(transfer) && transfer.length > 0) {
+			for (const item of transfer) {
+				if (
+					item instanceof ArrayBuffer ||
+					item instanceof MessagePort ||
+					item instanceof ImageBitmap ||
+					item instanceof OffscreenCanvas ||
+					item instanceof AudioData ||
+					item instanceof VideoFrame
+				) {
+					safeTransfer.push(item);
+				}
+			}
+		}
+
+		tf.transfer = safeTransfer;
+
+		return tf;
+	}
 	// Create a new Neuron instance (weights + bias) and return it
 	neuron(numInputs) {
 		return {
@@ -618,14 +653,14 @@ class AiWorkerInterface {
 		const { convOptions = {}, poolSize = 2, poolStride = 2, poolType = 'max', activation = 'relu', flatten = false } = options;
 
 		// conv -> activation -> pool
-		const convOut = AiInterface.convolve(image, filters, convOptions);
+		const convOut = AiWorkerInterface.convolve(image, filters, convOptions);
 		// convOut may be single map or array
 		const maps = Array.isArray(convOut) ? convOut : [convOut];
 
-		const activated = maps.map(m => activation === 'relu' ? AiInterface.reluMap(m) : m);
-		const pooled = activated.map(m => AiInterface.pool(m, poolSize, poolStride, poolType));
+		const activated = maps.map(m => activation === 'relu' ? AiWorkerInterface.reluMap(m) : m);
+		const pooled = activated.map(m => AiWorkerInterface.pool(m, poolSize, poolStride, poolType));
 
-		if (flatten) return AiInterface.flatten(pooled);
+		if (flatten) return AiWorkerInterface.flatten(pooled);
 		return pooled.length === 1 ? pooled[0] : pooled;
 	}
 
@@ -956,11 +991,149 @@ function postWorkerError(err) {
 	}
 }
 
-self.onerror = (e) => {
-	postWorkerError(e);
+// ===== AI MESSAGE HANDLER =====
+
+const workerAI = new AiWorkerInterface({
+	inputSize: 4,
+	outputSize: 2,
+	actions: ['left', 'right'],
+	alpha: 0.1,
+	gamma: 0.99,
+	epsilon: 0.1
+});
+
+const handleAiMessage = async (event) => {
+
+	switch (event.data.type) {
+		case "ai":
+			switch (event.data.method) {
+
+				default:
+					try {
+						if (!workerAI) {
+							throw new Error('AI not initialized on worker');
+						}
+						if (typeof workerAI[event.data.method] !== 'function') {
+							throw new Error(`Method "${event.data.method}" not found`);
+						}
+
+						const method = event.data.action;
+						const args = Array.isArray(event.data.payload.args) ? event.data.payload.args : [];
+						let result = workerAI[event.data.method](...args);
+
+						if (result instanceof Promise) {
+							result
+								.then(res => {
+									self.postMessage(workerAI.tycadome(
+										id,
+										"ai",
+										method,
+										{
+											worker: "ai",
+										},
+										{
+											status: "completed",
+											priority: "normal"
+										},
+										{
+											need: "low",
+										},
+										{
+											result: res,
+											method: method,
+											timestamp: Date.now()
+										}
+									));
+								})
+								.catch(err => {
+									self.postMessage(workerAI.tycadome(
+										id,
+										"ai",
+										method,
+										{
+											worker: "ai",
+										},
+										{
+											status: "failed",
+											priority: "high"
+										},
+										{
+											need: "low",
+										},
+										{
+											system: "ai",
+											error: err,
+											messsge: err.message || String(err),
+											other: "none",
+											method: method,
+											timestamp: Date.now()
+										}
+									));
+								});
+						} else {
+							self.postMessage(workerAI.tycadome(
+								id,
+								"ai",
+								method,
+								{
+									worker: "ai",
+								},
+								{
+									status: "completed",
+									priority: "normal"
+								},
+								{
+									need: "low",
+								},
+								{
+									result: result,
+									method: method,
+									timestamp: Date.now()
+								}
+							));
+						}
+					} catch (err) {
+						self.postMessage(workerAI.tycadome(
+							id,
+							"ai",
+							method || unknown,
+							{
+								worker: "ai",
+							},
+							{
+								status: "failed",
+								priority: "high"
+							},
+							{
+								need: "low",
+							},
+							{
+								system: "ai",
+								error: err,
+								messsge: err.message,
+								other: err.stack
+							}
+						));
+					}
+					break;
+			}
+		default:
+			break;
+	}
 };
 
+
+
 try {
+	// Add to your existing self.onmessage handler:
+	self.onmessage = async (e) => {
+		await handleAiMessage(e);
+		return;
+	};
+
+	self.onerror = (e) => {
+		postWorkerError(e);
+	};
 	console.log("AiWebWorker started");
 } catch (err) {
 	postWorkerError(err);

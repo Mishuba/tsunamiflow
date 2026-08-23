@@ -663,7 +663,7 @@ export class AiInterface {
     const g = AiInterface._tanhVec(AiInterface._dotMatVec(this.Wxc, x).map((v, i) => v + AiInterface._dotMatVec(this.Whc, prevH)[i] + this.bc[i]));
     const o = AiInterface._sigmoidVec(AiInterface._dotMatVec(this.Wxo, x).map((v, i) => v + AiInterface._dotMatVec(this.Who, prevH)[i] + this.bo[i]));
 
-    const nextC = prevC.map((cv, i) => f[i] * cv + i[i] * g[i]);
+    const nextC = prevC.map((cv, i) => f[i] * cv + (i[i] * g[i]));
     const nextH = nextC.map((cv, i) => o[i] * Math.tanh(cv));
 
     this.h = nextH.slice(); this.c = nextC.slice();
