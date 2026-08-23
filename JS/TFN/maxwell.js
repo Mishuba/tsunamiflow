@@ -649,11 +649,11 @@ export class maxwell {
 
         this.user.chatInput = find("TFthoughtsNow")
         this.onMe("LiveStreamChat", "click", async () => {
-            this.user.sendMessage(this.user.chatInput, this.tsunamisocket);
+            this.sendMessage();
         }, true, null);
         this.onMe("TFthoughtsNow", "keydown", async (e) => {
             if (e.key === "Enter") {
-                this.user.sendMessage()
+                this.sendMessage();
             };
         })
     }
@@ -1244,14 +1244,17 @@ export class maxwell {
         this.emit("error", { source, error });
     }
     connectWebSocket(key = "viewer", role = "viewer") {
+        console.log("creating socket link.");
         this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+        console.log("creating socket");
         this.tsunamisocket = new WebSocket(this.wsUrl);
         this.tsunamisocket.binaryType = "arraybuffer";
 
+        console.log("attempting to open socket");
         this.tsunamisocket.onopen = async () => {
             log("🌐 WebSocket connected.");
-            document.getElementById("startBtn").disabled = true;
-            document.getElementById("stopBtn").disabled = false;
+            //document.getElementById("startBtn").disabled = true;
+            //document.getElementById("stopBtn").disabled = false;
 
             if (this.user.reconnectTimer) clearTimeout(this.user.reconnectTimer);
 
@@ -1289,6 +1292,34 @@ export class maxwell {
                 console.error("Invalid WebSocket message:", event.data);
             }
         }
+    }
+    sendMessage(username = "guest") {
+        this.chatInput = input.value.trim();
+        if (!this.chatInput || this.tsunamisocket.readyState !== WebSocket.OPEN) {
+            return
+        }
+        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput, username: username }));
+        //or
+        /*socket.send(this.user.tycadome(
+            "guest",
+            "chat",
+            "send.message",
+            {
+                worker: "shared",
+                server: "backend",
+                ai: true
+            },
+            {
+                status: "working",
+                priority: "low"
+            },
+            "async",
+            {
+                message: message,
+                username: this.username
+            }
+        ));*/
+        input.value = "";
     }
     receiveSharedWorkerMessage(e) {
         const msg = e.data;
@@ -1454,7 +1485,7 @@ export class maxwell {
                             this.bindAudio();
                         }
                         this.site.requestLocation();
-                        this.connectWebSocket("viewer", "viewer");
+                        this.connectWebSocket();
                         console.log("TFN");
                     }).catch(err => {
                         console.error("Cart binding error:", err);
