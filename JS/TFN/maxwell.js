@@ -641,6 +641,7 @@ export class maxwell {
             costInfo: this.find("membershipCostInfo"),
         };
         this.chatBox = find("TFthought");
+        this.chatInput = find("TFthoughtsNow");
         this.onMe("TFMembershipLevel", "click", async () => {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
