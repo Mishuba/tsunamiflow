@@ -583,11 +583,6 @@ export class maxwell {
         }
         );
     }
-    bindSignUp() {
-        this.onMe("TFCompleteForm", "submit", async () => {
-            this.user.signup(this.userFields, this.extraFields);
-        }, true, false);
-    }
     bindUsers() {
         this.userFields = {
             tfFN: this.find("TfFirstName", null),
@@ -643,7 +638,10 @@ export class maxwell {
             address: this.find("AddressDetailsSubscribers"), // if present
             costInfo: this.find("membershipCostInfo"),
         };
-        this.bindSignUp();
+        this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl);
+        this.onMe("TFCompleteForm", "submit", async () => {
+            this.user.signup(this.userFields, this.extraFields);
+        }, true, false);
     }
 
     async addVideoToBin(file) {
@@ -1355,7 +1353,6 @@ export class maxwell {
         switch (event) {
             case "DOMContentLoaded":
 
-                this.user.updateMembership();
                 this.mainSection = this.find("mainTsectionFdiv");
                 this.mainSectionWidth = this.mainSection ? (this.mainSection.clientWidth || this.mainSection.offsetWidth || 800) : 800;
                 this.mainSectionHeight = this.mainSection ? (this.mainSection.clientHeight || this.mainSection.offsetHeight || 600) : 600;
