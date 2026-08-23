@@ -13,7 +13,7 @@ export class User extends StripeDonation {
       displayText: "Please Select a Level",
       paymentText: ""
     },
-    free: {
+    Free: {
       cost: 0,
       payment: "none",
       show: [
@@ -24,7 +24,7 @@ export class User extends StripeDonation {
       displayText: "$0.00",
       paymentText: "No payment required"
     },
-    regular: {
+    Regular: {
       cost: 4,
       payment: "monthly",
       show: [
@@ -36,7 +36,7 @@ export class User extends StripeDonation {
       displayText: "$4.00",
       paymentText: "Monthly payment"
     },
-    vip: {
+    Vip: {
       cost: 7,
       payment: "monthly",
       show: [
@@ -49,7 +49,7 @@ export class User extends StripeDonation {
       displayText: "$7.00",
       paymentText: "Monthly payment"
     },
-    team: {
+    Team: {
       cost: 10,
       payment: "monthly",
       show: [
