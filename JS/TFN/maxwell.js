@@ -18,6 +18,7 @@ export class maxwell {
     wsUrl = null;
     tsunamisocket = null;
     tsunamisocketlink = "wss://world.tsunamiflow.club/ws";
+    reconnectInterval = 2000;
     mainSection = null;
     chatBox = null;
     site = new HeaderWeather();
@@ -1258,15 +1259,14 @@ export class maxwell {
             //document.getElementById("startBtn").disabled = true;
             //document.getElementById("stopBtn").disabled = false;
 
-            if (this.user.reconnectTimer) clearTimeout(this.user.reconnectTimer);
-
+            if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
         }
         this.tsunamisocket.onclose = async () => {
-            console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
-            console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
+            console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
+            console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
             //document.getElementById("startBtn").disabled = false;
             //document.getElementById("stopBtn").disabled = true;
-            setTimeout(this.connectWebSocket, this.user.reconnectInterval);
+            setTimeout(this.connectWebSocket, this.reconnectInterval);
         }
 
         this.tsunamisocket.onerror = async (err) => {
