@@ -1248,7 +1248,7 @@ export class maxwell {
     }
     connectWebSocket(key = "viewer", role = "viewer") {
         console.log("creating socket link.");
-        this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+        this.wsUrl = `wss://world.tsunamiflow.club/ws?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
         console.log("creating socket");
         this.tsunamisocket = new WebSocket(this.wsUrl);
         this.tsunamisocket.binaryType = "arraybuffer";
