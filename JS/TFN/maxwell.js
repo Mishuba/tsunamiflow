@@ -26,6 +26,7 @@ export class maxwell {
         stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
         backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
     });
+    chatInput = null;
     imageEngine = new TsunamiFlowImageEngine();
     //soundEngine = null;
     radiodock = null;
@@ -1315,7 +1316,7 @@ export class maxwell {
             "async",
             {
                 message: this.chatInput.value.trim(),
-                username: this.username
+                username: username
             }
         ));*/
         this.chatInput.value = "";
