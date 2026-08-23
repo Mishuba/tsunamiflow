@@ -1252,7 +1252,7 @@ export class maxwell {
 
         console.log("attempting to open socket");
         this.tsunamisocket.onopen = async () => {
-            log("🌐 WebSocket connected.");
+            console.log("🌐 WebSocket connected.");
             //document.getElementById("startBtn").disabled = true;
             //document.getElementById("stopBtn").disabled = false;
 
@@ -1260,7 +1260,7 @@ export class maxwell {
 
         }
         this.tsunamisocket.onclose = async () => {
-            log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
+            console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
             console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
             document.getElementById("startBtn").disabled = false;
             document.getElementById("stopBtn").disabled = true;
@@ -1268,7 +1268,7 @@ export class maxwell {
         }
 
         this.tsunamisocket.onerror = async (err) => {
-            log("❌ WebSocket error: " + err);
+            console.log("❌ WebSocket error: " + err);
             console.error("WebSocket error:", err);
         }
         this.tsunamisocket.onmessage = async (event) => {
@@ -1283,7 +1283,7 @@ export class maxwell {
                         break;
                     case "ffmpeg_stderr":
                         this.chatBox.innerHTML += `<div style="color:#f88;"><em>FFmpeg: ${data.message}</em></div>`;
-                        log("[FFmpeg] " + data.message);
+                        console.log("[FFmpeg] " + data.message);
                         break;
                 }
                 this.chatBox.scrollTop = this.chatBox.scrollHeight;
