@@ -1,109 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TsunamiFlow Live</title>
-<style>
-    body { font-family: Arial, sans-serif; margin: 20px; background: #111; color: #eee; }
-    #chatBox { height: 300px; overflow-y: scroll; border: 1px solid #444; padding: 10px; margin-bottom: 10px; background: #222; }
-    #msg { width: 75%; padding: 5px; background: #333; color: #eee; border: 1px solid #555; }
-    #LiveStreamChat { padding: 5px 10px; background: #1e90ff; color: #fff; border: none; cursor: pointer; }
-    #LiveStreamChat:hover { background: #0f78d1; }
-    video { width: 100%; max-width: 800px; margin-bottom: 20px; background: black; }
-</style>
-<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-</head>
-<body>
-<h1>🎥 TsunamiFlow Live</h1>
-
-<!-- VIDEO STREAM -->
-<video id="stream" type="application/vnd.apple.mpegurl" controls autoplay muted></video>
-
-<!-- CHAT -->
-<h2>💬 Live Chat</h2>
-<div id="chatBox"></div>
-<input id="msg" type="text" placeholder="Type a message...">
-<button id="LiveStreamChat">Send</button>
-
-<script>
-const chatBox = document.getElementById('chatBox');
-const input = document.getElementById('msg');
-const sendButton = document.getElementById("LiveStreamChat");
-
-// You can replace "Guest" with your logged-in username logic
-const username = "Guest";
-
-// ------------------------
-// VIDEO STREAM SETUP (HLS)
-// ------------------------
-const videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
-const videoEl = document.getElementById("stream");
-
-if (Hls.isSupported()) {
-    const hls = new Hls();
-    hls.loadSource(videoSrc);
-    hls.attachMedia(videoEl);
-    hls.on(Hls.Events.ERROR, (event, data) => console.error("HLS error:", data));
-} else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
-    videoEl.src = videoSrc;
-} else {
-    console.error("HLS not supported in this browser.");
-}
-
-// ------------------------
-// WEBSOCKET WITH AUTORECONNECT
-// ------------------------
-let socket;
-let reconnectInterval = 2000;
-
-function connectWebSocket() {
-    socket = new WebSocket("wss://world.tsunamiflow.club/ws");
-
-    socket.onopen = () => console.log("WebSocket connected!");
-    socket.onclose = () => {
-        console.log(`WebSocket disconnected. Reconnecting in ${reconnectInterval/1000}s...`);
-        setTimeout(connectWebSocket, reconnectInterval);
-    };
-    socket.onerror = (err) => console.error("WebSocket error:", err);
-
-    socket.onmessage = function(event) {
-        try {
-            const data = JSON.parse(event.data);
-            switch(data.type) {
-                case "welcome":
-                    chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
-                    break;
-                case "chat":
-                    chatBox.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
-                    break;
-                case "ffmpeg_stderr":
-                    chatBox.innerHTML += `<div style="color:#f88;"><em>FFmpeg: ${data.message}</em></div>`;
-                    break;
-            }
-            chatBox.scrollTop = chatBox.scrollHeight;
-        } catch (e) {
-            console.error("Invalid WebSocket message:", event.data);
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TsunamiFlow Live</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #111;
+            color: #eee;
         }
-    };
-}
 
-// Connect immediately
-connectWebSocket();
+        video {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background: black;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
 
-// ------------------------
-// SEND MESSAGE
-// ------------------------
-function sendMessage() {
-    const message = input.value.trim();
-    if (!message || socket.readyState !== WebSocket.OPEN) return;
-    const payload = { type: "chat", message: message, username };
-    socket.send(JSON.stringify(payload));
-    input.value = "";
-}
+<body>
+    <h1>🎥 TsunamiFlow Live</h1>
 
-sendButton.addEventListener("click", sendMessage);
-input.addEventListener("keydown", (e) => { if(e.key === "Enter") sendMessage(); });
-</script>
+    <!-- VIDEO STREAM -->
+    <video id="stream" type="application/vnd.apple.mpegurl" controls autoplay muted></video>
+
+    <!-- CHAT -->
+    <h2>💬 Live Chat</h2>
+    <div id="chatBox"></div>
+    <input id="msg" type="text" placeholder="Type a message...">
+    <button id="LiveStreamChat">Send</button>
+
+    <script>
+        const videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
+        const videoEl = document.getElementById("stream");
+
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(videoEl);
+            hls.on(Hls.Events.ERROR, (event, data) => console.error("HLS error:", data));
+        } else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+            videoEl.src = videoSrc;
+        } else {
+            console.error("HLS not supported in this browser.");
+        }
+    </script>
 </body>
+
 </html>

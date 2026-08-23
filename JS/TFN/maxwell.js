@@ -19,6 +19,7 @@ export class maxwell {
     tsunamisocket = null;
     tsunamisocketlink = "wss://world.tsunamiflow.club/ws";
     mainSection = null;
+    chatBox = null;
     site = new HeaderWeather();
     iframe = new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame);
     user = new TfPrintful({
@@ -638,12 +639,23 @@ export class maxwell {
             address: this.find("AddressDetailsSubscribers"), // if present
             costInfo: this.find("membershipCostInfo"),
         };
+        this.chatBox = find("TFthought");
         this.onMe("TFMembershipLevel", "click", async () => {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
         this.onMe("TFCompleteForm", "submit", async () => {
             this.user.signup(this.userFields, this.extraFields);
         }, true, null);
+
+        this.user.chatInput = find("TFthoughtsNow")
+        this.onMe("LiveStreamChat", "click", async () => {
+            this.user.sendMessage(this.user.chatInput, this.tsunamisocket);
+        }, true, null);
+        this.onMe("TFthoughtsNow", "keydown", async (e) => {
+            if (e.key === "Enter") {
+                this.user.sendMessage()
+            };
+        })
     }
 
     async addVideoToBin(file) {
@@ -1231,40 +1243,53 @@ export class maxwell {
         console.error(`[${source}]colno: `, error.colno);
         this.emit("error", { source, error });
     }
-    connectWS(key = "viewer", role = "viewer") {
+    connectWebSocket(key = "viewer", role = "viewer") {
         this.wsUrl = `${this.tsunamisocketlink}?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
         this.tsunamisocket = new WebSocket(this.wsUrl);
         this.tsunamisocket.binaryType = "arraybuffer";
 
-        this.tsunamisocket.onopen = () => {
+        this.tsunamisocket.onopen = async () => {
             log("🌐 WebSocket connected.");
             document.getElementById("startBtn").disabled = true;
             document.getElementById("stopBtn").disabled = false;
-            /*
-            if (reconnectTimer) clearTimeout(reconnectTimer);
-            */
-        };
 
-        this.tsunamisocket.onclose = () => {
-            log("⚠️ WebSocket closed.");
+            if (this.user.reconnectTimer) clearTimeout(this.user.reconnectTimer);
+
+        }
+        this.tsunamisocket.onclose = async () => {
+            log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
+            console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
             document.getElementById("startBtn").disabled = false;
             document.getElementById("stopBtn").disabled = true;
-        };
+            setTimeout(this.connectWebSocket, this.user.reconnectInterval);
+        }
 
-        this.tsunamisocket.onerror = (err) => {
+        this.tsunamisocket.onerror = async (err) => {
             log("❌ WebSocket error: " + err);
-        };
-
-        this.tsunamisocket.onmessage = event => {
+            console.error("WebSocket error:", err);
+        }
+        this.tsunamisocket.onmessage = async (event) => {
             try {
                 const data = JSON.parse(event.data);
-                if (data.type === "ffmpeg_stderr") log("[FFmpeg] " + data.message);
-            } catch {
+                switch (data.type) {
+                    case "welcome":
+                        this.chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
+                        break;
+                    case "chat":
+                        this.chatBox.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
+                        break;
+                    case "ffmpeg_stderr":
+                        this.chatBox.innerHTML += `<div style="color:#f88;"><em>FFmpeg: ${data.message}</em></div>`;
+                        log("[FFmpeg] " + data.message);
+                        break;
+                }
+                this.chatBox.scrollTop = this.chatBox.scrollHeight;
+            } catch (e) {
                 // ignore non-JSON
+                console.error("Invalid WebSocket message:", event.data);
             }
-        };
+        }
     }
-
     receiveSharedWorkerMessage(e) {
         const msg = e.data;
 
@@ -1429,6 +1454,7 @@ export class maxwell {
                             this.bindAudio();
                         }
                         this.site.requestLocation();
+                        this.connectWebSocket("viewer", "viewer");
                         console.log("TFN");
                     }).catch(err => {
                         console.error("Cart binding error:", err);

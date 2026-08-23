@@ -271,6 +271,36 @@ section>* {
     padding: 10px;
 }
 
+#TFthought {
+    width: 100%;
+    height: 50px;
+    overflow-y: scroll;
+    /*border: 1px solid #444;*/
+    /*padding: 10px;*/
+    /*margin-bottom: 10px;*/
+    /*background: #222;*/
+}
+
+#TFthoughtsNow {
+    width: 100%;
+    padding: 10px;
+    /*background: #333;
+    color: #eee;
+    border: 1px solid #555;*/
+}
+
+#LiveStreamChat {
+    padding: 5px 10px;
+    background: #1e90ff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#LiveStreamChat:hover {
+    background: #0f78d1;
+}
+
 /* =========================
    PERSISTENT RADIO PLAYER
 ========================= */

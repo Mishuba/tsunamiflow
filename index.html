@@ -143,6 +143,7 @@
                 <h6> Tsunami Radio (completely random)</h6>
                 <p id="TfRadioStuff"></p>
                 <p id="CheckRadio"></p>
+
             </span>
             <span>
                 <address id="authorStuffTF">
@@ -167,23 +168,10 @@
         </section>
         <aside id="tfExtraSection">
             <span id="ThoughtsCss">
-                <form id="TFthoughtsNow" method="POST" action="server.php" target="_blank">
-                    <label for="TFthoughtLabel"><textarea name="tfThoughtArea" id="TFthought" cols="14" rows="5"
-                            placeholder="Share your thoughts with everyone."></textarea></label>
-                    <br>
-                    <input type="submit" id="ThoughtsButtonTFok" name="tfTbutton" value="Release">
-                </form>
-            </span>
-            <span id="ThoughtArea">
-                <h4>Thoughts</h4>
-                <ul id="thoughtsList"></ul>
-                <i class="glyphicon glyphicon-thumbs-up">like</i>
-                <i class="material-icons">love </i>
-                <i class="glyphicon glyphicon-remove">remove </i>
-                <select name="numThoughts">
-                    <option value="1">1</option>
-                </select>
-                <button type="submit" id="displayNumberOfThoughts">This Many?</button>
+                <h2>💬 Live Chat</h2>
+                <div id="TFthought"></div>
+                <input id="TFthoughtsNow" type="text" placeholder="Type a message...">
+                <button id="LiveStreamChat">Send</button>
             </span>
             <span id="ThoughtsCss">
                 <form name="TfCompleteForm" id="TFCompleteForm" class="TfMemberForm" autocomplete="on" target="_self"

@@ -62,7 +62,8 @@ export class User extends StripeDonation {
       displayText: "$10.00",
       paymentText: "Monthly payment"
     },
-  }
+  };
+  reconnectInterval = 2000;
   constructor(options = {}) {
     super(options);
 
@@ -104,8 +105,8 @@ export class User extends StripeDonation {
     if (hiddenPT) hiddenPT.value = config.payment;
     //this.mountCard("user card element area."); or create one univeral spot.
     /*
-the idea press pay button. other than 0 user submit payment. once accepted data sent to server. and put into database.
-
+  the idea press pay button. other than 0 user submit payment. once accepted data sent to server. and put into database.
+   
     */
   }
   signup(fields, extraFields) {
@@ -156,5 +157,35 @@ the idea press pay button. other than 0 user submit payment. once accepted data 
     this.username = null;
     this.password = null;
     console.log("User logged out.");
+  }
+
+  sendMessage(input, socket,) {
+    const message = input.value.trim();
+    if (!message || socket.readyState !== WebSocket.OPEN) {
+      return
+    }
+    let payload = this.tycadome(
+      "guest",
+      "chat",
+      "send.message",
+      {
+        worker: "shared",
+        server: "backend",
+        ai: true
+      },
+      {
+        status: "working",
+        priority: "low"
+      },
+      "async",
+      {
+        message: message,
+        username: this.username
+      }
+    );
+    socket.send(JSON.stringify({ type: "chat", message: message, username: this.username }));
+    //or
+    //socket.send(payload);
+    input.value = "";
   }
 }
