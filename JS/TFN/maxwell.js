@@ -1264,8 +1264,8 @@ export class maxwell {
         this.tsunamisocket.onclose = async () => {
             console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
             console.log(`WebSocket disconnected. Reconnecting in ${this.user.reconnectInterval / 1000}s...`);
-            document.getElementById("startBtn").disabled = false;
-            document.getElementById("stopBtn").disabled = true;
+            //document.getElementById("startBtn").disabled = false;
+            //document.getElementById("stopBtn").disabled = true;
             setTimeout(this.connectWebSocket, this.user.reconnectInterval);
         }
 
