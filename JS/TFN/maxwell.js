@@ -631,18 +631,16 @@ export class maxwell {
         this.hiddenMC = this.find("hiddenMC");
         this.hiddenPT = this.find("hiddenPT");
         this.sections = {
-            Free: this.find("freeLevelInputs"),
-            Regular: this.find("regularLevelInputs"),
-            Vip: this.find("vipLevelInputs"),
-            Team: this.find("teamLevelInputs"),
+            free: this.find("freeLevelInputs"),
+            regular: this.find("regularLevelInputs"),
+            vip: this.find("vipLevelInputs"),
+            team: this.find("teamLevelInputs"),
             address: this.find("AddressDetailsSubscribers"), // if present
             costInfo: this.find("membershipCostInfo"),
         };
-
         this.onMe("TFMembershipLevel", "click", async () => {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
-
         this.onMe("TFCompleteForm", "submit", async () => {
             this.user.signup(this.userFields, this.extraFields);
         }, true, null);
