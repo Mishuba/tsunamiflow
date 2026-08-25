@@ -756,168 +756,264 @@ export class maxwell {
 
     }
     bindVidSystem() {
-        if (this.videoEngine._videoBound) return;
-        this.videoEngine._videoBound = true;
-        const iframe = this.iframe.frame;
-        this.onMe("RemoveCameraStream", async () => {
-            this.videoEngine.detachVideoStream();
-        })
-        // START WEBCAM + DRAW LOOP
-        this.onMe("TfStartShit", async () => {
-            if (this.videoEngine.canvas === null) {
-                this.videoEngine.canvas = this.find("TFcanvas", true);
-            }
-            if (this.videoEngine.videoElement === null) {
-                this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
-            }
-            if (!this.videoEngine.webcamstream) {
-                try {
-                    await this.videoEngine.startwebcam();            // get MediaStream
-                    this.videoEngine.attachwebcam();
-                    /*
-                                        if (!this.soundEngine._webcamWired) {
-                                            this.soundEngine.webcamAudioStream.addMixerMediaElement(this.videoEngine.videoElement, this.videoEngine.videoElement.id, false);
-                                            this.soundEngine._webcamWired = true;
-                                        }
-                                        */
-                    /*
-                                        //this.effects.isPlaying = true;
-        
-                    // FRAME DRAW LOOP
-                    const drawLoop = async () => {
-                    if (!this.effects.isPlaying) return;
-                    await this.effects.drawingFrame(this.videoCanv, this.videoElem);
-                    requestAnimationFrame(drawLoop);
+        if (this.videoEngine._videoBound === true) {
+            return;
+        } else {
+            const iframe = this.iframe.frame;
+
+            this.onMe("TfControlShit", async () => {
+                if (this.buttonPressed === true) {
+                    //disable all buttons.
+
+                    //this.buttonPressed = null;
+                    return;
+                } else {
+                    this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
+                    this.videoEngine.canvas = this.find("TFcanvas", true);
+                    this.VideooOffscreenCanvas = this.videoEngine.canvas.transferControlToOffscreen();
+                    this.worker.postMessage(
+                        this.videoEngine.tycadome(
+                            "tycadome-guest" + Date.now(),
+                            "canvas",
+                            "load.video.canvas",
+                            {
+                                source: "web",
+                                target: "device:web-001",
+                                worker: "video"
+                            },
+                            {
+                                status: "pending",
+                                priority: "low"
+                            },
+                            "async",
+                            {
+                                system: "loading",
+                                canvas: this.VideooOffscreenCanvas,
+                            },
+                            [
+                                this.VideooOffscreenCanvas
+                            ]
+                        ),
+                        [this.VideooOffscreenCanvas]);
+                    //webcam
+                    this.onMe("TfStartShit", async () => {
+                        if (!this.videoEngine.webcamstream) {
+                            try {
+                                await this.videoEngine.startwebcam();            // get MediaStream
+                                this.videoEngine.attachwebcam();
+
+                                this.soundEngine.initAudioContext(this.worker, this.videoEngine.webcamaudioTrack, {
+                                    type: "webcam",
+                                    element: "window"
+                                }, "webcam");
+
+                            } catch (err) {
+                                console.error("Webcam start failed:", err);
+                            }
+                        }
+                    }, false, iframe);
+                    // STOP WEBCAM
+                    this.onMe("TfStopShit", () => {
+                        this.videoEngine.stopwebcam();
+                    }, false, iframe);
+
+                    const sounds = {
+                        crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
+                        bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
+                        gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effect (Loading and shooting) (3_10 Guns).mp3"),
+                        laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
+                        intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
+                        hellnah: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
+                        shock: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/I cant believe youve done this (Full Facepunch Meme) - Sound Effect for editing.mp3"),
+                        wtf: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
+                        other: new Audio("https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg")
                     };
-                    drawLoop();
-                    */
-                } catch (err) {
-                    console.error("Webcam start failed:", err);
-                }
-            }
-        }, false, iframe);
 
-        // STOP WEBCAM
-        this.onMe("TfStopShit", () => {
-            this.videoEngine.stopwebcam();
-            //this.effects.isPlaying = false;
-        }, false, iframe);
+                    const fxSources = {};
 
-        // START Video From Bin
-        this.onMe("TFplayFromBin", async () => {
-            const id = this.find("TFmediaSelect", true).value;
-            await this.playFromBin(id);
-        }, false, iframe);
+                    for (const key in sounds) fxSources[key] = this.soundEngine.initAudioContext(this.worker, sounds[key], { type: "video", element: "audio" }, "video");
 
-        // ENABLE CHROMA KEY
-        this.onMe("TuseFthisKeycolor", () => {
-            const keyInput = this.find("TFchromaKey", true); // color input inside iframe
-            //this.effects.ColorPickerChromaKey(keyInput);
-            //this.effects.useChromaKey = true;
-        }, false, iframe);
+                    let playlist = this.soundEngine.radioSchedule ? this.soundEngine.DefaultPlaylist : this.soundEngine.AudioElement; this.onMe("crowdclapping", "click", async () => {
+                        sounds.crowd.play();
+                    }, false, iframe);
 
-        // DISABLE CHROMA KEY
-        this.onMe("rmvTFchromakey", () => {
-            //this.effects.disableChromaKey();
-        }, false, iframe);
+                    this.onMe("tsunamibomb", "click", async () => {
+                        sounds.bomb.play();
+                    }, false, iframe);
 
-        // UPLOAD / REMOVE BACKGROUND IMAGE
-        //this.onMe("TFuploadImage", (e) => this.effects.UploadImage(e), false, iframe);
-        //this.onMe("rmvTFimg", () => this.effects.RemoveImage(this.videoCanv, this.videoCanv.width, this.videoCanv.height), false, iframe);
+                    this.onMe("tsunamigun", "click", async () => {
+                        sounds.gun.play();
+                    }, false, iframe);
 
-        // UPLOAD / REMOVE BACKGROUND VIDEO
-        //this.onMe("TFuploadVideo", (e) => this.effects.UploadVideo(e), false, iframe);
-        //this.onMe("rmvTFvid", () => this.effects.RemoveVideo(this.videoCanv, this.videoCanv.height, this.videoCanv.width), false, iframe);
+                    this.onMe("tsunamiLaugh", "click", async () => {
+                        sounds.laugh.play();
+                    }, false, iframe);
 
-        this.onMe("CaptureScreen", () => {
-            this.screenStream = this.videoEngine.startScreenShare();
-            this.videoEngine.attachVideoStream(this.screenStream);;
-        })
-        // START / STOP RECORDING if recorder exists
-        this.onMe("TfStartRecPlz", () => {
-            //this.videoEngine.startStream();
-            if (this.videoEngine.canvas === null) {
-                this.videoEngine.canvas = this.find("TFcanvas", true);
-            }
-            if (this.videoEngine.videoElement === null) {
-                this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
-            }
-            if (!this.videoEngine.webcamstream) {
-                try {
-                    this.videoEngine.startwebcam();            // get MediaStream
-                    this.videoEngine.attachwebcam();
+                    this.onMe("randomIntro", "click", async () => {
+                        sounds.intro.play();
+                    }, false, iframe);
+
+                    this.onMe("hellNah", "click", async () => {
+                        sounds.hellnah.play();
+                    }, false, iframe);
+
+                    this.onMe("shocking", "click", async () => {
+                        sounds.shock.play();
+                    }, false, iframe);
+
+                    this.onMe("wtf", "click", async () => {
+                        sounds.wtf.play();
+                    }, false, iframe);
+
+                    this.onMe("OtherSounds", "click", async () => {
+                        sounds.other.play();
+                    }, false, iframe);
+
+                    this.onMe("fileInput", "change", async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.soundEngine.loadaudio(URL.createObjectURL(file));
+                        }
+                    })
+
+                    this.onMe("TFchromaKey", "click", async (event) => {
+                        this.videoEngine.ChooseChromaColor = this.find("TFchromaKey", true); // 
+                    }, false, iframe);
+
+
+                    // Use chosen CHROMA KEY
+                    this.onMe("TuseFthisKeycolor", () => {
+                        //apply color to the video element. make sure it is transparent so that the black can be seen around your body. Most likely will do this in the worker. i will either apply it to the video directly or on the canvas. i think on the video directly would be the best thing to do. then attach and draw it on the canvas. 
+                        this.videoEngine.chooseChromaColor.value;
+                    }, false, iframe);
+
+                    // DISABLE CHROMA KEY
+                    this.onMe("rmvTFchromakey", () => {
+
+                    }, false, iframe);
+
+                    // UPLOAD / REMOVE BACKGROUND IMAGE
+                    this.onMe("TFuploadImage", "change", async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.imageEngine.loadImage(URL.createObjectURL(file));
+                        }
+                    }, false, iframe);
+
+                    this.onMe("rmvTFimg", "click", async () => {
+                        /// remove the image.
+                    }, false, iframe);
+
+                    // UPLOAD / REMOVE BACKGROUND VIDEO
+                    this.onMe("TFuploadVideo", "change", async (e) => {
+                        const file = e.target.files[0];
+                        if (file) {
+                            this.videoEngine.loadVideo(URL.createObjectURL(file));
+                        }
+                    }, false, iframe);
+
+                    this.onMe("rmvTFvid", "click", async (e) => {
+
+                    }, false, iframe);
+
+                    // START / STOP RECORDING if recorder exists
+                    this.onMe("TfStartRecPlz", () => {
+                        this.videoEngine.startRecorder({
+                            stream: this.videoEngine.webcamstream,
+                            fps: 30
+                        });
+
+                        // or
+
+                        /*
+                        this.videoEngine.createVideoEncoder({
+                            width: 600,
+                            height: 480,
+                            codec: "vp8",
+                            bitrate: 2_000_000,
+                            framerate: 30
+                        });
+                        
+                        await this.videoEngine.VideoWebCodecs(flow.webcamvideoTrack);
+                                    */
+                    }, false, iframe);
+
+                    this.onMe("TfStopRecPlz", () => {
+                        this.videoEngine.stopRecorder();
+                    }, false, iframe);
+
+                    //include audio in live.
+                    this.onMe("musicToggle", "click", async (event) => {
+                        //let includeAudio = this.find("musicToggle", true);
+                    }, false, iframe)
+
+                    //include vid in live.
+                    this.onMe("videoToggle", "click", async (event) => {
+                        //let includeVideo = this.find("videoToggle", true);
+                    }, false, iframe)
+
                     /*
-                        if (!this.soundEngine._webcamWired) {
-                        this.soundEngine.webcamAudioStream.addMixerMediaElement(this.videoEngine.videoElement, this.videoEngine.videoElement.id, false);
-                        this.soundEngine._webcamWired = true;
-                    }
-                    */
+                    //CHOOSE STREAM KEY 
+                    let streamKey = this.find("streamKey", true);
+
+                    //CHOOSE STREAM ROLE
+                    let streamRole = this.find("role", true);
+                    this.connectWebSocket(streamKey.value, streamRole.value);
+*/
+                    this.onMe("GoLive", () => {
+                        this.videoEngine.isLive = true;
+
+                        if (!this.videoEngine.Videorecorderstream) {
+                            this.videoEngine.startStream();
+                            this.videoEngine.startRecorder({
+                                stream: this.videoEngine.stream,
+                                fps: 30
+                            });
+                        } else {
+
+                            //ws.send(JSON.stringify({ type: 'start_stream' }));
+                        }
+                        //this.videoEngine.sendToSharedWorker("stream", this.videoEngine.Videorecorderstream);
+                    }, false, iframe);
+
+                    this.onMe("StopLive", () => {
+                        this.videoEngine.isLive = false;
+                        this.videoEngine.stopRecorder();
+                        this.videoEngine.stopStream();
+                    }, false, iframe);
+
+                    //let micVolume = this.find("micVol", true);
                     /*
-                        //this.effects.isPlaying = true;
-        
-                    // FRAME DRAW LOOP
-                    const drawLoop = async () => {
-                    if (!this.effects.isPlaying) return;
-                    await this.effects.drawingFrame(this.videoCanv, this.videoElem);
-                    requestAnimationFrame(drawLoop);
-                    };
-                    drawLoop();
+                    micVolume.oninput = e => micGain && (micGain.gain.value = e.target.value);
                     */
-                } catch (err) {
-                    console.error("Webcam start failed:", err);
+                    //let eectVolume = this.find("fxVol", true);
+                    /*
+                    eectVolume.oninput = e => fxGain && (fxGain.gain.value = e.target.value);
+                    */
                 }
-            }
-            this.videoEngine.startRecorder({
-                stream: this.videoEngine.webcamstream,
-                fps: 30
+                this.buttonPressed = true;
             });
+            this.onMe("RemoveCameraStream", async () => {
+                this.videoEngine.detachVideoStream();
+            })
 
-            //this.videoEngine.startRecorder({ stream: this.screenStream, fps: 30});
-            // or
+            // START Video From Bin
+            this.onMe("TFplayFromBin", async () => {
+                const id = this.find("TFmediaSelect", true).value;
+                await this.playFromBin(id);
+            }, false, iframe);
 
-            /*
-            this.videoEngine.createVideoEncoder({
-                width: 600,
-                height: 480,
-                codec: "vp8",
-                bitrate: 2_000_000,
-                framerate: 30
-            });
-            
-            await this.videoEngine.VideoWebCodecs(flow.webcamvideoTrack);
-                        */
-        }, false, iframe);
+            this.onMe("CaptureScreen", () => {
+                this.screenStream = this.videoEngine.startScreenShare();
+                this.videoEngine.attachVideoStream(this.screenStream);;
+            })
 
-        this.onMe("TfStopRecPlz", () => {
-            this.videoEngine.stopRecorder();
-        }, false, iframe);
-
-        this.onMe("GoLive", () => {
-            this.videoEngine.isLive = true;
-
-            if (!this.videoEngine.Videorecorderstream) {
-                this.videoEngine.startStream();
-                this.videoEngine.startRecorder({
-                    stream: this.videoEngine.stream,
-                    fps: 30
-                });
-            } else {
-
-                //ws.send(JSON.stringify({ type: 'start_stream' }));
-            }
-            //this.videoEngine.sendToSharedWorker("stream", this.videoEngine.Videorecorderstream);
-        }, false, iframe);
-
-        this.onMe("StopLive", () => {
-            this.videoEngine.isLive = false;
-            this.videoEngine.stopRecorder();
-            this.videoEngine.stopStream();
-        }, false, iframe);
-
-        this.onMe("Download Recording", () => {
-            this.VideoDownload = this.videoEngine.downloadRecorder();
-            console.log(this.VideoDownload);
-        })
+            this.onMe("Download Recording", () => {
+                this.VideoDownload = this.videoEngine.downloadRecorder();
+                console.log(this.VideoDownload);
+            })
+            this.videoEngine._videoBound = true;
+        }
     }
     async bindStore() {
         await this.user.showProducts();
@@ -1446,8 +1542,6 @@ export class maxwell {
                 this.audioStart = document.createElement('button');
                 this.audioSkip = document.createElement('button');
 
-                this.videoCanvas = document.createElement("canvas");
-
                 if (this.mainSection) {
                     this.iframe.allow = "camera; microphone; geolocation";
                     this.iframe.allowFullscreen = true;
@@ -1476,7 +1570,6 @@ export class maxwell {
                         this.bindUsers();
                         if (window.Worker) {
                             try {
-                                this.VideooOffscreenCanvas = this.videoCanvas.transferControlToOffscreen();
                                 this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
                                 this.initTsunamiWorkers();
                             } catch (err) {

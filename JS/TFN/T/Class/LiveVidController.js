@@ -1,6 +1,8 @@
 import { TsunamiFlowVideoRecorder } from "./Elder/videoRecorder.js";
 
 export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
+    _videoBound = null;
+    ChooseChromaColor
     localVideoStream = null;
     remoteVideoStream = new MediaStream();
     remoteVideoElement = null;

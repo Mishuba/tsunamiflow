@@ -92,6 +92,8 @@ const indexdb = {
   };
 
   TsunamiController.onDomEvent("DOMContentLoaded");
+
+  window.ControlMishuba = TsunamiController;
 });
 
 

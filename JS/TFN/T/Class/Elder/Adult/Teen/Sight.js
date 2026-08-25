@@ -38,7 +38,7 @@ export class TsunamiFlowSight extends TsDomCanvas {
     -----------------------------*/
     async loadImage(input) {
         try {
-            await this.loadblob(input);
+            this.blobobjectURL = await this.loadblob(input);
             this.imageElement.src = this.blobobjectURL;
 
             await this.imageElement.decode();
