@@ -1,6 +1,32 @@
 import { TsDomCanvas } from "./Child/Canvas.js";
 export class TsunamiFlowFrames extends TsDomCanvas {
     queueVideo = [];
+    webcamvideoTrack = null;
+    webcamaudioTrack = null;
+    webcamconstraints = {
+        audio: {
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true
+        },
+        video: {
+            frameRate: {
+                min: 15,
+                ideal: 30,
+                max: 60
+            },
+            width: 600,
+            height: 480,
+            resizeMode: "crop-and-scale"
+            //aspectRatio:
+            //facingMode: 
+            //zoom:
+            //torch:
+            //focusMode:
+        }
+    };
+    webcamstream = null;
+    webcamonReady = null;
     VideoProcessor = null;
     VideoReader = null;
     VideomediaSource = null;
@@ -17,15 +43,11 @@ export class TsunamiFlowFrames extends TsDomCanvas {
     constructor(options = {}) {
         super(options);
     }
-    VideoWebCodecs(stream) {
+    VideoWebCodecs(track, worker) {
         if (this.VideoReading) {
             console.warn("VideoWebCodecs is already running");
             return;
         }
-
-        const track = stream instanceof MediaStream
-            ? stream.getVideoTracks()[0]
-            : stream;
 
         if (!track || track.kind !== "video") {
             throw new TypeError(
@@ -38,72 +60,62 @@ export class TsunamiFlowFrames extends TsDomCanvas {
         });
 
         this.VideoReader =
-            this.VideoProcessor.readable.getReader();
+            this.VideoProcessor.readable;
 
-        return this._readVideoFrames();
+        worker.postMessage(this.tycadome(
+            "guest-video",
+            "video",
+            "video.processor",
+            {
+                worker: "video",
+
+            },
+            {
+                status: "working",
+                priority: "",
+
+            },
+            "async",
+            {
+                video: this.VideoReader,
+                message: "sending video rame",
+                error: "none",
+                ctx: "2d"
+            },
+            [this.VideoReader]
+        ), [this.VideoReader]);
     }
 
-    async _readVideoFrames() {
-        if (!this.VideoReader) {
-            throw new Error("VideoReader is not initialized");
-        }
-
-        this.VideoReading = true;
+    async startwebcam(worker) {
+        if (this.webcamstream) return this.webcamstream;
 
         try {
-            while (this.VideoReading) {
-                const {
-                    done,
-                    value: frame
-                } = await this.VideoReader.read();
+            this.webcamstream = await navigator.mediaDevices.getUserMedia(this.webcamconstraints);
 
-                if (done) {
-                    break;
-                }
+            this.webcamvideoTrack = this.webcamstream.getVideoTracks()[0] || null;
+            this.webcamaudioTrack = this.webcamstream.getAudioTracks()[0] || null;
 
-                try {
-                    const processedFrame =
-                        this.processVideoFrame(frame);
+            this.VideoWebCodecs(this.webcamvideoTrack, worker);
+            if (this.webcamonReady) this.webcamonReady(this.webcamstream);
 
-                    if (
-                        this.VideoEncoder &&
-                        this.VideoEncoder.state === "configured"
-                    ) {
-                        const keyFrame =
-                            this.VideoFrameCount %
-                            this.VideoKeyFrameInterval === 0;
-
-                        this.VideoEncoder.encode(
-                            processedFrame,
-                            {
-                                keyFrame
-                            }
-                        );
-
-                        this.VideoFrameCount++;
-                    }
-
-                    processedFrame.close();
-                } catch (error) {
-                    console.error(
-                        "Failed to process VideoFrame:",
-                        error
-                    );
-                } finally {
-                    frame.close();
-                }
-            }
-        } catch (error) {
-            if (this.VideoReading) {
-                console.error(
-                    "VideoReader failed:",
-                    error
-                );
-            }
-        } finally {
-            this.VideoReading = false;
+        } catch (err) {
+            console.error("TfWebcam start failed:", err);
+            throw err;
         }
     }
+    stopwebcam() {
+        if (!this.webcamstream) return;
+
+        this.webcamstream.getTracks().forEach(track => {
+            track.stop();
+        });
+
+        this.webcamstream = null;
+        this.webcamvideoTrack = null;
+        this.webcamaudioTrack = null;
+    }
+
+    //////////////////////////////////////////////////////////////////////////
     _handleEncodedVideoChunk(chunk, metadata) {
 
         console.log(
@@ -205,15 +217,15 @@ export class TsunamiFlowFrames extends TsDomCanvas {
 
         return this.VideoEncoder;
     }
-    attachVideoMediaSource() {
-        if (!this.VideomediaSource || !this.videoElement) return;
+    attachVideoMediaSource(element) {
+        if (!this.VideomediaSource || element) return;
 
         if (this.VideoobjectUrl) {
             URL.revokeObjectURL(this.VideoobjectUrl);
         }
 
         this.VideoobjectUrl = URL.createObjectURL(this.VideomediaSource);
-        this.videoElement.src = this.VideoobjectUrl;
+        element.src = this.VideoobjectUrl;
 
         console.log("MediaSource attached to video element");
     }

@@ -95,6 +95,3 @@ const indexdb = {
 
   window.ControlMishuba = TsunamiController;
 });
-
-
-

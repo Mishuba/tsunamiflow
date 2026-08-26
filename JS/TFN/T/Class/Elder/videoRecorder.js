@@ -1,32 +1,6 @@
 import { TsunamiFlowVideo } from "./Adult/Video.js";
 
 export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
-    webcamvideoTrack = null;
-    webcamaudioTrack = null;
-    webcamconstraints = {
-        audio: {
-            echoCancellation: true,
-            noiseSuppression: true,
-            autoGainControl: true
-        },
-        video: {
-            frameRate: {
-                min: 15,
-                ideal: 30,
-                max: 60
-            },
-            width: 600,
-            height: 480,
-            resizeMode: "crop-and-scale"
-            //aspectRatio:
-            //facingMode: 
-            //zoom:
-            //torch:
-            //focusMode:
-        }
-    };
-    webcamstream = null;
-    webcamonReady = null;
     backgroundVideo = null;
     backgroundImg = null;
     videoBitsPerSecond = 4000000;
@@ -77,22 +51,6 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
         this.ScreenSharevideoTrack = null;
         this.ScreenShareaudioTrack = null;
     }
-    async startwebcam() {
-        if (this.webcamstream) return this.webcamstream;
-
-        try {
-            this.webcamstream = await navigator.mediaDevices.getUserMedia(this.webcamconstraints);
-
-            this.webcamvideoTrack = this.webcamstream.getVideoTracks()[0] || null;
-            this.webcamaudioTrack = this.webcamstream.getAudioTracks()[0] || null;
-
-            if (this.webcamonReady) this.webcamonReady(this.webcamstream);
-            return this.webcamstream;
-        } catch (err) {
-            console.error("TfWebcam start failed:", err);
-            throw err;
-        }
-    }
     attachwebcam() {
         if (!this.webcamstream) throw new Error("Webcam not started");
 
@@ -124,31 +82,32 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
         if (kind === "video") this.webcamvideoTrack = newTrack;
         if (kind === "audio") this.webcamaudioTrack = newTrack;
     }
-    stopwebcam() {
-        if (!this.webcamstream) return;
-
-        this.webcamstream.getTracks().forEach(track => {
-            track.stop();
-        });
-
-        this.webcamstream = null;
-        this.webcamvideoTrack = null;
-        this.webcamaudioTrack = null;
-    }
-    UploadVideo(e) {
+    UploadVideo(e, worker) {
+        //it says to looop
         const file = e.target.files[0];
         if (file) {
-            this.backgroundVideo = document.createElement("video");
-            this.backgroundVideo.src = URL.createObjectURL(file);
-            this.backgroundVideo.muted = true;
-            this.backgroundVideo.loop = true;
-            this.backgroundVideo.playsInline = true;
-
-            this.backgroundVideo.oncanplay = () => {
-                this.backgroundVideo.play().catch(() => { });
-            };
-
-            this.backgroundVideo.load();
+            if (file.readyState >= 2) {
+                this.backgroundVidRame = new VideoFrame(file);
+                worker.postMessage(this.tycadome(
+                    "guest-video",
+                    "video",
+                    "video.background",
+                    {
+                        worker: "video",
+                    },
+                    {
+                        status: "updating",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        background: this.backgroundVidRame,
+                        error: "none",
+                        ctx: "2d"
+                        useBackground: true
+                    }
+                ));
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 
 class vidWorker {
+    useBackground;
     backgroundVideo;
     Tfhex;
     rgb;
@@ -75,9 +76,196 @@ class vidWorker {
         }
     }
 
+    webcam(frameData, col) {
+        /*
+        this.frameCounter++;
+        if (this.frameCounter % this.frameSkipCount !== 0) {
+            return frameData;
+        }
+*/
+        const key = col;
+
+        for (let i = 0; i < frameData.length; i += 4) {
+            const r = frameData[i];
+            const g = frameData[i + 1];
+            const b = frameData[i + 2];
+
+            const diff =
+                Math.abs(r - key.r) +
+                Math.abs(g - key.g) +
+                Math.abs(b - key.b);
+
+            if (diff < 120) {
+                chromaData[i + 3] = 0; // true transparency
+            }
+        }
+
+        return frameData;
+    }
+    async Video2d(video, color = this.chromaKeyColorWebcam) {
+        while (true) {
+            this.WorkerReader = await video.read();
+            this.WorkerRame = this.WorkerReader.value;
+            this.WorkerRameDone = this.WorkerReader.done;
+
+            if (this.WorkerRameDone && this.useBackground === false) {
+                break;
+            } else {
+                if (this.useBackground) {
+                    drawImage(this.backgroundVideo, 0, 0, this.canvas.width, this.canvas.height);
+                }
+
+                this.currentRame = this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.canvas.width, this.canvas.height);
+
+                if (this.useChromaKey) {
+                    const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
+                    const processed = this.webcam(frame.data, color);
+                    this.offscreenctx.putImageData(processed, 0, 0);
+                }
+
+
+                this.WorkerRame.close();
+            }
+        }
+    }
+    _handleEncodedVideoChunk(chunk, metadata) {
+
+        console.log(
+            "Encoded chunk:",
+            chunk.type,
+            chunk.timestamp,
+            chunk.byteLength
+        );
+
+        console.log(
+            "Metadata:",
+            metadata
+        );
+
+        this.VideoEncodedChunks.push({
+            chunk,
+            metadata
+        });
+    }
+    async createVideoEncoder({
+        width,
+        height,
+        codec = "vp8",
+        bitrate = 2_000_000,
+        framerate = 30
+    } = {}) {
+
+        if (typeof VideoEncoder === "undefined") {
+            throw new Error(
+                "WebCodecs VideoEncoder is not supported"
+            );
+        }
+
+        if (!width || !height) {
+            throw new TypeError(
+                "VideoEncoder requires width and height"
+            );
+        }
+
+        const config = {
+            codec,
+            width,
+            height,
+            bitrate,
+            framerate,
+            latencyMode: "realtime"
+        };
+
+        const support =
+            await VideoEncoder.isConfigSupported(config);
+
+        if (!support.supported) {
+            throw new Error(
+                `Unsupported VideoEncoder config: ${codec}`
+            );
+        }
+
+        this.VideoEncoderConfig = support.config;
+
+        this.VideoEncoder = new VideoEncoder({
+            output: (chunk, metadata) => {
+                this._handleEncodedVideoChunk(
+                    chunk,
+                    metadata
+                );
+            },
+
+            error: (error) => {
+                console.error(
+                    "VideoEncoder error:",
+                    error
+                );
+            }
+        });
+
+        this.VideoEncoder.configure(
+            this.VideoEncoderConfig
+        );
+
+        this.VideoEncoding = true;
+
+        console.log(
+            "VideoEncoder configured:",
+            this.VideoEncoderConfig
+        );
+
+        return this.VideoEncoder;
+    }
+    GoLive() {
+
+    }
 }
 
+/////////////////////////////////////////////////////
+const videoWorker = new vidWorker();
 
+self.onmessage = async (event) => {
+    switch (event.data.type) {
+        case "canvas":
+            switch (event.data.action) {
+                case "":
+                    videoWorker.initRadioOffscreen(event.data.payload.canvas, "2d");
+                    break;
+            }
+            break;
+
+        case "video":
+            switch (event.data.action) {
+                case "video.processor":
+                    switch (event.data.payload.ctx) {
+                        case "webgl":
+
+                            break;
+
+                        case "webgl2":
+
+                            break;
+                        default:
+                            videoWorker.Video2d(event.data.payload.video)
+                            break;
+                    }
+                    break;
+                case "video.chroma.key":
+                    videoWorker.useChromaKey = event.data.payload.useChroma;
+                    videoWorker.chromaKeyColorWebcam = event.data.payload.chromaColor;
+                    //videoWorker.canvasctx = event.data.payload.ctx;
+                    break;
+                case "video.background":
+                    videoWorker.useBackground = event.data.payload.useBackground;
+                    videoWorker.backgroundVideo = event.data.payload.background;
+                    break;
+            }
+            break;
+        default:
+            console.warn(`unknown event data type sent to worker: ${event}`);
+            break;
+    }
+}
 /*
 
 */
@@ -86,45 +274,11 @@ class vidWorker {
 
 
 /*
-let renderFrame =
-    typeof self.requestAnimationFrame === "function"
-        ? self.requestAnimationFrame.bind(self)
-        : (callback) => setTimeout(callback, 16);
-
-let cancelFrame =
-    typeof self.cancelAnimationFrame === "function"
-        ? self.cancelAnimationFrame.bind(self)
-        : clearTimeout.bind(self);
 function UseVideo(w, h) {
     this.initOffscreen();
     if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
 }
-function webcam(frameData) {
-    this.frameCounter++;
-    if (this.frameCounter % this.frameSkipCount !== 0) {
-        return frameData;
-    }
 
-    const chromaData = frameData.data;
-    const key = this.chromaKeyColorWebcam;
-
-    for (let i = 0; i < chromaData.length; i += 4) {
-        const r = chromaData[i];
-        const g = chromaData[i + 1];
-        const b = chromaData[i + 2];
-
-        const diff =
-            Math.abs(r - key.r) +
-            Math.abs(g - key.g) +
-            Math.abs(b - key.b);
-
-        if (diff < 120) {
-            chromaData[i + 3] = 0; // true transparency
-        }
-    }
-
-    return frameData;
-}
 async function drawingFrame(vidCanv, TfWebcam) {
     this.initOffscreen();
     this.resizeoffscreen(vidCanv.width, vidCanv.height);
@@ -142,11 +296,7 @@ async function drawingFrame(vidCanv, TfWebcam) {
     // Draw to offscreen for chroma key
     this.offscreenctx.drawImage(TfWebcam, 0, 0, vidCanv.width, vidCanv.height);
 
-    if (this.useChromaKey) {
-        const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
-        const processed = this.webcam(frame);
-        this.offscreenctx.putImageData(processed, 0, 0);
-    }
+
 
     // Composite webcam over background
     return this.offscreenctx;

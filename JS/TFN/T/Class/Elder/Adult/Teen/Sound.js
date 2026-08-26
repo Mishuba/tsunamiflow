@@ -466,9 +466,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
                 ));
                 break;
         }
-
-        // GAME SIGNALS
-        //this.updateGame(features);
     }
     processAudioForVideo() {
         this.masterBufferLength = this.masterFloat32.length;

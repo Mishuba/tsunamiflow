@@ -795,27 +795,6 @@ export class maxwell {
                             ]
                         ),
                         [this.VideooOffscreenCanvas]);
-                    //webcam
-                    this.onMe("TfStartShit", async () => {
-                        if (!this.videoEngine.webcamstream) {
-                            try {
-                                await this.videoEngine.startwebcam();            // get MediaStream
-                                this.videoEngine.attachwebcam();
-
-                                this.soundEngine.initAudioContext(this.worker, this.videoEngine.webcamaudioTrack, {
-                                    type: "webcam",
-                                    element: "window"
-                                }, "webcam");
-
-                            } catch (err) {
-                                console.error("Webcam start failed:", err);
-                            }
-                        }
-                    }, false, iframe);
-                    // STOP WEBCAM
-                    this.onMe("TfStopShit", () => {
-                        this.videoEngine.stopwebcam();
-                    }, false, iframe);
 
                     const sounds = {
                         crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
@@ -833,7 +812,29 @@ export class maxwell {
 
                     for (const key in sounds) fxSources[key] = this.soundEngine.initAudioContext(this.worker, sounds[key], { type: "video", element: "audio" }, "video");
 
-                    let playlist = this.soundEngine.radioSchedule ? this.soundEngine.DefaultPlaylist : this.soundEngine.AudioElement; this.onMe("crowdclapping", "click", async () => {
+                    let playlist = this.soundEngine.radioSchedule ? this.soundEngine.DefaultPlaylist : this.soundEngine.AudioElement;
+
+                    //webcam
+                    this.onMe("TfStartShit", async () => {
+                        if (!this.videoEngine.webcamstream) {
+                            try {
+                                await this.videoEngine.startwebcam(this.worker);
+                                this.soundEngine.initAudioContext(this.worker, this.videoEngine.webcamaudioTrack, {
+                                    type: "webcam",
+                                    element: "window"
+                                }, "webcam");
+
+                            } catch (err) {
+                                console.error("Webcam start failed:", err);
+                            }
+                        }
+                    }, false, iframe);
+                    // STOP WEBCAM
+                    this.onMe("TfStopShit", () => {
+                        this.videoEngine.stopwebcam();
+                    }, false, iframe);
+
+                    this.onMe("crowdclapping", "click", async () => {
                         sounds.crowd.play();
                     }, false, iframe);
 
@@ -876,27 +877,66 @@ export class maxwell {
                         }
                     })
 
-                    this.onMe("TFchromaKey", "click", async (event) => {
+
+                    this.onMe("TFchromaKey", "click", async () => {
+
                         this.videoEngine.ChooseChromaColor = this.find("TFchromaKey", true); // 
                     }, false, iframe);
 
 
                     // Use chosen CHROMA KEY
                     this.onMe("TuseFthisKeycolor", () => {
-                        //apply color to the video element. make sure it is transparent so that the black can be seen around your body. Most likely will do this in the worker. i will either apply it to the video directly or on the canvas. i think on the video directly would be the best thing to do. then attach and draw it on the canvas. 
-                        this.videoEngine.chooseChromaColor.value;
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.chroma.key",
+                            {
+                                worker: "video",
+                            }
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                useChroma: true,
+                                chromaColor: this.videoEngine.chooseChromaColor.value,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
                     }, false, iframe);
 
                     // DISABLE CHROMA KEY
                     this.onMe("rmvTFchromakey", () => {
-
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.chroma.key",
+                            {
+                                worker: "video",
+                            }
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                useChroma: false,
+                                chromaColor: this.videoEngine.chooseChromaColor.value,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
                     }, false, iframe);
 
                     // UPLOAD / REMOVE BACKGROUND IMAGE
                     this.onMe("TFuploadImage", "change", async (e) => {
                         const file = e.target.files[0];
                         if (file) {
-                            this.imageEngine.loadImage(URL.createObjectURL(file));
+                            //this.imageEngine.loadImage(URL.createObjectURL(file));
+                        } else {
+                            //no file or an error.
                         }
                     }, false, iframe);
 
@@ -906,14 +946,29 @@ export class maxwell {
 
                     // UPLOAD / REMOVE BACKGROUND VIDEO
                     this.onMe("TFuploadVideo", "change", async (e) => {
-                        const file = e.target.files[0];
-                        if (file) {
-                            this.videoEngine.loadVideo(URL.createObjectURL(file));
-                        }
+                        this.videoEngine.UploadVideo(e);
                     }, false, iframe);
 
                     this.onMe("rmvTFvid", "click", async (e) => {
-
+                        worker.postMessage(this.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.background",
+                            {
+                                worker: "video",
+                            },
+                            {
+                                status: "updating",
+                                priority: "low"
+                            },
+                            "async",
+                            {
+                                background: "none",
+                                error: "none",
+                                ctx: "2d"
+                        useBackground: false
+                            }
+                        ));
                     }, false, iframe);
 
                     // START / STOP RECORDING if recorder exists

@@ -1003,8 +1003,6 @@ async function MessageReceived(event) {
             break;
         case "audio.worklet": {
             const payload = event.data.payload || {};
-            console.log("the audio worklet payload is " + payload);
-
             if (event.data.action === "audio.visual.data") {
                 if (payload.dataArray) {
                     TsunamiRadio.TfAudioVisualData.dataArray =
