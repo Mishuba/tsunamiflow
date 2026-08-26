@@ -115,7 +115,8 @@ class vidWorker {
                     drawImage(this.backgroundVideo, 0, 0, this.canvas.width, this.canvas.height);
                 }
 
-                this.currentRame = this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.canvas.width, this.canvas.height);
+                //this.currentRame =
+                this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.canvas.width, this.canvas.height);
 
                 if (this.useChromaKey) {
                     const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
@@ -261,6 +262,13 @@ self.onmessage = async (event) => {
                     break;
             }
             break;
+        case "audio.worklet":
+            switch (event.data.action) {
+                case "audio.visual.data":
+                    //do audio encoder things.
+                    break;
+            }
+            break;
         default:
             console.warn(`unknown event data type sent to worker: ${event}`);
             break;
@@ -268,55 +276,4 @@ self.onmessage = async (event) => {
 }
 /*
 
-*/
-
-
-
-
-/*
-function UseVideo(w, h) {
-    this.initOffscreen();
-    if (this.backgroundVideo) this.offscreenctx.drawImage(this.backgroundVideo, 0, 0, w, h);
-}
-
-async function drawingFrame(vidCanv, TfWebcam) {
-    this.initOffscreen();
-    this.resizeoffscreen(vidCanv.width, vidCanv.height);
-
-    this.offscreenctx.clearRect(0, 0, vidCanv.width, vidCanv.height);
-
-    // Draw background
-    if (this.backgroundVideo) {
-        this.UseVideo(vidCanv.width, vidCanv.height);
-        if (this.backgroundImg) this.UseImage(vidCanv, true); // corner logo
-    } else if (this.backgroundImg) {
-        this.UseImage(vidCanv, true);
-    }
-
-    // Draw to offscreen for chroma key
-    this.offscreenctx.drawImage(TfWebcam, 0, 0, vidCanv.width, vidCanv.height);
-
-
-
-    // Composite webcam over background
-    return this.offscreenctx;
-}
-
-function setChromaHex(hex) {
-    this.rgb = parseInt(hex.slice(1), 16);
-    this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
-    this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
-    this.chromaKeyColorWebcam.b = this.rgb & 255;
-}
-
-function ColorPickerChromaKey(chroma) {
-    this.Tfhex = chroma.value;
-    this.setChromaHex(this.Tfhex);
-    this.useChromaKey = true;
-}
-
-function disableChromaKey() {
-    this.frameCounter = 0;
-    this.useChromaKey = false;
-}
 */

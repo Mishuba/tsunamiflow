@@ -444,15 +444,37 @@ export class TsunamiFlowSound extends TsDomCanvas {
     onWorkletMessage(e, worker) {
         switch (e.data.type) {
             case "audio.worklet":
-                worker.postMessage(this.tycadome(
-                    e.data.id,
-                    e.data.type,
-                    e.data.action,
-                    e.data.meta,
-                    e.data.state,
-                    e.data.mode,
-                    e.data.payload
-                ));
+                switch (e.data.meta.worker) {
+                    case "media":
+                        worker.postMessage(this.tycadome(
+                            e.data.id,
+                            e.data.type,
+                            e.data.action,
+                            e.data.meta,
+                            e.data.state,
+                            e.data.mode,
+                            e.data.payload
+                        ));
+                        break;
+
+                    case "video":
+                        worker.postMessage(this.tycadome(
+                            e.data.id,
+                            e.data.type,
+                            e.data.action,
+                            e.data.meta,
+                            e.data.state,
+                            e.data.mode,
+                            {
+                                left: e.data.payload.left,
+                                right: e.data.payload.right,
+                                sampleRate: this.MasterSoundsContext.sampleRate
+                            }
+
+                        ));
+                        break;
+                }
+
                 break;
             default:
                 worker.postMessage(this.tycadome(

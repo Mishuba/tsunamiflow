@@ -103,6 +103,31 @@ class FFTProcessor extends AudioWorkletProcessor {
             return true;
         }
 
+        if (input && input.length > 0) {
+            const leSound = input[0];
+            const riSound = input[1];
+            this.port.postMessage(this.tycadome(
+                "user-id",
+                "audio.worklet",
+                "audio.visual.data",
+
+                {
+                    worker: "video"
+                },
+
+                {
+                    process: "working"
+                },
+
+                "async",
+
+                {
+                    left: leSound,
+                    right: riSound
+                }
+            ));
+
+        }
         /*
          * Copy audio to output
          */
@@ -181,6 +206,8 @@ class FFTProcessor extends AudioWorkletProcessor {
                         beat: features.beat
                     }
                 ));
+
+
             }
         }
 

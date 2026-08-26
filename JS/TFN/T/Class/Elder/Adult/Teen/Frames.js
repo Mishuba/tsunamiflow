@@ -114,109 +114,17 @@ export class TsunamiFlowFrames extends TsDomCanvas {
         this.webcamvideoTrack = null;
         this.webcamaudioTrack = null;
     }
-
+    setChromaHex(hex) {
+        this.rgb = parseInt(hex.slice(1), 16);
+        this.chromaKeyColorWebcam.r = (this.rgb >> 16) & 255;
+        this.chromaKeyColorWebcam.g = (this.rgb >> 8) & 255;
+        this.chromaKeyColorWebcam.b = this.rgb & 255;
+    }
+    ColorPickerChromaKey(chroma) {
+        this.Tfhex = chroma.value;
+        this.setChromaHex(this.Tfhex);
+    }
     //////////////////////////////////////////////////////////////////////////
-    _handleEncodedVideoChunk(chunk, metadata) {
-
-        console.log(
-            "Encoded chunk:",
-            chunk.type,
-            chunk.timestamp,
-            chunk.byteLength
-        );
-
-        console.log(
-            "Metadata:",
-            metadata
-        );
-
-        this.VideoEncodedChunks.push({
-            chunk,
-            metadata
-        });
-    }
-    processVideoFrame(frame) {
-        const canvas = this.canvas;
-        const ctx = canvas.getContext("2d");
-
-        canvas.width = frame.displayWidth;
-        canvas.height = frame.displayHeight;
-
-        ctx.drawImage(frame, 0, 0);
-
-        return new VideoFrame(canvas, {
-            timestamp: frame.timestamp
-        });
-    }
-    async createVideoEncoder({
-        width,
-        height,
-        codec = "vp8",
-        bitrate = 2_000_000,
-        framerate = 30
-    } = {}) {
-
-        if (typeof VideoEncoder === "undefined") {
-            throw new Error(
-                "WebCodecs VideoEncoder is not supported"
-            );
-        }
-
-        if (!width || !height) {
-            throw new TypeError(
-                "VideoEncoder requires width and height"
-            );
-        }
-
-        const config = {
-            codec,
-            width,
-            height,
-            bitrate,
-            framerate,
-            latencyMode: "realtime"
-        };
-
-        const support =
-            await VideoEncoder.isConfigSupported(config);
-
-        if (!support.supported) {
-            throw new Error(
-                `Unsupported VideoEncoder config: ${codec}`
-            );
-        }
-
-        this.VideoEncoderConfig = support.config;
-
-        this.VideoEncoder = new VideoEncoder({
-            output: (chunk, metadata) => {
-                this._handleEncodedVideoChunk(
-                    chunk,
-                    metadata
-                );
-            },
-
-            error: (error) => {
-                console.error(
-                    "VideoEncoder error:",
-                    error
-                );
-            }
-        });
-
-        this.VideoEncoder.configure(
-            this.VideoEncoderConfig
-        );
-
-        this.VideoEncoding = true;
-
-        console.log(
-            "VideoEncoder configured:",
-            this.VideoEncoderConfig
-        );
-
-        return this.VideoEncoder;
-    }
     attachVideoMediaSource(element) {
         if (!this.VideomediaSource || element) return;
 
@@ -317,20 +225,5 @@ export class TsunamiFlowFrames extends TsDomCanvas {
 
         this.VideoReader = null;
         this.VideoProcessor = null;
-
-        if (this.VideoEncoder) {
-
-            try {
-                await this.VideoEncoder.flush();
-            } catch { }
-
-            try {
-                this.VideoEncoder.close();
-            } catch { }
-        }
-
-        this.VideoEncoder = null;
-        this.VideoEncoderConfig = null;
-        this.VideoEncoding = false;
     }
 }
