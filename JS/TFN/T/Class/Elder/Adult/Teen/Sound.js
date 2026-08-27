@@ -470,7 +470,6 @@ export class TsunamiFlowSound extends TsDomCanvas {
                                 right: e.data.payload.right,
                                 sampleRate: this.MasterSoundsContext.sampleRate
                             }
-
                         ));
                         break;
                 }

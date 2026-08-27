@@ -7,6 +7,11 @@ class vidWorker {
     chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
     frameSkipCount = 2;
     frameCounter = 0;
+    hasSentHeader = false;
+    vencoder;
+    aencoder;
+    vseqheadersent = false;
+    aseqheadersent = false;
     constructor(options = {}) {
 
     }
@@ -129,6 +134,7 @@ class vidWorker {
             }
         }
     }
+
     _handleEncodedVideoChunk(chunk, metadata) {
 
         console.log(
@@ -217,6 +223,95 @@ class vidWorker {
 
         return this.VideoEncoder;
     }
+    getlvheader() {
+        return new Uint8Array([
+            0x46, 0x4C, 0x56,
+            0x01,
+            0x05,
+            0x00, 0x00, 0x00, 0x09,
+            0x00, 0x00, 0x00, 0x00
+        ]).buffer
+    }
+    wrapInLvTag(type, payload, timestampMs) {
+        const payloadSize = payload.byteLength;
+        const totalSize = 11 + payloadSize + 4;
+        const tag = new Uint8Array(totalSize);
+
+        tag[0] = type;
+        tag[1] = (payloadSize >> 16) & 0xFF;
+        tag[2] = (payloadSize >> 8) & 0xFF;
+        tag[3] = payloadSize & 0xFF;
+        tag[4] = (timestampMs >> 16) & 0xFF;
+        tag[5] = (timestampMs >> 8) & 0xFF;
+        tag[6] = timestampMs & 0xFF;
+        tag[7] = (timestampMs >> 24) & 0xFF;
+        tag[8] = 0;
+        tag[9] = 0;
+        tag[10] = 0;
+        tag.set(payload, 11);
+
+        const tagSize = 11 + payloadSize;
+        const offset = 11 + payloadSize;
+        tag[offset] = (tagSize >> 24) & 0xFF;
+        tag[offset + 1] = (tagSize >> 16) & 0xFF;
+        tag[offset + 2] = (tagSize >> 8) & 0xFF;
+        tag[offset + 3] = tagSize & 0xFF;
+        return tag.buffer;
+    }
+    createAudioSeqHeaderTag(decoderConfig) {
+        const description = new Uint8Array(decoderConfig.description);
+        const payloadSize = 2 + description.byteLength;
+
+        const payload = new Uint8Array(payloadSize);
+        payload[0] = 0xAF;
+        payload[1] = 0x00;
+        payload.set(description, 2);
+
+        return this.wrapInLvTag(0x08, payload, 0);
+    }
+    createAudioTag(chunk) {
+        const chunkData = new Uint8Array(chunk.byteLength);
+        chunk.copyTo(chunkData);
+
+        const payload = new Uint8Array(2 + chunkData.byteLength);
+        payload[0] = 0xAF;
+        payload[1] = 0x01;
+        payload.set(chunkData, 2);
+
+        const timestamp = Math.floor(chunk.timestamp / 1000);
+        return this.wrapInLvTag(0x08, payload, timestamp);
+    }
+    createVideoSeqHeaderTag(decoderConfig) {
+        const description = new Uint8Array(decoderConfig.description);
+        const payloadSize = 5 + description.byteLength;
+
+        const payload = new Uint8Array(payloadSize);
+        payload[0] = 0x17;
+        payload[1] = 0x00;
+        payload[2] = 0x00;
+        payload[3] = 0x00;
+        payload[4] = 0x00;
+        payload.set(description, 5);
+
+        return this.wrapInLvTag(0x09, payload, 0);
+    }
+    createVideoTag(chunk) {
+        const chunkData = new Uint8Array(chunk.byteLength);
+        chunk.copyTo(chunkData);
+        const isKeyRame = chunk.type === "key";
+        const RameType = isKeyRame ? 0x17 : 0x27;
+
+        const payload = new Uint8Array(5 + chunkData.byteLength);
+        payload[0] = RameType;
+        payload[1] = 0x01;
+        payload[2] = 0x00;
+        payload[3] = 0x00;
+        payload[4] = 0x00;
+        payload.set(chunkData, 5);
+
+        const timestamp = Math.floor(chunk.timestamp / 1000);
+        return this.wrapInLvTag(0x09, payload, timestamp);
+    }
     GoLive() {
 
     }
@@ -266,6 +361,7 @@ self.onmessage = async (event) => {
             switch (event.data.action) {
                 case "audio.visual.data":
                     //do audio encoder things.
+
                     break;
             }
             break;
@@ -274,6 +370,3 @@ self.onmessage = async (event) => {
             break;
     }
 }
-/*
-
-*/
