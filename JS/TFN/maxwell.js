@@ -831,60 +831,60 @@ export class maxwell {
                     // STOP WEBCAM
                     this.onMe("TfStopShit", "click", () => {
                         this.videoEngine.stopwebcam();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("RemoveCameraStream", "click", async () => {
                         this.videoEngine.detachVideoStream();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("crowdclapping", "click", async () => {
                         sounds.crowd.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("tsunamibomb", "click", async () => {
                         sounds.bomb.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("tsunamigun", "click", async () => {
                         sounds.gun.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("tsunamiLaugh", "click", async () => {
                         sounds.laugh.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("randomIntro", "click", async () => {
                         sounds.intro.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("hellNah", "click", async () => {
                         sounds.hellnah.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("shocking", "click", async () => {
                         sounds.shock.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("wtf", "click", async () => {
                         sounds.wtf.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("OtherSounds", "click", async () => {
                         sounds.other.play();
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("fileInput", "change", async (e) => {
                         const file = e.target.files[0];
                         if (file) {
                             this.soundEngine.loadaudio(URL.createObjectURL(file));
                         }
-                    }, false,)
+                    }, false, this.iframe.frame)
 
 
                     this.onMe("TFchromaKey", "click", async () => {
 
                         this.videoEngine.ChooseChromaColor = this.videoEngine.ColorPickerChromaKey(this.find("TFchromaKey", true)); // 
-                    }, false,);
+                    }, false, this.iframe.frame);
 
 
                     // Use chosen CHROMA KEY
@@ -908,7 +908,7 @@ export class maxwell {
                                 ctx: "2d"
                             }
                         ));
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     // DISABLE CHROMA KEY
                     this.onMe("rmvTFchromakey", "click", () => {
@@ -931,7 +931,7 @@ export class maxwell {
                                 ctx: "2d"
                             }
                         ));
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     // UPLOAD / REMOVE BACKGROUND IMAGE
                     this.onMe("TFuploadImage", "change", async (e) => {
@@ -941,16 +941,16 @@ export class maxwell {
                         } else {
                             //no file or an error.
                         }
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("rmvTFimg", "click", async () => {
                         /// remove the image.
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     // UPLOAD / REMOVE BACKGROUND VIDEO
                     this.onMe("TFuploadVideo", "change", async (e) => {
                         //this.videoEngine.UploadVideo(e);
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("rmvTFvid", "click", async (e) => {
                         worker.postMessage(this.tycadome(
@@ -972,12 +972,12 @@ export class maxwell {
                                 useBackground: false
                             }
                         ));
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("CaptureScreen", "click", () => {
                         this.screenStream = this.videoEngine.startScreenShare();
                         this.videoEngine.attachVideoStream(this.screenStream);;
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     // START / STOP RECORDING if recorder exists
                     this.onMe("TfStartRecPlz", "click", () => {
@@ -1002,16 +1002,16 @@ export class maxwell {
                                 ctx: "2d"
                             }
                         ));
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("TfStopRecPlz", "click", () => {
 
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("Download Recording", "click", () => {
                         this.VideoDownload = this.videoEngine.downloadRecorder();
                         console.log(this.VideoDownload);
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     //include audio in live.
                     this.onMe("musicToggle", "click", async () => {
@@ -1019,19 +1019,19 @@ export class maxwell {
 
                         this.includeAudio = true;
 
-                    }, false,)
+                    }, false, this.iframe.frame)
 
                     //include vid in live.
                     this.onMe("videoToggle", "click", async () => {
                         let includeVideo = this.find("videoToggle", true).value;
 
                         this.includeVideo = true;
-                    }, false,)
+                    }, false, this.iframe.frame)
 
                     this.onMe("GoLive", "click", () => {
                         this.videoEngine.isLive = true;
-                        this.liveStreamKey = this.find("streamKey", true).value;
-                        this.liveStreamRole = this.find("role", true);
+                        this.liveStreamKey = this.find("streamKey", this.iframe.frame).value;
+                        this.liveStreamRole = this.find("role", this.iframe.frame);
 
                         this.connectWebSocket(streamKey.value, streamRole.value);
                         this.worker.postMessage(this.videoEngine.tycadome(
@@ -1060,10 +1060,10 @@ export class maxwell {
                                 error: "none",
                                 ctx: "2d"
                             }
-                        ), false,);
+                        ), false, this.iframe.frame);
                         /*
 */
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     this.onMe("StopLive", "click", () => {
                         this.videoEngine.isLive = false;
@@ -1107,7 +1107,7 @@ export class maxwell {
                                 ctx: "2d"
                             }
                         ));
-                    }, false,);
+                    }, false, this.iframe.frame);
 
                     //let micVolume = this.find("micVol", true);
                     /*
