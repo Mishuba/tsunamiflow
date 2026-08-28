@@ -155,7 +155,7 @@ export class tfIframe {
       "news.html",
       "competitions.html",
       "TFnetwork.html",
-      "Community.html",
+      "community.html",
 
     ];
 
