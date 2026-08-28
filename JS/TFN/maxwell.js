@@ -642,8 +642,8 @@ export class maxwell {
             address: this.find("AddressDetailsSubscribers"), // if present
             costInfo: this.find("membershipCostInfo"),
         };
-        this.chatBox = find("TFthought");
-        this.chatInput = find("TFthoughtsNow");
+        this.chatBox = this.find("TFthought");
+        this.chatInput = this.find("TFthoughtsNow");
         this.onMe("TFMembershipLevel", "click", async () => {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
@@ -651,7 +651,7 @@ export class maxwell {
             this.user.signup(this.userFields, this.extraFields);
         }, true, null);
 
-        this.user.chatInput = find("TFthoughtsNow")
+        this.user.chatInput = this.find("TFthoughtsNow")
         this.onMe("LiveStreamChat", "click", async () => {
             this.sendMessage();
         }, true, null);
@@ -730,16 +730,16 @@ export class maxwell {
         this.onMe("TFRadioRestartButton", () => {
             this.soundEngine.AudioElement.currentTime = 0;
             this.soundEngine.startMusic();
-            start.innerHTML = "Pause Tsunami Radio";
+            this.audioStart.innerHTML = "Pause Tsunami Radio";
         });
 
         this.onMe("TFradioButton", () => {
             if (this.soundEngine.AudioElement.paused) {
                 this.soundEngine.playAudio();
-                start.innerHTML = "Pause Tsunami Radio";
+                this.audioStart.innerHTML = "Pause Tsunami Radio";
             } else {
                 this.soundEngine.stopMusic();
-                start.innerHTML = "Play Tsunami Radio";
+                this.audioStart.innerHTML = "Play Tsunami Radio";
             }
         });
 
@@ -1033,7 +1033,7 @@ export class maxwell {
                         this.liveStreamKey = this.find("streamKey", this.iframe.frame).value;
                         this.liveStreamRole = this.find("role", this.iframe.frame);
 
-                        this.connectWebSocket(streamKey.value, streamRole.value);
+                        this.connectWebSocket(this.liveStreamKey.value, this.liveStreamRole.value);
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
