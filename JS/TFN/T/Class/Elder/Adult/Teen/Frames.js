@@ -90,7 +90,7 @@ export class TsunamiFlowFrames extends TsDomCanvas {
         if (this.webcamstream) return this.webcamstream;
 
         try {
-            this.webcamstream = await navigator.mediaDevices.getUserMedia(this.webcamconstraints);
+            this.webcamstream = await window.navigator.mediaDevices.getUserMedia(this.webcamconstraints);
 
             this.webcamvideoTrack = this.webcamstream.getVideoTracks()[0] || null;
             this.webcamaudioTrack = this.webcamstream.getAudioTracks()[0] || null;

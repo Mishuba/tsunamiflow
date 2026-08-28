@@ -40,24 +40,24 @@
 </head>
 
 <body>
-    <button id="TfControlShit">Press To have access to button controls.</button>
-    <button id="TfStartShit">Press to start your webcam</button>
-    <button id="TfStopShit">Stop Webcam</button>
+    <button id="TfControlShit" type="button">Press To have access to button controls.</button>
+    <button id="TfStartShit" type="button">Press to start your webcam</button>
+    <button id="TfStopShit" type="button">Stop Webcam</button>
 
-    <label for="chromaColorWebcam">Choose Chroma Key Color for Webcam:</label>
+    <label for="chromaColorWebcam" type="button">Choose Chroma Key Color for Webcam:</label>
     <input type="color" id="TFchromaKey" value="#00ff00">
-    <button id="TuseFthisKeycolor">Use Webcam Chroma Key Color</button>
+    <button id="TuseFthisKeycolor" type="button">Use Webcam Chroma Key Color</button>
 
-    <button id="rmvTFchromakey">Remove Chroma Key Color</button>
+    <button id="rmvTFchromakey" type="button">Remove Chroma Key Color</button>
 
     <video id="TsunamiFlowVideoStuff" width="640" height="480" autoplay></video>
     <input type="file" id="TFuploadImage" accept="image/*">
-    <button id="rmvTFimg">Remove Image</button>
+    <button id="rmvTFimg" type="button">Remove Image</button>
     <input type="file" id="TFuploadVideo" accept="video/*">
-    <button id="rmvTFvid">Remove Video</button>
+    <button id="rmvTFvid" type="button">Remove Video</button>
     <canvas id="TFcanvas" width="640" height="480"></canvas>
-    <button id="TfStartRecPlz">Start Recording</button>
-    <button id="TfStopRecPlz">Stop Recording</button>
+    <button id="TfStartRecPlz" type="button">Start Recording</button>
+    <button id="TfStopRecPlz" type="button">Stop Recording</button>
 
     <div>
         <label>Stream Key:</label>
@@ -80,15 +80,15 @@
 
     <div class="section soundboard">
         <h3>🎛️ Sound Effects</h3>
-        <button id="crowdclpping" data-sound="crowd">Crowd Clapping</button>
-        <button id="tsunamibomb" data-sound="bomb">Bomb</button>
-        <button id="tsunamigun" data-sound="gun">Gun Shots</button>
+        <button id="crowdclpping" data-sound="crowd" type="button">Crowd Clapping</button>
+        <button id="tsunamibomb" data-sound="bomb" type="button">Bomb</button>
+        <button id="tsunamigun" data-sound="gun" type="button">Gun Shots</button>
         <button id="tsunamiLaugh" data-sound="laugh">Crowd Laughing</button>
-        <button id="randomIntro" data-sound="intro">Intro</button>
-        <button id="hellNah" data-sound="hellnah">Hell Nah</button>
-        <button id="shocking" data-sound="shock">Shocked</button>
-        <button id="wtf" data-sound="wtf">Questioned (WTF)</button>
-        <button id="OtherSounds" data-sound="other">Other</button>
+        <button id="randomIntro" data-sound="intro" type="button">Intro</button>
+        <button id="hellNah" data-sound="hellnah" type="button">Hell Nah</button>
+        <button id="shocking" data-sound="shock" type="button">Shocked</button>
+        <button id="wtf" data-sound="wtf" type="button">Questioned (WTF)</button>
+        <button id="OtherSounds" data-sound="other" type="button">Other</button>
     </div>
 
     <div class="section sliders">

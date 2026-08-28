@@ -168,10 +168,12 @@ const workers = {
 };
 */
 const workers = {
+    image: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/ImageWebWorker.js", { type: "module" }),
     input: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", { type: "module" }),
     media: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", { type: "module" }),
     world: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", { type: "module" }),
-    ai: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js", { type: "module" })
+    ai: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js", { type: "module" }),
+    video: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/VideoWebWorker.js", { type: "module" }),
 };
 
 Object.entries(workers).forEach(([name, worker]) => {
