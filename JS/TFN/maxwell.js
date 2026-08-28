@@ -1120,7 +1120,7 @@ export class maxwell {
                     */
                 }
                 this.buttonPressed = true;
-            });
+            }, false, iframe);
 
             this.videoEngine._videoBound = true;
         }
