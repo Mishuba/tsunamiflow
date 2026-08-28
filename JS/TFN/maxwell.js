@@ -834,9 +834,9 @@ export class maxwell {
                         this.videoEngine.stopwebcam();
                     }, false, iframe);
 
-                    this.onMe("RemoveCameraStream", async () => {
+                    this.onMe("RemoveCameraStream", "click", async () => {
                         this.videoEngine.detachVideoStream();
-                    });
+                    }, false, iframe);
 
                     this.onMe("crowdclapping", "click", async () => {
                         sounds.crowd.play();
@@ -879,7 +879,7 @@ export class maxwell {
                         if (file) {
                             this.soundEngine.loadaudio(URL.createObjectURL(file));
                         }
-                    })
+                    }, false, iframe)
 
 
                     this.onMe("TFchromaKey", "click", async () => {
@@ -975,10 +975,10 @@ export class maxwell {
                         ));
                     }, false, iframe);
 
-                    this.onMe("CaptureScreen", () => {
+                    this.onMe("CaptureScreen", "click", () => {
                         this.screenStream = this.videoEngine.startScreenShare();
                         this.videoEngine.attachVideoStream(this.screenStream);;
-                    });
+                    }, false, iframe);
 
                     // START / STOP RECORDING if recorder exists
                     this.onMe("TfStartRecPlz", "click", () => {
@@ -1009,10 +1009,10 @@ export class maxwell {
 
                     }, false, iframe);
 
-                    this.onMe("Download Recording", () => {
+                    this.onMe("Download Recording", "click", () => {
                         this.VideoDownload = this.videoEngine.downloadRecorder();
                         console.log(this.VideoDownload);
-                    });
+                    }, false, iframe);
 
                     //include audio in live.
                     this.onMe("musicToggle", "click", async () => {
@@ -1061,7 +1061,7 @@ export class maxwell {
                                 error: "none",
                                 ctx: "2d"
                             }
-                        ));
+                        ), false, iframe);
                         /*
 */
                     }, false, iframe);

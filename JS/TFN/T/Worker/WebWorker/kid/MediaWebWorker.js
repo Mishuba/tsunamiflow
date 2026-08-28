@@ -180,9 +180,9 @@ class TsunamilowNation {
             }
         } catch (error) {
             if (error.name === "NotSupportedError") {
-                console.warn("❌ requestAnimationFrame not supported, falling back to setTimeout");
+                //console.warn("❌ requestAnimationFrame not supported, falling back to setTimeout");
             } else {
-                console.error("Error in requestAnimationFrame:", error);
+                //console.error("Error in requestAnimationFrame:", error);
             }
         }
 
@@ -911,7 +911,7 @@ function RadioTime(PSL, response = null) {
 const TsunamiRadio = new TsunamilowNation();
 
 async function MessageReceived(event) {
-    console.log(`audio worker received ${event.data.type} data type.`);
+    //console.log(`audio worker received ${event.data.type} data type.`);
     switch (event.data.type) {
         case "canvas":
             console.log(`the canvas sent to the audio worker has an data action to ${event.data.action}`);
