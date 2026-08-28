@@ -761,7 +761,7 @@ export class maxwell {
         } else {
             const iframe = this.iframe.frame;
 
-            this.onMe("TfControlShit", async () => {
+            this.onMe("TfControlShit", "click", async () => {
                 if (this.buttonPressed === true) {
                     //disable all buttons.
 
@@ -815,7 +815,7 @@ export class maxwell {
                     let playlist = this.soundEngine.radioSchedule ? this.soundEngine.DefaultPlaylist : this.soundEngine.AudioElement;
 
                     //webcam
-                    this.onMe("TfStartShit", async () => {
+                    this.onMe("TfStartShit", "click", async () => {
                         if (!this.videoEngine.webcamstream) {
                             try {
                                 await this.videoEngine.startwebcam(this.worker);
@@ -830,7 +830,7 @@ export class maxwell {
                         }
                     }, false, iframe);
                     // STOP WEBCAM
-                    this.onMe("TfStopShit", () => {
+                    this.onMe("TfStopShit", "click", () => {
                         this.videoEngine.stopwebcam();
                     }, false, iframe);
 
@@ -889,7 +889,7 @@ export class maxwell {
 
 
                     // Use chosen CHROMA KEY
-                    this.onMe("TuseFthisKeycolor", "click", () => {
+                    this.onMe("TuseFthisKeycolor", "click", async () => {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
@@ -912,7 +912,7 @@ export class maxwell {
                     }, false, iframe);
 
                     // DISABLE CHROMA KEY
-                    this.onMe("rmvTFchromakey", () => {
+                    this.onMe("rmvTFchromakey", "click", () => {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
@@ -981,7 +981,7 @@ export class maxwell {
                     });
 
                     // START / STOP RECORDING if recorder exists
-                    this.onMe("TfStartRecPlz", () => {
+                    this.onMe("TfStartRecPlz", "click", () => {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
@@ -1005,7 +1005,7 @@ export class maxwell {
                         ));
                     }, false, iframe);
 
-                    this.onMe("TfStopRecPlz", () => {
+                    this.onMe("TfStopRecPlz", "click", () => {
 
                     }, false, iframe);
 
@@ -1029,7 +1029,7 @@ export class maxwell {
                         this.includeVideo = true;
                     }, false, iframe)
 
-                    this.onMe("GoLive", () => {
+                    this.onMe("GoLive", "click", () => {
                         this.videoEngine.isLive = true;
                         this.liveStreamKey = this.find("streamKey", true).value;
                         this.liveStreamRole = this.find("role", true);
@@ -1066,7 +1066,7 @@ export class maxwell {
 */
                     }, false, iframe);
 
-                    this.onMe("StopLive", () => {
+                    this.onMe("StopLive", "click", () => {
                         this.videoEngine.isLive = false;
                         this.connectWebSocket(streamKey.value, streamRole.value);
                         this.worker.postMessage(this.videoEngine.tycadome(
