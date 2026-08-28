@@ -104,7 +104,7 @@ export class tfIframe {
         };
         source.contentWindow.postMessage(TfNetworkJson, origin);
         break;
-      case "community.html":
+      case "Community.html":
         console.log("iframe community message received");
         let CommunityJson = {
           type: "community",
@@ -155,7 +155,7 @@ export class tfIframe {
       "news.html",
       "competitions.html",
       "TFnetwork.html",
-      "community.html",
+      "Community.html",
 
     ];
 
