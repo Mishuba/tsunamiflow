@@ -834,6 +834,10 @@ export class maxwell {
                         this.videoEngine.stopwebcam();
                     }, false, iframe);
 
+                    this.onMe("RemoveCameraStream", async () => {
+                        this.videoEngine.detachVideoStream();
+                    });
+
                     this.onMe("crowdclapping", "click", async () => {
                         sounds.crowd.play();
                     }, false, iframe);
@@ -880,19 +884,19 @@ export class maxwell {
 
                     this.onMe("TFchromaKey", "click", async () => {
 
-                        this.videoEngine.ChooseChromaColor = this.find("TFchromaKey", true); // 
+                        this.videoEngine.ChooseChromaColor = this.videoEngine.ColorPickerChromaKey(this.find("TFchromaKey", true)); // 
                     }, false, iframe);
 
 
                     // Use chosen CHROMA KEY
-                    this.onMe("TuseFthisKeycolor", () => {
+                    this.onMe("TuseFthisKeycolor", "click", () => {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
                             "video.chroma.key",
                             {
                                 worker: "video",
-                            }
+                            },
                             {
                                 status: "updating",
                                 priority: "low",
@@ -915,7 +919,7 @@ export class maxwell {
                             "video.chroma.key",
                             {
                                 worker: "video",
-                            }
+                            },
                             {
                                 status: "updating",
                                 priority: "low",
@@ -946,7 +950,7 @@ export class maxwell {
 
                     // UPLOAD / REMOVE BACKGROUND VIDEO
                     this.onMe("TFuploadVideo", "change", async (e) => {
-                        this.videoEngine.UploadVideo(e);
+                        //this.videoEngine.UploadVideo(e);
                     }, false, iframe);
 
                     this.onMe("rmvTFvid", "click", async (e) => {
@@ -965,76 +969,145 @@ export class maxwell {
                             {
                                 background: "none",
                                 error: "none",
-                                ctx: "2d"
-                        useBackground: false
+                                ctx: "2d",
+                                useBackground: false
                             }
                         ));
                     }, false, iframe);
 
+                    this.onMe("CaptureScreen", () => {
+                        this.screenStream = this.videoEngine.startScreenShare();
+                        this.videoEngine.attachVideoStream(this.screenStream);;
+                    });
+
                     // START / STOP RECORDING if recorder exists
                     this.onMe("TfStartRecPlz", () => {
-                        this.videoEngine.startRecorder({
-                            stream: this.videoEngine.webcamstream,
-                            fps: 30
-                        });
-
-                        // or
-
-                        /*
-                        this.videoEngine.createVideoEncoder({
-                            width: 600,
-                            height: 480,
-                            codec: "vp8",
-                            bitrate: 2_000_000,
-                            framerate: 30
-                        });
-                        
-                        await this.videoEngine.VideoWebCodecs(flow.webcamvideoTrack);
-                                    */
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.recording.start",
+                            {
+                                worker: "video",
+                            },
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                record: true,
+                                recordVideo: this.includeVideo,
+                                recordAudio: this.includeAudio,
+                                fps: 30,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
                     }, false, iframe);
 
                     this.onMe("TfStopRecPlz", () => {
-                        this.videoEngine.stopRecorder();
+
                     }, false, iframe);
 
+                    this.onMe("Download Recording", () => {
+                        this.VideoDownload = this.videoEngine.downloadRecorder();
+                        console.log(this.VideoDownload);
+                    });
+
                     //include audio in live.
-                    this.onMe("musicToggle", "click", async (event) => {
-                        //let includeAudio = this.find("musicToggle", true);
+                    this.onMe("musicToggle", "click", async () => {
+                        let includeAudio = this.find("musicToggle", true).value;
+
+                        this.includeAudio = true;
+
                     }, false, iframe)
 
                     //include vid in live.
-                    this.onMe("videoToggle", "click", async (event) => {
-                        //let includeVideo = this.find("videoToggle", true);
+                    this.onMe("videoToggle", "click", async () => {
+                        let includeVideo = this.find("videoToggle", true).value;
+
+                        this.includeVideo = true;
                     }, false, iframe)
 
-                    /*
-                    //CHOOSE STREAM KEY 
-                    let streamKey = this.find("streamKey", true);
-
-                    //CHOOSE STREAM ROLE
-                    let streamRole = this.find("role", true);
-                    this.connectWebSocket(streamKey.value, streamRole.value);
-*/
                     this.onMe("GoLive", () => {
                         this.videoEngine.isLive = true;
+                        this.liveStreamKey = this.find("streamKey", true).value;
+                        this.liveStreamRole = this.find("role", true);
 
-                        if (!this.videoEngine.Videorecorderstream) {
-                            this.videoEngine.startStream();
-                            this.videoEngine.startRecorder({
-                                stream: this.videoEngine.stream,
-                                fps: 30
-                            });
-                        } else {
-
-                            //ws.send(JSON.stringify({ type: 'start_stream' }));
-                        }
-                        //this.videoEngine.sendToSharedWorker("stream", this.videoEngine.Videorecorderstream);
+                        this.connectWebSocket(streamKey.value, streamRole.value);
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.recording.start",
+                            {
+                                worker: "video",
+                            },
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                goLive: {
+                                    stream: this.videoEngine.isLive,
+                                    key: this.liveStreamKey,
+                                    role: this.liveStreamRole
+                                },
+                                record: {
+                                    Video: this.includeVideo,
+                                    Audio: this.includeAudio,
+                                },
+                                fps: 30,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
+                        /*
+*/
                     }, false, iframe);
 
                     this.onMe("StopLive", () => {
                         this.videoEngine.isLive = false;
-                        this.videoEngine.stopRecorder();
-                        this.videoEngine.stopStream();
+                        this.connectWebSocket(streamKey.value, streamRole.value);
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.recording.start",
+                            {
+                                worker: "video",
+                                source: "web",
+                                target: "device:web-001",
+                                layer: "tf",
+                                backend: false
+                            },
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                system: "none",
+                                message: "none",
+                                radio: {
+
+                                    playlist: this.soundEngine.radioSchedule,
+                                    file: this.soundEngine.AudioElement.src,
+                                    buffer: "none"
+                                },
+                                goLive: {
+                                    stream: this.videoEngine.isLive,
+                                    key: "none",
+                                    role: "guest"
+                                },
+                                record: {
+                                    Video: this.includeVideo,
+                                    Audio: this.includeAudio,
+                                },
+                                fps: 30,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
                     }, false, iframe);
 
                     //let micVolume = this.find("micVol", true);
@@ -1048,25 +1121,7 @@ export class maxwell {
                 }
                 this.buttonPressed = true;
             });
-            this.onMe("RemoveCameraStream", async () => {
-                this.videoEngine.detachVideoStream();
-            })
 
-            // START Video From Bin
-            this.onMe("TFplayFromBin", async () => {
-                const id = this.find("TFmediaSelect", true).value;
-                await this.playFromBin(id);
-            }, false, iframe);
-
-            this.onMe("CaptureScreen", () => {
-                this.screenStream = this.videoEngine.startScreenShare();
-                this.videoEngine.attachVideoStream(this.screenStream);;
-            })
-
-            this.onMe("Download Recording", () => {
-                this.VideoDownload = this.videoEngine.downloadRecorder();
-                console.log(this.VideoDownload);
-            })
             this.videoEngine._videoBound = true;
         }
     }

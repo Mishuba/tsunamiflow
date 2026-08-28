@@ -96,7 +96,9 @@ export class TsunamiFlowFrames extends TsDomCanvas {
             this.webcamaudioTrack = this.webcamstream.getAudioTracks()[0] || null;
 
             this.VideoWebCodecs(this.webcamvideoTrack, worker);
-            if (this.webcamonReady) this.webcamonReady(this.webcamstream);
+            if (this.webcamonReady) {
+                this.webcamonReady = true
+            };
 
         } catch (err) {
             console.error("TfWebcam start failed:", err);

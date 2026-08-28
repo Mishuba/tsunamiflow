@@ -103,7 +103,7 @@ export class TsunamiFlowVideoRecorder extends TsunamiFlowVideo {
                     {
                         background: this.backgroundVidRame,
                         error: "none",
-                        ctx: "2d"
+                        ctx: "2d",
                         useBackground: true
                     }
                 ));

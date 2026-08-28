@@ -96,12 +96,6 @@ export class TsunamiLiveVideoController extends TsunamiFlowVideoRecorder {
         this.stream = null;
         this.emit("stop");
     }
-    replaceCanvas(newCanvas, audio, fps = 30) {
-        if (!newCanvas) throw new Error("New canvas is required");
-        this.canvas = newCanvas;
-        if (this.stream) this.stop();
-        return this.start({ audio, fps });
-    }
     async initPeer(iceServers = [{ urls: "stun:stun.l.google.com:19302" }]) {
         if (this.WebRtfcPc) return this.WebRtfcPc;
 
