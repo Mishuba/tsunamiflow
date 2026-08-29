@@ -760,7 +760,7 @@ export class maxwell {
         if (this.videoEngine._videoBound === true) {
             return;
         } else {
-            this.onMe("TfControlShit", "click", async () => {
+            this.onMe("TfControlShit", "click", async (e) => {
                 if (this.buttonPressed === true) {
                     //disable all buttons.
 
@@ -1320,7 +1320,7 @@ export class maxwell {
             if (time === word) {
                 let TfWotd = this.find("tfWordOfTheDay");
                 TfWotd.innerHTML = this.site.WordOfTheDay(time);
-            } break;
+            }
         }
 
         this.site.UpdateNews();
@@ -1344,15 +1344,22 @@ export class maxwell {
             case "timer":
                 this.find("TFtime").innerHTML = payload.time;
 
-                if (payload.system === "Tf Schedule") {
-                    await this.handleSchedule(payload.time);
-                } else if (payload.system === "Tf Time") {
-                    this.find("TFweather").innerHTML = this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(worker);
-                } else {
-                    this.site.UpdateNews();
-                    this.site.requestLocation();
-                    this.soundEngine.AudioNetworkState(worker);
+                switch (payload.system) {
+                    case "Tf Schedule":
+                        await this.handleSchedule(payload.time);
+                        break;
+                    case "Tf Time":
+                        this.find("TFweather").innerHTML = this.site.requestLocation();
+                        this.soundEngine.AudioNetworkState(worker);
+                        this.find("TFtime").innerHTML = payload.time;
+                        break;
+
+                    default:
+                        this.site.UpdateNews();
+                        this.site.requestLocation();
+                        this.soundEngine.AudioNetworkState(worker);
+                        this.find("TFtime").innerHTML = payload.time;
+                        break;
                 }
                 break;
             case 'radio':
@@ -1398,27 +1405,11 @@ export class maxwell {
                 }
                 break;
             default:
-                if (payload.system === "error") {
-                    console.error("Worker error:", payload);
-
-                } else {
-                    if (data.meta.message) {
-                        console.warn("Unknown message type:", data.type, "Message:", data.meta.message);
-
-                        console.warn("Type:", data.type);
-                        console.warn("Payload:", payload);
-                        console.warn("Full Data:", data);
-                        console.warn("Event:", event);
-                        console.warn("error: ", payload.error);
-
-                        if (data.meta?.message) {
-                            console.warn("Meta Message:", data.meta.message);
-                        }
-
-                        console.trace();
-
-                        console.groupEnd();
-                    } else {
+                switch (payload.system) {
+                    case "error":
+                        console.error("Worker error:", payload);
+                        break;
+                    default:
                         console.warn("Unknown message type:", data.type, "Message:", data, "payload", payload);
 
                         console.warn("Type:", data.type);
@@ -1433,12 +1424,13 @@ export class maxwell {
                         console.trace();
 
                         console.groupEnd();
-                    }
+                        this.handleSchedule(this.find("TFtime").innerHTML);
+                        break;
+                };
+                break;
+        };
+    };
 
-                    this.handleSchedule(this.find("TFtime").innerHTML);
-                }
-        }
-    }
     handleError(source, error) {
         if (this.soundEngine.AudioElement.src === "") {
             this.soundEngine.initAudioContext(this.worker, this.soundEngine.AudioElement, { type: "radio", element: "audio" }, "audio");
@@ -1616,7 +1608,7 @@ export class maxwell {
         switch (event) {
             case "load":
                 try {
-                    this.iframe.frame.contentWindow.controller = maxwell;
+                    this.iframe.frame.contentWindow.controller = this;
                     this.iframe.MenuSwitch(this.iframe.frame);
                 } catch (e) {
                     console.error("Cross-origin block:", e);
