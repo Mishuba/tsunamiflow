@@ -1132,35 +1132,32 @@ export class maxwell {
         }
     }
     getControllerType(gamepad) {
-        getControllerType(gamepad) {
-            const id = (gamepad.id || "").toLowerCase();
+        const id = (gamepad.id || "").toLowerCase();
 
-            if (
-                id.includes("playstation") ||
-                id.includes("dualshock") ||
-                id.includes("dualsense")
-            ) {
-                return "playstation";
-            }
-
-            if (
-                id.includes("xbox") ||
-                id.includes("xinput")
-            ) {
-                return "xbox";
-            }
-
-            if (
-                id.includes("switch") ||
-                id.includes("joy-con") ||
-                id.includes("pro controller")
-            ) {
-                return "switch";
-            }
-
-            return "generic";
+        if (
+            id.includes("playstation") ||
+            id.includes("dualshock") ||
+            id.includes("dualsense")
+        ) {
+            return "playstation";
         }
 
+        if (
+            id.includes("xbox") ||
+            id.includes("xinput")
+        ) {
+            return "xbox";
+        }
+
+        if (
+            id.includes("switch") ||
+            id.includes("joy-con") ||
+            id.includes("pro controller")
+        ) {
+            return "switch";
+        }
+
+        return "generic";
     }
     gamepadHandler(event, connected) {
         const gamepad = event.gamepad;
