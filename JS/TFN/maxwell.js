@@ -10,6 +10,7 @@ import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 
 export class maxwell {
+    offscreencanvas = null;
     buttonPressed = null;
     listeners = {};
     domListeners = new Map();
@@ -31,6 +32,7 @@ export class maxwell {
     chatInput = null;
     imageEngine = new TsunamiFlowImageEngine();
     //soundEngine = null;
+    radiocollapsed = false;
     radiodock = null;
     radiotoggle = null;
     radioheader = null;
@@ -42,6 +44,15 @@ export class maxwell {
     audioStart = null;
     audioSkip = null;
     videoEngine = new TsunamiLiveVideoController();
+    includeVideo = null;
+    includeAudio = null;
+    liveStreamKey = null;
+    liveStreamRole = null;
+    VideoDownload = null;
+    userFields = null;
+    extraFields = null;
+    membershipSelect = null;
+    screenStream = null;
     mediaBin = {
         webcams: {},
         videos: {},
@@ -240,12 +251,19 @@ export class maxwell {
         logBox.scrollTop = logBox.scrollHeight;
     }
     find(elem, frame = null) {
-        if (frame !== null) {
-            return frame.contentDocument.getElementById(elem);
-        } else {
-            return document.getElementById(elem);
+        if (frame) {
+            const doc = frame.contentDocument;
+
+            if (!doc) {
+                return null;
+            }
+
+            return doc.getElementById(elem);
         }
+
+        return document.getElementById(elem);
     }
+
     emit(event, data) {
         (this.listeners[event] || []).forEach((fn) => {
             try {
@@ -290,7 +308,7 @@ export class maxwell {
         const supportsTouch = "ontouchstart" in window;
 
         const runHandler = (event) => {
-            console.log("handler readyj");
+            console.log("handler ready");
             if (isForm || isSubmitButton || preventDefault) {
                 event.preventDefault();
             }
@@ -307,21 +325,10 @@ export class maxwell {
             }
 
             // also emit internal event if eventName exists
-            if (eventName) {
-                this.emit(eventName, payload);
+            if (el) {
+                this.emit(id, payload);
             }
         };
-
-        // POINTER
-        if (supportsPointer) {
-            const eventType = isForm ? "submit" : "click";
-
-            //console.log("element " + el);
-            //console.log("event type" + eventType);
-            el.addEventListener(eventType, runHandler);
-            this._storeDomListener(id, el, runHandler, eventType);
-            return;
-        }
 
         // TOUCH fallback
         if (supportsTouch) {
@@ -341,12 +348,8 @@ export class maxwell {
             return;
         }
 
-        // CLICK fallback
-        const clickType = isForm ? "submit" : "click";
-
-        el.addEventListener(clickType, runHandler);
-        this._storeDomListener(id, el, runHandler, clickType);
-
+        el.addEventListener(eventName, runHandler);
+        this._storeDomListener(id, el, runHandler, eventName);
     }
 
     onIframeEvent(event) {
@@ -395,20 +398,20 @@ export class maxwell {
     }
     bindNavBar() {
         // navigation menu
-        this.onMe("tfRoster", "tfRoster", () => {
+        this.onMe("tfRoster", "click", (e) => {
             //i have a function for this already.
             this.iframe.frame.src = "Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }, true);
+        });
         this.onMe("tfNews", "click", () => {
             this.iframe.frame.src = "Iframe/Pages/news.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }, true);
+        });
 
         this.onMe("tfCompetitions", "click", () => {
             this.iframe.frame.src = "Iframe/Pages/Competitions.html";
             this.iframe.MenuSwitch(this.iframe.frame);
-        }, true);
+        });
 
         this.onMe("tfNetwork", "change", async (e) => {
             let playlist = {
@@ -527,27 +530,27 @@ export class maxwell {
             };
 
             this.iframe.MenuSwitch(this.iframe.frame);
-        }, true);
+        });
 
         this.onMe("tfCommunity", "click", () => {
             this.iframe.frame.src = "Iframe/Pages/Community.html";
             this.iframe.MenuSwitch(this.iframe.frame)
 
-        }, true);
+        });
 
         this.onMe("NavLoginButton", "submit", () => {
             this.user.login();
-        }, true);
+        });
     }
     async bindPayments() {
-        this.user.initMoney().then(() => {
+        await this.user.initMoney().then(() => {
             this.user.mountCard("UniqueOriginal");
             this.user.mountCard("SubscribeUsers");
             this.user.mountCard("TfDonation"); //div
         });
         const emailInput = this.userFields?.tfEM || this.find("TfEmail");
 
-        this.onMe("UniqueOriginalBtn", async () => {
+        this.onMe("UniqueOriginalBtn", "click", async () => {
             const email = emailInput?.value || null;
             try {
                 const result = await this.user.donate(20, 'usd', true, email); // $20 item
@@ -560,7 +563,7 @@ export class maxwell {
             }
         });
 
-        this.onMe("SubscribeUsers", async () => {
+        this.onMe("SubscribeUsers", "click", async () => {
             const email = emailInput?.value || null;
             const priceId = "price_123456789"; // Stripe Price ID for subscription
             try {
@@ -575,7 +578,11 @@ export class maxwell {
             }
         });
 
-        this.onMe("TfDonateBtn", async () => {
+        this.onMe("TfDonateBtn", "click", async () => {
+            const email = this.userFields?.tfEM?.value ||
+                this.find("TfEmail")?.value ||
+                null;
+
             try {
                 const result = await this.user.donate(10, 'usd', true, email); // $10 donation
                 if (result.paymentIntent && result.paymentIntent.status === 'succeeded') {
@@ -723,17 +730,17 @@ export class maxwell {
         this.audioSkip.innerHTML = "Next";
         //this.audioSystem.appendChild(this.audioSkip);
 
-        this.onMe("TFradioPreviousButton", () => {
+        this.onMe("TFradioPreviousButton", "click", () => {
             this.soundEngine.previousSong();
         });
 
-        this.onMe("TFRadioRestartButton", () => {
+        this.onMe("TFRadioRestartButton", "click", () => {
             this.soundEngine.AudioElement.currentTime = 0;
             this.soundEngine.startMusic();
             this.audioStart.innerHTML = "Pause Tsunami Radio";
         });
 
-        this.onMe("TFradioButton", () => {
+        this.onMe("TFradioButton", "click", () => {
             if (this.soundEngine.AudioElement.paused) {
                 this.soundEngine.playAudio();
                 this.audioStart.innerHTML = "Pause Tsunami Radio";
@@ -743,7 +750,7 @@ export class maxwell {
             }
         });
 
-        this.onMe("TFradioSkipButton", () => {
+        this.onMe("TFradioSkipButton", "click", () => {
             this.soundEngine.AudioElement.removeAttribute("src");;
         });
     }
@@ -953,7 +960,7 @@ export class maxwell {
                     }, false, this.iframe.frame);
 
                     this.onMe("rmvTFvid", "click", async (e) => {
-                        worker.postMessage(this.tycadome(
+                        this.worker.postMessage(this.tycadome(
                             "guest-video",
                             "video",
                             "video.background",
@@ -1015,25 +1022,23 @@ export class maxwell {
 
                     //include audio in live.
                     this.onMe("musicToggle", "click", async () => {
-                        let includeAudio = this.find("musicToggle", true).value;
-
-                        this.includeAudio = true;
+                        const element = this.find("musicToggle", true);
+                        this.includeAudio = Boolean(element?.checked);
 
                     }, false, this.iframe.frame)
 
                     //include vid in live.
                     this.onMe("videoToggle", "click", async () => {
-                        let includeVideo = this.find("videoToggle", true).value;
-
-                        this.includeVideo = true;
+                        const element = this.find("videoToggle", true);
+                        this.includeVideo = Boolean(element?.checked);
                     }, false, this.iframe.frame)
 
                     this.onMe("GoLive", "click", () => {
                         this.videoEngine.isLive = true;
                         this.liveStreamKey = this.find("streamKey", this.iframe.frame).value;
-                        this.liveStreamRole = this.find("role", this.iframe.frame);
+                        this.liveStreamRole = this.find("role", this.iframe.frame).value;
 
-                        this.connectWebSocket(this.liveStreamKey.value, this.liveStreamRole.value);
+                        this.connectWebSocket(this.liveStreamKey, this.liveStreamRole);
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
@@ -1067,7 +1072,9 @@ export class maxwell {
 
                     this.onMe("StopLive", "click", () => {
                         this.videoEngine.isLive = false;
-                        this.connectWebSocket(streamKey.value, streamRole.value);
+                        if (this.tsunamisocket) {
+                            this.tsunamisocket.close();
+                        }
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
@@ -1124,20 +1131,36 @@ export class maxwell {
             this.videoEngine._videoBound = true;
         }
     }
-    async bindStore() {
-        await this.user.showProducts();
-    }
-
     getControllerType(gamepad) {
-        // Detect controller type based on button layout
-        if (gamepad.buttons[0].value === 1) {
-            return 'playstation';
-        } else if (gamepad.buttons[1].value === 1) {
-            return 'xbox';
-        } else if (gamepad.buttons[0].value === 1 && gamepad.buttons[3].value === 1) {
-            return 'switch';
+        getControllerType(gamepad) {
+            const id = (gamepad.id || "").toLowerCase();
+
+            if (
+                id.includes("playstation") ||
+                id.includes("dualshock") ||
+                id.includes("dualsense")
+            ) {
+                return "playstation";
+            }
+
+            if (
+                id.includes("xbox") ||
+                id.includes("xinput")
+            ) {
+                return "xbox";
+            }
+
+            if (
+                id.includes("switch") ||
+                id.includes("joy-con") ||
+                id.includes("pro controller")
+            ) {
+                return "switch";
+            }
+
+            return "generic";
         }
-        return 'generic';
+
     }
     gamepadHandler(event, connected) {
         const gamepad = event.gamepad;
@@ -1167,7 +1190,8 @@ export class maxwell {
     }
 
     aiSetQ(state, action, value) {
-        if (!this.ai) this.ai.setQ(state, action, value);
+        if (!this.ai) return;
+        return this.ai.setQ(state, action, value);
     }
 
     aiPredict(state) {
@@ -1444,59 +1468,100 @@ export class maxwell {
         this.emit("error", { source, error });
     }
     connectWebSocket(key = "viewer", role = "viewer") {
-        console.log("creating socket link.");
-        this.wsUrl = `wss://world.tsunamiflow.club/ws?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
-        console.log("creating socket");
-        this.tsunamisocket = new WebSocket(this.wsUrl);
-        this.tsunamisocket.binaryType = "arraybuffer";
 
-        console.log("attempting to open socket");
-        this.tsunamisocket.onopen = async () => {
-            console.log("🌐 WebSocket connected.");
-            //document.getElementById("startBtn").disabled = true;
-            //document.getElementById("stopBtn").disabled = false;
+        if (
+            this.tsunamisocket &&
+            this.tsunamisocket.readyState === WebSocket.OPEN
+        ) {
+            return this.tsunamisocket;
+        } else {
+            console.log("creating socket link.");
+            this.wsUrl = `wss://world.tsunamiflow.club/ws?key=${encodeURIComponent(key)}&role=${encodeURIComponent(role)}`;
+            console.log("creating socket");
+            this.tsunamisocket = new WebSocket(this.wsUrl);
+            this.tsunamisocket.binaryType = "arraybuffer";
 
-            if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
-        }
-        this.tsunamisocket.onclose = async () => {
-            console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
-            console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
-            //document.getElementById("startBtn").disabled = false;
-            //document.getElementById("stopBtn").disabled = true;
-            setTimeout(this.connectWebSocket, this.reconnectInterval);
-        }
+            console.log("attempting to open socket");
+            this.tsunamisocket.onopen = async () => {
+                console.log("🌐 WebSocket connected.");
+                //document.getElementById("startBtn").disabled = true;
+                //document.getElementById("stopBtn").disabled = false;
 
-        this.tsunamisocket.onerror = async (err) => {
-            console.log("❌ WebSocket error: " + err);
-            console.error("WebSocket error:", err);
-        }
-        this.tsunamisocket.onmessage = async (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                switch (data.type) {
-                    case "welcome":
-                        this.chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
-                        break;
-                    case "chat":
-                        this.chatBox.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
-                        break;
-                    case "ffmpeg_stderr":
-                        this.chatBox.innerHTML += `<div style="color:#f88;"><em>FFmpeg: ${data.message}</em></div>`;
-                        console.log("[FFmpeg] " + data.message);
-                        break;
+                if (this.reconnectTimer) clearTimeout(this.reconnectTimer);
+            }
+            this.tsunamisocket.onclose = async () => {
+                console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
+                console.log(`WebSocket disconnected. Reconnecting in ${this.reconnectInterval / 1000}s...`);
+                //document.getElementById("startBtn").disabled = false;
+                //document.getElementById("stopBtn").disabled = true;
+                const key = this.liveStreamKey;
+                const role = this.liveStreamRole;
+                setTimeout(this.connectWebSocket(key, role), this.reconnectInterval);
+            }
+
+            this.tsunamisocket.onerror = async (err) => {
+                console.log("❌ WebSocket error: " + err);
+                console.error("WebSocket error:", err);
+            }
+            this.tsunamisocket.onmessage = async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    switch (data.type) {
+                        case "welcome":
+                            this.chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
+                            break;
+                        case "chat":
+                            if (!this.chatBox) return;
+
+                            const div = document.createElement("div");
+
+                            const strong = document.createElement("strong");
+                            strong.textContent = `${data.username}: `;
+
+                            const text = document.createTextNode(data.message);
+
+                            div.appendChild(strong);
+                            div.appendChild(text);
+
+                            this.chatBox.appendChild(div);
+                            this.chatBox.scrollTop = this.chatBox.scrollHeight;
+                            break;
+                        case "ffmpeg_stderr":
+                            if (!this.chatBox) return;
+
+                            const div2 = document.createElement("div");
+                            div2.style.color = "#f88";
+
+                            const em = document.createElement("em");
+                            em.textContent = `FFmpeg: ${data.message}`;
+
+                            div2.appendChild(em);
+                            this.chatBox.appendChild(div2);
+                            break;
+                    }
+                    this.chatBox.scrollTop = this.chatBox.scrollHeight;
+                } catch (e) {
+                    // ignore non-JSON
+                    console.error("Invalid WebSocket message:", event.data);
                 }
-                this.chatBox.scrollTop = this.chatBox.scrollHeight;
-            } catch (e) {
-                // ignore non-JSON
-                console.error("Invalid WebSocket message:", event.data);
             }
         }
     }
     sendMessage(username = "guest") {
-        if (!this.chatInput.value.trim() || this.tsunamisocket.readyState !== WebSocket.OPEN) {
-            return
+        if (!this.chatInput || !this.tsunamisocket) {
+            return;
         }
-        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: username }));
+
+        const message = this.chatInput.value.trim();
+
+        if (
+            !message ||
+            this.tsunamisocket.readyState !== WebSocket.OPEN
+        ) {
+            return;
+        }
+
+        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: "guest" }));
         //or
         /*socket.send(this.user.tycadome(
             "guest",
@@ -1520,9 +1585,7 @@ export class maxwell {
         this.chatInput.value = "";
     }
     receiveSharedWorkerMessage(e) {
-        const msg = e.data;
-
-        const swtf = tycadome(
+        const swtf = this.user.tycadome(
             e.data.id || crypto.randomUUID(),
             e.data.type || "backend",
             e.data.action || "completed",
@@ -1590,7 +1653,7 @@ export class maxwell {
                     [this.RadioOffscreenCanvas]);
             }
 
-            if (this.sharedworker === null) {
+            if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
                 this.sharedWorker.port.start();
@@ -1665,10 +1728,11 @@ export class maxwell {
                     this.updateRadioState();
 
                     this.user.showProducts().then(() => {
+                        this.bindUsers();
                         this.bindPayments();
                         this.user.bindCart();
                         this.bindNavBar();
-                        this.bindUsers();
+
                         if (window.Worker) {
                             try {
                                 this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
@@ -1680,7 +1744,7 @@ export class maxwell {
                             this.bindAudio();
                         }
                         this.site.requestLocation();
-                        this.connectWebSocket();
+                        //this.connectWebSocket();
                         console.log("TFN");
                     }).catch(err => {
                         console.error("Cart binding error:", err);
