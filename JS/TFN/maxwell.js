@@ -11,6 +11,22 @@ import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fet
 
 export class maxwell {
     offscreencanvas = null;
+    membershipCostEl = null;
+    paymentTypeEl = null;
+    hiddenMC = null;
+    hiddenPT = null;
+    sections = {
+        free: null,
+        regular: null,
+        vip: null,
+        team: null,
+        address: null,
+        costInfo: null
+    };
+    mainSectionWidth = 800;
+    mainSectionHeight = 600;
+    RadioOffscreenCanvas = null;
+    VideooOffscreenCanvas = null;
     buttonPressed = null;
     reconnectTimer = null;
     listeners = {};
@@ -252,6 +268,9 @@ export class maxwell {
         logBox.scrollTop = logBox.scrollHeight;
     }
     find(elem, frame = null) {
+        const doc = frame?.contentDocument ?? document;
+        return doc?.getElementById(elem) ?? null;
+        /*
         if (frame) {
             const doc = frame.contentDocument;
 
@@ -263,6 +282,7 @@ export class maxwell {
         }
 
         return document.getElementById(elem);
+        */
     }
 
     emit(event, data) {
@@ -296,6 +316,9 @@ export class maxwell {
             console.warn(`Element not found: ${id}`);
             return;
         }
+
+        // Prevent duplicate binding.
+        this.off(`${id}:${eventName}`);
 
         const isForm =
             el instanceof HTMLFormElement;
@@ -764,7 +787,7 @@ export class maxwell {
                 } else {
                     this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
                     this.videoEngine.canvas = this.find("TFcanvas", true);
-                    this.VideooOffscreenCanvas = this.videoEngine.canvas.transferControlToOffscreen();
+                    this.VideoOffscreenCanvas = this.videoEngine.canvas.transferControlToOffscreen();
                     this.worker.postMessage(
                         this.videoEngine.tycadome(
                             "tycadome-guest" + Date.now(),
@@ -782,13 +805,13 @@ export class maxwell {
                             "async",
                             {
                                 system: "loading",
-                                canvas: this.VideooOffscreenCanvas,
+                                canvas: this.VideoOffscreenCanvas,
                             },
                             [
-                                this.VideooOffscreenCanvas
+                                this.VideoOffscreenCanvas
                             ]
                         ),
-                        [this.VideooOffscreenCanvas]);
+                        [this.VideoOffscreenCanvas]);
 
                     const sounds = {
                         crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
@@ -1128,6 +1151,9 @@ export class maxwell {
                             this.tsunamisocket.close();
                             this.tsunamisocket = null;
                         }
+
+                        this.liveStreamKey = null;
+                        this.liveStreamRole = null;
                     }, false, this.iframe.frame);
 
                     //let micVolume = this.find("micVol", true);
@@ -1586,7 +1612,7 @@ export class maxwell {
             return;
         }
 
-        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: username }));
+        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: message, username: username }));
         //or
         /*socket.send(this.user.tycadome(
             "guest",

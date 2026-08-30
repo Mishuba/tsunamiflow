@@ -1,15 +1,22 @@
 
 class vidWorker {
-    useBackground;
-    backgroundVideo;
+    useBackground = null;
+    backgroundVideo = null;
+    useChromaKey = null;
     Tfhex;
     rgb;
+    offscreencanvas = null;
+    canvasctx = null;
+    isoffscreenReady = false;
+
     chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
     frameSkipCount = 2;
     frameCounter = 0;
     hasSentHeader = false;
     vencoder;
     aencoder;
+    VideoEncodedChunks = [];
+
     vseqheadersent = false;
     aseqheadersent = false;
     constructor(options = {}) {
@@ -101,7 +108,7 @@ class vidWorker {
                 Math.abs(b - key.b);
 
             if (diff < 120) {
-                chromaData[i + 3] = 0; // true transparency
+                frameData[i + 3] = 0; // true transparency
             }
         }
 
@@ -117,16 +124,28 @@ class vidWorker {
                 break;
             } else {
                 if (this.useBackground) {
-                    drawImage(this.backgroundVideo, 0, 0, this.canvas.width, this.canvas.height);
+                    drawImage(this.backgroundVideo, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
                 }
 
                 //this.currentRame =
-                this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.canvas.width, this.canvas.height);
+                this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 
                 if (this.useChromaKey) {
-                    const frame = this.offscreenctx.getImageData(0, 0, vidCanv.width, vidCanv.height);
-                    const processed = this.webcam(frame.data, color);
-                    this.offscreenctx.putImageData(processed, 0, 0);
+                    const frame = this.canvasctx.getImageData(
+                        0,
+                        0,
+                        this.offscreencanvas.width,
+                        this.offscreencanvas.height
+                    );
+
+                    this.webcam(frame.data, color);
+
+                    this.canvasctx.putImageData(
+                        frame,
+                        0,
+                        0
+                    );
+
                 }
 
 
@@ -324,7 +343,7 @@ self.onmessage = async (event) => {
     switch (event.data.type) {
         case "canvas":
             switch (event.data.action) {
-                case "":
+                case "load.video.canvas":
                     videoWorker.initRadioOffscreen(event.data.payload.canvas, "2d");
                     break;
             }
