@@ -279,7 +279,7 @@ onmessage = (e) => {
     switch (target) {
         case "task":
             if (task.type === "timer") {
-                if (event.data.payload.system === "Tf Schedule") {
+                if (task.payload.system === "Tf Schedule") {
                     if (!TimerLoop) {
                         startTime();
                     }

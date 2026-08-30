@@ -304,7 +304,7 @@ export class maxwell {
             (el instanceof HTMLInputElement &&
                 ["submit", "image"].includes(el.type));
 
-        const supportsPointer = "PointerEvent" in window;
+        //const supportsPointer = "PointerEvent" in window;
         const supportsTouch = "ontouchstart" in window;
 
         const runHandler = (event) => {
@@ -763,15 +763,20 @@ export class maxwell {
     bindVideoGame() {
 
     }
+
     bindVidSystem() {
         if (this.videoEngine._videoBound === true) {
+
             return;
         } else {
             this.onMe("TfControlShit", "click", async (e) => {
                 if (this.buttonPressed === true) {
+                    this.find("TfControlShit").innerHTML = "Press to ensable button controls";
                     //disable all buttons.
+                    //---- do it here
 
-                    //this.buttonPressed = null;
+
+                    //this.buttonPressed = "alse";
                     return;
                 } else {
                     this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
@@ -834,7 +839,7 @@ export class maxwell {
                                 console.error("Webcam start failed:", err);
                             }
                         }
-                    }, false,);
+                    }, false, this.iframe.frame);
                     // STOP WEBCAM
                     this.onMe("TfStopShit", "click", () => {
                         this.videoEngine.stopwebcam();
@@ -1125,6 +1130,7 @@ export class maxwell {
                     eectVolume.oninput = e => fxGain && (fxGain.gain.value = e.target.value);
                     */
                 }
+                this.find("TfControlShit").innerHTML = "Press to disable button controls";
                 this.buttonPressed = true;
             }, false, this.iframe.frame);
 
@@ -1493,7 +1499,9 @@ export class maxwell {
                 //document.getElementById("stopBtn").disabled = true;
                 const key = this.liveStreamKey;
                 const role = this.liveStreamRole;
-                setTimeout(this.connectWebSocket(key, role), this.reconnectInterval);
+                setTimeout(async () => {
+                    this.connectWebSocket(key, role)
+                }, this.reconnectInterval);
             }
 
             this.tsunamisocket.onerror = async (err) => {
@@ -1696,7 +1704,7 @@ export class maxwell {
                 }
 
                 this.audioSkip = document.createElement("button");
-                this.audioTitle = find("TfRadioStuff") || document.createElement('div');
+                this.audioTitle = this.find("TfRadioStuff") || document.createElement('div');
                 this.audioLast = document.createElement('button');
                 this.audioSystem = document.createElement('div');
                 this.audioRestart = document.createElement('button');
