@@ -12,6 +12,7 @@ import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fet
 export class maxwell {
     offscreencanvas = null;
     buttonPressed = null;
+    reconnectTimer = null;
     listeners = {};
     domListeners = new Map();
     isItOk = null;
@@ -305,7 +306,7 @@ export class maxwell {
                 ["submit", "image"].includes(el.type));
 
         //const supportsPointer = "PointerEvent" in window;
-        const supportsTouch = "ontouchstart" in window;
+        //const supportsTouch = "ontouchstart" in window;
 
         const runHandler = (event) => {
             console.log("handler ready");
@@ -329,24 +330,6 @@ export class maxwell {
                 this.emit(id, payload);
             }
         };
-
-        // TOUCH fallback
-        if (supportsTouch) {
-            const start = (e) => {
-                this._touchStart = e;
-            };
-
-            const end = (e) => {
-                runHandler(e);
-            };
-
-            el.addEventListener("touchstart", start, { passive: false });
-            el.addEventListener("touchend", end, { passive: false });
-
-            this._storeDomListener(id, el, start, "touchstart");
-            this._storeDomListener(id, el, end, "touchend");
-            return;
-        }
 
         el.addEventListener(eventName, runHandler);
         this._storeDomListener(id, el, runHandler, eventName);
@@ -965,7 +948,7 @@ export class maxwell {
                     }, false, this.iframe.frame);
 
                     this.onMe("rmvTFvid", "click", async (e) => {
-                        this.worker.postMessage(this.tycadome(
+                        this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
                             "video.background",
@@ -1017,7 +1000,27 @@ export class maxwell {
                     }, false, this.iframe.frame);
 
                     this.onMe("TfStopRecPlz", "click", () => {
-
+                        this.worker.postMessage(this.videoEngine.tycadome(
+                            "guest-video",
+                            "video",
+                            "video.recording.stop",
+                            {
+                                worker: "video",
+                            },
+                            {
+                                status: "updating",
+                                priority: "low",
+                            },
+                            "async",
+                            {
+                                record: true,
+                                recordVideo: this.includeVideo,
+                                recordAudio: this.includeAudio,
+                                fps: 30,
+                                error: "none",
+                                ctx: "2d"
+                            }
+                        ));
                     }, false, this.iframe.frame);
 
                     this.onMe("Download Recording", "click", () => {
@@ -1047,7 +1050,7 @@ export class maxwell {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
-                            "video.recording.start",
+                            "video.live.start",
                             {
                                 worker: "video",
                             },
@@ -1077,13 +1080,10 @@ export class maxwell {
 
                     this.onMe("StopLive", "click", () => {
                         this.videoEngine.isLive = false;
-                        if (this.tsunamisocket) {
-                            this.tsunamisocket.close();
-                        }
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
-                            "video.recording.start",
+                            "video.live.stop",
                             {
                                 worker: "video",
                                 source: "web",
@@ -1119,6 +1119,15 @@ export class maxwell {
                                 ctx: "2d"
                             }
                         ));
+                        if (this.reconnectTimer) {
+                            clearTimeout(this.reconnectTimer);
+                            this.reconnectTimer = null;
+                        }
+
+                        if (this.tsunamisocket) {
+                            this.tsunamisocket.close();
+                            this.tsunamisocket = null;
+                        }
                     }, false, this.iframe.frame);
 
                     //let micVolume = this.find("micVol", true);
@@ -1218,7 +1227,7 @@ export class maxwell {
             return null;
         }
 
-        const id = this.user?.tycadome() ? this.user?.tycadome().id : `ai_${++this.aiMessageId}`;
+        const id = `ai_${++this.aiMessageId}`;
 
         return new Promise((resolve, reject) => {
             // Store promise handler
@@ -1500,7 +1509,9 @@ export class maxwell {
                 const key = this.liveStreamKey;
                 const role = this.liveStreamRole;
                 setTimeout(async () => {
-                    this.connectWebSocket(key, role)
+                    if (this.videoEngine.isLive) {
+                        this.connectWebSocket(key, role);
+                    }
                 }, this.reconnectInterval);
             }
 
@@ -1513,7 +1524,14 @@ export class maxwell {
                     const data = JSON.parse(event.data);
                     switch (data.type) {
                         case "welcome":
-                            this.chatBox.innerHTML += `<div><em>${data.message}</em></div>`;
+                            if (!this.chatBox) break;
+
+                            const welcome = document.createElement("div");
+                            const eml = document.createElement("em");
+
+                            eml.textContent = data.message;
+                            welcome.appendChild(eml);
+                            this.chatBox.appendChild(welcome);
                             break;
                         case "chat":
                             if (!this.chatBox) return;
@@ -1544,7 +1562,9 @@ export class maxwell {
                             this.chatBox.appendChild(div2);
                             break;
                     }
-                    this.chatBox.scrollTop = this.chatBox.scrollHeight;
+                    if (this.chatBox) {
+                        this.chatBox.scrollTop = this.chatBox.scrollHeight;
+                    }
                 } catch (e) {
                     // ignore non-JSON
                     console.error("Invalid WebSocket message:", event.data);
@@ -1566,7 +1586,7 @@ export class maxwell {
             return;
         }
 
-        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: "guest" }));
+        this.tsunamisocket.send(JSON.stringify({ type: "chat", message: this.chatInput.value.trim(), username: username }));
         //or
         /*socket.send(this.user.tycadome(
             "guest",
@@ -1660,6 +1680,10 @@ export class maxwell {
 
             if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
+
+                this.sharedWorker.port.onmessage = (e) => {
+                    this.receiveSharedWorkerMessage(e);
+                };
 
                 this.sharedWorker.port.start();
             }
