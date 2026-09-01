@@ -1,6 +1,9 @@
-
 class vidWorker {
     useBackground = null;
+    currentRame = null;
+    WorkerRame = null;
+    WorkerRameDone = null;
+    WorkerReader = null;
     backgroundVideo = null;
     useChromaKey = null;
     Tfhex;
@@ -12,9 +15,14 @@ class vidWorker {
     chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };
     frameSkipCount = 2;
     frameCounter = 0;
+    frameCounter = 0;
+
+    firstVideoTimestamp = null;
+    lastVideoTimestamp = null;
+
     hasSentHeader = false;
-    vencoder;
-    aencoder;
+    vencoder = null;
+    aencoder = null;
     VideoEncodedChunks = [];
 
     vseqheadersent = false;
@@ -80,99 +88,189 @@ class vidWorker {
         }
     }
     stopVisualizerLoop() {
-        visualizerRunning = false;
+        this.visualizerRunning = false;
 
-        if (visualizerFrame !== null) {
-            this.cancelVisualizerFrame(visualizerFrame);
-            visualizerFrame = null;
+        if (this.visualizerFrame !== null) {
+            this.cancelVisualizerFrame(this.visualizerFrame);
+            this.visualizerFrame = null;
         }
     }
 
-    webcam(frameData, col) {
-        /*
-        this.frameCounter++;
-        if (this.frameCounter % this.frameSkipCount !== 0) {
-            return frameData;
-        }
-*/
-        const key = col;
+    webcam() {
+        const data = this.currentRame.data;
 
-        for (let i = 0; i < frameData.length; i += 4) {
-            const r = frameData[i];
-            const g = frameData[i + 1];
-            const b = frameData[i + 2];
+        const { r, g, b } = this.chromaKeyColorWebcam;
 
+        for (let i = 0; i < data.length; i += 4) {
             const diff =
-                Math.abs(r - key.r) +
-                Math.abs(g - key.g) +
-                Math.abs(b - key.b);
+                Math.abs(data[i] - r) +
+                Math.abs(data[i + 1] - g) +
+                Math.abs(data[i + 2] - b);
 
             if (diff < 120) {
-                frameData[i + 3] = 0; // true transparency
+                data[i + 3] = 0;
             }
         }
 
-        return frameData;
+        return this.currentRame;
     }
-    async Video2d(video, color = this.chromaKeyColorWebcam) {
-        while (true) {
-            this.WorkerReader = await video.read();
-            this.WorkerRame = this.WorkerReader.value;
-            this.WorkerRameDone = this.WorkerReader.done;
 
-            if (this.WorkerRameDone && this.useBackground === false) {
+    CreateKeyRame(timestamp) {
+
+        if (this.lastKeyFrameTimestamp === null) {
+            this.lastKeyFrameTimestamp = timestamp;
+            return true;
+        }
+
+        if (
+            timestamp - this.lastKeyFrameTimestamp >=
+            this.keyFrameInterval
+        ) {
+            this.lastKeyFrameTimestamp = timestamp;
+            return true;
+        }
+
+        return false;
+    }
+
+
+    async Video2d(video) {
+        while (true) {
+            const result = await video.read();
+
+            if (result.done) {
                 break;
-            } else {
-                if (this.useBackground) {
-                    drawImage(this.backgroundVideo, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
+            }
+
+            const frame = result.value;
+
+            try {
+                const sourceTimestamp = frame.timestamp;
+
+                if (this.firstVideoTimestamp === null) {
+                    this.firstVideoTimestamp = sourceTimestamp;
                 }
 
-                //this.currentRame =
-                this.canvasctx.drawImage(this.WorkerRame, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
+                const timestamp =
+                    sourceTimestamp - this.firstVideoTimestamp;
 
-                if (this.useChromaKey) {
-                    const frame = this.canvasctx.getImageData(
+                // -----------------------------
+                // 1. Draw background
+                // -----------------------------
+
+                if (this.useBackground && this.backgroundVideo) {
+                    this.canvasctx.drawImage(
+                        this.backgroundVideo,
                         0,
                         0,
                         this.offscreencanvas.width,
                         this.offscreencanvas.height
                     );
+                } else {
+                    this.canvasctx.clearRect(
+                        0,
+                        0,
+                        this.offscreencanvas.width,
+                        this.offscreencanvas.height
+                    );
+                }
 
-                    this.webcam(frame.data, color);
+                // -----------------------------
+                // 2. Draw webcam/video frame
+                // -----------------------------
+
+                this.canvasctx.drawImage(
+                    frame,
+                    0,
+                    0,
+                    this.offscreencanvas.width,
+                    this.offscreencanvas.height
+                );
+
+                // -----------------------------
+                // 3. Chroma key
+                // -----------------------------
+
+                if (this.useChromaKey) {
+                    const imageData =
+                        this.canvasctx.getImageData(
+                            0,
+                            0,
+                            this.offscreencanvas.width,
+                            this.offscreencanvas.height
+                        );
+
+                    this.currentRame = imageData;
+
+                    this.webcam();
 
                     this.canvasctx.putImageData(
-                        frame,
+                        imageData,
                         0,
                         0
                     );
+                }
+
+                // -----------------------------
+                // 4. Encode
+                // -----------------------------
+
+                if (this.VideoEncoder) {
+                    const outputFrame = new VideoFrame(
+                        this.offscreencanvas,
+                        {
+                            timestamp: timestamp
+                        }
+                    );
+
+                    this.VideoEncoder.encode(
+                        outputFrame,
+                        {
+                            keyFrame: this.CreateKeyRame(timestamp)
+                        }
+                    );
+
+                    outputFrame.close();
 
                 }
 
-
-                this.WorkerRame.close();
+            } finally {
+                frame.close();
             }
+        }
+
+        if (this.VideoEncoder) {
+            await this.VideoEncoder.flush();
         }
     }
 
+
     _handleEncodedVideoChunk(chunk, metadata) {
 
-        console.log(
-            "Encoded chunk:",
-            chunk.type,
-            chunk.timestamp,
-            chunk.byteLength
-        );
+        if (!this.vseqheadersent) {
 
-        console.log(
-            "Metadata:",
-            metadata
-        );
+            const decoderConfig =
+                metadata?.decoderConfig;
 
-        this.VideoEncodedChunks.push({
-            chunk,
-            metadata
-        });
+            if (decoderConfig?.description) {
+
+                const header =
+                    this.createVideoSeqHeaderTag(
+                        decoderConfig
+                    );
+
+                this.GoLive(header);
+
+                this.vseqheadersent = true;
+            }
+        }
+
+        const tag =
+            this.createVideoTag(chunk);
+
+        this.GoLive(tag);
     }
+
     async createVideoEncoder({
         width,
         height,
@@ -370,9 +468,24 @@ self.onmessage = async (event) => {
                     videoWorker.chromaKeyColorWebcam = event.data.payload.chromaColor;
                     //videoWorker.canvasctx = event.data.payload.ctx;
                     break;
+                case "video.chroma.delete":
+
+                    break;
                 case "video.background":
                     videoWorker.useBackground = event.data.payload.useBackground;
                     videoWorker.backgroundVideo = event.data.payload.background;
+                    break;
+                case "video.recording.start":
+
+                    break;
+                case "video.recording.stop":
+
+                    break;
+                case "video.live.start":
+
+                    break;
+                case "video.live.stop":
+
                     break;
             }
             break;

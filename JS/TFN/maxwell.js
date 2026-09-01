@@ -26,7 +26,7 @@ export class maxwell {
     mainSectionWidth = 800;
     mainSectionHeight = 600;
     RadioOffscreenCanvas = null;
-    VideooOffscreenCanvas = null;
+    VideoOffscreenCanvas = null;
     buttonPressed = null;
     reconnectTimer = null;
     listeners = {};
@@ -933,7 +933,7 @@ export class maxwell {
                         this.worker.postMessage(this.videoEngine.tycadome(
                             "guest-video",
                             "video",
-                            "video.chroma.key",
+                            "video.chroma.delete",
                             {
                                 worker: "video",
                             },
@@ -1096,7 +1096,7 @@ export class maxwell {
                                 error: "none",
                                 ctx: "2d"
                             }
-                        ), false, this.iframe.frame);
+                        ));
                         /*
 */
                     }, false, this.iframe.frame);
