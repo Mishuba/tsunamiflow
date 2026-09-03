@@ -285,6 +285,17 @@ class vidWorker {
             );
         }
 
+        /*
+canvas        ca
+    live        
+        2d = 30 ps
+        webgl = 24 ps
+        
+    video games
+        2d = 60 ps
+        webgl = 30ps  
+        */
+
         if (!width || !height) {
             throw new TypeError(
                 "VideoEncoder requires width and height"

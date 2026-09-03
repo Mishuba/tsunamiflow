@@ -1726,7 +1726,7 @@ export class maxwell {
         switch (event) {
             case "load":
                 try {
-                    this.iframe.frame.contentWindow.controller = this;
+                    //this.iframe.frame.contentWindow.controller = this;
                     this.iframe.MenuSwitch(this.iframe.frame);
                 } catch (e) {
                     console.error("Cross-origin block:", e);
