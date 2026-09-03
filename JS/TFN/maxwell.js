@@ -777,7 +777,7 @@ export class maxwell {
         } else {
             this.onMe("TfControlShit", "click", async (e) => {
                 if (this.buttonPressed === true) {
-                    this.find("TfControlShit").innerHTML = "Press to ensable button controls";
+                    this.find("TfControlShit", true).innerHTML = "Press to ensable button controls";
                     //disable all buttons.
                     //---- do it here
 
@@ -1165,7 +1165,7 @@ export class maxwell {
                     eectVolume.oninput = e => fxGain && (fxGain.gain.value = e.target.value);
                     */
                 }
-                this.find("TfControlShit").innerHTML = "Press to disable button controls";
+                this.find("TfControlShit", true).innerHTML = "Press to disable button controls";
                 this.buttonPressed = true;
             }, false, this.iframe.frame);
 
