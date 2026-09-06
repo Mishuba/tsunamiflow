@@ -168,12 +168,12 @@ const workers = {
 };
 */
 const workers = {
-    image: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/ImageWebWorker.js", { type: "module" }),
-    input: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js", { type: "module" }),
-    media: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js", { type: "module" }),
-    world: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js", { type: "module" }),
-    ai: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js", { type: "module" }),
-    video: new Worker("https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/VideoWebWorker.js", { type: "module" }),
+    image: new Worker(new URL("./kid/ImageWebWorker.js", import.meta.url), { type: "module" }),
+    input: new Worker(new URL("./kid/GameInputWebWorker.js", import.meta.url), { type: "module" }),
+    media: new Worker(new URL("./kid/MediaWebWorker.js", import.meta.url), { type: "module" }),
+    world: new Worker(new URL("./kid/GameWorldWebWorker.js", import.meta.url), { type: "module" }),
+    ai: new Worker(new URL("./kid/AiWebWorker.js", import.meta.url), { type: "module" }),
+    video: new Worker(new URL("./kid/VideoWebWorker.js", import.meta.url), { type: "module" }),
 };
 
 Object.entries(workers).forEach(([name, worker]) => {
