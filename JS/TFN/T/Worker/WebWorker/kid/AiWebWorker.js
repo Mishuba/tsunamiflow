@@ -1131,9 +1131,42 @@ try {
 		return;
 	};
 
-	self.onerror = (e) => {
-		postWorkerError(e);
-	};
+
+	self.onerror = async (e) => {
+		try {
+			const err = e?.error || e;
+			self.postMessage(tycadome(
+				"tycadome-guest" /*+ Date.now()*/,
+				"error",
+				"ai.worker.error",
+				{
+					source: "web",
+					target: "device:web-001",
+					layer: "tf",
+					worker: "ai"
+				},
+				{
+					status: "pending",
+					priority: "low"
+				},
+				"async",
+				{
+					system: "Ai Worker",
+					message: err?.message || String(err),
+					filename: err?.fileName || null,
+					lineno: err?.lineNumber || null,
+					colno: err?.columnNumber || null,
+					stack: err?.stack || null,
+					rawEvent: e
+				}));
+
+		} catch (postErr) {
+			console.error("Worker onerror failed to post:", postErr);
+			console.trace();
+		}
+		console.error("Worker error:", e);
+		console.trace();
+	};;
 	console.log("AiWebWorker started");
 } catch (err) {
 	postWorkerError(err);

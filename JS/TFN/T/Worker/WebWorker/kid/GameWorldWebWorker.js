@@ -1,18 +1,36 @@
-function postWorkerError(err) {
+
+self.onerror = async (e) => {
 	try {
-		const e = err?.error || err;
-		self.postMessage({ type: "error", action: "worker.error", payload: { message: e?.message || String(e), filename: e?.fileName || null, lineno: e?.lineNumber || null, colno: e?.columnNumber || null, stack: e?.stack || null, detail: e } });
+		const err = e?.error || e;
+		self.postMessage(tycadome(
+			"tycadome-guest" /*+ Date.now()*/,
+			"error",
+			"world.worker.error",
+			{
+				source: "web",
+				target: "device:web-001",
+				layer: "tf",
+				worker: "world"
+			},
+			{
+				status: "pending",
+				priority: "low"
+			},
+			"async",
+			{
+				system: "World Worker",
+				message: err?.message || String(err),
+				filename: err?.fileName || null,
+				lineno: err?.lineNumber || null,
+				colno: err?.columnNumber || null,
+				stack: err?.stack || null,
+				rawEvent: e
+			}));
+
 	} catch (postErr) {
-		console.error("Failed to post worker error:", postErr);
+		console.error("Worker onerror failed to post:", postErr);
+		console.trace();
 	}
-}
-
-self.onerror = (e) => {
-	postWorkerError(e);
+	console.error("Worker error:", e);
+	console.trace();
 };
-
-try {
-	console.log("GameWorldWebWorker started");
-} catch (err) {
-	postWorkerError(err);
-}
