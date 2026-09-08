@@ -61,6 +61,7 @@ export class maxwell {
     audioStart = null;
     audioSkip = null;
     videoEngine = new TsunamiLiveVideoController();
+    VideoCanavs = null;
     includeVideo = null;
     includeAudio = null;
     liveStreamKey = null;
@@ -785,34 +786,6 @@ export class maxwell {
                     //this.buttonPressed = "alse";
                     return;
                 } else {
-                    this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", this.iframe.frame);
-                    const videoEnginecanvas = this.find("TFcanvas", this.iframe.frame);
-                    this.VideoOffscreenCanvas = videoEnginecanvas.transferControlToOffscreen();
-                    this.worker.postMessage(
-                        this.videoEngine.tycadome(
-                            "tycadome-guest" + Date.now(),
-                            "canvas",
-                            "load.video.canvas",
-                            {
-                                source: "web",
-                                target: "device:web-001",
-                                worker: "video"
-                            },
-                            {
-                                status: "pending",
-                                priority: "low"
-                            },
-                            "async",
-                            {
-                                system: "loading",
-                                canvas: this.VideoOffscreenCanvas,
-                            },
-                            [
-                                this.VideoOffscreenCanvas
-                            ]
-                        ),
-                        [this.VideoOffscreenCanvas]);
-
                     const sounds = {
                         crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
                         bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
