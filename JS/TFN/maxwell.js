@@ -1705,7 +1705,7 @@ export class maxwell {
             }
 
             if (this.sharedWorker === null) {
-                this.sharedWorker = this.createSafeWorker("TFN/T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
+                this.sharedWorker = this.createSafeWorker("T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
                 this.sharedWorker.port.onmessage = (e) => {
                     this.receiveSharedWorkerMessage(e);
