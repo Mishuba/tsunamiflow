@@ -777,7 +777,7 @@ export class maxwell {
         } else {
             this.onMe("TfControlShit", "click", async (e) => {
                 if (this.buttonPressed === true) {
-                    this.find("TfControlShit", true).innerHTML = "Press to ensable button controls";
+                    this.find("TfControlShit", this.iframe.frame).innerHTML = "Press to ensable button controls";
                     //disable all buttons.
                     //---- do it here
 
@@ -785,8 +785,8 @@ export class maxwell {
                     //this.buttonPressed = "alse";
                     return;
                 } else {
-                    this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", true);
-                    this.videoEngine.canvas = this.find("TFcanvas", true);
+                    this.videoEngine.videoElement = this.find("TsunamiFlowVideoStuff", this.iframe.frame);
+                    this.videoEngine.canvas = this.find("TFcanvas", this.iframe.frame);
                     this.VideoOffscreenCanvas = this.videoEngine.canvas.transferControlToOffscreen();
                     this.worker.postMessage(
                         this.videoEngine.tycadome(
@@ -1165,7 +1165,7 @@ export class maxwell {
                     eectVolume.oninput = e => fxGain && (fxGain.gain.value = e.target.value);
                     */
                 }
-                this.find("TfControlShit", true).innerHTML = "Press to disable button controls";
+                this.find("TfControlShit", this.iframe.frame).innerHTML = "Press to disable button controls";
                 this.buttonPressed = true;
             }, false, this.iframe.frame);
 
