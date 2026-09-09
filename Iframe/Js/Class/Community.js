@@ -29,18 +29,12 @@ document.addEventListener("DOMContentLoaded", async () => {
             ),
             [VideoOffscreenCanvas]);
         controller.videoEngine.videoElement = document.getElementById("TsunamiFlowVideoStuff");
+        controller.newplaylistoptions = document.getElementById("liveplaylist");
     } catch (err) {
 
     } finally {
         controller.bindVidSystem();
+        
     }
-    self.onmessage = async (event) => {
 
-    }
-    self.onmessageerror = (err) => {
-        console.error("Error handling message in Community.js:", err);
-    };
-    self.onerror = (err) => {
-        console.error("Error in Community.js:", err);
-    }
 });
