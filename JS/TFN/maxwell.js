@@ -802,7 +802,7 @@ export class maxwell {
 
                     for (const key in sounds) fxSources[key] = this.soundEngine.initAudioContext(this.worker, sounds[key], { type: "video", element: "audio" }, "video");
 
-                    let newplaylistoptions = find("liveplaylist", this.iframe.frame);
+                    const newplaylistoptions = find("liveplaylist", this.iframe.frame);
 
                     if (this.soundEngine.radioSchedule === null) {
                         for (let lilj = 0; lilj < this.soundEngine.DefaultPlaylist.length; lilj++) {
@@ -857,7 +857,6 @@ export class maxwell {
                                     }
                                     break;
                             }
-
                         }
                     }
                     //webcam
