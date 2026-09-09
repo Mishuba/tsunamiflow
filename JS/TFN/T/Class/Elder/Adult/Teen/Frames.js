@@ -61,29 +61,6 @@ export class TsunamiFlowFrames extends TsDomCanvas {
 
         this.VideoReader =
             this.VideoProcessor.readable;
-
-        worker.postMessage(this.tycadome(
-            "guest-video",
-            "video",
-            "video.processor",
-            {
-                worker: "video",
-
-            },
-            {
-                status: "working",
-                priority: "",
-
-            },
-            "async",
-            {
-                video: this.VideoReader,
-                message: "sending video rame",
-                error: "none",
-                ctx: "2d"
-            },
-            [this.VideoReader]
-        ), [this.VideoReader]);
     }
 
     async startwebcam(worker) {

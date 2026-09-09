@@ -850,6 +850,28 @@ export class maxwell {
                                     element: "window"
                                 }, "webcam");
 
+                                worker.postMessage(this.soundEngine.tycadome(
+                                    "guest-video",
+                                    "video",
+                                    "video.processor",
+                                    {
+                                        worker: "video",
+
+                                    },
+                                    {
+                                        status: "working",
+                                        priority: "",
+
+                                    },
+                                    "async",
+                                    {
+                                        video: this.videoEngine.VideoReader,
+                                        message: "sending video rame",
+                                        error: "none",
+                                        ctx: "2d"
+                                    },
+                                    [this.videoEngine.VideoReader]
+                                ), [this.videoEngine.VideoReader]);
                             } catch (err) {
                                 console.error("Webcam start failed:", err);
                             }

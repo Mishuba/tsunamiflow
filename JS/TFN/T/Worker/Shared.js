@@ -15,7 +15,6 @@
 | It ONLY executes instructions from Task Worker.
 |--------------------------------------------------------------------------
 */
-
 import { TsharedWorker } from "./../Class/Elder/Adult/Teen/Child/Base/F.js";
 
 const ports = [];
