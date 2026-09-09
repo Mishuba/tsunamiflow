@@ -779,7 +779,7 @@ export class maxwell {
         } else {
             this.onMe("TfControlShit", "click", async (e) => {
                 if (this.buttonPressed === true) {
-                    this.find("TfControlShit", this.iframe.frame).innerHTML = "Press to ensable button controls";
+                    this.find("TfControlShit", this.iframe.frame).innerHTML = "Press to disable button controls";
                     //disable all buttons.
                     //---- do it here
 
@@ -787,6 +787,42 @@ export class maxwell {
                     //this.buttonPressed = "alse";
                     return;
                 } else {
+                    const VideoCanvas = this.find("TFcanvas", this.iframe.frame);
+                    const VideoOffscreenCanvas = VideoCanvas.transferControlToOffscreen();
+                    const videoElement = this.find("TsunamiFlowVideoStuff", this.iframe.frame);
+                    this.videoEngine.videoElement = videoElement;
+                    /*
+                                        try {
+                                            window.parent.ControlMishuba.worker.postMessage(
+                                                window.parent.ControlMishuba.soundEngine.tycadome(
+                                                    "tycadome-guest" + Date.now(),
+                                                    "canvas",
+                                                    "load.video.canvas",
+                                                    {
+                                                        source: "web",
+                                                        target: "device:web-001",
+                                                        worker: "video"
+                                                    },
+                                                    {
+                                                        status: "pending",
+                                                        priority: "low"
+                                                    },
+                                                    "async",
+                                                    {
+                                                        system: "loading",
+                                                        canvas: VideoOffscreenCanvas,
+                                                    },
+                                                    [
+                                                        VideoOffscreenCanvas
+                                                    ]
+                                                ),
+                                                [VideoOffscreenCanvas]);
+                                        } catch (err) {
+                                            console.error(err);
+                                        } finally {
+                    
+                                            }
+                                            */
                     const sounds = {
                         crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
                         bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
