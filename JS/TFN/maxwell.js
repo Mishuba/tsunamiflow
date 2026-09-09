@@ -66,6 +66,7 @@ export class maxwell {
     includeAudio = null;
     liveStreamKey = null;
     liveStreamRole = null;
+    newplaylistoptions = null;
     VideoDownload = null;
     userFields = null;
     extraFields = null;
@@ -802,14 +803,12 @@ export class maxwell {
 
                     for (const key in sounds) fxSources[key] = this.soundEngine.initAudioContext(this.worker, sounds[key], { type: "video", element: "audio" }, "video");
 
-                    const newplaylistoptions = find("liveplaylist", this.iframe.frame);
-
                     if (this.soundEngine.radioSchedule === null) {
                         for (let lilj = 0; lilj < this.soundEngine.DefaultPlaylist.length; lilj++) {
                             const item = this.soundEngine.DefaultPlaylist[lilj];
                             const option = document.createElement("option");
                             option.value = item;
-                            newplaylistoptions.appendChild(option);
+                            this.newplaylistoptions.appendChild(option);
                         }
                     } else {
                         for (let i = 0; i < this.soundEngine.radioSchedule.length; i++) {
@@ -844,7 +843,7 @@ export class maxwell {
                                             const subItem = subolder[l];
                                             const option = document.createElement("option");
                                             option.value = subItem;
-                                            newplaylistoptions.appendChild(option);
+                                            this.newplaylistoptions.appendChild(option);
                                         }
                                     }
                                     break;
@@ -853,7 +852,7 @@ export class maxwell {
                                         const subItem = item[j];
                                         const option = document.createElement("option");
                                         option.value = subItem;
-                                        newplaylistoptions.appendChild(option);
+                                        this.newplaylistoptions.appendChild(option);
                                     }
                                     break;
                             }
