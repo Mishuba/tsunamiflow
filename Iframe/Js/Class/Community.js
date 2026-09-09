@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const VideoOffscreenCanvas = VideoCanvas.transferControlToOffscreen();
     try {
         window.parent.ControlMishuba.worker.postMessage(
-            window.parent.ControlMishuba.videoEngine.tycadome(
+            window.parent.ControlMishuba.audioEngine.tycadome(
                 "tycadome-guest" + Date.now(),
                 "canvas",
                 "load.video.canvas",
@@ -43,5 +43,4 @@ document.addEventListener("DOMContentLoaded", async () => {
     self.onerror = (err) => {
         console.error("Error in Community.js:", err);
     }
-
 });
