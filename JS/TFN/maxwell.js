@@ -789,7 +789,7 @@ export class maxwell {
                     const sounds = {
                         crowd: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Applause Crowd Cheering sound effect.mp3"),
                         bomb: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/The sound of a bomb blast Sound Effect   ((HD)).mp3"),
-                        gun: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Mossberg 590 a1 Shotgun Sound Effect (Loading and shooting) (3_10 Guns).mp3"),
+                        gun: new Audio(""),
                         laugh: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Big Crowd Laughing Sound Effect.mp3"),
                         intro: new Audio("https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg"),
                         hellnah: new Audio("https://radio.tsunamiflow.club/Sound Effects/Live/Oh my god, Oh hell nah - Meme Sound Effect.mp3"),
@@ -805,11 +805,12 @@ export class maxwell {
                     let newplaylistoptions = find("liveplaylist");
 
                     if (this.soundEngine.radioSchedule === null) {
-                        foreach(this.soundEngine.DefaultPlaylist, (item) => {
+                        for (let lilj = 0; lilj < this.soundEngine.DefaultPlaylist.length; lilj++) {
+                            const item = this.soundEngine.DefaultPlaylist[lilj];
                             const option = document.createElement("option");
                             option.value = item;
                             newplaylistoptions.appendChild(option);
-                        })
+                        }
                     } else {
                         for (let i = 0; i < this.soundEngine.radioSchedule.length; i++) {
                             const item = this.soundEngine.radioSchedule[i];

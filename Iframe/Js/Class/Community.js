@@ -1,5 +1,5 @@
-const controller = window.parent.ControlMishuba;
 document.addEventListener("DOMContentLoaded", async () => {
+    const controller = window.parent.ControlMishuba;
     console.log("Iframe dom loaded");
     const VideoCanvas = document.getElementById("TFcanvas");
     const VideoOffscreenCanvas = VideoCanvas.transferControlToOffscreen();
