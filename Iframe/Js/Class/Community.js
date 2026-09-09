@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const controller = window.parent.ControlMishuba;
+    window.parent.ControlMishuba;
     console.log("Iframe dom loaded");
     const VideoCanvas = document.getElementById("TFcanvas");
     const VideoOffscreenCanvas = VideoCanvas.transferControlToOffscreen();
@@ -28,13 +28,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 ]
             ),
             [VideoOffscreenCanvas]);
-        controller.videoEngine.videoElement = document.getElementById("TsunamiFlowVideoStuff");
-        controller.newplaylistoptions = document.getElementById("liveplaylist");
-
+        const videoElement = document.getElementById("TsunamiFlowVideoStuff");
+        window.parent.ControlMishuba.videoEngine.videoElement = videoElement;
     } catch (err) {
-
+        console.error(err);
     } finally {
-        controller.bindVidSystem();
+        window.parent.ControlMishuba.bindVidSystem();
 
         self.onmessage = async (event) => {
 
@@ -47,17 +46,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
 
         try {
-
-            if (controller.soundEngine.radioSchedule === null) {
-                for (let lilj = 0; lilj < controller.soundEngine.DefaultPlaylist.length; lilj++) {
-                    const item = controller.soundEngine.DefaultPlaylist[lilj];
+            const newplaylistoptions = document.getElementById("liveplaylist");
+            window.parent.ControlMishuba.newplaylistoptions = newplaylistoptions;
+            if (window.parent.ControlMishuba.soundEngine.radioSchedule === null) {
+                for (let lilj = 0; lilj < window.parent.ControlMishuba.soundEngine.DefaultPlaylist.length; lilj++) {
+                    const item = window.parent.ControlMishuba.soundEngine.DefaultPlaylist[lilj];
                     const option = document.createElement("option");
                     option.value = item;
-                    controller.newplaylistoptions.appendChild(option);
+                    newplaylistoptions.appendChild(option);
                 }
             } else {
-                for (let i = 0; i < controller.soundEngine.radioSchedule.length; i++) {
-                    const item = controller.soundEngine.radioSchedule[i];
+                for (let i = 0; i < window.parent.ControlMishuba.soundEngine.radioSchedule.length; i++) {
+                    const item = window.parent.ControlMishuba.soundEngine.radioSchedule[i];
                     switch (subItem) {
                         case 0:
                         case 1:
@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                     const subItem = subolder[l];
                                     const option = document.createElement("option");
                                     option.value = subItem;
-                                    controller.newplaylistoptions.appendChild(option);
+                                    window.parent.ControlMishuba.newplaylistoptions.appendChild(option);
                                 }
                             }
                             break;
@@ -97,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                                 const subItem = item[j];
                                 const option = document.createElement("option");
                                 option.value = subItem;
-                                controller.newplaylistoptions.appendChild(option);
+                                window.parent.ControlMishuba.newplaylistoptions.appendChild(option);
                             }
                             break;
                     }
