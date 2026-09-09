@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const VideoOffscreenCanvas = VideoCanvas.transferControlToOffscreen();
     try {
         window.parent.ControlMishuba.worker.postMessage(
-            window.parent.ControlMishuba.audioEngine.tycadome(
+            window.parent.ControlMishuba.soundEngine.tycadome(
                 "tycadome-guest" + Date.now(),
                 "canvas",
                 "load.video.canvas",
