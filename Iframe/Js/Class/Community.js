@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    window.parent.ControlMishuba;
+    window.parent.ControlMishuba.bindVidSystem();
     console.log("Iframe dom loaded");
     self.onmessage = async (event) => {
 
