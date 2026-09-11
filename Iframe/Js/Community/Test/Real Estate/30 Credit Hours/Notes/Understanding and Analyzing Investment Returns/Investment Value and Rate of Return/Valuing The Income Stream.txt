@@ -1,0 +1,9 @@
+There are a number of methods available to calculate the value of an investment based on its income stream. Some are quite simple and others quite elaborate. They include:
+
+Capitalization of net income (cap rate)
+Gross rent multiplier (GRM)
+Internal rate of return (IRR)
+Discounted cash flow analysis
+Financial management rate of return (FMRR)
+The first two methods (cap rate and GRM) are the most common and are important for the real estate licensee to learn and be able to apply. The others are more sophisticated methods of valuing an income stream. They consider not only the return from the investment, but also the return from the reinvestment of any profits along the way. These can be computed with a good financial calculator or computer, but are often too sophisticated to be practical for the average investor. We will limit our discussion to the first two for now.
+

@@ -1,0 +1,152 @@
+<<<<<<< HEAD
+Special assessments and local improvement district taxes
+
+A special assessment is a tax charged on real estate to fund public improvements to the property, and it creates a lien for the amount of the assessment on the property. Property owners in the improvement area are required to pay for the improvements because their properties benefit directly from them. For example, the construction of paved streets, curbs, gutters, sidewalks, storm sewers, or street lighting increases the value of properties that benefit from them. The additional tax paid by the homeowner of those properties covers the cost of the improvements.
+
+A special assessment is generally paid in equal annual installments over a period of years. The first installment is usually due during the year following the public authority's approval of the assessment. The first bill includes one year's interest on the property owner's share of the entire assessment. Subsequent bills include one year's interest on the unpaid balance. Property owners have the right to prepay any or all installments to avoid future interest charges.
+
+For large-scale improvement projects such as streets, sidewalks, and water or sewer construction, a local improvement district (LID) may be created. An LID is a specific geographical area formed by a group of property owners working together to fund needed capital improvements. LID taxation is simply a financing method available for the design and construction of public improvements.
+
+In some parts of the country, strict subdivision regulations and LIDs have just about eliminated special assessments. Most items for which assessments have traditionally been levied are now required to be installed at the time of construction as a condition of a subdivision's approval.
+
+15.3 Notes
+Mortgage Lien
+- A mortgage lien is a specific, voluntary lien on real estate given to a lender by a borrower as security for a real estate loan. It becomes a lien on real property when the lender records the documents in the county where the property is located. Lenders generally require a preferred lien, called a first mortgage lien. This means that no other liens against the property (aside from real estate taxes) can take priority over the mortgage lien. As mentioned earlier, subsequent liens are referred to as junior liens.
+
+Mechanic Lien
+- A mechanic's lien is a specific, involuntary lien that gives security to persons or companies that perform labor or furnish material to improve real property. A mechanic's lien is available to contractors, subcontractors, architects, equipment lessors, surveyors, laborers, and other providers. This type of lien is filed when the owner has not fully paid for the work or when the general contractor has been compensated but has not paid the subcontractors or suppliers of materials. Statutes in some states prohibit subcontractors from placing liens directly on certain types of property, such as owner-occupied residences. While laws regarding mechanics' liens vary from state to state, there are many similarities.
+
+- To be entitled to a mechanic's lien, the person who did the work must have had a contract with the owner or the owner's authorized representative, such as a general contractor. A person claiming a mechanic's lien must file a notice of lien in the public record of the county where the property is located within a certain time after the work has been completed. A lien waiver is required for a contractor to receive a payment from the owner's construction loan. Once the work is completed and accounts paid, the owner will ask for a release or satisfaction of lien to be filed to clear the property title.
+
+- According to state law, priority of a mechanic's lien may be established as of the date the construction began or materials were first furnished; the date the work was completed; the date the individual subcontractor's work was either commenced or completed; the date the contract was signed or work was ordered; or the date a notice of the lien was recorded, filed, posted, or served. In some states, mechanics' liens may be given priority over previously recorded liens, such as mortgages.
+
+- If improvements that were not ordered by the property owner have commenced, the property owner should execute a document called a notice of nonresponsibility to be relieved from possible mechanics' liens. By posting this notice in some conspicuous place on the property and recording a verified copy of it in the public record within the time specified by statute, the owner gives notice that he or she is not responsible for the work done. This may prevent the filing of mechanics' liens on the property.
+
+- In Practice
+
+- In most states, a mechanic's lien takes priority from the time it attaches, even though a claimant's notice of lien will not be filed in the public record until sometime later. A prospective purchaser of property that has been recently constructed, altered, or repaired should be cautious about possible unrecorded mechanics' liens against the property.
+
+Judgment
+- A judgment is a decree issued by a court. When the decree establishes the amount a debtor owes and provides for money to be awarded, it is called a money judgment. These often result from damages caused to one person by another person through a wrongful act, breach of contract, or nonpayment of a debt.
+
+A judgment is a general, involuntary, equitable lien on both real and personal property owned by the debtor. A judgment is not the same as a mortgage because no specific parcel of real estate was given as security at the time the debt was created. A lien automatically covers only property located within the county in which the judgment is issued, so a notice of the lien must be filed in any county to which a creditor wishes to extend the lien coverage. Judgments expire after a number of years but, in some states, can be renewed indefinitely by the judgment creditor.
+
+To enforce a judgment, the creditor must obtain a writ of execution from the court. A writ of execution directs the sheriff to seize and sell as much of the debtor's property as is necessary to pay both the debt and the expenses of the sale. A judgment does not become a lien against the personal property of a debtor until the creditor orders the sheriff to assess the property and the charge is actually made.
+
+A judgment lien's priority is established by one or a combination of the following (as provided by state law):
+
+Date the judgment was entered by the court
+Date the judgment was filed in the recorder's office
+Date a writ of execution was issued
+When real property is sold to satisfy a debt, the debtor should demand a legal document known as a satisfaction of judgment (or satisfaction piece). Filing the satisfaction of judgment clears the record of the lien. In those states using a deed of trust, a deed of reconveyance must be filed with either the clerk of the court or, in some states, the recorder of deeds.
+
+Lis Pendens
+- There is often a considerable delay between the time a lawsuit is filed and the time final judgment is rendered. When any suit that affects title to or possession of real estate is filed, a special notice, known as a lis pendens is recorded. A lis pendens is not itself a lien, but rather notice of a possible future lien. Recording a lis pendens notifies prospective purchasers and lenders that there is a potential claim against the property. It also establishes a priority for the later lien. The lien is backdated to the recording date of the lis pendens.
+
+Attachment
+- To prevent a debtor from conveying title to previously unsecured real estate while a court suit is being decided, a creditor may seek a writ of attachment. A writ of attachment is a court order against the property of another person that directs the sheriff or other officer of the court to seize or take control of a property. By this writ, the court retains custody of the property until the suit concludes. Most attachments arise from an action for payment of an unsecured debt. For example, a plaintiff in a lawsuit may attach a defendant's property to gain a security interest in order to foreclose the property or to prevent the defendant from disposing of property that may be needed to pay a judgment.
+
+Estate and Inheritance Tax Liens
+- Federal estate taxes and state inheritance taxes (as well as the debts of decedents) are general, statutory, involuntary liens that encumber a deceased person's real and personal property. These taxes and debts are normally paid or cleared in probate court proceedings.
+
+Liens for Municipal Utilities
+- Municipalities often have the right to impose a specific, equitable, involuntary lien on the property of an owner who refuses to pay bills for municipal utility services.
+
+Bail Bond Liens
+- A real estate owner who is charged with a crime that will result in a trial may post bail in the form of real estate rather than cash. The execution and recording of such a bail bond creates a specific, statutory, voluntary lien against the owner's real estate. If the accused fails to appear in court, the lien may be enforced by the sheriff or another court officer.
+
+Corporation Franchise Tax
+- State governments generally levy a corporation franchise tax on corporations as a condition of allowing them to do business in the state. Such a tax is a general, statutory, involuntary lien on all real and personal property owned by the corporation.
+
+IRS Tax Lien
+- A federal tax lien, or Internal Revenue Service (IRS) tax lien, results from a person's failure to pay any portion of federal taxes, such as income and withholding taxes. A federal tax lien is a general, statutory, involuntary lien on all real and personal property held by the delinquent taxpayer. Its priority, however, is based on the date of filing or recording; it does not supersede previously recorded liens. The same rules apply to most state income tax liens. Information on federal tax liens can be found at www.irs.gov.
+=======
+Liens 
+    - A lien is a charge or claim against a person's property made to enforce the payment of money. Whenever someone borrows money, the lender generally requires some form of security. Security (also called collateral) is something of value that the borrower promises to give the lender if the borrower fails to repay the debt. When the lender's security is in the form of real estate, the security interest is called a mortgage lien. Property can thus be used to ensure payment for work performed, material provided, or debts incurred.
+    - Liens are not limited to security for borrowed money. Liens can be enforced against property by a government agency for payment of property tax owed by the owner. A lien also can be used to force the payment of an assessment or other special charge.
+    - A lien represents an interest in ownership, but it does not constitute actual ownership of the property. It is an encumbrance on the owner's title. An encumbrance is any charge or claim that attaches to real property and lessens its value or impairs its use. An encumbrance does not necessarily prevent the transfer or conveyance of the property, but because an encumbrance is attached to the property, it transfers along with it. Liens differ from other encumbrances because they are financial or monetary in nature and attach to the property because of a debt. Other encumbrances may be physical in nature and may affect the owner's use of the property, such as easements or encroachments.
+    - If a lien is not paid in the allotted time, the lienholder may foreclose on the lien, potentially forcing the sale of the property as set out by state law. Depending on how the lien was created, a lienholder may be required to initiate a legal action to force the sale of the property or acquire title. In other cases, the sale of the property can take place without a court hearing. The debt is paid out of the proceeds of the sale; any remaining amount goes to the debtor.
+
+Types of Liens 
+    - There are many different types of liens. One way that liens are classified is by how they are created. A voluntary lien is created intentionally by the property owner's action, such as when someone takes out a mortgage loan. An involuntary lien is not a matter of choice; it is created by law and may be either statutory or equitable. A statutory lien is created by statute. A real estate tax lien, for example, is an involuntary, statutory lien. It exists without any action by the property owner. An equitable lien arises out of common law. A court-ordered judgment that requires a debtor to pay the balance on a delinquent charge account, and which can be filed in the county where the debtor owns property, would create an involuntary, equitable lien on the debtor's real estate.
+    - Liens may be classified according to the type of property involved. General liens affect all the property, both real and personal, of a debtor. This includes judgments, estate and inheritance taxes, decedent's debts, corporate franchise taxes, and Internal Revenue Service taxes. A lien on real estate differs from a lien on personal property. A lien attaches to real property at the moment it is filed and recorded. In contrast, a lien does not attach to personal property until the personal property is seized.
+    - Specific liens are secured by specific property and affect only that particular property. Specific liens on real estate include vendors' liens, mechanics' liens, mortgage liens, real estate tax liens, and liens for special assessments and utilities. A vendor's lien is a lien belonging to the vendor (seller) for the unpaid purchase price of the property, when the vendor has not taken any other lien or security, such as a mortgage, beyond the personal obligation of the purchaser. Vendors' liens in real estate are uncommon and arise out of the use of owner financing to sell property.
+
+Effect of lien on title 
+    - The existence of a lien does not necessarily prevent a property owner from transferring title to someone else. The lien might reduce the value of the real estate because few buyers will take on the risk of a property that has a lien on it. Because the lien attaches to the property, not the property owner, a new owner might lose the property if the creditors take court action to enforce payment. Once in place, a lien runs with the land and will bind all successive owners until the lien is paid or settled and title is cleared by the filing of a release of lien by the lienholder.
+        In Practice
+            - A buyer should insist on a title search before closing a real estate transaction so that any recorded liens are revealed. If liens are present, the buyer may decide to purchase at a lower price or at better terms, require that the liens be removed, or refuse to complete the purchase.
+
+Priority of liens
+    - Priority of liens refers to the order in which claims against the property will be satisfied if the property is sold by the debtor. In general, the rule for priority of liens is first to record, first in right (priority). In accordance with state law, the priority of payment typically is established by the date the liens are placed in the public record of the county in which the property is located. If the holder of the first lien to be recorded forecloses on that lien, the proceeds of the property sale are used to pay that lien; if there are any funds remaining, the holder of any other lien is paid, with the former property owner receiving anything that remains after all lien holders are paid off. The holder of a junior lien (one that comes after an earlier lien) can foreclose on that lien, but the property will still be subject to the lien or liens with higher priority.
+        - There are some notable exceptions to this rule. For instance, real estate taxes and special assessments generally take priority over all other liens, regardless of the order in which the liens are recorded. This means that outstanding real estate taxes and special assessments are paid first from the proceeds of a court-ordered sale.
+            - In Practice
+                - It is important for a creditor to have the highest lien priority because it will mean that the creditor will be paid first if it becomes necessary to bring about a forced sale of the debtor's property. A creditor in the second or later position may receive little or nothing from the sale.
+
+Subordination Agreements 
+    - Subordination agreements are written agreements between lienholders to change the priority of mortgage, judgment, and other liens. Under a subordination agreement, the holder of a superior or prior lien agrees to permit a later lienholder's interest to take precedence.
+        - In Practice
+            - The seller of a vacant parcel of land often finances the purchase for a builder, claiming the first lien priority, but will then agree to subordinate that interest to the interest of the lender who provides financing for the construction of a home on the lot. The construction lender will insist on having first lien priority but, because the overall property value will be increased by the improvements made to it, the seller of the land is willing to bear the risk that, in the event of a forced sale of the property, the proceeds of the sale will be sufficient to cover both liens.
+
+Real Estate Tax Liens 
+    - There are two types of real estate taxes: 
+        * general real estate taxes and special assessments or improvement taxes. Both are levied against specific parcels of property and automatically become liens on those properties.
+    - The ownership of real estate is subject to certain governmental powers. One of these is the right of state and local governments to impose (levy) taxes to pay for their functions. Because the location of real estate is permanently fixed, the government can levy taxes with a high degree of certainty that the taxes will be collected. The annual taxes levied on real estate in most states usually have priority over previously recorded liens and may be enforced by a court-ordered sale.
+
+Ad valorem tax 
+    - The general real estate tax is an ad valorem tax. Ad valorem is Latin for "according to value." Ad valorem taxes are based on the value of the property being taxed and are specific, involuntary, statutory liens. Real estate property taxes are a favored source of revenue for local governments because real estate cannot be hidden and is relatively easy to value. Property taxes pay for a wide range of government services and programs, including those of
+        * states;
+        * counties;
+        * cities, towns, boroughs, and villages;
+        * school districts (local elementary and high schools, publicly funded junior colleges, and community colleges);
+        * drainage districts;
+        * hospital districts;
+        * water districts;
+        * sanitary districts;
+        * transportation districts; and
+        * parks, forest preserves, and recreation districts.
+
+Exemptions from general taxes 
+    Most state laws exempt certain real estate from taxation. Such property must be used for tax-exempt purposes, as defined in the statutes. The most common exempt properties are owned by
+        cities,
+        various municipal organizations (such as schools, parks, and playgrounds),
+        state and federal governments,
+        religious and charitable organizations,
+        hospitals, and
+        educational institutions.
+    Many state laws also allow special exemptions to reduce real estate tax bills for certain property owners or land uses. For instance, senior citizens, veterans, and persons with a disability are frequently granted reductions in the assessed values of their homes. In some states, low-income seniors may request a property tax freeze on the principal residence, which means that the tax assessed will not increase during the remaining years of the senior's ownership and use of the property. In an effort to stem the recent record number of home foreclosures, some states have subsidized low-income homeowners' tax bills, without regard to the owners' ages.
+    Some state and local governments offer real estate tax reductions to attract industries and sports franchises. Many states also offer tax reductions for agricultural land.
+
+Assessment 
+    Real estate is valued for tax purposes by county or township assessors or appraisers. This official valuation process is called assessment. A property's assessed value is generally based on the sales prices of comparable properties, although practices may vary. Land values may be assessed separately from buildings or other improvements, and different valuation methods may be used for different types of property. State law may provide for property to be periodically reassessed.
+    Sometimes, a property owner believes that an error was made in determining the assessed property value—usually that the assessment is too high in comparison with the assessments of neighboring properties. Such owners may present their objections to a local board of appeal or board of review. A protest or appeal regarding a tax assessment may ultimately be taken to court.
+
+Equalization 
+    In some jurisdictions, when it is necessary to correct inequalities in statewide tax assessments, an assessment equalization factor is used to achieve uniformity. An equalization factor may be applied to raise or lower assessments in a particular district or county. The assessed value of each property in the area is multiplied by the equalization factor and the tax rate is then applied to the equalized assessment.
+
+Tax Rates 
+    The process of arriving at a real estate tax rate begins with the adoption of a budget by each taxing district. Each budget covers the financial requirements of the taxing body for the coming fiscal year. The fiscal year may be the January through December calendar year or some other 12-month period designated by statute. The budget must include an estimate of all expenditures for the year.
+    The next step is appropriation, which means that a taxing body authorizes the expenditure of funds and provides for the sources of the funding. Appropriation generally involves the adoption of an ordinance or the passage of a law that states the specific terms of the proposed taxation. Some states require voter approval of any real property tax increase.
+    After appropriation or approval by voters, the amount to be raised from the general real estate tax is imposed on property owners through a tax levy. A tax levy is the formal action taken to impose the tax, usually by a vote of the taxing district's governing body.
+    The tax rate for each taxing body is determined by state law or computed separately. Unless the tax rate has already been determined by state law, the total monies needed for the coming fiscal year are divided by the total assessments of all real estate located within the taxing body's jurisdiction.
+    The tax rate may be stated in a number of ways. In many areas, it is expressed in mills. A mill is 1/1000 of a dollar, or $0.001. The tax rate may be expressed as a mills-per-dollar ratio—for instance, in dollars per hundred or in dollars per thousand. A tax rate of 0.032, or 3.2%, could be expressed as 32 mills, or $3.20 per $100 of assessed value or $32 per $1,000 of assessed value.
+        In Practice
+            An easy way to recall the value of a mill is to remember that there are 10 mills in a penny.
+
+Tax bills 
+    A property owner's tax bill is computed by applying the tax rate to the assessed valuation of the property.
+        In Practice
+            A property is assessed for tax purposes at $160,000. At a tax rate of 3%, or 30 mills, the tax owed on the property is $4,800 ($160,000 × 0.03). If an equalization factor of 120% is used, the computation is in two steps: $160,000 × 1.20 = $192,000, and $192,000 × 0.03 = $5,760. The tax owed on the property is $5,760.
+    The due dates for tax payments (also called the penalty dates) are set by statute. Taxes may be payable in 2 installments (semiannually), 4 installments (quarterly), or 12 installments (monthly). In some areas, taxes become due at the beginning of the current tax year and must be paid in advance (e.g., the year 2015 taxes must be paid at the beginning of 2014). In other areas, taxes are payable during the year after the taxes are levied (e.g., 2015 taxes are paid throughout 2015). In some states, taxes are paid one year in arrears, and you cannot pay any portion of the ad valorem taxes during the current year (e.g., 2014 taxes could not be paid until the tax books open in 2015). In still other areas, a partial payment is due in the year the tax is imposed, with the balance due in the following year (e.g., 2015 taxes are payable partly during 2015 and partly during 2016).
+    Some states offer discounts and monthly payment plans to encourage prompt pay-ment of real property taxes. Penalties, typically in the form of monthly interest charges on overdue taxes, are added to all taxes that are not paid when due.
+
+Enforcement of tax Liens 
+    Real estate taxes must be valid to be enforceable. That means they must be charged properly, must be used for a legal purpose, and must be applied equitably to all property. As previously mentioned, tax liens usually are given priority over all other liens against a property. Real estate taxes that have remained delinquent for the statutory period can be collected through a tax sale of the property. While the methods and details of the various states' tax sale procedures differ substantially, the results are the same.
+    A tax sale is usually held according to a published notice after a court has rendered a judgment for overdue taxes, penalties, and administrative costs and has ordered that the property be sold. The sale is advertised in local newspapers, and a notice of sale is posted on the affected property. The county sheriff or other public official then holds a public sale of the property. Because a specific amount of delinquent tax and penalty must be collected, the purchaser at a tax sale must pay at least that amount. A certificate of sale is usually given to the highest bidder when that bidder pays the delinquent tax amount in cash. The certificate of sale gives the holder the right to take possession of the property.
+    The holder of the certificate of sale may not immediately receive the deed to the property. Some states grant a period of redemption after the tax sale. In this case, the defaulted owner (or the defaulted owner's creditors) may redeem the property by paying the amount collected at the tax sale plus interest and charges (including any taxes levied since the sale). This is known as a statutory right of redemption. If the property is not redeemed within the statutory period, the certificate holder can apply for a tax deed (sheriff's deed). The quality of the title conveyed by a tax deed varies from state to state.
+    In some states, the delinquent taxpayer may redeem the property any time before the tax sale. The taxpayer exercises this equitable right of redemption by paying the delinquent taxes plus interest and charges (any court costs or attorney's fees). An owner who does not exercise this right may force a sale.
+
+
+
+>>>>>>> 3ef6df50eab15c1e69a914faac18bc4df3a7b295
+

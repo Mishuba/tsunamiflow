@@ -1,0 +1,136 @@
+The next step in the analysis process is to determine the total operating expenses for the property. As with income, expenses will be analyzed on an annual basis. The investor will do a detailed analysis of the expenses of a given property, so it benefits the practitioner to have done a thorough analysis in the beginning.
+
+It is important to carefully analyze all categories of expenses in order to accurately portray the financial condition of the property. There are different categories of expenses depending on the type of property you will be analyzing. However, all expenses are segregated into three basic categories:
+
+Fixed expenses
+Variable expenses
+Reserves for replacement
+
+
+Fixed Expenses
+A fixed expense is determined to be an expense that will not vary in response to changing levels of occupancy. A list of typical fixed expense categories includes the following:
+
+Ad valorem property taxes
+Insurance
+Landscaping and service contracts
+This group of expenses is not difficult to document for your analysis, but be careful to consider that these expenses may not be the same for a new owner; for example, the building insurance may go up or the real estate may be reassessed upon transfer.
+
+Ad Valorem Property Tax
+Property taxes are typically a large fixed operating expense for commercial real estate owners. Since the value of investment real estate is dependent upon net income, understanding the impact of ad valorem or property tax is important.
+
+The general real estate tax is an ad valorem tax. Ad valorem is Latin for "according to value." Ad valorem taxes are based on the value of the property being taxed and are specific, involuntary, statutory liens. Real estate property taxes are a favored source of revenue for local governments because real estate cannot be hidden and is relatively easy to value. Property taxes pay for a wide range of government services and programs, including those of
+
+states;
+counties;
+cities, towns, boroughs, and villages;
+school districts (local elementary and high schools, publicly funded junior colleges, and community colleges);
+drainage districts;
+hospital districts;
+water districts;
+sanitary districts;
+transportation districts; and
+parks, forest preserves, and recreation districts.
+Exemptions from General Taxes
+
+Most state laws exempt certain real estate from taxation. Such property must be used for tax-exempt purposes, as defined in the statutes. The most common exempt properties are owned by
+
+cities;
+various municipal organizations (such as schools, parks, and playgrounds);
+state and federal governments;
+religious and charitable organizations;
+hospitals; and
+educational institutions.
+Some state and local governments offer real estate tax reductions to attract industries and sports franchises. Many states also offer tax reductions for agricultural land.
+
+Tax waivers
+
+In addition to other economic incentives, city leaders may offer a new job-creating industry certain tax waivers. Property taxes may be waived for specified periods of time if a company agrees to purchase a plant instead of leasing it. Inventory taxes may be waived for the term of the lease or longer, depending on circumstances. Local sales taxes, income taxes, and state income taxes, in certain cases, may be waived for prescribed time periods to allow an infant industry an opportunity to mature.
+
+Theoretically, these tax waivers—as well as the plant subsidies—will cost a community little, if any, money because of the incremental taxes that will be generated. The increased tax revenue will emanate from the income taxes of newly employed workers and the services they will use.
+
+Assessment
+
+Real estate is valued for tax purposes by county or township assessors or appraisers. This official valuation process is called assessment. Local governments will request a completed income and expense form from the commercial property owner to assist with determining the value of the property. It is extremely important to list every known expense as it relates to the property's operation. The assessors take into consideration these expenses when deciding the amount of property taxes.
+
+A property's assessed value is generally based on the concept of fair market value, although most jurisdictions use mass appraisal techniques instead of individual appraisals. Land values may be assessed separately from buildings or other improvements, and different valuation methods may be used for different types of property. Most taxing authorities periodically reassess the subject property and establish appraisal criteria as part of the valuation process. Property is also likely to be reassessed upon transfer.
+
+Sometimes, a property owner believes that an error was made in determining the assessed property value—usually that the assessment is too high in comparison with the assessments of neighboring properties. Such owners may present their objections to a local board of appeal or board of review. A protest or appeal regarding a tax assessment may ultimately be taken to court.
+
+Tax Rates
+
+The process of arriving at a real estate tax rate begins with the adoption of a budget by each taxing district. Each budget covers the financial requirements of the taxing body for the coming fiscal year. The fiscal year may be the January through December calendar year or some other 12-month period designated by statute. The budget must include an estimate of all expenditures for the year.
+
+The next step is appropriation, which means that a taxing body authorizes the expenditure of funds and provides for the sources of the funding. Appropriation generally involves the adoption of an ordinance or the passage of a law that states the specific terms of the proposed taxation. Some states require voter approval of any real property tax increase.
+
+After appropriation or approval by voters, the amount to be raised from the general real estate tax is imposed on property owners through a tax levy. A tax levy is the formal action taken to impose the tax, usually by a vote of the taxing district's governing body.
+
+The tax rate for each taxing body is determined by state law or computed separately. Unless the tax rate has already been determined by state law, the total monies needed for the coming fiscal year are divided by the total assessments of all real estate located within the taxing body's jurisdiction.
+
+The actual tax rate may vary depending on the classification of the property according to the use of the property. Classifications typically include commercial/industrial, multiple dwelling, residential, agricultural, and business.
+
+Some states offer discounts and monthly payment plans to encourage prompt payment of real property taxes. Penalties, typically in the form of monthly interest charges on overdue taxes, are added to all taxes that are not paid when due.
+
+Special Assessments
+
+A special assessment is a tax charged on real estate to fund public improvements to the property, and it creates a lien for the amount of the assessment on the property. Property owners in the improvement area must pay for the improvements because their properties benefit directly from them. For example, the construction of paved streets, curbs, gutters, sidewalks, storm sewers, or street lighting increases the value of properties that benefit from them. The additional tax paid by the property owners of those properties covers the cost of the improvements.
+
+Variable Expenses
+The list of variable expense categories is much longer than that of fixed expenses, and will vary depending on the type and size of the property under analysis. Variable expenses include all of the expenses necessary to maintain the income stream of the property and to provide agreed-upon services to the tenant. To attempt a comprehensive list of all expense categories for all types of properties might be impossible, and certainly is beyond the scope of our study. We will discuss the more common types of expenses in some detail, remembering that each property has unique characteristics and may include its own unique expense categories.
+
+Reserves for replacement
+
+The category "reserves for replacement" is for cash flow analysis purposes. This "expense" will help the investor to understand the effect on cash flow of anticipated replacement of major components of the building. This expense will be ignored, or added back for any after-tax cash flow analysis, because these items are usually treated as capital improvements for tax purposes instead of deductible expenses.
+
+Off-site management
+
+Many properties will be managed completely by offsite personnel. The amount for off-site management is determined and subtracted as an expense of operation. It should be noted that a management expense is a valid deduction from income even if the owner is managing the property. There are many firms specializing in this field that usually charge between 5 percent and 10 percent of the rental amount.
+
+Payroll on-site personnel
+
+On-site or resident management is used when the day-to-day activities of the property require constant supervision. A resident manager is sometimes given free or reduced rent. If that is the case, you must include the manager's unit rent in gross scheduled income and then enter the amount of free rent as an expense. In many types of property, this category will include security and maintenance personnel.
+
+Expenses/benefits
+
+This category includes management costs such as office and administrative expenses or performance bonuses paid to an on-site manager. Any health insurance or retirement plan contributions would also be listed here.
+
+Taxes and workers' compensation
+
+Whenever there is an employee, there are various taxes for which the employer is responsible. Among these are Social Security taxes, unemployment tax, and local, state, and federal income taxes. These taxes are payable by the employer, and, in turn, the employer is required to withhold some amount from the employees' pay and forward it to IRS. Failure by the employer to report or pay these taxes in a timely fashion will subject the employer to fines and penalties.
+
+Repairs and maintenance
+
+This covers the total amount of repairs and maintenance required for the year, not including any money spent on capital improvements. A capital improvement is any improvement that substantially increases the value or useful life of the property. If you find a property that has not had any maintenance expenses in the recent past, you will probably find a tradeoff in the overall condition of the property.
+
+Utilities
+
+This is probably the most difficult portion of the operating statement to complete accurately. This information is most easily obtained from the owner; however, you can usually acquire a printout from each utility supplier showing the historic cost of utilities on a particular property. The supplier may be willing to give you some indication of the anticipated cost in the coming year. This information is subject to many variables, such as increase in service cost, tenant use of the utilities, appliance efficiency and repair, and the possibility of a sustained water or gas leak that could dramatically affect utility cost.
+
+NOTE: If the owner is paying the utility bills and is then reimbursed by the tenant, the full utility cost will be listed here and the amount reimbursed to the owner would be listed as other income.
+
+Accounting and legal
+
+Accounting and legal expenses cover the amount for the bookkeeping required on the property. It will include any amounts paid for payroll reporting or for monthly profit and loss statements. This should also include any legal expenses associated with evictions, drafting of leases, and so on.
+
+Real estate leasing commissions
+
+This category should always be considered, particularly in nonresidential property. Each time the property is vacant, a new tenant will have to be found. This is often done through a leasing agent who will charge a fee for his or her services.
+
+Advertising, licenses, and permits
+
+Many larger properties will have ongoing advertising expenses. At the very least, there will be some cost at each vacancy. The amounts spent for advertising and any license or permit charges such as city business licenses, pool inspections, and code inspections, are included here.
+
+Supplies
+
+This might include supplies for the vendors mentioned previously, bug spray, batteries for smoke detectors, deicer for drives and walks, and so on.
+
+Miscellaneous
+
+That's right! There should always be a category for those expenses too insignificant to warrant their own category. Any additional expenses that were not accounted for elsewhere in the analysis can also be included.
+
+Contract services
+
+These are services that are supplied by outside vendors not already accounted for under fixed expense categories, such as a security patrol, maintenance contracts, design services, appraisals, and many others.
+
+Total operating expenses is the total of the expenses calculated, not including vacancy or credit losses. Remember that we are attempting to give as accurate a picture as possible of the property's financial condition. The property's value will be dependent on the ability to produce income, so it is important to be as accurate as possible in estimating both income and expenses.
+
+The total operating expenses are now subtracted from the effective gross income:

@@ -1,0 +1,154 @@
+Appraising
+- An appraisal is an opinion of value based on supportable evidence and approved methods. An appraisal report is an opinion of market value on a property given to a lender or client with detailed market information. An appraiser is an independent professional trained to provide an unbiased opinion of value in an impartial and objective manner, following an identified appraisal process. Appraising is a professional service performed for a fee; it is a breach of accepted practice and ethics to collect a commission for an appraisal based on the value of the property appraised.
+
+- An accurate, objective appraisal is an important part of a real estate transaction, as well as a safeguard against a fraudulent transaction. The Dodd-Frank Act required changes to the Truth in Lending Act and other legislation to prohibit the coercion and other activities that influenced appraisals in many cases of fraud that occurred during the housing crisis of the past decade. Fannie Mae initiated Appraiser Independence Requirements (AIR) that took effect October 15, 2010. A copy of the AIR can be found at www.fanniemae.com/content/fact_sheet/appraiser-independence-requirements.pdf.
+
+   Regulation of appraisal activities
+         - Title XI of the Financial Institutions Reform, Recovery, and Enforcement Act of 1989 (FIRREA) requires that any appraisal used in connection with a federally related transaction be performed by a competent individual who is licensed or certified by the state in which the appraiser practices. Every state now has an appraiser licensing agency, which is required by FIRREA to be separate from the agency that licenses real estate professionals.
+         - A federally related transaction is any real estate-related financial transaction in which a federal financial institution or regulatory agency is engaged. These transactions involve the sale, lease, purchase, investment, or exchange of real property. They also include the use of real property as security for a loan or an investment, including mortgage-backed securities. Appraisals of residential property valued at $250,000 or less are exempt and need not be performed by licensed or certified appraisers. Nonresidential properties valued at more than $250,000 (raised to $500,000 in 2018) require a certified appraiser.
+         - There are limited exceptions to the appraisal requirements. Fannie Mae will not require a new appraisal for a limited cash-out refinancing when borrower and lender are the same, the original appraisal was performed no more than 12 months earlier (if performed more than four months earlier, an appraisal update is required), and the property should be in substantially the same condition (no significant updates or deterioration) that would affect market value.
+         - Given the many properties that have had appraisals entered in Fannie Mae's Collateral Underwriter (CU) database, some loans purchased by Fannie Mae are eligible for a property inspection waiver (PIW). Fannie Mae's Desktop Underwriter (DU) system will search the property address for an appraisal; if the first and last names of the borrowers on the earlier and present loan match, Fannie Mae will consider a PIW. If the earlier appraisal was flagged for any reason (perhaps an over valuation), the PIW will not be issued.
+
+   Appraiser Qualifications
+         - State licensing and certification criteria for appraisers must conform to the requirements of the Appraisal Subcommittee of the Federal Financial Institutions Examination Council, as recommended by the Appraiser Qualifications Board (AQB) of the Appraisal Foundation. The Appraisal Foundation is a not-for-profit organization composed of representatives of the major appraisal and related groups. In conducting an appraisal, an appraiser must follow the Uniform Standards of Professional Appraisal Practice (USPAP) established by the Appraisal Standards Board (ASB) of the Appraisal Foundation. Members of the AQB meet regularly to review and make recommendations for changes to the level of education and experience required of appraisers. Members of the ASB also meet often to discuss revisions and updates to USPAP. Both of these boards are composed of practicing appraisers, state officials, and educators. The Appraisal Foundation has also created the Appraisal Practices Board (APB), which "offers voluntary guidance to appraisers, regulators and users of appraisal services on recognized valuation methods and techniques for all valuation disciplines."
+         - More information about the Appraisal Foundation and links to all of the Appraisal Foundation boards can be found at www.appraisalfoundation.org. USPAP undergoes review and revision in a two-year cycle starting with an even-numbered year; the current update can be found at www.uspap.org.
+
+  Organizations for Appraisers
+        - Most appraisers work as independent contractors, even when they are employed by a large appraisal management company, but appraisers are also employed by public agencies. Numerous trade associations are available for appraisers and are valuable sources of education, legal updates, and networking opportunities. Some of the largest are the following:
+
+      - American Society of Appraisers—www.appraisers.org
+      - American Society of Farm Managers and Rural Appraisers, Inc.—www.asfmra.org
+      - Appraisal Institute—www.appraisalinstitute.org
+      - International Association of Assessing Officers—www.iaao.org
+      - International Right of Way Association—www.irwaonline.org
+      - National Association of Independent Fee Appraisers—www.naifa.com
+
+Competitive Marketing Analysis
+      - Not all estimates of value are made by professional appraisers. As you have already learned, real estate professionals often prepare a comparative market analysis (CMA) for a seller or buyer. A CMA is distinctly different from an appraisal report offered by a licensed or certified appraiser. An appraisal is based on a detailed analysis of market conditions, the features of the subject property and comparable properties in the neighborhood, recent sales and listings, land value and current construction cost—all the elements that a lender wants to consider in determining whether or not to make a loan and accept the property as security for the debt. The CMA focuses on properties similar to the subject property in size, location, and amenities for the purpose of deriving a likely listing price or offering price. The CMA analysis is based on
+
+      • recently closed properties (solds),
+      • properties currently on the market (competition for the subject property), and
+      • properties that did not sell (expired listings in the area).
+
+Broker Price Option (BPO)
+- A broker's price opinion (BPO) is a less-expensive alternative for evaluating property that is often used by lenders working with home equity lines, refinancing, portfolio management, loss mitigation, and collections. Although some BPOs are more extensive, including information about the neighborhood and an interior analysis, many are simply "drive bys" that verify the existence of the property, along with a listing of comparable sales. A BPO should not be confused with an appraisal, which consists of more in-depth analysis of gathered information and which may be performed only by a licensed or certified appraiser. A BPO cannot be used if the matter involves a federally related transaction that requires an appraisal and/or the transaction occurs in a state that requires one. Information on how a BPO is used in certain Fannie Mae programs, perhaps a short sale or deed in lieu of foreclosure, can be obtained by entering "BPO" in the search box at www.fanniemae.com/singlefamily.
+
+The Three Approaches to Value 
+- To arrive at an accurate opinion of value, an appraiser traditionally uses one or more of three basic valuation techniques: the sales comparison approach, the cost approach, and the income approach. The three methods serve as checks against each other and using more than one approach helps the appraiser narrow the range of the final conclusion of value. Each approach is most useful with a specific type of property.
+
+      The sale comparison aaproach
+            - In the sales comparison approach (also known as the market data approach), value is obtained by comparing the property being appraised—the subject property—with recently sold comparable properties—properties similar to the subject in location and features. Because no two parcels of real estate are exactly alike, each comparable property must be analyzed for differences and similarities between it and the subject property. This approach is a good example of the principle of substitution, discussed above. The sales price of a comparable is adjusted to reflect the impact on value of any differences between the subject and comparable. The elements of comparison for which adjustments must be made include the following:
+                  * Property rights. An adjustment must be made when less than fee simple—the full legal bundle of rights—is involved. An adjustment could be made because of the presence of a land lease, ground lease, life estate, easement, deed restriction, and/or encroachment.
+                  * Financing concessions. The financing terms under which a property was sold must be considered, including mortgage loan terms and owner financing or an interest rate buydown by a builder-developer.
+                  * Market conditions. Interest rates, supply and demand, and other economic indicators must be analyzed.
+                  * Conditions of sale. Adjustments must be made for motivational factors that would affect the sale, such as foreclosure, a sale between family members, or some nonmonetary incentive.
+                  * Market conditions since the date of sale. An adjustment must be made if economic changes occur between the date of sale of the comparable property and the date of the appraisal.
+                  * Location or area preference. Similar properties might differ in price from neighborhood to neighborhood or even between locations within the same neighborhood.
+                  * Physical features and amenities. Physical features, such as the structure's age, size, and condition when compared to the subject property, may require adjustments.
+            - The sales comparison approach is usually considered the most reliable of the three approaches in appraising single-family homes, where the intangible benefits of home ownership may be difficult to measure otherwise
+
+      The cost approach 
+            - The cost approach to value also is based on the principle of substitution. The cost approach consists of five steps:
+                  1.) Estimate the value of the land as though it were vacant and available to be put to its highest and best use.
+                  2.) Estimate the current cost of constructing buildings and improvements.
+                  3.) Estimate the amount of accrued depreciation (loss in value) resulting from the property's physical deterioration, external depreciation, and functional obsolescence.
+                  4.) Deduct the accrued depreciation estimated in Step 3 from the construction cost estimated in Step 2.
+                  5.) Add the estimated land value from Step 1 to the depreciated cost of the building and site improvements derived in Step 4 to arrive at the total property value.
+                        For example:
+                              Value of the land 	=$50,000
+                              Current cost of construction 	=$180,000
+                              Accrued depreciation 	=$20,000
+                              $180,000 – $20,000 	=$160,000
+                              $50,000 + $160,000 	=$210,000
+                        Graph 16.3(4/8)
+                              Sales Price       262000      252000      265000
+                              
+
+
+                              In this case, the total property value is $210,000.
+                        The value of a feature that is present in the subject but not in the comparable property is added to the sales price of the comparable. The value of a feature that is present in the comparable but not in the subject property is subtracted from the sales price of the comparable. A good way to remember this is as follows: CBS stands for "comp better, subtract"; and CPA stands for "comp poorer, add." The adjusted sales prices of the comparables represent the probable range of value of the subject property. From this range, a single market value estimate can be selected.
+            Depreciation
+                  - In a real estate appraisal, depreciation is a loss in value for any reason. It refers to a condition that adversely affects the value of an improvement to real property. Land is not considered a depreciating asset; it retains its value indefinitely, except in such rare cases as an urban parcel that is rezoned, improperly developed land, or misused farmland. Depreciation is the result of a negative condition that affects real property.
+                        - In Practice
+                              - Depreciation for appraisal purposes is not the same as depreciation for tax reporting purposes. Depreciation for appraisal purposes represents the actual loss in value caused by property deterioration, damage, or obsolescence. Depreciation for tax purposes is an annual deduction from taxable income for a term of years, as permitted by IRS regulations, which may even allow the term of years to be shortened so that accelerated depreciation can be taken.
+                        Cost Approach to Value 
+                              Land valuation: Size 60' × 135' @ $450 per front foot		$ 27,000
+                              Plus site improvements: driveway, walks, landscaping, etc.		  10,000
+                              Total		$ 37,000
+                                          
+                              Building valuation: replacement cost		
+                              2,500 sq. ft. @$75 per sq. ft.	$187,500	
+                                          
+                              Less depreciation:		
+                              Physical depreciation		
+                               Curable (items of deferred maintenance)		
+                                exterior painting	$4,000	
+                               Incurable (structural deterioration)	9,750	
+                              Functional obsolescence	0	
+                              External obsolescence	       0	
+                              Total depreciation	$13,750	
+                                          
+                              Depreciated value of building		$173,750
+                              Indicated value by cost approach		$210,750
+                  - Depreciation is considered curable or incurable, depending on whether it can be corrected economically. For appraisal purposes, depreciation is divided into three classes, according to cause:
+                              - Physical deterioration. A curable item is one in need of repair, such as painting (deferred maintenance), that would result in an increase in value equal to or exceeding its cost. An item is incurable if it is a defect caused by physical wear and tear and its correction would not be economically feasible or contribute a comparable value to the building, such as an extensive crack in the foundation. The cost of a major repair may not warrant the financial investment.
+                              - Functional obsolescence. Obsolescence means a loss in value from the market's response to the item. Outmoded or unacceptable physical or design features that are no longer considered desirable by purchasers are considered curable if they can be replaced or redesigned at a cost that would be offset by the anticipated increase in ultimate value. Outmoded plumbing, for instance, is usually easily replaced. Room function may be redefined at no cost if the basic room layout allows for it. A bedroom adjacent to a kitchen, for example, may be converted to a family room. Currently undesirable physical or design features that cannot be easily remedied because the cost of the cure would be greater than its resulting increase in value are considered incurable. A four-bedroom home with only one bathroom is likely to suffer from incurable functional obsolescence.
+                              - External obsolescence. If depreciation is caused by negative factors not on the subject property, such as environmental, social, or economic forces, it is always incurable. The loss in value cannot be reversed by spending money on the property. For example, close proximity to a polluting factory is a factor that cannot be cured by the owner of the subject property.
+                        - The easiest but least precise way to determine depreciation is the straight-line method, also called the economic age-life method. Depreciation is assumed to occur at an even rate over a structure's economic life, the period during which it is expected to remain useful for its original intended purpose. The property's cost is divided by the number of years of its expected economic life to derive the amount of annual depreciation.
+                        - For instance, a $420,000 property may have a land value of $90,000 and an improvement value of $330,000. If the improvement is expected to last 60 years, the annual straight-line depreciation would be $5,500 ($330,000 divided by 60 years). Such depreciation can be calculated as an annual dollar amount or as a percentage of a property's improvements. 
+            - The cost approach is most useful in the appraisal of newer or special-purpose buildings such as schools, churches, and public buildings. Such properties are difficult to appraise using other methods because there are seldom enough local sales to use as comparables and because the properties do not ordinarily generate income.
+            - Much of the functional obsolescence and all the external obsolescence can be evaluated only by considering the actions of buyers in the marketplace.
+
+      The Income Approach 
+            - The income approach to value is based on the present value of the right to future income. It assumes that the income generated by a property will determine the property's value. The income approach is used for valuation of income-producing properties such as apartment buildings, office buildings, retail stores, and shopping centers and is based on anticipation. A simplified version of the computations used in applying to income approach is shown in  Income Capitalization Approach to Value. In estimating value using the income approach, an appraiser must take the following five steps: 
+                  1 Estimate the property's annual potential gross income. An estimate of economic rental income must be made based on market studies. Current rental income may not reflect the current market rental rates, especially in the case of short-term leases or leases about to terminate. Potential income also includes income to the property from such sources as vending machines, parking fees, and laundry machines.
+                  2 Deduct an appropriate allowance for vacancy and rent loss, based on the appraiser's experience, and arrive at the effective gross income.
+                  3 Deduct the annual operating expenses from the effective gross income to arrive at the annual net operating income (NOI). Management costs are always included, even if the current owner manages the property. Mortgage payments (principal and interest) are debt service and are not considered operating expenses. Capital expenditures are not considered expenses; however, an allowance can be calculated representing the annual usage of each major capital item.
+                  4 Estimate the price a typical investor would pay for the income produced by this particular type and class of property. This is done by estimating the rate of return (or yield) that an investor will demand for the investment of capital in this type of building. This rate of return is called the capitalization rate (or "cap" rate) and is determined by comparing the relationship of net operating income with the sales prices of similar properties that have sold in the current market. For example, a comparable property that is producing an annual net income of $15,000 is sold for $187,500. The capitalization rate is $15,000 divided by $187,500, or 8%. If other comparable properties sold at prices that yielded substantially the same rate, it may be concluded that 8% is the rate that the appraiser should apply to the subject property.
+                  5 Apply the capitalization rate to the property's annual net operating income to arrive at the estimate of the property's value.
+            Income Capitalization Approach to Value (graph 16.3[5/8]) 
+                  
+            - Capitalization rate = 10% (overall rate)
+            - Capitalization of annual net income: $31,176 ÷ 0.10 = $311,760
+            - Market value by income approach = $311,760
+            - With the appropriate capitalization rate and accurate projected annual net operating income, the appraiser can obtain an estimate of value by applying the income approach.
+            - This formula and its variations are important in dealing with income property:
+                  Income ÷ rate = value
+                  Income ÷ value = rate
+                  Value × rate = income 
+                        For Example 
+                              Net operating income ÷ capitalization rate = value
+                              $18,000 income ÷ 9% cap rate = $200,000 value or
+                              $18,000 income ÷ 8% cap rate = $225,000 value
+                                    Note the relationship between the rate and the value. As the rate goes down, the value increases.      
+            Gross Rent or Gross Income Multipliers 
+                  If a buyer is interested in purchasing a one- to four-unit residential rental property, the gross rent multiplier (GRM) based on monthly rental income could be used for a rough approximation of value. If the buyer is interested in purchasing five or more units, a gross income multiplier (GIM) based on annual income could be used.
+                        The formulas are as follows:
+                              For a property with one to four residential units that has no income from other sources:
+                                    Sales price ÷ monthly gross rent = gross rent multiplier (GRM)
+                              For a property with five or more units and commercial properties with income from a variety of sources:
+                                    Sales price ÷ annual gross income = gross income multiplier (GIM)
+                                          For example, if a home recently sold for $155,000 and its monthly rental income was $1,250, the GRM for the property would be
+
+                                                $155,000 ÷ $1,250 = 124 GRM
+
+                                          If a commercial property recently sold for $155,000 and its annual rental income was $15,000, the GIM for the property would be
+
+                                                $155,000 ÷ $15000 = 10.33 GIM
+
+                                          To establish an accurate GRM, an appraiser must have recent sales and rental data from at least four properties that are similar to the subject property. The resulting GRM can then be applied to the estimated fair market rental of the subject property to arrive at its market value. The formula would be as follows:
+
+                                                Rental income × GRM = Estimated market value 
+
+                              Gross Rent Multiplier 
+
+
+Reconciliation
+      - When the three approaches to value are applied to the same property, they normally produce three separate indications of value. (Compare  Cost Approach to Value with  Income Capitalization Approach to Value.) Reconciliation is the act of analyzing and effectively weighing the findings from the three approaches. In reconciliation, an appraiser explains not only the appropriateness of each approach but also the relative reliability of the data within each approach in line with the type of value sought. The appraiser should also explain how the data reflect the current market.
+      - The process of reconciliation is not simply taking the average of the three estimates of value. An average implies that the data and logic applied in each of the approaches are equally valid and reliable and should, therefore, be given equal weight. In fact, however, certain approaches are more valid and reliable with some kinds of properties than with others.
+      - For example, in appraising a home, the income approach is rarely valid, and the cost approach is of limited value unless the home is relatively new. Therefore, the sales comparison approach is usually given greatest weight in valuing single-family residences. In the appraisal of income or investment property, the income approach normally is given the greatest weight. In the appraisal of churches, libraries, museums, schools, and other special-use properties, where little or no income or sales revenue is generated, the cost approach 
+
+
+
+
+

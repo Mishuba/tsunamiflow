@@ -1,0 +1,105 @@
+Housing Affordability 
+
+    Principal, Intererst, Taxes, Insurance 
+        PITI 
+            Speak to the lender ()
+
+    Consider montly budget 
+        Utilites, Trash removal, rountine maintence, repairs 
+
+    Credit Score 
+        Any debts will effect the amount you qualify for. 
+
+    Debt-to-income radio 
+        Debts(bills) vs income 
+    Housing Expense Ratio 
+        PITI vs Income 
+
+    Other Expenses to Consider 
+        Trash 
+        Water
+        sewer
+        HOA fee 
+        Deferred Maintenance 
+
+    Helping your clients understand the real costs of owning a home builds trust. 
+
+
+Security Instrument 
+    Financing Documents 
+
+        Title theory vs lien theory 
+            1 In title theory states, the vorrower (mortgagor) grants legal title to a trustee. 
+                a.) Trustee holds title on behalf of the lender 
+                b.) The borrower retains equitable title. 
+                c.) Legal title is returned to the borrower when the debt is paid in full. 
+
+            2 In lien theory states, the borrower holds both legal and equitable title. 
+                a.) The lender has a specific lien on the property as security for the mortgage debt. 
+                
+                // this shit down here important // 
+            3 Whether a mortgage or deed of trust is used, the function is the same:
+                a.) Security for the promissory note, pledging the real estate property as collateral for the debt. 
+                        <!-- nah like bruh really want me to remember this shit-->
+            4 States using deeds of trust often use nonjudicial foreclosure (also konwn as power of sale); those using mortgages use either nonjudicial or a judicial foreclosure process. 
+
+        Promissory note 
+            Promissory note is a legal instrument that provides evidence of the debt 
+                A) Secured by the mortgage or deed of trust 
+
+            2 Held by the lender until loan is fully repaid; not recorded 
+            3 Key elements 
+                a Personal promise of borrower to repay a fixed amount 
+                b Terms of repayment 
+                c Signature of borrower; lender does not sign 
+            4 Special Provisions 
+                a) Acceleration clause 
+                    1 if borrower defaults, lender can demand immediate payment of entire balance. 
+                b) Promissory note alone does not create a lien on the property. 
+                C) MOst real estate notes are negotiable and transferable, which allows them to be sold. 
+
+        MOrtgage or Deed of trust 
+            1) Instruments that pledge (hypothecate)
+                Property as security for a debt 
+            2) Mortgage or deed of trust creates a lien when recorded 
+                A.) Creates payment obligation to pay off principal and interest 
+                B) Interest on the majority of home loans is simple, not compounded. 
+            3) Allows for foreclosure if borrower defaults on the note 
+            4) Mortgage: Two-Party instrument 
+                A) Borrower is the mortgagor who gives a mortgage to the lender 
+                B) Lender is the mortgagee  
+            5) Deeed of Trust: Three-party instrument 
+                A) Borrower is the trustor 
+                B) Lender is the beneficiary (benefits from the trust). 
+                C) Trustee -- in some states, a public official 
+            6) Like all contracts, a mortgage requires the essential elements and must be in writing and signed to be valid. 
+        Provisions of a mortgage/deed of trust 
+            1) Defines the rights and obligations 
+            2) Acceleration caluse --lender may demand full payment in case of default. 
+            3) Defeasance clause -- when debt is paid (mortgage/deed of trust), lien must be removed. 
+                A) Mortgagee provides "Satisfaction."
+                B) Trustee provides deed of reconveyance 
+                C) Satisfaction or reconveyance deed proves payments are in full and are recorded by borrower 
+            4) Due-on-sale clause Also called alienation clause 
+                A)Provides that when the property is sold, the lender may demand immediate payment of the outstanding debt 
+                B) Lender consent is required for assumption of a loan.
+            5 Prepayment clause establishes terms and conditions for early loan payoff 
+                A) May include penalties for early payoff (prepayment penalty)
+            6) Power of sale clause --optional provision in mortgage if allowed by state law; standard in deeds of trust 
+                a) Gives the trustee/mortgagee the power to foreclose without going to court(nonjudicial)
+        Reasons for loan acceleration and foreclosure 
+            1) Nonpayment of principal and interest 
+            2) Nonpayment of taxes 
+            3) Removal of improvements wihtou lender's permission 
+            4) Let insurance coverage lapse 
+            5) Waste would include deferred maintenance that lowers value below what is owed 
+            6) Alienation without consent (if there is a due-on-sale clause)
+
+
+
+
+
+
+
+
+

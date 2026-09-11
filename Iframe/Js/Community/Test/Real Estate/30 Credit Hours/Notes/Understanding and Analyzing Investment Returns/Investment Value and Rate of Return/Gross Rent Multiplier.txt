@@ -1,0 +1,25 @@
+Another method of valuing an income stream is known as the gross rent multiplier (GRM). It is also referred to as the gross income multiplier (GIM). This method simply compares the value or sales price of a property to its gross rental income. The gross income may be figured on an annual or a monthly basis. In most cases, the monthly gross rents will be used in small residential properties almost exclusively.
+
+Regardless of which type of gross income is used, the calculation is the same. This factor must be derived from analysis of comparable property sales. The formula is:
+
+Value ÷ Gross Income = Gross rent multiplier (GRM)
+
+Example: Assume you are analyzing a small residential investment property with a gross annual income of $12,500. A search of comparable sales indicates the following data regarding each property's sales price and gross annual rent:
+
+Sales price: $125,000—Gross annual rent: $19,600
+Sales price: $164,000—Gross annual rent: $26,100
+Sales price: $110,000—Gross annual rent: $17,000
+Sales price: $130,000—Gross annual rent: $20,000
+Sales price: $182,000—Gross annual rent: $30,000
+The gross rent multiplier for each property may now be calculated, using the formula Value ÷ Gross income = GRM:
+
+Value ($125,000) ÷ Gross income ($19,600) = GRM 6.38
+Value ($164,000) ÷ Gross income ($26,100) = GRM 6.28
+Value ($110,000) ÷ Gross income ($17,100) = GRM 6.43
+Value ($130,000) ÷ Gross income ($20,000) = GRM 6.5
+Value ($182,000) ÷ Gross income ($30,000) = GRM 6.07
+The analysis indicates that the property will have a gross rent multiplier of between 6.07 and 6.5.
+
+The next step is to analyze each comparable property to determine the most appropriate GRM. It is important to ascertain the most comparable multiplier rather than to simply average the various multipliers. For example, if the property under analysis has a gross annual income of $19,000 and the multiplier selected is 6.25, then the property's value would be $118,750:
+
+Gross rent multiplier (6.25) × Gross income ($19,000) = Value ($118,750)

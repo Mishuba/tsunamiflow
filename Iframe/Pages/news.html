@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TsunamiFlow Live</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #111;
+            color: #eee;
+        }
+
+        video {
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+            background: black;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+
+<body>
+    <h1>🎥 TsunamiFlow Live</h1>
+
+    <!-- VIDEO STREAM -->
+    <video id="stream" type="application/vnd.apple.mpegurl" controls autoplay muted></video>
+
+    <!-- CHAT -->
+    <h2>💬 Live Chat</h2>
+    <div id="chatBox"></div>
+    <input id="msg" type="text" placeholder="Type a message...">
+    <button id="LiveStreamChat">Send</button>
+
+    <script>
+        const videoSrc = "https://world.tsunamiflow.club/hls/anything.m3u8";
+        const videoEl = document.getElementById("stream");
+
+        if (Hls.isSupported()) {
+            const hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(videoEl);
+            hls.on(Hls.Events.ERROR, (event, data) => console.error("HLS error:", data));
+        } else if (videoEl.canPlayType('application/vnd.apple.mpegurl')) {
+            videoEl.src = videoSrc;
+        } else {
+            console.error("HLS not supported in this browser.");
+        }
+    </script>
+</body>
+
+</html>

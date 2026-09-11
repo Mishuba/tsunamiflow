@@ -1,0 +1,14 @@
+Like the IRR, the financial management rate of return (FMRR) requires an accurate estimation of future after-tax cash flows. This calculation takes into account not only the value of the property's cash flows, but also the fact that cash flows can be reinvested at a safe rate of return. The FMRR also considers the rates of return on competing, less risky investments.
+
+Admittedly, this calculation is more complex. However, when accurately applied, it can determine not only the rate of return available, but the optimum holding period of the investment as well.
+
+Time Value of Money
+Following is a brief discussion and review of the most common calculations and the formulas used to calculate the value of an income stream. These calculations are most commonly done using a spreadsheet or financial calculator and are employed in after-tax cash flow analysis, internal rate of return, financial management rate of return, net present value, and accumulation of wealth calculations.
+
+Money grows in worth over time if it is employed in an earning situation. The amount of growth is a function of the rate of interest, or yield, earned on the deposit or investment. By the same logic, money not received until some future time must be worth less today. How much less it is worth is also a function of yield coupled with time.
+
+The time value of money is particularly significant for real estate investors whose yields are a function of rents to be received in the future. A lease, after all, is a promise to make a series of payments (annuities) called rent. Because these monies are not immediately available for reinvestment, they are worth less now than they will be when they are received.
+
+For example, at a yield rate of 10%, a dollar that will not be received for one year is really worth only $0.90 today. If the dollar could be deposited today at 10% per annum, it would be worth $1.10 at the end of the year. Waiting a year to receive the dollar precludes the opportunity to earn $0.10.
+
+Thus, the $0.10 can be interpreted as the opportunity cost, or discount rate, which diminishes the present worth of the subject dollar to be received at the end of the year to $0.90.

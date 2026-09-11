@@ -1,0 +1,18 @@
+Passive fraud imposes liability for intentionally concealing known material defects from a buyer, particularly if one or more of the following is true:
+
+The buyer is unable or unlikely to discover such a defect without assistance, sometimes referred to as a latent defect (Cooper v. Jevne, 128 Cal. Rptr. 724 [Cal. App. 1976]; Lynn v. Taylor, 642 P.2d 131 [Kan. App. 1982]).
+
+The defect relates to a health or safety matter (Cashion v. Ahmadi, 345 So. 2d 268 [Ala. 1977]; Gozon v. Henderson-Dewey & Assoc., Inc., 458 A.2d 605 [Pa. Sup. 1983]).
+
+The real estate agent has led the buyer away from discovering the defect.
+
+The real estate agent has made a false statement, believing it to be true when made, but later discovering it to be false without correcting it (Mammas v. Oro Valley Townhouses, Inc., 638 P.2d 1367 [Ariz. Ct. App. 1981]).
+
+Intentional Concealment
+In May v. Hopkinson, 347 S.E.2d 508 (S.C. App. 1986), the real estate agent obtained two estimates for repair work on a window. One estimate did not include repairs to the wall's structural damage. The agent did not disclose this estimate and, despite the fact that there were other indications of termites and additional problems, he informed the purchasers that the house was structurally sound. The South Carolina Court of Appeals held that the agent's actions supported a finding of fraud.
+
+In Lynn v. Taylor, 642 P.2d 131 [Kan. App. 1982], the buyer of a termite-damaged residence sued the seller and broker for delivering a clean pest control inspection report while fraudulently concealing a negative report previously obtained by the broker. The appellate court confirmed judgment against the broker and the seller and stated that a party is under legal obligation to disclose information, including existing reports, if it has knowledge the other party would not or could not reasonably be expected to have. Failure to do so can constitute fraud, especially if the other party relies on the first party's advice.
+
+In Century 21 Page One Realty v. Naghad, 760 S.W.2d 305 (Tex. App. 1988), the sellers listed their property with a real estate agency. A neighbor promptly called the agency and informed them of a sewage problem and threatened suit if it was not fixed before the property was sold. The real estate agent sold the property without disclosing the problem. Soon after the purchasers moved in, raw sewage leaked into their yard. The Texas Court of Appeals affirmed judgment against the agent and the seller for failing to disclose the problem.
+
+

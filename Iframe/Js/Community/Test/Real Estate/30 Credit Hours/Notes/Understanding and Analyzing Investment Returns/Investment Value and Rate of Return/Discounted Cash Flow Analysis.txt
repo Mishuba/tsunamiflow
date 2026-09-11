@@ -1,0 +1,1 @@
+This type of analysis requires an analysis of the after-tax cash flows over a number of years. In addition, the after-tax proceeds from the sale of the property are estimated based on a set of assumptions. These after-tax cash flows are then discounted against a required rate of return to establish the net present value of the income stream.

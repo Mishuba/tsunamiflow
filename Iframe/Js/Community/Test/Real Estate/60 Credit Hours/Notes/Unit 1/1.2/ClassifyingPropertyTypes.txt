@@ -1,0 +1,30 @@
+Agricultural
+    Farm
+    Orchard 
+    Ranch
+    Timberland
+
+Residential 
+    Multi-Family Home 
+    Single-Family Home 
+
+Special Purpose 
+    Cemetery 
+    Government-Held Land
+    School 
+    Place of Worship 
+
+Industrial  
+    Warehouse 
+    Factory 
+    Power Plant
+
+
+Commercial 
+    Office Space 
+    Hotel 
+    Theater
+    Shopping Center
+    Parking Facility
+
+

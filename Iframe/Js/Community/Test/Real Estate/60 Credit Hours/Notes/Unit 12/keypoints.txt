@@ -1,0 +1,50 @@
+The true cost of home ownership—from down payment to PITI (principal, interest, taxes, and insurance) and utility and maintenance costs—must be considered to determine whether it is a desirable alternative to renting a home. A prospective borrower's credit report, credit score, and percentage of debt to income (DTI) will be considered by a lender. The difference between the amount owed on a property and its current market value is the property owner's equity.
+
+A mortgage loan will require two instruments: the financing instrument and the security instrument. A promissory note, as a financing instrument, is a contract with a lender that sets out the terms under which a borrower promises to repay a debt. A promissory note is a negotiable instrument that can be transferred to a third party.
+
+Interest is a charge for the use of money; charging an excessive rate of interest is called usury, but most home loans are exempt from state usury laws. Discount points are a percentage of a loan amount and are charged by a lender to increase the lender's yield on its investment. A mortgage loan may include a prepayment penalty.
+
+A home mortgage loan is secured by the borrower's real property in the process called hypothecation. The borrower retains the right of possession and control of the property. The security agreement can be either a mortgage or deed of trust.
+
+In a mortgage, the mortgagor (owner) borrows money from the mortgagee (lender), and the real estate purchased with the borrowed money is used as security for the debt.
+
+A deed of trust transfers title from the trustor (property owner) to a trustee, who holds it on behalf of a beneficiary (lender).
+
+When a mortgage loan is paid in full, a defeasance clause requires the lender to execute a satisfaction (release or discharge) that is recorded to clear title. If the borrower defaults, the lender can accelerate the due date of the remaining principal balance and all other payments and costs.
+
+A deed of trust executed by the borrower is recorded in the county in which property is located. The trustor transfers legal title to the trustee but retains equitable title and has the right to possession and use of the mortgaged property.
+
+When the loan is paid in full, a defeasance clause requires the beneficiary to request the trustee to execute and deliver to the trustor a deed of reconveyance (release deed) to return legal title to the trustor.
+
+If the borrower defaults, the lender can accelerate the due date of the remaining principal balance and all overdue costs. If the borrower continues in default, a deed of trust with power of sale allows the beneficiary (lender) to ask the trustee to conduct the trustee's sale without court action. A mortgage with power of sale also enables a sale without court action.
+
+An impound (escrow) account may be required to create a reserve fund to ensure that future tax, property insurance, and other payments are made.
+
+The National Flood Insurance Reform Act of 1994 imposes obligations on lenders and loan servicers to set aside escrow funds for flood insurance on new loans for property in flood-prone areas.
+
+When property with an outstanding mortgage or deed of trust is conveyed, the new owner may take title in one of two ways, if allowed by the loan document:
+
+    "Subject to" —the new owner makes payments on existing loans but is not personally liable if the property is sold on default and proceeds of the sale do not satisfy debt. "Subject to" is no longer in use.
+    Assuming the existing mortgage or deed of trust and agreeing to pay the debt—the new owner takes personal responsibility for existing loans and is subject to a deficiency judgment if the property is sold on default and proceeds of the sale do not satisfy the debt.
+
+An alienation clause (due-on-sale clause) in a loan document requires full payment on the sale of the property and can prevent future purchasers of the property from assuming the loan.
+
+Priority of mortgages and other liens is determined by the order in which they were recorded. Priority may be changed by subordination agreement.
+
+Most forms of real estate financing provide for amortization of the loan payments so that the principal of the loan is paid off by the end of the loan term. A straight loan is an interest-only loan. With an adjustable-rate mortgage (ARM), the interest rate changes over the term of the loan according to an identified economic indicator—the index. A margin is added to the index to determine the rate the borrower will pay and a rate cap sets the highest interest rate that can be charged at any point over the life of the loan. Rate adjustments are made monthly, quarterly, or annually, as agreed between borrower and lender. The loan might have a conversion option that allows it to be converted to a fixed-rate loan.
+
+With a growing-equity mortgage, payments of principal are increased each month to pay off the loan more quickly. A balloon payment typically is a final loan payment that is at least twice as much as any other payment.
+
+A reverse mortgage can be used by someone age 62 or older to receive one or more payments that result in a claim by the lender on the equity in the mortgaged property when the homeowner moves from the property, dies, defaults on one of the loan terms, or sells the property.
+
+If a judicial foreclosure is granted, the judge orders the property sold. A public sale is advertised and the real estate is sold to the highest bidder. The borrower has equitable right of redemption within a time period (before and/or after sale) allowed by state law. No court action is necessary to begin the sale process if the mortgage or deed of trust has a power-of-sale clause.
+
+The mortgagee may have the right to a deficiency judgment against the borrower for an unpaid balance, when allowed by state law, if the sale proceeds are less than the amount owed. The court can award title to the lender and no sale occurs in a strict foreclosure. The lender may accept a deed in lieu of foreclosure from a defaulting borrower, but title is subject to junior liens that are eliminated in a foreclosure.
+
+In a short sale, the lender agrees to accept less than the amount of the remaining indebtedness in order to allow the property to be sold.
+
+Homeowners insurance, which will be required by a mortgage lender, will protect against loss due to natural disasters, accidents, theft, and fire. The Comprehensive Loss Underwriting Exchange (CLUE) database allows insurers to share information on a consumer's claims history. The Federal Emergency Management Agency (FEMA) administers the National Flood Insurance Program.
+
+
+
+

@@ -1,0 +1,18 @@
+An agent for one party to a transaction may be asked to represent the other party in the same transaction. In such a dual agency, to whom must the agent show undivided loyalty? That is the conundrum of a dual agency. In some states, a dual agency is unlawful. In most states, (including South Carolina) however, dual agency is lawful so long as it complies with state requirements. In these states, a real estate broker can legally be the agent of both the seller and the buyer in a transaction, provided full disclosure is made to both parties and both give their informed consent. Because the seller and buyer in a transaction have conflicts of interest, the dual agent can only act as an intermediary between the parties. A dual agency disclosure addendum form is designed to present the predicament to the seller and buyer and to provide full disclosure of the limitation in services the agent is able to provide in such a dual agency situation.
+If a dual agency is created lawfully, the broker is obliged not to disclose to either principal any information of a confidential nature that could harm one party's bargaining position or benefit the other's. For example, the broker could not disclose to the seller information about what price or terms the buyer might be willing to pay, other than what is offered in writing, or disclose to the buyer information about what price or terms the seller might accept other than what is contained in the listing agreement.
+
+Duties of a Dual Agent to Both Buyer and Seller
+Fiduciary Duties 
+Fiduciary duties include acting with utmost care, integrity, honesty, and loyalty in dealings with both the seller and the buyer.
+
+Duty of Disclosure and Honest and Fair Dealings 
+Just as in an agency relationship with only one party, dual agency commands certain responsibilities to both buyer and seller. 
+A dual agent has a duty to disclose all material facts required by law, as well as information the agent believes might affect the principal's decisions with respect to the transaction. 
+A dual agent has a duty to disclose any business or family relationship between the agent and either the seller or the buyer. 
+A dual agent may not disclose to the seller information about any price or terms the buyer may offer other than those offered in writing by the buyer. 
+A dual agent may not disclose to the buyer information about any price or terms the seller may accept other than the listed price or terms. 
+A dual agent may not disclose any information of a confidential nature that could harm one party's bargaining position or benefit the other's. 
+
+Unintended or Accidental Undisclosed Dual Agency 
+In all states, undisclosed dual agency is unlawful, whether intended, unintended, or accidental. The broker who fails to disclose dual agency is likely to (1) violate both state licensing law and general agency law, (2) jeopardize any right to a commission, and (3) justify having either the seller or the buyer rescind the underlying transaction. The broker is then potentially liable for monetary damages. This right of rescission exists even if there is no injury, the transaction is fair, and the agent acts in good faith. Even though the dual agent obtains the required consents, the agent must still be extremely careful not to favor one side over the other.
+

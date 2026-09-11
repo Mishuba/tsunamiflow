@@ -1,0 +1,39 @@
+A valid contract is a voluntary agreement based on the consent of the parties to the agreement. An offer by one party (offeror) is accepted by the other (offeree). A contract can be revoked by the offeror up to the time of acceptance. The parties must be of legal age and able to understand the nature or consequences of their actions. The contract must be supported by consideration—something of value, which could be love and affection—and must have a legal act as its objective.
+
+A contract may be express (in words) or implied by the conduct of parties and may be required to be in writing to be enforceable in a court of law. A contract may be bilateral (having obligations on both sides) or unilateral (a promise by one side that can be accepted by performance of the other side). A contract may be executed (all parties have fulfilled their promises) or executory (one or both parties still have an act to perform).
+
+A contract is voidable if it may be rescinded or disaffirmed by one or both parties. A contract with a minor is voidable. A contract is void if one of the essential elements is missing. If a mistake, misrepresentation, fraud, undue influence, or duress occurs, there is no mutual consent or meeting of the minds, which means that an essential element of the contract is missing and the contract is void.
+
+A contract may be discharged (completed) by
+
+    performance, which completes the contract terms;
+    partial performance, if agreeable to both parties;
+    substantial performance, depending on circumstances;
+    impossibility of performance (required acts cannot be legally accomplished); assignment (transfer of rights to assignee or delegation of duties, if allowed by the contract);
+    novation (substitutes a new contract or party for the original);
+    breach by one of the parties without legal cause, in which case a liquidated damages clause may specify the amount the seller will receive if the buyer defaults;
+    failure to enforce contract within statute of limitations;
+    mutual agreement of the parties;
+    operation of law, as when a contract is void from inception;
+    rescission, which returns the parties to their original pre-contract positions, so any property or funds that have been transferred must be returned; or
+    cancellation, which also is a termination of the contract.
+
+The written agreements most often used in residential real estate transactions by real estate professionals are client representation agreements, sales contracts, options, escrow agreements, property management agreements, leases, and owner financing agreements, such as land contracts or contracts for deed.
+
+A real estate sales contract is usually accompanied by an earnest money deposit, which may be held in a broker's escrow or trust account until an escrow is arranged to complete a property purchase or the funds are returned to the would-be buyer if there is no sales agreement.
+
+The sales contract usually will identify the parties and the property that is the subject of the transaction, indicate the amount that the buyer is including with the offer to serve as earnest money, how the buyer intends to finance the purchase, who will serve as the closing agent for the transaction, when the transaction is to close and possession of the property delivered to the buyer, fixtures or other items on the property that are not part of the sale, personal property of the seller that will be included in the sale, inspections that will be made by the buyer, seller disclosures that are required by law, and other provisions.
+
+The contingencies included in a sales contract allow the buyer to have an attorney review the contract, secure financing, conduct necessary inspections, and perform other activities.
+
+Amendments and addendums can be used to alter the terms of a preprinted contract during the negotiation of the sale or to include additional terms after the contract has been signed by the parties.
+
+An option allows the optionor (owner) to give the optionee the right to purchase the property at a later date at the price fixed in the option agreement.
+
+Owner financing can assist a buyer by providing a credit for some or all of the purchase price. A land contract, also known as a contract for deed, bond for title, installment contract, land sales contract, or articles of agreement for warranty deed, must comply with state law. With a purchase money mortgage, the buyer receives title to the property immediately but places a security interest on the property in favor of the seller.
+
+
+
+
+
+

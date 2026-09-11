@@ -1,0 +1,297 @@
+Underground Storage Tanks
+Underground storage tanks (USTs) have been used since the early 1900s to store petroleum products, chemicals, and liquid wastes for the convenience of owners and for what was then considered "safety." Unfortunately, corrosion, stress, and faulty construction or installation have caused tanks to leak after 20 years or less, depending on the corrosiveness of the soil. Some estimates place the number of USTs in the United States between three and five million, and the EPA estimates that on a national scale about 40% of USTs are leaking and discharging gasoline, petroleum products, and other hazardous liquids into the soil and potential groundwater sources.
+
+Under federal law, a UST is defined as any tank system, including its piping, that has at least 10% of its volume underground. Federal law regulates only those tanks that are used to store petroleum or those hazardous chemicals regulated under CERCLA (Superfund).
+
+As of December 1998, all tanks must have spill, overflow, and corrosion protection.
+
+
+Underground Storage Tanks (cont.)
+Tanks not covered by the regulation include
+
+farm and residential tanks holding 1,100 gallons or less of motor fuel used for noncommercial purposes;
+tanks storing heating oil used on the premises where stored;
+tanks on or above the floor of underground areas, such as basements or tunnels;
+septic tanks or systems for collecting storm water and waste water;
+flow-through process tanks;
+tanks containing less than 110 gallons; and
+emergency spill and overfill tanks.
+Responsibility for complying with federal UST requirements can continue even after ownership of the UST is terminated.
+
+
+Underground Storage Tanks (cont.)
+An aboveground spill from a UST that either releases at least 25 gallons of a petroleum substance or causes an oil sheen on nearby water surfaces must be reported to the local administering agency within 24 hours. A belowground release must be reported within 24 hours of discovery. Failure to report a spill or release can result in civil or criminal penalties or both. Owners should consult legal counsel when dealing with property containing a UST.
+
+Clues indicating the possible presence of a UST include
+
+air vents or piping sticking out of the ground above the tank;
+oil sheens in wet areas;
+traces of concrete, metal, or asphalt that may indicate former or commercial use of the property; and
+fill pipes or vent lines protruding from or flush with the ground.
+Where such indicators are observed, the seller should be questioned concerning any knowledge he or she may have about the presence of a UST.
+
+
+Underground Storage Tanks (cont.)
+The presence of a UST should be a red flag, triggering advice to the client that further investigation by a qualified expert is needed. Real estate licensees should be familiar with the disclosure law in their state so that they can properly advise buyers and sellers.
+
+South Carolina law requires only owners of one- to four-family dwelling units to complete the Residential Property Condition Disclosure Statement. The Disclosure Statement requires disclosure of the following:
+
+Drainage, soil stability, atmosphere, or underground problems affecting the property
+Erosion or erosion control affecting the property
+Flood hazards, wetlands, or flood hazard designations affecting the property
+Buried, unburied, or covered presence of the following: lead-based paint, lead hazards, asbestos, radon gas, methane gas, storage tanks, hazardous materials, toxic materials, or environmental contamination.
+There is no requirement for South Carolina owners of any other properties to make disclosures about the presence of underground storage tanks. Real estate licensees should always advise buyers of other properties to have the site examined by professionals.
+
+If the presence of a UST is suspected, a trained consultant should be retained to perform further studies. It should be noted that there may not be any visual signs of a UST, such as vent or fill pipes. In some cases, detailed historical investigation may be required to identify a potential UST.
+
+Once it has been established that a UST is in the ground, further steps need to be taken to determine
+
+whether the tank is leaking;
+the extent of any contamination caused by the leakage; and
+the cost of remediation of the contamination.
+
+Underground Storage Tanks (cont.)
+The first step is a Phase I Assessment. This may include a physical examination of the property; a review of the property's history; an examination of the records showing reported incidents and potential problems; and an investigation into nearby potential offsite locations of contamination. Sampling is not normally performed during a Phase I Assessment. If it is known that a UST exists, a tank tightness test may be able to determine whether a tank is leaking and to what extent. The result of a Phase I Assessment will help determine if an environmental contamination problem potentially exists. If it appears that a potential problem exists, it usually is verified in a Phase II Assessment.
+
+Underground Storage Tanks (cont.)
+During a Phase II Assessment, sampling is performed to verify the problem. If the potential problem is a UST, the tank is often removed and samples are taken from under it. If a release is verified, the pertinent regulatory agencies must be informed. If necessary, the extent of contamination is normally characterized in a Phase III Assessment. In this phase, sampling is performed to determine how far the problem has migrated.
+
+Once reported, the pertinent regulatory agency will usually provide guidance and remediation. For a leaking tank, this may include removal of the tank and cleanup of affected soil and groundwater. Affected nearby properties must also be cleaned up. Usually, final samples are required to verify that a contaminated site has been properly cleaned up.
+
+It should be noted that different entities may call the assessment phases by different names. For example, Phase I is sometimes called an Environmental Site Assessment (ESA). This can result in confusion. It is therefore recommended that any assessment be carefully screened to ensure that contractors are professional, certified when required, and reputable. A mistake by the contractor can ultimately be at the cost of the landowner.
+
+Water Quality and Groundwater Contamination
+Water is the most essential element the human body needs. The surface of the earth is about 70% water, but only about 1% of that water is potable (drinkable).
+
+When rainwater reaches the earth, it is compromised by many contaminants, including nitrates contained in manure and fertilizer, lead, volatile organic compounds or VOCs (such as benzene and industrial solvents), pesticides, chlorine, and others. Surface and groundwater contamination can result from many sources, including surface spills, hazardous wastes, mining waste and run-off, agricultural chemicals, septic and sewer systems, leaking storage tanks, and boat traffic. The EPA Safe Drinking Water Hotline may be contacted for additional information. The federal Safe Drinking Water Act (SDWA), enacted in 1974, requires each state to submit an annual report on public water system violations to the EPA.
+
+For More Information
+
+EPA's Groundwater and Drinking Water website: www.epa.gov/ground-water-and-drinking-water
+
+EPA's Safe Drinking Water Hotline: www.epa.gov/ground-water-and-drinking-water/safe-drinking-water-hotline, 800-426-4791
+
+EPA's UST website: www.epa.gov/ust
+
+EPA regulations: www.epa.gov/laws-regulations
+
+Asbestos
+Asbestos is a naturally occurring fibrous material that has been used as a construction material because it is a good fire retardant and an efficient insulator.
+
+Asbestos can cause asbestosis (a fibrotic scarring in the lung), lung cancer, and mesothelioma (a cancer of the chest cavity). A 1988 random survey by the EPA found asbestos in about 20% of buildings surveyed. Sadly, asbestos-related diseases are rarely curable, underscoring the need to prevent exposure in the first place. There is no safe level of asbestos exposure.
+
+Asbestos or asbestos-containing material (ACM) can be classified into two general categories: friable and nonfriable.
+
+Friable products are materials that can easily crumble, usually with little mechanical activity. This is considered the most dangerous because when this asbestos becomes airborne, asbestos fibers can be easily inhaled. Activities that can cause friable products to become airborne include routine cleaning, repair and maintenance, renovation, operation of air-conditioning, and general deterioration over time.
+
+Nonfriable products typically contain bonding agents, such as cements and plastics, that prevent asbestos from being released into the air. Problems can occur, however, if the material is physically altered through sanding, drilling, or similar activity.
+
+
+Asbestos (cont.)
+The use of asbestos in buildings has been generally prohibited since 1978, with some restrictions as early as 1973. A building constructed before 1979, therefore, is a red flag property and should be evaluated for asbestos danger.
+
+The EPA has indicated that many homes built since the date of the prohibition may contain asbestos products if older building materials were used in their construction. According to experts, some places where asbestos might be found in the home include
+
+insulation jackets and sheeting around pipes and furnaces in older homes;
+some vinyl flooring material;
+ceiling tiles and sprayed ceilings;
+exterior roofing, shingles, and siding;
+some wallboards;
+in a mixture with other materials that is sprayed around pipes, ducts, and beams;
+patching compounds or textured paints; and
+door gaskets of stoves, furnaces, and ovens.
+Both the EPA and the Occupational Safety and Health Administration (OSHA) have authority on issues concerning asbestos.
+
+Asbestos (cont.)
+In 1986, OSHA lowered the permissible exposure limit (PEL) to asbestos over an eight-hour period to 0.2 fibers per cubic centimeter.
+
+Removal of asbestos should be performed by experts. Projects involving more than 230 square feet or 160 linear feet of asbestos-carrying materials require notification to the EPA regional office. On July 20, 1990, OSHA proposed new standards that would only exempt repair or removal of asbestos on pipes of less than 21 linear feet and repair and removal of an asbestos panel of less than nine square feet.
+
+Experts indicate that if the ACM is in good condition and in an area where it is not likely to be disturbed, it should be left in place. Extreme care should be exercised in handling, cleaning, or working with material suspected of containing asbestos. The owner or operator of a demolition or renovation activity must first thoroughly inspect the pertinent facility area for the presence of any ACM prior to any construction activities. Contractors working near a potential ACM should be notified of its presence.
+
+For More Information
+
+EPA's Asbestos website: www.epa.gov/asbestos/
+
+American Lung Association: www.lungusa.org/lung-disease/mesothelioma/
+
+National Institutes of Health: www.nih.gov/health-information
+
+
+Formaldehyde
+Formaldehyde is a colorless, gaseous chemical compound that was used for home insulation until the early 1980s. It is also used in some glues, resins, preservatives, and bonding agents. In homes, formaldehyde is most likely to be found in adhesives used in pressed-wood building materials (such as those used in furniture and kitchen cabinets) and insulation.
+
+Health risks to humans are undetermined, but formaldehyde has been found to cause cancer in animals, while humans exposed to sufficient quantities have been affected with skin rashes, breathing difficulties, and other symptoms.
+
+Formaldehyde emissions decrease over the first two or three years of a product's use. Experts say that older building materials are probably not a significant source of formaldehyde emissions.
+
+For More Information
+
+EPA's Formaldehyde website: www.epa.gov/formaldehyde/
+
+Radon
+Radon is a naturally occurring, odorless, colorless, tasteless, cancer-causing, radioactive gas produced by the decay of uranium and radium found in many different types of soils and rocks.
+
+Radon typically moves up through the ground to the air above and into a home through cracks and other holes in the foundation. Radon problems can be corrected by sealing cracks in foundations and by increasing ventilation. Even high levels of radon can be reduced to acceptable levels.
+
+According to the EPA, one in every 15 homes in the United States is estimated to have an elevated radon level. Testing is the only way to determine the radon level in a home.
+
+The EPA recommends testing for radon before putting a home up for sale. Save test results and all information about steps taken to fix any problems.
+
+Real estate professionals, whether representing sellers or buyers, should investigate and disclose the radon level of homes they are selling.
+
+For More Information
+
+EPA's Radon website: www.epa.gov/radon/
+
+Centers for Disease Control and Agency for Toxic Substances and Disease Registry: 800-232-4636; www.atsdr.cdc.gov/
+
+National Radon Safety Board: www.nrsb.org
+
+National Environmental Health Association: www.neha.org
+
+Mold
+The presence of mold in or near living spaces is an environmental issue. Numerous lawsuits have been filed by individuals claiming to have mold-related illnesses. Insurance companies are now excluding coverage for mold and, in some cases, dropping homeowner policies all together.
+
+Molds are part of the fungi kingdom. Mold is the common name for microfungi. In order to grow, molds require food, suitable temperatures (ideally between 40 and 100 degrees Fahrenheit), oxygen, and moisture. When these conditions are met, mold will grow and reproduce by creating spores that are released into the air.
+
+Mold and mold spores are everywhere around us and have always been a part of our natural environment. The air we breathe is a virtual jungle of fungal spores. Outdoors, molds play a part in nature by breaking down dead organic matter, such as fallen leaves and dead trees, but indoors, mold should be avoided. Mold may begin growing indoors when mold spores land on surfaces that are moist, particularly surfaces of organic materials, such as wallpaper, plaster, and wallboard. Mold can be a significant problem in the large number of vacant homes created by the recent wave of foreclosures.
+
+There are many types of mold and none of them will grow without water or moisture. The key to mold control is moisture control. If mold is a problem, it should be cleaned up promptly and may require professional remediation. The water problem should be eliminated as part of the remediation process. Water-damaged areas and items should be dried within 24 to 48 hours to prevent mold growth.
+
+Mold (cont.)
+Can Mold Cause Health Problems?
+
+Molds have the potential to cause health problems if mold spores land on a wet or damp spot and begin growing. Inhaling or touching mold or mold spores may cause allergic reactions in sensitive individuals. Allergic reactions to mold vary widely from person to person. Some may have no reaction while others may become severely ill. Some allergic reactions include
+
+allergic rhinitis (with symptoms similar to a common cold);
+asthma aggravation;
+dermatitis (red, itchy skin blotches); and
+hypersensitivity pneumonitis (pneumonia-like symptoms).
+Many REALTOR® associations have developed mold disclosure forms that include basic information on mold and how it can adversely affect both the property and the health of the individuals.
+
+Risk Reduction Recommendation
+
+Educate the consumer
+Recommend the concerned party conduct a visual inspection of the property, obtain an inspection specifically for molds, or both
+Encourage sellers to disclose any known moisture problems
+For More Information
+
+EPA's Mold website: www.epa.gov/mold/
+
+Centers for Disease Control: www.cdc.gov/mold/
+
+The American Industrial Hygiene Association: www.aiha.org
+
+
+Polychlorinated Biphenyls
+Polychlorinated biphenyls (PCBs) are used in electrical equipment because they provide a good insulating medium. The EPA has determined that PCBs may cause adverse reproductive effects, developmental toxicity, and tumor development in humans. PCBs have been found to remain in the environment for a long time and have been shown to be passed on with the food chain and offspring of contaminated species.
+
+PCBs are used in electrical transformers, capacitors, fluorescent light ballasts, heat transfer and hydraulic systems, and other electrical equipment.
+
+A real estate agent should be aware of the types of equipment that may contain PCBs. PCBs may remain in place as long as the equipment they are contained in does not appear to be leaking. For example, older light ballasts may contain PCBs. These do not represent a contamination problem unless they are leaking or are disposed of improperly. If a piece of equipment containing PCBs is observed to be leaking, the local regulatory agency may be contacted for direction. Specific record-keeping requirements apply to threshold quantities of PCBs.
+
+
+Lead
+Lead is a heavy, soft metal found as a natural ore. When processed it becomes a health hazard. Lead in dust can come from chalking, weathering, chipping, sanding, or scraping of lead-based paint, resulting in a lead-based paint hazard.
+
+Lead poisoning occurs when high concentrations of lead are ingested either by mouth or from breathing dust containing fine airborne particles of lead. If ingested, lead can cause irreparable brain damage, especially in children under the age of six. Prolonged exposure can induce anemia and hypertension, trigger gallbladder problems or appendicitis, and cause reproductive problems in both men and women, including abnormal fetal development in pregnant women.
+
+The hazard of contaminated drinking water has been reduced as a health concern in the United States since the Safe Drinking Water Act of 1986 required the use of lead-free solder, pipes, and flux for any facilities connected to a public water system. Nevertheless, older water systems may still be significant sources of lead contaminants.
+
+
+Lead-Based Paint
+Approximately three-quarters of the nation's housing built before 1978 contains lead-based paint; after 1977, the use of lead was banned in paint.
+
+To protect families from exposure to lead, Congress passed the Residential Lead-Based Paint Hazard Reduction Act (LBPHRA) of 1992. In accordance with LBPHRA, the EPA promulgated regulations requiring the disclosure of known information on lead-based paint and lead-based paint hazards before a sale or lease agreement becomes binding.
+
+Renovation activities, such as sanding, cutting, and demolition, can create hazardous lead dust and chips. In recognition of this risk, in 2008, the EPA issued a rule on renovation projects that took effect on April 22, 2010.
+
+Lead-Based Paint (cont.)
+Targeted Housing
+
+Targeted housing under the Residential LBPHRA is housing built before 1978, but it does not include
+
+zero-bedroom units, such as efficiency units, lofts, and dormitories;
+leases for less than 100 days where no lease renewal can occur, such as vacation houses or short-term rentals;
+housing for the elderly (unless children under six years of age live there);
+housing for the handicapped (unless children under six years of age live there);
+rental housing that has been inspected by a certified inspector and found to be free of lead-based paint; and
+foreclosure sales.
+
+
+Lead-Based Paint (cont.)
+Before a contract for the sale or lease of residential real estate becomes binding, the law requires the following:
+
+Sellers and landlords must give buyers and tenants a pamphlet, developed by the EPA and HUD, titled Protect Your Family from Lead in Your Home.
+Sellers and landlords must disclose to buyers and tenants and to each agent in the transaction any known lead-based paint and lead-based paint hazards. The regulations do not require any testing or removal of lead-based paint by sellers and landlords.
+Sellers and landlords must provide to buyers and renters available reports concerning lead-based paint and lead-based paint hazards on the property.
+Sales contracts and leasing agreements must include certain notification and disclosure language, including a Lead Warning Statement.
+If this information is provided after the seller or lessor receives an offer, the seller must allow the buyer or lessee an opportunity to review the information and possibly amend the offer.
+Homebuyers must be given a ten-day (or any other agreed-upon time period) opportunity to conduct a lead-based paint inspection or risk assessment at their own expense.
+
+
+Lead-Based Paint (cont.)
+A Certification and Acknowledgment of Disclosure must be attached to the purchase agreement in which the buyers acknowledge, among other things, that they have had the opportunity to conduct a risk assessment or inspection within 10 days (or other agreed-upon period) or have waived the opportunity.
+Both the listing and the selling agent (except a selling agent who is paid solely by the buyer or lessee) must inform the sellers or lessors of their obligations to ensure that
+the required disclosures are given;
+the buyer is permitted the opportunity to inspect, unless waived; and
+the Certification and Acknowledgment is completed.
+If agents do this, they will not be liable for the seller or lessor's failure to disclose.
+
+The seller and both agents must keep a copy of the Certification and Acknowledgment for three years after closing or the commencement of the lease.
+
+Lead-Based Paint (cont.)
+The EPA rule on renovations that took effect April 22, 2010, requires that contractors performing renovation, repair, and painting projects that disturb lead-based paint in homes, childcare facilities, and schools built before 1978 must
+
+be certified and
+follow specific work practices to prevent lead contamination.
+Firms performing such work must be certified by the EPA and use certified renovators, who are trained by EPA-approved training providers to follow lead-safe work practices. Individuals can become certified renovators by taking an eight-hour training course from an EPA-approved training provider. The rule applies to paid renovators who work in pre-1978 housing and child-occupied facilities, including renovation contractors, maintenance workers in multifamily housing, and painters and those in other specialty trades.
+
+The rule requires that contractors performing work covered by the rule concerning lead-based paint use lead-safe work practices and follow these procedures:
+
+Contain the work area
+Minimize dust
+Clean up thoroughly
+Beginning in December 2008, contractors performing such work must provide owners and occupants of childcare facilities and parents and guardians of children under age six who attend childcare facilities built before 1978 with the lead hazard information pamphlet Renovate Right: Important Lead Hazard Information for Families, Child Care Providers, and Schools.
+
+Lead-Based Paint (cont.)
+Violations
+
+In addition to civil and criminal sanctions, any person who knowingly violates the provisions under the LBPHRA will be jointly and severally liable to the purchaser or lessee in an amount equal to three times the amount of damages actually incurred, together with attorney fees, expert witness fees, and costs.
+
+For More Information
+
+EPA's Lead website: www.epa.gov/lead
+
+National Lead Information Center: www.epa.gov/lead/forms/lead-hotline-national-lead-information-center; 800-424-LEAD
+
+HUD Office of Lead Hazard Control and Healthy Homes: http://portal.hud.gov/hudportal/HUD?src=/program_offices/healthy_homes
+
+Meth Labs
+Addiction to methamphetamines has reached epidemic proportions in many states and is impacting society at all levels. Methamphetamine, an illegal substance also known as "meth," "speed," "crank," "crystal," and "ice," is a potent synthetic drug that is a stimulant of the central nervous system. Long-term use leads to physical dependence. Meth may give a person periods of high energy and rapid speech. Many chronic meth users also experience severe depression, delusions, hallucinations, paranoia, and violent behavior. For this reason, you should never enter an active meth lab. Contact your local law enforcement immediately.
+
+Meth is often made in makeshift laboratories, such as rented apartments or hotel rooms. During the production of meth, a property can become contaminated with hazardous chemicals. Chemical residues and lab wastes that are left behind from a former meth lab can also result in health problems for people who use the property. Unsuspecting people can touch residues of meth and have symptoms similar to those experienced by meth users.
+
+Children who live in homes where methamphetamine is being or has been "cooked" suffer from a variety of problems including learning disabilities and liver damage. For this reason, local health departments should thoroughly assess property for hazards before allowing it to be reoccupied, especially by children.
+
+
+Meth Labs (cont.)
+There are many different chemical "recipes" for making or cooking meth, and each uses different ingredients. Many chemicals used in meth labs are commonly found in homes, but the poor handling and disposal of these chemicals, as well as the mixing of incompatible compounds, can create hazards. Some examples of common household chemicals used in a meth lab include flammable, volatile solvents, such as methanol, ether, benzene, methylene chloride, trichloroethane, and toluene. Other common household chemicals include ephedrine and other cold medications, muriatic acid, sodium hydroxide, table salt, and ammonia.
+
+Meth-related chemicals not commonly found in large amounts in homes include anhydrous ammonia, red phosphorous, iodine, reactive metals, and other solvents not listed above. Additionally, other hazardous chemicals can be formed during the cooking process.
+
+As a result of meth cooking, many chemicals may contaminate a property. Household materials such as carpeting, wallboard, ceiling tile, or fabric may absorb spilled chemicals. Furniture or draperies may also become contaminated. Soil or groundwater (including nearby drinking water wells) may become contaminated if chemicals are dumped in a septic system or on the ground.
+
+
+Meth Labs (cont.)
+Red Flags Indicating the Presence of a Meth Lab
+
+Strong chemical odors smelling like cat urine, ether, ammonia, and acetone
+Windows that have been blacked out
+Renters who pay their landlord in cash
+Lots of traffic at unusual times
+Excessive trash, including items such as antifreeze containers, lantern fuel cans, red chemically stained coffee filters, drain cleaner, and duct tape
+Unusual amounts of clear glass containers being brought into the property
+
+

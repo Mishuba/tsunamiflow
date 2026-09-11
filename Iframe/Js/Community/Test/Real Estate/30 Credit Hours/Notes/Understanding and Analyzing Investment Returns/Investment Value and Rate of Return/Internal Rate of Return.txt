@@ -1,0 +1,3 @@
+
+The internal rate of return (IRR) is arrived at through an after-tax cash flow analysis. This is not a simple calculation; rather, it requires an accurate estimation of future cash flows and some assumptions about how the property being analyzed will perform in the long run. Once the cash flows have been determined, then each future cash flow is discounted to a net present value based on a required rate of return. The IRR will be that rate. When applied to all future cash flows, that creates a net present value of the cash flows equal to the initial investment. This is a calculation based purely on yield.
+

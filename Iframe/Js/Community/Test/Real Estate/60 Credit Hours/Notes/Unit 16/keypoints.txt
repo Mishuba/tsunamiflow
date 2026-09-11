@@ -1,0 +1,31 @@
+An appraisal provides the appraiser's opinion of value based on supportable evidence and appraisal methods, as defined by the Uniform Standards of Professional Appraisal Practice (USPAP) established by the Appraisal Foundation's Appraisal Standards Board.
+
+An appraiser must be state-licensed or certified for an appraisal performed as part of a federally related transaction. The Appraiser Qualifications Board sets minimum education and experience requirements for licensing or certification and the Appraisal Practices Board recommends acceptable business practices.
+
+The Uniform Residential Appraisal Report (URAR) is required by Fannie Mae and Freddie Mac.
+
+A comparative market analysis (CMA) is a report by a real estate professional of market statistics, but it is not an appraisal.
+
+A broker's price opinion (BPO) may be used in transactions involving home equity lines, refinancing, portfolio management, loss mitigation, and collections.
+
+Value is created by demand, utility, scarcity, and transferability of property (DUST). Market value is the most probable price that property should bring in a fair sale, but not necessarily the same as the price asked or paid or the cost to construct.
+
+The basic principles of value include anticipation of certain events, change that can be physical or economic, competition for clients and customers, conformity of properties in a neighborhood, and contribution to a property's value of any individual improvement. A property's highest and best use is the use that is physically possible, legally permitted, economically or financially feasible, and the most profitable or maximally productive. The law of increasing and diminishing returns is in evidence when additional property improvements no longer bring a comparable increase in property value.
+
+Plottage is the increase in value that can result when two or more parcels of land are combined in the process called assemblage. The principle of progression is in evidence when a property's value is enhanced because of more valuable properties in the vicinity; the opposite is true and the principle of regression is in effect when a property's value is lower because of less valuable properties in the vicinity.
+
+The principle of substitution is the foundation of the sales comparison approach. A buyer will not want to pay more for a property than it would cost to purchase an equally desirable and suitable property. The principle of supply and demand dictates that prices will rise when demand is high relative to supply, and prices will fall when supply is high relative to demand.
+
+The sales comparison approach (market data approach) makes use of sales of properties comparable to the property that is the subject of the appraisal by adding or subtracting from the sales price of each comp the value of a feature present or absent in the subject property versus the comparable.
+
+The cost approach uses the current cost of constructing building and other property improvements and an estimate of accrued depreciation using the straight-line method (economic age-life method), or an estimate of individual items of physical deterioration, functional obsolescence, or external obsolescence.
+
+The income approach is based on the present value of the right to future income arrived at by these steps:
+
+    Estimating annual potential gross income
+    Deducting an allowance for vacancy and rent loss to find effective gross income
+    Deducting annual operating expenses to find net operating income (NOI)
+    Estimating the rate of return (capitalization rate or cap rate) for the subject by analyzing cap rates of similar properties
+    Deriving an estimate of the subject's market value by applying the cap rate to the property's annual NOI using this formula: net operating income ÷ capitalization rate = value
+
+Reconciliation is the process by which the validity and reliability of the results of the approaches to value are weighed objectively to determine the appraiser's final opinion of value.

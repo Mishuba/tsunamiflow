@@ -1,0 +1,26 @@
+{
+    "development": {
+      "username": "epiz_33663768",
+      "password": "MyLife34KT",
+      "database": "epiz_33663768_tycadome",
+      "host": "sql108.infinityfree.com",
+      "dialect": "mysql",
+      "URL": "infinityfree.com"
+    },
+    "test": {
+      "username": "epiz_33663768",
+      "password": "MyLife34KT",
+      "database": "epiz_33663768_tycadome",
+      "host": "sql108.infinityfree.com",
+      "dialect": "mysql",
+      "URL": "infinityfree.com"
+    },
+    "production": {
+      "username": "epiz_33663768",
+      "password": "MyLife34KT",
+      "database": "epiz_33663768_tycadome",
+      "host": "sql108.infinityfree.com",
+      "dialect": "mysql",
+      "URL": "infinityfree.com"
+    }
+  }

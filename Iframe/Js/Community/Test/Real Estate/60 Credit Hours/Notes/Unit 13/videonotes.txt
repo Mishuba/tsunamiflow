@@ -1,0 +1,120 @@
+Conventional Loans 
+    No government involvement 
+    1.) Debt repayment is based soley on the borrorwer's ability to repay. 
+        a) Loans are not insured or guaranteed. 
+    2.) Maximum LTV is 80%. 
+
+Insured Conventional Mortgages 
+    1.) Private mortgage insurance (PMI) protects lenders from loss due to a deficiency after foreclosure. 
+    2.) A borrower/mortgagor pays PMI when the LTV is above 80%.
+        a) PMI does not pay off the full loan. 
+         (1) PMI covers a portion of the shortfall between the amount obtained through the REO sale and the outstanding mortgage debt.
+        b) The advantage for the brrower is a lower down payment. 
+Private Mortgage Insruance (PMI)
+    Borrower defaults. (5% equity) 
+    Lender FCs then sells (15% PMI coverage) 
+    PMI partially indemnifies lender for losses over 80% LTV (80% No Coverage)
+
+5% Down Payment 
+95% LTV loan
+Pay PMI 
+
+20% Down Payment 
+80% LTV Loan 
+No PMI 
+
+Consumer Protection Laws 
+    Two laws enforced by the Consumer 
+        Financial Protection Bureau (CFPB)
+            reg z 1.) Truth in Lending Act (TILA) --- loan costs 
+                a) Covers all consumer lending, not just real estate 
+                b) Annual percentage rte (APR) = true cost of credit and lender charges 
+            2.) RESPA -- all closing costs 
+                a) Covers real estate professionals, including agents, lenders, title companies, and closers.
+                1.) RESPA standardizes clsing practices for one- to four-family residential properties financed by federally related loan lenders. 
+                    a) Includes FHA, VA, and conventional loans 
+                        Does not include seller financing
+                    b) Ensures buyers and sellers receive information of al lsettlement costs 
+                    C) Also requires an estimate of a loan cost at application and disclosure of loan costs at closing 
+                2.) RESPA prohibits kickbacks to real estate agents for referral of any service related to closing. 
+                    Ask broker about how everthing that has to be disclosed will be disclosed 
+                3.) RESPA restricts the amount of advance escrow payments (taxes and insurance) required by lenders. 
+
+        Truth in Lending Act (TILA) === Federal Reserve Regulation Z 
+            1.) Purpose: to promote the informed use of consumer credit by requiring advance disclosures of loan terms and costs
+                a.) Four primary disclosures required of lenders. 
+                    1.) The true cost of credit is expressed as APR (annual percentage rate)
+                        (a) the APR, or effective rate, is the actual cost of the loan expressed as an annual percentage rate. 
+                        (b) the APR will be higher than the face rate or nominal interest rate 
+                    2.) The total finance charges associated with the loan include nominal interest, origination or assumption fee, borrower-paid points, and mortgage insurance costs. 
+                    3.) The total number and amount of all payment must be disclosed by the lender 
+                    4.) The total amount financed must be disclosed by the lender. 
+                b.)Applies to al lconsumer loans, including mortgages 
+                    (1) Does not apply to 
+                        (a) loans to entites (i.e., corporations), 
+                        (b) business or commercial laons, and 
+                        (c) seller financing (purchase money mortgage or contract for deed) 
+            2.) Right of rescission 
+                a) TILA requires a three-day right of rscission for refiances of owner-occupied, one- to fouruhnit properties and home equity loans 
+                    (1) Rescission does not apply to honme purchase or construction loans 
+            3.) Advertising requirements 
+                a) The asking PRICE adn APR are the only finance terms allowed in an advertisement wihtout full disclousre 
+                b) Mention of down payment interest rate, montlhy payment, or number of pyaments TRIGGERS FULL DISCLOSURE (the small print)
+                c) General statement (e.g., "low down payment", or the amount of property taxes or HOA dues) not related to financing are allowed. 
+            Example ad: 
+                1) $150,000 purchase price with an APR of 5.5%; call for other great terms; HOA $50 per month; taxes $1,200 per year" (no trigger) 
+                2) $150,000 purchase price with 100% financing and a payment of $675 per month" (would trigger full disclosure)
+            4.) Remember 
+                A) Truth in Lending Act = disclosure of all loan cost 
+                B) RESPA = disclosure of all costs to close 
+        TIRD = TILA/RESPA Integrated Disclousre
+            1) Loan Estimate (LE) 
+                a) Combines TILA and RSPA requirements and shows both APR/lender costs and all estimated loan costs 
+                    (1) Information presented to help consumers better understand loan and closing costs
+                b) Must be *provided to the borrower no later than 3 business days* after loan application, and consumer must acknowledge receipt
+            2) Closing Disclosure (CD) 
+                a) The CD must be provided to the borrower no later than three business days before closing. 
+                    1) Lender must have proof of receipt. 
+                b) if certain chagnes are made to the loan, a new three-day review period is required. This will delay closing. 
+                c) The changes that will dealay the transcation include the follwoing: 
+                1) An increase in the annual rate (APR) of; 
+                    A) more than 1/8% on fixed-rate loans, or 
+                    b) 1/4% on variable-rate loans 
+                2) Addition of a prepayment penalty
+                3) The basic loan product changes 
+                    Note: Other last-minute changes to the closing Disclosure will generally not require a new review periods
+            3) Lender responsible for timely delivery of the LE and CD to consumer 
+            4) Applies to all federally related residential mortgage loans 
+                a) exceptions 
+                    (1) Home equity lines of credit 
+                    (2) Mobile homes 
+                    (3) Reverse mortgages 
+                    (4) Seller financing (contract for deed and purchase money mortgages) 
+        Equal Credit Opportuinity ACT (ECOA) 
+            1. The purpose of ECOA is to make consumer credit available with fiarnes sand imparialtiy. 
+                a) Membership in a protected class should have no bearing on qualifying for a loan 
+            2 Prohibits discrimination in all consumer credit rtanscations 
+                a) Protected categories include 
+                    1) Race, color, religion, national origin, sex, martial status, dependence on public assistance, and age. 
+            3.) ECOA add teh protected classes of arital status, age, and public assistance (MAP) 
+                A) ECOA does not protect minors, families with children, or those with an erratic emplyment hsitory or bad credit. 
+            4.) Lenders are required to provide a written notice of why a borrower was denied a loan.
+            
+                         
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

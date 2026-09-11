@@ -1,0 +1,144 @@
+export class WorkerManager {
+  constructor(deps, news) {
+    this.timeWorker = null;
+    this.radioWorker = null;
+
+    // External dependencies injected on purpose
+    this.Radio = deps.Radio;
+    this.TfWeather = deps.TfWeather;
+    this.WordTimes = deps.WordTimes;
+    this.RadioTimes = deps.RadioTimes;
+    this.WordOfTheDay = deps.WordOfTheDay;
+    this.NewsTimer = deps.NewsTimer;
+    this.TsunamiAudioCtx = deps.TsunamiAudioCtx;
+
+    this.MyNewTFTime = deps.MyNewTFTime;
+    this.TfWotd = deps.TfWotd;
+    this.news = news;
+  }
+
+  init(audioElem) {
+    if (typeof Worker === "undefined") {
+      console.warn("No Web Worker support");
+      return;
+    }
+
+    if (typeof EventSource === "undefined") {
+      console.warn("Server Sent Events not supported");
+      return;
+    }
+
+    this.initTimeWorker(audioElem);
+  }
+
+  initTimeWorker(audioElement) {
+    if (!this.timeWorker) {
+      try {
+        this.timeWorker = new Worker(new URL("./Timer.js", import.meta.url), { type: "module" });
+      } catch (err) {
+        this.timeWorker = new Worker("JS/TFN/F/Compute/Class/Worker/Class/WebWorker/Timer.js", { type: "module" });
+      }
+      this.timeWorker.onmessage = (e) => this.handleTimeMessage(e, audioElement);
+      this.timeWorker.onerror = (e) => this.handleError("TimeWorker", e);
+    }
+  }
+
+  initRadioWorker(audioEl) {
+    if (!this.radioWorker) {
+      try {
+        this.radioWorker = new Worker(new URL("./TsunamiRadio.js", import.meta.url), { type: "module" });
+      } catch (err) {
+        this.radioWorker = new Worker("WebWorker/TsunamiRadio.js", { type: "module" });
+      }
+      this.radioWorker.onmessage = (e) => this.handleRadioMessage(e, audioEl);
+      this.radioWorker.onerror = (e) => this.handleError("RadioWorker", e);
+    }
+  }
+
+  async handleTimeMessage(event, elem) {
+    const { time: TimerTime, type } = event.data;
+
+    this.MyNewTFTime.innerHTML = TimerTime;
+    this.initRadioWorker(elem);
+
+    if (type === "Tf Schedule") {
+      await this.handleSchedule(TimerTime, elem);
+    } else if (type === "Tf Time") {
+      this.handleGenericTime(elem);
+    } else {
+      this.handleFallback(elem);
+    }
+  }
+
+  async handleSchedule(TimerTime, audio) {
+    for (const word of this.WordTimes) {
+      this.TfWotd.innerHTML = await this.WordOfTheDay(TimerTime);
+      if (TimerTime === word) break;
+    }
+
+    this.NewsTimer(this.news);
+
+    for (const tfRT of this.RadioTimes) {
+      if (TimerTime === tfRT) {
+        this.Radio.MusicNetworkState(this.radioWorker, audio);
+        return;
+      }
+    }
+
+    this.ensureRadioPlaying(audio);
+  }
+
+  handleGenericTime(audioElem) {
+    this.NewsTimer(this.news);
+    document.getElementById("TFweather").innerHTML =
+      this.TfWeather.requestLocation();
+    this.Radio.MusicNetworkState(this.radioWorker, audioElem);
+  }
+
+  handleFallback(el) {
+    this.NewsTimer(this.news);
+    this.TfWeather.requestLocation();
+    this.Radio.MusicNetworkState(this.radioWorker, el);
+  }
+
+  ensureRadioPlaying(ele) {
+    const audio = ele;
+
+    if (!audio?.src || audio.ended) {
+      this.Radio.MusicNetworkState(this.radioWorker, audio);
+    }
+  }
+
+  async handleRadioMessage(event, element) {
+    const { type, system, buffer } = event.data;
+
+    if (type !== "radio") return;
+
+    if (system === "file") {
+      const update = this.Radio.RadioWorkerReceivedMessage(event);
+      element.src = update;
+
+    }
+
+    if (system === "arraybuffer") {
+      this.Radio.TfScheduleBuffer(buffer, this.TsunamiAudioCtx);
+
+      const pcm = this.Radio.RadioWorkerArrayBuffer(buffer, this.TsunamiAudioCtx);
+
+      this.radioWorker.postMessage({
+        type: "radio",
+        system: "pcm",
+        buffer: pcm,
+        sampleRate: buffer.sampleRate
+      }, [pcm]);
+    }
+  }
+
+  handleError(source, error) {
+    console.error(
+      `[${source}] ${error.message}`,
+      error.filename,
+      error.lineno
+    );
+  }
+}

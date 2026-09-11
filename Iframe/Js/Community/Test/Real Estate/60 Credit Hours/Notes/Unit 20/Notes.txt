@@ -1,0 +1,220 @@
+LAND-USE CONTROLS 
+    Land use is controlled through public and private limitations as well as through the direct ownership of land by federal, state, and local governments. According to the U.S. Department of Agriculture (USDA), more than 60% (1.35 billion acres) of the total 2.3 billion acres of land area in the United States is privately owned. The federal government owns more than 29% of the land, over a third of which is in Alaska, while state and local governments own about 9%, and about 3% is Indian trust land. These percentages change very little over time. In 2007, about 1% of U.S. land (22 million acres) was in foreign ownership. Urban land acreage increased fourfold from 1945 to 2007, to 61 million acres, about twice the rate of population growth in that time. The latest report by the USDA on major uses of land in the United States (compiled in 2007 and published in 2011) can be found at www.ers.usda.gov/data-products/major-land-uses.aspx, or enter "major land uses" in the search box at www.usda.gov.
+
+    Government ownership
+
+        Government-owned land is used for national parks and forests, military bases, federal office buildings, schools, museums, state parks, government buildings, and municipal parks and buildings, as well as streets, highways, and bridges. Beyond direct ownership of land, government controls on property use range from regulation of the use and disposal of hazardous materials by the federal government to the design, construction, and type of buildings that are permitted at the local level.
+
+        The police power of government is the source of its authority to create regulations needed to protect the public's health, safety, and welfare. Through enabling acts, states delegate to counties and local municipalities the authority to enact ordinances in keeping with general laws. The degree to which governmental bodies seek to regulate land uses varies and is often a reflection of the priorities of local residents. While there may be little objection anywhere to regulations that control noise, air, and water pollution, the topic of population density (lot and building sizes) can elicit strong reactions.
+
+The comprehensive plan
+
+    Local governments, municipalities, and counties establish development goals by creating a comprehensive plan. The comprehensive plan, also known as a master plan, is not a regulatory document, but a guide that tries to anticipate changing needs. The comprehensive plan usually is long term, perhaps 20 years or longer, and often includes (a) a general plan that can be revised and updated more frequently, (b) plans for specific areas, and (c) strategic plans. Systematic planning for orderly growth usually considers the following elements:
+
+        Land use—determining how much land may be proposed for residences, industries, businesses, agriculture, traffic and transit uses, utilities, community facilities, parks and recreational facilities, floodplains, and areas of special hazards
+        Housing needs of present and anticipated residents, including rehabilitation of declining neighborhoods, as well as new residential developments
+        Movement of people and goods, including highways and public transit, parking facilities, and pedestrian and bikeway systems
+        Community facilities and utilities such as schools, libraries, hospitals, recreational facilities, fire and police stations, water resources, sewerage, waste treatment and disposal, storm drainage, and flood management
+        Energy conservation to reduce energy consumption and promote the use of renewable energy sources
+
+    The preparation of a comprehensive plan involves surveys, studies, and analyses of housing, demographic, and economic characteristics and trends. The plan typically is drafted by a planning commission and approved by the city council or other governing body following a period for public comment at hearings held for that purpose. A municipality's planning activities may be coordinated with other government bodies and private interests to achieve orderly growth and development.
+
+        In Practice
+
+            After the Great Chicago Fire of 1871 reduced most of the city's downtown to rubble and ash, the city engaged planner Daniel Burnham to lay out a design for Chicago's future. The resulting Burnham Plan of orderly boulevards linking a park along Lake Michigan with other large parks and public spaces throughout the city established an attractive and workable urban space. The plan is still being implemented today.
+
+ZONING 
+    Zoning ordinances implement the comprehensive plan and regulate and control the use of land and structures within designated land-use districts, in part by separating conflicting land uses. If the comprehensive plan is the big picture, zoning provides the details that carry out the comprehensive plan.
+
+    Although no nationwide or statewide zoning ordinances exist, the federal government and the states regulate land use through coastal management, environmental laws, and scenic easements.
+
+    Zoning affects such things as
+
+        permitted uses of each parcel of land,
+        lot sizes,
+        types of structures,
+        building heights,
+        setbacks (the minimum distance from property boundaries that structures may be built),
+        style and appearance of structures,
+        density (the ratio of land area to structure area), and
+        protection of natural resources.
+
+    Zoning ordinances should conform to the comprehensive plan, but both must remain flexible to meet the changing needs of society. Extensive information on how the zoning process works can be found at the websites for New York City, www1.nyc.gov; Pittsburgh, www.pittsburghpa.gov/dcp/zoning; and Portland, www.portlandoregon.gov/bps/31612.
+
+        In Practice
+
+            The changing nature of the U.S. economy has resulted in areas of vacant factories and warehouses in many cities. Some cities have revised zoning ordinances to permit new residential or commercial developments in areas once zoned strictly for industrial use. Coupled with tax incentives, the changes have lured developers back into the cities. The resulting housing is often stylishly contemporary, conveniently located, and affordable. In some cities, rundown waterfront areas have become attractive recreational spaces that revitalize surrounding commercial and residential areas.
+
+    Zoning classifications
+
+        Zoning ordinances have traditionally designated land for residential, commercial, industrial, and agricultural uses. These land-use areas are further divided into subclasses. For example, a residential area may be subdivided to provide for detached single-family dwellings, semidetached structures containing not more than four dwelling units, lowrise apartment buildings without elevators (walkups), and highrise apartment buildings.
+
+        A planned unit development (PUD) is a development where land is set aside for mixed-use purposes, such as residential, commercial, and public areas. Zoning regulations may be modified for PUDs. PUDs tend to also be heavily regulated by private restrictions, including limitations on building design, materials, landscaping, and use.
+
+    Zoning ordinances
+
+        To meet both the growing demand for a variety of housing types and the need for innovative residential and nonresidential development, municipalities have adopted ordinances for subdivisions and planned residential developments. Some municipalities also use buffer zones to ease the transition from one use to another. A buffer zone is typically a strip of land separating land dedicated to one use from land dedicated to another use. For example, landscaped parks, playgrounds, and hiking trails may be used to screen residential areas from nonresidential zones. Certain types of zoning that focus on special land-use objectives are used in some areas. These include
+
+            bulk zoning to control density and avoid overcrowding by imposing restrictions such as setbacks, building heights, and percentage of open area or by restricting new construction projects;
+            aesthetic zoning to specify certain types of architecture for new buildings; and
+            incentive zoning to ensure that certain uses are incorporated into developments, such as requiring the street floor of an office building to house retail establishments.
+
+    Constitutional issues
+
+        Zoning can be a highly controversial issue and often raises questions of constitutional law. The Fourteenth Amendment to the U.S. Constitution prevents the states from depriving "any person of life, liberty, or property, without due process of law." The ongoing question is, How can a local government enact zoning ordinances that protect the public safety and welfare without violating the constitutional rights of property owners? Due process of law means that citizens can discuss zoning ordinances before they are enacted in public hearings. Those affected by the proposed change are provided notice of such hearings and have the opportunity to attend and be heard.
+
+        Any land-use legislation that is destructive, unreasonable, arbitrary, or confiscatory usually is considered void. Furthermore, zoning ordinances must not violate the various provisions of the state's constitution. Commonly applied tests in determining the validity of ordinances require that
+
+            power be exercised in a reasonable manner;
+            provisions be clear and specific;
+            ordinances be nondiscriminatory;
+            ordinances promote the public health, safety, and general welfare under the government's police power; and
+            ordinances apply to all property in a similar manner.
+
+        Is a zoning restriction ever an unconstitutional taking that entitles a property owner to compensation for a resulting loss in property value? Unlike the loss of ownership that occurs when title to property is taken, zoning leaves title in the landowner, but limits the owner's use of the property. On June 23, 2017, the U.S. Supreme Court decided the case of Murr v. Wisconsin by refusing to grant any relief to the property owner in the form of compensation for a diminution in the property's value created by a state law. The inheritors of two adjoining but separately titled and separately taxed parcels were prohibited from building a structure on one of the parcels because there was already a structure on the other parcel and the two parcels were under the same ownership.
+
+    Zoning permits
+
+        Compliance with zoning can be monitored by requiring that a property owner obtain a permit before beginning any development. A permit will not be issued unless the proposed development conforms to the permitted zoning, among other requirements. A zoning permit is usually required before a building permit will be issued.
+
+    Nonconforming use
+
+        Frequently, a lot or an improvement does not conform to the zoning use because it existed before the enactment or amendment of the zoning ordinance. Such a nonconforming use may be allowed to continue legally as long as it complies with the regulations governing nonconformities in the local ordinance, until the improvement is destroyed or torn down, or until the current use is abandoned. If the nonconforming use is allowed to continue indefinitely, it is considered to be grandfathered into the new zoning.
+
+        Real estate professionals should never assume, nor allow their clients to assume, that an existing nonconforming use will be allowed to continue. A prospective buyer should verify with the local zoning authorities the conditions under which the use is allowed to remain or whether changes are permitted.
+
+            In Practice
+
+                Under a city's original zoning ordinances, a small grocery store was well within a commercial zone. When the zoning map was changed to accommodate an increased need for residential housing, the grocery store was grandfathered into the new zoning.
+
+    Zoning hearing board
+
+        Most communities have a zoning hearing board (or zoning board of appeal) to hear testimony about the effects a zoning ordinance may have on specific parcels of property. A petition for an exception to the zoning law may be presented to the appeals board, as described next.
+
+    Variances and conditional-use permits
+
+        Once a plan or zoning ordinance is enacted, property owners and developers know what they can and cannot do on their property. Nevertheless, a property owner may want to use the property in a way that differs to some degree from what the zoning would allow. Generally, the property owner in such a situation may request either a conditional-use permit or a variance to allow a use that does not meet current zoning requirements.
+
+        A conditional-use permit (also known as a special-use permit) may be granted to a property owner to allow a special use of property that is defined as an allowable conditional use within that zone, such as a house of worship or daycare center in a residential district. For a conditional-use permit to be appropriate, the intended use must meet certain standards set by the municipality.
+
+        A variance will provide relief if a zoning regulation deprives an owner of the reasonable use of the property. To qualify for a variance, the owner must demonstrate the unique circumstances that make the variance necessary. In addition, the owner must prove that the regulation has caused harm or created a burden. A variance might also be sought to provide relief if an existing zoning regulation creates a physical hardship for the development of a specific property. For example, if an owner's lot is level next to a road but slopes steeply 30 feet away from the road, the zoning board may allow a variance so the owner can build closer to the road than the setback allows.
+
+        Both variances and conditional-use permits are issued by zoning boards only after public hearings. Owners of nearby properties must be given an opportunity to voice their opinions.
+
+        A property owner also can seek a change in the zoning classification of a parcel of real estate by obtaining an amendment to the district map or zoning ordinance for that area; that is, the owner can attempt to have the zoning changed to accommodate an intended use of the property.
+
+BUILDING CODES AND CERTIFICATES OF OCCUPANCY 
+    Most municipalities have enacted ordinances to specify construction standards that must be met when repairing or erecting buildings. These are called building codes, and they set many requirements for such things as materials and standards of workmanship, sanitary equipment, electrical wiring, and fire prevention. Not all building codes are local. Florida has adopted a statewide building code as a way to help protect properties against the massive destruction caused by hurricanes. California requires specific building standards to help protect structures and fixtures from damage that can be caused by earthquakes. Many jurisdictions have adopted the International Building Code that was developed by the International Code Council, www.iccsafe.org and is regularly reviewed and updated.
+
+    Permits
+
+        A property owner who wants to build a structure or alter or repair an existing building usually must obtain a building permit. Through the permit requirement, municipal officials are made aware of new construction or alterations and can verify compliance with building codes and zoning ordinances. An inspector will closely examine the plans and conduct periodic inspections of the work to ensure that the construction complies with relevant ordinances and codes. Once the completed structure has been inspected and found satisfactory, the building official will issue a certificate of occupancy or occupancy permit.
+
+        The certificate of occupancy indicating that the property is suitable for habitation must be issued before anyone moves in and usually before a lender will allow closing. Most municipalities allow for transfer of property ownership without the need to comply with the most current building codes. The exceptions are usually for safety reasons, such as the California requirement that a water heater be strapped in place for protection in an earthquake. Federal regulations may also be applicable, such as the design and construction requirements of the Americans with Disabilities Act (ADA).
+
+        If the construction of a building or an alteration violates a deed restriction, the issuance of a building permit will not cure this violation. A building permit is merely evidence of the applicant's compliance with municipal regulations.
+
+        Similarly, communities with historic districts, or those that are interested in maintaining a particular look or character, may have aesthetic ordinances. These laws require that all new construction or restorations be approved by a special board. The board ensures that the new structures will blend in with existing building styles. Owners of existing properties will need to obtain approval to have their homes painted or remodeled.
+
+            In Practice
+
+                The subject of planning, zoning, and restricting the use of real estate is extremely technical, and the interpretation of the law is not always clear. Questions concerning any of these subjects in relation to real estate transactions should be referred to legal counsel. The prospective property owner should also be aware of the costs for various permits.
+
+SUBDIVISION  
+    Most communities have adopted subdivision and land development ordinances as part of their comprehensive plans. Just as no national zoning ordinance exists, no uniform planning and land development legislation affects the entire country. Laws governing subdividing and land planning are controlled by the state and local governing bodies where the land is located. Rules and regulations developed by state agencies may provide certain minimum standards. Many local governments have established standards that are higher than the minimum standards.
+
+    Subdivider and developer
+
+        A subdivider is a person who buys undeveloped acreage and divides it into smaller lots for sale to individuals or developers or for the subdivider's own use. A subdivision ordinance will include provisions for submitting and processing a proposed subdivision. A developer, who may also be a subdivider, improves the land, constructs homes or other buildings on the lots, and sells them. Developing is generally a more extensive activity than subdividing.
+
+    Land development plan
+
+        Before the actual subdividing can begin, the subdivider must go through the process of land planning. The resulting land development plan must comply with the municipality's comprehensive or master plan. Although comprehensive plans and zoning ordinances are not necessarily inflexible, a plan that requires a change to either must undergo a long, expensive, and frequently complicated process that will include public hearings and action by multiple governing bodies.
+
+    Subdivision plan
+
+        In plotting out a subdivision according to local planning and zoning controls, a subdivider determines the size as well as the location of the individual lots. The maximum or minimum size of a lot is generally regulated by local ordinances and must be considered carefully. Most subdivisions are laid out by use of lots and blocks. An area of land is designated as a block, with the area making up the block then divided into individual building lots.
+
+        The land itself must be studied, usually in cooperation with a surveyor, so that the subdivision takes advantage of natural drainage and land contours. A subdivider should provide for utility easements, as well as easements for water and sewer mains. A developer is often required to submit an environmental impact report with the application for subdivision approval. This report explains what effect the proposed development will have on the surrounding area.
+
+        One negative aspect of subdivision development is the potential for increased tax burdens on all residents, both inside and outside the subdivision. To protect local taxpayers against the costs of a heightened demand for public services, many local governments strictly regulate nearly all aspects of subdivision development and may impose impact fees. Impact fees are charges made in advance to cover anticipated expenses involving off-site capital improvements, such as additional water and sewer facilities, new roads, and school expansions.
+
+    Plat map
+
+        From the land development and subdivision plans, the subdivider draws the plat map. A plat map is a detailed map illustrating the geographic boundaries of individual lots. The plat map shows the lots, blocks, sections, streets, public easements, and monuments in the prospective subdivision. The plat map may also include engineering data and restrictive covenants. The plat map must be approved by the municipality before it can be recorded. Once a plat map is properly recorded, it may be used to describe the individual parcels of real property. A metes-and-bounds or government survey system description will pinpoint the location of the subdivision plat map on the surface of the earth, which will become part of its description.
+
+    Subdivision density
+
+        Zoning ordinances typically dictate minimum lot sizes, as well as population density requirements for subdivisions and land developments. For example, a zoning restriction may set the minimum lot area on which a subdivider can build a single-family housing unit at 10,000 square feet. This means that the subdivider can build four houses per acre. Many zoning authorities establish special density zoning standards for certain subdivisions. Density zoning ordinances restrict the average maximum number of houses per acre that may be built within a particular subdivision. If the area is density zoned at an average maximum of four houses per acre, for instance, the subdivider may choose to cluster building lots to achieve an open effect. Regardless of lot size or number of units, the subdivider will be in compliance with the ordinance as long as the average number of units in the development, called its gross density, remains at or below the maximum density allowed.
+
+PRIVATE LAND-USE CONTROLS 
+    Not all restrictions on the use of land are imposed by government bodies. As already mentioned, certain restrictions to control and maintain the desirable quality and character of a property or subdivision may be created by private parties, including the property owners themselves. These restrictions are separate from and in addition to the land-use controls exercised by the government, but a private restriction cannot violate a federal, state, or local law. Any restriction that would attempt to do so would be void.
+
+    Deed restrictions are limitations to the use of property imposed by a past owner or the current owner by inclusion in the deed to the property and are binding on future grantees.
+
+    Restrictive covenants
+
+        Like deed restrictions, restrictive covenants or covenants, conditions, and restrictions (CC&Rs), are private rules set up by the developer that establish standards for all the parcels within the defined subdivision or PUD. The developer's restrictions may be imposed through a covenant in the deed or by a separate recorded declaration that is referenced in the deed. CC&Rs typically govern the type, height, and size of buildings that individual owners can erect, as well as land use, architectural style, construction methods, setbacks, and square footage. CC&Rs are enforced by the homeowners association (HOA) that is set up by the developer and turned over to the homeowners when a specified number of properties has been sold.
+
+        Unlike most deed restrictions, many CC&Rs have time limitations; for example, a restriction might state that it is "effective for a period of 25 years from this date." After the specified time, the restriction becomes inoperative or it may be extended if approved by the required number of owners. The rules of the HOA may also allow a specified number of homeowners to change a CC&R.
+
+        Restrictive covenants are usually considered valid if they are reasonable restraints that benefit all property owners in the subdivision; that is, they protect property values or safety. If a restriction is too broad, it may be construed as preventing the free transfer of property. If a restrictive covenant or condition is judged unenforceable by a court, the estate will stand free from the invalid covenant or condition. A restrictive covenant, just as with a deed restriction, cannot be used for an illegal purpose, such as the exclusion from a subdivision of members of certain races, nationalities, or religions.
+
+        Private land-use controls may be more restrictive of an owner's use than the local zoning ordinances. The rule is that the more restrictive of the two takes precedence. For example, local zoning ordinances may not address the use of a shed on a residential lot, but the CC&Rs in a particular subdivision may prohibit sheds, which means that a property owner in that subdivision may not place a shed on the property.
+
+        Private restrictions can be enforced in court when one lot owner or the HOA applies to the court for an injunction to prevent another lot owner from violating the recorded restrictions. The court injunction will direct the violator to stop or remove the violation. The court retains the power to punish the violator for failing to obey. If another lot owner or the HOA fails to take prompt action while a violation is occurring, the right to an injunction can be lost. The court might state that the right was lost through laches—that is, the legal principle that a right may be lost through undue delay or failure to assert it.
+
+            In Practice
+
+                A real estate professional should consider inserting a contingency in a purchase contract whenever there is doubt about any public or private restrictions which may exist, especially when knowing this information is important to the buyer. Real estate professionals must also be careful to stay informed about publicized changes in zoning so that a misrepresentation charge cannot later be made against the real estate professional who "knew or should have known" this information.
+
+REGULATION OF LAND SALES 
+    Just as the sale and use of property within a state are controlled by state and local governments, the sale of property in one state to buyers in another state is subject to strict federal and state regulations.
+
+    Interstate Land Sales Full Disclosure Act
+
+        The U.S. Congress created the Interstate Land Sales Full Disclosure Act (ILSA) to prevent fraudulent marketing schemes that may arise when land is sold without being seen by the purchasers. The Act was amended by the Dodd-Frank Act in 2011 and its administration is now under the authority of the Consumer Financial Protection Bureau. A full copy of the revised law is at www.hud.gov. Under ILSA, the property seller is required to file a statement of record with CFPB before offering unimproved lots in interstate commerce by telephone or through the mail. The statement of record must contain numerous disclosures about the property.
+
+        A developer is also required to provide each purchaser or lessee of property with a printed report before the purchaser or lessee signs a purchase contract or lease. The report must disclose specific information about the property, including the
+
+            type of title being transferred to the buyer,
+            number of homes currently occupied on the site,
+            availability of recreation facilities,
+            distance to nearby communities,
+            utility services and charges, and
+            soil conditions and foundation or construction problems.
+
+        If the purchaser or lessee does not receive a copy of the report before signing the purchase contract or lease, the consumer may have grounds to void the contract.
+
+        The act provides a number of exemptions. For instance, it does not apply to subdivisions consisting of fewer than 25 lots or to those in which each lot is 20 acres or more. Lots offered for sale solely to developers also are exempt from the act's requirements, as are lots on which buildings exist or where a seller is obligated to construct a building within two years.
+
+    State subdivided land sales laws
+
+        Many states have enacted their own subdivided land sales laws. Some affect only the sale to state residents of land located outside the state. Other states' laws regulate sales of land located both inside and outside the state. These state land sales laws tend to be stricter and more detailed than the federal law. Real estate professionals should be aware of the law in their state, if any, and how it compares with federal law.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+A listing (seller representation) contract is a fiduciary contract in which the owner/seller hires a brokerage firm to act as a special agent to find a buyer who is ready, willing, and able to buy according to the terms of the listing contract.
+
+While all listing agreements share some commonalities, state laws determine specific required content. 
+
+In an exclusive listing, the seller hires a single brokerage (exclusive) to market and sell the property. An exclusive listing is a bilateral contract. There are two types of exclusive listings: exclusive right to sell and exclusive agency.
+
+Exclusive right-to-sell listing: the listing brokerage is paid a commission if the property sells, regardless of who found the buyer.
+
+Exclusive agency listing: the listing brokerage is not  paid a commission if the seller finds a buyer through the seller's own efforts. The listing brokerage is paid a commission if the property sells under any other circumstances.
+
+Open/nonexclusive listing: the seller can sign open contracts with more than one brokerage firm (nonexclusive). Only the brokerage that procures (finds) the buyer is paid. If the property sells, all other open listings are automatically terminated with or without notice. An open listing is a unilateral contract. 
+
+Listing brokerages are obligated to promptly present all written offers to the seller, write an offer if so requested by an unrepresented buyer, pay fees only to their own salespersons or other licensed brokerages, market and sell the property per the terms of the listing contract, disclose material facts, and verify that the buyer has received the seller's property disclosure per state laws.
+
+Buyer representation contracts are similar to and contain many of the same elements as a listing (seller representation) contract. Buyer rep agreements can be exclusive right to buy or an exclusive agency contract.
+
+Home warranty plans cover existing homes. Home warranties may be offered by sellers or negotiated in an offer, and may be paid for by either party. Home warranties may cover the majority of a home, including all major systems and appliances, or simply cover one or more specific items (furnace, water heater, appliances, etc.). 
+
+Statutory new home warranties cover newly constructed homes. These statutory warranties are in place by state law and require the builder to warrant his work regardless of whether or not the builder acknowledges the warranty. Statutory new home warranties typically cover defects caused by faulty installation of materials, workmanship, mechanical systems (electrical, plumbing, and heating, ventilation, and cooling [HVAC]), and major structural defects. Statutory warranties do not cover storm damage, but homeowners insurance would. 
+

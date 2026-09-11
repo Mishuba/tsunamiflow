@@ -1,0 +1,69 @@
+The capitalization approach to value computes the value of an investment by comparing the net income from the property to the rate of return necessary to attract an investor to the investment. This comparison is done by the use of a mathematical formula referred to as the IRV formula. It is expressed as follows:
+
+Income = Rate × Value
+
+The relationship between these numbers allows us to compare investments with differing incomes based on objective criteria. Since the IRV formula can be restated in any manner, it allows us to calculate the value based on an income and rate, or to determine the rate of return on an investment based on value and income. The equation can be restated in the following different ways:
+
+Value = Income ÷ Rate or Rate = Income ÷ Value
+
+For example, assume that we are analyzing an investment that produces a net operating income of $12,000 annually. Market data indicates that investors require a 12 percent return on similar investments. What would be the market value of this investment?
+
+Value = Income ÷ Rate ... $12,000 ÷ 0.12 = $100,000
+
+This formula is very simple to use. However, in order to properly use it we must know two out of the three variables. In this section, we have covered the steps required to establish the net operating income of the property (the I in IRV). Now we will move on to the R.
+
+Establishing the Capitalization Rate
+The most challenging part of the capitalization approach to value is determining the appropriate capitalization rate. There are three major methods available to establish this rate, again ranging from the very simple to the very complex:
+
+Market extrapolation method
+Summation method
+Band of investment method
+The first method (market extrapolation) is the most accurate; the last two are used primarily when market data is unavailable or inconclusive.
+
+Market extrapolation method
+
+The market extrapolation method is similar to the market analysis approach commonly used in residential sales. Properties that are substantially similar to the property being analyzed are located. These comparable properties are then analyzed to determine the overall capitalization rate. Of the three major methods of valuation, the market extrapolation method is the most accurate.
+
+For example, assume you are analyzing a small residential investment property. Having calculated the net operating income of the property, you begin to accumulate market data on similar properties. You find recent comparable sales and list them by type of property, sales price, and net operating income:
+
+The next step in the analysis is to determine the overall capitalization rate for each of the comparable sales. We will return to the IRV formula for this purpose and divide the net income from each sale by the sales price to determine the appropriate rate:
+
+This calculation indicates that the property we are analyzing will have a capitalization rate of somewhere between 10.8 percent and 11.5 percent. At this point in the analysis, we will consider the comparable sales and the market differences as well as similarities to determine the precise rate to be used on the property being analyzed. This step is critical, because even a small difference in the capitalization rate will have a dramatic effect on value.
+
+For example, if the property under analysis has a net operating income of $12,000, the difference in value indicated by applying the top and bottom rates in the example would be nearly $7,000:
+
+Residential income—(Sales price: $125,000)—NOI = $13,700
+Residential income—(Sales price: $164,000)—NOI = $18,300
+Residential income—(Sales price: $110,000)—NOI = $12,000
+Residential income—(Sales price: $130,000)—NOI = $14,000
+Residential income—(Sales price: $182,000)—NOI = $21,000
+The next step in the analysis is to determine the overall capitalization rate for each of the comparable sales. We will return to the IRV formula for this purpose and divide the net income from each sale by the sales price to determine the appropriate rate:
+
+Income ($13,700) ÷ Value ($125,000) = Rate: 0.11 (11%)
+Income ($18,300) ÷ Value ($164,000) = Rate: 0.112 (11.2%)
+Income ($12,000) ÷ Value ($110,000) = Rate: 0.109 (10.9%)
+Income ($14,000) ÷ Value ($130,000) = Rate: 0.108 (10.8%)
+Income ($21,000) ÷ Value ($182,000) = Rate: 0.115 (11.5%)
+This calculation indicates that the property we are analyzing will have a capitalization rate of somewhere between 10.8 percent and 11.5 percent. At this point in the analysis, we will consider the comparable sales and the market differences as well as similarities to determine the precise rate to be used on the property being analyzed. This step is critical, because even a small difference in the capitalization rate will have a dramatic effect on value.
+
+For example, if the property under analysis has a net operating income of $12,000, the difference in value indicated by applying the top and bottom rates in the example would be nearly $7,000:
+
+
+
+This illustrates the need to be precise when determining the rate to be used in the analysis. This also illustrates one of the basic rules in the capitalization approach: value and capitalization rates move in opposite directions. As the capitalization rate increases, the value of the property will decrease.
+
+The capitalization rate will vary from community to community, investor to investor, and property type to property type. If there is insufficient market data, or if the market data does not indicate a solid range, the capitalization rate will have to be calculated.
+
+Return on investment
+Return of investment
+Return on investment is the rate of return required for the capital invested. Return of investment is the return of the investor's capital over a set period of time.
+
+Summation method
+
+The summation method recognizes that an investor in real estate can choose between many competing investments. This method then attempts to adjust the rate of return on competing investments, taking into consideration the inherent factors involved in a real estate investment. It considers that the return on real estate will be made up of four component parts: safe rate, risk rate, nonliquidity rate, and management rate.
+
+The safe rate is the rate of return available on investments of maximum liquidity and minimum risk. The risk rate, nonliquidity rate, and management rate are added to the safe rate to compensate for the additional return required to attract an investor to real estate when compared to an alternative investment.
+
+Band of investment method
+
+The band of investment method is a more complex approach. The investment is analyzed from the standpoint that all investors in real estate require different returns. The investment is then considered from the perspective of the different investors who might be interested in the property. Each investor's potential position regarding the property is analyzed, and a weighted average is then used to calculate the rate. This method is most similar to the valuation method used in residential sales.

@@ -1,0 +1,49 @@
+The Federal Reserve System (Fed) consists of 12 federal reserve district banks. The Fed regulates the flow of money and interest rates.
+
+The primary mortgage market consists of lenders that originate mortgage loans.
+
+In the secondary mortgage market, loans are bought and sold after being funded.
+
+Fannie Mae has shareholders but is under the conservatorship of the Federal Housing Finance Agency (FHFA). It creates mortgage-backed securities using pool of mortgages as collateral; and deals in conventional, FHA, and VA loans.
+
+Freddie Mac also has shareholders and is under the conservatorship of FHFA. It has authority to purchase mortgages, pool them, and use them as security for bonds sold on the open market.
+
+Ginnie Mae (Government National Mortgage Association) is entirely a government agency, a division of the Department of Housing and Urban Development (HUD), organized as a corporation but without corporate stock, that administers special-assistance programs, and guarantees mortgage-backed securities using FHA and VA loans as collateral.
+
+Conventional loans are the most secure loans. The loan-to-value ratio (LTV) is often lowest for these loans—traditionally 80%—but the LTV may be as high as 100%. Conventional loans are not government-insured or guaranteed. Conventional loans meet all the requirements of the secondary market, set by Fannie Mae and Freddie Mac, for conforming loans. Nonconforming loans (jumbo loans) must be retained in the lender's investment portfolio.
+
+Private mortgage insurance (PMI) may be required for LTVs higher than 80%,that is, down payments of less than 20%. Federal law requires PMI to automatically terminate if the borrower has accumulated 22% equity in the home (based on purchase price or original appraised value, whichever is less) and is current on mortgage payments. Fannie Mae and Freddie Mac have extended the automatic termination option to all loans that are in good standing and have had no additional financing added to the original loan.
+
+FHA-insured loans are backed by the Federal Housing Administration (FHA), which is part of HUD. FHA does not make loans but insures loans made by an FHA-approved lending institution. The FHA mortgage insurance premium (MIP) has an up-front fee along with monthly installments. VA-guaranteed loans are backed by the U.S. Department of Veterans Affairs and are available to eligible veterans and spouses.
+
+The Farm Service Agency (FSA), formerly Farmers Home Administration (FmHA), is part of the Department of Agriculture and has programs to help families purchase or operate family farms, including the Rural Housing and Community Development Service (RHCDS) and the Farm Credit System (Farm Credit).
+
+The package loan includes all personal property and appliances as well as real estate.
+
+A blanket loan covers more than one parcel or lot, and a partial release clause allows a borrower to pay off part of a loan to remove the liens from one parcel or lot at a time.
+
+An open-end loan secures the current loan to the borrower and future advances made by the lender to the borrower.
+
+Construction loans are used to finance construction of property improvements.
+
+A sale-and-leaseback arrangement can be used to finance large commercial or industrial properties. A buydown is a payment made at closing to reduce the interest rate on the loan.
+
+A home equity loan (home equity line of credit or HELOC) is junior to the original lien.
+
+The Truth in Lending Act (TILA) is implemented by Regulation Z, now enforced by the Consumer Financial Protection Bureau, and requires that, when a loan is secured by a residence, the lender must inform the borrower of the true cost of obtaining credit. The borrower has a three-business-day right of rescission. Advertising is strictly regulated, using triggering terms to mandate what must be disclosed, and there are civil and criminal penalties for violations.
+
+The Equal Credit Opportunity Act (ECOA) prohibits discrimination in granting or arranging credit on the basis of race, color, religion, national origin, sex, marital status, age (as long as the applicant is not a minor), or receipt of public assistance.
+
+The Fair Credit Reporting Act (FCRA) requires that reasons for a loan application rejection be provided to the applicant within 30 days and that the applicant be given the right to a free copy of any credit report that was considered in the loan application process.
+
+The Community Reinvestment Act (CRA) requires financial institutions to help meet the need for affordable housing in their communities.
+
+The Real Estate Settlement Procedures Act (RESPA) covers costs related to the closing of a residential transaction.
+
+Automated underwriting (loan processing) programs provide loan approvals quickly and include Fannie Mae's Desktop Underwriter and Freddie Mac's Loan Prospector. A credit score may be used as part of a loan application evaluation process.
+
+
+
+
+
+

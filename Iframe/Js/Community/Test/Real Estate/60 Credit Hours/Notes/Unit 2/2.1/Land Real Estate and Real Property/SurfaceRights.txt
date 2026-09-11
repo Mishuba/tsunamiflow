@@ -1,0 +1,82 @@
+Surface Rights 
+    Ownership rights in a parcel of real estate that are limited to the surface of the eart are called Surface Rights
+
+    Subsurface rights 
+        The rights to the natural resources below the earth's surface are called subsurface rights. 
+        An owner may transfer subsurface rights without transferring surface rightsk and vice versa. 
+        In oil-producing states, real estate is commonly transferred without including the rights to minerals found below ground level. 
+        Recently, natural gas found in  shale rock beneath the surface that is removed in the process called hydraulic tracturing ("fracking") has become economical and created new interest in subsurface rights in many states. 
+        Fracking also has resulted in environmental concerns. 
+
+    Air rights 
+        The rights to use the space above the earth may be sold or leased independently, provided the rights have not been limited by law. 
+        Air rights can be an important part of real estate, particularly in large cities, where the air rights over railroad tracks must be purchased or leased to construct office buildings, such as the MetLife Bilding (formerly the PanAm Building) in New York CIty and One Prudential Plaza (formerly the Prudential Building) in Chicago. 
+        To Contruct such a building, the developer must purschase not only the air rights but also numerous small portions of the land's surface for the building's foundation supports. 
+
+        Now that air travel is common, the federal government, through laws, regulations, and court decisions, has put limits on air rights. 
+        Today, reasonable interference with these rights is permitted, such as that necessary for aircraft (and presumably spacecraft), as long as the owner's right to use and occupy the land is not unduly lessened. 
+        Government and airport authorities often purchase adjacent air rights to provide approach patterns for air traffic. 
+
+        With the continuing development of solar power, air rights and, more specifically, light or solar rights are being closely examined by the courts. 
+        A new highrise building that blocks sunlight from a smaller existing building may be found to be interfering with the smaller building's right to sunlight, particularly if systems in the smaller building are solar powered. 
+        Air and solar rights are regulated by state and local laws and regulations. 
+
+    Water Rights 
+        Water rights  are common-law (historical) or staturory rights held by ownersr of land adjacent to rivers, lakes, or oceans and are restrictions on the rights of land ownership. 
+        Water rights are particularly important in arid western states, where water is a scarce and valuable public commodity, but are also of concern in agricultural areas and population centers.
+        Each state has strick laws that govern the ownership and use of water as well as the adjacent land. 
+        The laws vary among the states, but all are closely linked to climatic and topographical conditions. 
+        Where water is plentiful, states may rely on the siple parameters set by the common-law doctrines of riparian and littoral rights. 
+        Where water is scarce, a state may control all but limited domestic use of water, according to the doctrine of prior appropriation. 
+
+    Riparian Rights 
+        Common-law rights granted to owners of land along the course of a river, stredam, or similar flowing body of water are called Riparian Rights. 
+        Although riparian rights are governed by laws that vary from state to state, they generally include the unrestricted right to use the water. 
+        As a rule, the only limitation on the owner's use is that such use cannot interrupt or alter the flow of the water or contaminate it in any way. 
+        In addition, an owner of land that borders a nonnavigable waterway, (i.e., a body of water unsuitable for commercial boat traffic) owns the land under the water to the exact center of the waterway. 
+        Land adjoining commerically navigable rivers, on the other hand, is usually owned to the water's edge, with the state holding title to the submerged land. 
+        Navigable waters are considered public highways in which the public has an easement or right to travel. 
+
+    Littoral rights 
+        Closely realted to riparian rights are the littoral rights of owners whose land borders commerically navigable lakes, seas, and oceans. 
+        Owners with littoral rights enjoy unrestricted use of available waters but own the lnad adjacent to the water only up to the average high-water mark. 
+        All land below this point is owned by the government. 
+        
+        In some states, riparian and littoral rights are appurtenant to (run with) the land and cannot be retained when the property is sold. 
+        The right to use the water belongs to whoever owns the bordering land and that right cannot be retrained by a former owner after the land is sold. 
+
+    Accretion Erosion Avulsion 
+        The amount of land an individual owns may be affected by the natural action of water. 
+        An owner is entitled to all land created through accretion 
+            Increases in the land resulting from the deposit of soil by the water's action. 
+
+        An owner may lose land through the action of the elements. 
+        Erosion is the gradual and sometimes imperceptible wearing away of the land by natural forces, such as wind, rain, and flowing water. 
+        Fortunately, erosion usually takes hundreds or even thousands of years to have any noticeable effect on a person's property. 
+        Flash floods or heavy winds, however, can increase the speed of erosion. 
+
+        If erosion is a slow natural process, avulsion is its opposite.
+        Avulsion is the sudden removal of soil by an act of nature. 
+        It is an event that causes the loss of land in a much less subtle manner than erosion. 
+        An earthquake or a mudslide, for instance, can cause an individual's landholding to become much smaller very quickly.
+
+    Doctrine of Prior Appropriation 
+        In states where water is scarce, ownership and use of water are often determined by the doctrine of priop appropriation. 
+            Under this doctrine, the right to use any water, with the exception of limitred domestic use, is controlled by the state rather than by the landowner adjacent to the water. 
+
+        To secure water rights in prior appropriation states, a landowner must demonstrate to a state agency that the owner's plans are for beneficial use, such a crop irrigation. 
+        If the state's requirements are met, the landowner receives a permit to use a specified amount  of water for the limited purpose of the beneficial use.
+        Although statutes governing prior appropriation vary from state to state, the priority of water rights is usually determined by the oldest recorded permit date. 
+
+        Under some states laws, water rights, once granted, attach to the land of the permit holder.
+        The permit holder may sell a water right to another party; however, issuance of a water permit does not grant access to the water source. 
+        All access rights-of-way over the land of another (easements) must be obtained from the property owner. 
+
+    Coastal Waters 
+        The United Nations Convention on the Law of the Sea, signed in 1982, is the most recent agreemnet affecting coastal waters to which the United States is a party. 
+        The Law of the Sea identifies territorial waters as those extending up to 12 nautical miles (equivalent to 13.8 land miles) from a base line that is the mean low-water line of a coastal country. 
+        The law also recognizes Exclusive Economic Zones that extend 200 nautical miles from the coastal base line.  
+        All other ocean waters are considered international waters and are also referred to as the high seas. 
+
+        The Office of Coastal Survey of the National Oceanic and Atmospheric Administration (NOAA) is a part of the U.S. Department of Commerce. 
+        NOAA Electronic Navigational Charts (NOAA EOC) offer detailed information on nautical features and can be viewd at www.nauticalcharts.noaa.gov 

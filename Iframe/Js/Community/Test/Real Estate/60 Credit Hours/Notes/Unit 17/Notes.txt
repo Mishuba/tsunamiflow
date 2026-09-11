@@ -1,0 +1,212 @@
+LEASING REAL ESTATE
+
+The record number of property foreclosures in recent years has been accompanied by an increase in the number of residential rental properties, both because foreclosed owners have become renters and because investors have taken advantage of the decline in market values to increase their portfolios. There has been a drop in the rate of home ownership from a record high of 69% in 2004 to 63.7% in 2015, and a corresponding increase in the number of households residing in rental units. Additional statistics on the housing market are available from the U.S. Census Bureau, www.census.gov.
+
+The foundation of the relationship between a property owner and tenant is the lease. A lease is a contract between a lessor (the owner of real estate, or landlord) and a lessee (the tenant). A lease transfers the lessor's rights to exclusive possession and use of the property to the tenant for a specified period of time and establishes the consideration the lessee is to pay rent for use of the property. Rent is a fixed, periodic payment made by a tenant of a property to the owner for possession and use, usually by prior agreement of the parties. Other rights and obligations of the parties are also set forth. The landlord retains a reversionary right to possession after the lease term expires.
+
+The statute of frauds in most states requires lease agreements for more than one year to be in writing to be enforceable. In general, oral leases for one year or less that can be performed within a year of their making are enforceable. A written lease should be executed (signed) by both the lessor and the lessee.
+
+    In Practice
+        Even though an oral lease, such as a lease for one year commencing from the day of agreement, may be enforceable, it is always better practice to put a lease agreement in writing. A written lease signed by both landlord and tenant provides concrete evidence of the terms and conditions to which the parties have agreed.
+
+If the original agreement provides for the conversion from an estate for years to a periodic tenancy, no negotiations are necessary; the tenant simply exercises the option.
+
+An estate from period to period also might be created when a tenant with an estate for years remains in possession, or holds over, after the lease term expires. If no new lease agreement has been made, a holdover tenancy is created. The landlord may evict the tenant or treat the holdover tenant as one who holds a periodic tenancy. The landlord's acceptance of rent usually is considered conclusive proof of acceptance of the periodic tenancy. The courts customarily rule that a tenant who holds over can do so for a term equal to the term of the original lease, provided the period is for one year or less. For example, a tenant with a lease for six months would be entitled to a new six-month tenancy, but if the original lease were for five years, the holdover tenancy could not exceed one year. Some leases stipulate that in the absence of a renewal agreement, a tenant who holds over does so as a month-to-month tenant.
+
+To terminate a periodic estate, either the landlord or the tenant must give proper notice. The form and timing of the notice may be established by state statute. Normally, the notice must be given at least one period in advance. For example, to terminate an estate from week to week, one week's notice is required; to terminate an estate from month to month, one month's notice is required. For an estate from year to year, however, the notice requirements vary from two months to six months. Many states have statutory notice requirements.
+
+Estate at will
+
+An estate (tenancy) at will gives the tenant the right to possess property with the landlord's consent for an unspecified or uncertain term. An estate at will is a tenancy of indefinite duration; it continues until it is terminated by either party giving proper notice. No initial period of occupancy is specified, as is the case in a periodic tenancy. An estate at will is automatically terminated by the death of either the landlord or the tenant. It may be created by express agreement or by operation of law. During the existence of a tenancy at will, the tenant has all the rights and obligations of a lessor-lessee relationship, including the duty to pay rent at regular intervals. As a practical matter, tenancy at will is rarely used in a written agreement and is viewed skeptically by the courts.
+
+    In Practice
+        A landlord tells a tenant that two months after the end of the tenant's lease someone else will be moving into the apartment. The landlord gives the current tenant the option to continue to rent the unit until the new tenant is ready to move in. If the tenant agrees, an estate (tenancy) at will is created.
+
+Estate at sufferance
+
+An estate (tenancy) at sufferance arises when a tenant who lawfully took possession of real property continues in possession of the premises without the landlord's consent after the right of possession has expired. This estate can arise when a tenant for years fails to surrender possession at the lease's expiration.
+
+When a tenant fails to surrender possession, or holds over, the tenant is responsible for the payment of rent at the existing terms and rate. A lease may contain a holdover clause, in which case that provision will govern the rights of both the landlord and the tenant. If a lease does not contain such a clause, then state law will govern and will typically offer three options:
+
+    The landlord can accept rent offered by the tenant, thereby creating a new tenancy under conditions of the original lease, a holdover tenancy. If the original lease term was greater than one year, generally the new tenancy is limited to one year.
+    The landlord can treat the tenant as a tenant at sufferance by either objecting to the tenant holding over or informing the tenant of such treatment, thus creating a month-to-month or periodic tenancy. The landlord receives rent, and both parties have to provide notice within a certain period of terminating the arrangement.
+    The landlord can treat the tenant as a trespasser and proceed with an eviction and damages action. Under this situation, the landlord must comply with the notice to quit requirements in the lease as well as state law regarding the landlord-tenant relationship.
+
+LEASE AGREEMENTS 
+
+Most states require no special wording to establish the landlord-tenant relationship. The lease may be written, oral, or implied, depending on the circumstances and the requirements of the statute of frauds. The law of the state where the real estate is located must be followed to ensure the validity of the lease.
+
+Requirements of a valid lease
+
+A lease is a contract between the lessor (landlord) and the lessee (tenant). To be valid, a lease must meet the following requirements, which are essentially the same as in any other contract:
+
+    Capacity to contract. The parties must have the legal capacity to contract; that is, be of legal age and sound mind.
+    Legal objective. The objective of the lease must not be prohibited by any law.
+    Offer and acceptance.Acceptance The parties must reach a mutual agreement (meeting of the minds) on all the terms of the contract.
+    Consideration. The lease must be supported by valid consideration—an exchange of promises. The landlord promises to provide occupancy and the tenant promises to pay rent. Rent is typically monetary, although the tenant could provide agreed-upon labor in maintaining or fixing up the property. Because a lease is a contract, the rent and other terms may not be changed unless both parties agree to the changes in a writing that is executed in the same manner as the original lease.
+
+The leased premises should be clearly described. For most residential leases, the street address or the street address and the apartment number is usually sufficient. If supplemental space is part of the rental, it should be clearly identified. If the lease covers land, such as a ground lease, then a legal description should be used. There should be no ambiguity.
+
+Preprinted lease agreements are usually better suited to residential leases. Commercial leases are generally more complex, have different legal requirements, and may include complicated calculations of rent and maintenance costs. Drafting a commercial lease—or even a complex residential lease, for that matter—may constitute the practice of law. Unless the real estate professional is also an attorney, legal counsel should be sought.
+
+    In Practice
+        For a complex lease, the professional can use a two- or three-page form to facilitate a preliminary agreement on the basic terms of the lease, subject to approval of a final draft prepared by an attorney (usually, the attorney for the landlord). The final document would then require execution by both parties.
+
+Possession of premises
+
+    The lessor, as the owner of the real estate, is usually bound by the covenant of quiet enjoyment that the lessee can occupy the premises without interference from the owner or anyone else. Quiet enjoyment does not have anything to do with barking dogs or late-night motorcycles. The lease usually stipulates the conditions under which the landlord may enter the property to perform maintenance, to make repairs, or for other stated purposes. Except in emergencies, adequate notice to the tenant is usually required, which may be stipulated in the lease or by state law.
+
+Use of premises
+
+    A lessor may restrict a lessee's use of the premises through provisions included in the lease. For example, the property is leased only to the lessee "and shall be used strictly as a residence and for no other purpose." Use restrictions are particularly common in leases for stores or other commercial space. For example, a lease may provide that the leased premises are to be used only as a real estate office and for no other purpose. In the absence of such clear limitations, a lessee may use the premises for any lawful purpose.
+
+Term of lease
+
+    The term of a lease—the period for which the lease will run—should be stated precisely, including the beginning and ending dates together with a statement of the total period of the lease. For instance, a lease might run "for a term of 30 years beginning June 1, 2018, and ending May 31, 2048." A perpetual lease for an inordinate amount of time or an indefinite term usually will be ruled invalid, but if the language of the lease and the surrounding circumstances clearly indicate that the parties intended such a term, the lease will be binding on the parties. Some states prohibit leases that run for 100 years or more.
+
+Security deposit
+
+Tenants are often required to provide a security deposit, which is held by the landlord during the lease term. The security deposit usually is available to the landlord if the tenant defaults on payment of rent or destroys the premises. Real estate professionals should be aware of state laws that govern security deposits: how they may be held, maximum amounts, whether interest must be paid, and how and when they are returned. To safeguard against nonpayment of rent, landlords may require an advance rental payment or a contract for a lien on the tenant's property or may require the tenant to have a third person guarantee payment.
+    In Practice
+        A lease should specify whether a payment is a security deposit or an advance on rent. If it is a security deposit, the tenant is usually not entitled to apply it to the final month's rent. If it is an advance on rent, the landlord must treat it as income for tax purposes.
+
+Improvements
+    Neither the landlord nor the tenant is required to make any improvements to the leased property. The tenant may, however, make improvements with the landlord's permission or as required to make the rented premises accessible, as discussed in the next paragraph. In most residential properties, any alterations become the property of the landlord. In many commercial leases, however, the tenant is permitted to install and remove trade fixtures—those articles attached to a rental space that are required to conduct the tenant's business. Trade fixtures may be removed before the lease expires, provided the tenant restores the premises to the previous condition, with allowance for the wear and tear of normal use.
+
+Accessibility
+    The federal Fair Housing Act makes it illegal to discriminate against a prospective tenant on the basis of the tenant's real or perceived disability. A tenant with a disability must be permitted to make reasonable modifications to a property at the tenant's own expense. If the modifications would interfere with a future tenant's use, the landlord may require that the premises be restored to their original condition at the end of the lease term. The Americans with Disabilities Act (ADA) will also affect a landlord's obligations when a commercial property or place of public accommodation is being leased. Updates of access issues and accessibility guidelines are provided by the United States Access Board, www.access-board.gov.
+
+Maintenance of premises
+    Most states require a lessor of residential property to maintain dwelling units in a habitable condition. The landlord must make any necessary repairs to common areas, such as hallways, stairs, and elevators, and maintain safety features, such as fire sprinklers, smoke alarms, and adequate lighting. Residential tenants do not have to make any repairs, but they must return the premises in the same condition they were received, with allowances for ordinary wear and tear. Lessees of commercial and industrial properties usually maintain the premises and are often responsible for making their own repairs.
+
+Destruction of premises
+    The obligation to pay rent for damaged or destroyed premises differs depending on the type of property and the lease. Usually, residential tenants are permitted to reduce their rent payments in proportion to the amount of space they are unable to use. Likewise, tenants who lease only part of a building, such as office or commercial space, generally are not required to continue to pay rent after the leased premises are destroyed. In some states, if the property was destroyed as a result of the landlord's negligence, the tenant can recover damages.
+    On the other hand, tenants who have constructed buildings on leased land, often agricultural or industrial land, are still obligated for the payment of rent even if the improvements are damaged or destroyed. If the buildings are destroyed, tenants must turn to their property insurer for a covered loss.
+
+Assignment and subleasing
+    In an assignment of a lease, a tenant transfers the entire leasehold interest to another person. The new tenant is legally obligated to comply with all of the promises the original tenant made in the lease.
+
+    Under a sublease, a tenant transfers less than the entire leasehold interest by subletting the premises to a new tenant. The original tenant remains responsible for rent being paid by the new tenant and for any damage done to the rental during the lease term. The new tenant is responsible only to the original tenant to pay the rent due. The sublessor's (original lessee's) interest in the real estate is known as a sandwich lease.
+
+    Assignment and subleasing are allowed only when a lease specifically permits them. In both an assignment and a sublease, details of the arrangement should be in writing. In most cases, the sublease or assignment of a lease does not relieve the original lessee of the obligation to pay rent. The landlord may, however, agree to waive the former tenant's liability. Most leases prohibit a lessee from assigning or subletting without the lessor's consent. This permits the lessor to retain control over the occupancy of the leased premises. As a rule, the lessor must not unreasonably withhold consent.
+
+    Online rental services have become very popular and have been used by both property owners and renters to make accommodations available on a short-term basis. More jurisdictions are placing restrictions on such rentals, which may be seen as a way to avoid the legal protections typically available to tenants, landlords, property owners, and neighbors who live in the same building or complex. Local governments may be concerned that the protections available to hotel guests are ignored. Some jurisdictions limit the term of such rentals, and some impose a minimum number of days (such as 31 days) that a property can be rented out.
+
+Recording a lease
+
+    Anyone who inspects a leased property receives actual notice of the tenant's occupancy. For this reason, it is usually considered unnecessary to record a lease, although most states allow a lease to be recorded in the county in which the property is located. Furthermore, leases of three years or longer often are recorded as a matter of course. Some states require that a long-term lease be recorded, especially when the lessee intends to mortgage the leasehold interest.
+
+    A lease will typically run with the land; a change in the ownership of the leased fee estate doesn't affect the leasehold unless there is a provision in the lease providing for termination of an existing tenancy under specified circumstances or as provided by state law. Existing tenants usually have the right to remain in possession until the lease expires. A prospective buyer of property, especially an occupied single-family home, should inquire about the status of the occupants. The title records are searched for any recorded leases as part of the purchase transaction.
+
+Nondisturbance clause
+
+    A nondisturbance clause is included in the financing instrument used to mortgage leased premises. By accepting this provision, the mortgagee agrees not to terminate the tenancy of the lessee(s), so long as the lessee is current in payment of the required rent, should the mortgagee foreclose on the mortgagor's building.
+
+Options
+    A lease may contain a clause that grants the lessee the privilege of renewing the lease (called a renewal option). The lessee must, however, give notice of intent to exercise the option. Some leases grant the lessee the option to purchase the leased premises (called a purchase option). This option normally gives the tenant the right to purchase the property at a predetermined price within a certain period, possibly the lease term. The lease might also contain a right of first refusal that allows the tenant the opportunity to buy the property before the owner accepts an offer from another party. The lease option may stipulate that the tenant is to be given credit toward the purchase price for some percentage of the rent paid, as the parties negotiate.
+
+        In Practice
+
+            All the general statements concerning provisions of a lease are controlled largely by the terms of the agreement and state law. Landlord-tenant laws vary from state to state. Great care must be exercised in reading the entire lease document before signing it because every clause in the lease has an economic and legal impact on either the landlord or the tenant. Although preprinted lease forms are available, there is no such thing as a standard lease. When complicated lease situations arise, legal counsel should be sought.
+
+TYPES OF LEASES 
+
+A lease can be characterized by the manner in which rent payments are determined as well as the type of property being leased. There are three basic forms of lease payments: the gross lease, the net lease, and the percentage lease. (See  Types of Leases.) A variable lease will combine one of these forms of payment with adjustments in the amount of rent to be paid.
+
+Gross lease
+    In a gross lease, the tenant pays a fixed rent and some or all of the utility expenses, while the landlord pays all taxes, insurance, repairs, any other utility expenses, and maintenance connected with the property (usually called property charges or operating expenses). Residential and commercial office leases are most often gross leases.
+
+        In Practice
+
+            The landlord may pay for water, trash collection, and sewerage fees, while the tenant pays for items such as electricity, gas, and cable or other access to phone, television, and internet services.
+
+Net lease
+    In a net lease, the tenant pays all or most of the property expenses, such as hazard insurance, property taxes, and/or common area maintenance (CAM) charges, in addition to the rent. The monthly rental is net income for the landlord after operating costs have been paid. Leases for entire commercial and industrial buildings and the land on which they are located, ground leases, and long-term leases are usually net leases.
+
+Percentage lease
+    Either a gross lease or a net lease may be a percentage lease. This type of lease is generally used for retail business leases. The rent is based on a minimum fixed rental fee plus a percentage of the gross income received by the tenant doing business on the leased property. The percentage charged is negotiable and varies depending on the nature of the business, location of the property, and general economic conditions.
+
+Variable lease
+    A lease may allow for increases in the rental charges during the lease term. A graduated lease provides for specified rent increases at set future dates. An index lease allows rent to be increased or decreased periodically based on changes in the consumer price index or some other indicator.
+
+Other types of leases
+
+    Ground lease
+
+        When a landowner leases unimproved land to a tenant who agrees to erect a building on the land, the lease is usually called a ground lease. It is most often used in commercial and industrial property development. Ground leases typically involve separate ownership of the land and the buildings. These leases must be long enough to make the transaction desirable to the tenant investing in the building. They often run for terms of 50 to 99 years.
+
+            Ground leases are generally net leases: the lessee must pay rent on the ground, as well as real estate taxes, insurance, upkeep, utilities, and repairs. At the end of the lease term, any tenant-built structures on the property usually become the property of the landlord.
+
+    Oil and gas lease
+
+        When an oil company leases land to explore for oil and gas, a special lease agreement must be negotiated. Except for enough surface space to conduct extraction operations, the lease covers subsurface rights. Usually, the landowner receives a cash payment for executing the lease. If no well is drilled within the period stated in the lease, the lease expires, although most oil and gas leases permit the oil company to continue its rights for another year by paying another flat rental fee. Such rentals may be paid annually until a well is produced. If oil or gas is found, the landowner usually receives a percentage of its value as a royalty. As long as oil or gas is obtained in significant quantities, the lease continues indefinitely. Oil and gas leases, even after they have expired, are often listed as exclusions in title insurance policies.
+
+    Lease purchase
+
+        A lease purchase is used when a tenant wants to purchase the property but is not yet able to do so. Perhaps the tenant cannot obtain favorable financing or clear title, or the tax consequences of a purchase are currently unfavorable. The terms of the sale are negotiated and agreed to at the time that the lease is signed. A down payment is paid, which may or may not be refundable, and part of the periodic rent may be applied toward the purchase price of the property. Both parties hope that, by the time the lease expires, the tenant's issues have been resolved and financing can be obtained or the tenant can purchase the property outright.
+
+    Sale-and-leaseback
+
+        In a sale-and-leaseback, the property owners sell the property and then lease it back for an agreed period and rental. The original owners pull out their equity to use on other projects and are also able to reduce their taxable income when they pay rent to the new owner. The new owner has a reliable source of rental income for an extended time.
+
+            In Practice
+
+                The sale-and-leaseback is often used by a company that owns its own office building but is in need of capital, perhaps for business expansion. The building can be sold to obtain funds, but the company will be allowed to remain in the building as a tenant and pay rent to the new owners.
+
+DISCHARGE OF A LEASE 
+
+    As with any contract, a lease is discharged when the contract terminates. Termination can occur either when all parties have fully performed their obligations under the agreement, or when the parties agree to cancel the lease. If the tenant, for instance, offers to surrender the leasehold interest, and if the landlord accepts the tenant's offer, the lease is terminated. A tenant who simply abandons leased property, however, remains liable for the terms of the lease—including the rent. The terms of the lease will usually indicate whether the landlord is obligated to try to re-rent the space. If the landlord intends to sue for unpaid rent, however, most states require an attempt to mitigate damages by re-renting the premises to limit the amount owed.
+
+    The lease does not terminate if the parties die or if the property is sold. There are two exceptions to this general rule. First, a lease from the owner of a life estate ends with the death of the person on whose life the estate is measured. Second, the death of either party terminates a tenancy at will. In all other cases, the heirs of a deceased landlord are bound by the terms of existing valid leases.
+
+    If leased real estate is sold or otherwise conveyed, the new landlord takes the property subject to the rights of the tenants. A lease agreement may contain language that permits a new landlord to terminate existing leases, although this is much more common in commercial properties than in residential properties. The clause, known as a sale clause, requires that the tenant be given some period of notice before the termination. Because the new owner takes title subject to the rights of the tenant, the sale clause enables the new landlord to claim possession and negotiate a new lease under new terms and conditions.
+
+    A tenancy may also be terminated by operation of law, as in a bankruptcy, foreclosure, or condemnation proceeding in an eminent domain action.
+
+Breach of lease
+
+    When a tenant breaches (violates) any lease provision, the landlord may sue the tenant to obtain a judgment to cover past-due rent, damages to the premises, or other defaults. Likewise, when a landlord breaches any lease provision, the tenant is entitled to certain remedies. The rights and responsibilities of the landlord-tenant relationship are governed by state law.
+
+Suit for possession—actual eviction
+
+    When a tenant breaches a lease or improperly retains leased premises, the landlord may regain possession through a legal process known as actual eviction. The landlord must serve notice on the tenant before commencing the lawsuit. Most lease terms require at least a 10-day notice in the case of default. In many states, however, only a five-day or three-day notice is necessary when the tenant defaults in the payment of rent. When a court issues a judgment for possession to a landlord, the tenant must vacate the property. If the tenant fails to leave, the landlord can have the judgment enforced by a court officer, who forcibly removes the tenant and the tenant's possessions. The landlord then has the right to re-enter and regain possession of the property. In some states, in cases of nonpayment of rent, a landlord also has the right to distrain, that is, to seize the tenant's property for rent in arrears, generally by changing the locks and giving notice. Most states require a court order to pursue the remedy of distraint.
+
+Tenants' remedies—constructive eviction
+
+    If a landlord breaches any clause of a lease agreement, the tenant has the right to sue and recover damages against the landlord. If the leased premises become unusable for the purpose stated in the lease, the tenant may have the right to abandon them. This action, called constructive eviction, terminates the lease agreement. The tenant must prove that the premises have become unusable because of the conscious neglect of the landlord. To claim constructive eviction, the tenant must leave the premises while the conditions that made the premises uninhabitable exist.
+
+        For Example
+
+            A tenant's lease requires that the landlord furnish heat. The landlord fails to repair a defective furnace, and no heat is provided to the tenant's apartment during the winter months. The tenant is forced to abandon the apartment. Because the lack of heat was due to the landlord's negligence, the tenant has been constructively evicted.
+
+Protenant legislation
+
+    For the most part, leases are drawn up primarily for the benefit of the landlord. Due to tenants' rights movements and increased consumer awareness, however, most states have adopted all or part of the Uniform Residential Landlord and Tenant Act that was created in 1972, amended slightly in 1974, and updated in 2015, by what is now the National Conference of Commissioners on Uniform State Laws, www.uniformlaws.org. The model law addresses the need for both parties to a lease to fulfill certain basic obligations. The act addresses such issues as
+
+        the landlord's right of entry,
+        maintenance of the premises,
+        the tenant's protection against retaliation by the landlord for complaints,
+        the disclosure of the property owner's name and address to the tenant, and
+
+        specific remedies available to both the landlord and the tenant if a breach of the lease agreement occurs.
+
+        The law's revisions cover security deposits, disposition of tenant property, and lease termination in a situation involving domestic violence or sexual assault.
+
+Fair housing and civil rights laws
+
+    The federal fair housing and civil right laws that were previously covered affect landlords and tenants just as they do sellers and purchasers. All persons must have access to housing of their choice without any differentiation in terms and conditions based on race, color, religion, national origin, sex, disability, or familial status. State and local municipalities have their own fair housing laws that add protected classes such as age and sexual orientation. Withholding an apartment that is available for rent, segregating certain people in separate sections of an apartment complex or parts of a building, and charging people in the protected classes different amounts for rent or security deposits all constitute violations of the law.
+
+        In Practice
+
+            The fair housing laws require that the same tenant criteria be applied to families with children that are applied to adults. A landlord cannot charge a different amount of rent or security deposit because one of the tenants is a child. While landlords have historically argued that children are noisy and destructive, the fact is that many adults are also noisy and destructive.
+
+    It is important to remember that a violation of federal or state fair housing laws can occur even without deliberate intent to discriminate—and even if a prospective tenant asks for the kind of assistance that would make a real estate professional guilty of discrimination.
+
+        In Practice
+
+            The Manero family from Thailand moved to Oakton and contacted a real estate professional for assistance in finding a rental property. The real estate professional asked a number of questions to determine what kind of housing the family sought, their budget, and what part of town they preferred. Mrs. Manero insisted that she wanted to live in a part of town that they had heard about where a number of Thai families lived. She asked the real estate professional to find them a house in that part of town. The real estate professional complied but was subsequently disciplined by the state's real estate licensing agency and also fined by the fair housing division of the state's attorney general's office. The real estate professional learned, the hard way, that he should have informed the Maneros that he could show them properties in any part of town they requested that were within their budget but could not direct them to a neighborhood based on the nationality of the residents.
+
+
+
+
+

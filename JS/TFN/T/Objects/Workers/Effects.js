@@ -1,0 +1,1 @@
+export let chromaKeyColorWebcam = { r: 0, g: 255, b: 0 };

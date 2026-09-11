@@ -1,0 +1,141 @@
+The Resource Conservation and Recovery Act
+The Resource Conservation and Recovery Act (RCRA) of 1976 enables the EPA to regulate hazardous waste generators, hazardous waste facilities, and the transportation of hazardous waste. The Hazardous and Solid Waste Amendments (HSWA), enacted in 1984, phased out land disposal of hazardous wastes, enacted a comprehensive underground storage tank (UST) program, and increased EPA's enforcement authority. Amendments to RCRA in 1986 further cover environmental problems that may result from USTs holding hazardous substances, such as petroleum.
+
+Under RCRA, a waste is hazardous if it
+
+is specifically listed as hazardous; or
+fails specific characteristic tests that result in it being considered either toxic, corrosive, reactive, or ignitable.
+A real estate professional should be aware that a transporter of hazardous waste must be registered. If a potentially hazardous waste is found on a property, it should be left in place and picked up by a certified hauler. Additionally, strict documentation requirements apply.
+
+Unlawful Hauling of Hazardous Waste
+State law often duplicates or expands federal prohibitions. The California State Department of Toxic Substances Control, a division of the California Environmental Protection Agency, arrested four independent contractors in a sting targeting the illegal hauling of hazardous waste. The sting was part of an ongoing statewide campaign to crack down on unauthorized haulers. As a proactive approach to environmental crimes, 39 independent haulers have been implicated in five stings since statewide authorities began the enforcement campaign in May 2004.
+
+Under the ruse, investigators pretended to be the new owners of a former school building sold in 1993 by the school district to an artists' cooperative, later evicted for falling behind on mortgage payments. The undercover investigators, calling approximately 100 independent haulers listed in newspaper advertisements and in the Yellow Pages, found four unlicensed haulers that agreed to haul the waste (150 gallons of paint thinner). The toxins were going to be dumped illegally in drains, dumpsters, backyards, vacant lots, or some other "convenient" location.
+
+The link https://scdhec.gov/homepage accesses the South Carolina Department of Health and Environmental Control website. Search here for records, regulations, and more. The Environmental Affairs Enforcement Board publishes consent orders and administrative orders signed by the Director of Environmental Affairs for a given time period. The lists include the assessed civil penalties by program area. https://scdhec.gov/environment/enforcement-actions.
+
+In January 2019, a South Carolina executive was sentenced to six months of home confinement after his conviction for illegally storing hazardous waste in a Camden facility (March 1, 2019).
+
+After a series of hazardous waste violations in Sumter, S.C., Sumter Coatings, Inc., agreed to pay a civil penalty of $55,000 and begin employee training programs.
+
+In February, 2018, the U.S. Environmental Protection Agency (EPA) announced its oversight of a $30 million plan to clean up the former Koppers site in Charleston, S.C.. Koppers Co. had operated a wood treatment facility for nearly 40 years, ending in 1979. The site was designated in 1994.
+
+
+CERCLA
+Congress enacted the Comprehensive Environmental Response, Compensation, and Liability Act (CERCLA), commonly known as Superfund, on December 11, 1980. This act
+
+created a tax on the chemical and petroleum industries;
+established a trust fund to provide for cleanup of abandoned or uncontrolled hazardous waste sites when no responsible party could be identified;
+provided broad federal authority to respond directly to releases or threatened releases of hazardous substances that might endanger public health or the environment;
+established prohibitions and requirements concerning closed and abandoned hazardous waste sites; and
+provided for liability of persons responsible for releases of hazardous waste at these sites.
+
+
+CERCLA (cont.)
+CERCLA authorizes two kinds of response actions:
+
+Short-term removals are actions that may be taken to address releases or threatened releases requiring prompt response.
+Long-term remedial response actions permanently and significantly reduce the dangers associated with releases or threatened releases of hazardous substances that are serious, but not immediately life threatening. These actions can be conducted only at sites listed on the EPA's National Priorities List (NPL).
+CERCLA also enabled the revision of the National Contingency Plan (NCP). The NCP provides the guidelines and procedures needed to respond to releases and threatened releases of hazardous substances, pollutants, or contaminants. The NCP also established the NPL.
+
+The Superfund Amendments and Reauthorization Act (SARA) amended CERCLA on October 17 in 1986. SARA reflected the EPA's experience in administering the complex Superfund program during its first six years and made several important changes and additions to the program.
+
+
+CERCLA/SARA
+The Superfund Amendments and Reauthorization Act (SARA)
+
+stresses the importance of permanent remedies and innovative treatment technologies in cleaning up hazardous waste sites;
+requires Superfund actions to consider the standards and requirements found in other state and federal environmental laws and regulations;
+provides new enforcement authorities and settlement tools;
+increases state involvement in every phase of the Superfund program;
+increases the focus on human health problems posed by hazardous waste sites; and
+encourages greater citizen participation in making decisions on how sites should be cleaned up.
+SARA also requires the EPA to revise the Hazard Ranking System (HRS) to ensure that it accurately assesses the relative degree of risk to human health and the environment posed by uncontrolled hazardous waste sites that may be placed on the NPL. SARA increased the size of government contributions to the Superfund used by the EPA to finance cleanup work, though the size of the Superfund has been reduced since then and was about $505 million in 2013.
+
+CERCLA/SARA (cont.)
+Of major concern to real estate licensees are those laws that make owners of real property responsible for the cleanup of hazardous substances found on the property. Under CERCLA, there is no financial limit to the owner's obligation for the cleanup of hazardous wastes found on the property. The current owner may be strictly or absolutely liable for the costs of the cleanup, whether or not the current owner caused the problem. CERCLA does provide a defense to this liability, known as the innocent landowner defense, which may be satisfied if an assessment is performed prior to acquisition of the property that constitutes "all appropriate inquiry into the previous ownership and uses of the property consistent with good commercial or customary practice," as defined in 42 USC Section 9601(35)(B), and reveals no hazardous substances.
+
+In agreements for the sale of real property, buyers will want a comprehensive warranty and indemnity from the seller with respect to the existence of hazardous wastes. Sellers ordinarily will want to limit their representations to facts of which they have actual knowledge and require buyers to make their own investigation. Although an indemnity agreement can be helpful, an indemnification is only good if the indemnifying parties still exist and have the funds to back it up. Some states require sellers of commercial property to notify the buyer of the existence of any hazardous substance known to the seller.
+
+Lenders are concerned with the effect of hazardous wastes on the value of their security. Because of this, they normally require a comprehensive inspection and report with respect to the environmental integrity of the property. Many lenders require that an environmental inspection be performed by an environmental professional prior to agreeing to lend money on a parcel of real property. This is more often the case with properties zoned commercial or industrial or those that have a history warranting an investigation.
+
+CERCLA/SARA (cont.)
+Current commercial leases commonly include a provision prohibiting the use or storage of hazardous substances on the premises or requiring that the lessee comply with all environmental laws. Some states require a lessee to notify the lessor of the existence of any hazardous substance on the premises.
+
+As mentioned earlier, a transporter of hazardous wastes must be registered, and strict documentation requirements apply.
+
+
+Environmental Responsibilities Under CERCLA/SARA
+Environmental liability extends to those who violate environmental quality laws and to those who somehow become responsible for the cleanup of contaminated property. The government will seek cleanup costs from unwitting purchasers of real estate if the original wrongdoer is insolvent or cannot be found. In other words, this legislation is based on strict liability; it doesn't matter if the contamination was not the owner's fault.
+
+The National Association of REALTORS® advises that members familiarize themselves with hazards known to be common in their market area. The licensee's investigation should include signs of environmental problems apparent to a real estate licensee, but the licensee should not be expected to discover problems apparent only to the trained eye or requiring the judgment of an environmental expert.
+
+Environmental Responsibilities Under CERCLA/SARA (cont.)
+When there is a release (a spill or a leak, for example) of a hazardous substance, CERCLA gives the EPA the right to have the substance removed either by
+
+cleaning up the release using Superfund resources and suing to recover costs from any responsible party on a strict liability basis; or
+ordering through injunction that responsible parties have to clean up the release.
+The EPA has the right to fine violators $50,000 per day. The amount of the fine is reviewed every four years, with a possible adjustment for inflation. The current fine, set in 2017, will next be reviewed in 2021.
+
+Note: No minimum amount is required for the definition of a release. Even the threat of a release is sufficient to trigger EPA action to require payment for a cleanup.
+
+Liability for Cleanup Under CERCLA/SARA
+Who can become liable for cleaning up contaminated property? Property owners, lenders who foreclose on contaminated property, parties who have the equivalence of ownership through a sale-leaseback, and others are all potentially responsible parties (PRPs). They include the following:
+
+Those who have operations and processes that release regulated materials or wastes must pay to clean up the contaminated property or property where the wastes were improperly (illegally) disposed. This could include problems from leaking tanks affecting the soil or groundwater. It could range from contamination resulting from illegal dumping of materials to legal disposal of a waste that later caused a problem.
+The current owner or purchaser may have to pay for cleanup of contamination from previous owners, even if the current owner had nothing to do with past contamination.
+The current owner may have to pay for disposal of wastes illegally disposed of without the consent of the owner by an unknown third party.
+An owner of land may be required to pay for the cleanup of wastes that have leached in from an adjoining property.
+Landlords may be liable for actions of their tenants whenever a tenant improperly disposes of hazardous waste onto a property.
+Tenants may assume liability for property conditions or may be required to correct a condition they did not create or contribute to, such as cleanup of a prior tenant's waste or asbestos removal necessary for renovation.
+
+Liability for Cleanup Under CERCLA/SARA (cont.)
+Current owners can become responsible for cleanup costs when hazardous substances are discovered, unless they can prove they meet the requirements of the innocent landowner defense under CERCLA at found 42 USC 9601(35)(A). They can also be liable for preexisting hazardous substances if these are later released into the environment.
+
+Congress has issued regulations describing when lenders and fiduciaries are liable for cleanup costs under CERCLA. Under these regulations, secured lenders are not considered to be in the chain of title for liability purposes even if they foreclose on a trust deed and briefly own the property, unless they participate in the management of the property.
+
+
+Limiting a Landowner's Liability Under CERCLA/SARA
+Defenses that limit a landowner's liability to Superfund claims include an act of God, an act of war, or an act of an unrelated third party on an innocent owner.
+
+The so-called innocent landowner defense may not stop the purchaser from losing the contaminated asset. It will, however, protect other income and assets from being attached for the cleanup costs. The general rule is that, to avoid liability for cleanup costs, a purchaser must make all appropriate and customary inquiries into the past ownership and use of the property. If contamination is found later, liability for cleanup costs might not attach, although one's equity in the property might be lost. The process of taking all appropriate and reasonable steps to ascertain that there is no contamination is part of what is called environmental due diligence.
+
+
+Limiting a Landowner's Liability Under CERCLA/SARA (cont.)
+Example of Limiting Liability
+
+Part of environmental due diligence is to become aware of red flags that suggest the possibility of contamination.
+
+In BCW Assoc. Ltd. v. Occidental Chem. Corp., 3 Toxics Law Reporter 943, No. 88-5847 (E.D. PA September 29, 1988), a purchaser relied solely on an engineer's report of no contamination. Dust had accumulated in the building, but the purchaser decided not to have the dust tested even though it was an indication of possible problems. The dust was later found to contain lead, and the purchaser was ordered by the federal court to pay some of the cleanup costs for ignoring an "obvious red flag of contamination."
+
+
+Limiting a Landowner's Liability Under CERCLA/SARA (cont.)
+The EPA is willing to consider a de minimis settlement with an innocent landowner to limit the amount the landowner has to contribute to the cost of hazardous waste cleanup.
+
+To meet the requirements of a de minimis settlement the following question must be answered affirmatively: Did the landowner acquire the property without knowledge or reason to know of the disposal of hazardous substances?
+
+The landowner must show that he has conducted "all appropriate inquiry." Factors listed under Section 101(35)(B) for consideration in determining if all appropriate inquiry has been made include
+
+any specialized knowledge of an experienced defendant;
+the relationship of purchase price to value of the property if uncontaminated;
+commonly known or reasonably ascertainable information about the property;
+the obviousness of the presence or likely presence of contamination at the property; and
+the ability to detect such contamination by appropriate inspection.
+Note: The ability of a purchaser to demonstrate "all appropriate inquiry" and thus be able to receive a de minimis settlement may be based on the issue of whether the real estate agent was diligent in ascertaining and disclosing material facts.
+
+The EPA publishes an NPL of sites that require action through the Superfund. There are potentially 30,000 such sites nationally.
+
+For More Information
+
+EPA's Superfund website: www.epa.gov/superfund
+
+CDC's Agency for Toxic Substances and Disease Registry (ATSDR): www.atsdr.cdc.gov
+
+EPA's Brownfields website: www.epa.gov/brownfields
+
+Underwriters Laboratories: www.ul.com
+
+Air Conditioning, Heating, and Refrigeration Institute's technical standards for industry products: www.ahrinet.org
+
+
+

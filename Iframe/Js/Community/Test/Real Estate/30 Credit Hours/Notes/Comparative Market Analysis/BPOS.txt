@@ -1,0 +1,9 @@
+The Broker Price Opinion (BPO)
+Defined
+
+A broker price opinion is a more formal CMA. It is typically requested by a lender to estimate the value of property that may be in default or already owned by the lender. The BPO may use the comparable sales approach with dollar adjustments and may use the income capitalization approach for commercial properties.
+
+Purpose
+
+BPOs are most often prepared for lenders when a property is in default or already owned by the lender. A broker usually charges a fee for preparing a BPO.
+

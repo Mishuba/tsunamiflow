@@ -1,0 +1,50 @@
+A township is 6 miles square and contains 36 square miles (23,040 acres)
+
+Each township contains 36 sections
+
+Each section is one square mile or 640 acres, with 43,560 square feet in each acre
+
+Section 1 is always in the northeast, or upper right-hand, corner
+
+By law, each Section 16 was set aside for school purposes, and the sale or rental proceeds from this land were originally available for township school use
+
+Sections (640 Arces) (7040 yards) (42280 Feet) are divided into halves (320 acres) (3520 Yards) (21140 Feet) and quarters (160 acres) (1760 Yards) (10570 Feet)
+           1/8 80 acres (880 Yards) (5280 Feet)
+            1/16 40 arces (440 Yards) (2640 Feet)
+            1/32 20 arces (220 Yards) (1320 Feet)
+         1/4 0f 1/4 of 1/4 (1/64) 10 arces (110 Yards) (660 Feet)
+         1/128 arces (55 Yards) (330 Feet)
+The rectangular survey system sometimes uses a shorthand method in its descriptions
+     a comma may be used in place of the word of: SE¼, SE¼, SE¼, Section 1. It is possible to combine portions of a section, such as NE¼ of SW¼ and N½ of NW¼ of SE¼ of Section 1, which could also be written NE¼, SW¼; N½, NW¼, SE¼ of Section 1. A semicolon means and. Because of the semicolon in this description, the area is 60 acres
+    
+Legal descriptions should always include the name of the county and the state in which the land is located because meridians often relate to more than one state and occasionally relate to two base lines.
+
+Land in states that use the rectangular survey system may also require a metes-and-bounds description. This usually occurs in one of three situations: (1) when describing an irregular tract; (2) when a tract is too small to be described by quarter-sections; or (3) when a tract does not follow the lot or block lines of a recorded subdivision or section, quarter-section lines, or other fractional section lines
+
+
+
+
+Units of Land Measurement
+    Unit                Measurement 
+    Mile                5,280 feet; 1760 yards; 320 rods 
+    Furlong             220 yards; 660 feet; 40 rods; 10 chains 
+    Chain               66 Feet; 4 rods; 100 links 
+    Rod                 16.5 feet; 5.50 yards 
+    Square mile         640 arces (5280 * 5280 = 27,878/43,560)
+    Acre                43,560 square feet 
+    Cubic Yard          27 cubic feet 
+    Square Yard         9 square feet 
+    Square Foot         144 square inches 
+
+
+264 Feet
+
+16 Rods 
+
+522720
+
+522,720 = 380000
+
+
+15000
+

@@ -1,0 +1,268 @@
+Termination of seller representation
+    * A broker's agreement to represent a property seller may be terminated for the following reasons:
+        % The agreement's purpose is fulfilled by the transfer of title to the buyer.
+        % The agreement's term expires.
+        $ The property is destroyed, or its use is changed by some force outside the owner's control, such as a zoning change or condemnation by eminent domain.
+        $ Title to the property is transferred by operation of law, as in the case of the owner's bankruptcy or foreclosure.
+        $ The broker and the seller mutually agree to cancel the agreement.
+        $ Either the broker or the seller breaches the agreement, such as by the seller's refusal to consider an offer or the broker's refusal to present an offer to the seller.
+        $ Either the broker or the seller dies or becomes incapacitated. If a sales associate dies or becomes incapacitated, the agreement is still valid.
+
+
+Expiration of listing period
+    All exclusive listings should specify a definite period during which the broker is to be employed. In most states, failing to specify a definite termination date in a listing is grounds for the suspension or revocation of a real estate license.
+    Extension clauses are illegal in some states, and many listing contract forms specifically provide (as may be required by law) that there can be no automatic extension of the agreement. Some courts have held that an extension clause actually creates an open listing rather than an exclusive agency agreement.
+    Some listing contracts contain a broker protection clause. This clause provides that the property owner will pay the listing broker a commission if, within a specified number of days after the listing expires, the owner transfers the property to someone the broker originally introduced to the owner. This clause protects a broker from losing a commission in the event that the transaction is not completed (and, perhaps, is intentionally delayed) until after the listing expires.
+
+The sales associate should already have performed a comparative market analysis (CMA), also known as a competitive market analysis, and should be prepared to discuss the range of value in which the property is likely to fall, as well as the charges that will affect the amount that the seller will receive. The CMA is not a formal appraisal, which must meet separate licensing and other requirements, but instead looks at properties on the market that are similar to the property the seller owns in size, location, and amenities. The sales associate, by examining MLS data, can consider the asking prices of properties currently available, as well as the sales prices of properties that have sold recently and the asking prices on property listings that have expired without a sale being achieved. All of this information should make it easier for the seller to decide on a suitable asking price for the subject property.
+
+The Listing Presentation
+    - Common questions property owners may ask include "How quickly will the property sell?" and "What services will the broker provide during the listing period?" The property owner will also want to know whether the property's condition is suitable for showing to prospective buyers, or if certain improvements should be made. This is the sales associate's opportunity to explain the various types of listing agreements, the ramifications of different agency relationships, the marketing services the broker provides, and the other services, such as "staging" the property to make it as attractive as possible, that could be used to help market the property effectively. At the end of this discussion, the seller should have an idea of what is involved in the sale process and should feel comfortable with the decision to list with the brokerage.
+    - The information needed for a listing agreement generally includes the
+        names and relationship, if any, of the owners;
+        street address and legal description of the property;
+        size, type, age, and construction of improvements;
+        number of rooms and their sizes;
+        dimensions of the lot;
+        existing loans, including the name and address of each lender, the type of loan, the loan number, the loan balance, the interest rate, the monthly payment of principal, interest, taxes, and insurance (PITI), whether the loan may be assumed by the buyer and under what circumstances, whether the loan may be prepaid without penalty, and whether or not the lender has approved a short sale (one in which the sales price is less than the amount of the outstanding loan balance) and, if so, whether the seller will incur a personal debt for the difference;
+        possibility of seller financing or willingness to agree to a lease option in which the property is leased to a prospective buyer who will have the right to purchase the property during or at the end of the lease term at an agreed-upon price;
+        amount of any outstanding special assessments and whether they will be paid by the seller or assumed by the buyer;
+        zoning classification of the property;
+        current (or most recent year's) property taxes;
+        neighborhood amenities (e.g., schools, parks and recreation areas, places of worship, and public transportation);
+        real property, if any, to be removed from the premises by the seller and any personal property to be included in the sale for the buyer (both the listing contract and the subsequent purchase contract should be explicit on these points);
+        any additional information that would make the property more appealing and marketable; and
+        required disclosures regarding property condition.
+
+Disclosure
+    Most states have enacted laws requiring that real estate professionals disclose whose interests they legally represent. It is important that the seller be informed of the company's policies regarding single agency, subagency, buyer agency, dual agency, and any other forms of representation allowed by state law. State law may require a written acknowledgment of required agency disclosures and the seller's agreement to a stated form of representation.
+    The residential property owner must also disclose the property's condition, as required by law in most states. Property condition disclosures cover a wide range of structural, mechanical, and other conditions that a prospective purchaser should know about in order to make an informed decision. Frequently, state law requires that the property owner complete a standardized form that may require the owner to indicate the condition of specific property features, such as heating and plumbing systems. A real estate professional should always caution a property owner to make truthful disclosures to avoid litigation arising from fraudulent or careless misrepresentations. The real estate professional, while not responsible for investigating the seller's property disclosures, may not conceal property defects that should be readily apparent to the licensee.
+
+The Listing Contract
+    Listing agreement provisions
+
+    Regardless of which type of listing agreement is used, the same considerations arise in most real estate transactions.
+
+    Names of all parties to the contract
+
+    Anyone who has an ownership interest in the property must be identified and should sign the listing to validate it. If the property has co-owners, that fact should be clearly established. If one or more of the co-owners is married, the spouse's consent and signature on the contract to release any marital rights is required in most states. If the property is in the possession of a tenant, that should be disclosed (along with the terms of the tenancy), and instructions should be included on how the property is to be shown to prospective buyers.
+
+    Brokerage firm
+
+    The brokerage company name, the employing broker, and if applicable, the sales associate taking the listing must all be identified, even though the sales associate only acts on behalf of the broker and is not a party to the agreement.
+
+    Description of the premises
+
+    In addition to the street address, the legal description, lot size, and tax parcel number may be required for future purchase offers.
+
+    Listing price
+
+    This is the proposed sales price and is also called the asking price. This usually is a starting point for negotiation rather than the amount that will actually be agreed upon in the eventual purchase contract. What the seller will receive is the actual sales price, although the seller's proceeds usually will be reduced by unpaid real estate taxes, special assessments, mortgage debts, seller closing costs, brokerage fee, and any other outstanding obligations. If this is to be a short sale, the approval of the current lienholder(s) of any debts secured by the seller's property must be sought, and that fact should be included in all marketing.
+
+    Broker's authority and responsibilities
+
+    The contract should specify whether the broker may place a sign on the property and advertise; it should address when the property can be shown, allowing reasonable notice to the seller. It should also address whether or not the broker may accept earnest money on behalf of the seller, and the responsibilities for holding the funds. The broker does not have the authority to sign any legal documents or contracts without first obtaining a power of attorney from the seller or the seller's representative.
+
+    Broker's compensation
+
+    The circumstances under which the broker will be paid must be specifically stated in the contract. The broker's compensation could be a percentage of the sales price (commission) or a flat rate, and it is usually paid at closing directly by the seller or the party handling the closing. The contract should also indicate whether the compensation may be shared with a cooperating broker.
+
+    Math Concepts
+
+    Calculating Sales Price, Commission, and Net to Seller
+
+    When a property sells, the sales price equals 100% of the money being transferred. If a broker is to receive a 5% commission, 95% will remain for the seller's other expenses and equity. To calculate a commission using a sales price of $325,000 and a commission rate of 5%, multiply the sales price by the commission rate:
+
+    $325,000 × 5% = $325,000 × 0.05 = $16,250 commission
+
+    To calculate a sales price using a commission of $16,250 and a commission rate of 6%, divide the commission by the commission rate:
+
+    $16,250 ÷ 6% = $16,250 ÷ 0.06 = $270,833 sales price
+
+    To calculate a commission rate using a commission of $8,200 and a sales price of $164,000, divide the commission by the sales price:
+
+    $8,200 ÷ $164,000 = 0.05, or 5% commission rate
+
+    To calculate the net to the seller using a sales price of $125,000 and a commission rate of 4%, multiply the sales price by 100% minus the commission rate:
+
+    $125,000 × (100% – 4%) = $125,000 × (96%) = $125,000 × 0.96 = $120,000
+
+    The same result can be achieved by calculating the commission ($125,000 × 0.04 = $5,000) and deducting it from the sales price ($125,000 – $5,000 = $120,000); however, this involves unnecessary extra calculations.
+    commission
+    sales price	×	commission rate
+
+    Real property and personal property
+
+    Any personal property that will be included in the sale of the real estate must be explicitly identified. Items of real property that the seller expects to remove at the time of the sale must be specified as well. Some items that may later become points of negotiation might include major appliances, swimming pool and spa equipment, fireplace accessories, window treatments, stacked firewood, and stored heating oil.
+
+    Leased equipment
+
+    It must be determined if leased equipment—security system, cable television boxes, water softener, special antenna—will be left with the property. If so, the seller is responsible for notifying the equipment's lessor of the change of property ownership.
+
+    Proposed dates for closing and buyer's possession
+
+    These dates should be based on an anticipated closing date. The listing agreement should allow adequate time for the paperwork involved (including the buyer's qualification for any financing) and the move-in date to be arranged by the seller and the buyer. A short sale means that the lienholder(s) must approve the transaction, possibly at several stages, which will add at least several months to the closing process.
+
+    Closing
+
+    An attorney, title company, or escrow company should be considered and retained as soon as possible and may be required by state law. A designated party will be needed to complete the paperwork, disburse the funds, and file the proper forms, such as documents to be recorded and documents to be sent to the IRS.
+
+    Evidence of ownership
+
+    A warranty deed, title insurance policy, abstract of title with an attorney's opinion, or other documentation customary in the area will be used for proof of title.
+
+    Encumbrances
+
+    All liens will be paid in full by the seller or be assumed by the buyer at the closing.
+
+    Home warranty program
+
+    To make the property more desirable to potential buyers, the seller or the listing broker may agree at the time of the listing to purchase a home warranty when a sale closes to cover the property's plumbing, electrical, and heating systems, water heaters, duct work, and major appliances.
+
+    Termination of the contract
+
+    A contract should provide a way for the parties to terminate the agreement and should specify under what circumstances the contract can be terminated. Under certain circumstances, an agreement can be canceled if the seller arbitrarily refuses to sell or cooperate.
+
+    Broker protection clause
+
+    Brokers may be well advised to protect their interests against possible fraud or a reluctant buyer's change of heart. Usually, the contract will include a period of time during which the broker will be entitled to a fee if a sale is closed with someone who was introduced to the seller by the broker while the contract was in effect.
+
+    Warranties by the owner
+
+    The owner is responsible for certain assurances and disclosures. Is the property suitable for its intended purpose? Does it comply with the appropriate zoning and building codes? Will it be transferred to the buyer in essentially the same condition as it was originally presented, considering repairs or alterations to be made as provided for in a purchase contract? Are there any known defects that should be revealed to a prospective buyer?
+
+    Indemnification (hold harmless) wording
+
+    The seller and the broker may agree to hold each other harmless (i.e., not to sue one another) for any incorrect information supplied by one to the other. Indemnification may be offered, regardless of whether the inaccuracies are intentional or unintentional.
+
+    Nondiscrimination (equal opportunity) wording
+
+    The seller must understand that the property will be shown and offered without regard to the race, color, religion, national origin, familial status, sex, or disability of the prospective buyer. Refer to state and local fair housing laws for a complete listing of protected classes in your area. There are also federal, state, and local laws that prohibit discrimination in lending and other aspects of a real estate transaction.
+
+    Antitrust wording
+
+    The contract should state that all fees have been negotiated between the seller and the broker; to do otherwise is a violation of antitrust laws.
+
+    Signatures of the parties
+
+    All parties identified in the contract must sign the contract, including all individuals who have a legal interest in the property. Consent to the use of electronic signatures for required transaction documents reflects the use of email to transfer information about the transaction and greatly speeds the process of securing seller consent to any changes in the contracts terms, such as a change in the list price.
+
+    Date the contract is signed
+
+    This date may be different from the date the contract actually becomes effective. For example, a sales associate may take the listing and, in some states, then must have the broker sign the contract to accept employment under its terms.
+
+Buyer representation
+    In an exclusive buyer representation agreement, the buyer works with only one broker, although the broker is free to represent other buyer clients. If the representation is not exclusive, the buyer can work with two or more brokers, which may create a problem if more than one broker suggests the same property to the buyer. A nonexclusive representation may work if the buyer is considering a purchase in more than one geographic area; each broker's familiarity with a particular area will help find the property or properties that best match the buyer's needs.
+    Compensation issues should be addressed, whatever the type of representation. The buyer's broker may be compensated in the form of a flat fee for services, an hourly rate, a percentage of the purchase price, or some combination of those methods. The broker may require a retainer fee at the time the agreement is signed to cover initial expenses. The retainer may be applied as a credit toward any fees due at the closing. As in any brokerage agreement, the source of compensation does not determine the relationship of the parties. A buyer's broker may be compensated by either the buyer or (through the listing broker) the seller. Issues of compensation are always negotiable.
+
+Termination of buyer representation
+
+    Just as with a contract to represent a property seller, the success of a contract to represent a property buyer depends on the chosen broker's professional efforts; the agreement to find a suitable property for the buyer cannot be assigned to another broker without the buyer's written consent. The prospective buyer cannot force the broker to perform, but the broker's failure to work diligently toward fulfilling the contract's terms constitutes a breach of the buyer representation agreement. If the agreement is canceled by the broker, the buyer may be entitled to sue the broker for damages. The buyer could be liable for damages to the broker by refusing to cooperate with the broker's reasonable requests, such as viewing property that the broker has located or refusing to proceed with an accepted sales contract.
+
+    A broker's agreement to represent a property buyer may be terminated for the following reasons:
+
+        The agreement's purpose is fulfilled by the transfer of title to the buyer.
+        The agreement's term expires.
+        The broker and the buyer mutually agree to cancel the agreement.
+        Either the broker or the buyer breaches the terms of the agreement, such as by the buyer failing to pay an agreed-upon retainer fee to the broker.
+        Either the broker or the buyer dies or becomes incapacitated. If a sales associate dies or becomes incapacitated, the agreement is still valid.
+
+    If a transaction fails to be completed through no fault of the buyer or the buyer's broker, the representation will survive, provided the agreement's term has not expired.
+
+    Obligations of Real Estate Broker to Buyer lists the obligations owed to a buyer by the broker who works for the buyer, as well as the obligations owed to a buyer by the broker who works for the seller. While many of the responsibilities are the same, there are distinct differences that direct the actions of the seller's and buyer's representatives.
+
+    (cont.)
+
+    Obligations of Real Estate Broker to Buyer
+
+    Broker Works for Seller
+        
+
+    Broker Works for Buyer
+
+    General Responsibilities
+
+    Be honest with buyer but responsible to seller, including duty of skill and care to promote and safeguard seller's best interests
+        
+
+    Be fair with seller but responsible to buyer, including duty of skill and care to promote and safeguard buyer's best interests
+
+    Earnest Money Deposit
+
+    Collect amount sufficient to protect seller
+        
+
+    Suggest deposit sufficient to indicate sincerity in offer.
+
+    Seller Financing
+
+    Encourage financing terms and contract provisions favorable to seller, such as (1) due-on-sale clause, (2) deficiency judgment, (3) secured note.
+        
+
+    Suggest terms in best interests of buyer, such as low down payment, long term, no due-on-sale clause, long grace period, security interest limited to the real property (nonrecourse)
+
+    Property Condition
+
+    Require seller to fill out all disclosure forms
+        
+
+    Require that seller sign property condition statement and confirm representations of condition; require soil and termite inspections, if appropriate; look for negative features and use them to negotiate better price and terms
+
+    Documents
+
+    Give buyer a copy of important documents, such as mortgage to be assumed, declaration of restrictions, title report, condominium or homeowners association bylaws
+        
+
+    Research and explain significant portions of important documents affecting transaction; refer buyer to expert advisers when appropriate
+
+    Negotiation
+
+    Negotiate and bargain in seller's best interests
+        
+
+    Negotiate and bargain in buyer's best interests
+
+    Showing
+
+    Show buyer properties in which broker's commission is protected, such as in-house or MLS-listed properties; pick best times to show properties; emphasize attributes and amenities
+        
+
+    Search for best properties for buyer to inspect, widening marketplace to for-sale-by-owner properties, lender-owned (REO) properties, probate sales, unlisted properties. View properties at different times to find negative features, such as traffic congestion and noise from nearby properties
+
+    Property Goals
+
+    Find a buyer whose stated objectives match the seller's property on the seller's price and terms
+        
+
+    Counsel buyer as to developing accurate objectives; may find that buyer who wants apartment building might be better off with duplex (two-unit property) or that buyer looking for vacant lot would benefit more from investment in improved property
+
+    Offers
+
+    Transmit all offers to seller; consult with seller about possible action steps (e.g., accept offer, counteroffer, reject offer)
+        
+
+    Help buyer prepare strongest offer at least risk to buyer
+
+    Possession Date
+
+    Consider best date for seller in terms of moving out, notice to existing tenants, impact on insurance, risk of loss provision
+        
+
+    Consider best date for buyer in terms of moving in; storage of buyer's possessions, if necessary; favorable risk of loss provision if fire destroys property before closing
+
+    Default
+
+    Discuss remedies upon default by either party. Point out to seller any attempt by buyer to limit liability (nonrecourse financing; deposit money as liquidated damages)
+        
+
+    Consider having seller pay buyer's sale-related expenses and cancellation charges if seller defaults
+        
+        
+        
+
+    Property Value
+
+    No duty to disclose low appraisal or fact broker sold similar unit yesterday for $10,000 less
+
+
+

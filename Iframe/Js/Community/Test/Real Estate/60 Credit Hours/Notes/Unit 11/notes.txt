@@ -1,0 +1,154 @@
+Contract Law 
+        A contract must be
+
+        voluntary—no one may be forced into a contract;
+        an agreement or a promise—a contract is essentially a promise or set of promises;
+        made by legally competent parties—the parties must be viewed by the law as capable of making a legally binding promise;
+        supported by lawful consideration—a contract must be supported by something of value that induces a party to enter into the contract; and
+        for a legal act—a contract is invalid if it attempts to have an illegal objective.
+
+        Real estate professionals use many types of contracts and agreements to carry out their responsibilities to sellers, buyers, landlords, tenants, and the general public. The area of law that governs such agreements is known as contract law.
+
+    Express and Implied Contracts 
+        A contract is either express or implied. In an express contract, the parties state the terms and show their intentions in words, either oral or written. Most real estate contracts are express contracts and are written. In an implied contract, the agreement of the parties is demonstrated by their acts and conduct.
+        In addition, the state will probably have a statute of frauds requiring certain contracts, such as real estate sales or lease agreements, to be in writing. In any of those cases, only a written agreement can be enforced in a court of law.
+
+    Bilateral and Unilateral Contracts 
+        In a bilateral contract, both parties promise to do something; one promise is given in exchange for another.
+        A unilateral contract, on the other hand, is a one-sided agreement. One party makes a promise in order to entice a second party to do something.
+
+    Executed and executory contracts 
+        An executed contract is one in which all parties have fulfilled their promises; the contract has been performed. The term executed is also used to refer to the signing of a contract. An executory contract exists when one or both parties still have an act to perform. A sales contract is an executory contract from the time it is signed until closing; ownership has not yet changed hands, and the seller has not received the sales price. At closing, when the contract terms have been met, the sales contract is executed.
+
+    Contract Issues 
+        Essential Elements 
+            offer and acceptance 
+            consideration 
+            legal purpose 
+            consent 
+            legal capacity 
+        Classification 
+            Valid, Void, Voidable 
+            Enforceable, unenforceable, unenforceable 
+            Express, implied 
+            Unilateral, Bilateral 
+            Executory, executed 
+        Discharge 
+            Performance 
+            Breach 
+            Remedies(Damages, specific performance, rescission)
+
+    Creation of a Valid Contract 
+        Offer and Acceptance 
+            In a real estate sales transaction, the sales contract sets out the offer by the buyer that is accepted by the seller. This is known as offer and acceptance. The person who makes the offer is the offeror. The person to whom an offer is made is the offeree. This requirement is also called mutual assent. It means that there must be a meeting of the minds; that is, there must be complete agreement between the parties about the purpose and terms of the contract
+                An offer is a promise made by one party, requesting something in exchange for that promise. The offer is made with the intention that the offeror will be bound to the terms if the offer is accepted. The terms of the offer must be definite and specific and must be communicated to the offeree.
+                An acceptance is a promise by the offeree to be bound by the exact terms proposed by the offeror. The acceptance must be communicated to the offeror. Proposing any deviation from the terms of the offer is considered a rejection of the original offer. The changed offer is known as a counteroffer and is explained more fully later. The counteroffer must be accepted for a contract to exist.
+                an offer can be terminated if the offeree fails to accept it before expiration of the time stated in the offer. An offer also may be terminated by the offeree's outright rejection of it.
+                The offeror may revoke the offer at any time before acceptance. This revocation must be communicated to the offeree by the offeror, either directly or through the parties' agents. The offer is revoked if the offeree learns of the revocation and ob-serves the offeror acting in a manner that indicates that the offer no longer exists
+                     A letter of intent can be used to indicate the interest of a prospective buyer or lessee and, if that interest is reciprocated by the property owner, to begin negotiations.
+
+        Consideration 
+            Consideration is something of legal value offered by one party and accepted by another as an inducement to perform or to refrain from performing some act. Consideration is some interest or benefit accruing to one party, or some loss or responsibility by the other party. There should be a statement of the promised consideration in a contract to show that something of value will be given in exchange for the promise of the transfer of the described property, even if the amount of the consideration is yet to be determined
+            Consideration must be good and valuable between the parties. The courts usually do not inquire into the adequacy of consideration. Adequate consideration could be a promise of love and affection or it could be a substantial sum of money. Anything that has been bargained for and exchanged is legally sufficient to satisfy the requirement for consideration. The only requirements are that the parties agree and that no undue influence or fraud has occurred.
+
+        Consent 
+            A contract must be entered into by consent as a free and voluntary act of each party. Each party must be able to make a prudent and knowledgeable decision without undue influence. A mistake, misrepresentation, fraud, undue influence, or duress would deprive a person of that ability. If any of these circumstances is present, there is no valid offer and acceptance and the contract is voidable by the injured party. If the other party were to sue for breach, the injured party could use lack of voluntary assent as a defense.
+
+        Legal Purpose 
+            A contract must be for a legal purpose—that is, even with all the other elements (consent, competent parties, consideration, and offer and acceptance), the contract must have a legal reason for existence. A contract for an illegal purpose or for the performance of an act against public policy is not a valid contract.
+
+        Legally Competent Parties 
+            All parties to the contract must have legal capacity, meaning they must be of legal age and have enough mental capacity to understand the nature or consequences of their actions in the contract. In most states, 18 is the age of contractual capacity. If it is discovered that a party is not legally competent, the contract is voidable at the option of the person who lacks competency.
+
+    Validity of contract 
+        Valid Contract 
+            A valid contract meets all the essential elements that make it legally sufficient, or enforceable, and is binding in a court of law.
+        
+        Void Contract 
+            A void contract has no legal force or effect because it lacks some or all the essential elements of a contract. A contract that is void was never a legal contract.
+    
+        Voidable Contract 
+            A voidable contract appears on the surface to be valid, but it may be rescinded or disaffirmed by one or both parties based on some legal principle. A voidable contract is considered by the courts to be valid if the party who has the option to disaffirm the agreement does not do so within a period of time.
+        
+        Enforceable Contract 
+            An enforceable contract meets all the elements of a valid contract, including compliance with any applicable statute of frauds or other law that requires it to be in writing and signed by the parties. 
+
+        Unenforceable Contract 
+            An unenforceable contract may also appear on the surface to be valid; however, neither party can sue the other to force performance.
+            There is, however, a distinction between a suit to force performance and a suit for damages, which may be possible even with an oral agreement. An unenforceable contract is still said to be valid as between the parties. This means that once the agreement is fully executed by the transfer of the deed and purchase price, satisfying both parties, neither has reason to initiate a lawsuit to force performance.
+ 
+        Discharge of Contracts
+                A contract is discharged when the agreement is terminated. A contract terminates when it has been completely performed, with all its terms fulfilled, but a contract may be terminated for another reason, such as a party's breach or default.
+
+            Performance of a contract 
+                Each party to a contract has certain rights and duties to fulfill. The question of when a contract must be performed is an important factor. Many contracts call for a specific time by which the agreed acts must be completely performed. Some contracts provide that "time is of the essence" which means that each of the elements of the contract must be performed within the specified time. A party who fails to perform an obligation under the contract on time is liable for breach of contract.
+                When a contract does not specify a deadline for performance, the acts it requires should be performed within a reasonable time. The interpretation of what constitutes a reasonable time depends on the situation. Courts can declare a contract invalid because the contract did not contain a time or date for performance.
+
+
+            Assignment
+                Assignment refers to a transfer of rights or duties under a contract. Generally rights and obligations may be assigned to a third party as long as they do not involve a contract for personal services. Obligations may be delegated, but the original party remains liable unless specifically released. Many contracts have a clause that will either allow or forbid assignment.
+
+            Novation
+                Substitution of a new contract for an existing contract is called novation. The new agreement may be between the same parties, or a new party may be substituted for either in a novation of the parties. The parties' intent must be to discharge the old obligation. When there are many changes to a real estate contract and it is faxed, scanned, or otherwise re-transmitted several times, it may become difficult to decipher. Novation occurs when a new, clear contract with all the accepted changes is signed by all the parties.
+
+            Breach of COntract 
+                A contract may be terminated if it is breached by one of the parties. A breach of contract is a violation of any of the terms or conditions of a contract.
+                The breaching or defaulting party assumes certain burdens, and the nondefaulting party has certain legal and/or equitable remedies.
+                The contract may limit the remedies available to the parties. A liquidated damages clause in a real estate purchase contract specifies the amount of money to which the seller is entitled if the buyer breaches the contract. The liquidated damages in the event that the buyer defaults may be specified as the buyer's earnest money deposit (down payment), although in some states, the amount of liquidated damages in a residential purchase contract is limited to a specific percentage of the purchase price—say, 3%—even if the buyer has made a down payment for a larger amount.
+                If the seller breaches a real estate sales contract, the buyer may sue for specific performance unless the contract specifically states otherwise. In a suit for specific performance, the buyer asks the court to force the seller to go through with the sale and transfer the property as previously agreed. The buyer may choose to sue for damages, in which case the seller is asked to pay for any costs and hardships suffered by the buyer as a result of the seller's breach.
+                If the buyer defaults, the seller can sue for damages or sue for the purchase price. A suit for the purchase price is an action for damages, but it has the same result as a suit for specific performance: The seller tenders the deed and the buyer is required to pay the agreed price.
+                Every state limits the time during which parties to a contract may bring a legal action, or lawsuit, to enforce their rights. The statute of limitations varies for different legal actions, and any rights not enforced within the applicable time period are lost.
+
+            Staute of Limitations 
+
+            Other reasons for termination 
+                A contract may also be discharged or terminated when any of the following occurs:
+
+    Partial performance of the terms, along with a written acceptance by the party for whom acts have not been done or to whom money is owed. If the parties agree that the work performed is close enough to completion, for example, they can agree that the contract is discharged even if some minor elements remain unperformed.
+    Substantial performance, in which one party has substantially performed on the contract but does not complete all the details exactly as the contract requires. Such performance may be enough to force payment, with certain adjustments for any damages suffered by the other party. For example, if a newly constructed addition to a home is finished except for polishing the brass doorknobs, the contractor is entitled to the final payment.
+    Impossibility of performance, in which an unforeseen circumstance has made an act required by the contract impossible or impracticable. Sometimes, a contract will cover a contingency, such as the destruction of property to be transferred. At other times, an event will occur that makes fulfillment of the contract terms a practical impossibility, such as when a buyer is laid off and can no longer afford to complete the purchase.
+    Mutual agreement of the parties to cancel the contract. Cancellation by one party will terminate a contract but does not automatically return the parties to their original position, unless provided by law (such as the right of cancellation that accompanies some consumer contracts) or by the terms of the agreement.
+    Operation of law, such as in the voiding of a contract by a minor, or as a result of fraud, or because a contract was altered without the written consent of all parties involved. Rescission returns the parties to their original positions before the contract, so any monies or property exchanged must be returned. Rescission is normally a contractual remedy for a breach, but a contract may also be rescinded by the mutual agreement of the parties.
+
+    Sales contracts
+        A real estate sales contract contains the complete agreement between a buyer of a parcel of real estate and its seller. It establishes the legal rights and obligations of buyer and seller. Depending upon the area, the contract may be referred to as an offer to purchase, a contract of purchase and sale, a purchase agreement, an earnest money agreement, or a deposit receipt.
+        In addition to the essential elements of a contract, a real estate sales contract will include
+            the sales price and terms;
+            an adequate description of the property and improvements;
+            a statement of the kind and condition of the title and the form of deed to be delivered by the seller;
+            the kind of title evidence required, who will provide it, and how many defects in the title will be eliminated; and
+            a statement of all the terms of the agreement between the parties, including any contingencies—conditions that must be met to successfully complete the transaction.
+
+    Offer
+        The real estate sales agreement is an offer to purchase real estate when it has been prepared, signed by the prospective buyer, and communicated to the seller. Typically, the buyer's offer is presented by the buyer or the buyer's representative to the seller or the seller's representative. If either party is represented by a real estate professional, the real estate professional must be the one who sends or receives communications on behalf of the client. If the buyer's offer is accepted by the seller and the seller signs the document, it becomes a sales contract.
+
+    Counteroffer
+        Any change by the seller to the terms proposed by the buyer creates a counteroffer. The original offer ceases to exist because the seller has rejected it. The buyer may accept or reject the seller's counteroffer. If the buyer desires, the process may continue by making another counteroffer. Any change in the last offer results in a new counteroffer until either the parties reach agreement or one party walks away.
+        An offer or counteroffer may be withdrawn at any time before it has been accepted, even if the person making the offer or counteroffer agreed to keep the offer open for a set period.
+
+    Acceptance
+        If the seller agrees to the original offer or a later counteroffer exactly as it is made and signs the document, the offer has been accepted and a contract is formed. The seller's representative advises the buyer (through the buyer's representative, if there is one) of the seller's acceptance and a copy of the contract is provided to each party. The next step is the approval of the parties' attorneys, if the contract calls for it.
+        An offer is not considered accepted until the person making the offer has been notified of the other party's acceptance. When the parties communicate through a representative or at a distance, questions may arise regarding whether an acceptance, rejection, or counteroffer has occurred. All offers, acceptances, or other responses should be transmitted as soon as possible and acknowledged by the recipient to avoid later questions of proper communication.
+
+    Binder
+        In some states, and particularly in a complex transaction involving commercial or industrial property, a buyer's offer may be presented in a shorter document known as a binder, or letter of intent, instead of a complete sales contract. The binder states the essential terms of the offer and acknowledges that the buyer's representative has received the buyer's deposit. A more formal and complete contract of sale is drawn up by an attorney once the seller accepts and signs the binder.
+    
+    Earnest money deposits
+        It is customary, although not essential, for a purchaser to provide a deposit when making an offer to purchase real estate. This deposit, usually in the form of a check, is called earnest money. The earnest money deposit is evidence of the buyer's intention to carry out the terms of the contract in good faith. The amount of the deposit is a matter to be agreed on by the parties but typically is an amount sufficient to
+        discourage the buyer from defaulting,
+        compensate the seller for taking the property off the market, and
+        cover any expenses the seller might incur if the buyer defaults.
+        In many states, the earnest money check is given to the seller's agent on acceptance of the offer to purchase by the seller. When the disposition of the funds has been determined, they will be placed in an escrow account according to the terms of the escrow agreement, the contract between the buyer, the seller, and the escrow holder that sets forth the rights and responsibilities of each. The escrow holder will collect and then disburse the funds and documents that are necessary to close the transaction.
+        If there is a delay in presentation of an offer or negotiations are lengthy, most states require that earnest money be deposited in a broker's escrow or trust account, where it is held until the offer to purchase is accepted or rejected. The escrow account must be separate from the broker's business or personal account. A separate escrow account does not have to be opened for each earnest money deposit received; all deposits may be kept in one account. A broker must maintain full, complete, and accurate records of all earnest money deposits. The broker's (and any involved sales associate's) real estate license may be revoked or suspended if deposits are not managed properly. In some areas, it is customary for deposits to be held in escrow by the seller's attorney. If the offer is not accepted, the earnest money deposit is immediately returned to the would-be buyer. If the offer is accepted, the funds are delivered to the escrow holder according to the terms of the escrow agreement.
+
+    Equitable title
+        When a buyer signs a contract to purchase real estate that is accepted by the seller, the buyer does not immediately receive title to the land. Title transfers only upon delivery and acceptance of a deed. After both buyer and seller have executed a sales contract, however, the buyer acquires an interest in the land known as equitable title. A person who holds equitable title has rights that vary from state to state. Equitable title may give the buyer an insurable interest in the property.
+
+    Destruction of premises
+        In some states, once the sales contract is signed by both parties, the buyer assumes the risk of any damage to the property that may occur before closing the contract. In other states, laws and court decisions have placed the risk of loss on the seller. More than a dozen states, including California, Illinois, New York, and Texas, have adopted the Uniform Vendor and Purchaser Risk Act, which can be viewed at www.uniformlaws.org. The act specifically provides that the seller bear any loss that occurs before the title passes or the buyer takes possession.
+
+    Liquidated damages
+        To simplify matters in the event that one party breaches a contract, the parties may agree on a certain amount of money that will compensate the nonbreaching party. Such money is called liquidated damages. If a sales contract specifies that the earnest money deposit is to serve as liquidated damages in the event that the buyer defaults, the seller will be entitled to keep the deposit if the buyer refuses to perform without good reason. The seller who keeps a deposit as liquidated damages may not sue for any further damages if the contract provides that the deposit is the seller's sole remedy (usually, the purpose of liquidated damages). State law may limit the amount of the deposit that can be retained as liquidated damages. 
+
+
+

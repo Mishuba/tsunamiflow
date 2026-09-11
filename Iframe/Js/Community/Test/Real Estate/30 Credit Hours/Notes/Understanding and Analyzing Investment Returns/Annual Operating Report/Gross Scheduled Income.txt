@@ -1,0 +1,13 @@
+The gross scheduled income is the amount of money that the property would produce on an annual basis if it were fully occupied. Included in gross scheduled income would be any income attributable to the property from non-rent sources. These sources could include income from laundry, vending machines, parking and storage fees, as well as other owner-operated concessions.
+
+When analyzing the gross income, consideration is given not only to the existing rents being charged, called contract rent, but also economic rent, which is the rent the property would command if it were available for rent in the current market. An adjustment can be made to the gross income if the market indicates that economic rent differs from the actual contract rent. If such an adjustment is made, that should be plainly noted on the operating statement. No adjustment would be made if the property were subject to a long-term lease wherein the landlord was prevented from increasing the rental income.
+
+Establishing Effective Gross Income
+The chief component in the calculation of effective gross income is the vacancy and collection loss rate. Most properties are not expected to remain fully rented for the entire period of ownership. When a tenant vacates, often there is at least some rental income lost during the turnover period due to repair or remodeling time. In addition to this consideration, one must face the reality that a tenant might become unable or unwilling to pay rent as agreed. In this circumstance there will be some rental income lost.
+
+The vacancy and collection loss is usually expressed as a percentage of the gross annual rental income. There are several generally accepted methods for determining the amount of the vacancy and collection loss, including:
+
+historical data on the subject property,
+published figures for the community, and
+market analysis.
+Historical data and market analysis are perhaps the most accurate, because typically published figures for the community are an average and may not be representative of the property you are analyzing. Once the appropriate rate has been developed, the loss is subtracted from gross scheduled income to derive effective gross income.

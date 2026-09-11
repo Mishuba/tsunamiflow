@@ -1,0 +1,17 @@
+Three methods of legal description of land are the metes-and-bounds method, rectangular survey system, and lot-and-block system. The National Integrated Land System is being developed by the federal government to coordinate the land descriptions found in public records, making use of the accuracy in determining and recording property boundaries that is possible with current technology.
+
+The metes-and-bounds method measures distances (metes), starting from a point of beginning (POB), and following compass directions or angles (bounds) to arrive back at the point of beginning. Monuments (fixed objects or markers) identify the POB and corners or places where the boundary line changes direction.
+
+The rectangular survey system (government survey system) divides land into rectangles called townships, measured from the intersection of a principal meridian and base line, and referenced by degrees of longitude and latitude. Township lines within a section run east to west parallel to the base line, six miles apart; range lines run north to south parallel to and counted from the principal meridian, six miles apart. Rows of townships are called tiers and columns of townships are called ranges. A township is divided into 36 sections of one square mile (640 acres) each and run from right to left, then left to right, starting at section 1 at the northeast corner of the township and ending at section 36 at the southeast corner of the township.
+
+The lot-and-block (recorded plat) method divides a subdivision into block and lot (individual parcel) numbers and references all data in a subdivision plat map, noting lot sizes, street names, and other required information that is approved by the governing body, and filed in public records of the county where the land is located.
+
+Survey preparation includes both a legal description and a survey sketch. A less precise analysis, found in the improvement location certificate (ILC), may be used. The legal description must be included by reference or transcribed exactly as written to avoid future problems over incorrect boundaries.
+
+Elevations must be measured if air lots above the surface or subsurface rights below the datum are to be described and conveyed. Distances are noted as above or below datum, defined by U.S. Geological Survey (USGS) as mean sea level at New York Harbor, making use of permanent benchmarks that are established throughout the United States and are often based on a local official datum, and noting monuments marking surface measurements between points.
+
+The most common units of land measurement include the
+
+    mile of 5,280 feet,
+    acre of 43,560 square feet (approximately 209 × 209 feet), and
+    square mile of 640 acres (a section). 

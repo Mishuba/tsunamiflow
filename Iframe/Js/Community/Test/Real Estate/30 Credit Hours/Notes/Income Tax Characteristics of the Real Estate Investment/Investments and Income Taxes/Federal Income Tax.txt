@@ -1,0 +1,59 @@
+There are four major types of taxation that affect real estate investment. These are:
+
+Ad valorem taxes
+Income taxes
+Estate and gift taxes
+Special use and/or transfer taxes (in some locations)
+These taxes have a direct impact on real estate investment because some are considered operating costs and will affect the ultimate economic value of the property.
+
+While not considered an operating expense of a real estate investment, no discussion of real estate investments would be complete without a discussion of the impact of income taxes. Income taxes may be the single most influential form of taxation as relates to real estate. Income taxes are imposed by various government entities, the most visible being in the United States of America. These taxes are administered and collected by the Internal Revenue Service.
+
+The Internal Revenue Code affects many areas of real estate investment; we will cover the most common areas one at a time and then explore how each interacts with others.
+
+Always keep in mind that any time you receive a monetary benefit, your silent partner, the Internal Revenue Service, receives a share. In addition, it may be useful to differentiate in your mind between "tax paid" dollars and "taxable" dollars. The Internal Revenue Code attempts to tax each dollar of income only once per taxpayer, but never less than once.
+
+Income
+Income that is considered taxable income in a real estate investment includes:
+
+Net rental income
+Sale proceeds (dispositions)
+Partial sale or condemnation
+Mortgage relief
+Depreciation recapture
+
+Deductions
+These expenses may be used as write-offs against income in a real estate investment:
+
+Actual operating expenses
+Mortgage interest expense
+Discount points (amortized portion)
+Depreciation
+
+Types of Income
+The Internal Revenue Code now classifies all income into three categories:
+
+Active income
+Passive income
+Portfolio income
+Active income is income earned by a taxpayer from a source in which the taxpayer materially participates; wages, salaries, and commissions fall into this category. Passive income is income from an activity in which the taxpayer does not materially participate. Portfolio income is income from investments such as stocks and bonds.
+
+The reason for these classifications is fairly simple; the purpose is to prevent the taxpayer from using losses from one type of activity to offset income from another source.
+
+Passive activity loss limitations
+
+The Internal Revenue Service has classified all rental real estate as a passive activity, which means that you may not deduct rental losses against ordinary income.
+
+There exists one very important exception to this rule: If a taxpayer "materially participates" in a passive activity, the taxpayer is allowed to deduct up to $25,000 of "passive activity losses" against other income. An active participant in a passive activity will qualify for this tax benefit.
+
+This exception begins to "phase out" at the rate of $0.50 for each dollar that the taxpayer's adjusted gross income exceeds $100,000, so there is no benefit left at $150,000 AGI. Any losses that are not deductible in the year incurred are "suspended" and are carried forward until they can be used.
+
+In order to qualify under the material participation clause, the taxpayer must prove that his or her participation was "regular, continuous, and substantial." You may be considered to have materially participated in the activity provided that you make "management" decisions, such as approving repairs and expenditures, approving tenants, and setting rental rates.
+
+If a taxpayer owns more than one property or has income or losses from other passive activities, then all passive income and passive losses are netted together for the purpose of figuring the net passive income or loss. If a taxpayer has losses from passive activities that cannot be used, then those losses are suspended and the taxpayer is allowed to carry the suspended losses forward until such time as there is net income from passive activities against which to write off the losses. There is no limitation on passive losses in the year of a taxable disposition, under the theory that there has been a true economic loss to the owner.
+
+In addition to this special exception, there are tax credits available for rehabilitation projects and low-income housing that may be used without material participation. These credits reduce your tax liability dollar for dollar in an amount equivalent to a $25,000 (married filing jointly) tax "deduction."
+
+Therefore, despite what you may have heard about real estate losing all of its allure as a tax shelter, there are still many tax deductions available for owning investment real estate that can be very beneficial, dramatically increasing the return on investment.
+
+At this point it is very possible that taxable income is a negative number (taxable loss). This will be the loss that is subject to the limitations on passive activities. This loss is one of the potential tax benefits involved in real estate investment; when a loss can be used for income tax purposes, that loss creates a tax savings. When a taxpayer qualifies to use this loss (active participation), a portion of the actual cash flow received will not be taxed because of the additional deduction for depreciation, and the investor may be able to "shelter" additional income from other sources. Subtracting the tax liability from cash flow before income tax will give the investor the actual cash flow after taxes.
+

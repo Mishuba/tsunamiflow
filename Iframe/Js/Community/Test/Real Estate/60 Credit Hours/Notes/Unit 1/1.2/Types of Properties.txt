@@ -1,0 +1,18 @@
+Residential
+    - all property used for single-family or multifamily housing, whether in urban, suburban, or rural areas;
+
+Commercial
+    - business property, including office space, shopping centers, stores, theaters, hotels, and parking facilities;
+
+Mixed-use 
+    -Property that allows for two or more commercial and residential uses in the same building;
+
+Industrial
+    - Warehouses, factories, land in industrial districts, and power plants;
+
+Agricultural 
+    - Farms, timerland, ranches, and orchards; or 
+
+Special Purpose 
+    - Privately owned properties, such as places of worship, schools, and cemeteries, as well as publicly held properties, such as schools, municipal service buildings, and parks. 
+

@@ -1,0 +1,157 @@
+Estates in Land 
+    An estate in land defines the degree, quantity, nature, and extent of an owner's interest in real property. Many types of estates exist, but not all interests in real estate are estates. To be an estate in land, an interest must allow possession, meaning the holding and enjoyment of the property either now or in the future, and must be measured according to time. Historically, estates in land have been classified primarily by their length of time of possession.
+    A freehold estate lasts for an indeterminable length of time, such as for a lifetime or forever. A freehold estate can be a fee simple estate that continues for an indefinite period and may be passed along to the owner's heirs. The forms a fee simple estate may take are shown in  Fee Simple Estate. A freehold estate can also be a life estate that is held only for the lifetime of a person (who may not be the holder of the life estate) and ends when that individual dies. The forms of life estates are shown in  Life Estate. Both types of freehold estates are discussed in the next section.
+
+        Fee Simple Estate 
+            Fee Simple Absolute 
+            Fee Simple Defeasible 
+                Special Limitation with Pssibility of Reverter 
+                Condition Subsequent with Right of Re-Entry 
+            
+        Life Estate
+            Conventional Life Estate 
+                Ordinary with Remainder or Reversion 
+                Pur Autre Vie with Remainder of Reversion 
+            Legal Life Estate
+                Dower 
+                Homestead 
+                Curtesy 
+    A nonfreehold estate is one for which the length of time of the property's use can be determined. A nonfreehold estate is commonly referred to as a leasehold estate.
+
+    Fee simple estate
+
+        A fee simple estate, or fee simple absolute, is the highest interest in real estate recognized by law. Fee simple absolute ownership is ownership in which the holder is entitled to all rights to the property by law. This estate is intended to run forever. Upon the death of the owner of a fee simple estate, the property interest passes to
+            the decedent's co-owner, if there is one and the co-ownership was accompanied by a right of survivorship;
+            the person or persons specified in the decedent's will (the devisees); or
+            if the decedent has left no will, to the person or persons designated by the state's law of intestate succession.
+        The right to use a fee simple estate is limited only by public and private restrictions, such as zoning laws and restrictive covenants.
+
+    Fee simple defeasible
+        A fee simple defeasible estate is a qualified fee estate that is subject to the occurrence or nonoccurrence of some specified event. There are two categories of defeasible estate: fee simple determinable and fee simple subject to a condition subsequent.
+        A fee simple determinable is a fee simple defeasible estate that may be inherited. This estate is qualified by a special limitation (which is an occurrence or event). The language used to distinguish a special limitation—words such as so long as or while or during—is the key to creating this special limitation. The former owner retains a possibility of reverter, which is an interest that can be transferred to someone else. If the limitation is violated, the holder of the possibility of reverter (or heir or successor) can reacquire full ownership with no need to bring a legal action in court. The title is automatically transferred to the person who holds the possibility of reverter.
+            In Practice
+                When an owner gives land to a church, so long as the land is used for only religious purposes, it is known as a fee simple determinable. The church has the full bundle of rights possessed by a property owner, but one of the "sticks" in the bundle has a special feature. If the church ever decides to use the land for a nonreligious purpose, the holder of the possibility of reverter obtains title without going to court.
+                With a fee simple subject to a condition subsequent, an owner gives real estate on condition of ownership, which means there is a difference in the way the estate will terminate if there is a violation of the condition. With a fee simple subject to a condition subsequent, the estate does not automatically terminate upon violation of the condition of ownership. The owner (or the owner's heir or successor) has the right of reentry but must bring a legal action in court to assert this right.
+            In Practice
+                Land given on the condition that there be no consumption of alcohol on the premises is a fee simple subject to a condition subsequent. If alcohol is consumed on the property, the former owner (or the owner's heir or successor) has the right to reacquire full ownership. It will be necessary for that person to go to court to assert that right.
+        In the defeasible fee estates, the possibility of reverter (fee simple determinable) or right of entry (fee simple subject to a condition subsequent) will only be possible at some time in the future, and may never take effect. Each of those rights thus is considered a future interest.        
+
+    Life Estate 
+        A life estate is a freehold estate limited in duration to either the life of the holder of the estate or the life of some other designated person or persons.  Life Estate shows the forms a life estate may take.
+        Unlike other freehold estates, a life estate based on the life of the holder of the estate is not inheritable. It passes to the future owner according to the provisions by which the life estate was created.
+        The holder of a life estate is called a life tenant. A life tenant is not a renter like a tenant associated with a lease. A life tenant is entitled to the rights of ownership and can benefit from both possession and ordinary use, and profits arising from ownership, just as if the individual were a fee simple owner. The life tenant's ownership may be sold, mortgaged, or leased, but it is always subject to the finite limitation of the life estate.
+
+    Pur Autre Vie 
+        A life estate may also be based on the lifetime of a person other than the life tenant. Although a life estate is not considered an estate of inheritance, a life estate pur autre vie (for the life of another) provides for inheritance of the property right by the life tenant's heirs, but the right exists only until the death of the identified person or persons. A life estate pur autre vie is often created for people who are physically or mentally incapacitated in the hope of providing incentive for someone to care for them. More than one person could be identified as the measuring life; for instance, a life estate could be granted to a surviving brother by a deceased property owner for the life of the surviving brother's children. As long as one of the children survives, the life estate is in control of the life tenant or the life tenant's successor.
+
+    Remainder and Reversion 
+        The fee simple owner who creates a life estate must plan for its future ownership. When the life estate ends, it is replaced by a fee simple estate. The future owner of the fee simple estate may be designated in one of two ways:
+            Remainder interest—The creator of the life estate may name a remainderman as the person to whom the property will pass when the life estate ends.
+            Reversionary interest—The creator of the life estate may choose not to name a remainderman. In that case, ownership returns to the original owner upon the end of the life estate.
+                In Practice
+                To ensure that a surviving spouse would be adequately housed, a married couple with no other heirs drafted wills providing that, on the death of the first spouse, the family house would be held by the surviving spouse in a life estate, with the remainder interest to go to a charitable foundation.
+
+    Legal Life Estate 
+        A legal life estate is not created by a property owner, but rather is established by state law. It becomes effective automatically when certain events occur. Dower, curtesy, and homestead are the legal life estates currently used in some states.
+        Dower and curtesy provide a nonowning spouse with a means of support after the death of the owning spouse. Dower historically was the life estate of a wife in the real estate of her deceased husband. Curtesy was a life estate of a husband in the real estate of his deceased wife. (In some states, the terms are used interchangeably.)
+        States that recognize dower and curtesy typically provide that the nonowning spouse has a lifetime right to a one-half or one-third interest in the real estate, even if the owning spouse wills the estate to others. The surviving spouse benefits because the property cannot be conveyed with clear title until the life estate interest is released; the surviving spouse may release the claim to the property when the value of the interest is paid. Because a nonowning spouse might claim an interest in the future, both spouses should sign the proper documents when real estate is conveyed. The signature of the nonowning spouse would be needed to release any potential interest in the property being transferred.
+        Most states have abolished the common law concepts of dower and curtesy in favor of the Uniform Probate Code (UPC). The UPC gives a surviving spouse the right to an elective share on the death of the other spouse, if the surviving spouse is not satisfied with the decedent's disposition of the property by will. Community property states do not use dower and curtesy.
+        A homestead is a legal life estate in real estate occupied as the family home. In effect, the home (or at least some part of it) is protected from most creditors during the occupant's lifetime. In states that have homestead exemption laws, a portion of the land or value of the property occupied as the family home is exempt from certain judgments for debts, such as charge accounts and personal loans, but not a mortgage for the purchase or improvement of the property. If a debt is secured by the property, including funds advanced under a home equity line of credit, the property cannot be exempt from a judgment on that debt. The homestead also is not protected from real estate taxes billed against the property.
+        In some states, all that is required to establish a homestead is for the head of a household (who may be a single person) to own or lease the premises occupied by the family as a residence. In other states, the family is required by statute to record a notice of homestead rights. A family can have only one homestead at a time.
+        How does the homestead exemption actually work? In most states, the homestead exemption merely reserves a certain amount of money for the family in the event of a court sale. In a few states, however, the entire homestead is protected. Once a sale occurs (where permitted), any debts secured by the home (a mortgage, unpaid taxes, or mechanics' liens, for instance) will be paid from the proceeds. Then the family will receive the amount reserved by the homestead exemption. Finally, whatever remains will be applied to the family's unsecured debts.
+        More information on estates in land can be found at the site of Cornell University Law School's Legal Information Institute, www.law.cornell.edu/lii/get_the_law, by entering "real property" in the search engine at the top of the page.
+
+Encumbrances
+    An encumbrance is a type of interest in real estate that does not rise to the level of ownership or possession, yet still gives an individual, business, or other entity some degree of use or control of the property. This section covers
+        easements and licenses, which permit a limited use of property;
+        private restrictions found in property deeds, which cannot impose an illegal requirement;
+        liens, which give notice of a claim against the property; and
+        encroachments, which can result if a neighboring improvement extends over a property boundary.
+
+    Liens 
+        A lien is a charge against property that provides security for a debt or an obligation of the property owner. If the obligation is not repaid, the lienholder is entitled to have the debt satisfied from the proceeds of a court-ordered or forced sale of the debtor's property. Real estate taxes, mortgages, judgments, and mechanics' liens all represent possible liens against an owner's real estate.
+
+    Private Restrictions on the Use of Real Estate 
+        Private restrictions that affect the use of real estate are often found in the deed that conveys title to the property. Once placed in the deed by a previous owner, a deed restriction will run with the land, limiting the use of the property by the current owner, as well as future owners to whom the property is subsequently transferred.
+        A deed restriction cannot violate any law, such as a fair housing law, by attempting to prohibit certain property transfers. A deed restriction that would attempt to do so would be illegal and thus unenforceable.
+        Covenants, conditions, and restrictions (CC&Rs) are used by a subdivision developer to maintain specific standards in a subdivision, such as by requiring adherence to certain architectural or design specifications for improvements. CC&Rs are detailed in the original development plans for the subdivision that are filed in the public record in the county where the property is located, and they are referred to (incorporated by reference) in the deeds to individual properties in the subdivision. Future purchasers of the property should be given a copy of the CC&Rs and should make review of the CC&Rs a condition of the purchase. The restrictions can be enforced by the developer as long as the developer maintains an interest in any part of the development, and then by any of the subsequent property owners.
+
+    Easements 
+        An easement is the right to use the land of another for a particular purpose. It may exist in any portion of the real estate, including the airspace above or a right-of-way across the land.
+
+        Easement Appurtenant 
+            An easement appurtenant is attached to the ownership of real estate and allows the owner of that property the use of a neighbor's land. For an easement appurtenant to exist, two adjacent parcels of land must be owned by two different parties. The parcel that benefits from the easement is known as the dominant tenement; the parcel over which the easement runs is known as the servient tenement. (See  Easement Appurtenant.)
+            An easement appurtenant is part of the dominant tenement. If the dominant tenement is conveyed to another party, the easement transfers with the title. This type of easement will run with the land. It is an encumbrance on the servient property and will transfer with the dominant tenement forever, unless the holder of the dominant tenement legally releases the right or it is terminated in one of the ways that are discussed later in this section. The easement will terminate, for instance, if the owner of the dominant tenement also becomes the owner of the servient tenement (or vice versa). Because the same person then owns both properties, there is no need for the easement to exist.
+            A party wall can be an exterior wall of a building that straddles the boundary line between two lots, or it can be a shared partition wall between two connected properties. The individual lot owners own the half of the wall on their lot, and each has an easement appurtenant in the other half of the wall. The reciprocal interest of each owner in the property of the other is often referred to as a cross easement. A written party wall agreement must be used to create the easement rights. Expenses to build and maintain the wall are usually shared. A fence built on the lot line is treated the same as a wall. A party driveway shared by and partly on the land of adjoining owners should be created by written agreement and specify responsibility for maintenance and expenses.
+ 
+        Easement in Gross 
+            An easement in gross is an individual or company interest in or right to use someone else's land. (See  Easement in Gross.) A railroad's right-of-way is an easement in gross, as are the rights-of-way of utility easements (such as for a pipeline or power line). Commercial easements in gross may be assigned, conveyed, and inherited. Personal easements in gross are usually not assignable. Generally, a personal easement in gross terminates on the death of the easement owner.
+
+        Creating an Easement
+            An easement is created by a written agreement between the parties that establishes the easement right. The creation of an easement always involves two separate parties; one party owns the land over which the easement runs and the other party benefits from the easement. Two other ways for an easement to be created are by means of an easement by necessity and easement by prescription.
+
+        Easement by Necessity 
+            An easement that is created when an owner sells a parcel of land that has no legal access to a street or public way except over the seller's remaining land is an easement by necessity. An easement by necessity is created by court order based on the principle that owners must have the right to enter and exit their land—the right of ingress (enter) and egress (exit); they cannot be landlocked. Remember, this form of easement is called an easement by necessity; it is not merely for convenience.
+
+        Easement by Prescription 
+            If the claimant has made use of another's land for a certain period of time as defined by state law, an easement by prescription, or a prescriptive easement, may be acquired. The prescriptive period generally runs from 10 to 21 years. The claimant's use must have been continuous, nonexclusive (the owner isn't excluded from using that part of the property), and without the owner's permission. The use must be visible, open, and notorious, and the owner must have been able to learn of it.
+            The concept of tacking provides that successive periods of continuous occupation by different parties may be combined (tacked) to reach the required total number of years necessary to establish a claim for a prescriptive easement. To tack on one person's possession to that of another, the parties must have been successors in interest, such as a deceased individual and the deceased's heir, a landlord and a tenant, or a seller and a buyer.
+                In Practice
+                    A property is located in a state with a prescriptive period of 20 years. For the past 22 years, the neighbor to the east has driven across the property's front yard several times a day to reach her garage from a more comfortable angle. The neighbor has an easement by prescription.
+                    For 25 years, the neighbor to the west has driven across this same front yard two or three times a year to reach his property when he is in a hurry. This neighbor does not have an easement by prescription because the use was not continuous.
+                    For 15 years, the neighbor to the north parked a car on the same property, next to the garage. Six years ago, the house to the north was sold to a person who continued to park a car next to the garage of the adjoining property. Last year, the buyer acquired an easement by prescription through tacking.
+
+        Terminating an Easement 
+            An easement terminates
+                when the need no longer exists,
+                when the owner of either the dominant or the servient tenement becomes sole owner of both properties,
+                by the release of the right of easement to the owner of the servient tenement,
+                by the abandonment of the easement (the intention of the parties is the determining factor), or
+                by the nonuse of a prescriptive easement.
+            Note that an easement may not automatically terminate for these reasons. Certain legal steps may be required.
+
+    Licenses 
+        A license is a personal privilege to enter the land of another for a specific purpose. A license differs from an easement in that it can be terminated or canceled by the owner of the property. If the right to use another's property is given orally or informally, it generally is considered to be a license rather than an easement. A license ends with the death of either party or with the sale of the land.
+
+    Encroachments 
+        When a building, fence, or driveway illegally extends beyond the boundaries of the land of its owner or legal building lines, an encroachment occurs. An encroachment is usually disclosed by either a physical inspection of the property or a limited survey. If a building encroaches on adjoining land, the neighbor may be able to either recover damages or secure removal of the portion of the building that encroaches. An encroachment that exceeds the state's prescriptive period, however, may give rise to an easement by prescription.
+
+    Lis Pendens 
+        A lis pendens (Latin for litigation pending) is a notice filed in the public record of a pending legal action affecting the title to or possession of property. While it does not have a physical effect on property, the lis pendens creates a "cloud on the title" to the property, which may prevent the property from being sold or further encumbered. Recording of a lis pendens should act as an incentive to the property owner to resolve the underlying dispute. When the matter is resolved, the party who filed the lis pendens will record a release to clear the title. If the lis pendens has been recorded without adequate evidence of a bona fide dispute, the property owner can have the lis pendens expunged.
+
+Governmental Powers 
+    Individual ownership rights are subject to certain powers, or rights, held by federal, state, and local governments. These limitations on the ownership of real estate are imposed for the general welfare of the community and, therefore, supersede the rights or interests of the individual. Government powers include police power, eminent domain, taxation, and escheat, which can be remembered by the acronym PETE.
+
+    Police Power 
+        Every state has the power to enact legislation to preserve order, protect the public health and safety, and promote the general welfare of its citizens. That authority is known as a state's police power. The state's authority is passed on to municipalities and counties through legislation called enabling acts. What is identified as being in the public interest can vary considerably from state to state and region to region. The police power of government is used to enact environmental protection laws, zoning ordinances, and building codes. These include the regulations that govern the use, maximum occupancy, size, location, and construction of real estate.
+        The government's power to regulate land use is not absolute. A law or regulation must be uniform and nondiscriminatory on its face, even though in practice it may operate to the advantage or disadvantage of a particular owner or owners.
+            In Practice
+                A large area of previously undeveloped land consists of 27 different parcels and is located near the location of a new highway. The land is incorporated into the city limits of Cedar City. The city council conducts the appropriate public hearings on the use of the land and ultimately decides to zone most of the area for residential use and a smaller section for commercial use. Because of its proximity to the highway, the commercially zoned area will keep heavy traffic away from the residential area. Years earlier, all the land was farm land and similarly valued. As a result of the zoning, however, a parcel zoned for commercial use will most likely become far more valuable than a similarly sized parcel zoned for residential use.
+
+    Eminent Domain 
+        Eminent domain is the right of the government to acquire privately owned real estate for public use. Condemnation is the process by which the government exercises this right, by either judicial or administrative proceedings.
+        Generally, states delegate their power of eminent domain to cities and counties or public entities for public services. For example, a public housing authority might take privately owned land to build low-income housing, or the state's land-clearance commission or redevelopment authority could use the power of eminent domain to allow parcels to be acquired for construction of a new sports arena. If there were no other feasible way to do so, a public railway, utility company, or state highway department might acquire land to extend railroad tracks, bring electricity to a remote new development, or build a highway.
+        Taking 
+            The concept of the taking of property for public use is found in the Fifth Amendment to the U.S. Constitution, which reads, "[N]or shall private property be taken for public use, without just compensation," meaning that when land is taken for public use through the government's power of eminent domain, the owner must be compensated fairly. The rights of the owner of the property also are to be protected by due process of law, as set out in the Fifth and Fourteenth Amendments to the U.S. Constitution. Ideally, the public agency and the owner of the property in question agree on compensation through direct negotiation, and the government purchases the property for a price considered fair by the owner. In some cases, the owner may dedicate the property to the government as a site for a school, park, or another beneficial use. If the owner's consent cannot be obtained, the government agency can initiate condemnation proceedings to acquire the property on payment of just compensation to the owner.
+            In the past, the proposed use for taking property was to be for the public good. However, in June 2005, the U.S. Supreme Court in Kelo v. City of New London significantly changed the definition to a beneficial public use. The court held that local governments can condemn homes and businesses for economic development purposes, even when a private developer is a beneficiary.
+            In Kelo, the city invoked a state statute that authorized the use of eminent domain to promote economic development. The Supreme Court decision leaves it to the states to establish rules that cities must follow when exercising eminent domain powers. Kelo caused an uproar when it was decided, and in response, many state legislatures acted to impose a narrower definition of public use in eminent domain proceedings to ensure that property would be taken only for public purposes as more commonly understood—roads, bridges, schools, municipal facilities, and so on—and not for commercial endeavors.
+            Ironically, the City of New London, Connecticut, has failed to benefit from its victory. The city initially sought to avoid losing a $73 million subsidy from the state and attract private development. More than a decade and a recession later, the developer was unable to obtain financing, the Kelo house was moved to another site, and the property is now vacant.
+            The "taking" concept appeared to further disfavor property owners when the Supreme Court decided, in Murr v. Wisconsin, on June 23, 2017, that a property owner could be denied the right to build a second structure on a property that had at one time been two separate parcels, each of which would have been entitled to a building permit, but which ultimately came under the same ownership. In effect, the right to build the second structure was eliminated in what the court considered was "a reasonable land-use regulation."
+            Inverse condemnation is an action brought by a property owner seeking just compensation for land adjacent to land used for a public purpose when the property's use and value have been diminished. For example, property along a newly constructed highway that could not have been anticipated by nearby property owners may be considered inversely condemned. While the property itself was not used in constructing the highway, the property value may be significantly diminished due to the construction of the highway close to the property. The property owner may bring an inverse condemnation action to be compensated for the loss in value.
+            It is sometimes very difficult to determine what level of compensation is fair in a particular situation. The compensation may be negotiated between the owner and the government, or the owner may seek a court judgment setting the amount after presentation of evidence of value.
+                In Practice
+                    One method used to determine just compensation is the before-and-after method. This method is used primarily where a portion of an owner's property is seized for public use. The value of the owner's remaining property after the taking is subtracted from the value of the whole parcel before the taking. The result is the total amount of compensation due to the owner.
+                    Articles on eminent domain, as well as information on current cases, can be found by going to the website of the National Association of REALTORS®, www.nar.realtor and entering "eminent domain" in the search engine at the top of the page.
+    Taxation 
+        Taxation is a charge on real estate to raise funds to finance the operation of government facilities and services. Taxes on real estate include
+            annual real property taxes assessed by local and area governmental entities to support school districts, transportation districts, and utility districts;
+            taxes on profit realized by individuals and corporations on the sale of real property; and
+            special fees that may be levied to finance special projects, such as road or utility installation.
+        Imposition of real property taxes may be accompanied by an automatic lien on the taxed property. Nonpayment of any of these taxes may allow the taxing body to enforce its lien rights in the property.
+
+    Escheat 
+        Escheat is a process by which the state may acquire privately owned real or personal property. State laws provide for ownership to transfer, or escheat, to the state when an owner dies and leaves no heirs (as defined by the law) and there is no will or living trust instrument that directs how the real estate is to be distributed. In some states, real property escheats to the county where the land is located; in other states, it becomes the property of the state. Escheat is intended to prevent property from being ownerless or abandoned.
+
+
+
+

@@ -1,0 +1,5 @@
+MARKET 
+    exists when goods can be bought and sold. 
+    The function of a market is to provide a setting in which supply and demand can establish market value, making it advantageous for buyers and sellers to trade.
+
+

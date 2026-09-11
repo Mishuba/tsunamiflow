@@ -1,0 +1,72 @@
+ALL MATH 
+
+
+Discount Points 
+    For borrowers, one discount point equals 1% of the loan amount (not purchase price) and is charged as prepaid interest at the closing. For instance, three discount points charged on a $100,000 loan would be $3,000, which is $100,000 × 3%, or $100,000 × 0.03. If a house sells for $100,000 and the borrower seeks an $80,000 loan, each point would be $800, not $1,000. The points in a new acquisition may be paid in cash at closing by the buyer (or, of course, by the seller on the buyer's behalf, as negotiated by the parties) rather than being financed as part of the total loan amount.
+    To determine how many points are charged on a loan, divide the total dollar amount of the points by the amount of the loan. For example, if the loan amount is $350,000 and the charge for points is $9,275, how many points are being charged?
+        $9,275 ÷ $350,000 = 0.0265 or 2.65% or 2.65 points
+
+
+
+The Mortgage Amortization Triangle 
+
+
+Mortgage Factor Chart 
+    Rate    Term 15 Years   Term 30 Years      
+    3           6.91            4.22
+    3 1/8       6.97            4.28
+    3 1/4       7.03            4.35
+    3 3/8       7.09            4.42
+    3 1/2       7.15            4.49
+    3 5/8       7.21            4.56
+    3 3/4       7.27            4.63
+    3 7/8       7.33            4.70
+    4           7.40            4.77
+    4 1/8       7.46            4.85
+    4 1/4       7.52            4.92
+    4 3/8       7.59            4.99
+    4 1/2       7.65            5.07
+    4 5/8       7.71            5.14
+    4 3/4       7.78            5.22
+    4 7/8       7.84            5.29
+    5           7.91            5.37
+    5 1/8       7.97            5.44
+    5 1/4       8.04            5.52
+    5 3/8       8.10            5.60
+    5 1/2       8.17            5.68
+    5 5/8       8.24            5.76
+    5 3/4       8.30            5.84
+    5 7/8       8.37            5.92
+    6           8.44            6.00
+    6 1/8       8.51            6.08
+    6 1/4       8.57            6.16
+    6 3/8       8.64            6.24
+    6 1/2       8.71            6.32
+    6 5/8       8.78            6.40
+    6 3/4       8.85            6.49
+    6 7/8       8.92            6.57
+    7           8.98            6.65
+    7  1/8      9.06            6.74
+    7 1/4       9.12            6.82
+    7 3/8       9.20            6.91
+    7 1/2       9.27            6.99
+    7 5/8       9.34            7.08
+    7 3/4       9.41            7.16
+    7 7/8       9.48            7.25
+    8           9.56            7.34
+    8 1/8       9.63            7.43
+    8 1/4       9.71            7.52
+    8 3/8       9.78            7.61
+    8 1/2       9.85            7.69
+    8 5/8       9.93            7.78
+    8 3/4       10.00           7.87
+    8 7/8       10.07           7.96
+    9           10.15           8.05
+
+Determining LTV 
+
+    appraised value or sales price / loan = LTV (loan-to-value ratio)
+        for example
+            If a property has an appraised value of $200,000, secured by an $180,000 loan, the LTV is 90%:
+                $180,000 ÷ $200,000 = 90%
+

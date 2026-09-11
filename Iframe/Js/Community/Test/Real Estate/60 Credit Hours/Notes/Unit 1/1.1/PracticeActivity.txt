@@ -1,0 +1,18 @@
+Subdivider
+    - Divides a single property into smaller parcels
+
+Property Manager
+    - Relieves an investment property owner from day-today activities
+
+Home inspector
+    - Combines an interest in real estate with skills in the housing trades 
+
+Real Estate Professional 
+    - Brings people together in a real estate transaction 
+
+Real Estate Appraiser 
+    - Forms an opinion of property value 
+
+Real Estate Counselor 
+    - Helps clients choose among alternatives in real property investment 
+

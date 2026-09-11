@@ -1,0 +1,9 @@
+One example of higher level service is providing a comparative market analysis (CMA). The Internet provides a lot of information to anyone researching recent home sales. But information needs interpretation to be useful. Agents offer higher levels of service to their sellers and buyers by not only doing the research but by also interpreting the results, which they often summarize in a CMA.
+
+A CMA typically consists of three different analyses:
+
+Homes similar to the subject property that have closed (price history)
+Similar homes that are currently on the market (competition)
+Homes that did not sell (looking at what other buyers have been unwilling to pay for similar homes)
+Listing agents provide a CMA to their seller clients to assist them in arriving at a competitive asking price. Buyers' agents provide a CMA to their buyer clients when they have narrowed their search and are ready to make an offer on the one that offers the most desired features for the least amount of money. The CMA assists these buyers in making an appropriate offer price.
+

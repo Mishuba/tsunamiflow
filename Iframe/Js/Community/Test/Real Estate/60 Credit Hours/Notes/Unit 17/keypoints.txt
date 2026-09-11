@@ -1,0 +1,28 @@
+A lease is a contract between the lessor (the owner of real estate, also called the landlord) and the lessee (the tenant) that transfers possession and use of the property, lasts for a specified period, and is made in return for consideration (possession and payment).
+
+The statute of frauds in most states requires that leases for more than one year be in writing to be enforceable. The lessor has a reversionary right to possession of property when a lease expires.
+
+The leasehold estate of the lessee can be one of the following:
+
+    An estate for years (tenancy for years) continues for a definite period. A holdover tenancy may be created when a tenant with an estate for years stays on after the lease term expires and the landlord accepts rent payment.
+    An estate from period to period (periodic tenancy) has no specific expiration date, but rent is payable at definite intervals and the lease term has continuity because it automatically renews. A month-to-month tenancy is a common form of residential lease.
+    An estate at will (tenancy at will) has no specified initial term, is created by express agreement or operation of law, and can be terminated by the landlord or the tenant at any time on proper notice.
+    An estate at sufferance (tenancy at sufferance) is created when the tenant stays on without the landlord's consent after termination. The landlord's acceptance of rent creates a holdover tenancy, or the landlord can treat the tenant as a trespasser and begin eviction proceedings and an action for damages under state law.
+
+A valid lease requires parties with CLOAC (Capacity to contract, Legal objective, Offer and Acceptance, and valid Consideration). A lease typically includes a description of leased premises, implied covenant of quiet enjoyment and a nondisturbance clause, limitations on tenant's use of the property and the term (length) of the lease, security deposit that must comply with state law, and a statement as to whether improvements may be made by the tenant.
+
+Fixtures installed by a tenant generally become the landlord's property unless they are removable trade fixtures. Federal fair housing law requires the landlord to allow a tenant with a disability to make reasonable modifications to the premises. The Americans with Disabilities Act (ADA) requires that commercial nonresidential property be free of barriers or that reasonable accommodations be provided.
+
+A typical lease will also include a provision that maintenance of premises will be performed by the landlord in compliance with state law; whether or not an assignment of the lease will be permitted, and if so, whether the assignment will relieve the tenant of further obligation to the landlord; and whether or not a sublease will be permitted and under what terms. Recording of the lease may be required by state law. An option may give the tenant the right to renew the lease, the right to purchase the leased property, or the right of first refusal if the landlord decides to sell the property.
+
+A gross lease requires the tenant to pay rent and the landlord to pay the expenses of ownership, such as taxes, insurance, and maintenance. A net lease requires the tenant to pay rent plus all or most property expenses, with the landlord also paying some property expenses. In a percentage lease, the tenant pays rent plus a percentage of gross sales and may pay property expenses.
+
+A variable lease allows an increase in rent during the lease period. A graduated lease states specific rent increases. An index lease allows rent changes (up or down) based on the consumer price index or other indicator.
+
+A ground lease involves separate ownership of land and buildings. An oil and gas lease allows exploration for and removal of oil and gas. In a lease purchase, part of the rent may be applied to the purchase price. A sale-and-leaseback allows the original owner to use the property as a tenant while freeing up capital for other business purposes.
+
+The remedies for breach of a lease are governed by state law. The landlord may bring suit for possession (actual eviction), or the tenant may claim a constructive eviction if the premises are uninhabitable.
+
+The Uniform Residential Landlord and Tenant Act has been adopted by many states in whole or in part and was updated in 2015.
+
+Federal fair housing and civil right laws affect landlords and tenants just as they do sellers and purchasers.

@@ -1,0 +1,31 @@
+While the value of a property is established without regard to financing, in the real world, the investor is going to be very concerned with the effect of financing on his investment. The investor will not stop the analysis with the net operating income; instead, the investor will subtract the total amount of debt service from the NOI to determine the cash flow of a property.
+
+The total annual debt service for the property is simply the annual amount of the principal and interest payments on the property. In determining the total annual debt service, be careful not to include any of the tax or insurance amounts paid to the lender because these have already been considered in the calculation of the net operating income.
+
+The cash flow of the property is the actual amount of money that the investor will expect to receive on an annual basis. This cash flow is often referred to as the cash flow before taxes, or CFBT. This could be either a positive or negative cash flow. A negative cash flow indicates that the investor will have to subsidize the property's operation annually. While a property may have significant advantages other than the anticipated cash flow, if the operating statement reflects a negative return, the investor should probably consider restructuring the investment.
+
+A property with a negative cash flow can be restructured in a number of ways. When restructuring, the investor should consider all options. The solution may be simple or it may require a combination of steps to arrive at an acceptable cash flow. There are three basic methods available to change the cash flow of a property:
+
+Increase the income
+Decrease the operating expenses
+Restructure the financing
+This may seem basic; however, the ability to make a property perform well is the surest way to maintain or increase the value of the investment.
+
+In addition to establishing the cash flow before taxes, the operating report will help the investor determine several ratios and relationships used to evaluate an investments performance, such as:
+
+cash on cash return,
+operating expense ratio, and
+capitalization rate.
+The cash on cash return compares the property's cash flow before taxes to the initial cash investment to determine the percentage return the cash flow represents on the cash investment. The formula for this calculation is:
+
+Cash flow before taxes ÷ Initial investment = Cash on cash return
+
+If we were to analyze a property with a CFBT of $13,500, and that property required an initial investment (down payment and closing costs) of $100,000, then the cash on cash return would be 13.5 percent annually.
+
+The operating expense ratio helps an investor determine if the property is being leased and managed efficiently, and if investment returns could perhaps be improved. The formula for this calculation is Operating Expenses divided by Gross Income equals Operating Expense Ratio. If we were to look at a property with operating expenses of $30,000 and that property had a gross income of $95,000, then the operating expense ratio would be 31.6 percent. While this ratio can vary widely, properties of a similar character with similar lease provisions will have similar expense ratios when operated efficiently.
+
+The capitalization rate (cap rate) is a measure of the property's return compared to the purchase price. This approach does not take into account financing, tax benefits, or the reinvestment of cash flows. The formula for the calculation is:
+
+
+
+A property that produces an NOI of $14,400 would have a cap rate of 12 percent if purchased for $120,000.

@@ -1,0 +1,29 @@
+Capital gains tax is the tax due when a taxpayer disposes of a capital asset. If a taxpayer receives consideration in excess of the adjusted basis of the capital asset, then there is a capital gain. On the other hand, if the consideration received is less than the adjusted basis of the asset, there is a capital loss.
+
+What Is a Capital Asset?
+A capital asset is any property held by a taxpayer, not including the following:
+
+Stock in trade or business—property held as inventory or for sale to customers in the ordinary book of business
+Property held for use in a trade or business of a nature subject to a depreciation allowance under IRC Section 167, either real or personal
+Copyrights, literary, musical, or artistic compositions (in the author's hands)
+Accounts or notes receivable generated in the ordinary book of a trade or business
+Publications of the U.S. government
+Thus, by definition, real estate is a capital asset and subject to the capital gains tax provisions. This is an important issue because capital gains income is taxed differently than other types of income.
+
+Short-Term vs. Long-Term Gains and Losses
+The holding period of an asset determines whether the gain is treated as a long-term gain or a short-term gain. In determining the holding period of an asset, the day of acquisition is excluded, and the day of disposition is included.
+
+Short-term capital gains/losses are gains and losses on capital assets held for one year or less. These gains and losses are taxed at ordinary income tax rates.
+
+Long-term capital gains/losses are gains and losses on capital assets held for more than one year. These gains and losses have historically received far more favorable rates than ordinary income tax rates.
+
+In order to figure the gain or loss attributable to a capital transaction, the adjusted basis of the property is subtracted from the consideration received.
+
+All of a taxpayer's capital gains and losses are netted together for each tax year. If this produces a net capital gain, then the amount of the gain is entered on the appropriate line of Form 1040. If there is a net capital loss, the extent to which the taxpayer may deduct this capital loss from his other income is subject to limitations. Any unused capital loss may be carried forward to subsequent tax years, subject to the same limitations.
+
+In order to calculate the capital gain in a real estate transaction, the first step is to determine the adjusted basis in the property:
+
+The next order of business is to subtract the adjusted basis from the sales prices to determine the indicated gain:
+
+The total capital gain calculated above will be split between the gain from appreciation and the gain due to depreciation recapture. Each of these gains will be taxed at different rates. All of a taxpayer's capital gains are to be reported in the year of sale, and the appropriate taxes are to be paid at that time. There are several methods available to minimize the tax due or to defer it to a later tax year.
+

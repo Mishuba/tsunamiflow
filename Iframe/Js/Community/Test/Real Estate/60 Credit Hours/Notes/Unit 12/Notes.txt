@@ -1,0 +1,342 @@
+Housing Affordability
+
+    Those who choose home ownership over renting must evaluate many factors before they decide to purchase property. And the purchasing decision must be weighed carefully in light of each individual's financial circumstances.
+
+    The decision to buy or to rent property involves considering
+
+        how long a person wants to live in a particular area,
+        a person's financial situation,
+        housing affordability,
+        current mortgage interest rates,
+        tax consequences of owning versus renting property, and
+        what might happen to home prices and tax laws in the future.
+        Unfortunately, recent history has shown that there are those who will commit mortgage fraud in applying for a home loan by exaggerating income or assets, minimizing or concealing debt obligations, or providing a false employment history. Loan applicants have also been victims of predatory lending practices that result in too-high loan fees and abusive interest rates. To help curb such practices, HUD now certifies housing counselors to assist borrowers in knowing their responsibilities and rights.
+
+    Mortgage terms 
+        Mortgage terms and payment plans are two of the biggest factors when deciding whether to own or rent a home. Although many loan programs of the past are no longer offered or are offered only to highly qualified borrowers, mortgages on less stringent terms are still available to those who qualify. The Federal Housing Administration (FHA) and the U.S. Department of Veterans Affairs (VA), for example, have programs with low down payments and lower credit score requirements. They, too, have tightened lending standards in recent years.
+
+    Ownership expenses and ability to pay 
+        Home ownership involves many expenses, including utility costs, such as electricity, natural gas, heating oil, water, trash removal, and sewer charges, in addition to routine maintenance and repairs. Owners also must pay real estate taxes, buy property insurance, and repay (with interest) the mortgage loan used to purchase the property—what lenders refer to as PITI (principal, interest, taxes, and insurance).
+        To determine what a prospective buyer can afford, most home mortgage lenders use a computerized underwriting system that considers various factors, including the loan applicant's credit report and credit score. There are three major credit reporting companies in the United States: Equifax (www.equifax.com), Experian (www.experian.com), and TransUnion (www.transunion.com).
+
+        Checking Your Credit Report 
+            The credit report is important in acquiring a loan for a home or other major purchase, obtaining a credit card, being approved for a lease, and even in acquiring a new job. Because of its significance to the consumer in so many ways, the federal government requires each of the major credit reporting companies to make a free copy of the report available annually to every consumer for whom a report is available. The free reports can be obtained at www.annualcreditreport.com. (Don't be confused by similarly named sites that charge for this service.) Because each of the credit reporting agencies is required to comply with the law, the consumer can request a free report every four months from a different company each time, making it possible to monitor one's credit status on a regular basis.
+
+        A credit score is prepared by a credit reporting company and is based on a consumer's past history of credit use, including income, outstanding loans, number of credit accounts open, outstanding credit lines, number of accounts opened and closed, payment history, and credit inquiries. The credit score, often called the FICO score because it can be created from software developed by Fair Isaac and Company, can range from a low of 300 to a high of 850, the best score. Lenders will require a minimum credit score for a loan, often dependent on whether or not the lender will sell the mortgage after initiating it or the borrower is making use of a government-sponsored program, such as those of FHA and VA
+        Lenders generally look at a loan applicant's percentage of debt to income (DTI). A homebuyer who is able to provide at least 10% of the purchase price as a down payment, for instance, could be expected to incur a monthly PITI payment of no more than 28% of the borrower's gross (pretax) monthly income. Monthly payments on all debts—normally including long-term debt such as car payments, student loans, or other mortgages—would be expected to not exceed 36% of gross monthly income. Expenses such as insurance premiums, utilities, and routine medical care would not be included in the 36% figure but would be expected to be covered by the remaining 64% of the buyer's monthly income. The formula can vary, depending on the type of loan program and the borrower's earnings, credit history, number of dependents, and other factors. The borrower's credit score now plays a key role in the lending decision, though the debt-to-income ratio is still important.
+
+            Practice using this 
+                A prospective homebuyer wants to know how much to budget for a purchase. The buyer has a gross monthly income of $5,000. If the required down payment can be made, the buyer's allowable housing expense may be calculated as follows:
+                    $5,000 gross monthly income × 28% = $1,400 total housing expense allowed
+                    $5,000 gross monthly income × 36% = $1,800 total housing and other debt expense allowed
+
+        If actual monthly non-housing debts exceed 8% of gross income (36%–28%), and the borrower is unable to reduce that amount, the monthly payment must be lowered proportionately because the debts and housing payment combined cannot exceed 36% of gross monthly income. Lower debts would not result in a higher allowable housing payment, but would be considered a factor for approval.
+        The lender will also consider the loan-to-value ratio (LTV), which is the amount of the loan as a percentage of the purchase price of the property. If a borrower makes a down payment of 10% of the purchase price and borrows the rest, the LTV is 90%. The lower the LTV (the greater the down payment), the less risk is assumed by the lender.
+
+Promissory Note
+        The purchase of a home usually requires borrowing a substantial amount—or all—of the purchase price. In exchange for a lender providing the needed funds, the borrower promises to repay the debt with interest
+
+        The promissory note, called the note or financing instrument, is a borrower's personal promise to repay a debt according to the agreed terms. A promissory note executed by a borrower (the maker or payor) is a contract with the lender (the payee). The note generally states the amount of the debt, the time and method of payment, and the rate of interest. When signed by the borrower and other necessary parties, the note becomes a legally enforceable and fully negotiable instrument of debt. When the terms of the note are satisfied, the debt is discharged. If the terms of the note are not met, the lender may foreclose on any property that was used as security for the debt. When a note is unsecured (there is no collateral provided for the debt), the lender can sue to collect on the note.
+
+        A note is a negotiable instrument, similar to a check or bank draft. The payee who holds the note may transfer the right to receive payment to a third party in one of two ways:
+            By signing the instrument over (that is, by assigning it) to the third party
+            By delivering the instrument to the third party
+
+    Interest 
+        Interest is a charge for the use of money, expressed as a percentage of the remaining balance of the loan. A lender charges interest on the principal (amount borrowed that has not yet been repaid) over the term of the loan, usually monthly. Interest may be due at either the end or the beginning of each payment period. Payments made at the end of a period are known as payments in arrears. This payment method is the general practice, and home loans often call for end-of-period payments due on the first of the following month. Payments may also be made at the beginning of each period and are known as payments in advance. Whether interest is charged in arrears or in advance is specified in the note. This distinction is important if the property is sold before the debt is repaid in full.
+
+    Usury 
+        Charging interest in excess of the maximum rate allowed by law is called usury. To protect consumers from unscrupulous lenders, many states have enacted laws limiting the interest rate that may be charged on loans. In some states, a lender that makes a usurious loan is permitted to collect the borrowed money, but only at the legal rate of interest. In others, a usurious lender may lose the right to collect any interest or may lose the entire amount of the loan in addition to the interest.
+        As of March 31, 1980, federal law exempts federally related residential first mortgage loans made after that date from state usury laws. A federally related transaction is one that involves a federally chartered or insured lending institution or an agency of the federal government. Because federal law always preempts state law on the same subject, the federal law means that most home loans are not subject to state usury protections. Private lenders are still subject to state usury laws, however.
+
+    Loan Origination Fee 
+        The processing of a mortgage application is known as loan origination. When a home loan is originated, a loan origination fee, or transfer fee, is charged by most lenders to cover the expenses involved in generating the loan. These expenses include the loan officer's salary and the lender's other costs of doing business. A loan origination fee is not prepaid interest; rather, it is a charge that must be paid to the lender. The loan origination fee will vary, depending on how competitive a lender chooses to be, but typically is about 1% of the loan amount.
+            In Practice
+                Because many real estate loans are made by private loan companies that may not be covered by federal regulations, it is important that a borrower insist on receiving a statement in advance from the lender that clearly states the total amount of the loan closing costs and the effective interest rate, in order to avoid unpleasant surprises at closing.
+
+    Discount points 
+        Discount points are used to increase the lender's yield (rate of return) on its investment. For example, the interest rate that a lender charges for a loan might be less than the yield an investor demands. To make up the difference, the lender charges the borrower discount points. The number of points charged depends on two factors:
+            1.) The difference between the loan's stated interest rate and the yield required by the lender
+            2.) How long the lender expects it will take the borrower to pay off the loan
+                Math
+                    For borrowers, one discount point equals 1% of the loan amount (not purchase price) and is charged as prepaid interest at the closing. For instance, three discount points charged on a $100,000 loan would be $3,000, which is $100,000 × 3%, or $100,000 × 0.03. If a house sells for $100,000 and the borrower seeks an $80,000 loan, each point would be $800, not $1,000. The points in a new acquisition may be paid in cash at closing by the buyer (or, of course, by the seller on the buyer's behalf, as negotiated by the parties) rather than being financed as part of the total loan amount.
+                    To determine how many points are charged on a loan, divide the total dollar amount of the points by the amount of the loan. For example, if the loan amount is $350,000 and the charge for points is $9,275, how many points are being charged?
+                        $9,275 ÷ $350,000 = 0.0265 or 2.65% or 2.65 points
+
+    Prepayment penalty 
+        Most mortgage loans are paid in installments over a long period of time. As a result, the total interest paid by the borrower may add up to more than the principal amount of the loan. That does not come as a surprise to the lender; the total amount of accrued interest is carefully calculated during the origination phase to determine the profitability of each loan. If the borrower repays the loan before the end of the term, the lender collects less than the anticipated interest. For this reason, some mortgage notes contain a prepayment clause. This clause requires that the borrower pay a prepayment penalty against the unearned portion of the interest for any payments made ahead of schedule, typically during the first years of the loan. This gives the lender the assurance of a certain level of income earned on the loan.
+        Lenders may not charge prepayment penalties on mortgage loans insured or guaranteed by the federal government or on those loans that have been sold on the secondary mortgage market to one of the government-sponsored enterprises, such as Fannie Mae.
+    
+Security Instrument 
+    Mortgage loans are secured loans. Mortgage loans have two parts: the debt itself and the security for the debt. When a property is mortgaged, the owner must execute (sign) two separate instruments—the financing instrument that creates the debt and the security instrument that specifies the property that the debtor will use as collateral for the debt. The financing instrument is the promissory note (discussed earlier), which states the amount owed. Depending on the state, the security instrument will take the form of either a mortgage or a deed of trust, though both are commonly referred to as a mortgage, and will specify the property used to secure the loan. A mortgage creates a lien on the property; the deed of trust actually transfers legal title from the borrower to a third party to hold on behalf of the lender while the borrower's debt is still outstanding. This section looks at the differences in how each form of security interest is created and how each is enforced.
+    A basic principle of property law is that no one can convey more than he actually owns. This principle also applies to a mortgage. The owner of a fee simple estate can mortgage the fee. The owner of a leasehold or subleasehold can mortgage that leasehold interest. The owner of a condominium unit can mortgage the fee interest in the condominium. Even the owner of a cooperative unit may be able to offer that property interest (the owner's stock in the underlying corporation) as security for a loan.
+
+    Hypothecation 
+        In mortgage lending practice, a borrower is required to make specific real property security (collateral) for the loan. In the process called hypothecation, the debtor retains the right of possession and control of the secured property, while the creditor receives an equitable right in the property. The right to foreclose on the property in the event a borrower defaults is contained in the security agreement, which takes the form of either a mortgage or a deed of trust, as discussed next.
+
+    Mortgage 
+        A mortgage is a lien on the real property of a debtor. The borrower, or mortgagor, receives a loan and in return gives a promissory note and mortgage to the lender, called the mortgagee. The mortgage is a voluntary, specific lien. If the debtor defaults, the lender can sue on the note and foreclose on the mortgage. When the loan is paid in full, the mortgagee issues a document called a satisfaction of mortgage, which can be filed in the public record as evidence of the removal of the security interest, which would otherwise continue to be an encumbrance on the ownership interest of the borrower. The judicial process for foreclosure of a mortgage depends on state law and on whether the state treats the mortgage as a lien or as a conveyance of some part of the title to the property.
+        In a mortgage or lien theory state, the mortgagor retains both legal and equitable title to property that serves as security for a debt. The mortgagee has a lien on the property but the mortgage is nothing more than collateral for the loan. If the mortgagor defaults, the mortgagee must go through a formal foreclosure proceeding in court to obtain legal title. If the foreclosure is approved by the court, the property is offered for sale at public auction, and the funds from the sale are used to pay the balance of the remaining debt. In some states, a defaulting mortgagor may redeem (buy back) the property during a certain period after the sale, the statutory right of redemption. A borrower who fails to redeem the property during that time loses the property irrevocably. See  Mortgages for a diagram of how a mortgage works.
+
+    Deed of Trust 
+        In some states, lenders prefer to use a three-party security instrument known as a deed of trust. A trust deed conveys bare legal title (naked title)—that is, title without the right of possession—from the borrower to a third party, called the trustee. The trustee holds legal title on behalf of the lender, the holder of the promissory note, who is known as the beneficiary. On full payment of the underlying debt, the lender/beneficiary notifies the trustee, who returns legal title to the trustor.
+        In a deed of trust or title theory state, such as Arizona, the borrower is the trustor who conveys legal title to the trustee but retains equitable title and the right of possession. Legal title is returned to the borrower/trustor only when the debt is paid in full (or some other obligation is performed).
+        The deed of trust establishes the actions that the trustee may take if the borrower, the trustor, defaults under any of the deed of trust terms. In states where deeds of trust are generally preferred, foreclosure procedures for default, which must comply with state law, are usually simpler and faster than for mortgage loans. On notification of the borrower's default, the trustee is authorized to sell the secured property, providing the proceeds to the beneficiary, the lender. If the sale proceeds are greater than the amount owed on the debt, the borrower receives the difference, less penalty fees and court costs.
+        Usually, the lender chooses the trustee and reserves the right to substitute trustees in the event of the trustee's death or dismissal. State law usually dictates who may serve as trustee. Although the deed of trust is particularly popular in certain states, it is used all over the country. See  Deed of Trust for a diagram of how a deed of trust works.
+
+        A mortgage or deed of trust must clearly establish that the property is security for a debt, identify the lender and the borrower, and include an accurate legal description of the property. Both instruments incorporate the terms of the promissory note by reference, which coordinates the note and security instrument, and both should be signed by all parties who have an interest in the real estate.
+
+    Duties of the borrower 
+        The borrower—whether a mortgagor or a trustor—is required to fulfill certain obligations created by the mortgage or deed of trust. These usually include the following:
+
+            Payment of the debt in accordance with the terms of the promissory note
+            Payment of all real estate taxes on the property used as security
+            Maintenance of adequate insurance to protect the lender in the event that the property is destroyed or damaged by fire, windstorm, or other hazard
+            Maintenance of the property in good repair at all times
+            Receipt of lender authorization before making any major alterations on the property
+
+        Failure to meet any of these obligations can result in a borrower's default. The loan documents may, however, provide for a grace period (such as 30 days) during which the borrower can meet the obligation and cure the default. If the borrower does not do so, the lender has the right to take the steps described next.
+
+    Provisions for default 
+        The mortgage or deed of trust typically includes an acceleration clause to assist the lender in foreclosure. If a borrower defaults, the lender has the right to accelerate the maturity of the debt. This means the lender may declare the entire principal balance due and payable immediately. Without an acceleration clause, the lender would have to sue the borrower every time a payment was overdue.
+        Other provisions in a mortgage or deed of trust enable the lender to take care of the property in the event of the borrower's negligence or default. If the borrower does not pay taxes or insurance premiums, or fails to make necessary repairs on the property, the lender may step in and do so. The lender has the power to protect the security (the real estate).
+            In Practice
+                In financing a real estate sale, a lender will seldom accept an unsecured promissory note because there would be no backup for the loan. If a borrower defaulted, the lender would be forced to sue for a money judgment. In the meantime, the debtor might dispose of the property and hide assets. In some states, a money judgment cannot be used to foreclose on a debtor's personal residence. Because of these, and other reasons, lenders prefer a security interest in real property.
+
+    Assignment of the mortgage 
+        As noted earlier, a promissory note usually is a negotiable instrument. This means that, without changing the provisions of the contract, the note may be sold to a third party, such as an investor or another mortgage company. The original mortgagee (the assignor) endorses the note to the third party (the assignee) and executes an assignment of mortgage. The assignee becomes the new owner of the debt and security instrument. When the debt is paid in full (or satisfied), the assignee is required to execute the document that releases the security interest.
+
+    Release of the mortgage lien or deed of trust 
+            When all loan payments have been made and the promissory note has been paid in full, the borrower will want the public record to show that the debt has been satisfied and that the lender is divested of all rights conveyed under the mortgage or deed of trust. By the provisions of the defeasance clause in the financing instrument, the lender is required to execute a satisfaction of mortgage (also known as a release or discharge) when the note has been fully paid. This document returns to the borrower all interest in the real estate originally conveyed to the lender. Entering this release in the public record shows that the debt has been removed from the property.
+            When a real estate loan secured by a deed of trust has been completely repaid, the beneficiary must make a written request that the trustee convey the title to the property back to the grantor. The trustee executes and delivers a deed of reconveyance (sometimes called a release deed) to the trustor. The deed to the trustor conveys the same rights and powers that the trustee was given under the deed of trust. It should include a notarized acknowledgment and be recorded in the public records of the county in which the property is located.
+            If the mortgage or deed of trust has been assigned, the satisfaction of mortgage or reconveyance deed must be executed and recorded by the assignee or mortgagee.
+
+    Tax and Insurance Reserves 
+        As discussed previously, many lenders require that borrowers provide a reserve fund to meet future real estate taxes and property insurance premiums. This fund is called an impound or escrow account. When the mortgage or deed of trust loan is made, the borrower starts the reserve by depositing funds to cover the amount of unpaid real estate taxes. If a new insurance policy has just been purchased, the insurance premium reserve will be started with the deposit of one-twelfth of the insurance premium liability. The borrower's monthly loan payments will include PITI: principal, interest, taxes, and insurance. Other costs also may be included, such as flood insurance. Federal regulations limit the total amount of reserves that a lender may require.
+            In Practice
+                The borrower should make sure that property taxes and insurance payments have been made by the holder of an impound account by their respective due dates. The borrower should also keep track of any increases in taxes or insurance payments, in order to deposit a sufficient amount into the impound account.
+
+    Flood Insurance Reserves 
+        The National Flood Insurance Reform Act of 1994 imposes certain mandatory obligations on lenders and loan servicers to set aside (escrow) funds for flood insurance on new loans for property in flood-prone areas. This means that if a lender or servicer discovers that a secured property is in a flood hazard area, it must notify the borrower. The borrower then has 45 days to purchase flood insurance. If the borrower fails to procure flood insurance, the lender must purchase the insurance on the borrower's behalf. The cost of the insurance may be charged back to the borrower. More information on flood insurance, which can be a critical part of home ownership, is provided later.
+
+    Buying "subject to" or assuming a seller's mortgage or deed of trust 
+        When a person purchases real estate that has an outstanding mortgage or deed of trust, the buyer may take the property in one of two ways. The property may be purchased "subject to" the mortgage or deed of trust, or by assumption of mortgage, in which the buyer assumes the mortgage or deed of trust and agrees to pay the debt. This technical distinction becomes important if the buyer defaults and the mortgage or deed of trust is foreclosed.
+        When the property is sold subject to the mortgage, the buyer is not personally obligated to pay the debt in full. The buyer takes title to the real estate knowing that she must make payments on the existing loan. Upon default, the lender forecloses and the property is sold by court order to pay the debt. If the sale does not pay off the entire debt, the purchaser is not liable for the difference. In some circumstances, however, the original seller might continue to be liable.
+        In contrast, a buyer who purchases a property and assumes the seller's debt becomes personally obligated for the payment of the entire debt. If a seller wants to be completely free of the original mortgage loan, the seller(s), buyer(s), and lender must execute a novation agreement in writing. The novation makes the buyer solely responsible for any default on the loan. The original borrower (seller) is freed of any liability for the loan.
+        The existence of a lien does not prevent the transfer of property; however, when a secured loan is assumed, the mortgagee or beneficiary must approve the assumption and any release of liability of the original mortgagor or trustor. Because a loan may not be assumed without lender approval, the lending institution would require the assumer to qualify financially, and many lending institutions charge a transfer fee to cover the costs of changing the records. This charge can be paid by either the buyer or the seller.
+
+    Alienation clause 
+        The lender may want to prevent a future purchaser of the property from being able to assume the loan, particularly if the original interest rate is low. For this reason, most lenders include an alienation clause (also known as a resale clause, due-on-sale clause, or call clause) in the note. An alienation clause provides that when the property is sold, the lender may either declare the entire debt due immediately or permit the buyer to assume the loan at an interest rate acceptable to the lender. Land contracts that involve a due-on-sale clause also limit the assumption of the contract.
+
+    Recording a mortgage or deed of trust 
+        The mortgage document or deed of trust must be recorded in the recorder's office of the county in which the real estate is located. Recording gives constructive notice to the world of the borrower's obligations. Recording also establishes the lien's priority. If the property is registered in the Torrens system, notice of the lien must be entered on the original Torrens certificate.
+
+    Priority of a mortgage of deed of trust
+        Priority of mortgages and other liens normally is determined by the order in which they were recorded. A mortgage or deed of trust on land that has no prior mortgage lien is a first mortgage or first deed of trust. If the owner later executes another loan for additional funds, the new loan becomes a second mortgage or second deed of trust (or a junior lien) when it is recorded. Second loans represent greater risk to the lender, and they usually have a higher interest rate.
+        In the event that a second lien has a higher amount than the first, the lender may require a subordination agreement, in which the first lender subordinates or lowers its lien position to that of the second lender. To be valid, both lenders must sign the agreement.
+
+Types of Loans 
+    Real estate can be financed in a variety of ways. The most popular forms of financing are discussed next. Most provide for some form of amortization, with each payment including part of the loan principal, so that the entire principal is paid off by the end of the loan term.
+
+    Straight Loan   
+        With a straight loan (also known as a term loan or interest-only loan) the borrower makes periodic payments of interest only, followed by the payment of the principal in full at the end of the term. Straight loans were once the only form of home loan available, but are now generally used for home improvements and second mortgages rather than for residential first mortgage loans. A loan may provide for interest-only payments in the beginning years, to make payments affordable.
+
+    Amortized loan
+        Each payment in an amortized loan partially pays interest as well as a portion of the principal owed. Most mortgage and deed of trust loans are amortized loans. The word amortize literally means to kill off. The amount borrowed is gradually paid back over the loan term. The payment period usually ranges from 10 to 30 years. At the end of the loan term, the full amount of the principal and all interest due is reduced to zero. Such loans are known as direct reduction loans.
+        With a fully amortized loan, or level-payment loan, the lender credits each payment first to the interest due, then to the principal amount of the loan. While each payment remains the same, the portion applied to repayment of the principal grows and the interest due declines as the unpaid balance of the loan is reduced. If the borrower pays additional amounts that are applied directly to the principal, the loan will amortize more quickly. The required payment stays the same, but more of each payment goes toward paying down the principal, thereby shortening the loan term.
+            In Practice
+                Financial calculators can accurately perform the standard mortgage lending calculations, and most commercial lenders provide mortgage calculators on their websites. Nonetheless, it is valuable to understand how the calculations are performed.
+
+    Adjustable-rate mortgage (ARM)
+        The adjustable-rate mortgage (ARM) begins at one rate of interest, then fluctuates up or down during the loan term, based on a specified economic indicator. Because the interest rate may change, the mortgagor's loan payment may change. Details of how and when the interest rate will change are included in the note. When there is not much difference in interest rate between a fixed and an adjustable-rate loan, the ARM is less appealing. Common components of an ARM include the following:
+            The index is an economic indicator that is used to adjust the interest rate in the loan. Most indexes are tied to U.S. Treasury securities. The adjustment period establishes how often the rate may be changed, which could be monthly, quarterly, or annually. If interest rates are going up, the longest adjustment period benefits the borrower. If interest rates are going down, the borrower benefits from a shorter adjustment period.
+            Usually, the interest rate is the index rate plus a premium, called the margin. The margin represents the lender's cost of doing business.
+            Rate caps limit the amount the interest rate may change. Most ARMs have two types of rate caps—periodic and life-of-the-loan (or aggregate). A periodic rate cap limits the amount the rate may increase over a stated term, usually a year. A life-of-the-loan rate cap limits the amount the rate may increase over the entire life of the loan.
+        The mortgagor can be protected from unaffordable individual payments by a payment cap. The payment cap sets a maximum amount for payments, but the difference between the payment made and the full payment amount will be added to the remaining mortgage balance. The amount of the loan actually increases (instead of decreasing) in the process called negative amortization. If property values do not increase as anticipated, or the borrower can no longer afford to make mortgage payments, negative amortization can result in the borrower owing more than the property is worth—the unhappy situation of being under water. The option ARM that allowed negative amortization as one of the borrower's choices was a contributing factor to many of the foreclosures that suppressed the housing market in many parts of the country.
+        The lender may offer a conversion option that permits the mortgagor to convert from an adjustable-rate to a fixed-rate loan at certain intervals during the life of the mortgage.
+
+    Growing-Equity Mortgage 
+        A growing-equity mortgage is also called a rapid-payoff mortgage. The growing-equity mortgage uses a fixed interest rate, but payments of principal are increased according to an index or schedule. The total payment thus increases, and the loan is paid off more quickly. A growing-equity mortgage is most frequently used when the borrower's income is expected to keep pace with the increasing loan payments.
+
+    The Mortgage Amortization Triangle 
+        If you know the monthly payment and interest rate on a loan, you can easily track how much of each month's payment is being applied toward principal and how much is applied toward interest.
+        Always begin with the top box and follow the direction of the arrows to perform the calculations described in each box for each month's calculation. Your result will show how much of a given month's mortgage payment goes to pay principal and what portion pays interest on the loan to the lender. For instance, if you wanted to see how much the loan principal would be reduced after three months, you would "go around the triangle" three times.
+            The triangle (below)
+                Monthly Payment(- month's interest) = amount paid toward principal 
+                    if you start here then do bottom row next
+                Principal Balance (- amount paid toward principal) = new principal balance 
+                    if you start here then do bottom row next
+                Principal balance * annual interest rate / 12 = month's interest 
+                    if you start here then go back to top next 
+                            Mortgage Factor Chart 
+                                Rate    Term 15 Years   Term 30 Years      
+                                3           6.91            4.22
+                                3 1/8       6.97            4.28
+                                3 1/4       7.03            4.35
+                                3 3/8       7.09            4.42
+                                3 1/2       7.15            4.49
+                                3 5/8       7.21            4.56
+                                3 3/4       7.27            4.63
+                                3 7/8       7.33            4.70
+                                4           7.40            4.77
+                                4 1/8       7.46            4.85
+                                4 1/4       7.52            4.92
+                                4 3/8       7.59            4.99
+                                4 1/2       7.65            5.07
+                                4 5/8       7.71            5.14
+                                4 3/4       7.78            5.22
+                                4 7/8       7.84            5.29
+                                5           7.91            5.37
+                                5 1/8       7.97            5.44
+                                5 1/4       8.04            5.52
+                                5 3/8       8.10            5.60
+                                5 1/2       8.17            5.68
+                                5 5/8       8.24            5.76
+                                5 3/4       8.30            5.84
+                                5 7/8       8.37            5.92
+                                6           8.44            6.00
+                                6 1/8       8.51            6.08
+                                6 1/4       8.57            6.16
+                                6 3/8       8.64            6.24
+                                6 1/2       8.71            6.32
+                                6 5/8       8.78            6.40
+                                6 3/4       8.85            6.49
+                                6 7/8       8.92            6.57
+                                7           8.98            6.65
+                                7  1/8      9.06            6.74
+                                7 1/4       9.12            6.82
+                                7 3/8       9.20            6.91
+                                7 1/2       9.27            6.99
+                                7 5/8       9.34            7.08
+                                7 3/4       9.41            7.16
+                                7 7/8       9.48            7.25
+                                8           9.56            7.34
+                                8 1/8       9.63            7.43
+                                8 1/4       9.71            7.52
+                                8 3/8       9.78            7.61
+                                8 1/2       9.85            7.69
+                                8 5/8       9.93            7.78
+                                8 3/4       10.00           7.87
+                                8 7/8       10.07           7.96
+                                9           10.15           8.05
+                        How To Use This Chart
+                            To use this chart, start by finding the appropriate interest rate. Then follow that row over to the column for the appropriate loan term. This number is the interest rate factor required each month to amortize a $1,000 loan. To calculate the principal and interest (PI) payment, multiply the interest rate factor by the number of 1,000s in the total loan.
+                            For example, if the interest rate is 6% for a term of 30 years, the interest rate factor is 6.00. If the total loan is $200,000, the loan contains 200 1,000s. Therefore, 200 × 6.00 = $1,200 PI.
+
+    Balloon Payment Loan 
+        When the periodic payments on a loan are not enough to fully pay off the principal of the loan by the time the final payment is due, the final payment will be larger than the others. State law will provide the definition, but typically a balloon payment is a final payment that is at least twice the amount of any other payment. The loan will be considered a partially amortized loan because some of the principal has been paid, with some still owed at the end of the term.
+        It is frequently assumed that if payments are made promptly, the lender will extend the balloon payment for another limited term. The lender, however, is not legally obligated to grant this extension and can require payment in full when the note is due.
+
+    Reverse Mortgage 
+        A reverse mortgage allows a homeowner aged 62 or older to borrow money against the equity built up in the home. The borrowed money may be used for any purpose and the borrower decides if the funds will be paid out in a lump sum, fixed monthly payments, an open line of credit, or another option. The borrower is charged a fixed rate of interest on amounts paid out by the lender, but the lender does not need to be repaid until the property is sold or the borrow defaults (perhaps by failing to maintain the property), moves, or dies. With the recent recession and volatility of the stock market, the reverse mortgage has become a popular method of providing more income for other expenses while allowing the homeowner to remain in the home. It is important to remember, however, that the usual property tax, insurance, maintenance, and utility costs must still be paid by the homeowner, and these may be more substantial than the income produced by the reverse mortgage. Also, with the equity in the home reduced, the homeowner will have fewer resources on which to draw in the event that a move to a smaller property, an assisted-living facility, or a nursing home becomes necessary.
+
+Foreclosure 
+    Foreclosure is a legal procedure in which property pledged as security for a debt is sold to satisfy the debt when a borrower defaults on any required payment or fails to fulfill any of the other obligations set forth in the mortgage or deed of trust. Any unpaid lienholder, regardless of priority position, can initiate foreclosure proceedings; however, foreclosure of a junior lien means that the liens with higher priority remain in place and the buyer takes title subject to those liens. The foreclosure of a lien with highest priority brings the rights of the parties and all junior lienholders to a conclusion. It passes title to the person holding the mortgage document, the beneficiary of a deed of trust, or a third party who purchases the property at a foreclosure sale. The property is sold free of the foreclosing mortgage and all junior liens.
+    The purchaser on foreclosure of a debt secured by real property could be the mortgagee—the lender—and the property then becomes part of the lender's REO (real estate owned) portfolio. The lender then becomes responsible for maintaining the property and paying the expenses of ownership, including property taxes.
+        In Practice
+            Institutional lenders are not in the business of managing property, so they try to minimize their REO portfolios, but dealing with an institutional seller can be a frustrating experience for a prospective buyer. In some areas, a buyer should be prepared for a much longer than usual time for acceptance of an offer to purchase as well as a lengthy period before the sale is closed, during which there may be repeated requests from the seller that must be addressed. In other areas, the volume of REO sales has prompted lenders to expedite the sale process. In any event, an attractive sales price may make the purchase of an REO property worth any aggravation.
+
+    Methods of Foreclosure 
+        There are three general types of foreclosure proceedings—judicial, nonjudicial, and strict foreclosure. The specific provisions and procedures depend on state law.
+
+        Judicial Foreclosure 
+            Judicial foreclosure allows the property to be sold by court order after the mortgagee has given sufficient public notice. When a borrower defaults, the lender may accelerate the due date of the remaining principal balance, along with all overdue monthly payments and interest, penalties, and administrative costs. The lender's attorney can then file a suit to foreclose the lien. After presentation of the facts in court, if the court grants the request, the property is ordered sold. A public sale is advertised and held, and the real estate is sold to the highest bidder.
+
+        Nonjudicial Foreclosure 
+            Some states allow nonjudicial foreclosure procedures to be used when the security instrument contains a power-of-sale clause. In nonjudicial foreclosure, no court action is required. In those states that recognize deed of trust loans, the beneficiary is generally given the power of sale, which is conducted by the trustee. Some states allow a similar power of sale to be used with a mortgage loan, if specified in the terms of the mortgage.
+            To institute a nonjudicial foreclosure, the trustee or mortgagee will send a notice of default to the borrower indicating the amount that must be paid to make the debt current, as well as the action that will be taken if the required payment is not made. If the borrower fails to cure the default within the specified time, a notice of foreclosure will be sent to the borrower, indicating when and where the property will be sold at public auction. The notice of foreclosure will be recorded within a designated period to give notice to the public of the intended auction. The notice is generally provided by newspaper advertisements that state the total amount due and the date of the public sale. After selling the property, the trustee or mortgagee may be required to file a notice of sale or affidavit of foreclosure.
+
+        Strict Foreclosure 
+            In some states, a lender may acquire mortgaged property through a strict foreclosure process. First, appropriate notice must be given to the delinquent borrower. Once the proper documents have been prepared and recorded, the court establishes a deadline for the balance of the defaulted debt to be paid in full. If the borrower does not pay off the loan by that date, the court simply awards full legal title to the lender. No sale takes place. Strict foreclosure is more common when personal property is used to secure a debt.
+
+    Deed in lieu of foreclosure 
+        As an alternative to foreclosure, a lender may be willing to accept a deed in lieu of foreclosure from the borrower. This is sometimes known as a friendly foreclosure because it is carried out by mutual agreement rather than by lawsuit. The deed in lieu of foreclosure eliminates any equity that the homeowner may have had in the property. The disadvantage of the deed in lieu of foreclosure to the lender is that it does not eliminate junior liens. In a foreclosure action, all junior liens are eliminated. Also, by accepting a deed in lieu of foreclosure, the lender usually loses any rights pertaining to FHA or private mortgage insurance or VA guarantees. Finally, a deed in lieu of foreclosure is still considered an adverse element in the borrower's credit history.
+
+    Redemption 
+        Most states give defaulting borrowers a chance to redeem their property through the equitable right of redemption. If, after default but before the foreclosure sale, the borrower (or any other person who has an interest in the real estate, such as another creditor) pays the lender the amount in default, plus costs, the debt will be reinstated. In some cases, the person who redeems may be required to repay the accelerated loan in full. If some person other than the mortgagor or trustor redeems the real estate, the borrower becomes responsible to that person for the amount of the redemption.
+        Certain states also allow defaulted borrowers a period in which to redeem their real estate after the sale. During this period (which may be as long as one year), the borrower has a statutory right of redemption. The mortgagor who can raise the necessary funds to redeem the property within the statutory period pays the redemption money to the court. Because the debt was paid from the proceeds of the sale, the borrower can take possession free and clear of the former defaulted loan. The court may appoint a receiver to take charge of the property, collect rents, and pay operating expenses during the redemption period.
+
+            Some weird chart 
+                Date of Default | Equitable Redemption | Date of Sale | Statutory Redemption | End of Redemption Right 
+                    The chart is like showing when you can use redemption on a defaulted loan. 
+
+    Deed to purchaser at sale 
+        If redemption is not made, or if state law does not provide for a redemption period, the successful bidder at the foreclosure sale receives a deed to the real estate. Officials such as a sheriff, an officer of the court, or a trustee executes this deed to the purchaser to convey whatever title the borrower had.
+
+    Deficiency Judgment 
+        The foreclosure sale may not produce enough cash to pay the loan balance in full after deducting expenses and accrued unpaid interest. In that case, the mortgagee may be entitled to a personal judgment against the borrower for the unpaid balance. Such a judgment is a deficiency judgment. It may also be obtained against any endorsers or guarantors of the note and against any owners of the mortgaged property who assumed the debt by written agreement. If any money remains from the foreclosure sale after paying the debt and any other liens (such as a second mortgage or a mechanic's lien), expenses, and interest, those proceeds are paid to the borrower.
+        Some states prohibit a deficiency judgment on a purchase money loan for the borrower's principal residence. A lender could decide not to pursue a deficiency judgment, even though entitled to one, but the defaulting borrower could then be faced with short sale situation.
+
+    Short Sale 
+        Since 2008, many parts of the country have experienced a severe drop in market values of all kinds of real estate. While the market has improved somewhat in many places, a prospective property seller may still be faced with a proposed sales price that is less than the amount outstanding on the seller's mortgage debt. In such a situation, the lender may permit a short sale in which the sales price is less than the remaining indebtedness. Contact the lender before marketing the property to determine whether or not the short sale would be accepted and, if so, how low a sales price the lender would be willing to approve.
+        The listing of a property for which a short sale has been approved should always disclose that fact. The lender will expect to approve the sales contract negotiated by buyer and seller and will also be informed of the progress of the transaction, giving final approval before the closing. Lender approvals will add several months or longer to the closing of the transaction, and the buyer should be aware of the lengthy period before the transaction can be completed. This might be acceptable to a buyer who is satisfied that the sales price is worth the wait; another buyer might not be able to wait that long.
+        A lender's willingness to approve a short sale may result in forgiveness of part of the borrower's debt. In addition to the seller's loss of any equity in the property, the forgiveness of part of the seller's mortgage debt has been considered by the IRS to be income to the seller/borrower and thus subject to income tax. The widespread dismay at this outcome resulted in the passage by Congress of the Mortgage Forgiveness Debt Relief Act of 2007. The law allows a taxpayer to exclude from income the forgiveness of part of the mortgage debt on the taxpayer's principal residence on a sale of the property, restructuring of an existing mortgage loan, or foreclosure of a mortgage loan. Subsequent legislation extended this provision through January 1, 2017.
+
+Consumer Protections 
+    As directed by the Wall Street Reform and Consumer Protection Act of 2010 (Dodd-Frank), the Consumer Financial Protection Bureau (CFPB) issued new mortgage disclosure rules that took effect January 10, 2014. A consumer information pamphlet, which was released in January 2013, can be found at www.consumerfinance.gov. The pamphlet explains information that the mortgage lender must provide to the borrower and also provides contact information for the borrower to initiate a complaint if the lender is not following the rules. The lender must
+        provide billing information in writing;
+        give the borrower two months' warning if an adjustable-rate mortgage will have a rate change;
+        promptly credit the borrower's payments;
+        respond quickly when the borrower asks about paying off the loan;
+        not charge for insurance the borrower doesn't need, or over-charge for insurance the lender provides if the borrower fails to do so ("force-placed insurance");
+        quickly resolve complaints, generally within 30 to 45 business days, and share information;
+        have and follow good customer service policies and procedures;
+        contact the borrower to help when the borrower is having trouble making payments;
+        work with the borrower, if the borrower is having trouble paying the mortgage, before starting or continuing foreclosure; and
+        allow the borrower to seek review of the decision about a loan workout request.
+
+    Homeowners Insurance 
+        A home is usually the biggest purchase many people ever make. Most homebuyers recognize the importance of protecting their investment by insuring it. A lender will require that a homeowner obtain insurance when the loan is secured by the property. While owners can purchase individual policies that insure against destruction of property by fire or windstorm, injury to others, and theft of personal property, most buy a homeowners insurance policy to cover all these risks.
+
+    Coverage and Claims 
+        Basic Form 
+            The most common homeowners policy is called a basic form. The basic form provides property coverage against
+                fire and lightning,
+                glass breakage,
+                windstorm and hail,
+                explosion,
+                riot and civil commotion,
+                damage by aircraft,
+                damage from vehicles,
+                damage from smoke,
+                vandalism and malicious mischief,
+                theft, and
+                loss of property removed from the premises when it is endangered by fire or other perils.
+
+        Broad-Form 
+            falling objects;
+            damage due to the weight of ice, snow, or sleet;
+            collapse of all or part of the building;
+            bursting, cracking, burning, or bulging of a steam or water heating system or of appliances used to heat water;
+            accidental discharge, leakage, or overflow of water or steam from within a plumbing, heating, or air-conditioning system;
+            freezing of plumbing, heating, and air-conditioning systems and domestic appliances; and
+            damage to electrical appliances, devices, fixtures, and wiring from short circuits or other accidentally generated currents.
+            
+        Additional insurance is available to cover almost all possible perils. Special apartment and condominium policies generally provide fire and windstorm, theft, and public liability coverage for injuries or losses sustained within the unit, but they usually do not cover losses or damages to the structure. The basic structure is insured by either the landlord or the condominium owners association.
+        Most homeowners insurance policies contain a coinsurance clause. This provision usually requires that the owner maintain insurance equal to a specified percentage (usually 80%) of the replacement cost of the dwelling (not including the price of the land). An owner who has this type of policy may make a claim for the full cost of the repair or replacement of the damaged property without deduction for depreciation or annual wear and tear.
+    
+        In Practice
+            A homeowner's insurance policy is for 80% of the replacement cost of the home, or $80,000. The home is valued at $100,000, and the land is valued at $40,000. The homeowner sustains $30,000 in fire damage to the house. The homeowner can make a claim for the full cost of the repair or replacement of the damaged property without a deduction for depreciation. If the owner has insurance of only $70,000, the claim will be handled in one of two ways. The owner will receive either actual cash value (replacement cost of $30,000 less depreciation cost of say $3,000, or $27,000), or the claim will be prorated by dividing the percentage of replacement cost actually covered (0.70) by the policy's minimum coverage requirement (0.80). So, 0.70 divided by 0.80 equals 0.875, and $30,000 multiplied by 0.875 equals $26,250. 
+
+    Comprehensive Loss Underwriting Exchange 
+        The Comprehensive Loss Underwriting Exchange (CLUE) is a database of consumer claims history that enables insurance companies to access prior claims information in the underwriting and rating process. The database contains up to five years of personal property claims history. The reports include policy information such as name, date of birth, policy number, and claim information date (date and type of loss, amounts paid, and description of property covered)
+
+    National Flood Insurance Program 
+        The National Flood Insurance Act of 1968 was enacted by Congress to help owners of property in flood-prone areas by subsidizing flood insurance and by taking land-use and land-control measures to improve future management for floodplain areas. The Federal Emergency Management Agency (FEMA) administers the National Flood Insurance Program (NFIP). The Army Corps of Engineers has prepared maps that identify specific flood-prone areas throughout the country. To finance property with federally related mortgage loans, owners in flood-prone areas must obtain flood insurance.
+        In flood-prone areas identified as special flood hazard areas (SFHAs), flood insurance is required on all types of buildings—residential, commercial, industrial, and agricultural—used as security for a federally related mortgage loan. The insurance must cover either the value of the property or the amount of the mortgage loan, subject to the maximum limits available. Policies are written annually and can be purchased from any licensed property insurance broker, the NFIP, or the designated servicing companies in each state. A borrower who can produce a survey showing that the lowest part of the building is located above the 100-year flood mark may be exempted from the flood insurance requirement, even if the property is in a flood-prone area. A flood insurance premium reduction is available for communities that participate in NFIP's voluntary Community Rating System (CRS) by taking floodplain management steps to reduce flood losses, facilitating accurate insurance ratings, and promoting awareness of flood insurance issues.
+        Even when it is not required, flood insurance should be considered for all properties in coastal states subject to hurricanes and in any state through which major rivers run. The cost of flood insurance will increase the property owner's expenses, which will be taken into consideration by the lender when making a financing decision. Higher expenses mean that a borrower will qualify for a lower loan amount, or may be charged a higher interest rate, but a lower interest rate will be no comfort if the property suffers unexpected flood damage.
+                In Practice
+                        A flood insurance policy is separate from a homeowners insurance policy, which many property owners fail to realize until it is too late. Flood insurance is not retroactive; it must be purchased before a disaster occurs. Flood insurance is not effective until 30 days after it is purchased, unless the lender requires it.
+
+            Flood insurance: What's Covered and What's Not 
+                FEMA defines a flood as "a general and temporary condition of partial or complete inundation of two or more acres of normally dry land or two or more properties from
+                    an overflow of inland or tidal waves,
+                    an unusual and rapid accumulation or runoff of surface waters,
+                    mudflows or mudslides on the surface of normally dry land, or
+                    the collapse of land along the shore of a body of water (under certain conditions)."
+                The physical damage to a building or personal property "directly" caused by a flood is covered by flood insurance policies. For example, damage from sewer backups is covered if it results directly from flooding. Flood policies exclude coverage for losses such as swimming pools, cars, money, animals, groundcover, or underground systems.
+            
+            Policies are of two types: replacement cost value (RCV) or actual cost value (ACV). Deductibles and premiums vary accordingly
+
+
+

@@ -1,0 +1,22 @@
+An appraisal uses the three approaches to value: cost, market, and income. The typical CMA or BPO provides a limited-market-data approach. Commercial BPOs often use a limited-income approach.
+Appraisers usually make detailed analyses of the dollar adjustments necessary to reflect the differences in property characteristics. The CMA may include some adjustments for major differences, but very often just shows raw data on prices. The BPO often uses the market data form used by appraisers with limited adjustments.
+Most appraisal reports provide a specific market value in dollars. CMAs and BPOs usually report results in a range of values.
+Appraisal reports are concerned mainly with prices actually paid for properties. CMAs also use properties currently on the market and those that did not sell. BPOs use sales and currently listed properties.
+An appraiser should not be involved in the property transaction for personal gain. A licensee may be involved in a transaction as the listing or selling agent, and may prepare a CMA in order to assist the seller in establishing a listing price, or if working with the buyer, to assist the buyer in establishing an offering price. Brokers who prepare BPOs often list the properties owned by the financial institutions.
+Appraisals are most often used for financing houses. CMAs are most often used for pricing listings. BPOs are most often prepared for lenders when a property is in default or already owned by the lender.
+The CMA is most effective when prepared for pricing residential properties up to four units or for residential building lots in a subdivision. It is less appropriate for commercial income properties. BPOs are often prepared for commercial properties.
+Many licensees inspect the property before preparing a CMA. This reduces the chances for a surprise at the time of presentation. Some licensees feel that a prepresentation visit, while helpful, is not time effective. At a minimum, a licensee should drive by the subject property and the properties that are being used in the CMA. Licensees must make their own judgments as to which method will provide the best results.
+
+
+                                                Appraisal                   CMA         BPO
+Approaches to value	                            Cost, market, income	    Market	    Market, income
+Detailed adjustments	                        Yes	                        No	        Yes
+Specific value	                                Yes	                        No	        No
+Shows sales, properties for sale, and expireds  Sales and market trends     Yes         Sales, listings, not expireds
+Preparer may be involved in transaction	        No	                        Yes	        Yes
+Principal type of properties valued	            All	                        Residential	Residential
+May charge fee	                                Yes	                        Yes	        Yes
+Federally related transaction	                Yes	                        No	        No
+Must be licensed or certified appraiser	        No	                        No	        No
+Shows repairs needed	                        Yes	                        No	        Yes
+

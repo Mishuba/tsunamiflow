@@ -1,0 +1,149 @@
+Most CMAs are completed today using one or more software programs that take data directly from the MLS and insert the analysis directly in to the listing presentation. This text will use a paper form to demonstrate the process.
+
+Categories of Comparables
+A CMA shows three major categories of properties: currently on the market, sold recently, and listings that expired recently.
+
+Currently on the market
+
+Prices of properties currently on the market show sellers their competition. Because buyers will normally select the property with the best price, the seller should price the property appropriately. The seller should be made aware that the asking prices are typically higher than the selling prices.
+
+For the best results in marketing the property, the seller should price the property just below the competition and just above recent sales.
+
+Recently sold
+
+A review of properties that have sold within the previous 12 months shows sellers and buyers the property's most likely appraisal value. If there are some unusually high or low prices in the study, licensees should try to see if there are good reasons for the variance. The most recent sales are the most reliable, especially in a changing market.
+
+Recently expired
+
+It is a common occurrence when listed properties do not sell. Usually, the price was too high, considering the characteristics of the property. Reviewing this section of the CMA shows the seller that buyers resist overpriced listings. It also becomes clear to licensees that taking an overpriced listing is usually a waste of time.
+
+Information Needed to Prepare a Comparative Market Analysis
+
+Before starting on the analysis, the licensee will find it helpful to have the following information:
+
+Information necessary                                                           Source(s)
+Owners' names and address	                                                    Owner, public records, city directory
+Property description	                                                        Owner's deed, public records, previous title insurance policy
+Lot size (frontage and depth)	                                                Owner's survey, recorded plat maps
+Number and size of rooms and total square footage	                            Inspection and measurement
+Building's construction and age	                                                Inspection, owner, tax appraiser's office
+Information relative to the neighborhood (schools, churches, transportation)	Inspection, owner
+Current taxes	                                                                Owner's tax bill, tax appraiser's office
+Amount of existing financing	                                                Owner's records, mortgage status letter sent by licensee
+Utilities and average payments	                                                Owner's records, utility company records
+Appliances to be included in the transaction	                                Owner
+Personal property and fixtures included in the sale	                            Owner
+Zoning classification (especially important for vacant land)	                City/county planning department
+Environmental hazards	                                                        Owner
+
+Obtaining Comparables
+Information about comparable properties that will be used in the report is usually easier to obtain if the property is in a recorded subdivision with many sales. Getting information takes longer if the property is in a rural area, because comparable properties are harder to find. The best sources for such information include:
+
+MLS records;
+company files;
+public records; and
+other licensees.
+MLS records are the most convenient and comprehensive method of obtaining information about listings and sales. MLS computer records may be searched by address, subdivision, size, price, or any other features that might show comparable properties. The prices shown include a commission. The major limitation with MLS data is that it usually only includes properties listed by a REALTOR®, and does not include properties sold by an owner.
+
+Company files usually have more information than the other sources, but they show only those properties listed or sold by the company.
+
+Public records show all recorded sales data and are used to supplement the data. Most county property appraisers and clerks in Florida now have online databases. These records, however, show only basic details and offer very little information about the property's features.
+
+Other licensees are a good source of information on properties not normally listed in MLS, such as commercial, industrial, or agricultural properties, or those in rural areas that don't have a formal sharing service.
+
+
+Common Elements of Comparison
+A CMA is useful for sellers and buyers only if it fairly reflects the interaction of supply and demand for a specific property. For that reason, it is important that all properties used in the report be similar to the subject property in size, age, amenities, and location. Adjustments should be made for important differences such as swimming pools, condition, style, and other items. There are many amenities that must be considered when making a comparison. (See  Information Needed to Prepare a Comparative Market Analysis.)
+
+Location
+
+Location is so important that only in unusual circumstances should the licensee use a property outside the neighborhood as a comparable. Even within the same neighborhood, location may result in significant differences in value. For example, a house next to a busy street normally has a lower value than a house in the subdivision's interior.
+
+Size and shape of lot
+
+A level site usually is more valuable than a sloping site. Bigger is usually better, and a rectangular lot often is more desirable than a pie-shaped lot.
+
+Landscaping
+
+The licensee should evaluate trees and other greenery as to their maturity and quality. The enhanced curb appeal of a well-landscaped home adds to its value.
+
+Construction quality
+
+Variations in construction quality may result in significant differences in property value. In some cases, the difference may be so great that the sold property should not be used as a comparable.
+
+Style
+
+Generally, a home's style should conform to that of other homes in the neighborhood. Substantial differences may result if the licensee uses the average square-foot prices of ranch homes to estimate a two-story home's value when the best comparable is another two-story home.
+
+Design
+
+Design features are important if some homes in an area have floor plans that are not functional or that are not accepted by the market. These are not good comparables for a home with a functional floor plan.
+
+Age
+
+In some established subdivisions, building sites are still available. If the licensee is preparing the CMA for a 20-year-old home, the licensee should avoid using a new home as a comparable sale.
+
+Square feet of gross living area
+
+All homes shown on the CMA should be comparable in size. Making dollar adjustments for small differences in size is relatively simple. However, the licensee should not compare a 2,500-square-foot home with a 1,500-square-foot home. Also, below-grade floor space is not considered gross living area (GLA) for most appraisals. It has less value than above grade space; thus, great care should be taken when including below-grade floor space as a comparable feature. If a square-foot adjustment must be made, the licensee should not also adjust for number of bedrooms or for a family room, for example. This may lead to a double adjustment for two items that really represent the same thing.
+
+Measure the structure
+
+It is important that the licensee measure the home accurately. Gross living area normally is calculated by taking exterior measurements, eliminating the garage, porches, and any workshops.
+
+Number of rooms
+
+The total room count should not include the foyer, bathrooms, or basement.
+
+Number of bedrooms
+
+If a comparable property has four bedrooms and the subject has only three, the square-foot adjustment probably will account for any difference. However, if one of the properties is a two-bedroom home in a neighborhood of three-bedroom and four-bedroom homes, an additional adjustment may be necessary.
+
+Number of bathrooms
+
+The number of bathrooms can have a significant impact on value, particularly when one of the properties has only one bathroom.
+
+Kitchen
+
+The market resists a kitchen with inadequate counter and storage space. Also, poorly maintained counters and cabinet finish may cause a kitchen to appear outdated, compared with others in the neighborhood. The age and condition of appliances also affect value.
+
+Other space
+
+A screened-in porch or Florida room adds value even though it is not counted in gross living area. The licensee should adjust for this difference.
+
+Condition
+
+The licensee should make adjustments if the subject property needs repairs that the homeowner refuses to make.
+
+Garage
+
+The licensee should make adjustments when the subject's garage or carport size differs from comparable properties' garages or carports.
+
+Other improvements
+
+The licensee should evaluate swimming pools, decks, patios, storage sheds, and other site improvements if they differ from comparable properties' improvements, making appropriate adjustments.
+
+Adjusting for Differences
+It would be ideal if all the comparable properties were identical to the subject property, but that situation rarely occurs. Therefore, the licensee may need to adjust for major differences so that the CMA does not mislead; however, making too many adjustments for less significant items also may mislead and could give the appearance that the licensee is trying to "back in" to a predetermined value.
+
+All adjustments are made to the comparable property. They may be remembered using the acronym CBS-CIA:
+
+To Remember: CBS - CIA
+
+If the Comparable is Better, Subtract.
+
+If the Comparable is Inferior, Add.
+
+
+Reconciliation
+After the licensee makes adjustments, each category of property (for sale now, sold, expired) should be reconciled. While an appraiser usually reports a single dollar amount as the value, a real estate licensee often prefers to give a range of values. This gives a seller flexibility to list the property at a lower (faster sell) or higher (slower sell) price. If the CMA is being prepared for a buyer, the buyer will have a better understanding of the property's value range and be able to make an educated offer.
+
+
+Computerized CMAs
+Several excellent software programs organize the data the licensee collects into an attractive presentation. Many MLS service providers also offer built-in or optional software that allows REALTOR® members to download the comparable information directly into a listing presentation package. Realtors® Property Resource (RPR) software is becoming one of the most popular of the CMA preparation packages. The fact that a computer generates the information does not in itself make the analysis more correct. The licensee should select only those properties comparable to the subject property.
+
+
+Attachments to CMA
+Photos of comparable properties, along with a plat map of the neighborhood, make the CMA easier to understand. A photograph of the home is a gift the owner may remember for a long time.
+
+

@@ -1,0 +1,10 @@
+/JS/*
+  Content-Type: application/javascript
+  X-Content-Type-Options: nosniff
+  Access-Control-Allow-Origin: https://tsunamiflow.club
+  Cache-Control: public, max-age=86400
+  Content-Security-Policy: default-src 'self'; script-src 'self'; worker-src 'self'; connect-src 'self' wss://world.tsunamiflow.club/ws; media-src 'self' https://radio.tsunamiflow.club/;
+
+/*
+  Access-Control-Allow-Origin: https://tsunamiflow.club
+  Cache-Control: public, max-age=86400

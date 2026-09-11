@@ -1,0 +1,11 @@
+Leasing Real Estate
+    - The record number of property foreclosures in recent years has been accompanied by an increase in the number of residential rental properties, both because foreclosed owners have become renters and because investors have taken advantage of the decline in market values to increase their portfolios. There has been a drop in the rate of home ownership from a record high of 69% in 2004 to 63.7% in 2015, and a corresponding increase in the number of households residing in rental units. Additional statistics on the housing market are available from the U.S. Census Bureau, www.census.gov.
+    - The foundation of the relationship between a property owner and tenant is the lease. A lease is a contract between a lessor (the owner of real estate, or landlord) and a lessee (the tenant). A lease transfers the lessor's rights to exclusive possession and use of the property to the tenant for a specified period of time and establishes the consideration the lessee is to pay rent for use of the property. Rent is a fixed, periodic payment made by a tenant of a property to the owner for possession and use, usually by prior agreement of the parties. Other rights and obligations of the parties are also set forth. The landlord retains a reversionary right to possession after the lease term expires.
+    - The statute of frauds in most states requires lease agreements for more than one year to be in writing to be enforceable. In general, oral leases for one year or less that can be performed within a year of their making are enforceable. A written lease should be executed (signed) by both the lessor and the lessee.
+        # In Practice
+            * Even though an oral lease, such as a lease for one year commencing from the day of agreement, may be enforceable, it is always better practice to put a lease agreement in writing. A written lease signed by both landlord and tenant provides concrete evidence of the terms and conditions to which the parties have agreed.
+
+
+
+
+

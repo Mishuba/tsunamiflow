@@ -1,0 +1,50 @@
+Secondary Mortgage Market
+    Helps lenders raise capital to continue making mortgage loans 
+    Mortgage loans are purchased and assemvbled into packages 
+
+Primary Mortgage Market 
+    Lender derives income from servicing loans 
+    Loans are originated 
+
+Federal Reserve System 
+    Regulates interest rates 
+    Maintains sound credit conditions 
+
+FHA 
+    Operating under HUD, it protects lenders from loss from borrower's default
+    Offers loans with LTV up to 96.5% 
+
+FSA 
+    Helps borrowers purchase homes in rural areas 
+
+VA 
+    No down payment required with no maximum loan amount restriction 
+
+Farm Credit 
+    Provides loans to farmers and ranchers 
+
+Home Equity Loan 
+    The original mortgage loan remains in place while a second (junior) laon is obtained 
+
+Package Loan 
+    Real and personal property are financed together 
+
+Buydown 
+    A lump sum is paid in cash to the lender to reduce the borrower's interest rate and monthly payments during the first few years of the loan. 
+
+Sale-and-leaseback 
+    A business owner sells real estate to an investor but remains on the property as a tenant. 
+
+FCRA 
+    Gives the loan applicant the right to a copy of the credit report 
+    Requires notification within 30 days if a loan application is rejected 
+TILA 
+    Requires that consumers be notified of the sale of transfer of their mortgage loans 
+    Requires that credit institutions inform borrowers of the true cost of obtaining credit 
+CRA 
+    Requires the deposit and credit needs of local residents ot be met 
+    Helps banks meet communities' needs for low-and moderate-income housing 
+TILA 
+    Requires that consumers be notified of the sale of transfer of their mortgage loans 
+    Requires that credit institutions inform borrowers of the true cost of obtaining credit 
+

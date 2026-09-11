@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Tsunami Flow Club</title>
+
+    <meta name="description"
+        content="Tsunami Flow is the homebase for turning dreams into reality, achieving goals, and mastering life.">
+    <meta name="theme-color" content="#000000">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+
+    <link rel="canonical" href="https://tsunamiflow.club/">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/icons/192Logo.png">
+    <link rel="apple-touch-icon" href="/icons/192Logo.png">
+    <link rel="stylesheet" href="/MyStyle/tfMain.css">
+
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Tsunami Flow Club">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta property="og:title" content="Tsunami Flow Club">
+    <meta property="og:description" content="Tsunami Flow is the homebase for turning dreams into reality.">
+    <meta property="og:image" content="https://tsunamiflow.club/icons/192Logo.png">
+    <meta property="og:url" content="https://tsunamiflow.club/">
+    <meta property="og:type" content="website">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tsunami Flow Club">
+    <meta name="twitter:description" content="Tsunami Flow is the homebase for turning dreams into reality.">
+    <meta name="twitter:image" content="https://tsunamiflow.club/icons/192Logo.png">
+
+    <meta name="google-site-verification" content="Yae7Q7bC5eK9FjTbjARZOisTwVTVknEe0tLWT4EiVqU">
+    <meta name="google-adsense-account" content="ca-pub-1650194129657038">
+
+    <link rel="preconnect" href="https://js.stripe.com">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1650194129657038"
+        crossorigin="anonymous"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/8.1.2/adapter.min.js"
+        integrity="sha512-l40eBFtXx+ve5RryIELC3y6/OM6Nu89mLGQd7fg1C93tN6XrkC3supb+/YiD/Y+B8P37kdJjtG1MT1kOO2VzxA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body id="theBody">
+    <header id="tfHeaderFr">
+        <div>
+            <h3 id="TFtime">Time</h3>
+            <p id="tfWordOfTheDay"></p>
+            <br>
+            <p id="TimeInfo"></p>
+
+        </div>
+        <div>
+            <h3>TF News & History</h3>
+            <p id="NTS">News Currently Unavailable</p>
+        </div>
+        <div>
+            <h3>Weather</h3>
+            <p id="TFweather"></p>
+            <p id="TfAd"></p>
+        </div>
+    </header>
+    <nav>
+        <table>
+            <caption> Website Navigation and Login. </caption>
+            <colgroup>
+                <col span="7">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <td>
+                        <button id="tfRoster" type="button">Roster</button>
+                    </td>
+                    <td>
+                        <button id="tfNews" type="button">News</button>
+                    </td>
+                    <td>
+                        <button id="tfCompetitions" type="button">Competition</button>
+                    </td>
+                    <td>
+                        TF Network
+                        <br>
+                        <select id="tfNetwork">
+                            <optgroup label="Music">
+                                <option value="Studio Sessions">Studio Sessions</option>
+                                <option value="Music Videos">Music Videos</option>
+                            </optgroup>
+
+                            <optgroup label="Tsunami World">
+                                <option value="Live">Live</option>
+                            </optgroup>
+
+                            <optgroup label="Shows">
+                                <option value="TV">TV</option>
+                                <option value="Documentary">Documentary</option>
+                                <option value="Case Study">Case Study</option>
+                            </optgroup>
+
+                            <optgroup label="Video Games">
+                                <option value="Kingdom Deliverance">Kingdom Deliverance </option>
+                                <option value="Elden Ring">Elden Ring</option>
+                                <option value="Legend of the Dragoon">Legend of the Dragoon</option>
+                                <option value="Watchdogs Legion">Watchdogs Legion</option>
+                                <option value="Lord of the Rings: Middle Earth Shadow Of War">Lord of the Rings: Middle
+                                    Earth Shadow Of War</option>
+                                <option value="Devil May Cry V ">Devil May Cry V </option>
+                                <option value="Project Nimbus">Project Nimbus</option>
+                                <option value="Skyrim">Skyrim</option>
+
+                            </optgroup>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="tfCommunity">
+                            <optgroup label="Activities">
+                                <option value="Video Studio">Video Studio</option>
+                                <option value="Audio Studio">Audio Studio</option>
+                            </optgroup>
+                            <optgroup label="Test">
+                                <option value="Unoffical Real Estate Test"> Unoffical Real Estate Tests</option>
+                            </optgroup>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <form id="tfNavLoginForm" action="server.php" method="POST" target="_blank">
+            <label for="nun"><input class="nav-input" id="nun" type="text" placeholder="Username" name="NavUserName"
+                    size="4"></label>
+            <label for="npsw"><input class="nav-input" id="npsw" type="password" placeholder="Password"
+                    name="NavPassword" size="4"></label>
+            <label for="NavLoginButton"><input id="NavLoginButton" type="submit" value="Login"></label>
+            <i class="glyphicon glyphicon-user" id="TFloginIcon">Nobody is logged in.</i>
+        </form>
+    </nav>
+    <main id="MainSection">
+        <div id="TfLogBox"> </div>
+        <aside>
+            <span>
+                <h6> Tsunami Radio (completely random)</h6>
+                <p id="TfRadioStuff"></p>
+                <p id="CheckRadio"></p>
+
+            </span>
+            <span>
+                <address id="authorStuffTF">
+                    <p>Homebase: Tyacdome <br>Location: The Land of Dreams <br></p>
+                    <p>Planet: Earth<br>Galaxy: Milky Way<br></p>
+                </address>
+            </span>
+            <div id="TfDonation"></div>
+            <button id="TfDonateBtn">Donate $5</button>
+
+            <!--
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick" />
+                    <input type="hidden" name="hosted_button_id" value="3LQGL334FUKLW" />
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!" />
+                    <img alt="Please donate." border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+                </form>
+            -->
+        </aside>
+        <section>
+            <div id="mainTsectionFdiv"></div>
+        </section>
+        <aside id="tfExtraSection">
+            <span id="ThoughtsCss">
+                <h2>💬 Live Chat</h2>
+                <div id="TFthought"></div>
+                <input id="TFthoughtsNow" type="text" placeholder="Type a message...">
+                <button id="LiveStreamChat" type="button">Send</button>
+            </span>
+            <span id="ThoughtsCss">
+                <form name="TfCompleteForm" id="TFCompleteForm" class="TfMemberForm" autocomplete="on" target="_self"
+                    method="POST" action="server.php">
+                    <h1>Subscriber Form</h1>
+                    <fieldset name="FreeLevelSection">
+                        <legend>You will have to input your card information to help with verification.</legend>
+
+                        <!-- Membership Level Selection -->
+                        <label for="membershipLevel">Select Membership Level</label><select id="TFMembershipLevel"
+                            name="membershipLevel" required>
+                            <option value="none">Please Select One</option>
+                            <option value="free">Free</option>
+                            <option value="regular">Regular</option>
+                            <option value="vip">VIP</option>
+                            <option value="team">Team</option>
+                        </select>
+                        <br>
+
+                        <div id="freeLevelInputs">
+                            <!-- Free Level Fields -->
+                            <label for="FirstName"><input id="TfFirstName" class="TFFormInput"
+                                    name="TFRegisterFirstName" type="text" placeholder="First Name" required></label>
+                            <br>
+                            <label for="LastName"><input id="TfLastName" class="TFFormInput" name="TFRegisterLastName"
+                                    type="text" placeholder="Last Name" required></label>
+                            <br>
+                            <label for="NickName"><input id="TfNickName" class="TFFormInput" name="TFRegisterNickName"
+                                    type="text" placeholder="Nickname"></label>
+                            <br>
+                            <label for="Gender">
+                                Gender
+                                <select id="TfGender" name="TFRegisterGender">
+                                    <option>Please Select</option>
+                                    <option value="Male"> Male </option>
+                                    <option value="Female"> Female </option>
+                                    <option value="Transgender"> Transgender </option>
+                                    <option value="Transexual"> Transexual </option>
+                                    <option value="Transvestite"> Transvestite </option>
+                                </select>
+                                <br>
+                                <label for="Birthday">Birthday<input id="TfBirthday" class="TFFormInput"
+                                        name="TFRegisterBirthday" type="date" min="1890-01-01" max=""
+                                        placeholder="01/01/1900" required></label>
+                                <br>
+                                <label for="Email"><input id="TfEmail" class="TFFormInput" name="TFRegisterEmail"
+                                        type="email" placeholder="Email" required></label>
+                                <br>
+                                <label for="Username"><input id="TFuserName" class="TFFormInput"
+                                        name="TFRegisterUsername" type="text" placeholder="Username" required></label>
+                                <br>
+                                <label for="Password"><input id="TFpassword" class="TFFormInput"
+                                        name="TFRegisterPassword" type="password" placeholder="Password"
+                                        required></label>
+                                <br>
+                        </div>
+
+                        <!-- Regular Member Section -->
+                        <div id="regularLevelInputs" style="display:none;">
+
+                            <br>
+                            <label for="SpiritAnimal">Spirit Animal
+                                <select id="SpiritAnimal" class="TFFormInput" name="SpiritAnimal">
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </label>
+                            <br>
+                            <label for="CelticTreeZodiacSign">Celtic Tree Zodiac Sign
+                                <select id="CelticTreeZodiacSign" class="TFFormInput" name="CelticTreeZodiacSign">
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                    <option value=""></option>
+                                </select>
+                            </label>
+                            <br>
+                            <label for="NativeAmericanZodiacSign">Native American Zodiac Sign<input
+                                    id="NativeAmericanZodiacSign" class="TFFormInput" name="NativeAmericanZodiacSign"
+                                    type="text" placeholder="Native American Zodiac Sign"></label>
+                            <br>
+                            <label for="VedicAstrologySign">Vedic Astrology Sign<input id="VedicAstrologySign"
+                                    class="TFFormInput" name="VedicAstrologySign" type="text"
+                                    placeholder="Verdic Astrology Sign"></label>
+                            <br>
+                            <label for="GuardianAngel">Guardian Angel<input id="GuardianAngel" class="TFFormInput"
+                                    name="GuardianAngel" type="text" placeholder="Guardian Angel"></label>
+                            <br>
+                            <label for="ChineseElement">Chinese Element<input id="ChineseElement" class="TFFormInput"
+                                    name="ChineseElement" type="text" placeholder="Chinese Element"></label>
+                            <br>
+                            <label for="EyeColorMeaning">Eye Color Meaning<input id="EyeColorMeaning"
+                                    class="TFFormInput" name="EyeColorMeaning" type="text"
+                                    placeholder="Eye Color Meaning"></label>
+                            <br>
+                            <label for="GreekMythologyArchetype">Greek Mythology Archetype<input
+                                    id="GreekMythologyArchetype" class="TFFormInput" name="GreekMythologyArchetype"
+                                    type="text" placeholder="Greek Mythology Archetype"></label>
+                            <br>
+                            <label for="NorseMythologyPatronDeity">Norse Mythology Patron Deity<input
+                                    id="NorseMythologyPatronDeity" class="TFFormInput" name="NorseMythologyPatronDeity"
+                                    type="text" placeholder="Norse Mythology Patron Deity"></label>
+                            <br>
+                            <label for="EgyptianZodiacSign">Egyptian Zodiac Sign<input id="EgyptianZodiacSign"
+                                    class="TFFormInput" name="EgyptianZodiacSign" type="text"
+                                    placeholder="Egyptian Zodiac Sign"></label>
+                            <br>
+                            <label for="MayanZodiacSign">Mayan Zodiac Sign<input id="MayanZodiacSign"
+                                    class="TFFormInput" name="MayanZodiacSign" type="text"
+                                    placeholder="Mayan Zodiac Sign">
+                            </label>
+                        </div>
+
+                        <!-- VIP Member Section -->
+                        <div id="vipLevelInputs" style="display:none;">
+                            <label for="LoveLanguage">Love Language<input id="LoveLanguage" class="TFFormInput"
+                                    name="LoveLanguage" type="text" placeholder="Love Language"></label>
+                            <br>
+                            <label for="BloodType">Blood Type<input id="BloodType" class="TFFormInput" name="BloodType"
+                                    type="text" placeholder="Blood Type"></label>
+                            <br>
+                            <label for="AttachmentStyle">Attachment Style<input id="AttachmentStyle" class="TFFormInput"
+                                    name="AttachmentStyle" type="text" placeholder="Attachment Style"></label>
+                            <br>
+                            <label for="CharismaType">Charisma Type<input id="CharismaType" class="TFFormInput"
+                                    name="CharismaType" type="text" placeholder="Charisma Type"></label>
+                        </div>
+
+                        <!-- Team Member Section -->
+                        <div id="teamLevelInputs" style="display:none;">
+                            <label for="BusinessPersonality">Business Personality<input id="BusinessPersonality"
+                                    class="TFFormInput" name="BusinessPersonality" type="text"
+                                    placeholder="Business Personality"></label>
+                            <br>
+                            <label for="DISC">DISC<input id="DISC" class="TFFormInput" name="DISC" type="text"
+                                    placeholder="DISC"></label>
+                            <br>
+                            <label for="SocionicsType">Socionics Type<input id="SocionicsType" class="TFFormInput"
+                                    name="SocionicsType" type="text" placeholder="Socionics Type"></label>
+                            <br>
+                            <label for="LearningStyle">Learning Style<input id="LearningStyle" class="TFFormInput"
+                                    name="LearningStyle" type="text" placeholder="Learning Style"></label>
+                            <br>
+                            <label for="FinancialPersonalityType">Financial Personality Type<input
+                                    id="FinancialPersonalityType" class="TFFormInput" name="FinancialPersonalityType"
+                                    type="text" placeholder="Financial Personality Type"></label>
+                            <br>
+                            <label for="PrimaryMotivationStyle">Primary Motivation Style<input
+                                    id="PrimaryMotivationStyle" class="TFFormInput" name="PrimaryMotivationStyle"
+                                    type="text" placeholder="Primary Motivation Style"></label>
+                            <br>
+                            <label for="CreativeStyle">Creative Style<input id="CreativeStyle" class="TFFormInput"
+                                    name="CreativeStyle" type="text" placeholder="Creative Style"></label>
+                            <br>
+                            <label for="ConflictManagementStyle">Conflict Management Style<input
+                                    id="ConflictManagementStyle" class="TFFormInput" name="ConflictManagementStyle"
+                                    type="text" placeholder="Conflict Management Style"></label>
+                            <br>
+                            <label for="TeamRolePreference">Team Role Preference<input id="TeamRolePreference"
+                                    class="TFFormInput" name="TeamRolePreference" type="text"
+                                    placeholder="Team Role Prefernce"></label>
+                        </div>
+                        <div id="SubscribeUsers"></div>
+                        <button id="SubscribeUsersSubmit" class="SubFormButton" name="TFRegisterFreeLevelButton"
+                            type="submit" disabled>Subscribe</button>
+                    </fieldset>
+                </form>
+
+            </span>
+        </aside>
+    </main>
+    <article>
+        <div id="radioDock">
+
+            <div id="radioHeader">
+                <span>🎧 Tsunami Radio</span>
+                <button id="toggleRadio">▲</button>
+            </div>
+            <div id="radioBody">
+                <canvas id="TFradioCanvas" width="1200" height="100"></canvas>
+                <p id="TFradioInfo">
+                    Song Name: , Song Title: , Album Name: , Artist: , Featured Artist: , Writers: , Composers: , Record
+                    Label:
+                    , Publisher: ,
+                </p>
+                <p id="TFradioCurrentTIme">
+
+                </p>
+                <p id="TFradioTimeLeft">
+
+                </p>
+                <p id="RadioTimeFr">
+
+                </p>
+                <p id="TFradioProcessBar">
+
+                </p>
+                <audio id="TFradioPlayer" src="" controls controlsList="nodownload" preload="metadata"
+                    crossorigin="anonymous">
+                    Radio
+                </audio>
+            </div>
+
+        </div>
+    </article>
+    <footer>
+        <div id="TFstore">
+            <h2>Tsunami Flow Store</h2>
+            <ul>
+                <li id="">
+                    <h4></h4>
+                    <img src="" alt="Product Image">
+                    <p>
+                    </p>
+
+                    <form class="cartForm" method="POST" action="/server.php">
+                        <select class="variantSelect" name="product_id" required>
+                            <option value="" data-price="">
+                            </option>
+                        </select>
+                        <select disabled>
+                            <option>No Variants Available</option>
+                        </select>
+
+                        <input class="quantityInput" type="number" name="StoreQuantity" value="1" min="1" max="1000">
+                        <span class="itemSubtotal">0.00</span>
+                        <button type="submit" name="addProductToCart">Add to Cart</button>
+                    </form>
+                </li>
+            </ul>
+            <p>No products available.</p>
+            <p>Cart Total: $<span id="cartTotal">0.00</span></p>
+        </div>
+        <div id="UniqueOriginal"></div>
+        <button id="UniqueOriginalBtn" class="SubFormButton" name="TFRegisterFreeLevelButton" type="submit"
+            disabled>Subscribe</button>
+    </footer>
+    <script type="module" src="./JS/tfMain.js"></script>
+</body>
+
+</html>

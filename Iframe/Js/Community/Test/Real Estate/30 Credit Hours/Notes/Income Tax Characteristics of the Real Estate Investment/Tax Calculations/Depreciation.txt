@@ -1,0 +1,39 @@
+In order to compute depreciation deduction, it is important to understand some basic terms:
+
+Basis. This is the "book value" of the investment for tax reporting purposes. Basis is a generic term and is modified depending on which type of tax reporting you are dealing with.
+Cost basis. This is the cost or purchase price of the investment, plus any nondeductible closing costs. If the property was acquired by something other than purchase, for example, gift, inheritance, or tax-deferred exchange, then the basis will be determined differently.
+Depreciable basis. This is the amount of the investment that may be recovered through depreciation. The investor may not depreciate that portion of the investment that is land value, nor can he or she depreciate any portion of the property that is personal use and not held for the production of income.
+Adjusted basis. This is your cost basis, increased by any capital improvements, decreased by any partial sales and depreciation deductions previously allowed or allowable, and increased by costs of sale. This is the figure that will be deducted from the sales price to determine the investor's capital gain or loss on disposition.
+Useful life. This is the period of time during which the property remains of economic value. This is also the period over which the property may be depreciated. This useful life is now determined by the Internal Revenue Code, depending on the type of property involved.
+Having identified depreciable basis and useful life, we can begin to calculate the depreciation deduction. The concept of depreciation recognizes that an asset wears out over a period of time, and at the end of that time it will either have no economic value or will require a major investment to achieve economic value.
+
+Determining the useful life of an asset used to be a real point of confusion and negotiation under the old depreciation system, called ADR (or asset depreciation range). However, with recent changes in the tax laws, virtually all assets have a useful life determined by statute. These lives are 27.5 years for residential property and 39 years for nonresidential property.
+
+
+Straight-Line Depreciation
+This method is the simplest type of depreciation and is used as the benchmark for all other forms. This method allows you to deduct your depreciable basis in equal amounts each year over the appropriate useful life. The annual depreciation deduction is calculated by dividing the depreciable basis by the useful life of the asset.
+
+Accelerated Depreciation Methods
+Accelerated depreciation methods allow a larger expense deduction during the early years of your investment than you would be available under the straight-line method; however, this deduction decreases in the later years.
+
+All forms of accelerated depreciation allow the taxpayer to change the method of depreciation to the straight-line method at the time that the straight-line method will yield a larger deduction than the existing method of depreciation.
+
+While the accelerated methods allow a larger deduction in the early years, the accelerated amount is subject to recapture at time of disposition. This means that at time of sale, all depreciation deductions taken in excess of the allowable straight-line amount are taxed as ordinary income.
+
+Modified Accelerated Cost Recovery System (MACRS)
+Assets placed in service after December 31, 1986, are depreciated using the Modified Accelerated Cost Recovery System (MACRS). This method is straight-line depreciation, with the added calculation of the mid-month convention. This convention states that any asset placed in service during the month is treated as placed in service at the midpoint of the month. The useful life of these assets is 27.5 years for residential property and 39 years for nonresidential property. A property placed in service on January 1st of the tax year would receive 11.5/12ths of the annual straight-line amount.
+
+Alternative Depreciation System (ADS)
+For assets placed in service after December 31, 1986, the taxpayer may elect the Alternative Depreciation System (ADS). This allows the use of straight-line depreciation over a useful life of 40 years. This type of depreciation is not typically considered a preference item for the purpose of calculating alternative minimum tax.
+
+In closing this discussion, it is important to remember the following:
+
+All rental activities are passive activities.
+A taxpayer may not use losses from passive activities to offset other types of income.
+EXCEPTION:
+
+A taxpayer who materially participates in a passive activity may use $25,000 of passive activity losses to offset income from other sources. This exception begins to phase out at the rate of $0.50 for each $1.00 that the taxpayer's adjusted gross income exceeds $100,000.
+
+Any passive activity losses that are disallowed in the year incurred are considered suspended, and the taxpayer is allowed to carry those losses forward to a year in which there is net passive income to write off the losses.
+In the year of disposition, any suspended losses are allowed without limitation if the disposition is taxable. If the disposition is tax deferred, then the suspended losses are carried forward subject to the limitations mentioned.
+
