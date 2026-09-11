@@ -1,4 +1,0 @@
-regular => prod_RkeSjtKfxieNrl
-vip =>
-team =>
-
