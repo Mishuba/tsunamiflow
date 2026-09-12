@@ -548,11 +548,11 @@ export class maxwell {
                 case "Audio Studio":
                     this.iframe.frame.src = "Iframe/Pages/homepage.html";
                     break;
-                case "Unoffical Real Estate Tests":
+                case "Real Estate":
                     this.iframe.frame.src = "Iframe/Js/Community/Test/'Real Estate'/Programs/index.html";
                     break;
                 default:
-                    this.iframe.frame.src = this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
                     break;
             }
             this.iframe.MenuSwitch(this.iframe.frame)
