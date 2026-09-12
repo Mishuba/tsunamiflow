@@ -542,6 +542,15 @@ export class maxwell {
 
         this.onMe("tfCommunity", "change", () => {
             switch (this.find("tfCommunity").value) {
+                case "Profile":
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    break;
+                case "Community":
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    break;
+                case "Settings":
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    break;
                 case "Video Studio":
                     this.iframe.frame.src = "Iframe/Pages/Community.html";
                     break;
