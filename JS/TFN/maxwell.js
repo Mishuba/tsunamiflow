@@ -546,10 +546,10 @@ export class maxwell {
                     this.iframe.frame.src = "Iframe/Pages/Community.html";
                     break;
                 case "Audio Studio":
-                    this.iframe.frame.src = "Iframe/Js/Community/Studio/Audio/homepage.html";
+                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
                     break;
-                case "Unoffical Real Estate Test":
-                    this.iframe.frame.src = "Iframe/Js/Community/Test/Programs/index.html";
+                case "Unoffical Real Estate Tests":
+                    this.iframe.frame.src = "Iframe/Js/Community/Test/'Real Estate'/Programs/index.html";
                     break;
                 default:
                     this.iframe.frame.src = this.iframe.frame.src = "Iframe/Pages/homepage.html";
