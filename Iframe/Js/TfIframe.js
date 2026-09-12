@@ -1,6 +1,6 @@
 export class tfIframe {
   pageName = null;
-  constructor(element = null, Homepage = null, Game1 = null, video = null) {
+  constructor(element = null, Homepage = null, Game1 = null) {
     this.frame = element;
     this.HomepageUpdates = Homepage;
     this.FirstGame = Game1;
@@ -30,6 +30,7 @@ export class tfIframe {
     console.log(`Determined postMessage origin: ${origin}`);
     switch (this.pageName) {
       case "homepage.html":
+        /*
         console.log("iframe message received from the homepage");
         console.log("The event type is " + event.data.type);
         if (event.data.type === "Website Updates") {
@@ -45,6 +46,7 @@ export class tfIframe {
           source.contentWindow.postMessage(HomePageJson, origin);
         }
         console.log("the end of that");
+        */
         break;
       case "roster.html":
         console.log("The iframe is from the roster page");

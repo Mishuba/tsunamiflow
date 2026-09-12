@@ -608,15 +608,15 @@ export class GameMechanics extends TFgameMovement {
         switch (type) {
 
             case "BEAT_HIT":
-                spawnShockwave();
+                //spawnShockwave();
                 break;
 
             case "DROP":
-                world.timeScale = 0.5; // slow motion
+                //world.timeScale = 0.5; // slow motion
                 break;
 
             case "HIGH_ENERGY":
-                unlockAbility("overdrive");
+                //unlockAbility("overdrive");
                 break;
         }
     }

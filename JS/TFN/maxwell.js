@@ -1781,12 +1781,42 @@ export class maxwell {
     bindFrameEvent(event) {
         switch (event) {
             case "load":
-                try {
-                    //this.iframe.frame.contentWindow.controller = this;
-                    this.iframe.MenuSwitch(this.iframe.frame);
-                } catch (e) {
-                    console.error("Cross-origin block:", e);
+                switch (this.iframe.frame.src) {
+                    case "Iframe/Pages/homepage.html":
+                        const homepageCanvas = this.find("homecanvas", this.iframe.frame);
+                        this.homepageCanvas = homepageCanvas;
+                        this.worker.postMessage(
+                            this.soundEngine.tycadome(
+                                "tycadome-guest" + Date.now(),
+                                "canvas",
+                                "load.game.world.canvas",
+                                {
+                                    source: "web",
+                                    target: "device:web-001",
+                                    worker: "world"
+                                },
+                                {
+                                    status: "pending",
+                                    priority: "low"
+                                },
+                                "async",
+                                {
+                                    system: "homepage",
+                                    canvas: this.homepageCanvas,
+                                    ai: this.ackmaHawk.toJSON
+                                },
+                                [
+                                    this.homepageCanvas
+                                ]
+                            ),
+                            [this.homepageCanvas]);
+
+                        break;
                 }
+                break;
+
+            default:
+
                 break;
         }
     }
@@ -1842,7 +1872,7 @@ export class maxwell {
                         this.bindUsers();
                         this.bindPayments();
                         this.user.bindCart();
-                        this.bindNavBar();
+
 
                         if (window.Worker) {
                             try {
