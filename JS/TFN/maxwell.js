@@ -8,6 +8,7 @@ import { TsunamiFlowImageEngine } from "./T/Class/Elder/Img.js";
 import { Studio } from "./T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
+import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
 export class maxwell {
     offscreencanvas = null;
@@ -42,6 +43,7 @@ export class maxwell {
     chatBox = null;
     site = new HeaderWeather();
     iframe = new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame);
+    homepageCanvas = null;
     user = new TfPrintful({
         stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
         backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
@@ -78,7 +80,7 @@ export class maxwell {
         images: {},
         screens: {}
     };
-    ackmaHawk = new gameComponent(
+    stickman = new gameComponent(
         30,
         30,
         "https://www.tsunamiflow.club/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
@@ -175,8 +177,211 @@ export class maxwell {
         1,
         1
     );
+    ackmaHawk = new gameComponent(
+        30,
+        30,
+        "https://www.tsunamiflow.club/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
+        60,
+        160,
+        "sprite",
+        0,
+        0,
+        120,
+        120,
+        "30px",
+        "Consolas",
+        280,
+        40,
+        "center",
+        "alphabetic",
+        "inherit",
+        0,
+        "auto",
+        "normal",
+        "normal",
+        "auto",
+        0,
+        undefined,
+        [],
+        "stand",
+        "https://www.tsunamiflow.club/Pictures/Logo/Tsunami Flow Logo.png",
+        "Mishuba",
+        "Feilong",
+        "Ackma",
+        [
+            { name: "health", points: 1 },
+            { name: "stamina", points: 1 },
+            { name: "weight", points: 1 },
+            { name: "strength", points: 1 },
+            { name: "agility", points: 1 }
+        ],
+        [
+            { name: "Science", level: 0, experience: 0 },
+            { name: "Creativity", level: 0, experience: 0 },
+            { name: "Math", level: 0, experience: 0 },
+            { name: "Memory", level: 0, experience: 0 },
+            { name: "Awareness", level: 0, experience: 0 }
+        ],
+        [
+            { name: "Reflection", level: 0, experience: 0 },
+            { name: "honesty", level: 0, experience: 0 },
+            { name: "deception", level: 0, experience: 0 },
+            { name: "manipulation", level: 0, experience: 0 },
+            { name: "charisma", level: 0, experience: 0 }
+        ],
+        [
+            { name: "feelings", level: 0, experience: 0 },
+            { name: "mood", level: 0, experience: 0 },
+            { name: "temper", level: 0, experience: 0 },
+            { name: "attitude", level: 0, experience: 0 },
+            { name: "perspective", level: 0, experience: 0 }
+        ],
+        [
+            { name: "consciousness", level: 0, experience: 0 },
+            { name: "time", level: 0, experience: 0 },
+            { name: "dimension", level: 0, experience: 0 },
+            { name: "space", level: 0, experience: 0 },
+            { name: "defense", level: 0, experience: 0 }
+        ],
+        [
+            { name: "fire", level: 0, experience: 0 },
+            { name: "water", level: 0, experience: 0 },
+            { name: "air", level: 0, experience: 0 },
+            { name: "lightning", level: 0, experience: 0 },
+            { name: "earth", level: 0, experience: 0 }
+        ],
+        [
+            { name: "magic", level: 0, experience: 0 },
+            { name: "ESP", level: 0, experience: 0 },
+            { name: "dexterity", level: 0, experience: 0 },
+            { name: "genetic", level: 0, experience: 0 },
+            { name: "personal", level: 0, experience: 0 }
+        ],
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+    );
+
+    Halu = new aiSprite2d({
+        inputSize: 4,
+        outputSize: 2,
+        actions: ['left', 'right'],
+        alpha: 0.1,
+        gamma: 0.99,
+        epsilon: 0.1,
+        sprite: new gameComponent(
+            30,
+            30,
+            "https://www.tsunamiflow.club/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
+            60,
+            160,
+            "sprite",
+            0,
+            0,
+            120,
+            120,
+            "30px",
+            "Consolas",
+            280,
+            40,
+            "center",
+            "alphabetic",
+            "inherit",
+            0,
+            "auto",
+            "normal",
+            "normal",
+            "auto",
+            0,
+            undefined,
+            [],
+            "stand",
+            "https://www.tsunamiflow.club/Pictures/Logo/Tsunami Flow Logo.png",
+            "Hubert",
+            "Maxwell",
+            "Halu",
+            [
+                { name: "health", points: 1 },
+                { name: "stamina", points: 1 },
+                { name: "weight", points: 1 },
+                { name: "strength", points: 1 },
+                { name: "agility", points: 1 }
+            ],
+            [
+                { name: "Science", level: 0, experience: 0 },
+                { name: "Creativity", level: 0, experience: 0 },
+                { name: "Math", level: 0, experience: 0 },
+                { name: "Memory", level: 0, experience: 0 },
+                { name: "Awareness", level: 0, experience: 0 }
+            ],
+            [
+                { name: "Reflection", level: 0, experience: 0 },
+                { name: "honesty", level: 0, experience: 0 },
+                { name: "deception", level: 0, experience: 0 },
+                { name: "manipulation", level: 0, experience: 0 },
+                { name: "charisma", level: 0, experience: 0 }
+            ],
+            [
+                { name: "feelings", level: 0, experience: 0 },
+                { name: "mood", level: 0, experience: 0 },
+                { name: "temper", level: 0, experience: 0 },
+                { name: "attitude", level: 0, experience: 0 },
+                { name: "perspective", level: 0, experience: 0 }
+            ],
+            [
+                { name: "consciousness", level: 0, experience: 0 },
+                { name: "time", level: 0, experience: 0 },
+                { name: "dimension", level: 0, experience: 0 },
+                { name: "space", level: 0, experience: 0 },
+                { name: "defense", level: 0, experience: 0 }
+            ],
+            [
+                { name: "fire", level: 0, experience: 0 },
+                { name: "water", level: 0, experience: 0 },
+                { name: "air", level: 0, experience: 0 },
+                { name: "lightning", level: 0, experience: 0 },
+                { name: "earth", level: 0, experience: 0 }
+            ],
+            [
+                { name: "magic", level: 0, experience: 0 },
+                { name: "ESP", level: 0, experience: 0 },
+                { name: "dexterity", level: 0, experience: 0 },
+                { name: "genetic", level: 0, experience: 0 },
+                { name: "personal", level: 0, experience: 0 }
+            ],
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+        )
+    });
     game = new letsDoIt(
-        "Homepage Game", this.ackmaHawk
+        "Homepage Game", this.stickman
     );
     ai = new AiInterface({
         inputSize: 4,
@@ -406,7 +611,7 @@ export class maxwell {
     }
     bindNavBar() {
         // navigation menu
-        this.onMe("tfRoster", "click", (e) => {
+        this.onMe("tfRoster", "click", () => {
             //i have a function for this already.
             this.iframe.frame.src = "Iframe/Pages/roster.html";
             this.iframe.MenuSwitch(this.iframe.frame);
@@ -421,7 +626,7 @@ export class maxwell {
             this.iframe.MenuSwitch(this.iframe.frame);
         });
 
-        this.onMe("tfNetwork", "change", async (e) => {
+        this.onMe("tfNetwork", "change", async () => {
             let playlist = {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
@@ -1862,10 +2067,6 @@ export class maxwell {
                     this.iframe.frame.style.pointerEvents = "auto";
                     this.iframe.frame.src = "Iframe/Pages/homepage.html";
 
-                    this.iframe.frame.addEventListener("load", () => {
-                        this.bindFrameEvent("load");
-                    });
-
                     this.updateRadioState();
 
                     this.user.showProducts().then(() => {
@@ -1884,7 +2085,16 @@ export class maxwell {
                         } else {
                             this.bindAudio();
                         }
+
+                        this.bindNavBar();
+
+                        this.iframe.frame.addEventListener("load", () => {
+                            this.bindFrameEvent("load");
+                        });
+
                         this.site.requestLocation();
+
+
                         //this.connectWebSocket();
                         console.log("TFN");
                     }).catch(err => {

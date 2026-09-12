@@ -104,7 +104,6 @@ class GameWorld {
 	constructor(options = {}) {
 
 	}
-
 	tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
 		let tf = {
 			"id": id, //options.id
@@ -140,11 +139,13 @@ class GameWorld {
 		return tf;
 	}
 
+
 	MessageReceived(event) {
 		switch (event.data.type) {
 			case "game.player":
 
 				break;
+
 			case "audio.worklet": {
 				const payload = event.data.payload || {};
 				if (event.data.action === "audio.visual.data") {
