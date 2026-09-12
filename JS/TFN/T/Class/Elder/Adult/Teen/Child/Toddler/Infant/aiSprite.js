@@ -1,4 +1,4 @@
-import { AiInterface } from "./Fetus/ai";
+import { AiInterface } from "./Fetus/ai.js";
 
 export class aiSprite2d extends AiInterface {
     sprite = null;
