@@ -549,7 +549,7 @@ export class maxwell {
                     this.iframe.frame.src = "Iframe/Pages/homepage.html";
                     break;
                 case "Real Estate":
-                    this.iframe.frame.src = "Iframe/Js/Community/Test/'Real Estate'/Programs/index.html";
+                    this.iframe.frame.src = "Iframe/Js/Community/Test/Real Estate/Programs/index.html";
                     break;
                 default:
                     this.iframe.frame.src = "Iframe/Pages/homepage.html";
