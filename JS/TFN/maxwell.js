@@ -2,7 +2,6 @@ import { gameComponent } from "./N/Games/Class/planetuniverse.js";
 import { letsDoIt } from "./N/Games/Class/gamemechanics.js";
 import { HeaderWeather } from "./T/Class/weather.js";
 import { tfIframe } from "./../../Iframe/Js/TfIframe.js";
-import { HomepageUpdates, FirstGame } from "./N/Games/sprite.js";
 import { TfPrintful } from "./T/Class/Tycadome.js";
 import { TsunamiFlowImageEngine } from "./T/Class/Elder/Img.js";
 import { Studio } from "./T/Class/Studio.js";
@@ -42,7 +41,6 @@ export class maxwell {
     mainSection = null;
     chatBox = null;
     site = new HeaderWeather();
-    iframe = new tfIframe(document.createElement("iframe"), HomepageUpdates, FirstGame);
     homepageCanvas = null;
     user = new TfPrintful({
         stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
@@ -382,6 +380,17 @@ export class maxwell {
     });
     game = new letsDoIt(
         "Homepage Game", this.stickman
+    );
+    iframe = new tfIframe(
+        document.createElement("iframe"),
+        [
+            "Welcome to tsunamiflow.club",
+            "This is the homebase for Tsunami Flow",
+            "We are currently working on content for the website.",
+            "Come by often and check for updates.",
+            "Please be patient"
+        ],
+        this.game
     );
     ai = new AiInterface({
         inputSize: 4,
@@ -1983,48 +1992,6 @@ export class maxwell {
 
         this.bindAudio();
     }
-    bindFrameEvent(event) {
-        switch (event) {
-            case "load":
-                switch (this.iframe.frame.src) {
-                    case "Iframe/Pages/homepage.html":
-                        const homepageCanvas = this.find("homecanvas", this.iframe.frame);
-                        this.homepageCanvas = homepageCanvas;
-                        this.worker.postMessage(
-                            this.soundEngine.tycadome(
-                                "tycadome-guest" + Date.now(),
-                                "canvas",
-                                "load.game.world.canvas",
-                                {
-                                    source: "web",
-                                    target: "device:web-001",
-                                    worker: "world"
-                                },
-                                {
-                                    status: "pending",
-                                    priority: "low"
-                                },
-                                "async",
-                                {
-                                    system: "homepage",
-                                    canvas: this.homepageCanvas,
-                                    ai: this.ackmaHawk.toJSON
-                                },
-                                [
-                                    this.homepageCanvas
-                                ]
-                            ),
-                            [this.homepageCanvas]);
-
-                        break;
-                }
-                break;
-
-            default:
-
-                break;
-        }
-    }
     async onDomEvent(event) {
         switch (event) {
             case "DOMContentLoaded":
@@ -2088,9 +2055,48 @@ export class maxwell {
 
                         this.bindNavBar();
 
-                        this.iframe.frame.addEventListener("load", () => {
-                            this.bindFrameEvent("load");
-                        });
+
+                        if (this.iframe.frame.contentDocument?.readyState === "complete") {
+                            switch (this.iframe.frame.src) {
+                                case "Iframe/Pages/homepage.html":
+                                    const homepageCanvas = this.find("homecanvas", this.iframe.frame);
+                                    this.homepageCanvas = homepageCanvas;
+                                    this.worker.postMessage(
+                                        this.soundEngine.tycadome(
+                                            "tycadome-guest" + Date.now(),
+                                            "canvas",
+                                            "load.game.world.canvas",
+                                            {
+                                                source: "web",
+                                                target: "device:web-001",
+                                                worker: "world"
+                                            },
+                                            {
+                                                status: "pending",
+                                                priority: "low"
+                                            },
+                                            "async",
+                                            {
+                                                system: "homepage",
+                                                canvas: this.homepageCanvas,
+                                                ai: this.ackmaHawk.toJSON
+                                            },
+                                            [
+                                                this.homepageCanvas
+                                            ]
+                                        ),
+                                        [this.homepageCanvas]);
+
+                                    break;
+                                default:
+
+                                    break;
+                            }
+                        } else {
+                            this.iframe.frame.addEventListener("load", () => {
+
+                            });
+                        }
 
                         this.site.requestLocation();
 
