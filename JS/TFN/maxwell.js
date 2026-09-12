@@ -548,7 +548,8 @@ export class maxwell {
                 case "Audio Studio":
                     this.iframe.frame.src = "Iframe/Pages/homepage.html";
                     break;
-                case "Real Estate":
+                case "Real.Estate":
+                case "Unoffical Real Estate Tests":
                     this.iframe.frame.src = "Iframe/Js/Community/Test/Real Estate/Programs/index.html";
                     break;
                 default:
