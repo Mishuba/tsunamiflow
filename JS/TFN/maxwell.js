@@ -534,7 +534,7 @@ export class maxwell {
         }
 
         // Prevent duplicate binding.
-        this.off(`${id}:${eventName}`);
+        this.off(`${id}`);
 
         const isForm =
             el instanceof HTMLFormElement;
@@ -618,21 +618,35 @@ export class maxwell {
 
         this.domListeners.delete(id);
     }
+    async loadNavSource(src) {
+        this.iframe.frame.src = src;
+
+        return new Promise((resolve) => {
+            const onLoad = () => {
+                this.iframe.frame.removeEventListener("load", onLoad);
+                this.iframe.MenuSwitch(this.iframe.frame);
+                resolve();
+            };
+            this.iframe.frame.addEventListener("load", onLoad);
+        })
+
+    }
     bindNavBar() {
         // navigation menu
-        this.onMe("tfRoster", "click", () => {
+        this.onMe("tfRoster", "click", async () => {
             //i have a function for this already.
-            this.iframe.frame.src = "Iframe/Pages/roster.html";
-            this.iframe.MenuSwitch(this.iframe.frame);
+            let src = "Iframe/Pages/roster.html";
+            await this.loadNavSource(src);
+
         });
-        this.onMe("tfNews", "click", () => {
-            this.iframe.frame.src = "Iframe/Pages/news.html";
-            this.iframe.MenuSwitch(this.iframe.frame);
+        this.onMe("tfNews", "click", async () => {
+            let src = "Iframe/Pages/news.html";
+            await this.loadNavSource(src);
         });
 
-        this.onMe("tfCompetitions", "click", () => {
-            this.iframe.frame.src = "Iframe/Pages/Competitions.html";
-            this.iframe.MenuSwitch(this.iframe.frame);
+        this.onMe("tfCompetitions", "click", async () => {
+            let src = "Iframe/Pages/Competitions.html";
+            await this.loadNavSource(src);
         });
 
         this.onMe("tfNetwork", "change", async () => {
@@ -686,100 +700,98 @@ export class maxwell {
             console.log(this.find("tfNetwork").value);
             switch (this.find("tfNetwork").value) {
                 case "Live":
-                    this.iframe.frame.src = playlist.Live;
+                    await this.loadNavSource(playlist.live);
                     this.isItOk = true;
                     break;
                 case "Studio Sessions":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`;
+
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`);
                     this.isItOk = false;
                     break;
                 case "Music Videos":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`);
                     this.isItOk = false;
                     break;
                 case "TV":
-                    this.iframe.frame.src = playlist.Tv;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Tv}`);
                     this.isItOk = false;
                     break;
 
                 case "Movies":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`);
                     this.isItOk = false;
                     break;
                 case "Case Study":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`);
                     this.isItOk = false;
                     break;
                 case "documentary":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`);
                     this.isItOk = false;
                     break;
                 case "Podcast":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`);
                     this.isItOk = false;
                     break;
                 case "Video Games":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`);
                     this.isItOk = false;
                     break;
                 case "Kingdom Deliverance":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.kindom_deliverance[1]}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.kindom_deliverance[1]}`);
                     break;
 
                 case "Elden Ring":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.legend_of_the_dragoon}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.Elden_Ring}`);
                     break;
 
                 case "Watchdogs Legion":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.watchdogs.Legion}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.watchdogs.Legion}`);
                     break;
                 case "Lord of the Rings: Middle Earth Shadow Of War":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.lord_of_the_rings.shadow_of_war}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.lord_of_the_rings.shadow_of_war}`);
                     break;
                 case "Devil May Cry V":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.devil_may_cry[5]}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.devil_may_cry[5]}`);
                     break;
                 case "Project Nimbus":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.project_nimbus}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.project_nimbus}`);
                     break;
                 case "Skyrim":
-                    this.iframe.frame.src = `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`;
+                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`);
                     break;
                 default:
-                    this.iframe.frame.src = playlist.Live;
+                    await this.loadNavSource(playlist.Live);
                     this.isItOk = false;
                     break;
             };
-
-            this.iframe.MenuSwitch(this.iframe.frame);
         });
 
-        this.onMe("tfCommunity", "change", () => {
+        this.onMe("tfCommunity", "change", async () => {
             switch (this.find("tfCommunity").value) {
                 case "Profile":
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Community":
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Settings":
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Video Studio":
-                    this.iframe.frame.src = "Iframe/Pages/Community.html";
+                    await this.loadNavSource("Iframe/Pages/Community.html");
                     break;
                 case "Audio Studio":
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Real.Estate":
                 case "Unoffical Real Estate Tests":
-                    this.iframe.frame.src = "Iframe/Js/Community/Test/Real Estate/Programs/index.html";
+                    await this.loadNavSource("Iframe/Js/Community/Test/Real Estate/Programs/index.html");
                     break;
                 default:
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
             }
-            this.iframe.MenuSwitch(this.iframe.frame)
         });
 
         this.onMe("NavLoginButton", "submit", () => {
@@ -2032,7 +2044,35 @@ export class maxwell {
                     this.iframe.frame.style.background = "white";
                     this.iframe.frame.style.touchAction = "manipulation";
                     this.iframe.frame.style.pointerEvents = "auto";
-                    this.iframe.frame.src = "Iframe/Pages/homepage.html";
+                    await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {
+                        this.bindNavBar();
+                        this.worker.postMessage(
+                            this.soundEngine.tycadome(
+                                "tycadome-guest" + Date.now(),
+                                "canvas",
+                                "load.game.world.canvas",
+                                {
+                                    source: "web",
+                                    target: "device:web-001",
+                                    worker: "world"
+                                },
+                                {
+                                    status: "pending",
+                                    priority: "low"
+                                },
+                                "async",
+                                {
+                                    system: "homepage",
+                                    canvas: this.homepageCanvas,
+                                    ai: this.stickman.toJSON
+                                },
+                                [
+                                    this.homepageCanvas
+                                ]
+                            ),
+                            [this.homepageCanvas]);
+                    })
+
 
                     this.updateRadioState();
 
@@ -2053,53 +2093,7 @@ export class maxwell {
                             this.bindAudio();
                         }
 
-                        this.bindNavBar();
-
-
-                        if (this.iframe.frame.contentDocument?.readyState === "complete") {
-                            switch (this.iframe.frame.src) {
-                                case "Iframe/Pages/homepage.html":
-                                    const homepageCanvas = this.find("homecanvas", this.iframe.frame);
-                                    this.homepageCanvas = homepageCanvas;
-                                    this.worker.postMessage(
-                                        this.soundEngine.tycadome(
-                                            "tycadome-guest" + Date.now(),
-                                            "canvas",
-                                            "load.game.world.canvas",
-                                            {
-                                                source: "web",
-                                                target: "device:web-001",
-                                                worker: "world"
-                                            },
-                                            {
-                                                status: "pending",
-                                                priority: "low"
-                                            },
-                                            "async",
-                                            {
-                                                system: "homepage",
-                                                canvas: this.homepageCanvas,
-                                                ai: this.ackmaHawk.toJSON
-                                            },
-                                            [
-                                                this.homepageCanvas
-                                            ]
-                                        ),
-                                        [this.homepageCanvas]);
-
-                                    break;
-                                default:
-
-                                    break;
-                            }
-                        } else {
-                            this.iframe.frame.addEventListener("load", () => {
-
-                            });
-                        }
-
                         this.site.requestLocation();
-
 
                         //this.connectWebSocket();
                         console.log("TFN");

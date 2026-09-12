@@ -30,23 +30,7 @@ export class tfIframe {
     console.log(`Determined postMessage origin: ${origin}`);
     switch (this.pageName) {
       case "homepage.html":
-        /*
-        console.log("iframe message received from the homepage");
-        console.log("The event type is " + event.data.type);
-        if (event.data.type === "Website Updates") {
-          console.log("creating the json to send to the iframe");
-          let HomePageJson = {
-            type: "start_updates",
-            info: this.HomepageUpdates.toJSON(),
-            message: "Starting the game",
-            username: "Mishuba",
-            error: "Nothing as of now"
-          };
-          console.log("sending the iframe message");
-          source.contentWindow.postMessage(HomePageJson, origin);
-        }
-        console.log("the end of that");
-        */
+
         break;
       case "roster.html":
         console.log("The iframe is from the roster page");
