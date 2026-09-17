@@ -125,7 +125,7 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
         {
             system: "homepage",
             canvas: ok,
-            ai: window.parent.ControlMishuba.stickman.toJSON
+            ai: window.parent.ControlMishuba.stickman
         },
         [
             ok
