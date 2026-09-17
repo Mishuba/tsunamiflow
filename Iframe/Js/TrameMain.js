@@ -5,8 +5,12 @@ export class homepage {
     TFpostActualObject = null;
     messageOrigin = null;
     messageSource = null;
-    constructor() {
-
+    game = null;
+    homepageCanvas = null;
+    constructor(options = {}) {
+        if (options.homepageCanvas) {
+            this.homepageCanvas = options.homepageCanvas;
+        }
     }
     WindowResponseType(event) {
         switch (event.data.type) {
@@ -31,7 +35,7 @@ export class homepage {
                 StripeWindowResponse(event);
                 break;
             default:
-                return console.log(`Some outside source is trying to send a message.`);
+                console.log(`Some outside source is trying to send a message.`);
                 console.warn(event.data);
                 break;
         }
@@ -89,7 +93,7 @@ export class homepage {
         }
     }
 }
-const me = new homepage();
+
 
 document.addEventListener("DOMContentLoaded", async (ev) => {
     self.onmessage = async (event) => {
@@ -100,4 +104,33 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
         console.error(error);
     }
 
-})
+    const me = new homepage(
+        {
+            homepageCanvas: document.getElementById("homecanvas")
+        }
+    );
+    window.parent.ControlMishuba.worker.postMessage(window.parent.ControlMishuba.soundEngine.tycadome(
+        "tycadome-guest" + Date.now(),
+        "canvas",
+        "load.game.world.canvas",
+        {
+            source: "web",
+            target: "device:web-001",
+            worker: "world"
+        },
+        {
+            status: "pending",
+            priority: "low"
+        },
+        "async",
+        {
+            system: "homepage",
+            canvas: me.homepageCanvas,
+            ai: window.parent.ControlMishuba.stickman.toJSON
+        },
+        [
+            me.homepageCanvas
+        ]
+    ),
+        [me.homepageCanvas]);
+});

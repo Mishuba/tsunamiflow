@@ -622,7 +622,7 @@ export class maxwell {
         this.iframe.frame.src = src;
 
         return new Promise((resolve) => {
-            const onLoad = () => {
+            const onLoad = async () => {
                 this.iframe.frame.removeEventListener("load", onLoad);
                 this.iframe.MenuSwitch(this.iframe.frame);
                 resolve();
@@ -2046,31 +2046,6 @@ export class maxwell {
                     this.iframe.frame.style.pointerEvents = "auto";
                     await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {
                         this.bindNavBar();
-                        this.worker.postMessage(
-                            this.soundEngine.tycadome(
-                                "tycadome-guest" + Date.now(),
-                                "canvas",
-                                "load.game.world.canvas",
-                                {
-                                    source: "web",
-                                    target: "device:web-001",
-                                    worker: "world"
-                                },
-                                {
-                                    status: "pending",
-                                    priority: "low"
-                                },
-                                "async",
-                                {
-                                    system: "homepage",
-                                    canvas: this.homepageCanvas,
-                                    ai: this.stickman.toJSON
-                                },
-                                [
-                                    this.homepageCanvas
-                                ]
-                            ),
-                            [this.homepageCanvas]);
                     })
 
 
