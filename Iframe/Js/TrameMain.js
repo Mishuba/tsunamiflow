@@ -104,11 +104,10 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
         console.error(error);
     }
 
-    const me = new homepage(
-        {
-            homepageCanvas: document.getElementById("homecanvas")
-        }
-    );
+    const me = new homepage();
+
+    const homepageCanvas = document.getElementById("homepagecanvas");
+    const ok = homepageCanvas.transferControlToOffscreen();
     window.parent.ControlMishuba.worker.postMessage(window.parent.ControlMishuba.soundEngine.tycadome(
         "tycadome-guest" + Date.now(),
         "canvas",
@@ -125,12 +124,12 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
         "async",
         {
             system: "homepage",
-            canvas: me.homepageCanvas,
+            canvas: ok,
             ai: window.parent.ControlMishuba.stickman.toJSON
         },
         [
-            me.homepageCanvas
+            ok
         ]
     ),
-        [me.homepageCanvas]);
+        [ok]);
 });
