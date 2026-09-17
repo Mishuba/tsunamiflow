@@ -2047,7 +2047,7 @@ export class maxwell {
 
                     this.updateRadioState();
 
-                    this.user.showProducts().then(() => {
+                    this.user.showProducts().then(async () => {
                         this.bindUsers();
                         this.bindPayments();
                         this.user.bindCart();
