@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
 
     const me = new homepage();
 
-    const homepageCanvas = document.getElementById("homepagecanvas");
+    const homepageCanvas = document.getElementById("homecanvas");
     const ok = homepageCanvas.transferControlToOffscreen();
     window.parent.ControlMishuba.worker.postMessage(window.parent.ControlMishuba.soundEngine.tycadome(
         "tycadome-guest" + Date.now(),

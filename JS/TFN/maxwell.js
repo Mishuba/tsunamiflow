@@ -2044,10 +2044,6 @@ export class maxwell {
                     this.iframe.frame.style.background = "white";
                     this.iframe.frame.style.touchAction = "manipulation";
                     this.iframe.frame.style.pointerEvents = "auto";
-                    await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {
-                        this.bindNavBar();
-                    })
-
 
                     this.updateRadioState();
 
@@ -2061,6 +2057,9 @@ export class maxwell {
                             try {
                                 this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
                                 this.initTsunamiWorkers();
+                                await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {
+                                    this.bindNavBar();
+                                });
                             } catch (err) {
                                 console.warn("Offscreen canvas transfer failed:", err);
                             }
