@@ -25,6 +25,7 @@ export class maxwell {
     };
     mainSectionWidth = 800;
     mainSectionHeight = 600;
+    mainOffscreenCanvas = null;
     RadioOffscreenCanvas = null;
     VideoOffscreenCanvas = null;
     buttonPressed = null;
@@ -635,18 +636,15 @@ export class maxwell {
         // navigation menu
         this.onMe("tfRoster", "click", async () => {
             //i have a function for this already.
-            let src = "Iframe/Pages/roster.html";
-            await this.loadNavSource(src);
+            await this.switchmaincontent("iframe", "Iframe/Pages/roster.html");
 
         });
         this.onMe("tfNews", "click", async () => {
-            let src = "Iframe/Pages/news.html";
-            await this.loadNavSource(src);
+            await this.switchmaincontent("iframe", "Iframe/Pages/news.html");
         });
 
         this.onMe("tfCompetitions", "click", async () => {
-            let src = "Iframe/Pages/Competitions.html";
-            await this.loadNavSource(src);
+            await this.loadNavSource("Iframe/Pages/Competitions.html");
         });
 
         this.onMe("tfNetwork", "change", async () => {
@@ -654,7 +652,6 @@ export class maxwell {
                 Music: {
                     studio_sessions: "PLyt4VU_WgIQOqaIEGXD0dNTddI0BRyCMx",
                     videos: "PLyt4VU_WgIQM_8UE1n3H03ymT8IAAg6SU",
-
                 },
                 Live: "Iframe/Pages/news.html",
                 Tv: "Iframe/Pages/tfNetwork.html",
@@ -700,68 +697,68 @@ export class maxwell {
             console.log(this.find("tfNetwork").value);
             switch (this.find("tfNetwork").value) {
                 case "Live":
-                    await this.loadNavSource(playlist.live);
+                    await this.switchmaincontent("iframe", playlist.live);
                     this.isItOk = true;
                     break;
                 case "Studio Sessions":
 
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Music.studio_sessions}`);
                     this.isItOk = false;
                     break;
                 case "Music Videos":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Music.videos}`);
                     this.isItOk = false;
                     break;
                 case "TV":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Tv}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Tv}`);
                     this.isItOk = false;
                     break;
 
                 case "Movies":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Movies}`);
                     this.isItOk = false;
                     break;
                 case "Case Study":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.case_study}`);
                     this.isItOk = false;
                     break;
                 case "documentary":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.documentary.all}`);
                     this.isItOk = false;
                     break;
                 case "Podcast":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Podcast}`);
                     this.isItOk = false;
                     break;
                 case "Video Games":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.all}`);
                     this.isItOk = false;
                     break;
                 case "Kingdom Deliverance":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.kindom_deliverance[1]}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.kindom_deliverance[1]}`);
                     break;
 
                 case "Elden Ring":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.Elden_Ring}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.Elden_Ring}`);
                     break;
 
                 case "Watchdogs Legion":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.watchdogs.Legion}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.watchdogs.Legion}`);
                     break;
                 case "Lord of the Rings: Middle Earth Shadow Of War":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.lord_of_the_rings.shadow_of_war}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.lord_of_the_rings.shadow_of_war}`);
                     break;
                 case "Devil May Cry V":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.devil_may_cry[5]}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.devil_may_cry[5]}`);
                     break;
                 case "Project Nimbus":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.project_nimbus}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.project_nimbus}`);
                     break;
                 case "Skyrim":
-                    await this.loadNavSource(`https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`);
+                    await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`);
                     break;
                 default:
-                    await this.loadNavSource(playlist.Live);
+                    await switchmaincontent("iframe", playlist.Live);
                     this.isItOk = false;
                     break;
             };
@@ -779,17 +776,17 @@ export class maxwell {
                     await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Video Studio":
-                    await this.loadNavSource("Iframe/Pages/Community.html");
+                    await this.switchmaincontent("iframe", "Iframe/Pages/Community.html");
                     break;
                 case "Audio Studio":
                     await this.loadNavSource("Iframe/Pages/homepage.html");
                     break;
                 case "Real.Estate":
                 case "Unoffical Real Estate Tests":
-                    await this.loadNavSource("Iframe/Js/Community/Test/Real Estate/Programs/index.html");
+                    await this.switchmaincontent("iframe", "Iframe/Js/Community/Test/Real Estate/Programs/index.html");
                     break;
                 default:
-                    await this.loadNavSource("Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("iframe", "Iframe/Pages/homepage.html");
                     break;
             }
         });
@@ -797,6 +794,19 @@ export class maxwell {
         this.onMe("NavLoginButton", "submit", () => {
             this.user.login();
         });
+    }
+    async switchmaincontent(type, src = null) {
+        switch (type) {
+            case "iframe":
+                this.currentMainElement.replaceWith(this.iframe.frame);
+                await this.loadNavSource(src);
+                break;
+            case "canvas":
+                this.currentMainElement.replaceWith(this.mainCanvas);
+            default:
+                break;
+
+        }
     }
     async bindPayments() {
         await this.user.initMoney().then(() => {
@@ -2032,10 +2042,9 @@ export class maxwell {
                 this.audioSkip = document.createElement('button');
 
                 if (this.mainSection) {
-                    this.iframe.allow = "camera; microphone; geolocation";
-                    this.iframe.allowFullscreen = true;
-                    this.iframe.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
-                    this.mainSection.appendChild(this.iframe.frame);
+                    this.iframe.frame.allow = "camera; microphone; geolocation";
+                    this.iframe.frame.allowFullscreen = true;
+                    this.iframe.frame.sandbox = "allow-scripts allow-same-origin allow-popups allow-downloads allow-modals";
                     this.iframe.frame.title = "Main Website Content";
                     this.iframe.frame.id = "TsunamiContent";
                     this.iframe.frame.name = "TsunamiMainFlowContent";
@@ -2044,7 +2053,15 @@ export class maxwell {
                     this.iframe.frame.style.background = "white";
                     this.iframe.frame.style.touchAction = "manipulation";
                     this.iframe.frame.style.pointerEvents = "auto";
-
+                    //this.mainSection.appendChild(this.iframe.frame);
+                    this.mainCanvas = document.createElement("canvas");
+                    this.mainCanvas.name = "TsunamiMainFlowContent";
+                    this.mainCanvas.id = "TsunamiContent";
+                    this.mainCanvas.style.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
+                    this.mainCanvas.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
+                    this.mainCanvas.style.background = "white";
+                    this.mainSection.appendChild(this.mainCanvas);
+                    this.mainOffscreenCanvas = this.mainCanvas.transferControlToOffscreen;
                     this.updateRadioState();
 
                     this.user.showProducts().then(async () => {
@@ -2057,16 +2074,40 @@ export class maxwell {
                             try {
                                 this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
                                 this.initTsunamiWorkers();
-                                await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {
-                                    this.bindNavBar();
-                                });
+
+                                //await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {;});
+
+                                this.worker.postMessage(this.soundEngine.tycadome(
+                                    "tycadome-guest" + Date.now(),
+                                    "canvas",
+                                    "load.game.world.canvas",
+                                    {
+                                        source: "web",
+                                        target: "device:web-001",
+                                        worker: "world"
+                                    },
+                                    {
+                                        status: "pending",
+                                        priority: "low"
+                                    },
+                                    "async",
+                                    {
+                                        system: "homepage",
+                                        canvas: this.mainOffscreenCanvas,
+                                        ai: window.parent.ControlMishuba.stickman
+                                    },
+                                    [
+                                        this.mainOffscreenCanvas
+                                    ]
+                                ),
+                                    [this.mainOffscreenCanvas]);
                             } catch (err) {
                                 console.warn("Offscreen canvas transfer failed:", err);
                             }
                         } else {
                             this.bindAudio();
                         }
-
+                        this.bindNavBar()
                         this.site.requestLocation();
 
                         //this.connectWebSocket();
