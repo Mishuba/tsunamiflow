@@ -758,7 +758,7 @@ export class maxwell {
                     await this.switchmaincontent("iframe", `https://www.youtube.com/embed/videoseries?list=${playlist.Video_Games.skyrim}`);
                     break;
                 default:
-                    await switchmaincontent("iframe", playlist.Live);
+                    await this.switchmaincontent("iframe", playlist.Live);
                     this.isItOk = false;
                     break;
             };
@@ -767,26 +767,26 @@ export class maxwell {
         this.onMe("tfCommunity", "change", async () => {
             switch (this.find("tfCommunity").value) {
                 case "Profile":
-                    await this.loadNavSource("Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("canvas");
                     break;
                 case "Community":
-                    await this.loadNavSource("Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("canvas");
                     break;
                 case "Settings":
-                    await this.loadNavSource("Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("canvas");
                     break;
                 case "Video Studio":
                     await this.switchmaincontent("iframe", "Iframe/Pages/Community.html");
                     break;
                 case "Audio Studio":
-                    await this.loadNavSource("Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("canvas");
                     break;
                 case "Real.Estate":
                 case "Unoffical Real Estate Tests":
                     await this.switchmaincontent("iframe", "Iframe/Js/Community/Test/Real Estate/Programs/index.html");
                     break;
                 default:
-                    await this.switchmaincontent("iframe", "Iframe/Pages/homepage.html");
+                    await this.switchmaincontent("canvas");
                     break;
             }
         });
@@ -798,11 +798,13 @@ export class maxwell {
     async switchmaincontent(type, src = null) {
         switch (type) {
             case "iframe":
-                this.currentMainElement.replaceWith(this.iframe.frame);
+                this.mainCanvas.replaceWith(this.iframe.frame);
+                this.currentMainElement = this.iframe.frame;
                 await this.loadNavSource(src);
                 break;
             case "canvas":
-                this.currentMainElement.replaceWith(this.mainCanvas);
+                this.iframe.frame.replaceWith(this.mainCanvas);
+                this.currentMainElement = this.mainCanvas;
             default:
                 break;
 
@@ -2061,7 +2063,8 @@ export class maxwell {
                     this.mainCanvas.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
                     this.mainCanvas.style.background = "white";
                     this.mainSection.appendChild(this.mainCanvas);
-                    this.mainOffscreenCanvas = this.mainCanvas.transferControlToOffscreen;
+                    this.currentMainElement = this.mainCanvas;
+                    this.mainOffscreenCanvas = new offscreenCanvas(this.mainCanvas.width, this.mainCanvas.height);
                     this.updateRadioState();
 
                     this.user.showProducts().then(async () => {
