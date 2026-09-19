@@ -2059,12 +2059,10 @@ export class maxwell {
                     this.mainCanvas = document.createElement("canvas");
                     this.mainCanvas.name = "TsunamiMainFlowContent";
                     this.mainCanvas.id = "TsunamiContent";
-                    this.mainCanvas.style.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
-                    this.mainCanvas.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
-                    this.mainCanvas.style.background = "white";
-                    this.mainSection.appendChild(this.mainCanvas);
-                    this.currentMainElement = this.mainCanvas;
-                    this.mainOffscreenCanvas = new offscreenCanvas(this.mainCanvas.width, this.mainCanvas.height);
+                    //this.mainCanvas.style.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
+                    //this.mainCanvas.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
+                    //this.mainCanvas.style.background = "white";
+
                     this.updateRadioState();
 
                     this.user.showProducts().then(async () => {
@@ -2072,10 +2070,12 @@ export class maxwell {
                         this.bindPayments();
                         this.user.bindCart();
 
-
                         if (window.Worker) {
                             try {
                                 this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
+                                this.mainSection.appendChild(this.mainCanvas);
+                                this.currentMainElement = this.mainCanvas;
+                                this.mainOffscreenCanvas = this.mainCanvas.transferControlToOffscreen();
                                 this.initTsunamiWorkers();
 
                                 //await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {;});
@@ -2097,7 +2097,7 @@ export class maxwell {
                                     {
                                         system: "homepage",
                                         canvas: this.mainOffscreenCanvas,
-                                        ai: window.parent.ControlMishuba.stickman
+                                        ai: this.stickman
                                     },
                                     [
                                         this.mainOffscreenCanvas
@@ -2117,6 +2117,7 @@ export class maxwell {
                         console.log("TFN");
                     }).catch(err => {
                         console.error("Cart binding error:", err);
+                        //throw err;
                     });
                 }
                 break;
