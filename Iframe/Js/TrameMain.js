@@ -108,28 +108,5 @@ document.addEventListener("DOMContentLoaded", async (ev) => {
 
     const homepageCanvas = document.getElementById("homecanvas");
     const ok = homepageCanvas.transferControlToOffscreen();
-    window.parent.ControlMishuba.worker.postMessage(window.parent.ControlMishuba.soundEngine.tycadome(
-        "tycadome-guest" + Date.now(),
-        "canvas",
-        "load.game.world.canvas",
-        {
-            source: "web",
-            target: "device:web-001",
-            worker: "world"
-        },
-        {
-            status: "pending",
-            priority: "low"
-        },
-        "async",
-        {
-            system: "homepage",
-            canvas: ok,
-            ai: window.parent.ControlMishuba.stickman
-        },
-        [
-            ok
-        ]
-    ),
-        [ok]);
+
 });

@@ -1,3 +1,4 @@
+import { updates } from "./T/Arrays/Homepage/homepage.js";
 import { gameComponent } from "./N/Games/Class/planetuniverse.js";
 import { letsDoIt } from "./N/Games/Class/gamemechanics.js";
 import { HeaderWeather } from "./T/Class/weather.js";
@@ -8,6 +9,7 @@ import { Studio } from "./T/Class/Studio.js";
 import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
+
 
 export class maxwell {
     offscreencanvas = null;
@@ -104,7 +106,7 @@ export class maxwell {
         "auto",
         0,
         undefined,
-        [],
+        updates,
         "stand",
         "https://www.tsunamiflow.club/Pictures/Logo/Tsunami Flow Logo.png",
         "Hubert",
