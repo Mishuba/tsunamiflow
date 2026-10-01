@@ -435,6 +435,11 @@ async function SendBeacon(url, data) {
 }
 
 async function requestWorld(method = "GET", url = "https://world.tsunamiflow.club/server.php", data = null, headers = {}, transport = "fetch") {
+
+if (url === false) {
+url = "https://world-l87q.onrender.com/";
+} else {
+url = "https://world.tsunamiflow.club/server.php";
     switch (transport.toLowerCase()) {
 
         case "fetch":
