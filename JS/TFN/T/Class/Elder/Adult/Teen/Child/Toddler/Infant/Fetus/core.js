@@ -285,6 +285,11 @@ export class core {
         return 0; // fallback (FormData/URLSearchParams not easily measurable)
     }
     async requestWorld(method = "GET", url = "https://world.tsunamiflow.club/server.php", data = null, headers = {}, transport = "fetch") {
+        if (url !== true) {
+            url = "https://world-l87q.onrender.com/"
+        } else {
+            url = "https://world.tsunamiflow.club/server.php"
+        }
         switch (transport.toLowerCase()) {
 
             case "fetch":
