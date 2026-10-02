@@ -37,6 +37,12 @@ class GameWorld {
 			}
 		}
 	}
+	updateAiComponent(ai) {
+		
+	}
+	updateUserComponent(user) {
+		
+	}
 	scheduleVisualizerFrame(callback) {
 		// Try requestAnimationFrame first
 		try {
@@ -107,6 +113,9 @@ class GameWorld {
 		}
 	}
 	planetUniverse(ai, player = null) {
+		this.clear();
+
+
 	}
 	cancelVisualizerFrame(id) {
 		if (id === null) {
@@ -210,6 +219,7 @@ class GameWorld {
 								this.worldai = event.data.payload.ai;
 								this.startVisualizerLoop(this.worldai, "homepage");
 								break;
+							case "planet universe":
 
 							default:
 
