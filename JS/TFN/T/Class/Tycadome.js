@@ -6,7 +6,7 @@ export class TfPrintful extends User {
     }
     async fetchCart() {
         try {
-            const res = await fetch('https://www.tsunamiflow.club/Server/server.php?cart_action=view', {
+            const res = await fetch('https://world-l87q.onrender.com?cart_action=view', {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -83,7 +83,7 @@ export class TfPrintful extends User {
     async showProducts() {
         const xhr = new XMLHttpRequest();
         console.log("created printful request");
-        xhr.open("GET", "https://world.tsunamiflow.club/store.php", true);
+        xhr.open("GET", "https://world-l87q.onrender.com/", true);
         xhr.setRequestHeader("X-Request-Type", "fetch_printful_items");
 
         xhr.onload = () => {
