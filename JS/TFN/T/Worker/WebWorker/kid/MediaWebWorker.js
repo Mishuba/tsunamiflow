@@ -42,7 +42,7 @@ class TsunamilowNation {
             this.offscreencanvas = options.offscreencanvas;
         }
         if (options.canvastype) {
-            this.initRadioOffscreen(options.canvastype);
+            this.canvastype = options.canvastype;
         }
     }
     initRadioOffscreen(canvas, canvastype) {
@@ -234,7 +234,7 @@ class TsunamilowNation {
 
             this.update(this.particles[i]);
 
-            this.draw(this.particles[i], features);
+            this.draw(this.particles[i]. features);
         }
 
         this.barWidth =
@@ -924,10 +924,10 @@ async function MessageReceived(event) {
                 case "load.radio.canvas":
                     console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
                     console.log(`attempting to create a 2d canvas context in the audio worker `);
-                    TsunamiRadio.initRadioOffscreen(event.data.payload.canvas, "2d");
+                    TsunamiRadio.initRadioOffscreen(event.data.payload?.canvas, "2d");
                     console.log(`success now doing particles.`);
                     TsunamiRadio.particles.length = 0;
-                    //TsunamiRadio.particle();
+TsunamiRadio.particle();
                     break;
                 default:
                     console.log(`the event data action was something i did not expect ${event.data.action}`);
