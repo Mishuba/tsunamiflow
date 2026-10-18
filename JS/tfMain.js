@@ -102,7 +102,5 @@ const indexdb = {
     TsunamiController.onDomEvent("DOMContentLoaded"))
   ).catch(err => console.error(err));
 
-  TsunamiController.onDomEvent("DOMContentLoaded");
-
   window.ControlMishuba = TsunamiController;
 });
