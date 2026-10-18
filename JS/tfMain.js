@@ -51,7 +51,51 @@ const indexdb = {
     console.log(`suppose tfo be word ${TsunamiController.site.WordOfTheDayArray[i]}`);
   };
 
-  TsunamiController.onDomEvent("DOMContentLoaded");
+const API_BASE = 'https://your-service.onrender.com'; // <-- change this
+
+// Polls /health.php until the server answers 200, or gives up after timeoutMs.
+async function waitForServer({ timeoutMs = 90000, intervalMs = 3000, onStatus } = {}) {
+  const start = Date.now();
+  let attempt = 0;
+
+  while (Date.now() - start < timeoutMs) {
+    attempt++;
+    onStatus?.(`Waking server... (attempt ${attempt})`);
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 10000);
+      const res = await fetch(`${API_BASE}/health.php`, {
+        cache: 'no-store',
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+
+      if (res.ok) {
+        const data = await res.json().catch(() => null);
+        if (data && data.status === 'ok') {
+          onStatus?.('Server is active.');
+          return true;
+        }
+      }
+    } catch (_) {
+      // Cold start: timeouts, 502/503, or network errors are expected. Keep polling.
+    }
+    await new Promise(r => setTimeout(r, intervalMs));
+  }
+  throw new Error('Server did not wake up in time.');
+}
+
+// Wrapper: wake first, then do the real request.
+async function apiRequest(options = {}, onStatus) {
+  await waitForServer({ onStatus });
+  return fetch(`${API_BASE}`, options);
+}
+
+// Example usage:
+// apiRequest({ method: 'GET' }, msg => console.log(msg)).then(TsunamiController.onDomEvent("DOMContentLoaded")).catch(err => console.error(err));
+
+
+TsunamiController.onDomEvent("DOMContentLoaded");
 
   window.ControlMishuba = TsunamiController;
 });
