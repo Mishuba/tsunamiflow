@@ -46,18 +46,27 @@ class TsunamilowNation {
         }
     }
     initRadioOffscreen(canvas, canvastype) {
+        if (!canvas) {
+            console.error("no canvas");
+            return false;
+        }
         if (this.offscreencanvas !== null) {
             return;
+        } else if (this.isoffscreenReady && this.offscreencanvas === canvas) {
+            return true;
         } else {
             try {
                 this.offscreencanvas = canvas;
                 this.canvasctx = this.offscreencanvas.getContext(canvastype);
                 if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
                 this.isoffscreenReady = true;
+                this.canvastype = canvastype;
                 console.log(`OffscreenCanvas initialized with ${canvastype} context`);
             } catch (err) {
                 console.error("OffscreenCanvas init failed:", err);
                 this.canvasctx = null;
+                this.isoffscreenReady = false;
+                return false;
             }
         }
     }
@@ -928,7 +937,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         console.log(`success now doing particles.`);
                         TsunamiRadio.particles.length = 0;
                         TsunamiRadio.particle();
-
+                        break;
                     default:
                         console.log(`the event data action was something i did not expect ${event.data.action}`);
 
