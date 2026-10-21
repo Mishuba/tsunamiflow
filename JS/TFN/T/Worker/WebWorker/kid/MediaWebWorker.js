@@ -243,7 +243,7 @@ class TsunamilowNation {
 
             this.update(this.particles[i]);
 
-            this.draw(this.particles[i].features);
+            this.draw(this.particles[i]);
         }
 
         this.barWidth =
