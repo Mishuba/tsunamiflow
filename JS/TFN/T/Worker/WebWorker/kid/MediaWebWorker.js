@@ -234,7 +234,7 @@ class TsunamilowNation {
 
             this.update(this.particles[i]);
 
-            this.draw(this.particles[i]. features);
+            this.draw(this.particles[i].features);
         }
 
         this.barWidth =
@@ -436,191 +436,230 @@ async function SendBeacon(url, data) {
 
 async function requestWorld(method = "GET", url = false, data = null, headers = {}, transport = "fetch") {
 
-if (url === false) {
-url = "https://world-l87q.onrender.com/";
-} else {
-url = "https://world.tsunamiflow.club/server.php";
-    switch (transport.toLowerCase()) {
+    if (url === false) {
+        url = "https://world-l87q.onrender.com/";
+    } else {
+        url = "https://world.tsunamiflow.club/server.php";
+        switch (transport.toLowerCase()) {
 
-        case "fetch":
-            try {
-                const options = {
-                    method,
-                    headers: { ...headers }
-                };
+            case "fetch":
+                try {
+                    const options = {
+                        method,
+                        headers: { ...headers }
+                    };
 
-                // Only attach body if needed
-                if (
-                    data !== null &&
-                    method.toUpperCase() !== "GET" &&
-                    method.toUpperCase() !== "HEAD"
-                ) {
+                    // Only attach body if needed
                     if (
-                        typeof data === "object" &&
-                        !(data instanceof FormData) &&
-                        !(data instanceof Blob) &&
-                        !(data instanceof URLSearchParams)
+                        data !== null &&
+                        method.toUpperCase() !== "GET" &&
+                        method.toUpperCase() !== "HEAD"
                     ) {
-                        options.body = JSON.stringify(data);
+                        if (
+                            typeof data === "object" &&
+                            !(data instanceof FormData) &&
+                            !(data instanceof Blob) &&
+                            !(data instanceof URLSearchParams)
+                        ) {
+                            options.body = JSON.stringify(data);
 
-                        if (!options.headers["Content-Type"]) {
-                            options.headers["Content-Type"] = "application/json";
+                            if (!options.headers["Content-Type"]) {
+                                options.headers["Content-Type"] = "application/json";
+                            }
+                        } else {
+                            options.body = data;
                         }
-                    } else {
-                        options.body = data;
                     }
-                }
 
-                const response = await fetch(url, options);
+                    const response = await fetch(url, options);
 
-                if (!response.ok) {
-                    self.postMessage(tycadome(
-                        'tycadomeguest' + Date.now(),
-                        'error',
-                        'fetch.exception',
-                        {
-                            source: 'web',
-                            target: 'device:web-001',
-                            layer: 'tf',
-                            worker: 'media',
-                        },
-                        {
-                            status: 'failed',
-                            priority: 'high'
-                        },
-                        'async',
-                        {
-                            type: "fetch",
-                            status: response.status,
-                            statusText: response.statusText,
-                            url,
-                            method,
-                            body: data
-                        }));
+                    if (!response.ok) {
+                        self.postMessage(tycadome(
+                            'tycadomeguest' + Date.now(),
+                            'error',
+                            'fetch.exception',
+                            {
+                                source: 'web',
+                                target: 'device:web-001',
+                                layer: 'tf',
+                                worker: 'media',
+                            },
+                            {
+                                status: 'failed',
+                                priority: 'high'
+                            },
+                            'async',
+                            {
+                                type: "fetch",
+                                status: response.status,
+                                statusText: response.statusText,
+                                url,
+                                method,
+                                body: data
+                            }));
 
+                        return null;
+                    }
+
+                    const contentType = response.headers.get("content-type") || "";
+
+                    let result;
+
+                    if (contentType.includes("application/json")) {
+                        result = await response.json();
+                    } else if (
+                        contentType.includes("audio") ||
+                        contentType.includes("video") ||
+                        contentType.includes("application/octet-stream")
+                    ) {
+                        result = await response.arrayBuffer();
+                    } else {
+                        result = await response.text();
+                    }
+
+                    emit("success", {
+                        type: "fetch",
+                        url,
+                        data: result
+                    });
+
+                    return result;
+
+                } catch (error) {
+                    emit("error", {
+                        type: "fetch",
+                        url,
+                        error: error.message
+                    });
+
+                    console.error("Fetch Error:", error);
                     return null;
                 }
 
-                const contentType = response.headers.get("content-type") || "";
+            case "xml":
+            case "xhr":
+                return new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
 
-                let result;
+                    xhr.open(method, url, true);
 
-                if (contentType.includes("application/json")) {
-                    result = await response.json();
-                } else if (
-                    contentType.includes("audio") ||
-                    contentType.includes("video") ||
-                    contentType.includes("application/octet-stream")
-                ) {
-                    result = await response.arrayBuffer();
-                } else {
-                    result = await response.text();
-                }
+                    for (const [key, value] of Object.entries(headers)) {
+                        xhr.setRequestHeader(key, value);
+                    }
 
-                emit("success", {
-                    type: "fetch",
-                    url,
-                    data: result
-                });
+                    xhr.onreadystatechange = () => {
+                        if (xhr.readyState === 4) {
+                            if (xhr.status >= 200 && xhr.status < 300) {
 
-                return result;
+                                console.log("the radio xml responseType is " + xhr.responseType);
 
-            } catch (error) {
-                emit("error", {
-                    type: "fetch",
-                    url,
-                    error: error.message
-                });
+                                resolve(JSON.parse(xhr.responseText));
+                            } else {
+                                emit("error", {
+                                    type: "xhr",
+                                    status: xhr.status,
+                                    statusText: xhr.statusText,
+                                    url
+                                });
 
-                console.error("Fetch Error:", error);
-                return null;
-            }
+                                reject(xhr.statusText);
+                            }
+                        }
+                    };
 
-        case "xml":
-        case "xhr":
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-
-                xhr.open(method, url, true);
-
-                for (const [key, value] of Object.entries(headers)) {
-                    xhr.setRequestHeader(key, value);
-                }
-
-                xhr.onreadystatechange = () => {
-                    if (xhr.readyState === 4) {
-                        if (xhr.status >= 200 && xhr.status < 300) {
-
-                            console.log("the radio xml responseType is " + xhr.responseType);
-
-                            resolve(JSON.parse(xhr.responseText));
-                        } else {
-                            emit("error", {
+                    xhr.onerror = (response) => {
+                        self.postMessage(tycadome(
+                            'tycadomeguest' + Date.now(),
+                            'error',
+                            'xml.exception',
+                            {
+                                source: 'web',
+                                target: 'device:web-001',
+                                layer: 'tf',
+                                worker: 'media',
+                            },
+                            {
+                                status: 'failed',
+                                priority: 'high'
+                            },
+                            'async',
+                            {
                                 type: "xhr",
+                                error: "Network Error",
                                 status: xhr.status,
                                 statusText: xhr.statusText,
-                                url
-                            });
+                                url,
+                                method,
+                                body: data
+                            }));
 
-                            reject(xhr.statusText);
-                        }
+                        console.error("XHR Network Error");
+                        reject("Network Error");
+                    };
+
+
+                    if (
+                        data &&
+                        typeof data === "object" &&
+                        !(data instanceof FormData)
+                    ) {
+                        xhr.send(JSON.stringify(data));
+                    } else {
+                        xhr.send(data);
                     }
-                };
-
-                xhr.onerror = (response) => {
-                    self.postMessage(tycadome(
-                        'tycadomeguest' + Date.now(),
-                        'error',
-                        'xml.exception',
-                        {
-                            source: 'web',
-                            target: 'device:web-001',
-                            layer: 'tf',
-                            worker: 'media',
-                        },
-                        {
-                            status: 'failed',
-                            priority: 'high'
-                        },
-                        'async',
-                        {
-                            type: "xhr",
-                            error: "Network Error",
-                            status: xhr.status,
-                            statusText: xhr.statusText,
-                            url,
-                            method,
-                            body: data
-                        }));
-
-                    console.error("XHR Network Error");
-                    reject("Network Error");
-                };
-
-
-                if (
-                    data &&
-                    typeof data === "object" &&
-                    !(data instanceof FormData)
-                ) {
-                    xhr.send(JSON.stringify(data));
-                } else {
-                    xhr.send(data);
-                }
-            });
-
-        case "beacon":
-            return await SendBeacon(url, data);
-
-        case "binary":
-        case "arraybuffer":
-            try {
-                const response = await fetch(url, {
-                    method,
-                    headers
                 });
 
-                if (!response.ok) {
+            case "beacon":
+                return await SendBeacon(url, data);
+
+            case "binary":
+            case "arraybuffer":
+                try {
+                    const response = await fetch(url, {
+                        method,
+                        headers
+                    });
+
+                    if (!response.ok) {
+                        self.postMessage(tycadome(
+                            'tycadomeguest' + Date.now(),
+                            'error',
+                            'binary.arraybuffer.exception',
+                            {
+                                source: 'web',
+                                target: 'device:web-001',
+                                layer: 'tf',
+                                worker: 'media',
+                            },
+                            {
+                                status: 'failed',
+                                priority: 'high'
+                            },
+                            'async',
+                            {
+                                type: "binary.arraybuffer",
+                                error: response,
+                                status: response.status,
+                                statusText: response.statusText,
+                                url,
+                                method,
+                                body: data
+                            }));
+
+                        return null;
+                    }
+
+                    const buffer = await response.arrayBuffer();
+
+                    emit("success", {
+                        type: "binary",
+                        url,
+                        data: buffer
+                    });
+
+                    return buffer;
+
+                } catch (err) {
                     self.postMessage(tycadome(
                         'tycadomeguest' + Date.now(),
                         'error',
@@ -638,7 +677,7 @@ url = "https://world.tsunamiflow.club/server.php";
                         'async',
                         {
                             type: "binary.arraybuffer",
-                            error: response,
+                            error: err.message,
                             status: response.status,
                             statusText: response.statusText,
                             url,
@@ -646,20 +685,13 @@ url = "https://world.tsunamiflow.club/server.php";
                             body: data
                         }));
 
+
                     return null;
                 }
+            case "audio":
 
-                const buffer = await response.arrayBuffer();
-
-                emit("success", {
-                    type: "binary",
-                    url,
-                    data: buffer
-                });
-
-                return buffer;
-
-            } catch (err) {
+                return;
+            default:
                 self.postMessage(tycadome(
                     'tycadomeguest' + Date.now(),
                     'error',
@@ -676,479 +708,447 @@ url = "https://world.tsunamiflow.club/server.php";
                     },
                     'async',
                     {
-                        type: "binary.arraybuffer",
-                        error: err.message,
-                        status: response.status,
-                        statusText: response.statusText,
-                        url,
-                        method,
-                        body: data
+                        type: "transport",
+                        error: `Unknown transport: ${transport}`
                     }));
 
 
+                console.error(`Unknown transport type: ${transport}`);
                 return null;
-            }
-        case "audio":
-
-            return;
-        default:
-            self.postMessage(tycadome(
-                'tycadomeguest' + Date.now(),
-                'error',
-                'binary.arraybuffer.exception',
-                {
-                    source: 'web',
-                    target: 'device:web-001',
-                    layer: 'tf',
-                    worker: 'media',
-                },
-                {
-                    status: 'failed',
-                    priority: 'high'
-                },
-                'async',
-                {
-                    type: "transport",
-                    error: `Unknown transport: ${transport}`
-                }));
-
-
-            console.error(`Unknown transport type: ${transport}`);
-            return null;
-    }
-}
-
-function NoSubFolder(PSL, tsu, response = null) {
-    if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
-        if (PSL[tsu].length >= 20) {
-            radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
-            return CurrentSong = PSL[tsu][radioRandom];
-
-        } else {
-            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-            return CurrentSong = PSL[11][radioRandom];
-
-
         }
-    } else {
-
-    }
-}
-
-function ThreeFolderSub(PSL, tsu, nami, response = null) {
-    if (nami <= 19) {
-        rangeIndex = 0;
-    } else if (nami >= 20 && nami <= 39) {
-        rangeIndex = 1;
-    } else {
-        rangeIndex = 2;
     }
 
-    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+    function NoSubFolder(PSL, tsu, response = null) {
+        if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
+            if (PSL[tsu].length >= 20) {
+                radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+                return CurrentSong = PSL[tsu][radioRandom];
 
-    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
-            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-
-
-        } else {
-            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-            return CurrentSong = PSL[11][radioRandom];
-
-
-        }
-    } else {
-
-    }
-}
-
-function FourFolderSub(PSL, tsu, nami, response = null) {
-    if (nami <= 14) {
-        rangeIndex = 0;
-    } else if (nami >= 15 && nami <= 29) {
-        rangeIndex = 1;
-    } else if (nami >= 30 && nami <= 44) {
-        rangeIndex = 2;
-    } else {
-        rangeIndex = 3;
-    }
-
-    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
-
-    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
-            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-
-
-        } else {
-            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-            return CurrentSong = PSL[11][radioRandom];
-
-
-        }
-    } else {
-
-    }
-}
-
-function SixFolderSub(PSL, tsu, nami, response = null) {
-    rangeIndex = Math.floor(nami / 10);
-
-    console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
-
-    if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-        if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
-            radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-            return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
-
-
-        } else {
-            console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-            radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-            return CurrentSong = PSL[11][rangeIndex][radioRandom];
-        }
-    } else {
-
-    }
-}
-
-function RadioTime(PSL, response = null) {
-    let now = new Date();
-    let hour = now.getHours();
-    let minute = now.getMinutes();
-
-    switch (hour) {
-        case 0:
-            return FourFolderSub(PSL, 0, minute, response);
-            break;
-        case 1:
-            if (minute <= 4) {
-                return NoSubFolder(PSL, 1, response);
-            } else if (minute <= 14) {
-                return ThreeFolderSub(PSL, 1, minute, response);
-            } else if (minute <= 29) {
-                return ThreeFolderSub(PSL, 1, minute, response);
             } else {
-                return ThreeFolderSub(PSL, 1, minute, response);
-            }
-            break;
-        case 2:
-            return NoSubFolder(PSL, 2, response);
-            break;
-        case 3:
-            return ThreeFolderSub(PSL, 3, minute, response);
-            break;
-        case 4:
-            return ThreeFolderSub(PSL, 4, minute, response);
-            break;
-        case 5:
-            return ThreeFolderSub(PSL, 5, minute, response);
-            break;
-        case 6:
-            return ThreeFolderSub(PSL, 6, minute, response);
-            break;
-        case 7:
-            return ThreeFolderSub(PSL, 7, minute, response);
-            break;
-        case 8:
-            return SixFolderSub(PSL, 8, minute, response);
-            break;
-        case 9:
-            return ThreeFolderSub(PSL, 9, minute, response);
-            break;
-        case 10:
-            return NoSubFolder(PSL, 10, response);
-            break;
-        case 11:
-            return CurrentSong = PSL[11][
-                Math.floor(Math.random() * (PSL[11].length - 1))
-            ];
+                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return CurrentSong = PSL[11][radioRandom];
 
-            break;
-        case 12:
-            return FourFolderSub(PSL, 12, minute, response);
-            break;
-        case 13:
-            return FourFolderSub(PSL, 13, minute, response);
-            break;
-        case 14:
-            return FourFolderSub(PSL, 14, minute, response);
-            break;
-        case 15:
-            return FourFolderSub(PSL, 15, minute, response);
-            break;
-        case 16:
-            return FourFolderSub(PSL, 16, minute, response);
-            break;
-        case 17:
-            return NoSubFolder(PSL, 17, response);
-            break;
-        case 18:
-            return SixFolderSub(PSL, 18, minute, response);
-            break;
-        case 19:
-            return FourFolderSub(PSL, 19, minute, response);
-            break;
-        case 20:
-            return FourFolderSub(PSL, 20, minute, response);
-            break;
-        case 21:
-            return NoSubFolder(PSL, 21, response);
-            break;
-        case 22:
-            return NoSubFolder(PSL, 22, response);
-            break;
-        case 23:
-            return NoSubFolder(PSL, 23, response);
-            break;
-        default:
-            return CurrentSong = PSL[11][
-                Math.floor(Math.random() * (PSL[11].length - 1))
-            ];
-            break;
+
+            }
+        } else {
+
+        }
     }
-}
 
-const TsunamiRadio = new TsunamilowNation();
+    function ThreeFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 19) {
+            rangeIndex = 0;
+        } else if (nami >= 20 && nami <= 39) {
+            rangeIndex = 1;
+        } else {
+            rangeIndex = 2;
+        }
 
-async function MessageReceived(event) {
-    //console.log(`audio worker received ${event.data.type} data type.`);
-    switch (event.data.type) {
-        case "canvas":
-            console.log(`the canvas sent to the audio worker has an data action to ${event.data.action}`);
-            switch (event.data.action) {
-                case "load.radio.canvas":
-                    console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
-                    console.log(`attempting to create a 2d canvas context in the audio worker `);
-                    TsunamiRadio.initRadioOffscreen(event.data.payload?.canvas, "2d");
-                    console.log(`success now doing particles.`);
-                    TsunamiRadio.particles.length = 0;
-TsunamiRadio.particle();
-                    break;
-                default:
-                    console.log(`the event data action was something i did not expect ${event.data.action}`);
-                    break;
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
+                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return CurrentSong = PSL[11][radioRandom];
+
+
             }
-            break;
+        } else {
 
-        case "radio":
-            if (songList === null) {
-                try {
-                    songList = await requestWorld(
-                        "GET", "https://world.tsunamiflow.club/RadioPlaylist.php",
-                        null,
-                        { "X-Request-Type": "fetchRadioSongs" },
-                        "xml"
-                    );
-                    //RadioTime(songList);
-                    //nextRadioItem = songList;
-                } catch (e) {
-                    songList = null;
-                    console.error("JSON parse error:", e);
-                    //RadioTime(songList);
+        }
+    }
+
+    function FourFolderSub(PSL, tsu, nami, response = null) {
+        if (nami <= 14) {
+            rangeIndex = 0;
+        } else if (nami >= 15 && nami <= 29) {
+            rangeIndex = 1;
+        } else if (nami >= 30 && nami <= 44) {
+            rangeIndex = 2;
+        } else {
+            rangeIndex = 3;
+        }
+
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
+                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return CurrentSong = PSL[11][radioRandom];
+
+
+            }
+        } else {
+
+        }
+    }
+
+    function SixFolderSub(PSL, tsu, nami, response = null) {
+        rangeIndex = Math.floor(nami / 10);
+
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+
+        if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
+            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
+                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
+                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+
+
+            } else {
+                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
+                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return CurrentSong = PSL[11][rangeIndex][radioRandom];
+            }
+        } else {
+
+        }
+    }
+
+    function RadioTime(PSL, response = null) {
+        let now = new Date();
+        let hour = now.getHours();
+        let minute = now.getMinutes();
+
+        switch (hour) {
+            case 0:
+                return FourFolderSub(PSL, 0, minute, response);
+                break;
+            case 1:
+                if (minute <= 4) {
+                    return NoSubFolder(PSL, 1, response);
+                } else if (minute <= 14) {
+                    return ThreeFolderSub(PSL, 1, minute, response);
+                } else if (minute <= 29) {
+                    return ThreeFolderSub(PSL, 1, minute, response);
+                } else {
+                    return ThreeFolderSub(PSL, 1, minute, response);
                 }
-            }
+                break;
+            case 2:
+                return NoSubFolder(PSL, 2, response);
+                break;
+            case 3:
+                return ThreeFolderSub(PSL, 3, minute, response);
+                break;
+            case 4:
+                return ThreeFolderSub(PSL, 4, minute, response);
+                break;
+            case 5:
+                return ThreeFolderSub(PSL, 5, minute, response);
+                break;
+            case 6:
+                return ThreeFolderSub(PSL, 6, minute, response);
+                break;
+            case 7:
+                return ThreeFolderSub(PSL, 7, minute, response);
+                break;
+            case 8:
+                return SixFolderSub(PSL, 8, minute, response);
+                break;
+            case 9:
+                return ThreeFolderSub(PSL, 9, minute, response);
+                break;
+            case 10:
+                return NoSubFolder(PSL, 10, response);
+                break;
+            case 11:
+                return CurrentSong = PSL[11][
+                    Math.floor(Math.random() * (PSL[11].length - 1))
+                ];
 
-            switch (event.data.action) {
-                case "get.radio.file":
-                    switch (event.data.payload.system) {
-                        case "files":
-                            let tfrSong = RadioTime(songList);
-                            console.log(tfrSong);
-                            self.postMessage(tycadome(
-                                "tycadome-guest" + Date.now(),
-                                "radio",
-                                "receive.radio.file",
-                                {
-                                    source: "web",
-                                    target: "device:web-001",
-                                    layer: "tf",
-                                    worker: "media",
-                                    backend: false
-                                },
-                                {
-                                    status: "pending",
-                                    priority: "low"
-                                },
-                                "async",
-                                {
-                                    system: "files",
-                                    playlist: songList,
-                                    file: tfrSong,
-                                    message: "the radio source is ''",
-                                    buffer: "nothing should be buffering.",
-                                })
-                            );
-                            break;
-                        default:
-                            console.log(`the event data action was something i did not expect ${event.data.action}`);
-                            break;
+                break;
+            case 12:
+                return FourFolderSub(PSL, 12, minute, response);
+                break;
+            case 13:
+                return FourFolderSub(PSL, 13, minute, response);
+                break;
+            case 14:
+                return FourFolderSub(PSL, 14, minute, response);
+                break;
+            case 15:
+                return FourFolderSub(PSL, 15, minute, response);
+                break;
+            case 16:
+                return FourFolderSub(PSL, 16, minute, response);
+                break;
+            case 17:
+                return NoSubFolder(PSL, 17, response);
+                break;
+            case 18:
+                return SixFolderSub(PSL, 18, minute, response);
+                break;
+            case 19:
+                return FourFolderSub(PSL, 19, minute, response);
+                break;
+            case 20:
+                return FourFolderSub(PSL, 20, minute, response);
+                break;
+            case 21:
+                return NoSubFolder(PSL, 21, response);
+                break;
+            case 22:
+                return NoSubFolder(PSL, 22, response);
+                break;
+            case 23:
+                return NoSubFolder(PSL, 23, response);
+                break;
+            default:
+                return CurrentSong = PSL[11][
+                    Math.floor(Math.random() * (PSL[11].length - 1))
+                ];
+                break;
+        }
+    }
+
+    const TsunamiRadio = new TsunamilowNation();
+
+    async function MessageReceived(event) {
+        //console.log(`audio worker received ${event.data.type} data type.`);
+        switch (event.data.type) {
+            case "canvas":
+                console.log(`the canvas sent to the audio worker has an data action to ${event.data.action}`);
+                switch (event.data.action) {
+                    case "load.radio.canvas":
+                        console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
+                        console.log(`attempting to create a 2d canvas context in the audio worker `);
+                        TsunamiRadio.initRadioOffscreen(event.data.payload?.canvas, "2d");
+                        console.log(`success now doing particles.`);
+                        TsunamiRadio.particles.length = 0;
+                        TsunamiRadio.particle();
+                        break;
+                    default:
+                        console.log(`the event data action was something i did not expect ${event.data.action}`);
+                        break;
+                }
+                break;
+
+            case "radio":
+                if (songList === null) {
+                    try {
+                        songList = await requestWorld(
+                            "GET", false,
+                            null,
+                            { "X-Request-Type": "fetchRadioSongs" },
+                            "xml"
+                        );
+                        //RadioTime(songList);
+                        //nextRadioItem = songList;
+                    } catch (e) {
+                        songList = null;
+                        console.error("JSON parse error:", e);
+                        //RadioTime(songList);
                     }
-                    break;
-                case "audio.paused":
-                    TsunamiRadio.stopVisualizerLoop();
-                    break;
-
-                case "audio.ended":
-                    TsunamiRadio.stopVisualizerLoop();
-                    break;
-                case "audio.play":
-
-                    //startVisualizerLoop(TfAudioVisualData);
-                    break;
-                default:
-                    //RadioTime(songList);
-                    //TheLastSongUsed = CurrentSong;
-                    break;
-            }
-            break;
-        case "audio.worklet": {
-            const payload = event.data.payload || {};
-            if (event.data.action === "audio.visual.data") {
-                if (payload.dataArray) {
-                    TsunamiRadio.TfAudioVisualData.dataArray =
-                        payload.dataArray instanceof Uint8Array
-                            ? payload.dataArray
-                            : new Uint8Array(payload.dataArray);
                 }
 
-                TsunamiRadio.TfAudioVisualData.volume = Number(payload.volume) || 1;
-                TsunamiRadio.TfAudioVisualData.bass = Number(payload.bass) || 0;
-                TsunamiRadio.TfAudioVisualData.mid = Number(payload.mid) || 0;
-                TsunamiRadio.TfAudioVisualData.treble = Number(payload.treble) || 0;
-                TsunamiRadio.TfAudioVisualData.beat = Boolean(payload.beat);
-                TsunamiRadio.TfAudioVisualData.timestamp = Date.now();
+                switch (event.data.action) {
+                    case "get.radio.file":
+                        switch (event.data.payload.system) {
+                            case "files":
+                                let tfrSong = RadioTime(songList);
+                                console.log(tfrSong);
+                                self.postMessage(tycadome(
+                                    "tycadome-guest" + Date.now(),
+                                    "radio",
+                                    "receive.radio.file",
+                                    {
+                                        source: "web",
+                                        target: "device:web-001",
+                                        layer: "tf",
+                                        worker: "media",
+                                        backend: false
+                                    },
+                                    {
+                                        status: "pending",
+                                        priority: "low"
+                                    },
+                                    "async",
+                                    {
+                                        system: "files",
+                                        playlist: songList,
+                                        file: tfrSong,
+                                        message: "the radio source is ''",
+                                        buffer: "nothing should be buffering.",
+                                    })
+                                );
+                                break;
+                            default:
+                                console.log(`the event data action was something i did not expect ${event.data.action}`);
+                                break;
+                        }
+                        break;
+                    case "audio.paused":
+                        TsunamiRadio.stopVisualizerLoop();
+                        break;
 
-                if (!TsunamiRadio.visualizerRunning) {
-                    TsunamiRadio.startVisualizerLoop();
+                    case "audio.ended":
+                        TsunamiRadio.stopVisualizerLoop();
+                        break;
+                    case "audio.play":
+
+                        //startVisualizerLoop(TfAudioVisualData);
+                        break;
+                    default:
+                        //RadioTime(songList);
+                        //TheLastSongUsed = CurrentSong;
+                        break;
                 }
+                break;
+            case "audio.worklet": {
+                const payload = event.data.payload || {};
+                if (event.data.action === "audio.visual.data") {
+                    if (payload.dataArray) {
+                        TsunamiRadio.TfAudioVisualData.dataArray =
+                            payload.dataArray instanceof Uint8Array
+                                ? payload.dataArray
+                                : new Uint8Array(payload.dataArray);
+                    }
+
+                    TsunamiRadio.TfAudioVisualData.volume = Number(payload.volume) || 1;
+                    TsunamiRadio.TfAudioVisualData.bass = Number(payload.bass) || 0;
+                    TsunamiRadio.TfAudioVisualData.mid = Number(payload.mid) || 0;
+                    TsunamiRadio.TfAudioVisualData.treble = Number(payload.treble) || 0;
+                    TsunamiRadio.TfAudioVisualData.beat = Boolean(payload.beat);
+                    TsunamiRadio.TfAudioVisualData.timestamp = Date.now();
+
+                    if (!TsunamiRadio.visualizerRunning) {
+                        TsunamiRadio.startVisualizerLoop();
+                    }
+                }
+                break;
             }
-            break;
+            case "stream":
+
+                switch (event.data.action) {
+                    case "audio array":
+                        // console.log("Processing audio array:", event.data.audioArray);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+
+            case "downloads":
+
+                break;
+
+            case "calculations":
+
+                switch (event.data.action) {
+                    case "fft":
+
+                        break;
+                    case "RMS":
+
+                        break;
+                    case "signaling":
+
+                        break;
+                    case "Peak Detection":
+
+                        break;
+                    default:
+                        console.log(`the event data action was something i did not expect ${event.data.action}`);
+                        break;
+                }
+                break;
+
+            case "processor":
+                switch (event.data.action) {
+                    case "stereo":
+
+                        break;
+
+                    case "amplitude":
+
+                        break;
+                    case "volume peak Detection":
+                        break;
+
+                    case "filtering":
+
+                        break;
+                    case "Zero Crossing":
+
+                        break;
+                    case "Pitch Detection":
+
+                        break;
+                    case "decode":
+
+                        break;
+                    case "encode":
+
+                        break;
+                    default:
+                        console.log(`the event data action was something i did not expect ${event.data.action}`);
+                        break;
+                }
+                break;
+
+            case "game":
+
+                break;
+
+            default:
+                console.log(`the event data type was something i did not expect ${event.data.type}`);
+                break;
         }
-        case "stream":
+    }
 
-            switch (event.data.action) {
-                case "audio array":
-                    // console.log("Processing audio array:", event.data.audioArray);
-                    break;
-                default:
-                    break;
+    try {
+        self.onmessage = (e) => {
+            MessageReceived(e);
+        };
+
+        self.onerror = (e) => {
+            try {
+                const err = e?.error || e;
+                self.postMessage(tycadome(
+                    "tycadome-guest" /*+ Date.now()*/,
+                    "error",
+                    "audio.worker.error",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        layer: "tf",
+                        worker: "media"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "Audio System",
+                        message: err?.message || String(err),
+                        filename: err?.fileName || null,
+                        lineno: err?.lineNumber || null,
+                        colno: err?.columnNumber || null,
+                        stack: err?.stack || null,
+                        rawEvent: e
+                    }));
+
+            } catch (postErr) {
+                console.error("Worker onerror failed to post:", postErr);
+                console.trace();
             }
-            break;
-
-        case "downloads":
-
-            break;
-
-        case "calculations":
-
-            switch (event.data.action) {
-                case "fft":
-
-                    break;
-                case "RMS":
-
-                    break;
-                case "signaling":
-
-                    break;
-                case "Peak Detection":
-
-                    break;
-                default:
-                    console.log(`the event data action was something i did not expect ${event.data.action}`);
-                    break;
-            }
-            break;
-
-        case "processor":
-            switch (event.data.action) {
-                case "stereo":
-
-                    break;
-
-                case "amplitude":
-
-                    break;
-                case "volume peak Detection":
-                    break;
-
-                case "filtering":
-
-                    break;
-                case "Zero Crossing":
-
-                    break;
-                case "Pitch Detection":
-
-                    break;
-                case "decode":
-
-                    break;
-                case "encode":
-
-                    break;
-                default:
-                    console.log(`the event data action was something i did not expect ${event.data.action}`);
-                    break;
-            }
-            break;
-
-        case "game":
-
-            break;
-
-        default:
-            console.log(`the event data type was something i did not expect ${event.data.type}`);
-            break;
+            console.error("Worker error:", e);
+            console.trace();
+        };
+    } catch (error) {
+        console.error("Error initializing mediaWorker:", error);
     }
 }
-
-try {
-    self.onmessage = (e) => {
-        MessageReceived(e);
-    };
-
-    self.onerror = (e) => {
-        try {
-            const err = e?.error || e;
-            self.postMessage(tycadome(
-                "tycadome-guest" /*+ Date.now()*/,
-                "error",
-                "audio.worker.error",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    layer: "tf",
-                    worker: "media"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "Audio System",
-                    message: err?.message || String(err),
-                    filename: err?.fileName || null,
-                    lineno: err?.lineNumber || null,
-                    colno: err?.columnNumber || null,
-                    stack: err?.stack || null,
-                    rawEvent: e
-                }));
-
-        } catch (postErr) {
-            console.error("Worker onerror failed to post:", postErr);
-            console.trace();
-        }
-        console.error("Worker error:", e);
-        console.trace();
-    };
-} catch (error) {
-    console.error("Error initializing mediaWorker:", error);
-}
-
