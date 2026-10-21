@@ -824,7 +824,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
         switch (hour) {
             case 0:
                 return FourFolderSub(PSL, 0, minute, response);
-                break;
+
             case 1:
                 if (minute <= 4) {
                     return NoSubFolder(PSL, 1, response);
@@ -835,81 +835,81 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                 } else {
                     return ThreeFolderSub(PSL, 1, minute, response);
                 }
-                break;
+
             case 2:
                 return NoSubFolder(PSL, 2, response);
-                break;
+
             case 3:
                 return ThreeFolderSub(PSL, 3, minute, response);
-                break;
+
             case 4:
                 return ThreeFolderSub(PSL, 4, minute, response);
-                break;
+
             case 5:
                 return ThreeFolderSub(PSL, 5, minute, response);
-                break;
+
             case 6:
                 return ThreeFolderSub(PSL, 6, minute, response);
-                break;
+
             case 7:
                 return ThreeFolderSub(PSL, 7, minute, response);
-                break;
+
             case 8:
                 return SixFolderSub(PSL, 8, minute, response);
-                break;
+
             case 9:
                 return ThreeFolderSub(PSL, 9, minute, response);
-                break;
+
             case 10:
                 return NoSubFolder(PSL, 10, response);
-                break;
+
             case 11:
                 return CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
 
-                break;
+
             case 12:
                 return FourFolderSub(PSL, 12, minute, response);
-                break;
+
             case 13:
                 return FourFolderSub(PSL, 13, minute, response);
-                break;
+
             case 14:
                 return FourFolderSub(PSL, 14, minute, response);
-                break;
+
             case 15:
                 return FourFolderSub(PSL, 15, minute, response);
-                break;
+
             case 16:
                 return FourFolderSub(PSL, 16, minute, response);
-                break;
+
             case 17:
                 return NoSubFolder(PSL, 17, response);
-                break;
+
             case 18:
                 return SixFolderSub(PSL, 18, minute, response);
-                break;
+
             case 19:
                 return FourFolderSub(PSL, 19, minute, response);
-                break;
+
             case 20:
                 return FourFolderSub(PSL, 20, minute, response);
-                break;
+
             case 21:
                 return NoSubFolder(PSL, 21, response);
-                break;
+
             case 22:
                 return NoSubFolder(PSL, 22, response);
-                break;
+
             case 23:
                 return NoSubFolder(PSL, 23, response);
-                break;
+
             default:
                 return CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
-                break;
+
         }
     }
 
@@ -928,12 +928,12 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         console.log(`success now doing particles.`);
                         TsunamiRadio.particles.length = 0;
                         TsunamiRadio.particle();
-                        break;
+
                     default:
                         console.log(`the event data action was something i did not expect ${event.data.action}`);
-                        break;
+
                 }
-                break;
+
 
             case "radio":
                 if (songList === null) {
@@ -1138,7 +1138,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         lineno: err?.lineNumber || null,
                         colno: err?.columnNumber || null,
                         stack: err?.stack || null,
-                        rawEvent: e
+                        rawEvent: err
                     }));
 
             } catch (postErr) {
