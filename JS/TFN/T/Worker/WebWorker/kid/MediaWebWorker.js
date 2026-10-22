@@ -3,15 +3,14 @@ console.log("Media Worker:" + import.meta.url);
 //variables
 const maxBeaconSize = 64 * 1024;
 
-var songList = null;
-
 //boolean
 var listeners = {};
-let radioRandom = null;
-let CurrentSong = null;
-let rangeIndex = null;
 
 class TsunamilowNation {
+    CurrentSong = null;
+    radioRandom = null;
+    rangeIndex = null;
+    songList = null;
     offscreencanvas = null;
     canvasctx = null;
     canvastype = null;
@@ -50,24 +49,27 @@ class TsunamilowNation {
             console.error("no canvas");
             return false;
         }
+
+        if (this.isoffscreenReady && this.offscreencanvas === canvas) {
+            return true;
+        }
         if (this.offscreencanvas !== null) {
             return;
-        } else if (this.isoffscreenReady && this.offscreencanvas === canvas) {
-            return true;
-        } else {
-            try {
-                this.offscreencanvas = canvas;
-                this.canvasctx = this.offscreencanvas.getContext(canvastype);
-                if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
-                this.isoffscreenReady = true;
-                this.canvastype = canvastype;
-                console.log(`OffscreenCanvas initialized with ${canvastype} context`);
-            } catch (err) {
-                console.error("OffscreenCanvas init failed:", err);
-                this.canvasctx = null;
-                this.isoffscreenReady = false;
-                return false;
+        }
+        try {
+            this.offscreencanvas = canvas;
+            this.canvasctx = this.offscreencanvas.getContext(canvastype);
+            if (!this.canvasctx) {
+                throw new Error(`${canvastype} context not supported`);
             }
+            this.isoffscreenReady = true;
+            this.canvastype = canvastype;
+            console.log(`OffscreenCanvas initialized with ${canvastype} context`);
+        } catch (err) {
+            console.error("OffscreenCanvas init failed:", err);
+            this.canvasctx = null;
+            this.isoffscreenReady = false;
+            return false;
         }
     }
     draw(p) {
@@ -345,110 +347,74 @@ class TsunamilowNation {
 
         return tf;
     }
-}
-
-function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
-    let tf = {
-        "id": id, //options.id
-        "type": type, //command
-        "action": action, // video.start
-        "meta": meta, // {}
-        "timestamp": Math.floor(Date.now() / 1000),
-        "state": state, // {}
-        "mode": mode, //"async"
-        "payload": payload // {},
-    };
-
-    // Attach transferables only if valid
-    const safeTransfer = [];
-
-    if (Array.isArray(transfer) && transfer.length > 0) {
-        for (const item of transfer) {
-            if (
-                item instanceof ArrayBuffer ||
-                item instanceof MessagePort ||
-                item instanceof ImageBitmap ||
-                item instanceof OffscreenCanvas ||
-                item instanceof AudioData ||
-                item instanceof VideoFrame
-            ) {
-                safeTransfer.push(item);
+    getSize(payload) {
+        if (typeof payload === "string") {
+            return new TextEncoder().encode(payload).length;
+        }
+        if (payload instanceof Blob) {
+            return payload.size;
+        }
+        return 0; // fallback (FormData/URLSearchParams not easily measurable)
+    }
+    emit(event, data) {
+        (listeners[event] || []).forEach((fn) => {
+            try {
+                fn(data);
+            } catch (error) {
+                console.error(`Error occurred while emitting event "${event}":`, error);
             }
-        }
-    }
-
-    tf.transfer = safeTransfer;
-
-    return tf;
-}
-function getSize(payload) {
-    if (typeof payload === "string") {
-        return new TextEncoder().encode(payload).length;
-    }
-    if (payload instanceof Blob) {
-        return payload.size;
-    }
-    return 0; // fallback (FormData/URLSearchParams not easily measurable)
-}
-function emit(event, data) {
-    (listeners[event] || []).forEach((fn) => {
-        try {
-            fn(data);
-        } catch (error) {
-            console.error(`Error occurred while emitting event "${event}":`, error);
-        }
-    });
-}
-async function SendBeacon(url, data) {
-    let payload = data;
-
-    if (
-        !(data instanceof Blob) &&
-        !(data instanceof FormData) &&
-        !(data instanceof URLSearchParams) &&
-        typeof data !== "string"
-    ) {
-        payload = JSON.stringify(data);
-    }
-
-    const size = getSize(payload);
-
-    if (size > maxBeaconSize) {
-        emit("error", { url, data, reason: "Payload too large" });
-        return false;
-    }
-
-    if ("sendBeacon" in navigator) {
-        const accepted = navigator.sendBeacon(url, payload);
-
-        emit(accepted ? "queued" : "rejected", { url, data, size });
-
-        return accepted;
-    }
-
-    // 🔥 REAL fallback
-    try {
-        await fetch(url, {
-            method: "POST",
-            body: payload,
-            keepalive: true,
-            headers: { "Content-Type": "application/json" }
         });
-
-        emit("queued", { url, data, size, fallback: true });
-        return true;
-    } catch (err) {
-        emit("error", err);
-        return false;
     }
-}
+    async SendBeacon(url, data) {
+        let payload = data;
 
-async function requestWorld(method = "GET", url = false, data = null, headers = {}, transport = "fetch") {
+        if (
+            !(data instanceof Blob) &&
+            !(data instanceof FormData) &&
+            !(data instanceof URLSearchParams) &&
+            typeof data !== "string"
+        ) {
+            payload = JSON.stringify(data);
+        }
 
-    if (url === false) {
-        url = "https://world-l87q.onrender.com/";
-    } else {
-        url = "https://world.tsunamiflow.club/server.php";
+        const size = this.getSize(payload);
+
+        if (size > maxBeaconSize) {
+            this.emit("error", { url, data, reason: "Payload too large" });
+            return false;
+        }
+
+        if ("sendBeacon" in navigator) {
+            const accepted = navigator.sendBeacon(url, payload);
+
+            this.emit(accepted ? "queued" : "rejected", { url, data, size });
+
+            return accepted;
+        }
+
+        // 🔥 REAL fallback
+        try {
+            await fetch(url, {
+                method: "POST",
+                body: payload,
+                keepalive: true,
+                headers: { "Content-Type": "application/json" }
+            });
+
+            this.emit("queued", { url, data, size, fallback: true });
+            return true;
+        } catch (err) {
+            this.emit("error", err);
+            return false;
+        }
+    }
+    async requestWorld(method = "GET", url = false, data = null, headers = {}, transport = "fetch") {
+
+        if (url === false) {
+            url = "https://world-l87q.onrender.com/";
+        } else {
+            url = "https://world.tsunamiflow.club/server.php";
+        }
         switch (transport.toLowerCase()) {
 
             case "fetch":
@@ -483,7 +449,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     const response = await fetch(url, options);
 
                     if (!response.ok) {
-                        self.postMessage(tycadome(
+                        self.postMessage(this.tycadome(
                             'tycadomeguest' + Date.now(),
                             'error',
                             'fetch.exception',
@@ -526,7 +492,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         result = await response.text();
                     }
 
-                    emit("success", {
+                    this.emit("success", {
                         type: "fetch",
                         url,
                         data: result
@@ -535,7 +501,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     return result;
 
                 } catch (error) {
-                    emit("error", {
+                    this.emit("error", {
                         type: "fetch",
                         url,
                         error: error.message
@@ -564,7 +530,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
                                 resolve(JSON.parse(xhr.responseText));
                             } else {
-                                emit("error", {
+                                this.emit("error", {
                                     type: "xhr",
                                     status: xhr.status,
                                     statusText: xhr.statusText,
@@ -577,7 +543,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     };
 
                     xhr.onerror = (response) => {
-                        self.postMessage(tycadome(
+                        self.postMessage(this.tycadome(
                             'tycadomeguest' + Date.now(),
                             'error',
                             'xml.exception',
@@ -619,7 +585,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                 });
 
             case "beacon":
-                return await SendBeacon(url, data);
+                return SendBeacon(url, data);
 
             case "binary":
             case "arraybuffer":
@@ -630,7 +596,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     });
 
                     if (!response.ok) {
-                        self.postMessage(tycadome(
+                        self.postMessage(this.tycadome(
                             'tycadomeguest' + Date.now(),
                             'error',
                             'binary.arraybuffer.exception',
@@ -660,7 +626,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
                     const buffer = await response.arrayBuffer();
 
-                    emit("success", {
+                    this.emit("success", {
                         type: "binary",
                         url,
                         data: buffer
@@ -669,7 +635,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     return buffer;
 
                 } catch (err) {
-                    self.postMessage(tycadome(
+                    self.postMessage(this.tycadome(
                         'tycadomeguest' + Date.now(),
                         'error',
                         'binary.arraybuffer.exception',
@@ -701,7 +667,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
                 return;
             default:
-                self.postMessage(tycadome(
+                self.postMessage(this.tycadome(
                     'tycadomeguest' + Date.now(),
                     'error',
                     'binary.arraybuffer.exception',
@@ -727,15 +693,15 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
         }
     }
 
-    function NoSubFolder(PSL, tsu, response = null) {
+    NoSubFolder(PSL, tsu, response = null) {
         if (typeof PSL !== "undefined" && Array.isArray(PSL[tsu]) && PSL[tsu].length > 0) {
             if (PSL[tsu].length >= 20) {
-                radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
-                return CurrentSong = PSL[tsu][radioRandom];
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu].length - 1));
+                return this.CurrentSong = PSL[tsu][this.radioRandom];
 
             } else {
-                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                return CurrentSong = PSL[11][radioRandom];
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return this.CurrentSong = PSL[11][this.radioRandom];
 
 
             }
@@ -743,28 +709,27 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
         }
     }
-
-    function ThreeFolderSub(PSL, tsu, nami, response = null) {
+    ThreeFolderSub(PSL, tsu, nami, response = null) {
         if (nami <= 19) {
-            rangeIndex = 0;
+            this.rangeIndex = 0;
         } else if (nami >= 20 && nami <= 39) {
-            rangeIndex = 1;
+            this.rangeIndex = 1;
         } else {
-            rangeIndex = 2;
+            this.rangeIndex = 2;
         }
 
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 7) {
-                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 7) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                return this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
 
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                return CurrentSong = PSL[11][radioRandom];
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return this.CurrentSong = PSL[11][this.radioRandom];
 
 
             }
@@ -772,30 +737,29 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
         }
     }
-
-    function FourFolderSub(PSL, tsu, nami, response = null) {
+    FourFolderSub(PSL, tsu, nami, response = null) {
         if (nami <= 14) {
-            rangeIndex = 0;
+            this.rangeIndex = 0;
         } else if (nami >= 15 && nami <= 29) {
-            rangeIndex = 1;
+            this.rangeIndex = 1;
         } else if (nami >= 30 && nami <= 44) {
-            rangeIndex = 2;
+            this.rangeIndex = 2;
         } else {
-            rangeIndex = 3;
+            this.rangeIndex = 3;
         }
 
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 4) {
-                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 4) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                return this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
 
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                return CurrentSong = PSL[11][radioRandom];
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
+                return this.CurrentSong = PSL[11][this.radioRandom];
 
 
             }
@@ -803,128 +767,124 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
 
         }
     }
+    SixFolderSub(PSL, tsu, nami, response = null) {
+        this.rangeIndex = Math.floor(nami / 10);
 
-    function SixFolderSub(PSL, tsu, nami, response = null) {
-        rangeIndex = Math.floor(nami / 10);
-
-        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${rangeIndex}`);
+        console.log(`Accessing PSL[${tsu}] with rangeIndex: ${this.rangeIndex}`);
 
         if (Array.isArray(PSL) && Array.isArray(PSL[tsu])) {
-            if (PSL[tsu][rangeIndex] && PSL[tsu][rangeIndex].length > 3) {
-                radioRandom = Math.floor(Math.random() * (PSL[tsu][rangeIndex].length - 1));
-                return CurrentSong = PSL[tsu][rangeIndex][radioRandom];
+            if (PSL[tsu][this.rangeIndex] && PSL[tsu][this.rangeIndex].length > 3) {
+                this.radioRandom = Math.floor(Math.random() * (PSL[tsu][this.rangeIndex].length - 1));
+                return this.CurrentSong = PSL[tsu][this.rangeIndex][this.radioRandom];
 
 
             } else {
-                console.log(`No valid data in PSL[${tsu}][${rangeIndex}], falling back to PSL[11]`);
-                radioRandom = Math.floor(Math.random() * (PSL[11].length - 1));
-                return CurrentSong = PSL[11][rangeIndex][radioRandom];
+                console.log(`No valid data in PSL[${tsu}][${this.rangeIndex}], falling back to PSL[11]`);
+                this.radioRandom = Math.floor(Math.random() * (PSL[11].length));
+                return this.CurrentSong = PSL[11][this.radioRandom];
             }
         } else {
 
         }
     }
-
-    function RadioTime(PSL, response = null) {
+    RadioTime(PSL, response = null) {
         let now = new Date();
         let hour = now.getHours();
         let minute = now.getMinutes();
 
         switch (hour) {
             case 0:
-                return FourFolderSub(PSL, 0, minute, response);
+                return this.FourFolderSub(PSL, 0, minute, response);
 
             case 1:
                 if (minute <= 4) {
-                    return NoSubFolder(PSL, 1, response);
+                    return this.NoSubFolder(PSL, 1, response);
                 } else if (minute <= 14) {
-                    return ThreeFolderSub(PSL, 1, minute, response);
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
                 } else if (minute <= 29) {
-                    return ThreeFolderSub(PSL, 1, minute, response);
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
                 } else {
-                    return ThreeFolderSub(PSL, 1, minute, response);
+                    return this.ThreeFolderSub(PSL, 1, minute, response);
                 }
 
             case 2:
-                return NoSubFolder(PSL, 2, response);
+                return this.NoSubFolder(PSL, 2, response);
 
             case 3:
-                return ThreeFolderSub(PSL, 3, minute, response);
+                return this.ThreeFolderSub(PSL, 3, minute, response);
 
             case 4:
-                return ThreeFolderSub(PSL, 4, minute, response);
+                return this.ThreeFolderSub(PSL, 4, minute, response);
 
             case 5:
-                return ThreeFolderSub(PSL, 5, minute, response);
+                return this.ThreeFolderSub(PSL, 5, minute, response);
 
             case 6:
-                return ThreeFolderSub(PSL, 6, minute, response);
+                return this.ThreeFolderSub(PSL, 6, minute, response);
 
             case 7:
-                return ThreeFolderSub(PSL, 7, minute, response);
+                return this.ThreeFolderSub(PSL, 7, minute, response);
 
             case 8:
-                return SixFolderSub(PSL, 8, minute, response);
+                return this.SixFolderSub(PSL, 8, minute, response);
 
             case 9:
-                return ThreeFolderSub(PSL, 9, minute, response);
+                return this.ThreeFolderSub(PSL, 9, minute, response);
 
             case 10:
-                return NoSubFolder(PSL, 10, response);
+                return this.NoSubFolder(PSL, 10, response);
 
             case 11:
-                return CurrentSong = PSL[11][
+                return this.CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
 
 
             case 12:
-                return FourFolderSub(PSL, 12, minute, response);
+                return this.FourFolderSub(PSL, 12, minute, response);
 
             case 13:
-                return FourFolderSub(PSL, 13, minute, response);
+                return this.FourFolderSub(PSL, 13, minute, response);
 
             case 14:
-                return FourFolderSub(PSL, 14, minute, response);
+                return this.FourFolderSub(PSL, 14, minute, response);
 
             case 15:
-                return FourFolderSub(PSL, 15, minute, response);
+                return this.FourFolderSub(PSL, 15, minute, response);
 
             case 16:
-                return FourFolderSub(PSL, 16, minute, response);
+                return this.FourFolderSub(PSL, 16, minute, response);
 
             case 17:
-                return NoSubFolder(PSL, 17, response);
+                return this.NoSubFolder(PSL, 17, response);
 
             case 18:
-                return SixFolderSub(PSL, 18, minute, response);
+                return this.SixFolderSub(PSL, 18, minute, response);
 
             case 19:
-                return FourFolderSub(PSL, 19, minute, response);
+                return this.FourFolderSub(PSL, 19, minute, response);
 
             case 20:
-                return FourFolderSub(PSL, 20, minute, response);
+                return this.FourFolderSub(PSL, 20, minute, response);
 
             case 21:
-                return NoSubFolder(PSL, 21, response);
+                return this.NoSubFolder(PSL, 21, response);
 
             case 22:
-                return NoSubFolder(PSL, 22, response);
+                return this.NoSubFolder(PSL, 22, response);
 
             case 23:
-                return NoSubFolder(PSL, 23, response);
+                return this.NoSubFolder(PSL, 23, response);
 
             default:
-                return CurrentSong = PSL[11][
+                return this.CurrentSong = PSL[11][
                     Math.floor(Math.random() * (PSL[11].length - 1))
                 ];
 
         }
     }
 
-    const TsunamiRadio = new TsunamilowNation();
-
-    async function MessageReceived(event) {
+    async MessageReceived(event) {
         //console.log(`audio worker received ${event.data.type} data type.`);
         switch (event.data.type) {
             case "canvas":
@@ -942,23 +902,22 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         console.log(`the event data action was something i did not expect ${event.data.action}`);
 
                 }
-
-
+                break;
             case "radio":
-                if (songList === null) {
+                if (this.songList === null) {
                     try {
-                        songList = await requestWorld(
+                        this.songList = await this.requestWorld(
                             "GET", false,
                             null,
                             { "X-Request-Type": "fetchRadioSongs" },
                             "xml"
                         );
-                        //RadioTime(songList);
-                        //nextRadioItem = songList;
+                        //this.RadioTime(this.songList);
+                        //nextRadioItem = this.songList;
                     } catch (e) {
-                        songList = null;
+                        this.songList = null;
                         console.error("JSON parse error:", e);
-                        //RadioTime(songList);
+                        //this.RadioTime(this.songList);
                     }
                 }
 
@@ -966,9 +925,9 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                     case "get.radio.file":
                         switch (event.data.payload.system) {
                             case "files":
-                                let tfrSong = RadioTime(songList);
+                                let tfrSong = this.RadioTime(this.songList);
                                 console.log(tfrSong);
-                                self.postMessage(tycadome(
+                                self.postMessage(this.tycadome(
                                     "tycadome-guest" + Date.now(),
                                     "radio",
                                     "receive.radio.file",
@@ -986,7 +945,7 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                                     "async",
                                     {
                                         system: "files",
-                                        playlist: songList,
+                                        playlist: this.songList,
                                         file: tfrSong,
                                         message: "the radio source is ''",
                                         buffer: "nothing should be buffering.",
@@ -1010,8 +969,8 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                         //startVisualizerLoop(TfAudioVisualData);
                         break;
                     default:
-                        //RadioTime(songList);
-                        //TheLastSongUsed = CurrentSong;
+                        //this.RadioTime(this.songList);
+                        //TheLastSongUsed = this.CurrentSong;
                         break;
                 }
                 break;
@@ -1116,48 +1075,52 @@ async function requestWorld(method = "GET", url = false, data = null, headers = 
                 break;
         }
     }
+    async MessageError(e) {
+        try {
+            const err = e?.error || e;
+            self.postMessage(this.tycadome(
+                "tycadome-guest" /*+ Date.now()*/,
+                "error",
+                "audio.worker.error",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    layer: "tf",
+                    worker: "media"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "Audio System",
+                    message: err?.message || String(err),
+                    filename: err?.fileName || null,
+                    lineno: err?.lineNumber || null,
+                    colno: err?.columnNumber || null,
+                    stack: err?.stack || null,
+                    rawEvent: err
+                }));
 
-    try {
-        self.onmessage = (e) => {
-            MessageReceived(e);
-        };
-
-        self.onerror = (e) => {
-            try {
-                const err = e?.error || e;
-                self.postMessage(tycadome(
-                    "tycadome-guest" /*+ Date.now()*/,
-                    "error",
-                    "audio.worker.error",
-                    {
-                        source: "web",
-                        target: "device:web-001",
-                        layer: "tf",
-                        worker: "media"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "Audio System",
-                        message: err?.message || String(err),
-                        filename: err?.fileName || null,
-                        lineno: err?.lineNumber || null,
-                        colno: err?.columnNumber || null,
-                        stack: err?.stack || null,
-                        rawEvent: err
-                    }));
-
-            } catch (postErr) {
-                console.error("Worker onerror failed to post:", postErr);
-                console.trace();
-            }
-            console.error("Worker error:", e);
+        } catch (postErr) {
+            console.error("Worker onerror failed to post:", postErr);
             console.trace();
-        };
-    } catch (error) {
-        console.error("Error initializing mediaWorker:", error);
-    }
+        }
+        console.error("Worker error:", e);
+        console.trace();
+    };
+}
+
+const TsunamiRadio = new TsunamilowNation();
+
+try {
+    self.onmessage = (e) => {
+        TsunamiRadio.MessageReceived(e);
+    };
+} catch (error) {
+    self.onerror = (e) => {
+        TsunamiRadio.MessageError(e);
+    };
+    console.error("Error initializing mediaWorker:", error);
 }
