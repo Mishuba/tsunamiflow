@@ -98,7 +98,7 @@ class TsunamilowNation {
             const y = Math.random() * this.offscreencanvas.height;
             const dx = (Math.random() - 0.5) * 0.5;
             const dy = (Math.random() - 0.5) * 0.5;
-            const radius = Math.random() * 0.5 + 0.2;
+            const radius = Math.random() * 0.2 + 0.03;
             const color = `rgba(${Math.floor(Math.random() * 256)}, ` +
                 `${Math.floor(Math.random() * 256)}, ` +
                 `${Math.floor(Math.random() * 256)}, 0.8)`;
