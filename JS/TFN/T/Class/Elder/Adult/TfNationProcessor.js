@@ -203,7 +203,8 @@ class FFTProcessor extends AudioWorkletProcessor {
                         bass: features.bass,
                         mid: features.mid,
                         treble: features.treble,
-                        beat: features.beat
+                        beat: features.beat,
+                        //radius: 3//features.radius
                     }
                 ));
 

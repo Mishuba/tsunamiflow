@@ -25,7 +25,8 @@ class TsunamilowNation {
         mid: 0,
         treble: 0,
         beat: false,
-        timestamp: 0
+        timestamp: 0,
+        radius: 0,
     };
     fftEnergy = null;
     fftValue = null;
@@ -236,7 +237,7 @@ class TsunamilowNation {
             this.fftValue =
                 this.TfAudioVisualData.dataArray[i % this.TfAudioVisualData.dataArray.length];
 
-            this.update(this.particles[i].features);
+            this.update(this.particles[i]);
 
             this.draw(this.particles[i]);
         }
