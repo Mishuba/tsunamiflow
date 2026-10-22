@@ -886,10 +886,10 @@ class TsunamilowNation {
                     case "load.radio.canvas":
                         console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
                         console.log(`attempting to create a 2d canvas context in the audio worker `);
-                        TsunamiRadio.initRadioOffscreen(event.data.payload?.canvas, "2d");
+                        this.initRadioOffscreen(event.data.payload?.canvas, "2d");
                         console.log(`success now doing particles.`);
-                        TsunamiRadio.particles.length = 0;
-                        TsunamiRadio.particle();
+                        this.particles.length = 0;
+                        this.particle();
                         break;
                     default:
                         console.log(`the event data action was something i did not expect ${event.data.action}`);
@@ -951,11 +951,11 @@ class TsunamilowNation {
                         }
                         break;
                     case "audio.paused":
-                        TsunamiRadio.stopVisualizerLoop();
+                        this.stopVisualizerLoop();
                         break;
 
                     case "audio.ended":
-                        TsunamiRadio.stopVisualizerLoop();
+                        this.stopVisualizerLoop();
                         break;
                     case "audio.play":
 
@@ -971,21 +971,21 @@ class TsunamilowNation {
                 const payload = event.data.payload || {};
                 if (event.data.action === "audio.visual.data") {
                     if (payload.dataArray) {
-                        TsunamiRadio.TfAudioVisualData.dataArray =
+                        this.TfAudioVisualData.dataArray =
                             payload.dataArray instanceof Uint8Array
                                 ? payload.dataArray
                                 : new Uint8Array(payload.dataArray);
                     }
 
-                    TsunamiRadio.TfAudioVisualData.volume = Number(payload.volume) || 1;
-                    TsunamiRadio.TfAudioVisualData.bass = Number(payload.bass) || 0;
-                    TsunamiRadio.TfAudioVisualData.mid = Number(payload.mid) || 0;
-                    TsunamiRadio.TfAudioVisualData.treble = Number(payload.treble) || 0;
-                    TsunamiRadio.TfAudioVisualData.beat = Boolean(payload.beat);
-                    TsunamiRadio.TfAudioVisualData.timestamp = Date.now();
+                    this.TfAudioVisualData.volume = Number(payload.volume) || 1;
+                    this.TfAudioVisualData.bass = Number(payload.bass) || 0;
+                    this.TfAudioVisualData.mid = Number(payload.mid) || 0;
+                    this.TfAudioVisualData.treble = Number(payload.treble) || 0;
+                    this.TfAudioVisualData.beat = Boolean(payload.beat);
+                    this.TfAudioVisualData.timestamp = Date.now();
 
-                    if (!TsunamiRadio.visualizerRunning) {
-                        TsunamiRadio.startVisualizerLoop();
+                    if (!this.visualizerRunning) {
+                        this.startVisualizerLoop();
                     }
                 }
                 break;
