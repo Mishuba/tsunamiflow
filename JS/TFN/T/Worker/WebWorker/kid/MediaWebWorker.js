@@ -32,6 +32,11 @@ class TsunamilowNation {
     energy = null;
     bassEnergy = null;
     beatEnergy = null;
+    visualizerLastTime = 0;
+    visualizerPulse = 0;
+    smoothedVolume = 0;
+    smoothedBass = 0;
+    smoothedTreble = 0;
     particles = [];
     visualizerUsingTimeout = null;
     visualizerRunning = false;
@@ -112,7 +117,7 @@ class TsunamilowNation {
         }
     }
     update(
-        p,
+        p, deltaTime = 16.67
     ) {
         this.fftEnergy =
             (this.fftValue / 255) * this.TfAudioVisualData.volume;
@@ -243,7 +248,7 @@ class TsunamilowNation {
             this.fftValue =
                 this.TfAudioVisualData.dataArray[i % this.TfAudioVisualData.dataArray.length];
 
-            this.update(this.particles[i]);
+            this.update(this.particles[i].features);
 
             this.draw(this.particles[i]);
         }
