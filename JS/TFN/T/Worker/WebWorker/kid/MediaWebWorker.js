@@ -125,9 +125,9 @@ class TsunamilowNation {
          * Particle radius.
          */
         p.radius =
-            this.baseRadius +
-            this.energy +
-            this.beatEnergy;
+            this.baseRadius - 34 +
+            this.energy - 35 +
+            this.beatEnergy - 36;
 
         /*
          * Movement.
