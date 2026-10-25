@@ -120,7 +120,7 @@ export class User extends StripeDonation {
     for (const [key, elem] of Object.entries(extraFields)) {
       if (elem) SubFormData.append(key, elem.value);
     }
-    this.sendToSharedWorker("xml", SubFormData);
+    return SubFormData;
   }
 
   login(saveSession = true) {

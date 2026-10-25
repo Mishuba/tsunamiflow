@@ -479,7 +479,7 @@ export class maxwell {
         }
     }
     log(element, msg) {
-        let logBox = this.find(element);
+        let logBox = this.find(element); //"TFthought"
         if (!logBox) return;
 
         logBox.innerText += msg + "\n";
@@ -488,19 +488,6 @@ export class maxwell {
     find(elem, frame = null) {
         const doc = frame?.contentDocument ?? document;
         return doc?.getElementById(elem) ?? null;
-        /*
-        if (frame) {
-            const doc = frame.contentDocument;
-
-            if (!doc) {
-                return null;
-            }
-
-            return doc.getElementById(elem);
-        }
-
-        return document.getElementById(elem);
-        */
     }
 
     emit(event, data) {
@@ -925,6 +912,7 @@ export class maxwell {
         }, true, null);
         this.onMe("TFCompleteForm", "submit", async () => {
             this.user.signup(this.userFields, this.extraFields);
+            this.user.requestWorld("POST", false, this.user.signup(this.userFields, this.extraFields), { "X-Request-Type": "user-signup" }, "xml");
         }, true, null);
 
         this.user.chatInput = this.find("TFthoughtsNow")
