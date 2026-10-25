@@ -911,8 +911,39 @@ export class maxwell {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
         this.onMe("TFCompleteForm", "submit", async () => {
-            this.user.signup(this.userFields, this.extraFields);
-            this.user.requestWorld("POST", false, this.user.signup(this.userFields, this.extraFields), { "X-Request-Type": "user-signup" }, "xml");
+
+            this.user.requestWorld(
+                "POST",
+                false,
+                this.user.tycadome(
+                    "",
+                    "community",
+                    "user.signup",
+                    {
+                        worker: "none"
+                    },
+                    {
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "",
+                        message: "",
+                        error: "",
+                        membership: this.membershipSelect,
+                        membershipcost: this.membershipCostEl.innerHTML,
+                        form: this.user.signup(
+                            this.userFields,
+                            this.extraFields
+                        )
+                    }
+                ),
+                {
+                    "X-Request-Type": "user-signup"
+
+                },
+                "xml"
+            );
         }, true, null);
 
         this.user.chatInput = this.find("TFthoughtsNow")
