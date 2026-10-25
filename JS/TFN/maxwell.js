@@ -910,7 +910,7 @@ export class maxwell {
         this.onMe("TFMembershipLevel", "click", async () => {
             this.user.updateMembership(this.membershipSelect, this.sections, this.membershipCostEl, this.paymentTypeEl, this.hiddenMC, this.hiddenPT);
         }, true, null);
-        this.onMe("TFCompleteForm", "submit", async () => {
+        this.onMe("SubscribeUsersSubmit", "submit", async () => {
 
             this.user.requestWorld(
                 "POST",
