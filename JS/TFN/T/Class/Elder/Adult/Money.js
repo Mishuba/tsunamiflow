@@ -41,73 +41,6 @@ export class StripeDonation extends TsDomCanvas {
         this.stripe = Stripe(this.stripePublicKey);
     }
 
-    async _fetchRequest(data) {
-        const res = await fetch(this.backendUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify(data),
-        });
-
-        let json;
-        try { json = await res.json(); }
-        catch { throw new Error("Invalid JSON response"); }
-
-        if (!res.ok || json.error) throw json.error || "Unknown error";
-        return json;
-    }
-
-    // ===== XHR VERSION =====
-    _xhrRequest(data) {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-
-            xhr.open("POST", this.#backendUrl, true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.withCredentials = true;
-
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState !== 4) return;
-
-                try {
-                    const json = JSON.parse(xhr.responseText);
-
-                    if (xhr.status === 200 && !json.error) {
-                        resolve(json);
-                    } else {
-                        reject(json.error || "Unknown error");
-                    }
-                } catch {
-                    reject("Invalid JSON response");
-                }
-            };
-
-            xhr.onerror = () => reject("Network error");
-
-            xhr.send(JSON.stringify(data));
-        });
-    }
-
-    // ===== UNIFIED REQUEST =====
-    async request(data, retries = 2) {
-        try {
-            if (this.transport === "xhr") {
-                return await this._xhrRequest(data);
-            } else {
-                return await this._fetchRequest(data);
-            }
-        } catch (err) {
-            if (retries > 0) {
-                this.emit("retry", { data, retries });
-                return this.request(data, retries - 1);
-            }
-
-            this.queue.push(data);
-            throw err;
-        }
-    }
-
-
     mountCard(elementId) {
         if (!this.stripe) throw new Error("Stripe not initialized");
         if (this.cardElement) this.cardElement.unmount();
@@ -121,15 +54,35 @@ export class StripeDonation extends TsDomCanvas {
 
         this.emit("loading", true);
         try {
-            const payload = { action: "createPaymentIntent", amount: Math.round(amount * 100), currency, saveCustomer, email, metadata, customerId: this.customerId };
-            const data = await this.request(payload);
+            const payload = this.tycadome(
+                "payment" + customerId: this.customerId,
+                "stripe.payment",
+                "createPaymentIntent",
+                {
+                    worker: "none" //"site"
+                },
+                {
+
+                },
+                "async",
+                {
+                    amount: Math.round(amount * 100), 
+                    currency, 
+                    saveCustomer, 
+                    email, 
+                    metadata, 
+                    customerId: this.customerId
+                }
+            )
+            const data = await this.requestWorld("POST", false,payload, {
+                "ContentType: application/x-www-form-urlencoded"
+            }, "xml");
             const { clientSecret, customerId } = data;
 
             if (saveCustomer && customerId) {
                 this.customerId = customerId;
                 localStorage.setItem("stripeCustomerId", customerId);
             }
-
             const result = await this.stripe.confirmCardPayment(clientSecret, { payment_method: { card: this.cardElement } });
             if (result.error) throw result.error;
 
@@ -140,6 +93,14 @@ export class StripeDonation extends TsDomCanvas {
             throw err;
         } finally {
             this.emit("loading", false);
+            if ("store") {
+                
+            } 
+
+            if ("community") {
+                
+            }
+            
         }
     }
 
@@ -149,10 +110,30 @@ export class StripeDonation extends TsDomCanvas {
 
         this.emit("loading", true);
         try {
-            const payload = { action: "createSubscription", email, priceId, saveCustomer, metadata, ...options };
-            if (this.customerId) payload.customerId = this.customerId;
 
-            const data = await this.request(payload);
+            const payload = this.tycadome(
+                "id",
+                "money",
+                "stripe.substription",
+                {
+                    worker: "none",
+                },
+                { 
+priority: "low",
+                },
+                "async",
+                { 
+                    action: "createSubscription", 
+                    email, 
+                    priceId, 
+                    saveCustomer, 
+                    metadata, 
+                    ...options 
+                }
+            )
+            if (this.customerId) payload.id = this.customerId;
+
+            const data = await this.requestWorld("POST", false,payload, "application/json", "xml");
             const { clientSecret, subscriptionId, customerId, status } = data;
 
             if (saveCustomer && customerId) {

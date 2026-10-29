@@ -940,7 +940,6 @@ export class maxwell {
                 ),
                 {
                     "X-Request-Type": "user-signup"
-
                 },
                 "xml"
             );
