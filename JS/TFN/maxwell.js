@@ -916,7 +916,7 @@ export class maxwell {
                 "POST",
                 false,
                 this.user.tycadome(
-                    "",
+                    this.userFields.tfUN.value,
                     "community",
                     "user.signup",
                     {
@@ -2038,7 +2038,6 @@ export class maxwell {
     async onDomEvent(event) {
         switch (event) {
             case "DOMContentLoaded":
-
                 this.mainSection = this.find("mainTsectionFdiv");
                 this.mainSectionWidth = this.mainSection ? (this.mainSection.clientWidth || this.mainSection.offsetWidth || 800) : 800;
                 this.mainSectionHeight = this.mainSection ? (this.mainSection.clientHeight || this.mainSection.offsetHeight || 600) : 600;
@@ -2081,68 +2080,109 @@ export class maxwell {
                     //this.mainCanvas.style.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
                     //this.mainCanvas.style.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
                     //this.mainCanvas.style.background = "white";
-
-                    this.updateRadioState();
-
-                    this.user.showProducts().then(async () => {
-                        this.bindUsers();
-                        this.bindPayments();
-                        this.user.bindCart();
-
-                        if (window.Worker) {
-                            try {
-                                this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
-                                this.mainSection.appendChild(this.mainCanvas);
-                                this.currentMainElement = this.mainCanvas;
-                                this.mainOffscreenCanvas = this.mainCanvas.transferControlToOffscreen();
-                                this.initTsunamiWorkers();
-
-                                //await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {;});
-
-                                this.worker.postMessage(this.soundEngine.tycadome(
-                                    "tycadome-guest" + Date.now(),
-                                    "canvas",
-                                    "load.game.world.canvas",
-                                    {
-                                        source: "web",
-                                        target: "device:web-001",
-                                        worker: "world"
-                                    },
-                                    {
-                                        status: "pending",
-                                        priority: "low"
-                                    },
-                                    "async",
-                                    {
-                                        system: "homepage",
-                                        canvas: this.mainOffscreenCanvas,
-                                        ai: this.stickman
-                                    },
-                                    [
-                                        this.mainOffscreenCanvas
-                                    ]
-                                ),
-                                    [this.mainOffscreenCanvas]);
-                            } catch (err) {
-                                console.warn("Offscreen canvas transfer failed:", err);
-                            }
-                        } else {
-                            this.bindAudio();
-                        }
-                        this.bindNavBar()
-                        this.site.requestLocation();
-
-                        //this.connectWebSocket();
-                        console.log("TFN");
-                    }).catch(err => {
-                        console.error("Cart binding error:", err);
-                        //throw err;
-                    });
+                    this.mainSection.appendChild(this.mainCanvas);
+                    this.currentMainElement = this.mainCanvas;
+                    this.bindNavBar()
+                    this.site.requestLocation();
                 }
                 break;
 
             default:
                 break;
         }
+    }
+    async waitForServer({ timeoutMs = 5 * 60 * 1000, intervalMs = 60 * 1000, onStatus } = {}) {
+        const start = Date.now();
+        let attempt = 0;
+
+        while (Date.now() - start < timeoutMs) {
+            attempt++;
+            const attemptStart = Date.now();
+            onStatus?.(`Waking server... (attempt ${attempt})`);
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), intervalMs);
+                const res = await fetch(`https://world-l87q.onrender.com/health.php`, {
+                    cache: 'no-store',
+                    signal: controller.signal,
+                });
+                clearTimeout(timer);
+
+                if (res.ok) {
+                    const data = await res.json().catch(() => null);
+                    if (data && data.status === 'ok') {
+                        onStatus?.('Server is active.');
+                        return true;
+                    }
+                }
+            } catch (_) {
+                // Cold start: timeouts, 502/503, or network errors are expected. Keep polling.
+            }
+            const elapsed = Date.now() - attemptStart;
+            const waitTime = Math.max(0, intervalMs - elapsed);
+            onStatus?.(`Server not ready yet. Waiting ${waitTime / 1000}s before next attempt...`);
+            if (elapsed < intervalMs) {
+                await new Promise(r => setTimeout(r, waitTime));
+            }
+        }
+        throw new Error('Server did not wake up in time.');
+    }
+    OnServerReady() {
+        this.updateRadioState();
+
+        this.user.showProducts().then(async () => {
+            this.bindUsers();
+            this.bindPayments();
+            this.user.bindCart();
+
+            if (window.Worker) {
+                try {
+                    this.RadioOffscreenCanvas = this.RadioCanvas.transferControlToOffscreen();
+                    this.mainOffscreenCanvas = this.mainCanvas.transferControlToOffscreen();
+                    this.initTsunamiWorkers();
+
+                    //await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {;});
+
+                    this.worker.postMessage(this.soundEngine.tycadome(
+                        "tycadome-guest" + Date.now(),
+                        "canvas",
+                        "load.game.world.canvas",
+                        {
+                            source: "web",
+                            target: "device:web-001",
+                            worker: "world"
+                        },
+                        {
+                            status: "pending",
+                            priority: "low"
+                        },
+                        "async",
+                        {
+                            system: "homepage",
+                            canvas: this.mainOffscreenCanvas,
+                            ai: this.stickman
+                        },
+                        [
+                            this.mainOffscreenCanvas
+                        ]
+                    ),
+                        [this.mainOffscreenCanvas]);
+                } catch (err) {
+                    console.warn("Offscreen canvas transfer failed:", err);
+                }
+            } else {
+                this.bindAudio();
+            }
+            //this.connectWebSocket();
+            console.log("TFN");
+        }).catch(err => {
+            console.error("Cart binding error:", err);
+            //throw err;
+        });
+    }
+    async apiRequest(options = {}, onStatus) {
+        const API_BASE = 'https://world-l87q.onrender.com/health.php';
+        await this.waitForServer({ onStatus });
+        return fetch(`${API_BASE}`, options);
     }
 }

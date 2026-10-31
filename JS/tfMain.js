@@ -51,56 +51,9 @@ const indexdb = {
     console.log(`suppose tfo be word ${TsunamiController.site.WordOfTheDayArray[i]}`);
   };
 
-  const API_BASE = 'https://world-l87q.onrender.com/health.php'; // <-- change this
-
-  // Polls /health.php until the server answers 200, or gives up after timeoutMs.
-  async function waitForServer({ timeoutMs = 5 * 60 * 1000, intervalMs = 60 * 1000, onStatus } = {}) {
-    const start = Date.now();
-    let attempt = 0;
-
-    while (Date.now() - start < timeoutMs) {
-      attempt++;
-      const attemptStart = Date.now();
-      onStatus?.(`Waking server... (attempt ${attempt})`);
-      try {
-        const controller = new AbortController();
-        const timer = setTimeout(() => controller.abort(), intervalMs);
-        const res = await fetch(`${API_BASE}`, {
-          cache: 'no-store',
-          signal: controller.signal,
-        });
-        clearTimeout(timer);
-
-        if (res.ok) {
-          const data = await res.json().catch(() => null);
-          if (data && data.status === 'ok') {
-            onStatus?.('Server is active.');
-            return true;
-          }
-        }
-      } catch (_) {
-        // Cold start: timeouts, 502/503, or network errors are expected. Keep polling.
-      }
-      const elapsed = Date.now() - attemptStart;
-      const waitTime = Math.max(0, intervalMs - elapsed);
-      onStatus?.(`Server not ready yet. Waiting ${waitTime / 1000}s before next attempt...`);
-      if (elapsed < intervalMs) {
-        await new Promise(r => setTimeout(r, waitTime));
-      }
-    }
-    throw new Error('Server did not wake up in time.');
-  }
-
-  // Wrapper: wake first, then do the real request.
-  async function apiRequest(options = {}, onStatus) {
-    await waitForServer({ onStatus });
-    return fetch(`${API_BASE}`, options);
-  }
+  TsunamiController.onDomEvent("DOMContentLoaded");
+  window.ControlMishuba = TsunamiController;
 
   // Example usage:
-  apiRequest({ method: 'GET' }, msg => console.log(msg)).then(() => (
-    TsunamiController.onDomEvent("DOMContentLoaded"))
-  ).catch(err => console.error(err));
-
-  window.ControlMishuba = TsunamiController;
+  TsunamiController.apiRequest({ method: 'GET' }, msg => console.log(msg)).then(() => (TsunamiController.OnServerReady())).catch(err => console.error(err));
 });
