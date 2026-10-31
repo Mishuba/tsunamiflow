@@ -1003,15 +1003,15 @@ export class maxwell {
 
         this.audioLast.id = "TFradioPreviousButton";
         this.audioLast.innerHTML = "Previous";
-        this.audioTitle.appendChild(last);
+        this.audioTitle.appendChild(this.audioLast);
 
         this.audioRestart.id = "TFRadioRestartButton";
         this.audioRestart.innerHTML = "Restart";
-        this.audioTitle.appendChild(restart);
+        this.audioTitle.appendChild(this.audioRestart);
 
         this.audioStart.id = "TFradioButton";
         this.audioStart.innerHTML = "Start Radio";
-        this.audioTitle.appendChild(start);
+        this.audioTitle.appendChild(this.audioStart);
 
         this.audioSkip.id = "TFradioSkipButton";
         this.audioSkip.innerHTML = "Next";
