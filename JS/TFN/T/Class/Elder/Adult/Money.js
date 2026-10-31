@@ -55,7 +55,7 @@ export class StripeDonation extends TsDomCanvas {
         this.emit("loading", true);
         try {
             const payload = this.tycadome(
-                "payment" + customerId: this.customerId,
+                "payment" + this.customerId,
                 "stripe.payment",
                 "createPaymentIntent",
                 {
@@ -66,17 +66,15 @@ export class StripeDonation extends TsDomCanvas {
                 },
                 "async",
                 {
-                    amount: Math.round(amount * 100), 
-                    currency, 
-                    saveCustomer, 
-                    email, 
-                    metadata, 
+                    amount: Math.round(amount * 100),
+                    currency,
+                    saveCustomer,
+                    email,
+                    metadata,
                     customerId: this.customerId
                 }
             )
-            const data = await this.requestWorld("POST", false,payload, {
-                "ContentType: application/x-www-form-urlencoded"
-            }, "xml");
+            const data = await this.requestWorld("POST", false, payload, { "ContentType": "application/x-www-form-urlencoded" }, "xml");
             const { clientSecret, customerId } = data;
 
             if (saveCustomer && customerId) {
@@ -94,13 +92,13 @@ export class StripeDonation extends TsDomCanvas {
         } finally {
             this.emit("loading", false);
             if ("store") {
-                
-            } 
+
+            }
 
             if ("community") {
-                
+
             }
-            
+
         }
     }
 
@@ -118,22 +116,22 @@ export class StripeDonation extends TsDomCanvas {
                 {
                     worker: "none",
                 },
-                { 
-priority: "low",
+                {
+                    priority: "low",
                 },
                 "async",
-                { 
-                    action: "createSubscription", 
-                    email, 
-                    priceId, 
-                    saveCustomer, 
-                    metadata, 
-                    ...options 
+                {
+                    action: "createSubscription",
+                    email,
+                    priceId,
+                    saveCustomer,
+                    metadata,
+                    ...options
                 }
             )
             if (this.customerId) payload.id = this.customerId;
 
-            const data = await this.requestWorld("POST", false,payload, "application/json", "xml");
+            const data = await this.requestWorld("POST", false, payload, "application/json", "xml");
             const { clientSecret, subscriptionId, customerId, status } = data;
 
             if (saveCustomer && customerId) {
