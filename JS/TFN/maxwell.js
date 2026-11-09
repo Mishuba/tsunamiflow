@@ -2137,13 +2137,13 @@ export class maxwell {
                     this.mainCanvas = document.createElement("canvas");
                     this.mainCanvas.name = "TsunamiMainFlowContent";
                     this.mainCanvas.id = "TsunamiContent";
-                    this.maincanvas.style.margin = "0 auto";
-                    this.maincanvas.style.background = "000000";
-                    this.maincanvas.style.display = "block";
-                    this.maincanvas.style.border = "1px solid black";
-                    this.maincanvas.style.cursor = "none";
-                    this.maincanvas.imageSmoothingEnabled = true;
-                    //this.maincanvas.imageSmoothingQualty;
+                    this.mainCanvas.style.margin = "0 auto";
+                    this.mainCanvas.style.background = "000000";
+                    this.mainCanvas.style.display = "block";
+                    this.mainCanvas.style.border = "1px solid black";
+                    this.mainCanvas.style.cursor = "none";
+                    this.mainCanvas.imageSmoothingEnabled = true;
+                    //this.mainCanvas.imageSmoothingQualty;
                     this.mainSection.appendChild(this.mainCanvas);
                     this.currentMainElement = this.mainCanvas;
                     this.bindNavBar()
