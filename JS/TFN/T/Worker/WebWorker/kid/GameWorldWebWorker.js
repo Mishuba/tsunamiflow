@@ -27,13 +27,6 @@ class GameWorld {
 		} else {
 			try {
 				this.offscreencanvas = canvas;
-				this.offscreencanvas.style.margin = "0 auto";
-				this.offscreencanvas.style.background = "000000";
-				this.offscreencanvas.style.display = "block";
-				this.offscreencanvas.style.border = "1px solid black";
-				this.offscreencanvas.style.cursor = "none";
-				this.offscreencanvas.imageSmoothingEnabled = true;
-				//this.offscreencanvas.imageSmoothingQualty;
 				this.canvasctx = this.offscreencanvas.getContext(canvastype);
 				if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
 				this.isoffscreenReady = true;
