@@ -2138,7 +2138,7 @@ export class maxwell {
                     this.mainCanvas.name = "TsunamiMainFlowContent";
                     this.mainCanvas.id = "TsunamiContent";
                     this.mainCanvas.style.margin = "0 auto";
-                    this.mainCanvas.style.background = "000000";
+                    this.mainCanvas.style.background = "rgb(255, 255, 255)";
                     this.mainCanvas.style.display = "block";
                     this.mainCanvas.style.border = "1px solid black";
                     this.mainCanvas.style.cursor = "none";
