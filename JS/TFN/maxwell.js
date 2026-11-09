@@ -631,8 +631,68 @@ export class maxwell {
             await this.switchmaincontent("iframe", "Iframe/Pages/news.html");
         });
 
-        this.onMe("tfCompetitions", "click", async () => {
-            await this.loadNavSource("Iframe/Pages/Competitions.html");
+        this.onMe("tfCompetitions", "click", async () => { //change instead o click
+            await this.switchmaincontent("canvas");
+
+
+            /*
+            switch (this.find("tfCompetitions").value) {
+            case "":
+            */
+            this.worker.postMessage(this.soundEngine.tycadome(
+                "tycadome-guest" + Date.now(),
+                "canvas",
+                "load.game.world.canvas",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    worker: "world"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "race against the universe",
+                    canvas: this.mainOffscreenCanvas,
+                    ai: this.stickman
+                },
+                [
+                    this.mainOffscreenCanvas
+                ]
+            ),
+                [this.mainOffscreenCanvas]);
+            /*
+            break;
+            case "planet universe":
+            this.worker.postMessage(this.soundEngine.tycadome(
+                "tycadome-guest" + Date.now(),
+                "canvas",
+                "load.game.world.canvas",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    worker: "world"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "planet universe",
+                    canvas: this.mainOffscreenCanvas,
+                    ai: this.stickman
+                },
+                [
+                    this.mainOffscreenCanvas
+                ]
+            ),
+                [this.mainOffscreenCanvas]);
+
+                break;
+            */
         });
 
         this.onMe("tfNetwork", "change", async () => {

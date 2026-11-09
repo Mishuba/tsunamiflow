@@ -118,61 +118,7 @@ export class GameMechanics extends TFgameMovement {
         //r //distance between the centers of the two object (if using earth it would be [center of earth and the person's center of mass{usually just Earth's radius if the person is on the surface.}]);
         let GravitationalForce = (g * m1 * (m2 * 2.20462)) / (r * r);
         return GravitationalForce;
-    }
-    updateComponent(data) {
-        let placement = this.context;
-        if (data.type == "sprite") {
-            let gameCharacter = this.image;
-            gameCharacter.src = data.color;
 
-            this.SpritePosition(data);
-            placement.drawImage(gameCharacter, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
-
-            //Scoreboard
-            placement.font = `${data.textSize} ${data.textStyle}`;
-            placement.textAlign = data.textAlign;
-            placement.textBaseline = data.textBaseline;
-            placement.direction = data.textDirection;
-            placement.letterSpacing = data.letterSpacing;
-            placement.fontKerning = data.fontKerning;
-            placement.fontStretch = data.fontStretch;
-            placement.fontVariantCaps = data.fontVariantCaps;
-            placement.textRendering = data.textRendering;
-            placement.wordSpacing = data.wordSpacing;
-            placement.fillStyle = data.textColor;
-            placement.fillText(data.text, data.textWidth, data.textHeight /*, data.textSettings*/);
-        } else if (data.type == "background") {
-            //this.gameBackground.src = data.battleBackground;
-            placement.drawImage(gameBackground, data.x, data.y, data.width, data.height);
-        } else if (data.type == "text") {
-            placement.font = `${data.textSize} ${data.textStyle}`;
-            placement.fillStyle = data.textColor;
-            placement.fillText(data.text, data.textWidth, data.textHeight);
-        } else if (data.type == "player") {
-
-            placement.fillStyle = data.color;
-            placement.fillRect(data.x, data.y, data.width, data.height);
-
-            //Scoreboard
-            placement.font = `${data.textSize} ${data.textStyle}`;
-            placement.textAlign = data.textAlign;
-            placement.textBaseline = data.textBaseline;
-            placement.direction = data.textDirection;
-            placement.letterSpacing = data.letterSpacing;
-            placement.fontKerning = data.fontKerning;
-            placement.fontStretch = data.fontStretch;
-            placement.fontVariantCaps = data.fontVariantCaps;
-            placement.textRendering = data.textRendering;
-            placement.wordSpacing = data.wordSpacing;
-            placement.fillStyle = data.textColor;
-            placement.fillText(data.text, data.textWidth, data.textHeight /*, data.textSettings*/);
-        } else if (data.type == "obstacle") {
-            placement.fillStyle = data.color;
-            placement.fillRect(data.x, data.y, data.width, data.height);
-        } else {
-            placement.fillStyle = data.color;
-            placement.fillRect(data.x, data.y, data.width, data.height);
-        }
     }
     ActionMechanics(data) {
         switch (data.spriteState) {
@@ -406,50 +352,7 @@ export class GameMechanics extends TFgameMovement {
                 break;
         }
     }
-    crashWith(player, object) {
-        let myLeft = player.x;
-        let myRight = player.x + (player.width);
-        let myTop = player.y;
-        let myBottom = player.y + (player.height);
-        let badLeft = object.x;
-        let badRight = object.x + (object.width);
-        let badTop = object.y;
-        let badBottom = object.y + (object.height);
-        let crash = true;
-        switch (object.type) {
-            case "environment":
-                //Do not end game
-                break;
-            case "sprite":
-                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-                    crash = false;
-                } else {
-                    crash = true;
-                    //Create logic that determines who hit who first and also based on power, durability and weakness.
-                    this.damageTotal(player, object, this.ActionMechanics(player));
-                }
-                //input damage function
-                break;
-            case "obstacle":
-                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-                    crash = false;
-                }
-                // prevent from moving in that direction or jump/climb/swim over it.
-                break;
-            case "background":
-                //idk what ima do for it yet / maybe no crash maybe just prevent from going off screen
-                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-                    crash = false;
-                }
-                break;
-            default:
-                if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
-                    crash = false;
-                    break;
-                }
-        }
-        return crash;
-    }
+
     damage(character, attackType) {
         switch (attackType) {
             case "weakAttack":

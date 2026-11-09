@@ -27,18 +27,15 @@ export class GameController extends TsDomCanvas {
                     up: "D-Pad Up", down: "D-Pad Down", left: "D-Pad Left", right: "D-Pad Right",
                     select: "- Button", start: "+ Button", action1: "B", action2: "A", action3: "Y", action4: "X",
                     leftStick: "Left Analog Stick", rightStick: "Right Analog Stick",
+                },
+                phone: {
+
                 }
             };
         }
         //window.addEventListener("gamepadconnected", (e) => this.onGamepadConnected(e));
     }
-    everyInterval(n, frameNumber) {
-        if ((frameNumber / n) % 1 == 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     getControllerType(gamepad) {
         // Detect controller type based on button layout
@@ -68,20 +65,20 @@ export class GameController extends TsDomCanvas {
     }
     getButtonAction(buttonIndex, mappings) {
         switch (buttonIndex) {
-            case 0: return mappings.action1; // A or Cross
-            case 1: return mappings.action2; // B or Circle
-            case 2: return mappings.action3; // X or Square
-            case 3: return mappings.action4; // Y or Triangle
-            case 8: return mappings.select;  // Select Button
-            case 9: return mappings.start;   // Start Button
-            case 12: return mappings.up;     // D-Pad Up
+            case 0: return mappings.action1; // A or Cross (B)
+            case 1: return mappings.action2; // B or Circle (A)
+            case 2: return mappings.action3; // X or Square (Y)
+            case 3: return mappings.action4; // Y or Triangle (X)
+            case 8: return mappings.select;  // Select Button (T)
+            case 9: return mappings.start;   // Start Button (O)
+            case 12: return mappings.up;     // D-Pad Up 
             case 13: return mappings.down;   // D-Pad Down
             case 14: return mappings.left;   // D-Pad Left
             case 15: return mappings.right;  // D-Pad Right
-            case 16: return mappings.action5; // L1
-            case 17: return mappings.action6; // R1
-            case 18: return mappings.action7; // L2
-            case 19: return mappings.action8; // R2
+            case 16: return mappings.action5; // L1 (L)
+            case 17: return mappings.action6; // R1 (R)
+            case 18: return mappings.action7; // L2 (ZL)
+            case 19: return mappings.action8; // R2 (RZ)
             case 20: return mappings.action9; // Left Analog Stick
             case 21: return mappings.action10; // Right Analog stick
             case 22: return mappings.action2 && mapping.action4; // Triangle and Circle
@@ -89,6 +86,18 @@ export class GameController extends TsDomCanvas {
             case 24: return mappings.action5 && mapping.action6; // L1 and R1
             case 25: return mappings.action2 && mapping.action1; // Cross and Circle
             case 26: return mappings.action7 && mapping.action8; // X or Square
+            case 28:
+                //let click (ML)
+                break;
+            case 29:
+                //right click (MR)
+                break;
+            case 30:
+                //Let pad press (SL)
+                break;
+            case 31:
+                //(RL) Right Pad press
+                break;
         }
     }
 }

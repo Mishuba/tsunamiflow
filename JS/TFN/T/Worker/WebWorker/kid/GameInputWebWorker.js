@@ -138,8 +138,203 @@ class GameWorld {
 
 		return tf;
 	}
+	SpritePosition(data) {
+		let position = Math.floor(data.spriteFrameInterval / data.spriteStates[data.spriteState].frame) % data.spriteStates[data.spriteState].loc.length;
 
+		data.sx = data.dw * position;
+		data.sy = data.spriteStates[data.spriteState].loc[position].y;
 
+		if (this.frame % this.StaggerFrame === 0) {
+			if (data.spriteFrameInterval >= data.spriteStates[data.spriteState].frame) {
+				data.spriteFrameInterval = 0;
+			} else {
+				data.spriteFrameInterval = data.spriteFrameInterval + 1
+			}
+		} else {
+
+		}
+		return data.sx, data.sy;
+	}
+	moveup(data) {
+		if (data.type == "sprite") {
+			data.spriteState = "walk";
+			this.SpritePosition(data);
+			return data.y = Math.max(data.y - (1 * data.spriteSpeed), 0);
+		} else {
+			return data.speedY -= 1;
+		}
+	}
+	movedown(data, canvas = null) {
+		if (data.type == "sprite") {
+			data.spriteState = "walk";
+			this.SpritePosition(data);
+			return data.y = Math.max(data.y + (1 * data.spriteSpeed), Math.min(data.y + (1 * data.spriteSpeed), canvas.height - data.height));
+		} else {
+			return data.speedY += 1;
+		}
+	}
+	moveleft(data) {
+		if (data.type == "sprite") {
+			data.spriteState = "walk";
+			this.SpritePosition(data);
+			return data.x = Math.max(data.x - (1 * data.spriteSpeed), 0);
+		} else {
+			return data.speedX -= 1;
+		}
+	}
+	moveright(data) {
+		if (data.type !== "sprite") {
+			sprite.spriteState = "walk";
+			this.SpritePosition(sprite);
+			return sprite.x = Math.max(sprite.x + (1 * sprite.spriteSpeed), Math.min(sprite.x + (1 * sprite.spriteSpeed), canvas.width - sprite.width));
+		} else {
+			return data.speedX += 1;
+		}
+	}
+	stopMove(data) {
+		if (data.type !== "sprite") {
+			this.SpritePosition(data);
+			data.speedX = 0;
+			data.speedY = 0;
+		} else {
+			data.speedX = 0;
+			data.speedY = 0;
+		}
+	}
+	pcControls(event, key, canvas, sprite) {
+		switch (key) {
+			case "ArrowUp":
+			case "Up":
+			case 38:
+				this.moveup(sprite);
+				break;
+			case "ArrowDown":
+			case "Down":
+			case 40:
+				this.movedown(sprite, canvas);
+				break;
+			case "ArrowLeft":
+			case "Left":
+			case 37:
+				this.moveleft(sprite);
+				break;
+			case "ArrowRight":
+			case "Right":
+			case 39:
+				this.moveright(sprite);
+				break;
+			case "Enter":
+				sprite.spriteState = "select";
+				break;
+			case "Escape":
+				sprite.spriteState = "Start";
+				break;
+			case "j":
+				sprite.spriteState = "weak attack";
+				this.SpritePosition(sprite);
+				break;
+			case "k":
+				sprite.spriteState = "strong attack";
+				this.SpritePosition(sprite);
+				break;
+			case "l":
+				sprite.spriteState = "special attack";
+				this.SpritePosition(sprite);
+				break;
+			case ";":
+				sprite.spriteState = "main attack";
+				this.SpritePosition(sprite);
+				break;
+			case "m":
+				sprite.spriteState = "aoe skill";
+				this.SpritePosition(sprite);
+				break;
+			case ",":
+				sprite.spriteState = "range skill";
+				this.SpritePosition(sprite);
+				break;
+			case ".":
+				sprite.spriteState = "knockback skill";
+				this.SpritePosition(sprite);
+				break;
+			case "/":
+				sprite.spriteState = "evade skill";
+				this.SpritePosition(sprite);
+				break;
+			case "u":
+				sprite.spriteState = "defense skill";
+				this.SpritePosition(sprite);
+				break;
+			case "i":
+				sprite.spriteState = "buff skill";
+				this.SpritePosition(sprite);
+				break;
+			case "o":
+				sprite.spriteState = "debuff skill";
+				this.SpritePosition(sprite);
+				break;
+			case "p":
+				sprite.spriteState = "ultimate skill";
+				this.SpritePosition(sprite);
+				break;
+			case "w":
+				sprite.spriteState = "jump";
+				this.SpritePosition(sprite);
+				break;
+			case "x":
+				sprite.spriteState = "crounch";
+				this.SpritePosition(sprite);
+				break;
+			case "space":
+				sprite.spriteState = "crawl";
+				this.SpritePosition(sprite);
+				break;
+			case "d":
+				sprite.spriteState = "";
+				//hpXmove = +hpXmove;
+				break;
+			case "a":
+				sprite.spriteState = "";
+				//hpXmove = -hpXmove;
+				break;
+			case "s":
+				sprite.spriteState = "run";
+				this.SpritePosition(sprite);
+				break;
+			case "2":
+				sprite.spriteState = "double jump";
+				this.SpritePosition(sprite);
+				break;
+			case "e":
+				sprite.spriteState = "climb";
+				this.SpritePosition(sprite);
+				break;
+			case "c":
+				sprite.spriteState = "swim";
+				this.SpritePosition(sprite);
+			case "3":
+				sprite.spriteState = "fly";
+				this.SpritePosition(sprite);
+				//hpYmove = +hpYmove;
+				break;
+			case "v":
+				sprite.spriteState = "dive";
+				this.SpritePosition(sprite);
+				break;
+			case "y":
+				sprite.spriteState = "block";
+				this.SpritePosition(sprite);
+				break;
+			case "n":
+				sprite.spriteState = "parry";
+				this.SpritePosition(sprite);
+				break;
+			default:
+				sprite.spriteState = "stand";
+				this.SpritePosition(sprite);
+				break;
+		}
+	}
 	MessageReceived(event) {
 		switch (event.data.type) {
 			case "game.player":
@@ -173,6 +368,12 @@ class GameWorld {
 				console.error(`Unhandled event type: ${event.data.type}`);
 		}
 	}
+}
+
+const World = new GameWorld();
+
+self.onmessage = async (event) => {
+	World.MessageReceived(event);
 }
 self.onerror = async (e) => {
 	try {

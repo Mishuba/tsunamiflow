@@ -27,6 +27,13 @@ class GameWorld {
 		} else {
 			try {
 				this.offscreencanvas = canvas;
+				this.offscreencanvas.style.margin = "0 auto";
+				this.offscreencanvas.style.background = "000000";
+				this.offscreencanvas.style.display = "block";
+				this.offscreencanvas.style.border = "1px solid black";
+				this.offscreencanvas.style.cursor = "none";
+				this.offscreencanvas.imageSmoothingEnabled = true;
+				//this.offscreencanvas.imageSmoothingQualty;
 				this.canvasctx = this.offscreencanvas.getContext(canvastype);
 				if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
 				this.isoffscreenReady = true;
@@ -37,11 +44,44 @@ class GameWorld {
 			}
 		}
 	}
-	updateAiComponent(ai) {
-		
+	backgroundComponent(data) {
+		let backimage = new Image();
+		backimage.src = data.battleBackground;
+		this.canvasctx.drawImage(backimage, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
-	updateUserComponent(user) {
-		
+	obstacleComponent(data) {
+		placement.fillStyle = data.color;
+		placement.fillRect(data.x, data.y, data.width, data.height);
+	}
+	updateUserComponent(data) {
+		if (data.type === "sprite") {
+			let character = new Image();
+			character.src = data.color;
+
+			this.canvasctx.drawImage(character, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
+		} else if (data.type === "player") {
+			this.obstacleComponent(data);
+		} else {
+			this.obstacleComponent(data);
+		}
+
+	}
+	Scoreboard(user) {
+		user.text = "Score: " + this.frame;
+	}
+	MessageBoard(data) {
+		this.canvasctx.font = `${data.textSize} ${data.textStyle}`;
+		this.canvasctx.textAlign = data.textAlign;
+		this.canvasctx.textBaseline = data.textBaseline;
+		this.canvasctx.direction = data.textDirection;
+		this.canvasctx.letterSpacing = data.letterSpacing;
+		this.canvasctx.fontKerning = data.fontKerning;
+		this.canvasctx.fontStretch = data.fontStretch;
+		this.canvasctx.fontVariantCaps = data.fontVariantCaps;
+		this.canvasctx.textRendering = data.textRendering;
+		this.canvasctx.wordSpacing = data.wordSpacing;
+		this.canvasctx.fillStyle = data.textColor;
+		this.canvasctx.fillText(data.text, data.textWidth, data.textHeight /*, data.textSettings*/);
 	}
 	scheduleVisualizerFrame(callback) {
 		// Try requestAnimationFrame first
@@ -72,6 +112,13 @@ class GameWorld {
 
 		console.error("❌ No viable scheduling method available");
 		return null;
+	}
+	everyInterval(n, frameNumber) {
+		if ((frameNumber / n) % 1 == 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	clear() {
 		this.canvasctx.clearRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
@@ -112,10 +159,91 @@ class GameWorld {
 				break;
 		}
 	}
+	createObstacle() {
+		let minHeight = this.canvas.width * 0.10;
+		let maxHeight = this.canvas.width * 0.84;
+		let heightTF = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
+		let minGap = minHeight + 15;
+		let maxGap = maxHeight - 15;
+		let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
+
+		this.TfObstacles.push(this.createComponent(10, heightTF - gap, "green", this.canvas.width, 0, 0, 0));
+		this.TfObstacles.push(this.createComponent(10, this.canvas.width - heightTF - gap, "green", this.canvas.width, heightTF + gap, 0, 0));
+	}
+	crashWith(player, object) {
+		let myLeft = player.x;
+		let myRight = player.x + (player.width);
+		let myTop = player.y;
+		let myBottom = player.y + (player.height);
+		let badLeft = object.x;
+		let badRight = object.x + (object.width);
+		let badTop = object.y;
+		let badBottom = object.y + (object.height);
+		let crash = true;
+		switch (object.type) {
+			case "environment":
+				//Do not end game
+				break;
+			case "sprite":
+				if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+					crash = false;
+				} else {
+					crash = true;
+					//Create logic that determines who hit who first and also based on power, durability and weakness.
+					this.damageTotal(player, object, this.ActionMechanics(player));
+				}
+				//input damage function
+				break;
+			case "obstacle":
+				if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+					crash = false;
+				}
+				// prevent from moving in that direction or jump/climb/swim over it.
+				break;
+			case "background":
+				//idk what ima do for it yet / maybe no crash maybe just prevent from going off screen
+				if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+					crash = false;
+				}
+				break;
+			default:
+				if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {
+					crash = false;
+					break;
+				}
+		}
+		return crash;
+	}
 	planetUniverse(ai, player = null) {
+		if (this.crashWith(player, ai)) {
+			this.stop();
+			return;
+		}
+
 		this.clear();
+	}
 
+	RaceAgainstTheUniverse(user) {
+		for (let i = 0; i < this.TfObstacles.length; i += 1) {
+			if (this.crashWith(user, this.TfObstacles[i])) {
+				this.stop();
+				return;
+			} else {
+				this.TfObstacles[i].speedX = -1;
+				this.newComponentPos(this.TfObstacles[i]);
+				this.updateUserComponent(this.TfObstacles[i]);
+			}
+		}
 
+		this.clear();
+		this.frame = this.frame + 1;
+		if (this.frame == 1 || this.everyInterval(75, this.frame)) {
+			this.createObstacle();
+		}
+		this.backgroundComponent(user);
+		this.Scoreboard(user);
+		this.newComponentPos(user);
+		this.updateUserComponent(user);
 	}
 	cancelVisualizerFrame(id) {
 		if (id === null) {
@@ -141,6 +269,21 @@ class GameWorld {
 		this.visualizerRunning = true;
 		console.log("✅ Visualizer loop started");
 
+		//Create
+		entity.spriteStates.forEach((state, index) => {
+			entity.spriteStatesFrames = {
+				loc: [], frame: state.frames
+			};
+			for (let j = 0; j < state.frames; j++) {
+				let positionX = j * entity.dw;
+				let positionY = index * entity.dh;
+
+				entity.spriteStatesFrames.loc.push({ x: positionX, y: positionY });
+			}
+			entity.spriteStates[state.name] = entity.spriteStatesFrames;
+		});
+		console.log(entity.spriteStates);
+
 		switch (type) {
 			case "homepage":
 				const vizloop = () => {
@@ -155,7 +298,33 @@ class GameWorld {
 
 				vizloop();
 				break;
-			case "game":
+
+			case "race against the universe":
+				const RATU = () => {
+					if (!this.visualizerRunning) {
+						return;
+					}
+
+					this.RaceAgainstTheUniverse(entity);
+
+					this.visualizerFrame = this.scheduleVisualizerFrame(RATU);
+				};
+
+				RATU();
+				break;
+
+			case "planet universe":
+				const PlanetUniverse = () => {
+					if (!this.visualizerRunning) {
+						return;
+					}
+
+					this.planetUniverse(entity);
+
+					this.visualizerFrame = this.scheduleVisualizerFrame(PlanetUniverse);
+				};
+
+				PlanetUniverse();
 
 				break;
 			default:
@@ -217,12 +386,18 @@ class GameWorld {
 						switch (event.data.payload.system) {
 							case "homepage":
 								this.worldai = event.data.payload.ai;
-								this.startVisualizerLoop(this.worldai, "homepage");
+								this.startVisualizerLoop(this.worldai, event.data.payload.system);
+								break;
+							case "race against the universe":
+								this.worldai = event.data.payload.ai;
+								this.startVisualizerLoop(this.worldai, event.data.payload.system);
 								break;
 							case "planet universe":
-
+								this.worldai = event.data.payload.ai;
+								this.startVisualizerLoop(this.worldai, event.data.payload.system);
 							default:
-
+								this.worldai = event.data.payload.ai;
+								this.startVisualizerLoop(this.worldai, event.data.payload.system);
 								break;
 						}
 						break;
