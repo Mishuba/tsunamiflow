@@ -154,15 +154,15 @@ class GameWorld {
 		}
 	}
 	createObstacle() {
-		let minHeight = this.canvas.width * 0.10;
-		let maxHeight = this.canvas.width * 0.84;
+		let minHeight = this.offscreencanvas.width * 0.10;
+		let maxHeight = this.offscreencanvas.width * 0.84;
 		let heightTF = Math.floor(Math.random() * (maxHeight - minHeight + 1) + minHeight);
 		let minGap = minHeight + 15;
 		let maxGap = maxHeight - 15;
 		let gap = Math.floor(Math.random() * (maxGap - minGap + 1) + minGap);
 
-		this.TfObstacles.push(this.createComponent(10, heightTF - gap, "green", this.canvas.width, 0, 0, 0));
-		this.TfObstacles.push(this.createComponent(10, this.canvas.width - heightTF - gap, "green", this.canvas.width, heightTF + gap, 0, 0));
+		this.TfObstacles.push(this.createComponent(10, heightTF - gap, "green", this.offscreencanvas.width, 0, 0, 0));
+		this.TfObstacles.push(this.createComponent(10, this.offscreencanvas.width - heightTF - gap, "green", this.offscreencanvas.width, heightTF + gap, 0, 0));
 	}
 	crashWith(player, object) {
 		let myLeft = player.x;
