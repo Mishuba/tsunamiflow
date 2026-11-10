@@ -39,20 +39,15 @@ class GameWorld {
 		}
 	}
 	backgroundComponent(data) {
-		let backimage = new Image(this.offscreencanvas.width, this.offscreencanvas.height);
-		backimage.src = data.battleBackground;
-		this.canvasctx.drawImage(backimage, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
+		this.canvasctx.drawImage(data.battleBackground, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
 	obstacleComponent(data) {
-		placement.fillStyle = data.color;
-		placement.fillRect(data.x, data.y, data.width, data.height);
+		this.canvasctx.fillStyle = data.color;
+		this.canvasctx.fillRect(data.x, data.y, data.width, data.height);
 	}
 	updateUserComponent(data) {
 		if (data.type === "sprite") {
-			let character = new Image();
-			character.src = data.color;
-
-			this.canvasctx.drawImage(character, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
+			this.canvasctx.drawImage(data.color, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
@@ -223,7 +218,7 @@ class GameWorld {
 		if (this.frame == 1 || this.everyInterval(75, this.frame)) {
 			this.createObstacle();
 		}
-		this.backgroundComponent(user);
+		//this.backgroundComponent(user);
 		this.Scoreboard(user);
 		this.newComponentPos(user);
 		this.updateUserComponent(user);

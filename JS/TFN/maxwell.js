@@ -10,6 +10,32 @@ import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
+const myVar = process.env.CLOUDFLARE_R2_ENDPOINT;
+
+// Check if it exists
+if (!myVar) {
+    console.error("MY_VARIABLE is not set in the environment.");
+} else {
+    console.log(`MY_VARIABLE: ${myVar}`);
+}
+
+let stickmanSprite = new Image();
+stickmanSprite.src = `${myVar}/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png`;
+let sms = null;
+stickmanSprite.onload = async () => {
+    sms = await createImageBitmap(stickmanSprite);
+};
+
+const SS = sms;
+
+let stickmanBackground = new Image();
+stickmanBackground.src = `${myVar}/Pictures/Logo/Tsunami Flow Logo.png`;
+let sbs = null;
+stickmanBackground.onload = async () => {
+    sbs = await createImageBitmap(stickmanBackground);
+};
+
+const SBS = sbs;
 export class maxwell {
     offscreencanvas = null;
     membershipCostEl = null;
@@ -83,7 +109,7 @@ export class maxwell {
     stickman = new gameComponent(
         30,
         30,
-        "https://www.tsunamiflow.club/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png",
+        SS, //,
         60,
         160,
         "sprite",
@@ -107,7 +133,7 @@ export class maxwell {
         undefined,
         updates,
         "stand",
-        "https://www.tsunamiflow.club/Pictures/Logo/Tsunami Flow Logo.png",
+        SBS,//,
         "Hubert",
         "Maxwell",
         "StickMan",
