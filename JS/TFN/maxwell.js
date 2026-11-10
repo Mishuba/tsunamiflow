@@ -659,7 +659,7 @@ export class maxwell {
 
         this.onMe("tfCompetitions", "click", async () => {
             let decision = "race against the universe"; //this.find("tfCompetitions").value
-            if (this.currentMainElement === this.mainCanvas || this.mainOffscreenCanvas !== null) {
+            if (this.currentMainElement === this.mainCanvas && this.mainOffscreenCanvas !== null) {
                 this.worker.postMessage(this.soundEngine.tycadome(
                     "tycadome-guest" + Date.now(),
                     "game",
