@@ -39,7 +39,7 @@ class GameWorld {
 		}
 	}
 	backgroundComponent(data) {
-		let backimage = new Image();
+		let backimage = new Image(this.offscreencanvas.width, this.offscreencanvas.height);
 		backimage.src = data.battleBackground;
 		this.canvasctx.drawImage(backimage, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
