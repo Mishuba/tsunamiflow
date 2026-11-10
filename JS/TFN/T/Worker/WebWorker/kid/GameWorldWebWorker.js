@@ -218,6 +218,15 @@ class GameWorld {
 	}
 
 	RaceAgainstTheUniverse(user) {
+		this.clear();
+		this.frame = this.frame + 1;
+		if (this.frame == 1 || this.everyInterval(75, this.frame)) {
+			this.createObstacle();
+		}
+		this.backgroundComponent(user);
+		this.Scoreboard(user);
+		this.newComponentPos(user);
+		this.updateUserComponent(user);
 		for (let i = 0; i < this.TfObstacles.length; i += 1) {
 			if (this.crashWith(user, this.TfObstacles[i])) {
 				this.stop();
@@ -228,16 +237,6 @@ class GameWorld {
 				this.updateUserComponent(this.TfObstacles[i]);
 			}
 		}
-
-		this.clear();
-		this.frame = this.frame + 1;
-		if (this.frame == 1 || this.everyInterval(75, this.frame)) {
-			this.createObstacle();
-		}
-		this.backgroundComponent(user);
-		this.Scoreboard(user);
-		this.newComponentPos(user);
-		this.updateUserComponent(user);
 	}
 	cancelVisualizerFrame(id) {
 		if (id === null) {
