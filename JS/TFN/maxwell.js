@@ -10,7 +10,7 @@ import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
-const Var = "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com/tsunami-radio";
+const Var = "https://pub-f75098bd521f40639576ef44506b738c.r2.dev";
 
 // Check if it exists
 if (!Var) {
