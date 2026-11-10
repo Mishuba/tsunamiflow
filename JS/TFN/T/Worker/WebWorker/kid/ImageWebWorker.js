@@ -1,4 +1,46 @@
+/*
+Image decoding (createImageBitmap)
 
+Yes
+
+Resize calculations
+
+Yes
+
+Pixel manipulation
+
+Yes
+
+Color adjustments
+
+Yes
+
+Filters and effects
+
+Yes
+
+Image compression/encoding
+
+Yes
+
+Format conversion
+
+Yes
+
+Thumbnail generation
+
+Yes
+
+Image analysis
+
+Yes
+
+Loading image data
+
+Often
+
+Caching processed results
+*/
 let offscreenctx = null;
 let backgroundImg = null;
 
