@@ -38,6 +38,11 @@ class GameWorld {
 			}
 		}
 	}
+
+    createComponent(width, height, color, x, y, speedX, speedY, type) {
+        return { width, height, speedX, speedY, color, x, y, type };
+    }
+
 	backgroundComponent(data) {
 		this.canvasctx.drawImage(data.battleBackground, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
