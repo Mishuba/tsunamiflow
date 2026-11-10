@@ -203,6 +203,15 @@ class GameWorld {
 		}
 		return crash;
 	}
+	newComponentPos(data) {
+		if (this.offscreencanvas.x && this.offscreencanvas.y) {
+			data.x = this.offscreencanvas.x;
+			data.y = this.offscreencanvas.y;
+		} else {
+			data.x += data.speedX;
+			data.y += data.speedY;
+		}
+	}
 	planetUniverse(ai, player = null) {
 		if (this.crashWith(player, ai)) {
 			this.stop();
