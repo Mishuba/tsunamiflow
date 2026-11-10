@@ -4,6 +4,7 @@ class GameWorld {
 	frame = 0;
 	offscreencanvas = null;
 	canvastype = null;
+	tfObstacles = [];
 	TfAudioVisualData = {
 		dataArray: new Uint8Array(0),
 		volume: 0,
