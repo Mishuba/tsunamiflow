@@ -10,17 +10,17 @@ import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
-const myVar = "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com/tsunami-radio";
+const Var = "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com/tsunami-radio";
 
 // Check if it exists
-if (!myVar) {
+if (!Var) {
     console.error("MY_VARIABLE is not set in the environment.");
 } else {
-    console.log(`MY_VARIABLE: ${myVar}`);
+    console.log(`MY_VARIABLE: ${Var}`);
 }
 
 let stickmanSprite = new Image();
-stickmanSprite.src = `${myVar}/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png`;
+stickmanSprite.src = `${Var}/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png`;
 let sms = null;
 stickmanSprite.onload = async () => {
     sms = await createImageBitmap(stickmanSprite);
@@ -29,7 +29,7 @@ stickmanSprite.onload = async () => {
 const SS = sms;
 
 let stickmanBackground = new Image();
-stickmanBackground.src = `${myVar}/Pictures/Logo/Tsunami Flow Logo.png`;
+stickmanBackground.src = `${Var}/Pictures/Logo/Tsunami Flow Logo.png`;
 let sbs = null;
 stickmanBackground.onload = async () => {
     sbs = await createImageBitmap(stickmanBackground);
