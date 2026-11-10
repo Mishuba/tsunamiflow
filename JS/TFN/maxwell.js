@@ -631,68 +631,55 @@ export class maxwell {
             await this.switchmaincontent("iframe", "Iframe/Pages/news.html");
         });
 
-        this.onMe("tfCompetitions", "click", async () => { //change instead o click
-            await this.switchmaincontent("canvas");
-
-
-            /*
-            switch (this.find("tfCompetitions").value) {
-            case "":
-            */
-            this.worker.postMessage(this.soundEngine.tycadome(
-                "tycadome-guest" + Date.now(),
-                "canvas",
-                "load.game.world.canvas",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    worker: "world"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "race against the universe",
-                    canvas: this.mainOffscreenCanvas,
-                    ai: this.stickman
-                },
-                [
-                    this.mainOffscreenCanvas
-                ]
-            ),
-                [this.mainOffscreenCanvas]);
-            /*
-            break;
-            case "planet universe":
-            this.worker.postMessage(this.soundEngine.tycadome(
-                "tycadome-guest" + Date.now(),
-                "canvas",
-                "load.game.world.canvas",
-                {
-                    source: "web",
-                    target: "device:web-001",
-                    worker: "world"
-                },
-                {
-                    status: "pending",
-                    priority: "low"
-                },
-                "async",
-                {
-                    system: "planet universe",
-                    canvas: this.mainOffscreenCanvas,
-                    ai: this.stickman
-                },
-                [
-                    this.mainOffscreenCanvas
-                ]
-            ),
-                [this.mainOffscreenCanvas]);
-
-                break;
-            */
+        this.onMe("tfCompetitions", "click", async () => {
+            let decision = "race against the universe"; //this.find("tfCompetitions").value
+            if (this.currentMainElement === this.mainCanvas) {
+                this.worker.postMessage(this.soundEngine.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "game",
+                    "start.game",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "world"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: decision,
+                        ai: this.stickman
+                    },
+                ));
+            } else {
+                await this.switchmaincontent("canvas");
+                this.worker.postMessage(this.soundEngine.tycadome(
+                    "tycadome-guest" + Date.now(),
+                    "canvas",
+                    "load.game.world.canvas",
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "world"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: decision,
+                        canvas: this.mainOffscreenCanvas,
+                        ai: this.stickman
+                    },
+                    [
+                        this.mainOffscreenCanvas
+                    ]
+                ),
+                    [this.mainOffscreenCanvas]);
+            }
         });
 
         this.onMe("tfNetwork", "change", async () => {

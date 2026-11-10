@@ -367,6 +367,26 @@ class GameWorld {
 
 		return tf;
 	}
+
+	StartVideoGame(event) {
+		switch (event.data.payload.system) {
+			case "homepage":
+				this.worldai = event.data.payload.ai;
+				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				break;
+			case "race against the universe":
+				this.worldai = event.data.payload.ai;
+				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				break;
+			case "planet universe":
+				this.worldai = event.data.payload.ai;
+				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+			default:
+				this.worldai = event.data.payload.ai;
+				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				break;
+		}
+	}
 	MessageReceived(event) {
 		switch (event.data.type) {
 			case "canvas":
@@ -376,30 +396,29 @@ class GameWorld {
 						console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
 						console.log(`attempting to create a 2d canvas context in the audio worker `);
 						this.initRadioOffscreen(event.data.payload.canvas, "2d");
-						switch (event.data.payload.system) {
-							case "homepage":
-								this.worldai = event.data.payload.ai;
-								this.startVisualizerLoop(this.worldai, event.data.payload.system);
-								break;
-							case "race against the universe":
-								this.worldai = event.data.payload.ai;
-								this.startVisualizerLoop(this.worldai, event.data.payload.system);
-								break;
-							case "planet universe":
-								this.worldai = event.data.payload.ai;
-								this.startVisualizerLoop(this.worldai, event.data.payload.system);
-							default:
-								this.worldai = event.data.payload.ai;
-								this.startVisualizerLoop(this.worldai, event.data.payload.system);
-								break;
-						}
+						this.StartVideoGame(event);
 						break;
 					default:
 						console.log(`the event data action was something i did not expect ${event.data.action}`);
 						break;
 				}
 				break;
-
+			case "game":
+				switch (event.data.action) {
+					case "start.game":
+						if (this.visualizerRunning === true) {
+							this.stopVisualizerLoop();
+						}
+						this.StartVideoGame(event);
+						break;
+					default:
+						if (this.visualizerRunning === true) {
+							this.stopVisualizerLoop();
+						}
+						this.StartVideoGame(event);
+						break;
+				}
+				break;
 			case "audio.worklet": {
 				const payload = event.data.payload || {};
 				if (event.data.action === "audio.visual.data") {
@@ -425,6 +444,7 @@ class GameWorld {
 			}
 			default:
 				console.error(`Unhandled event type: ${event.data.type}`);
+				break;
 		}
 	}
 }
