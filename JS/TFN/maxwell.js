@@ -10,7 +10,7 @@ import { TsunamiLiveVideoController } from "./T/Class/LiveVidController.js";
 import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fetus/ai.js";
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
-const myVar = process.env.CLOUDFLARE_R2_ENDPOINT;
+const myVar = "https://ac47c31c7548ac580a0b4caaed91d41f.r2.cloudflarestorage.com/tsunami-radio";
 
 // Check if it exists
 if (!myVar) {
