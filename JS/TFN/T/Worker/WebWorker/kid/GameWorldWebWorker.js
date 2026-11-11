@@ -384,7 +384,7 @@ class GameWorld {
 				this.startVisualizerLoop(this.worldai, event.data.payload.system);
 				break;
 			case "race against the universe":
-				this.worldai = event.data.payload.ai;
+			//	this.worldai = event.data.payload.ai;
 				this.startVisualizerLoop(this.worldai, event.data.payload.system);
 				break;
 			case "planet universe":
