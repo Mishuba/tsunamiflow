@@ -106,103 +106,8 @@ export class maxwell {
         images: {},
         screens: {}
     };
-    stickman = new gameComponent(
-        30,
-        30,
-        SS, //,
-        60,
-        160,
-        "sprite",
-        0,
-        0,
-        120,
-        120,
-        "30px",
-        "Consolas",
-        280,
-        40,
-        "center",
-        "alphabetic",
-        "inherit",
-        0,
-        "auto",
-        "normal",
-        "normal",
-        "auto",
-        0,
-        undefined,
-        updates,
-        "stand",
-        SBS,//,
-        "Hubert",
-        "Maxwell",
-        "StickMan",
-        [
-            { name: "health", points: 1 },
-            { name: "stamina", points: 1 },
-            { name: "weight", points: 1 },
-            { name: "strength", points: 1 },
-            { name: "agility", points: 1 }
-        ],
-        [
-            { name: "Science", level: 0, experience: 0 },
-            { name: "Creativity", level: 0, experience: 0 },
-            { name: "Math", level: 0, experience: 0 },
-            { name: "Memory", level: 0, experience: 0 },
-            { name: "Awareness", level: 0, experience: 0 }
-        ],
-        [
-            { name: "Reflection", level: 0, experience: 0 },
-            { name: "honesty", level: 0, experience: 0 },
-            { name: "deception", level: 0, experience: 0 },
-            { name: "manipulation", level: 0, experience: 0 },
-            { name: "charisma", level: 0, experience: 0 }
-        ],
-        [
-            { name: "feelings", level: 0, experience: 0 },
-            { name: "mood", level: 0, experience: 0 },
-            { name: "temper", level: 0, experience: 0 },
-            { name: "attitude", level: 0, experience: 0 },
-            { name: "perspective", level: 0, experience: 0 }
-        ],
-        [
-            { name: "consciousness", level: 0, experience: 0 },
-            { name: "time", level: 0, experience: 0 },
-            { name: "dimension", level: 0, experience: 0 },
-            { name: "space", level: 0, experience: 0 },
-            { name: "defense", level: 0, experience: 0 }
-        ],
-        [
-            { name: "fire", level: 0, experience: 0 },
-            { name: "water", level: 0, experience: 0 },
-            { name: "air", level: 0, experience: 0 },
-            { name: "lightning", level: 0, experience: 0 },
-            { name: "earth", level: 0, experience: 0 }
-        ],
-        [
-            { name: "magic", level: 0, experience: 0 },
-            { name: "ESP", level: 0, experience: 0 },
-            { name: "dexterity", level: 0, experience: 0 },
-            { name: "genetic", level: 0, experience: 0 },
-            { name: "personal", level: 0, experience: 0 }
-        ],
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1,
-        1
-    );
+
+    stickman = null;
     ackmaHawk = new gameComponent(
         30,
         30,
@@ -659,6 +564,108 @@ export class maxwell {
 
         this.onMe("tfCompetitions", "click", async () => {
             let decision = "race against the universe"; //this.find("tfCompetitions").value
+            let who = "player"; // sprite
+            this.imageEngine.loadblob(`${Var}/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png`);
+            this.videoEngine.loadblob(`${Var}/Pictures/Logo/Tsunami Flow Logo.png`);
+            this.stickman = new gameComponent(
+                30,
+                30,
+                "black",
+                this.imageEngine.blob, //,
+                60,
+                160,
+                who,
+                0,
+                0,
+                120,
+                120,
+                "30px",
+                "Consolas",
+                280,
+                40,
+                "center",
+                "alphabetic",
+                "inherit",
+                0,
+                "auto",
+                "normal",
+                "normal",
+                "auto",
+                0,
+                undefined,
+                updates,
+                "stand",
+                this.videoEngine.blob,//,
+                "Hubert",
+                "Maxwell",
+                "StickMan",
+                [
+                    { name: "health", points: 1 },
+                    { name: "stamina", points: 1 },
+                    { name: "weight", points: 1 },
+                    { name: "strength", points: 1 },
+                    { name: "agility", points: 1 }
+                ],
+                [
+                    { name: "Science", level: 0, experience: 0 },
+                    { name: "Creativity", level: 0, experience: 0 },
+                    { name: "Math", level: 0, experience: 0 },
+                    { name: "Memory", level: 0, experience: 0 },
+                    { name: "Awareness", level: 0, experience: 0 }
+                ],
+                [
+                    { name: "Reflection", level: 0, experience: 0 },
+                    { name: "honesty", level: 0, experience: 0 },
+                    { name: "deception", level: 0, experience: 0 },
+                    { name: "manipulation", level: 0, experience: 0 },
+                    { name: "charisma", level: 0, experience: 0 }
+                ],
+                [
+                    { name: "feelings", level: 0, experience: 0 },
+                    { name: "mood", level: 0, experience: 0 },
+                    { name: "temper", level: 0, experience: 0 },
+                    { name: "attitude", level: 0, experience: 0 },
+                    { name: "perspective", level: 0, experience: 0 }
+                ],
+                [
+                    { name: "consciousness", level: 0, experience: 0 },
+                    { name: "time", level: 0, experience: 0 },
+                    { name: "dimension", level: 0, experience: 0 },
+                    { name: "space", level: 0, experience: 0 },
+                    { name: "defense", level: 0, experience: 0 }
+                ],
+                [
+                    { name: "fire", level: 0, experience: 0 },
+                    { name: "water", level: 0, experience: 0 },
+                    { name: "air", level: 0, experience: 0 },
+                    { name: "lightning", level: 0, experience: 0 },
+                    { name: "earth", level: 0, experience: 0 }
+                ],
+                [
+                    { name: "magic", level: 0, experience: 0 },
+                    { name: "ESP", level: 0, experience: 0 },
+                    { name: "dexterity", level: 0, experience: 0 },
+                    { name: "genetic", level: 0, experience: 0 },
+                    { name: "personal", level: 0, experience: 0 }
+                ],
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+            );
+
             if (this.currentMainElement === this.mainCanvas && this.mainOffscreenCanvas !== null) {
                 this.worker.postMessage(this.soundEngine.tycadome(
                     "tycadome-guest" + Date.now(),
@@ -676,7 +683,6 @@ export class maxwell {
                     "async",
                     {
                         system: decision,
-                        ai: this.stickman
                     },
                 ));
             } else {
@@ -701,10 +707,11 @@ export class maxwell {
                         ai: this.stickman
                     },
                     [
-                        this.mainOffscreenCanvas
+                        this.mainOffscreenCanvas, this.stickman.sprite, this.stickman.battleBackground
                     ]
                 ),
-                    [this.mainOffscreenCanvas]);
+                    [this.mainOffscreenCanvas, this.stickman.sprite,
+                    this.stickman.battleBackground]);
             }
         });
 

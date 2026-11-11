@@ -1,11 +1,6 @@
 export class gameComponent {
     static AmountOfComponents = 0;
-    /*
-   constructor(config = {}) {
-       Object.assign(this, config);
-   }
-   */
-    constructor(SpriteNewWidth, SpriteNewHeight, color, SpritePlacementX, SpritePlacementY, type, SpriteStartClippinX, SpriteStartClippinY, SpriteClippedWidth, SpriteClippedHeight, SpriteTextSize, SpriteTextStyle, SpriteTextWidth, SpriteTextHeight, SpriteTextAlign, SpriteTextBaseline, SpriteTextDirection, SpriteLetterSpacing, SpriteFontKerning, SpriteFontStretch, SpriteFontVariantCaps, SpriteTextRendering, SpriteWordSpacing, SpriteTextSettings, SpriteDialog, SpriteState, battleBackground, firstname, lastname, nickname, PhysicalAbility, IntellectualAbility, SocialAbility, EmotionalAbility, ExistentialAbility, EnergeticAbility, MetaCognitiveAbility, headArmor, bodyArmor, armArmor, legArmor, weakAttack, strongAttack, specialAttack, mainSkill, evadeSkill, defenseSkill, knockbackSkill, rangeSkill, aoeSkill, buffSkill, debuffSkill, ultimateSkill) {
+    constructor(SpriteNewWidth, SpriteNewHeight, color, sprite, SpritePlacementX, SpritePlacementY, type, SpriteStartClippinX, SpriteStartClippinY, SpriteClippedWidth, SpriteClippedHeight, SpriteTextSize, SpriteTextStyle, SpriteTextWidth, SpriteTextHeight, SpriteTextAlign, SpriteTextBaseline, SpriteTextDirection, SpriteLetterSpacing, SpriteFontKerning, SpriteFontStretch, SpriteFontVariantCaps, SpriteTextRendering, SpriteWordSpacing, SpriteTextSettings, SpriteDialog, SpriteState, battleBackground, firstname, lastname, nickname, PhysicalAbility, IntellectualAbility, SocialAbility, EmotionalAbility, ExistentialAbility, EnergeticAbility, MetaCognitiveAbility, headArmor, bodyArmor, armArmor, legArmor, weakAttack, strongAttack, specialAttack, mainSkill, evadeSkill, defenseSkill, knockbackSkill, rangeSkill, aoeSkill, buffSkill, debuffSkill, ultimateSkill) {
         gameComponent.AmountofComponents += 1;
         this.isLocalPlayer = false;
         this.isRemotePlayer = false;
@@ -18,6 +13,7 @@ export class gameComponent {
         this.speedY = 0;
         this.spriteSpeed = 5;
         this.color = color;
+        this.sprite = sprite;
         this.x = SpritePlacementX;
         this.y = SpritePlacementY;
         this.type = type;
@@ -118,7 +114,7 @@ export class gameComponent {
         this.y += (this.targetY - this.y) * 0.2;
     }
     static from(data) {
-        return new gameComponent(data.width, data.height, data.speedX, data.speedY, data.spriteSpeed, data.color, data.x, data.y, data.type, data.sx, data.sy, data.dx, data.dh, data.textSize, data.textStyle, data.textWidth, data.textHeight, data.textAlign, data.textBaseline, data.textDirection, data.letterSpacing, data.fontKerning, data.fontStretch, data.fontVariantCaps, data.textRendering, data.wordSpacing, data.textSettings, data.spriteDialog, data.spriteState, data.spriteAnimationArray, data.spriteStates, data.spriteStatesFrames, data.spriteFrameInterval, data.battleBackground, data.firstname, data.lastname, data.nickname, data.PhysicalAbility, data.IntellectualAbility, data.SocialAbility, data.EmotionalAbility, data.ExistentialAbility, data.EnergeticAbility, data.MetaCognitiveAbility, data.headArmor, data.bodyArmor, data.armArmor, data.legArmor, data.weakAttack, data.strongAttack, data.specialAttack, data.mainSkill, data.evadeSkill, data.defenseSkill, data.knockbackSkill, data.rangeSkill, data.aoeSkill, data.buffSkill, data.debuffSkill, data.ultimateSkill);
+        return new gameComponent(data.width, data.height, data.speedX, data.speedY, data.spriteSpeed, data.color, data.sprite, data.x, data.y, data.type, data.sx, data.sy, data.dx, data.dh, data.textSize, data.textStyle, data.textWidth, data.textHeight, data.textAlign, data.textBaseline, data.textDirection, data.letterSpacing, data.fontKerning, data.fontStretch, data.fontVariantCaps, data.textRendering, data.wordSpacing, data.textSettings, data.spriteDialog, data.spriteState, data.spriteAnimationArray, data.spriteStates, data.spriteStatesFrames, data.spriteFrameInterval, data.battleBackground, data.firstname, data.lastname, data.nickname, data.PhysicalAbility, data.IntellectualAbility, data.SocialAbility, data.EmotionalAbility, data.ExistentialAbility, data.EnergeticAbility, data.MetaCognitiveAbility, data.headArmor, data.bodyArmor, data.armArmor, data.legArmor, data.weakAttack, data.strongAttack, data.specialAttack, data.mainSkill, data.evadeSkill, data.defenseSkill, data.knockbackSkill, data.rangeSkill, data.aoeSkill, data.buffSkill, data.debuffSkill, data.ultimateSkill);
     }
     toJSON() {
         return {
@@ -128,6 +124,7 @@ export class gameComponent {
             speedY: this.speedY,
             spriteSpeed: this.spriteSpeed,
             color: this.color,
+            sprite: this.sprite,
             x: this.x,
             y: this.y,
             type: this.type,

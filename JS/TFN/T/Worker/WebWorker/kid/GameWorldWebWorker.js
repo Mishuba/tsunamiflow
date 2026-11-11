@@ -39,9 +39,9 @@ class GameWorld {
 		}
 	}
 
-    createComponent(width, height, color, x, y, speedX, speedY, type) {
-        return { width, height, speedX, speedY, color, x, y, type };
-    }
+	createComponent(width, height, color, x, y, speedX, speedY, type) {
+		return { width, height, speedX, speedY, color, x, y, type };
+	}
 
 	backgroundComponent(data) {
 		this.canvasctx.drawImage(data.battleBackground, 0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
@@ -52,7 +52,7 @@ class GameWorld {
 	}
 	updateUserComponent(data) {
 		if (data.type === "sprite") {
-			this.canvasctx.drawImage(data.color, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
+			this.canvasctx.drawImage(data.sprite, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
