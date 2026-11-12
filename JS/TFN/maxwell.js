@@ -693,10 +693,11 @@ export class maxwell {
                 ));
             } else {
                 await this.switchmaincontent("canvas");
+
                 this.worker.postMessage(this.soundEngine.tycadome(
                     "tycadome-guest" + Date.now(),
-                    "canvas",
-                    "load.game.world.canvas",
+                    "game",
+                    "start.game",
                     {
                         source: "web",
                         target: "device:web-001",
@@ -709,15 +710,8 @@ export class maxwell {
                     "async",
                     {
                         system: decision,
-                        canvas: this.mainOffscreenCanvas,
-                        ai: this.stickman
                     },
-                    [
-                        this.mainOffscreenCanvas/*, this.stickman.sprite, this.stickman.battleBackground*/
-                    ]
-                ),
-                    [this.mainOffscreenCanvas/*, this.stickman.sprite,
-                    this.stickman.battleBackground*/]);
+                ));
             }
         });
 
