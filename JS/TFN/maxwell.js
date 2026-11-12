@@ -707,11 +707,11 @@ export class maxwell {
                         ai: this.stickman
                     },
                     [
-                        this.mainOffscreenCanvas, this.stickman.sprite, this.stickman.battleBackground
+                        this.mainOffscreenCanvas/*, this.stickman.sprite, this.stickman.battleBackground*/
                     ]
                 ),
-                    [this.mainOffscreenCanvas, this.stickman.sprite,
-                    this.stickman.battleBackground]);
+                    [this.mainOffscreenCanvas/*, this.stickman.sprite,
+                    this.stickman.battleBackground*/]);
             }
         });
 
