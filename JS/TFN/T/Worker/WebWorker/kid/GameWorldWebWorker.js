@@ -1,5 +1,6 @@
 //import { gameComponent } from "../../../../N/Games/Class/planetuniverse.js";
 class GameWorld {
+	stickman = null;
 	worldai = null;
 	frame = 0;
 	offscreencanvas = null;
@@ -378,21 +379,26 @@ class GameWorld {
 	}
 
 	StartVideoGame(event) {
+		if (this.worldai === null) {
+			this.worldai = event.data.payload.ai;
+		} else if (this.worldai !== this.stickman) {
+			this.worldai = event.data.payload.ai;
+		}
 		switch (event.data.payload.system) {
 			case "homepage":
-				this.worldai = event.data.payload.ai;
-				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				this.stickman = event.data.payload.ai;
+				this.worldai = this.stickman;
+				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
 				break;
 			case "race against the universe":
-			//	this.worldai = event.data.payload.ai;
+				//	this.worldai = event.data.payload.ai;
 				this.startVisualizerLoop(this.worldai, event.data.payload.system);
 				break;
 			case "planet universe":
 				this.worldai = event.data.payload.ai;
 				this.startVisualizerLoop(this.worldai, event.data.payload.system);
 			default:
-				this.worldai = event.data.payload.ai;
-				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
 				break;
 		}
 	}
