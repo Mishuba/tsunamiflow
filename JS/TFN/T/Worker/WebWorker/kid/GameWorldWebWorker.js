@@ -236,7 +236,7 @@ class GameWorld {
 		this.updateUserComponent(user);
 		for (let i = 0; i < this.TfObstacles.length; i += 1) {
 			if (this.crashWith(user, this.TfObstacles[i])) {
-				this.stop();
+				this.stopVisualizerLoop();
 				return;
 			} else {
 				this.TfObstacles[i].speedX = -1;
