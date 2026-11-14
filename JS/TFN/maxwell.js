@@ -2071,6 +2071,7 @@ export class maxwell {
                     await this.handleWorkerMessage(e, this.worker);
                 }
                 this.worker.onerror = (e) => this.handleError(this.worker, e);
+
                 this.worker.postMessage(
                     this.soundEngine.tycadome(
                         "tycadome-guest" + Date.now(),
@@ -2088,8 +2089,7 @@ export class maxwell {
                         "async",
                         {
                             system: "loading",
-                            canvas: this.RadioOffscreenCanvas,
-                            ai: this.ai
+                            canvas: this.RadioOffscreenCanvas
                         },
                         [
                             this.RadioOffscreenCanvas
@@ -2097,6 +2097,31 @@ export class maxwell {
                     ),
                     [this.RadioOffscreenCanvas]);
             }
+
+            this.worker.postMessage(this.soundEngine.tycadome(
+                "tycadome-guest" + Date.now(),
+                "canvas",
+                "load.game.world.canvas",
+                {
+                    source: "web",
+                    target: "device:web-001",
+                    worker: "world"
+                },
+                {
+                    status: "pending",
+                    priority: "low"
+                },
+                "async",
+                {
+                    system: "homepage",
+                    canvas: this.mainOffscreenCanvas,
+                    ai: this.stickman
+                },
+                [
+                    this.mainOffscreenCanvas
+                ]
+            ),
+                [this.mainOffscreenCanvas]);
 
             if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
@@ -2107,6 +2132,7 @@ export class maxwell {
 
                 this.sharedWorker.port.start();
             }
+
         }
 
         if (typeof EventSource === "undefined") {
@@ -2228,30 +2254,7 @@ export class maxwell {
 
                     //await this.loadNavSource("Iframe/Pages/homepage.html").then(() => {;});
 
-                    this.worker.postMessage(this.soundEngine.tycadome(
-                        "tycadome-guest" + Date.now(),
-                        "canvas",
-                        "load.game.world.canvas",
-                        {
-                            source: "web",
-                            target: "device:web-001",
-                            worker: "world"
-                        },
-                        {
-                            status: "pending",
-                            priority: "low"
-                        },
-                        "async",
-                        {
-                            system: "homepage",
-                            canvas: this.mainOffscreenCanvas,
-                            ai: this.stickman
-                        },
-                        [
-                            this.mainOffscreenCanvas
-                        ]
-                    ),
-                        [this.mainOffscreenCanvas]);
+
                 } catch (err) {
                     console.warn("Offscreen canvas transfer failed:", err);
                 }
