@@ -61,7 +61,8 @@ class GameWorld {
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
-			this.obstacleComponent(data);
+			this.canvasctx.fillStyle = data.color;
+			this.canvasctx.fillRect(data.SpritePlacementX, data.SpritePlacementY, data.SpriteNewWidth, data.SpriteNewHeight);
 		}
 
 	}

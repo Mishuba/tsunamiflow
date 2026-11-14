@@ -90,7 +90,7 @@ export class maxwell {
         this.stickmanSprite, //,
         60,
         160,
-        "player",
+        "test",
         0,
         0,
         120,
