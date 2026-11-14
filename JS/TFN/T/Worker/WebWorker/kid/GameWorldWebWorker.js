@@ -57,14 +57,13 @@ class GameWorld {
 	}
 	updateUserComponent(data) {
 		if (data.type === "sprite") {
-			this.canvasctx.drawImage(data.sprite, data.SpriteStartClippingX, data.SpriteStartClippingY, data.SpriteClippedWidth, data.SpriteClippedHeight, data.SpritePlacementX, data.SpritePlacementY, data.SpriteNewWidth, data.SpriteNewHeight);
+			this.canvasctx.drawImage(data.sprite, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
 			this.canvasctx.fillStyle = data.color;
-			this.canvasctx.fillRect(data.SpritePlacementX, data.SpritePlacementY, data.SpriteNewWidth, data.SpriteNewHeight);
+			this.canvasctx.fillRect(data.x, data.y, data.width, data.height);
 		}
-
 	}
 	Scoreboard(user) {
 		user.text = "Score: " + this.frame;
