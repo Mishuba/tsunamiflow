@@ -2089,6 +2089,7 @@ export class maxwell {
                         {
                             system: "loading",
                             canvas: this.RadioOffscreenCanvas,
+                            ai: this.ai
                         },
                         [
                             this.RadioOffscreenCanvas
