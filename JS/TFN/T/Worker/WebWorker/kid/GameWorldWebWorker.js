@@ -53,7 +53,7 @@ class GameWorld {
 	}
 	updateUserComponent(data) {
 		if (data.type === "sprite") {
-			this.canvasctx.drawImage(data.sprite, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
+			this.canvasctx.drawImage(data.sprite, data.SpriteStartClippingX, data.SpriteStartClippingY, data.SpriteClippedWidth, data.SpriteClippedHeight, data.SpritePlacementX, data.SpritePlacementY, data.SpriteNewWidth, data.SpriteNewHeight);
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
@@ -233,7 +233,7 @@ class GameWorld {
 		if (this.frame == 1 || this.everyInterval(75, this.frame)) {
 			this.createObstacle();
 		}
-		//this.backgroundComponent(user);
+		this.backgroundComponent(user);
 		this.Scoreboard(user);
 		this.newComponentPos(user);
 		this.updateUserComponent(user);
