@@ -294,7 +294,10 @@ class GameWorld {
 						return;
 					}
 
-					this.Visualizer(entity);
+					if (this.stickman === null) {
+						this.stickman = entity;
+					}
+					this.Visualizer(this.stickman);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
 				};
@@ -308,6 +311,9 @@ class GameWorld {
 						return;
 					}
 
+					if (this.worldai === null) {
+						this.worldai = this.stickman;
+					}
 					this.RaceAgainstTheUniverse(entity);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(RATU);
@@ -379,19 +385,17 @@ class GameWorld {
 	}
 
 	StartVideoGame(event) {
-		if (this.worldai === null) {
-			this.worldai = event.data.payload.ai;
-		} else if (this.worldai !== this.stickman) {
-			this.worldai = event.data.payload.ai;
-		}
 		switch (event.data.payload.system) {
 			case "homepage":
-				this.stickman = event.data.payload.ai;
-				this.worldai = this.stickman;
 				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
 				break;
 			case "race against the universe":
 				//	this.worldai = event.data.payload.ai;
+				if (this.stickman === null) {
+					this.worldai = event.data.payload.ai;
+				} else {
+					this.worldai = this.stickman;
+				}
 				this.startVisualizerLoop(this.worldai, event.data.payload.system);
 				break;
 			case "planet universe":

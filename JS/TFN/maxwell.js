@@ -90,7 +90,7 @@ export class maxwell {
         this.stickmanSprite, //,
         60,
         160,
-        "sprite",
+        "player",
         0,
         0,
         120,
@@ -491,7 +491,7 @@ export class maxwell {
             };
 
             this.stickmanBackground = new Image();
-            this.stickmanBackground.src = `./Tsunami Flow Logo.png`;
+            this.stickmanBackground.src = "./Tsunami Flow Logo.png";
             this.stickmanBackground.onload = async () => {
                 this.stickman.battleBackground = await createImageBitmap(this.stickmanBackground);
             };
