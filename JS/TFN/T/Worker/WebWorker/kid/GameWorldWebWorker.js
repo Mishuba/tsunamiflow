@@ -65,10 +65,8 @@ class GameWorld {
 			this.canvasctx.fillRect(data.x, data.y, data.width, data.height);
 		}
 	}
-	Scoreboard(user) {
-		user.text = "Score: " + this.frame;
-	}
 	MessageBoard(data) {
+		let text = "Score: " + this.frame;
 		this.canvasctx.font = `${data.textSize} ${data.textStyle}`;
 		this.canvasctx.textAlign = data.textAlign;
 		this.canvasctx.textBaseline = data.textBaseline;
@@ -80,7 +78,7 @@ class GameWorld {
 		this.canvasctx.textRendering = data.textRendering;
 		this.canvasctx.wordSpacing = data.wordSpacing;
 		this.canvasctx.fillStyle = data.textColor;
-		this.canvasctx.fillText(data.text, data.textWidth, data.textHeight /*, data.textSettings*/);
+		this.canvasctx.fillText(text, data.textWidth, data.textHeight /*, data.textSettings*/);
 	}
 	scheduleVisualizerFrame(callback) {
 		// Try requestAnimationFrame first
@@ -238,7 +236,7 @@ class GameWorld {
 			this.createObstacle();
 		}
 		this.backgroundComponent(user);
-		this.Scoreboard(user);
+		this.MessageBoard(user);
 		this.newComponentPos(user);
 		this.updateUserComponent(user);
 		for (let i = 0; i < this.TfObstacles.length; i += 1) {
