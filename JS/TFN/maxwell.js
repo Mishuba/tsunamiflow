@@ -2099,10 +2099,12 @@ export class maxwell {
                     ai: this.stickman
                 },
                 [
-                    this.mainOffscreenCanvas
+                    this.mainOffscreenCanvas,
+                    this.stickman.sprite,
+                    this.stickman.battleBackground
                 ]
             ),
-                [this.mainOffscreenCanvas]);
+                [this.mainOffscreenCanvas, this.stickman.sprite, this.stickman.battleBackground]);
 
             if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
