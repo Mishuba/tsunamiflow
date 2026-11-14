@@ -485,15 +485,15 @@ export class maxwell {
             this.stickman = option.stickman;
         } else {
             this.stickmanSprite = new Image();
-            this.stickmanSprite.src = `https://pub-f75098bd521f40639576ef44506b738c.r2.dev/Pictures/Games/Sprites/Stickman/Sheets/standingNwalking.png`;
+            this.stickmanSprite.src = `./standingNwalking2400.png`;
             this.stickmanSprite.onload = async () => {
                 this.stickman.sprite = await createImageBitmap(this.stickmanSprite);
             };
 
             this.stickmanBackground = new Image();
-            this.stickmanBackground.src = `https://pub-f75098bd521f40639576ef44506b738c.r2.dev/Pictures/Logo/Tsunami Flow Logo.png`;
+            this.stickmanBackground.src = `./Tsunami Flow Logo.png`;
             this.stickmanBackground.onload = async () => {
-                this.stickman.background = await createImageBitmap(this.stickmanBackground);
+                this.stickman.battleBackground = await createImageBitmap(this.stickmanBackground);
             };
         }
     }
@@ -2100,10 +2100,10 @@ export class maxwell {
                 },
                 [
                     this.mainOffscreenCanvas,
-                    this.stickman
+                    this.stickman.sprite, this.stickman.battleBackground
                 ]
             ),
-                [this.mainOffscreenCanvas, this.stickman]);
+                [this.mainOffscreenCanvas, this.stickman.sprite, this.stickman.battleBackground]);
 
             if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
