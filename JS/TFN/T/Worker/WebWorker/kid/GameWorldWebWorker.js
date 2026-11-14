@@ -235,7 +235,7 @@ class GameWorld {
 		}
 		this.backgroundComponent(user);
 		this.Scoreboard(user);
-		//this.newComponentPos(user);
+		this.newComponentPos(user);
 		this.updateUserComponent(user);
 		for (let i = 0; i < this.TfObstacles.length; i += 1) {
 			if (this.crashWith(user, this.TfObstacles[i])) {
