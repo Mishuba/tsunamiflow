@@ -6,6 +6,7 @@ class GameWorld {
 	offscreencanvas = null;
 	canvastype = null;
 	TfObstacles = [];
+	canvasctx = null;
 	TfAudioVisualData = {
 		dataArray: new Uint8Array(0),
 		volume: 0,
@@ -21,6 +22,9 @@ class GameWorld {
 		}
 		if (options.canvastype) {
 			this.initRadioOffscreen(options.canvastype);
+		}
+		if (options.canvasctx) {
+			this.canvasctx = options.canvasctx;
 		}
 	}
 	initRadioOffscreen(canvas, canvastype) {
