@@ -2166,6 +2166,8 @@ export class maxwell {
                     this.mainCanvas = document.createElement("canvas");
                     this.mainCanvas.name = "TsunamiMainFlowContent";
                     this.mainCanvas.id = "TsunamiContent";
+                    this.mainCanvas.width = `${Math.max(0, this.mainSectionWidth - 1)}px`;
+                    this.mainCanvas.height = `${Math.max(0, this.mainSectionHeight - 1)}px`;
                     this.mainCanvas.style.margin = "0 auto";
                     this.mainCanvas.style.background = "rgb(255, 255, 255)";
                     this.mainCanvas.style.display = "block";
