@@ -311,7 +311,7 @@ class GameWorld {
 					if (this.worldai === null) {
 						this.worldai = this.stickman;
 					}
-					this.RaceAgainstTheUniverse(entity);
+					this.RaceAgainstTheUniverse(this.worldai);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(RATU);
 				};
