@@ -36,7 +36,7 @@ class GameWorld {
 				this.canvasctx = this.offscreencanvas.getContext(canvastype);
 				if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
 				this.isoffscreenReady = true;
-				console.log(`OffscreenCanvas initialized with ${canvastype} context`);
+				console.log(`Game OffscreenCanvas initialized with Game ${canvastype} context`);
 			} catch (err) {
 				console.error("OffscreenCanvas init failed:", err);
 				this.canvasctx = null;
@@ -123,36 +123,37 @@ class GameWorld {
 	Visualizer(ai, player = null) {
 		this.clear();
 
+		//draw ai  this.canvasctx.drawImage(ai.sprite, ai.sx, ai.sy, ai.dw, ai.dh, ai.x, ai.y, ai.width, ai.height);
+		this.canvasctx.drawImage(ai.sprite, 0, 0, 120, 120, 0, this.offscreencanvas.height - 30, 30, 30);
+
 		// Draw text
 		this.canvasctx.fillText(ai.spriteDialog.homepage[this.frame], ai.textWidth, ai.textHeight);
-
-		//draw ai
-		//this.canvasctx.drawImage(ai.sprite, ai.spriteX, ai.spriteY, ai.spriteWidth, ai.spriteHeight);
-
 
 		// Initialize speed if needed
 		if (ai.speedX === 0) ai.speedX = 1;
 		if (ai.speedY === 0) ai.speedY = 1;
+
+		// Bounce logic
+		if (ai.textWidth + ai.speedX >= this.offscreencanvas.width || ai.textWidth + ai.speedX <= 0) {
+			ai.speedX = -ai.speedX;
+		}
+
+		if (ai.textHeight + ai.speedY >= this.offscreencanvas.height || ai.textHeight + ai.speedY <= 0) {
+			this.frame = (this.frame + 1) % ai.spriteDialog.homepage.length;
+			ai.speedY = -ai.speedY;
+		}
+
+		// Move text
+		ai.textWidth += ai.speedX;
+		ai.textHeight += ai.speedY;
 
 		switch (player) {
 			case "exist":
 
 				break;
 			default:
-				// Bounce logic
-				if (ai.textWidth + ai.speedX >= this.offscreencanvas.width || ai.textWidth + ai.speedX <= 0) {
-					ai.speedX = -ai.speedX;
-				}
 
-				if (ai.textHeight + ai.speedY >= this.offscreencanvas.height || ai.textHeight + ai.speedY <= 0) {
-					this.frame = (this.frame + 1) % ai.spriteDialog.homepage.length;
-					ai.speedY = -ai.speedY;
-				}
 
-				// Move text
-
-				ai.textWidth += ai.speedX;
-				ai.textHeight += ai.speedY;
 				break;
 		}
 	}
@@ -286,14 +287,16 @@ class GameWorld {
 
 		switch (type) {
 			case "homepage":
+				if (this.stickman === null) {
+					this.stickman = entity;
+				}
+
 				const vizloop = () => {
 					if (!this.visualizerRunning) {
 						return;
 					}
 
-					if (this.stickman === null) {
-						this.stickman = entity;
-					}
+
 					this.Visualizer(this.stickman);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
@@ -304,14 +307,14 @@ class GameWorld {
 
 			case "race against the universe":
 				const RATU = () => {
+					if (this.worldai === null) {
+						this.worldai = entity;
+					}
+
 					if (!this.visualizerRunning) {
 						return;
 					}
-
-					if (this.worldai === null) {
-						this.worldai = this.stickman;
-					}
-					this.RaceAgainstTheUniverse(this.worldai);
+					this.RaceAgainstTheUniverse(entity);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(RATU);
 				};
@@ -387,17 +390,11 @@ class GameWorld {
 				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
 				break;
 			case "race against the universe":
-				//	this.worldai = event.data.payload.ai;
-				if (this.stickman === null) {
-					this.worldai = event.data.payload.ai;
-				} else {
-					this.worldai = this.stickman;
-				}
-				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				this.startVisualizerLoop(this.stickman, event.data.payload.system);
 				break;
 			case "planet universe":
 				this.worldai = event.data.payload.ai;
-				this.startVisualizerLoop(this.worldai, event.data.payload.system);
+				this.startVisualizerLoop(this.stickman, event.data.payload.system);
 			default:
 				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
 				break;
