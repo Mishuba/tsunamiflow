@@ -35,6 +35,7 @@ class GameWorld {
 		} else {
 			try {
 				this.offscreencanvas = canvas;
+
 				this.canvasctx = this.offscreencanvas.getContext(canvastype);
 				if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
 				this.isoffscreenReady = true;
