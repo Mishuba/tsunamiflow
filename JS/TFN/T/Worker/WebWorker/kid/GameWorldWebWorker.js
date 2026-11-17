@@ -18,11 +18,13 @@ class GameWorld {
 	};
 	constructor(options = {}) {
 		if (options.offscreencanvas) {
-			this.offscreencanvas = options.offscreencanvas;
+			if (options.canvastype) {
+				this.initRadioOffscreen(options.offscreencanvas, options.canvastype);
+			} else {
+				this.offscreencanvas = options.offscreencanvas;
+			}
 		}
-		if (options.canvastype) {
-			this.initRadioOffscreen(options.canvastype);
-		}
+
 		/*
 		if (options.canvasctx) {
 			this.canvasctx = options.canvasctx;
@@ -35,6 +37,9 @@ class GameWorld {
 		} else {
 			try {
 				this.offscreencanvas = canvas;
+				this.offscreencanvas.width = canvas.width;
+				this.offscreencanvas.height = canvas.height;
+				this.canvastype = canvastype;
 
 				this.canvasctx = this.offscreencanvas.getContext(canvastype);
 				if (!this.canvasctx) throw new Error(`${canvastype} context not supported`);
@@ -400,7 +405,7 @@ class GameWorld {
 				switch (event.data.action) {
 					case "load.game.world.canvas":
 						console.log(`this ${event.data.payload.canvas} should be an offscreencanvas`);
-						console.log(`attempting to create a 2d canvas context in the audio worker `);
+						console.log(`attempting to create a 2d canvas context in the game world worker `);
 						this.initRadioOffscreen(event.data.payload.canvas, "2d");
 						this.StartVideoGame(event);
 						break;
