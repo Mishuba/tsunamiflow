@@ -338,7 +338,7 @@ class GameWorld {
 	MessageReceived(event) {
 		switch (event.data.type) {
 			case "game.player":
-
+				this.pcControls(event, event.data.payload.key, event.data.payload.canvas, event.data.payload.sprite);
 				break;
 
 			case "audio.worklet": {

@@ -268,6 +268,21 @@ class GameWorld {
 		this.visualizerRunning = true;
 		console.log("✅ Visualizer loop started");
 
+		//Create
+		entity.spriteStates.forEach((state, index) => {
+			entity.spriteStatesFrames = {
+				loc: [], frame: state.frames
+			};
+			for (let j = 0; j < state.frames; j++) {
+				let positionX = j * entity.dw;
+				let positionY = index * entity.dh;
+
+				entity.spriteStatesFrames.loc.push({ x: positionX, y: positionY });
+			}
+			entity.spriteStates[state.name] = entity.spriteStatesFrames;
+		});
+		console.log(entity.spriteStates);
+
 		switch (type) {
 			case "homepage":
 				if (this.stickman === null) {
@@ -280,7 +295,7 @@ class GameWorld {
 						return;
 					}
 
-					this.Visualizer(entity, this.stickman);
+					this.Visualizer(entity);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
 				};
@@ -321,20 +336,7 @@ class GameWorld {
 
 				break;
 			default:
-				//Create
-				entity.spriteStates.forEach((state, index) => {
-					entity.spriteStatesFrames = {
-						loc: [], frame: state.frames
-					};
-					for (let j = 0; j < state.frames; j++) {
-						let positionX = j * entity.dw;
-						let positionY = index * entity.dh;
 
-						entity.spriteStatesFrames.loc.push({ x: positionX, y: positionY });
-					}
-					entity.spriteStates[state.name] = entity.spriteStatesFrames;
-				});
-				console.log(entity.spriteStates);
 				break;
 		}
 	}
