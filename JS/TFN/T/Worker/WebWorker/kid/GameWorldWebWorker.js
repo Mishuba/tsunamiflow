@@ -122,11 +122,11 @@ class GameWorld {
 	clear() {
 		this.canvasctx.clearRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
-	Visualizer(ai, player = null) {
+	Visualizer(ai) {
 		this.clear();
 
 		//draw ai  this.canvasctx.drawImage(ai.sprite, ai.sx, ai.sy, ai.dw, ai.dh, ai.x, ai.y, ai.width, ai.height);
-		this.canvasctx.drawImage(ai.sprite, 0, 0, 120, 120, 0, this.offscreencanvas.height - 30, 30, 30);
+		//this.canvasctx.drawImage(ai.sprite, 0, 0, 120, 120, 0, this.offscreencanvas.height - 30, 30, 30);
 
 		// Draw text
 		this.canvasctx.fillText(ai.spriteDialog.homepage[this.frame], ai.textWidth, ai.textHeight);
