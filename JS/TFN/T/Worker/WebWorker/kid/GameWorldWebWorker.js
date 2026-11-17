@@ -6,7 +6,7 @@ class GameWorld {
 	offscreencanvas = null;
 	canvastype = null;
 	TfObstacles = [];
-	canvasctx = null;
+	//canvasctx = null;
 	TfAudioVisualData = {
 		dataArray: new Uint8Array(0),
 		volume: 0,
@@ -149,15 +149,6 @@ class GameWorld {
 		ai.textWidth += ai.speedX;
 		ai.textHeight += ai.speedY;
 
-		switch (player) {
-			case "exist":
-
-				break;
-			default:
-
-
-				break;
-		}
 	}
 	createObstacle() {
 		let minHeight = this.offscreencanvas.width * 0.10;
@@ -277,7 +268,7 @@ class GameWorld {
 				if (this.stickman === null) {
 					this.stickman = entity;
 				}
-
+				console.log("✅Trying homepage Visualizer loop started");
 				const vizloop = () => {
 					if (!this.visualizerRunning) {
 						return;
@@ -289,6 +280,7 @@ class GameWorld {
 				};
 
 				vizloop();
+				console.log("working homepage Visualizer loop started");
 				break;
 
 			case "race against the universe":
