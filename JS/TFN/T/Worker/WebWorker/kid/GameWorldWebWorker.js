@@ -268,7 +268,8 @@ class GameWorld {
 				if (this.stickman === null) {
 					this.stickman = entity;
 				}
-				console.log("✅Trying homepage Visualizer loop started");
+				console.log(`✅ sprite dialog = ${entity.spriteDialog.homepage}, textWidth = ${entity.textWidth}, textHeight = ${entity.textHeight}, speedX = ${entity.speedX}, speedY = ${entity.speedY}, color = ${entity.color}, width = ${entity.width}, height = ${entity.height}, offscreencanvas.width = ${this.offscreencanvas.width}, offscreencanvas.height = ${this.offscreencanvas.height}, sprite = ${entity.sprite}, sx = ${entity.sx}, sy = ${entity.sy}, dw = ${entity.dw}, dh = ${entity.dh}`);
+
 				const vizloop = () => {
 					if (!this.visualizerRunning) {
 						return;
