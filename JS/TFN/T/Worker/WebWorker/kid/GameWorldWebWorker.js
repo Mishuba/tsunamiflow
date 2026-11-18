@@ -99,7 +99,7 @@ class GameWorld {
 			this.obstacleComponent(data);
 		} else {
 			this.canvasctx.fillStyle = data.color;
-			this.canvasctx.fillRect(data.x, data.y, data.width, data.height);
+			this.canvasctx.fillRect(data.x, this.offscreencanvas.height - data.y, data.width, data.height);
 		}
 	}
 	MessageBoard(data) {
