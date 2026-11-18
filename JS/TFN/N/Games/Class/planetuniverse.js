@@ -40,7 +40,7 @@ export class gameComponent {
         this.spriteAnimationArray = [];
         this.spriteStates = [
             { name: "stand", frames: 2 },
-            { name: "walk", frames: 2 },
+            { name: "walk", frames: 3 },
             { name: "run", frames: 2 },
             { name: "jump", frames: 2 },
             { name: "double jump", frames: 2 },

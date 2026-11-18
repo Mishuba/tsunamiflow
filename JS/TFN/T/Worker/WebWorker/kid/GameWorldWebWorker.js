@@ -128,9 +128,25 @@ class GameWorld {
 	clear() {
 		this.canvasctx.clearRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
+	animationInterval(frameNumber, n) {
+		return frameNumber % n === 0;
+	}
+	animationRame(ai) {
+		if (ai.sx < 120) {
+			ai.sx = ai.sx + 120;
+		} else {
+			ai.sx = 0;
+		}
+	}
 	Visualizer(ai) {
 		this.clear();
+		ai.spriteFrameInterval++;
 
+		ai.spriteStates[ai.SpriteState];
+
+		if (this.animationInterval(ai.spriteFrameInterval, ai.spriteSpeed)) {
+			this.animationRame(ai);
+		}
 		this.canvasctx.drawImage(ai.sprite, ai.sx, ai.sy, ai.dw, ai.dh, ai.x, this.offscreencanvas.height - ai.y, ai.width, ai.height);
 
 		// Draw text
