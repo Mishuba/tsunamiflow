@@ -264,6 +264,7 @@ class GameWorld {
 				return;
 			} else {
 				this.TfObstacles[i].speedX = -1;
+				this.TfObstacles[i].speedY = 0;
 				this.newComponentPos(this.TfObstacles[i]);
 				this.updateUserComponent(this.TfObstacles[i]);
 			}
@@ -478,8 +479,23 @@ class GameWorld {
 						//this.startVisualizerLoop(this.worldai);
 					}
 				}
-				break;
 			}
+				break;
+			case "input":
+				/*
+				switch (event.data.action) {
+					case "key.down":
+						this.handleKeyDown(event.data.payload);
+						break;
+					case "key.up":
+						this.handleKeyUp(event.data.payload);
+						break;
+					default:
+						console.error(`Unhandled input action: ${event.data.action}`);
+						break;
+				}
+				*/
+				break;
 			default:
 				console.error(`Unhandled event type: ${event.data.type}`);
 				break;
