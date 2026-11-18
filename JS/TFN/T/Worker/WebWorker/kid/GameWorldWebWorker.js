@@ -321,7 +321,7 @@ class GameWorld {
 						return;
 					}
 
-					this.Visualizer(entity);
+					this.Visualizer(this.stickman);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
 				};
