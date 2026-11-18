@@ -63,9 +63,38 @@ class GameWorld {
 		this.canvasctx.fillStyle = data.color;
 		this.canvasctx.fillRect(data.x, data.y, data.width, data.height);
 	}
+	animationInterval(frameNumber, n) {
+		return frameNumber % n === 0;
+	}
+	animationRame(ai) {
+		const row = ai.spriteStates.findIndex(s => s.name === ai.spriteState);
+		if (row < 0) {
+			return;
+		}
+		const frameCount = ai.spriteStates[row].frames;
+		ai.sy = row * ai.dh;
+		ai.sx = (Math.floor(ai.sx / ai.dw) + 1) % frameCount * ai.dw;
+	}
 	updateUserComponent(data) {
+		/*
+		if (this.offscreencanvas.width - data.width === this.offscreencanvas.width) {
+			data.x = this.offscreencanvas.width - data.width - 1;
+		} else if (data.width === 0) {
+			data.x = data.width + 1;
+		}
+
+		if (this.offscreencanvas.height - data.height >= this.offscreencanvas.height) {
+			data.y = this.offscreencanvas.height - data.height - 1;
+		} else if (data.height <= 0) {
+			data.y = data.height = 1;
+		}
+		*/
+		data.spriteFrameInterval++;
 		if (data.type === "sprite") {
-			this.canvasctx.drawImage(data.sprite, data.sx, data.sy, data.dw, data.dh, data.x, data.y, data.width, data.height);
+			if (this.animationInterval(data.spriteFrameInterval, data.spriteSpeed)) {
+				this.animationRame(data);
+			}
+			this.canvasctx.drawImage(data.sprite, data.sx, data.sy, data.dw, data.dh, data.x, this.offscreencanvas.height - data.y, data.width, data.height);
 		} else if (data.type === "player") {
 			this.obstacleComponent(data);
 		} else {
@@ -128,33 +157,13 @@ class GameWorld {
 	clear() {
 		this.canvasctx.clearRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
-	animationInterval(frameNumber, n) {
-		return frameNumber % n === 0;
-	}
-	animationRame(ai) {
-		const row = ai.spriteStates.findIndex(s => s.name === ai.spriteState);
-		if (row < 0) {
-			return;
-		}
-		const frameCount = ai.spriteStates[row].frames;
-		ai.sy = row * ai.dh;
-		ai.sx = (Math.floor(ai.sx / ai.dw) + 1) % frameCount * ai.dw;
-	}
 	Visualizer(ai) {
 		this.clear();
 		ai.spriteFrameInterval++;
 
-		if (this.animationInterval(ai.spriteFrameInterval, ai.spriteSpeed)) {
-			this.animationRame(ai);
-		}
-		this.canvasctx.drawImage(ai.sprite, ai.sx, ai.sy, ai.dw, ai.dh, ai.x, this.offscreencanvas.height - ai.y, ai.width, ai.height);
-
+		this.updateUserComponent(ai);
 		// Draw text
 		this.canvasctx.fillText(ai.spriteDialog.homepage[this.frame], ai.textWidth, ai.textHeight);
-
-		// Initialize speed if needed
-		if (ai.speedX === 0) ai.speedX = 1;
-		if (ai.speedY === 0) ai.speedY = 1;
 
 		// Bounce logic
 		if (ai.textWidth + ai.speedX >= this.offscreencanvas.width || ai.textWidth + ai.speedX <= 0) {
@@ -169,7 +178,6 @@ class GameWorld {
 		// Move text
 		ai.textWidth += ai.speedX;
 		ai.textHeight += ai.speedY;
-
 	}
 	createObstacle() {
 		let minHeight = this.offscreencanvas.width * 0.10;
@@ -195,6 +203,7 @@ class GameWorld {
 		switch (object.type) {
 			case "environment":
 				//Do not end game
+
 				break;
 			case "sprite":
 				if ((myBottom < badTop) || (myTop > badBottom) || (myRight < badLeft) || (myLeft > badRight)) {

@@ -9,9 +9,9 @@ export class gameComponent {
         this.exist = true;
         this.width = SpriteNewWidth;
         this.height = SpriteNewHeight;
-        this.speedX = 0;
-        this.speedY = 0;
-        this.spriteSpeed = 10;
+        this.speedX = 1;
+        this.speedY = 1;
+        this.spriteSpeed = 12;
         this.color = color;
         this.sprite = sprite;
         this.x = SpritePlacementX;
