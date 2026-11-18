@@ -132,17 +132,17 @@ class GameWorld {
 		return frameNumber % n === 0;
 	}
 	animationRame(ai) {
-		if (ai.sx < 120) {
-			ai.sx = ai.sx + 120;
-		} else {
-			ai.sx = 0;
+		const row = ai.spriteStates.findIndex(s => s.name === ai.spriteState);
+		if (row < 0) {
+			return;
 		}
+		const frameCount = ai.spriteStates[row].frames;
+		ai.sy = row * ai.dh;
+		ai.sx = (Math.floor(ai.sx / ai.dw) + 1) % frameCount * ai.dw;
 	}
 	Visualizer(ai) {
 		this.clear();
 		ai.spriteFrameInterval++;
-
-		ai.spriteStates[ai.SpriteState];
 
 		if (this.animationInterval(ai.spriteFrameInterval, ai.spriteSpeed)) {
 			this.animationRame(ai);
@@ -285,6 +285,7 @@ class GameWorld {
 		console.log("✅ Visualizer loop started");
 
 		//Create
+		/*
 		entity.spriteStates.forEach((state, index) => {
 			entity.spriteStatesFrames = {
 				loc: [], frame: state.frames
@@ -298,7 +299,7 @@ class GameWorld {
 			entity.spriteStates[state.name] = entity.spriteStatesFrames;
 		});
 		console.log(entity.spriteStates);
-
+*/
 		switch (type) {
 			case "homepage":
 				if (this.stickman === null) {
@@ -465,7 +466,7 @@ class GameWorld {
 					this.TfAudioVisualData.timestamp = Date.now();
 
 					if (!this.visualizerRunning) {
-						this.startVisualizerLoop();
+						//this.startVisualizerLoop(this.worldai);
 					}
 				}
 				break;

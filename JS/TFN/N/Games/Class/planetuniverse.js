@@ -11,7 +11,7 @@ export class gameComponent {
         this.height = SpriteNewHeight;
         this.speedX = 0;
         this.speedY = 0;
-        this.spriteSpeed = 5;
+        this.spriteSpeed = 10;
         this.color = color;
         this.sprite = sprite;
         this.x = SpritePlacementX;
