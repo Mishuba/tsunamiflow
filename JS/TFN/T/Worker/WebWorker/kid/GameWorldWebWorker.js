@@ -497,6 +497,7 @@ class GameWorld {
 
 								break;
 							case "w": // dpadUp
+event.data.payload.state; // idle, pressed, held, released
 								this.stickman.y = this.stickman.y - 1;
 								break;
 							case "r": // select
