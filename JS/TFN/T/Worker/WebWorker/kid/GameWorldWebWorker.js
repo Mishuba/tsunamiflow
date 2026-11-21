@@ -533,14 +533,14 @@ class GameWorld {
 
 								break;
 							default:
-								console.log("No action for this key: " + keyboard.key);
+								console.log("No action for this key: " + event.data.payload.key);
 								break;
 						}
-						this.handleKeyDown(event.data.payload);
+						
 						break;
 					case "race against the universe":
-						this.handleKeyUp(event.data.payload);
-						break;
+						
+break;
 					case "planet universe":
 
 						break;
