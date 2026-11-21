@@ -155,6 +155,7 @@ export class letsDoIt extends GameMechanics {
         //signal: controller.signal
 
         downButton.addEventListener("mousedown", () => { this.movedown(this.player1) }, { capture: false, once: false, passive: true });  // true means the listener will never call preventDefault
+
         //Touch Screen Controller
         window.addEventListener("touchmove", function (e) {
             this.canvas.x = e.touches[0].screenX;

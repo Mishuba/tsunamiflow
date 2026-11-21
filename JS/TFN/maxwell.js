@@ -80,6 +80,8 @@ export class maxwell {
         images: {},
         screens: {}
     };
+    TsunamiKeyboard = window.navigator.keyboard;
+    inputStates = new Map();
 
     stickmanSprite = null;
     stickmanBackground = null;
@@ -1117,8 +1119,409 @@ export class maxwell {
         this.soundEngine.RadioEventListeners(this.worker, this.soundEngine.MasterSoundsContext);
         this.soundEngine.loadaudio(this.soundEngine.AudioFile(null));
     }
-    bindVideoGame() {
+    updateInput(action, isDown) {
+        const previous = this.inputStates.get(action) || "idle";
 
+        let current;
+
+        if (isDown) {
+            current = previous === "idle" ||
+                previous === "released"
+                ? "pressed"
+                : "held";
+        } else {
+            current = previous === "pressed" ||
+                previous === "held"
+                ? "released"
+                : "idle";
+        }
+
+        this.inputStates.set(action, current);
+
+        return current;
+    }
+    releaseAllInputs() {
+        for (const [action, state] of this.inputStates) {
+            if (state === "pressed" || state === "held") {
+                this.inputStates.set(action, "released");
+            }
+        }
+    }
+    gameController() {
+        /*
+        this.TsunamiLeftTrigger = document.createElement("button");
+        this.TsunamiLeftTrigger.innerHTML = "LEFT TRIGGER";
+        this.mainCanvas.insertBefore(this.TsunamiLeftTrigger, element.childNodes[1]);
+
+        this.TsunamiRightTrigger = document.createElement("button");
+        this.TsunamiRightTrigger.innerHTML = "RIGHT TRIGGER";
+        this.mainCanvas.insertBefore(this.TsunamiRightTrigger, element.childNodes[0]);
+
+        this.TsunamiLeftBumber = document.createElement("button");
+        this.TsunamiLeftBumber.innerHTML = "LEFT BUMPER";
+        this.mainCanvas.insertBefore(this.TsunamiLeftBumber, element.childNodes[3]);
+
+        this.TsunamiRightBumber = document.createElement("button");
+        this.TsunamiRightBumber.innerHTML = "RIGHT BUMPER";
+        this.mainCanvas.insertBefore(this.TsunamiRightBumber, element.childNodes[2]);
+
+        this.dpadUp = document.createElement("button");
+        this.dpadUp.innerHTML = "Up";
+        this.mainCanvas.insertBefore(this.dpadUp, element.childNodes[0]);
+
+        this.dpadUp = document.createElement("button");
+        this.dpadUp.innerHTML = "Up";
+        this.mainCanvas.insertBefore(this.dpadUp, element.childNodes[0]);
+
+        this.TsunamiGameSelect = document.createElement("button");
+        this.TsunamiGameSelect.innerHTML = "SELECT";
+        this.mainCanvas.insertBefore(this.TsunamiGameSelect, element.childNodes[1]);
+
+        this.TsunamiGameStart = document.createElement("button");
+        this.TsunamiGameStart.innerHTML = "START";
+        this.mainCanvas.insertBefore(this.TsunamiGameStart, element.childNodes[2]);
+
+        this.TsunamiMove2 = document.createElement("button");
+        this.TsunamiMove2.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(this.TsunamiMove2, element.childNodes[3]);
+
+        this.dpadLeft = document.createElement("button");
+        this.dpadLeft.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(this.dpadLeft, element.childNodes[4]);
+
+        this.dpadRight = document.createElement("button");
+        this.dpadRight.innerHTML = "RIGHT";
+        this.mainCanvas.insertBefore(this.dpadRight, element.childNodes[5]);
+
+        this.TsunamiControllerPadScreenLeft = document.createElement("button");
+        this.TsunamiControllerPadScreenLeft.innerHTML = "CONTROLLER";
+        this.mainCanvas.insertBefore(this.TsunamiControllerPadScreenLeft, element.childNodes[6]);
+
+        this.TsunamiControllerPadScreenRight = document.createElement("button");
+        this.TsunamiControllerPadScreenRight.innerHTML = "CONTROLLER";
+        this.mainCanvas.insertBefore(this.TsunamiControllerPadScreenRight, element.childNodes[7]);
+
+        this.TsunamiMove1= document.createElement("button");
+        this.TsunamiMove1.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(this.TsunamiMove1, element.childNodes[8]);
+
+        this.TsunamiMove4 = document.createElement("button");
+        this.TsunamiMove4.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(this.TsunamiMove4, element.childNodes[9]);
+
+        this.dpadDown = document.createElement("button");
+        this.dpadDown.innerHTML = "Down";
+        this.mainCanvas.insertBefore(this.dpadDown, element.childNodes[10]);
+
+        this.TsunamiMove3 = document.createElement("button");
+        this.TsunamiMove3.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(this.TsunamiMove3, element.childNodes[11]);
+
+        This.TsunamiStickLeft = document.createElement("button");
+        This.TsunamiStickLeft.innerHTML = "LEFT";
+        this.mainCanvas.insertBefore(This.TsunamiStickLeft, element.childNodes[12]);
+
+        This.TsunamiStickRight = document.createElement("button");
+        This.TsunamiStickRight.innerHTML = "RIGHT";
+        this.mainCanvas.insertBefore(This.TsunamiStickRight, element.childNodes[13]);
+        */
+    }
+    gameMouse(event) {
+        this.worker.postMessage(this.imageEngine.tycadome(
+            "videogame" + "mishuba",
+            "input",
+            tsu,
+            {
+                source: "web",
+                target: "device:web-001",
+                worker: "world"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "videogame",
+                game: "mishuba",
+                type: "input",
+                source: "pointer",
+                controller: "touch",
+                action: "move",
+                state: "active",
+                pointer: {
+                    x: event.offsetX,
+                    y: event.offsetY,
+                    pressure: event.pressure,
+                    tiltX: event.tiltX,
+                    tiltY: event.tiltY,
+                    twist: event.twist,
+                    buttons: event.buttons,
+                    pointerId: event.pointerId,
+                    primary: event.isPrimary
+                }
+            }
+        ));
+
+    }
+    gameTouch(event) {
+        event.pressure;
+        event.tiltY;
+        event.tiltX;
+    }
+    gamePencil(event) {
+        event.pressure;
+        event.tiltY;
+        event.tiltX;
+        event.twist;
+    }
+    gamePointer(event) {
+        switch (event.pointerType) {
+            case "mouse":
+
+                break;
+
+            case "touch":
+                this.gameTouch(event);
+                break;
+
+            case "pen":
+                this.gamePencil(event);
+                break
+            default:
+
+                break;
+
+        }
+    }
+    gameKeyboard(tsu, event) {
+        const keymap = {
+            "2": "leftTrigger",
+            "3": "leftBumper",
+            "8": "rightBumper",
+            "9": "rightTrigger",
+            "w": "up",
+            "r": "select",
+            "y": "start",
+            "i": "move2",
+            "a": "left",
+            "d": "right",
+            "c": "padLeft",
+            "n": "padRight",
+            "j": "move1",
+            "l": "move4",
+            "x": "down",
+            "m": "move3"
+        };
+
+        const action = keymap[event.key.toLowerCase()];
+
+        if (!action) return;
+
+        const isDown = event.type === "keydown";
+
+        if (event.repeat && isDown) return;
+
+        const state = this.updateInput(action, isDown);
+
+        if (state === "idle") return;
+
+        const message = this.imageEngine.tycadome(
+            "videogamemishuba",
+            "input",
+            tsu,
+            {
+                source: "web",
+                target: "device:web-001",
+                worker: "world"
+            },
+            {
+                status: "pending",
+                priority: "low"
+            },
+            "async",
+            {
+                system: "videogame",
+                game: "mishuba",
+                type: "input",
+                player: who,
+                source: "keyboard",
+                action: action,
+                state: state,
+                controller: "pc",
+                key: event.key,
+                timestamp: performance.now()
+            }
+        );
+        this.worker.postMessage(message);
+    }
+    KeyboardGame(tsu, keyboard) {
+        let action = null;
+        let who = null;
+        switch (keyboard.key) {
+            case "2": //le t trigger
+
+                this.worker.postMessage();
+                break;
+            case "3": //le t bumper    
+                this.worker.postMessage();
+                break;
+            case "8": //right bumper
+                this.worker.postMessage();
+                break;
+            case "9": //right trigger
+                this.worker.postMessage();
+                break;
+            case "w": // dpadUp
+                this.worker.postMessage();
+                break;
+            case "r": // select
+                this.worker.postMessage();
+                break;
+            case "y": // start 
+                this.worker.postMessage();
+                break;
+            case "i": // move 2
+                this.worker.postMessage();
+                break;
+            case "a": // dpad left
+                action = "left";
+                who = "player";
+                this.worker.postMessage(this.imageEngine.tycadome(
+                    "videogame" + "mishuba",
+                    "input",
+                    tsu,
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "world"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+                        system: "",
+                        player: who,
+                        state: action,
+                        message: "testing movement",
+                        controller: "pc",
+                        key: keyboard.key
+                    }
+                ));
+                break;
+            case "d": // dpad right 
+                action = "right";
+                who = "player";
+                this.worker.postMessage(this.imageEngine.tycadome(
+                    "videogame" + "mishuba",
+                    "input",
+                    tsu,
+                    {
+                        source: "web",
+                        target: "device:web-001",
+                        worker: "world"
+                    },
+                    {
+                        status: "pending",
+                        priority: "low"
+                    },
+                    "async",
+                    {
+
+                        system: "videogame",
+                        game: "mishuba",
+                        type: "input",
+                        source: "keyboard",
+                        player: who,
+                        controller: "pc",
+                        action: action,
+                        state: "pressed",
+                        key: keyboard.key,
+                        timestamp: performance.now()
+
+                    }
+                ));
+                this.worker.postMessage();
+                break;
+            case "c": // controller pad left ()
+                this.worker.postMessage();
+                break;
+            case "n": // controller pad right (h)
+                this.worker.postMessage();
+                break;
+            case "j": // move 1
+                this.worker.postMessage();
+                break;
+            case "l": // move 4
+                this.worker.postMessage();
+                break;
+            case "x": // dpad down
+                this.worker.postMessage();
+                break;
+            case "m": // move 3
+                this.worker.postMessage();
+                break;
+            default:
+                console.log("No action for this key: " + keyboard.key);
+                break;
+        }
+    }
+    bindVideoGame(tsu) {
+        let keyboard = false;
+        this.mainSection.addEventListener("pointerenter", async (event) => {
+            this.mainSection.setPointerCapture(event.pointerId);
+            console.log(`Pointer enter at ${event.offsetX} ${event.offsetY}, ${event.pressure}, ${event.width}, ${event.height}, ${event.isPrimary}`);
+            keyboard = true;
+            this.gamePointer(event);
+        }); //enable game controls
+
+        window.addEventListener("keydown", async (event) => {
+            if (keyboard) {
+                event.preventDefault();
+                this.TsunamiKeyboard.key = (this.TsunamiKeyboard.key || []);
+
+                this.gameKeyboard(tsu, event);
+            }
+        });
+        window.addEventListener("keyup", async (event) => {
+            if (keyboard) {
+                event.preventDefault();
+                this.TsunamiKeyboard.key = (this.TsunamiKeyboard.key || []);
+
+                this.gameKeyboard(tsu, event);
+            }
+        });
+
+        this.mainSection.addEventListener("pointerover", async (event) => {
+            keyboard = true;
+            this.gamePointer(event); //game movement think mouse 1st.
+        }); //movement game controls
+
+        this.mainSection.addEventListener("pointerdown", async (event) => {
+            keyboard = true;
+            this.gamePointer(event);
+        });  // shoot
+
+        this.mainSection.addEventListener("pointerup", async (event) => {
+            keyboard = true;
+            this.gamePointer(event);
+        }); /// stop shoot
+
+        this.mainSection.addEventListener("pointerout", async () => {
+            keyboard = false;
+
+        }); //
+
+        this.mainSection.addEventListener("pointerleave", async (event) => {
+            this.mainSection.releasePointerCapture(event.pointerId);
+            keyboard = false;
+        }); //disable game controls
+
+        this.mainSection.addEventListener("pointercancel", async () => {
+            keyboard = false;
+        }); //enable game controls
     }
 
     bindVidSystem() {
@@ -2114,6 +2517,9 @@ export class maxwell {
             ),
                 [this.mainOffscreenCanvas, this.stickman.sprite, this.stickman.battleBackground]);
 
+
+
+
             if (this.sharedWorker === null) {
                 this.sharedWorker = this.createSafeWorker("T/Worker/Shared.js", "https://www.tsunamiflow.club/JS/TFN/T/Worker/Shared.js", true);
 
@@ -2123,6 +2529,7 @@ export class maxwell {
 
                 this.sharedWorker.port.start();
             }
+
 
         }
 
@@ -2181,12 +2588,16 @@ export class maxwell {
                     this.mainCanvas.style.display = "block";
                     this.mainCanvas.style.border = "1px solid black";
                     this.mainCanvas.style.cursor = "none";
+                    this.mainCanvas.tabIndex = 1;
                     this.mainCanvas.imageSmoothingEnabled = true;
                     //this.mainCanvas.imageSmoothingQualty;
                     this.mainSection.appendChild(this.mainCanvas);
                     this.currentMainElement = this.mainCanvas;
                     this.bindNavBar()
                     this.site.requestLocation();
+                    window.addEventListener("blur", () => {
+                        this.releaseAllInputs();
+                    });
                 }
                 break;
 
