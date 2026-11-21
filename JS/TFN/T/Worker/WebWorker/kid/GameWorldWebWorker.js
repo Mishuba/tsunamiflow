@@ -419,7 +419,6 @@ class GameWorld {
 				this.startVisualizerLoop(this.stickman, event.data.payload.system);
 				break;
 			case "planet universe":
-				this.worldai = event.data.payload.ai;
 				this.startVisualizerLoop(this.stickman, event.data.payload.system);
 			default:
 				this.startVisualizerLoop(event.data.payload.ai, event.data.payload.system);
@@ -482,19 +481,74 @@ class GameWorld {
 			}
 				break;
 			case "input":
-				/*
-				switch (event.data.action) {
-					case "key.down":
+				switch (event.data.system) {
+					case "homepage":
+						switch (event.data.payload.key) {
+							case "2": //le t trigger
+
+								break;
+							case "3": //le t bumper    
+
+								break;
+							case "8": //right bumper
+
+								break;
+							case "9": //right trigger
+
+								break;
+							case "w": // dpadUp
+								this.stickman.y = this.stickman.y - 1;
+								break;
+							case "r": // select
+
+								break;
+							case "y": // start 
+
+								break;
+							case "i": // move 2
+
+								break;
+							case "a": // dpad left
+								this.stickman.x = this.stickman.x - 1;
+								break;
+							case "d": // dpad right 
+								this.stickman.x = this.stickman.x + 1;
+								break;
+							case "c": // controller pad left ()
+
+								break;
+							case "n": // controller pad right (h)
+
+								break;
+							case "j": // move 1
+
+								break;
+							case "l": // move 4
+
+								break;
+							case "x": // dpad down
+								this.stickman.y = this.stickman.y + 1;
+								break;
+							case "m": // move 3
+
+								break;
+							default:
+								console.log("No action for this key: " + keyboard.key);
+								break;
+						}
 						this.handleKeyDown(event.data.payload);
 						break;
-					case "key.up":
+					case "race against the universe":
 						this.handleKeyUp(event.data.payload);
+						break;
+					case "planet universe":
+
 						break;
 					default:
 						console.error(`Unhandled input action: ${event.data.action}`);
 						break;
 				}
-				*/
+
 				break;
 			default:
 				console.error(`Unhandled event type: ${event.data.type}`);

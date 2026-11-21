@@ -1341,132 +1341,17 @@ export class maxwell {
             },
             "async",
             {
-                system: "videogame",
-                game: "mishuba",
-                type: "input",
+                system: "homepage",
                 player: who,
                 source: "keyboard",
                 action: action,
-                state: state,
+                buttonState: state,
                 controller: "pc",
                 key: event.key,
                 timestamp: performance.now()
             }
         );
         this.worker.postMessage(message);
-    }
-    KeyboardGame(tsu, keyboard) {
-        let action = null;
-        let who = null;
-        switch (keyboard.key) {
-            case "2": //le t trigger
-
-                this.worker.postMessage();
-                break;
-            case "3": //le t bumper    
-                this.worker.postMessage();
-                break;
-            case "8": //right bumper
-                this.worker.postMessage();
-                break;
-            case "9": //right trigger
-                this.worker.postMessage();
-                break;
-            case "w": // dpadUp
-                this.worker.postMessage();
-                break;
-            case "r": // select
-                this.worker.postMessage();
-                break;
-            case "y": // start 
-                this.worker.postMessage();
-                break;
-            case "i": // move 2
-                this.worker.postMessage();
-                break;
-            case "a": // dpad left
-                action = "left";
-                who = "player";
-                this.worker.postMessage(this.imageEngine.tycadome(
-                    "videogame" + "mishuba",
-                    "input",
-                    tsu,
-                    {
-                        source: "web",
-                        target: "device:web-001",
-                        worker: "world"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-                        system: "",
-                        player: who,
-                        state: action,
-                        message: "testing movement",
-                        controller: "pc",
-                        key: keyboard.key
-                    }
-                ));
-                break;
-            case "d": // dpad right 
-                action = "right";
-                who = "player";
-                this.worker.postMessage(this.imageEngine.tycadome(
-                    "videogame" + "mishuba",
-                    "input",
-                    tsu,
-                    {
-                        source: "web",
-                        target: "device:web-001",
-                        worker: "world"
-                    },
-                    {
-                        status: "pending",
-                        priority: "low"
-                    },
-                    "async",
-                    {
-
-                        system: "videogame",
-                        game: "mishuba",
-                        type: "input",
-                        source: "keyboard",
-                        player: who,
-                        controller: "pc",
-                        action: action,
-                        state: "pressed",
-                        key: keyboard.key,
-                        timestamp: performance.now()
-
-                    }
-                ));
-                this.worker.postMessage();
-                break;
-            case "c": // controller pad left ()
-                this.worker.postMessage();
-                break;
-            case "n": // controller pad right (h)
-                this.worker.postMessage();
-                break;
-            case "j": // move 1
-                this.worker.postMessage();
-                break;
-            case "l": // move 4
-                this.worker.postMessage();
-                break;
-            case "x": // dpad down
-                this.worker.postMessage();
-                break;
-            case "m": // move 3
-                this.worker.postMessage();
-                break;
-            default:
-                console.log("No action for this key: " + keyboard.key);
-                break;
-        }
     }
     bindVideoGame(tsu) {
         let keyboard = false;
