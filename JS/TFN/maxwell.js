@@ -2074,6 +2074,9 @@ export class maxwell {
         const payload = data.payload || {};
 
         switch (data.type) {
+            case "game":
+                this.bindVideoGame("homepage");
+                break;
             case "timer":
                 this.find("TFtime").innerHTML = payload.time;
 
