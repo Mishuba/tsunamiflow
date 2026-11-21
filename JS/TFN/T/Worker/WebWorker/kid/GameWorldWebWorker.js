@@ -481,13 +481,13 @@ class GameWorld {
 			}
 				break;
 			case "input":
-				switch (event.data.system) {
+				switch (event.data.payload.system) {
 					case "homepage":
 						switch (event.data.payload.key) {
-							case "2": //le t trigger
+							case "2": //left trigger
 
 								break;
-							case "3": //le t bumper    
+							case "3": //left bumper    
 
 								break;
 							case "8": //right bumper
