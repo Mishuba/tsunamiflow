@@ -311,6 +311,7 @@ class GameWorld {
 			case "up": // dpadUp
 				switch (event.data.payload.system) {
 					default:
+						this.stickman.spriteState = "walk";
 						this.stickman.y = this.stickman.y + 1;
 						break;
 				}
@@ -327,6 +328,7 @@ class GameWorld {
 			case "left":
 				switch (event.data.payload.system) {
 					default:
+						this.stickman.spriteState = "walk";
 						this.stickman.x = this.stickman.x - 1;
 						break;
 				}
@@ -334,6 +336,7 @@ class GameWorld {
 			case "right": // dpad right 
 				switch (event.data.payload.system) {
 					default:
+						this.stickman.spriteState = "walk";
 						this.stickman.x = this.stickman.x + 1;
 						break;
 				}
@@ -353,6 +356,7 @@ class GameWorld {
 			case "down": // dpad down
 				switch (event.data.payload.system) {
 					default:
+						this.stickman.spriteState = "walk";
 						this.stickman.y = this.stickman.y - 1;
 						break;
 				}
@@ -374,7 +378,7 @@ class GameWorld {
 				this.gameActions(event);
 				break;
 			case "released":
-				this.gameActions(event);
+				//this.gameActions(event);
 				break;
 			default:
 				this.gameActions(event);
