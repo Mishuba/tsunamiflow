@@ -311,7 +311,7 @@ class GameWorld {
 			case "up": // dpadUp
 				switch (event.data.payload.system) {
 					default:
-						this.stickman.y = this.stickman.y - 1;
+						this.stickman.y = this.stickman.y + 1;
 						break;
 				}
 				break;
@@ -353,7 +353,7 @@ class GameWorld {
 			case "down": // dpad down
 				switch (event.data.payload.system) {
 					default:
-						this.stickman.y = this.stickman.y + 1;
+						this.stickman.y = this.stickman.y - 1;
 						break;
 				}
 				break;
