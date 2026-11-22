@@ -1341,7 +1341,6 @@ export class maxwell {
                 system: "homepage", //game name variable
                 ai: "",
                 user: "",
-                character: who,
                 source: "keyboard",
                 action: action,
                 buttonState: state,
