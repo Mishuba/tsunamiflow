@@ -239,6 +239,148 @@ class GameWorld {
 		data.x += data.speedX;
 		data.y += data.speedY;
 	}
+	buttonKey(event) {
+		switch (event.data.payload.key) {
+			case "2": //left trigger
+
+				break;
+			case "3": //left bumper    
+
+				break;
+			case "8": //right bumper
+
+				break;
+			case "9": //right trigger
+
+				break;
+			case "w": // dpadUp
+				this.stickman.y = this.stickman.y - 1;
+				break;
+			case "r": // select
+
+				break;
+			case "y": // start 
+
+				break;
+			case "i": // move 2
+
+				break;
+			case "a": // dpad left
+				this.stickman.x = this.stickman.x - 1;
+				break;
+			case "d": // dpad right 
+				this.stickman.x = this.stickman.x + 1;
+				break;
+			case "c": // controller pad left ()
+
+				break;
+			case "n": // controller pad right (h)
+
+				break;
+			case "j": // move 1
+
+				break;
+			case "l": // move 4
+
+				break;
+			case "x": // dpad down
+				this.stickman.y = this.stickman.y + 1;
+				break;
+			case "m": // move 3
+
+				break;
+			default:
+
+				break;
+		}
+	}
+	gameActions(event) {
+		switch (event.data.payload.action) {
+			case "leftTrigger": //left trigger
+
+				break;
+			case "leftBumper": //left bumper    
+
+				break;
+			case "rightBumper": //right bumper
+
+				break;
+			case "rightTrigger": //right trigger
+
+				break;
+			case "up": // dpadUp
+				switch (event.data.payload.system) {
+					default:
+						this.stickman.y = this.stickman.y - 1;
+						break;
+				}
+				break;
+			case "select": // select
+
+				break;
+			case "start": // start 
+
+				break;
+			case "move2": // move 2
+
+				break;
+			case "left":
+				switch (event.data.payload.system) {
+					default:
+						this.stickman.x = this.stickman.x - 1;
+						break;
+				}
+				break;
+			case "right": // dpad right 
+				switch (event.data.payload.system) {
+					default:
+						this.stickman.x = this.stickman.x + 1;
+						break;
+				}
+				break;
+			case "padLeft": // controller pad left ()
+
+				break;
+			case "padRight": // controller pad right (h)
+
+				break;
+			case "move1": // move 1
+
+				break;
+			case "move4": // move 4
+
+				break;
+			case "down": // dpad down
+				switch (event.data.payload.system) {
+					default:
+						this.stickman.y = this.stickman.y + 1;
+						break;
+				}
+				break;
+			case "move3": // move 3
+
+				break;
+			default:
+				console.log("No action for this key: " + event.data.payload.key);
+				break;
+		}
+	}
+	buttonStatus(event) {
+		switch (event.data.payload.buttonState) {
+			case "pressed":
+				this.gameActions(event);
+				break;
+			case "held":
+				this.gameActions(event);
+				break;
+			case "released":
+				this.gameActions(event);
+				break;
+			default:
+				this.gameActions(event);
+				break;
+		}
+	}
 	planetUniverse(ai, player = null) {
 		if (this.crashWith(player, ai)) {
 			this.stop();
@@ -315,7 +457,7 @@ class GameWorld {
 				if (this.stickman === null) {
 					this.stickman = entity;
 				}
-				console.log(`✅ sprite dialog = ${entity.spriteDialog.homepage}, textWidth = ${entity.textWidth}, textHeight = ${entity.textHeight}, speedX = ${entity.speedX}, speedY = ${entity.speedY}, color = ${entity.color}, width = ${entity.width}, height = ${entity.height}, offscreencanvas.width = ${this.offscreencanvas.width}, offscreencanvas.height = ${this.offscreencanvas.height}, sprite = ${entity.sprite}, sx = ${entity.sx}, sy = ${entity.sy}, dw = ${entity.dw}, dh = ${entity.dh}`);
+				console.log(`✅ sprite dialog = ${this.stickman.spriteDialog.homepage}, textWidth = ${this.stickman.textWidth}, textHeight = ${this.stickman.textHeight}, speedX = ${this.stickman.speedX}, speedY = ${this.stickman.speedY}, color = ${this.stickman.color}, width = ${this.stickman.width}, height = ${this.stickman.height}, offscreencanvas.width = ${this.offscreencanvas.width}, offscreencanvas.height = ${this.offscreencanvas.height}, sprite = ${this.stickman.sprite}, sx = ${this.stickman.sx}, sy = ${this.stickman.sy}, dw = ${this.stickman.dw}, dh = ${this.stickman.dh}`);
 
 				const vizloop = () => {
 					if (!this.visualizerRunning) {
@@ -329,18 +471,41 @@ class GameWorld {
 
 				vizloop();
 				console.log("working homepage Visualizer loop started");
+				self.postMessage(this.tycadome(
+					"worker homepage game user",
+					"game",
+					"started.game",
+					{
+						source: "web worker",
+						target: "device:web-001",
+						worker: "world"
+					},
+					{
+						status: "done",
+						priority: "low",
+					},
+					"async",
+					{
+						system: "homepage",
+						timestamp: performance.now()
+					}
+				))
 				break;
 
 			case "race against the universe":
 				const RATU = () => {
 					if (this.worldai === null) {
-						this.worldai = entity;
+						if (this.stickman !== null) {
+							this.worldai = this.stickman;
+						} else {
+							this.worldai = entity;
+						}
 					}
 
 					if (!this.visualizerRunning) {
 						return;
 					}
-					this.RaceAgainstTheUniverse(entity);
+					this.RaceAgainstTheUniverse(this.worldai);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(RATU);
 				};
@@ -449,6 +614,22 @@ class GameWorld {
 						}
 						this.StartVideoGame(event);
 						break;
+					case "controller.input":
+						switch (event.data.payload.system) {
+							case "homepage":
+								this.buttonStatus(event);
+								break;
+							case "race against the universe":
+								this.buttonStatus(event);
+								break;
+							case "planet universe":
+								this.buttonStatus(event);
+								break;
+							default:
+								this.buttonStatus(event);
+								break;
+						}
+						break;
 					default:
 						if (this.visualizerRunning === true) {
 							this.stopVisualizerLoop();
@@ -479,77 +660,6 @@ class GameWorld {
 					}
 				}
 			}
-				break;
-			case "input":
-				switch (event.data.payload.system) {
-					case "homepage":
-						switch (event.data.payload.key) {
-							case "2": //left trigger
-
-								break;
-							case "3": //left bumper    
-
-								break;
-							case "8": //right bumper
-
-								break;
-							case "9": //right trigger
-
-								break;
-							case "w": // dpadUp
-event.data.payload.state; // idle, pressed, held, released
-								this.stickman.y = this.stickman.y - 1;
-								break;
-							case "r": // select
-
-								break;
-							case "y": // start 
-
-								break;
-							case "i": // move 2
-
-								break;
-							case "a": // dpad left
-								this.stickman.x = this.stickman.x - 1;
-								break;
-							case "d": // dpad right 
-								this.stickman.x = this.stickman.x + 1;
-								break;
-							case "c": // controller pad left ()
-
-								break;
-							case "n": // controller pad right (h)
-
-								break;
-							case "j": // move 1
-
-								break;
-							case "l": // move 4
-
-								break;
-							case "x": // dpad down
-								this.stickman.y = this.stickman.y + 1;
-								break;
-							case "m": // move 3
-
-								break;
-							default:
-								console.log("No action for this key: " + event.data.payload.key);
-								break;
-						}
-						
-						break;
-					case "race against the universe":
-						
-break;
-					case "planet universe":
-
-						break;
-					default:
-						console.error(`Unhandled input action: ${event.data.action}`);
-						break;
-				}
-
 				break;
 			default:
 				console.error(`Unhandled event type: ${event.data.type}`);

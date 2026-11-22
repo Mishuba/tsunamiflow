@@ -11,7 +11,7 @@ import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fet
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
 export class maxwell {
-    offscreencanvas = null;
+
     membershipCostEl = null;
     paymentTypeEl = null;
     hiddenMC = null;
@@ -80,7 +80,7 @@ export class maxwell {
         images: {},
         screens: {}
     };
-    TsunamiKeyboard = window.navigator.keyboard;
+    TsunamiKeyboard = null;
     inputStates = new Map();
 
     stickmanSprite = null;
@@ -427,9 +427,6 @@ export class maxwell {
         }
         if (option.tsunamisocketlink) {
             this.tsunamisocketlink = option.tsunamisocketlink;
-        }
-        if (option.offscreencanvas) {
-            this.offscreencanvas = option.offscreencanvas;
         }
         if (option.user) {
             this.user = option.user;
@@ -1294,7 +1291,7 @@ export class maxwell {
 
         }
     }
-    gameKeyboard(tsu, event) {
+    gameKeyboard(event) {
         const keymap = {
             "2": "leftTrigger",
             "3": "leftBumper",
@@ -1328,8 +1325,8 @@ export class maxwell {
 
         const message = this.imageEngine.tycadome(
             "videogamemishuba",
-            "input",
-            tsu,
+            "game",
+            "controller.input",
             {
                 source: "web",
                 target: "device:web-001",
@@ -1341,8 +1338,10 @@ export class maxwell {
             },
             "async",
             {
-                system: "homepage",
-                player: who,
+                system: "homepage", //game name variable
+                ai: "",
+                user: "",
+                character: who,
                 source: "keyboard",
                 action: action,
                 buttonState: state,
@@ -1353,59 +1352,56 @@ export class maxwell {
         );
         this.worker.postMessage(message);
     }
-    bindVideoGame(tsu) {
-        let keyboard = false;
+    bindVideoGame() {
         this.mainSection.addEventListener("pointerenter", async (event) => {
             this.mainSection.setPointerCapture(event.pointerId);
             console.log(`Pointer enter at ${event.offsetX} ${event.offsetY}, ${event.pressure}, ${event.width}, ${event.height}, ${event.isPrimary}`);
-            keyboard = true;
+            this.TsunamiKeyboard = true;
             this.gamePointer(event);
         }); //enable game controls
 
         window.addEventListener("keydown", async (event) => {
-            if (keyboard) {
+            if (this.TsunamiKeyboard) {
                 event.preventDefault();
-                this.TsunamiKeyboard.key = (this.TsunamiKeyboard.key || []);
 
-                this.gameKeyboard(tsu, event);
+                this.gameKeyboard(event);
             }
         });
         window.addEventListener("keyup", async (event) => {
-            if (keyboard) {
+            if (this.TsunamiKeyboard) {
                 event.preventDefault();
-                this.TsunamiKeyboard.key = (this.TsunamiKeyboard.key || []);
 
-                this.gameKeyboard(tsu, event);
+                this.gameKeyboard(event);
             }
         });
 
         this.mainSection.addEventListener("pointerover", async (event) => {
-            keyboard = true;
+            this.TsunamiKeyboard = true;
             this.gamePointer(event); //game movement think mouse 1st.
         }); //movement game controls
 
         this.mainSection.addEventListener("pointerdown", async (event) => {
-            keyboard = true;
+
             this.gamePointer(event);
         });  // shoot
 
         this.mainSection.addEventListener("pointerup", async (event) => {
-            keyboard = true;
+
             this.gamePointer(event);
         }); /// stop shoot
 
         this.mainSection.addEventListener("pointerout", async () => {
-            keyboard = false;
+            this.TsunamiKeyboard = false;
 
         }); //
 
         this.mainSection.addEventListener("pointerleave", async (event) => {
             this.mainSection.releasePointerCapture(event.pointerId);
-            keyboard = false;
+            this.TsunamiKeyboard = false;
         }); //disable game controls
 
         this.mainSection.addEventListener("pointercancel", async () => {
-            keyboard = false;
+            this.TsunamiKeyboard = false;
         }); //enable game controls
     }
 
@@ -2075,7 +2071,13 @@ export class maxwell {
 
         switch (data.type) {
             case "game":
-                this.bindVideoGame("homepage");
+                switch (data.action) {
+                    case "started.game":
+                        this.bindVideoGame();
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case "timer":
                 this.find("TFtime").innerHTML = payload.time;
