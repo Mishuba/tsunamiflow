@@ -365,6 +365,7 @@ class GameWorld {
 
 				break;
 			default:
+				this.stickman.spriteState = "stand";
 				console.log("No action for this key: " + event.data.payload.key);
 				break;
 		}
