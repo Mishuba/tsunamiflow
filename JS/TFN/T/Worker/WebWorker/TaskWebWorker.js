@@ -49,43 +49,6 @@ function tycadome(id, type, action, meta, state, mode, payload, transfer = []) {
 
     return tf;
 }
-function safeStringify(obj) {
-    try {
-        return JSON.stringify(obj);
-    } catch (e) {
-        try {
-            return String(obj);
-        } catch (e2) {
-            return null;
-        }
-    }
-}
-function createChildWorker(modulePath, classicPath, shared = false) {
-    try {
-        if (shared === false) {
-            let ihj = new Worker(
-                new URL(modulePath, import.meta.url),
-                { type: "module" }
-            );
-            console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-            return ihj;
-        } else {
-            let ihj = new SharedWorker(
-                new URL(modulePath, import.meta.url),
-                { type: "module" }
-            );
-            console.log("worker " + new URL(modulePath, import.meta.url) + " created.");
-            return ihj;
-        }
-    } catch (err) {
-        console.warn("Module worker failed. Falling back:", err);
-        if (shared === false) {
-            return new Worker(classicPath);
-        } else {
-            return new SharedWorker(classicPath);
-        }
-    }
-}
 
 async function startTime() {
     let TheTimeIGuess = new Promise((resolve) => {
@@ -159,14 +122,7 @@ async function startTime() {
         TimerTrigger.clear();
     }
 }
-/*
-const workers = {
-    input: createChildWorker("./kid/GameInputWebWorker.js", "https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameInputWebWorker.js"),
-    media: createChildWorker("./kid/MediaWebWorker.js", "https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/MediaWebWorker.js"),
-    world: createChildWorker("./kid/GameWorldWebWorker.js", "https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/GameWorldWebWorker.js"),
-    ai: createChildWorker("./kid/AiWebWorker.js", "https://tsunamiflow.club/JS/TFN/T/Worker/WebWorker/kid/AiWebWorker.js")
-};
-*/
+
 const workers = {
     image: new Worker(new URL("./kid/ImageWebWorker.js", import.meta.url), { type: "module" }),
     input: new Worker(new URL("./kid/GameInputWebWorker.js", import.meta.url), { type: "module" }),
@@ -178,39 +134,51 @@ const workers = {
 
 Object.entries(workers).forEach(([name, worker]) => {
     if (!worker) {
-        console.warn(`Child worker ${name} failed to start and will be skipped.`);
+        console.warn(`Child worker ${name} failed to start.`);
         return;
     }
 
     worker.onmessage = (e) => {
+        const message = e.data;
+
+        // Internal worker-to-worker communication
+        const target = message?.meta?.worker;
+
+        if (
+            message?.meta?.internal === true &&
+            target &&
+            workers[target]
+        ) {
+            workers[target].postMessage(
+                message,
+                message.transfer || []
+            );
+
+            return;
+        }
+
+        // External response: send it to the main thread
         self.postMessage(
             tycadome(
-                e.data.id || crypto.randomUUID(),
-                e.data.type || name,
-                e.data.action || "completed",
+                message.id || crypto.randomUUID(),
+                message.type || name,
+                message.action || "completed",
                 {
                     source: name,
                     layer: "compute",
                     worker: name
                 },
-                {
-                    status: "pending",
+                message.state || {
+                    status: "completed",
                     priority: "low"
                 },
-                "async",
-                e.data.payload || e.data
+                message.mode || "async",
+                message.payload ?? message
             )
         );
-    }
+    };
 
     worker.onerror = (errEvent) => {
-        // ErrorEvent from worker.onerror can vary across browsers; extract safely.
-        const message = errEvent?.message || errEvent?.type || null;
-        const filename = errEvent?.filename || errEvent?.fileName || null;
-        const lineno = errEvent?.lineno || errEvent?.lineNumber || null;
-        const colno = errEvent?.colno || errEvent?.columnNumber || null;
-        const stack = errEvent?.error?.stack || errEvent?.stack || null;
-
         self.postMessage(
             tycadome(
                 crypto.randomUUID(),
@@ -218,8 +186,7 @@ Object.entries(workers).forEach(([name, worker]) => {
                 "worker.error",
                 {
                     source: name,
-                    message: message,
-                    //worker: name,
+                    message: errEvent?.message || errEvent?.type || null
                 },
                 {
                     status: "failed",
@@ -227,12 +194,11 @@ Object.entries(workers).forEach(([name, worker]) => {
                 },
                 "async",
                 {
-                    message,
-                    filename,
-                    lineno,
-                    colno,
-                    stack,
-                    rawEvent: safeStringify(errEvent)
+                    message: errEvent?.message || null,
+                    filename: errEvent?.filename || null,
+                    lineno: errEvent?.lineno || null,
+                    colno: errEvent?.colno || null,
+                    stack: errEvent?.error?.stack || null
                 }
             )
         );
@@ -241,28 +207,16 @@ Object.entries(workers).forEach(([name, worker]) => {
 
 onmessage = (e) => {
     const task = e.data;
-    const target = task.meta?.worker;
+    const target = task?.meta?.worker;
 
-    /*
-    ----------------------------------------------------------------------
-    Validate routing target
-    ----------------------------------------------------------------------
-    */
-
-    if (!target || !workers[target]) {
+    if (!target) {
         self.postMessage(
             tycadome(
-                task.id || crypto.randomUUID(),
+                task?.id || crypto.randomUUID(),
                 "system",
                 "routing.error",
-                {
-                    reason: "Invalid or missing meta.worker",
-                    received: target
-                },
-                {
-                    status: "failed",
-                    priority: "low"
-                },
+                { reason: "Missing meta.worker" },
+                { status: "failed", priority: "low" },
                 "async",
                 task
             )
@@ -270,25 +224,39 @@ onmessage = (e) => {
         return;
     }
 
-    /*
-    ----------------------------------------------------------------------
-    Forward task to compute worker
-    ----------------------------------------------------------------------
-    */
+    // Task Worker handles its own commands
+    if (target === "task") {
+        if (
+            task.type === "timer" &&
+            task.action === "scheduled.timer"
+        ) {
+            startTime();
+        }
 
-    switch (target) {
-        case "task":
-            if (task.type === "timer") {
-                if (task.payload.system === "Tf Schedule") {
-                    if (!TimerLoop) {
-                        startTime();
-                    }
-                }
-            }
-
-            break;
-        default:
-            workers[target].postMessage(task, task.transfer || []);
-            break;
+        return;
     }
+
+    // Route to child workers
+    if (!workers[target]) {
+        self.postMessage(
+            tycadome(
+                task.id || crypto.randomUUID(),
+                "system",
+                "routing.error",
+                {
+                    reason: "Invalid worker target",
+                    received: target
+                },
+                { status: "failed", priority: "low" },
+                "async",
+                task
+            )
+        );
+        return;
+    }
+
+    workers[target].postMessage(
+        task,
+        task.transfer || []
+    );
 };

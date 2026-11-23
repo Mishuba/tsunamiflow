@@ -2,6 +2,11 @@
 class GameWorld {
 	stickman = null;
 	worldai = null;
+	worldaiEnabled = false;
+	worldaiDecisionInterval = 6;
+	worldaiDecisionFrame = 0;
+	worldaiPreviousState = null;
+	worldaiPreviousAction = null;
 	frame = 0;
 	offscreencanvas = null;
 	canvastype = null;
@@ -157,28 +162,7 @@ class GameWorld {
 	clear() {
 		this.canvasctx.clearRect(0, 0, this.offscreencanvas.width, this.offscreencanvas.height);
 	}
-	Visualizer(ai) {
-		this.clear();
-		ai.spriteFrameInterval++;
 
-		this.updateUserComponent(ai);
-		// Draw text
-		this.canvasctx.fillText(ai.spriteDialog.homepage[this.frame], ai.textWidth, ai.textHeight);
-
-		// Bounce logic
-		if (ai.textWidth + ai.speedX >= this.offscreencanvas.width || ai.textWidth + ai.speedX <= 0) {
-			ai.speedX = -ai.speedX;
-		}
-
-		if (ai.textHeight + ai.speedY >= this.offscreencanvas.height || ai.textHeight + ai.speedY <= 0) {
-			this.frame = (this.frame + 1) % ai.spriteDialog.homepage.length;
-			ai.speedY = -ai.speedY;
-		}
-
-		// Move text
-		ai.textWidth += ai.speedX;
-		ai.textHeight += ai.speedY;
-	}
 	createObstacle() {
 		let minHeight = this.offscreencanvas.width * 0.10;
 		let maxHeight = this.offscreencanvas.width * 0.84;
@@ -379,12 +363,42 @@ class GameWorld {
 				this.gameActions(event);
 				break;
 			case "released":
+				this.stickman.spriteState = "stand";
+				if (this.worldai !== null) {
+					this.worldai.spriteState = "stand";
+				} else {
+					this.worldai = this.stickman;
+					this.worldai.spriteState = "stand";
+				}
+
 				//this.gameActions(event);
 				break;
 			default:
 				this.gameActions(event);
 				break;
 		}
+	}
+	Visualizer(ai, user) {
+		this.clear();
+		ai.spriteFrameInterval++;
+
+		this.updateUserComponent(ai);
+		// Draw text
+		this.canvasctx.fillText(ai.spriteDialog.homepage[this.frame], ai.textWidth, ai.textHeight);
+
+		// Bounce logic
+		if (ai.textWidth + ai.speedX >= this.offscreencanvas.width || ai.textWidth + ai.speedX <= 0) {
+			ai.speedX = -ai.speedX;
+		}
+
+		if (ai.textHeight + ai.speedY >= this.offscreencanvas.height || ai.textHeight + ai.speedY <= 0) {
+			this.frame = (this.frame + 1) % ai.spriteDialog.homepage.length;
+			ai.speedY = -ai.speedY;
+		}
+
+		// Move text
+		ai.textWidth += ai.speedX;
+		ai.textHeight += ai.speedY;
 	}
 	planetUniverse(ai, player = null) {
 		if (this.crashWith(player, ai)) {
@@ -428,7 +442,7 @@ class GameWorld {
 			cancelAnimationFrame(id);
 		}
 	}
-	startVisualizerLoop(entity, type = null) {
+	startVisualizerLoop(event) {
 		if (!this.offscreencanvas) {
 			console.error("❌ No canvas available");
 			return;
@@ -457,10 +471,13 @@ class GameWorld {
 		});
 		console.log(entity.spriteStates);
 */
-		switch (type) {
+		switch (event.data.payload.system) {
 			case "homepage":
 				if (this.stickman === null) {
-					this.stickman = entity;
+					this.stickman = event.data.payload.user;
+				}
+				if (this.worldai === null) {
+					this.worldai = event.data.payload.ai;
 				}
 				console.log(`✅ sprite dialog = ${this.stickman.spriteDialog.homepage}, textWidth = ${this.stickman.textWidth}, textHeight = ${this.stickman.textHeight}, speedX = ${this.stickman.speedX}, speedY = ${this.stickman.speedY}, color = ${this.stickman.color}, width = ${this.stickman.width}, height = ${this.stickman.height}, offscreencanvas.width = ${this.offscreencanvas.width}, offscreencanvas.height = ${this.offscreencanvas.height}, sprite = ${this.stickman.sprite}, sx = ${this.stickman.sx}, sy = ${this.stickman.sy}, dw = ${this.stickman.dw}, dh = ${this.stickman.dh}`);
 

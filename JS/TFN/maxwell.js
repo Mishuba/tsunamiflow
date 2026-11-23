@@ -11,24 +11,9 @@ import { AiInterface } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/Fet
 import { aiSprite2d } from "./T/Class/Elder/Adult/Teen/Child/Toddler/Infant/aiSprite.js";
 
 export class maxwell {
-
-    membershipCostEl = null;
-    paymentTypeEl = null;
-    hiddenMC = null;
-    hiddenPT = null;
-    sections = {
-        free: null,
-        regular: null,
-        vip: null,
-        team: null,
-        address: null,
-        costInfo: null
-    };
     mainSectionWidth = 800;
     mainSectionHeight = 600;
     mainOffscreenCanvas = null;
-    RadioOffscreenCanvas = null;
-    VideoOffscreenCanvas = null;
     buttonPressed = null;
     reconnectTimer = null;
     listeners = {};
@@ -48,6 +33,18 @@ export class maxwell {
         stripePublicKey: "pk_live_51LEZXZDEt62FFVusTpTno0riC4cY20IoRtuiM2UnA3AHUdwAAxRj3qaev1RUwonD1pSzOOLmDYUXg9NiOBngYfUy005Tw1msUZ",
         backendUrl: "https://world.tsunamiflow.club/StripeStuff.php"
     });
+    membershipCostEl = null;
+    paymentTypeEl = null;
+    hiddenMC = null;
+    hiddenPT = null;
+    sections = {
+        free: null,
+        regular: null,
+        vip: null,
+        team: null,
+        address: null,
+        costInfo: null
+    };
     chatInput = null;
     imageEngine = new TsunamiFlowImageEngine();
     //soundEngine = null;
@@ -56,6 +53,7 @@ export class maxwell {
     radiotoggle = null;
     radioheader = null;
     RadioCanvas = null;
+    RadioOffscreenCanvas = null;
     audioTitle = null;
     audioSystem = null;
     audioLast = null;
@@ -64,6 +62,7 @@ export class maxwell {
     audioSkip = null;
     videoEngine = new TsunamiLiveVideoController();
     VideoCanavs = null;
+    VideoOffscreenCanvas = null;
     includeVideo = null;
     includeAudio = null;
     liveStreamKey = null;
