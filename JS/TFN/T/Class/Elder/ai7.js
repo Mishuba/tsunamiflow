@@ -1,6 +1,11 @@
-import { AiInterface } from "./Fetus/ai.js";
+import { AiWizard } from "./Adult/ai6";
 
-export class aiSprite2d extends AiInterface {
+
+export class AiMaster extends AiWizard {
+
+    constructor() {
+
+    }
     sprite = null;
     constructor(options = {}) {
         super(options);
@@ -8,5 +13,4 @@ export class aiSprite2d extends AiInterface {
             this.sprite = options.sprite;
         }
     }
-
 }

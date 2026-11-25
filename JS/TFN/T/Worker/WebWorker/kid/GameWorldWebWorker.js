@@ -10,7 +10,97 @@ class GameWorld {
 	frame = 0;
 	offscreencanvas = null;
 	canvastype = null;
+	//Mechnics
+	tfGravity = 0.05;
+	tfGravitySpeed = 0;
+	tfGravityBounce = 0.6;
 	TfObstacles = [];
+
+	//Ranking/PowerScaling
+	GodRank = Infinity;
+	RulerLevel = Math.pow(10, 10000);
+	OmegaRank = Math.pow(10, 1000);
+	XRank = Math.pow(10, 100);
+	Godly = Math.pow(10, 97);
+	MRank = Math.pow(10, 96);
+	DemiGodRank = Math.pow(10, 93);
+	YRank = Math.pow(10, 92)
+	GodLike = Math.pow(10, 91);
+	TsunamiFlowRank = Math.pow(10, 89);
+	ZRank = Math.pow(10, 88);
+	TranscendentLevel = Math.pow(10, 86);
+	SSSRank = Math.pow(10, 85);
+	GigaRank = Math.pow(10, 83);
+	SSRank = Math.pow(10, 82);
+	HyperRank = Math.pow(10, 80);
+	SRank = Math.pow(10, 79);
+	UltraRank = Math.pow(10, 77);
+	ARank = Math.pow(10, 76);
+	UniverseRank = Math.pow(10, 74);
+	BRank = Math.pow(10, 73);
+	RankBlackHoleLevel = Math.pow(10, 71);
+	CRank = Math.pow(10, 70);
+	RankStarLevel = Math.pow(10, 68);
+	DRank = Math.pow(10, 67);
+	RankSuperGalaxyLevel = Math.pow(10, 63);
+	ERank = Math.pow(10, 64);
+	RankGalaxyLevel = Math.pow(10, 62);
+	FRank = Math.pow(10, 61);
+	RankSolarSystemLevel = Math.pow(10, 59);
+	GRank = Math.pow(10, 58);
+	RankPlanetLevel = Math.pow(10, 56);
+	HRank = Math.pow(10, 55);
+	RankMoonLevel = Math.pow(10, 53);
+	IRank = Math.pow(10, 52);
+	RankOceanLevel = Math.pow(10, 49);
+	JRank = Math.pow(10, 48);
+	CommandarRank = Math.pow(10, 47);
+	HuhCOmmander = Math.pow(10, 46);
+	WoahWcommandar = Math.pow(10, 45);
+	KRank = Math.pow(10, 44);
+	Continent2Rank = Math.pow(10, 43);
+	Continent1Rank = Math.pow(10, 42);
+	RankContinentLevel = Math.pow(10, 41);
+	LRank = Math.pow(10, 40);
+	Country1Rank = Math.pow(10, 39);
+	Country2Rank = Math.pow(10, 38);
+	CountryLevel = Math.pow(10, 37);
+	NRank = Math.pow(10, 36);
+	CLrank = Math.pow(10, 35);
+	ClRank = Math.pow(10, 34);
+	CoastLevel = Math.pow(10, 33);
+	ORank = Math.pow(10, 32);
+	BossLevel = Math.pow(10, 31);
+	BossSomething = Math.pow(10, 30);
+	BossIdk = Math.pow(10, 29)
+	PRank = Math.pow(10, 28);
+	Nation2Rank = Math.pow(10, 27);
+	Nation1Rank = Math.pow(10, 26);
+	NationRank = Math.pow(10, 25);
+	QRank = Math.pow(10, 24);
+	RankDOlater = Math.pow(10, 23);
+	RankLater = Math.pow(10, 22);
+	RankMountain = Math.pow(10, 21);
+	Rrank = Math.pow(10, 20);
+	unknownCreateLater = Math.pow(10, 19);
+	Createlater = Math.pow(10, 18);
+	StateRank = Math.pow(10, 17);
+	TRank = Math.pow(10, 16);
+	MiniBoss = Math.pow(10, 15);
+	CreateLaterRank = Math.pow(10, 14);
+	ZipCodeRank = Math.pow(10, 13);
+	URank = Math.pow(10, 12);
+	EnemyRank = Math.pow(10, 11)
+	CityRank = Math.pow(10, 10);
+	AreaRank = Math.pow(10, 9)
+	VRank = Math.pow(10, 8);
+	FOrrestRank = Math.pow(10, 7);
+	RankLakeLevel = Math.pow(10, 6);
+	TownRank = Math.pow(10, 5)
+	WRank = Math.pow(10, 4);
+	StreetLevel = Math.pow(10, 3);
+	HouseLevel = Math.pow(10, 2);
+	BaseLevel = Math.pow(10, 1);
 	//canvasctx = null;
 	TfAudioVisualData = {
 		dataArray: new Uint8Array(0),
@@ -241,7 +331,7 @@ class GameWorld {
 				this.stickman.y = this.stickman.y - 1;
 				break;
 			case "r": // select
-
+				sprite.spriteState = "select";
 				break;
 			case "y": // start 
 
@@ -278,41 +368,51 @@ class GameWorld {
 				break;
 		}
 	}
+
 	gameActions(event) {
 		switch (event.data.payload.action) {
 			case "leftTrigger": //left trigger
-
+				this.stickman.spriteState = "aoe skill";
 				break;
 			case "leftBumper": //left bumper    
-
+				this.stickman.spriteState = "ultimate skill";
 				break;
 			case "rightBumper": //right bumper
-
+				this.stickman.spriteState = "range skill";
 				break;
 			case "rightTrigger": //right trigger
-
+				this.stickman.spriteState = "defense skill";
+				//this.stickman.spriteState = "parry";
 				break;
 			case "up": // dpadUp
 				switch (event.data.payload.system) {
 					default:
+						//this.stickman.spriteState = "crounch";
+						//this.stickman.spriteState = "crawl";
 						this.stickman.spriteState = "walk";
+						//this.stickman.spriteState = "swim"; //in water.
+						//this.stickman.spriteState = "climb"; //when climbing.
 						this.stickman.y = this.stickman.y + 1;
 						break;
 				}
 				break;
 			case "select": // select
-
+				this.stickman.spriteState = "select";
 				break;
 			case "start": // start 
-
+				this.stickman.spriteState = "Start";
 				break;
 			case "move2": // move 2
-
+				this.stickman.spriteState = "weak attack";
 				break;
 			case "left":
 				switch (event.data.payload.system) {
 					default:
+						//this.stickman.spriteState = "crounch";
+						//this.stickman.spriteState = "crawl";
 						this.stickman.spriteState = "walk";
+						//this.stickman.spriteState = "swim"; //in water.
+						//this.stickman.spriteState = "climb"; //when climbing.
 						this.stickman.x = this.stickman.x - 1;
 						break;
 				}
@@ -320,7 +420,11 @@ class GameWorld {
 			case "right": // dpad right 
 				switch (event.data.payload.system) {
 					default:
+						//this.stickman.spriteState = "crounch";
+						//this.stickman.spriteState = "crawl";
 						this.stickman.spriteState = "walk";
+						//this.stickman.spriteState = "swim"; //in water.
+						//this.stickman.spriteState = "climb"; //when climbing.
 						this.stickman.x = this.stickman.x + 1;
 						break;
 				}
@@ -332,21 +436,36 @@ class GameWorld {
 
 				break;
 			case "move1": // move 1
+				this.stickman.spriteState = "main attack";
 
 				break;
 			case "move4": // move 4
-
+				this.stickamn.spriteState = "strong attack";
 				break;
 			case "down": // dpad down
 				switch (event.data.payload.system) {
 					default:
+						//this.stickman.spriteState = "crounch";
+						//this.stickman.spriteState = "crawl";
 						this.stickman.spriteState = "walk";
+						//this.stickman.spriteState = "swim"; //in water.
+						//this.stickman.spriteState = "climb"; //when climbing.
 						this.stickman.y = this.stickman.y - 1;
 						break;
 				}
 				break;
 			case "move3": // move 3
-
+				this.stickman.spriteState = "special attack";
+				break;
+			case "L stick click":
+				this.stickman.spriteState = "evade skill";
+				break;
+			case "R stick click":
+				//this.stickman.spriteState = "run"; //one hold
+				this.stickman.spriteState = "jump"; //one click
+				//this.stickman.spriteState = "fly"; // one click one hold
+				//sprite.spriteState = "double jump"; two click
+				//this.stickman.spriteState = "dive"; // one click in water. 
 				break;
 			default:
 				this.stickman.spriteState = "stand";
@@ -486,7 +605,7 @@ class GameWorld {
 						return;
 					}
 
-					this.Visualizer(this.stickman);
+					this.Visualizer(this.worldai, this.stickman);
 
 					this.visualizerFrame = this.scheduleVisualizerFrame(vizloop);
 				};
@@ -500,7 +619,8 @@ class GameWorld {
 					{
 						source: "web worker",
 						target: "device:web-001",
-						worker: "world"
+						worker: "none",
+						internal: false
 					},
 					{
 						status: "done",
